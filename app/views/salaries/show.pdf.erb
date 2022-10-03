@@ -1,0 +1,61 @@
+<% @time = Time.zone.now+15*60 %>
+<% @date = Date.current %>
+<p style="border-bottom: double 6px;  margin: 0;"></p>
+<div>
+ <table>
+    <thead style="text-align: left;">
+      <th style="font-weight: bold;,text-align: left;"><h3>Date <%=@date%> , <%=@time.strftime(" %I:%M%p")%></h3></th>
+      <th></th>
+      <th><h1>PAYMENT RECEIPT</h1><th>
+    </thead>
+  </table>
+<div>
+<div>
+  <table>
+    <body>
+      <tr style="font-size:20px;text-align: left;,font-family: Arial Black, Gadget, sans-serif">
+        <td>Given to</td>
+        <td style="text-align: left;" class = "urdu-font"><%=@salary.staff&.name%></td>
+      </tr>
+      <tr style="font-size:20px;text-align: left;,font-family: Arial Black, Gadget, sans-serif">
+        <td style="">Cash Type</td>
+        <td style="text-align: left;">Cash</td>
+      </tr>
+      <tr style="font-size:20px;text-align: left;,font-family: Arial Black, Gadget, sans-serif">
+        <td style="">Comment</td>
+        <td style="text-align: left;"><%=@salary.comment%></td>
+      </tr >
+    </body>
+  </table>
+</div>
+<p style="border-bottom: double 6px;  margin: 0;"></p>
+<div>
+  <table>
+    <body>
+      <tr style="font-size:20px;text-align: left;,font-family: Arial Black, Gadget, sans-serif">
+        <td style="font-weight: bold;">Amount in words</td>
+        <td><%=number_to_words(@salary.advance).capitalize%></td>
+      </tr>
+      <tr style="font-size:20px;text-align: left;,font-family: Arial Black, Gadget, sans-serif">
+        <td style="font-weight: bold">Amount in Rs</td>
+          <td><%=@salary.advance%></td>
+      </tr>
+      <tr style="font-size:20px;text-align: left;,font-family: Arial Black, Gadget, sans-serif">
+        <td style="font-weight: bold">Remaing Balance</td>
+        <td ><%=@salary.balance%></td>
+      </tr>
+    </body>
+  </table>
+</div>
+
+<div style="margin-top: 25%;">
+  <table>
+    <body>
+      <tr style="font-size:20px;font-family: Arial Black, Gadget, sans-serif">
+          <td style="text-align: left; font-weight: bold;text-decoration: overline;"> Prepared By </td>
+          <td style="text-align: center; font-weight: bold;text-decoration: overline;"> Given By </td>
+          <td style="text-align: right; font-weight: bold;text-decoration: overline;"> Approved By </td>
+        </tr>
+    </body>
+  </table>
+</div>

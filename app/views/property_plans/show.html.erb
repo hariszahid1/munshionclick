@@ -1,0 +1,89 @@
+<p id="notice"><%= notice %></p>
+<div class="row">
+  <div class="col-sm-12"><h1>Property Plan Detail</h1></div>
+</div>
+
+<div class="show_content">
+  <div class="row form-group">
+    <div class="col-lg-6 col-sm-6">
+      <strong>Type: </strong>
+      <%= @property_plan.property_type %>
+    </div>
+    <div class="col-lg-6 col-sm-6">
+      <strong>Area in marla: </strong>
+      <%= @property_plan.area_in_marla %>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-lg-6 col-sm-6">
+      <strong>Total price: </strong>
+      Rs.<%= @property_plan.total_price %>
+    </div>
+    <div class="col-lg-6 col-sm-6">
+      <strong>Price Per Marla: </strong>
+      <%= @property_plan.price_per_marla %>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-lg-6 col-sm-6">
+      <strong>Payment type: </strong>
+      <%= @property_plan.payment_type %>
+    </div>
+    <div class="col-lg-6 col-sm-6">
+      <strong>Payment plan: </strong>
+      <%= @property_plan.payment_plan.titleize %>
+    </div>
+  </div>
+
+
+  <div class="row form-group">
+    <div class="col-lg-6 col-sm-6">
+      <strong>No of installments: </strong>
+      <%= @property_plan.no_of_installments %>
+    </div>
+    <div class="col-lg-6 col-sm-6">
+      <strong>Advance: </strong>
+      Rs.<%= @property_plan.advance %>
+    </div>
+
+  </div>
+
+  <div class="row form-group">
+    <div class="col-lg-6 col-sm-6">
+      <strong>High amount installments: </strong>
+      <%= @property_plan.high_amount_installments %>
+    </div>
+    <div class="col-lg-6 col-sm-6">
+      <strong>Total high amount: </strong>
+      Rs.<%= @property_plan.total_high_amount %>
+    </div>
+  </div>
+
+  <div class="clearfix"></div>
+  <h4>Installments Detail: </h4>
+  <% @property_plan.property_installments.in_batches(of: 2) do |property_installment| %>
+    <div class="row form-group">
+      <div class="col-lg-6 col-sm-6">
+        <strong>#<%= property_installment.first.installment_no%>: </strong>
+        Rs.<%= property_installment.first.installment_price %>
+      </div>
+      <% if property_installment.count == 2 %>
+        <div class="col-lg-6 col-sm-6">
+          <strong>#<%= property_installment.second.installment_no%>: </strong>
+          Rs.<%= property_installment.second.installment_price %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
+
+<div class="clearfix"></div>
+<div class="row form-group">
+  <div class="col-lg-6 col-sm-6">
+    <%= link_to 'Edit', edit_property_plan_path(@property_plan), class: "btn btn-info" %>
+    <%= link_to "Propert Plans List", property_plans_path, class: "btn btn-info" %>
+  </div>
+</div>

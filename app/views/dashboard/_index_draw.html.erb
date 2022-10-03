@@ -1,0 +1,261 @@
+
+<div class="hidden" id="products_list">
+  <h1>Dashboard</h1>
+
+
+<div class="row">
+  <div class="col-lg-12 col-sm-12">
+    <%= link_to new_ledger_book_path do %>
+      <div class="col-xl-2 col-md-6 mb-4 form-group float-left">
+        <div class="card border-left-primary shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                    <i class="fa fa-plus fa-2x" aria-hidden="true"></i>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">Debit (Jama)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+    <%= link_to new_ledger_book_path(benam: true) do %>
+      <div class="col-xl-2 col-md-6 mb-4 form-group float-left">
+        <div class="card border-left-primary shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                  <i class="fa fa-plus fa-2x" aria-hidden="true"></i>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800">Credit (Benam)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <%= link_to ledger_books_path  do %>
+    <div class="col-xl-2 col-md-6 mb-4 form-group float-left">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                    <i class="fas fa-calculator fa-2x" aria-hidden="true"></i>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">User Ledger</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% end %>
+
+    <%= link_to ledger_books_path(submit_credit:true,'q[created_at_gteq]':(DateTime.now).strftime('%Y-%m-%d'),'q[created_at_lteq]':(DateTime.now).strftime('%Y-%m-%d')),target: :_blank   do %>
+      <div class="col-xl-2 col-md-6 mb-4 form-group float-left">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                    <i class="fas fa-dollar-sign" aria-hidden="true"></i>
+                    <i class="h5 mb-0 font-weight-bold text-gray-800"><%= @t_debit.to_f.round(2) %></i>
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">Today Paid (Debit)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+    <% end %>
+
+    <%= link_to ledger_books_path(submit_debit:true,'q[created_at_gteq]':(DateTime.now).strftime('%Y-%m-%d'),'q[created_at_lteq]':(DateTime.now).strftime('%Y-%m-%d')),target: :_blank  do %>
+      <div class="col-xl-2 col-md-6 mb-4 form-group float-left">
+        <div class="card border-left-primary shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                      <i class="fas fa-dollar-sign" aria-hidden="true"></i>
+                      <i class="h5 mb-0 font-weight-bold text-gray-800"><%= @t_credit.to_f.round(2) %></i>
+                </div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">Today Received (Credit)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+
+<%= link_to payable_sys_users_sys_users_path do %>
+  <div class="col-xl-2 col-md-6 mb-4 form-group float-left">
+  <div class="card border-left-primary shadow h-100 py-2">
+    <div class="card-body">
+      <div class="row no-gutters align-items-center">
+        <div class="col mr-2">
+          <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">
+            <i class="fas fa-dollar-sign fa-2x" aria-hidden="true"></i>
+            <i class="h5 mb-0 font-weight-bold text-gray-800"><%=@payable%></i>
+          </div>
+          <div class="h5 mb-0 font-weight-bold text-gray-800">Net Payable</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  <% end %>
+
+  <%= link_to receiveable_sys_users_path do %>
+  <div class="col-xl-2 col-md-6 mb-4 form-group ">
+    <div class="card border-left-primary shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">
+              <i class="fas fa-dollar-sign fa-2x" aria-hidden="true"></i>
+              <i class="h5 mb-0 font-weight-bold text-gray-800"><%=@receivable%></i>
+            </div>
+            <div class="h5 mb-0 font-weight-bold text-gray-800">Net Receivable</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <% end %>
+
+  <%= link_to payments_path, target: :_blank  do %>
+    <div class="col-xl-2 col-md-6 mb-4 form-group float-left">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                <i class="fas fa-book fa-2x" aria-hidden="true"></i>
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">Day Book</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <%= link_to confirm_index_path,target: :_blank  do %>
+    <div class="col-xl-2 col-md-6 mb-4 form-group float-left">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                <i class="h5 mb-0 font-weight-bold text-red-800"><%= @transfer %> Confirmable</i>
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">Remaning Transaction</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <%= link_to reports_day_out_report_path  do %>
+    <div class="col-xl-2 col-md-6 mb-4 form-group float-left">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                <i class="fas fa-balance-scale fa-2x" aria-hidden="true"></i>
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">Day Check</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+  <div class="col-xl-2 col-md-6 mb-4 form-group float-left">
+    <%= link_to reports_trial_balance_path do %>
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body" >
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                <i class="fas fa-balance-scale fa-2x" aria-hidden="true"></i>
+              </div>
+              <div class="h5 mb-0  text-gray-800">Trial Balance</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  </div>
+</div>
+
+<div class="clearfix"></div>
+
+
+<div class="card shadow mb-4">
+    		<!-- Card Header - Accordion -->
+    		<a href="#collapseCard" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+    			<h6 class="m-0 font-weight-bold text-primary"><h1 style= "text-align : center">Accounts</h1></h6>
+    		</a>
+        <div class="collapse show" id="collapseCard" style="">
+          <div class="clearfix"></div>
+      <div class="row ">
+        <div class="col-lg-12 col-sm-12 ">
+          <%= search_form_for @q, url: dashboard_path, class: "admin-controls font-weight-bold", method: "get" do |f| %>
+            <div class="col-lg-2 form-group float-left">
+              <%= f.select :title_cont, options_from_collection_for_select(@account_title, "title", ->(st){"#{st.title} \u{27F6} #{st.bank_name} "},@code),{:include_blank => "Select Account"},:class=>"form-control chosen-select" %>
+            </div>
+            <div class="col-lg-2 form-group float-left">
+              <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px;"><i class="fa fa-search"></i></button>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+  <div class="tab-content" id="pills-tabContent">
+      <%= render partial: "accounts", locals: {} %>
+  </div>
+
+</div>
+</div>
+</div>
+
+<div class="clearfix"></div>
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#daily_books_list").removeClass('hidden');
+    FontAwesome.dom.i2svg();
+  });
+</script>
+
+
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#products_list").removeClass('hidden');
+    FontAwesome.dom.i2svg();
+  });
+  $(document).ready(function() {
+    setTimeout(function(){
+      $(".chosen-select").chosen({
+  allow_single_deselect: true,
+  width: '100%'
+});
+    }, 50);
+  });
+</script>

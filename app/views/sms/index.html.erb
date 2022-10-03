@@ -1,0 +1,43 @@
+<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+  <li class="nav-item" onclick="updatetabs('pills-home')">
+    <a class="<%=params[:from_tabe]=='pills-user' ? 'nav-link active' : 'nav-link'%>" id="pills-user-tab" data-toggle="pill" href="#pills-user" role="tab" aria-controls="pills-user" aria-selected="true">SMS to User</a>
+  </li>
+  <li class="nav-item" onclick="updatetabs('pills-profile')">
+    <a class="<%=params[:from_tabe]=='pills-staff' ? 'nav-link active' : 'nav-link'%>" id="pills-staff-tab" data-toggle="pill" href="#pills-staff" role="tab" aria-controls="pills-staff" aria-selected="false">SMS to Staff</a>
+  </li>
+  <li class="nav-item" onclick="updatetabs('pills-expense-month')">
+      <a class="<%=params[:from_tabe]=='pills-log' ? 'nav-link active' : 'nav-link'%>" id="pills-log-tab" data-toggle="pill" href="#pills-log" role="tab" aria-controls="pills-log" aria-selected="false">SMS LOG</a>
+  </li>
+</ul>
+<div class="tab-content" id="pills-tabContent">
+  <div class= "<%=params[:from_tabe]=='pills-user' ? 'tab-pane fade show active' : 'tab-pane fade show active'%>" id="pills-user" role="tabpanel" aria-labelledby="pills-user-tab" style="margin:2pc;">
+    <%= render partial: "user", locals: {} %>
+  </div>
+  <div class= "<%=params[:from_tabe]=='pills-staff' ? 'tab-pane fade show active' : 'tab-pane fade '%>" id="pills-staff" role="tabpanel" aria-labelledby="pills-profile-tab">
+    <%= render partial: "staff", locals: {} %>
+  </div>
+  <div class="<%=params[:from_tabe]=='pills-log' ? 'tab-pane fade show active' : 'tab-pane fade '%>" id="pills-log" role="tabpanel" aria-labelledby="pills-log-tab">
+    <%= render partial: "log", locals: {} %>
+  </div>
+</div>
+<script>
+  $(document).ready(function() {
+    $('#pills-user-tab').addClass('active');
+    setTimeout(function(){
+      if(window.location.href.search("pills-staff-tab")>1)
+      {
+        $('#pills-user-tab').removeClass('active');
+        $('#pills-staff-tab').addClass('active');
+        $('#pills-user').removeClass('active');
+        $('#pills-staff').addClass('active show');
+      }
+      else if(window.location.href.search("pills-log-tab")>1)
+      {
+        $('#pills-user-tab').removeClass('active');
+        $('#pills-log-tab').addClass('active');
+        $('#pills-user').removeClass('active');
+        $('#pills-log').addClass('active show');        
+      }
+    }, 50);
+  });
+</script>

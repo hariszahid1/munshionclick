@@ -1,0 +1,83 @@
+<div class="hidden" id="city_list">
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <h1>SMS To Any One</h1>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <div class="col-lg-12 form-group float-left">
+        <textarea name="sms_msg" class="form-control" ><%=@phone%></textarea>
+      </div>
+      <%= search_form_for @q, url: sms_sms_to_staff_path, class: "admin-controls", method: "get" do |f| %>
+        <div class="col-lg-3 form-group float-left">
+          <%= f.select :id_eq, options_from_collection_for_select(@customers, 'id', 'name', f.object.id_eq),{:include_blank => "Select User's"},class: 'form-control chosen-select'%>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.select :department_id_eq, options_from_collection_for_select(@departments, 'id', 'title', f.object.department_id_eq), {hide_label:true,title: "Select the Department" ,prompt: "Select the Department"},:class=>"form-control chosen-select"%>
+        </div>
+        <div class="col=lg-2 form-group float-left">
+          <%= f.select :staff_type_eq, Staff.staff_types.map { |key, value| [key.humanize, value] }, {include_blank: "Select the Status", hide_label:true, required: true },:class=>"form-control  chosen-select"%>
+        </div>
+        <div class="col-lg-12 form-group float-left">
+          <textarea name="sms_to" class="form-control" placeholder="Past Contacts here like 923xxxxxxxxx,923xxxxxxxxx... paste 100 phone number in single request"></textarea>
+        </div>
+        <div class="col-lg-12 form-group float-left">
+          <textarea name="sms_msg" class="form-control" placeholder="SMS Text here... length of 1 Sms is 160 characters"></textarea>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-primary" name="sms_submit" type="submit" value="SMS"><i class="fas fa-comment-alt"></i> English</button>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-primary" name="sms_submit_urdu" type="submit" value="SMS" ><i class="fas fa-comment-alt"></i> Urdu</button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <table data-toggle="table" data-search="true">
+    <thead>
+      <tr>
+        <th><%= sort_link(@q, :property_type, 'Name') %></th>
+        <th><%= sort_link(@q, :property_type, 'Type') %></th>
+        <th><%= sort_link(@q, :area_in_marla, 'Phone') %></th>
+        <th>Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @sys_users.each do |sys_user| %>
+        <tr>
+          <td><%= link_to sys_user&.name, edit_sys_user_path(sys_user)%></td>
+          <td><%= sys_user.department&.title %></td>
+          <td><%= sys_user&.phone %></td>
+          <td></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<div class="clearfix"></div>
+<div class="row">
+  <div class="col-lg-4 col-sm-4">
+    <%= page_entries_info @sys_users %>
+  </div>
+  <div class="col-lg-8 col-sm-8 pagination-left">
+    <%= paginate @sys_users %>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#city_list").removeClass('hidden');
+    FontAwesome.dom.i2svg();
+  });
+</script>

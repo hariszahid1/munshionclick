@@ -1,0 +1,57 @@
+<%= form_for(material) do |f| %>
+  <% if material.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(material.errors.count, "error") %> prohibited this material from being saved:</h2>
+
+      <ul>
+      <% material.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :production_id %>
+    <%= f.text_field :production_id , placeholder:"Enter Production"%>
+  </div>
+
+  <div class="field">
+    <%= f.label :item_id %>
+    <%= f.text_field :item_id  , placeholder:"Enter Item"%>
+  </div>
+
+  <div class="field">
+    <%= f.label :product_id %>
+    <%= f.text_field :product_id , placeholder:"Enter Product"%>
+  </div>
+
+  <div class="field">
+    <%= f.label :cost_price %>
+    <%= f.text_field :cost_price , placeholder:"Enter Cost Price"%>
+  </div>
+
+  <div class="field">
+    <%= f.label :sale_price %>
+    <%= f.text_field :sale_price , placeholder:"Enter Sale Price"%>
+  </div>
+
+  <div class="field">
+    <%= f.label :quantity %>
+    <%= f.text_field :quantity , placeholder:"Enter Quantity"%>
+  </div>
+
+  <div class="field">
+    <%= f.label :comment %>
+    <%= f.text_field :comment , placeholder:"Enter Comment"%>
+  </div>
+
+  <div class="field">
+    <%= f.label :status %>
+    <%= f.number_field :status %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

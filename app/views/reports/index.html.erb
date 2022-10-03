@@ -1,0 +1,34 @@
+<div class="row">
+  <div class="col-lg-12 col-sm-12">
+  </div>
+</div>
+
+<h3>Staffs:</h3>
+<%= render partial: "statics", locals: {activated: @stf_active, terminated: @stf_terminated, deleted: @stf_deleted, st_name: "Staffs", report_icon: "icon_stf"} %>
+<h3>Customer:</h3>
+<%= render partial: "statics", locals: {activated: @customers_active, terminated: @customers_terminated, deleted: @customers_deleted, st_name: "Staffs
+", report_icon: "icon_stf"} %>
+<h3>Supplier:</h3>
+<%= render partial: "statics", locals: {activated: @suppliers_active, terminated: @suppliers_terminated, deleted: @suppliers_deleted, st_name: "Staffs", report_icon: "icon_stf"} %>
+<h3>Customer and supplier:</h3>
+<%= render partial: "statics", locals: {activated: @Both_active, terminated: @Both_terminated, deleted: @Both_deleted, st_name: "Staffs", report_icon: "icon_stf"} %>
+<h3>Reports:</h3>
+<div class="row statics">
+  <div class="col-xl-4 col-lg-6 col-12">
+    <div class="card bg-gradient-directional-success">
+      <div class="card-content">
+        <div class="card-body">
+          <div class="media d-flex">
+            <div class="align-self-center">
+              <i class="icon-pencil white font-large-2 float-left"></i>
+            </div>
+            <div class="media-body white text-right">
+              <h3>Expense</h3>
+              <h6>Actual: <%=@actual_exp %> Expected:  <%=@expected_exp%></h6>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

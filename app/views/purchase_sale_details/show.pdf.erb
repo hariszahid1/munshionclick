@@ -1,0 +1,37 @@
+<%if pos_setting_sys_type=="batamega"%>
+  <%= render partial: "create_bata", locals: {purchase_sale_detail: @purchase_sale_detail} %>
+  <div style="display: block;clear: both;page-break-after: always;"></div>
+<%elsif pos_setting_sys_type=="FastFood"%>
+  <%= render partial: "/purchase_sale_details/fast_food/create", locals: {purchase_sale_detail: @purchase_sale_detail} %>
+<%elsif pos_setting_sys_type=="industry"%>
+  <%= render partial: "industry_invoice", locals: {purchase_sale_detail: @purchase_sale_detail, copy: :Customer} %>
+  <div style="display: block;clear: both;page-break-after: always;"></div>
+  <%= render partial: "industry_invoice", locals: {purchase_sale_detail: @purchase_sale_detail, copy: :Office} %>
+  <div style="display: block;clear: both;page-break-after: always;"></div>
+  <%= render partial: "delivery_show", locals: {purchase_sale_detail: @purchase_sale_detail} %>
+<%elsif pos_setting_sys_type=="batha"%>
+ <%= render partial: "order_show_batha", locals: {order: @purchase_sale_detail} %>
+<%elsif pos_setting_sys_type=="HousingScheme"%>
+  <%= render partial: "purchase_sale_details/house_scheme/show", locals: {order: @purchase_sale_detail} %>
+<%elsif pos_setting_sys_type=="CustomClear"%>
+  <%= render partial: "order_show_custom_clear", locals: {order: @purchase_sale_detail} %>
+<%elsif params[:with_gst].present? %>
+  <%= render partial: "order_show_with_gst", locals: {purchase_sale_detail: @purchase_sale_detail} %>
+<%else%>
+   <%= render partial: "order_show", locals: {purchase_sale_detail: @purchase_sale_detail} %>
+<%end%>
+<%if @pos_setting&.is_qr.present? && @pos_setting&.website.present? && pos_setting_sys_type!="HousingScheme"%>
+  <p style="text-align: center; margin: 0;">
+    <img width="150px" height="115px" class="figure" style=""src=<%="data:image/svg+xml;base64,"+@str%> ></img>
+  </p>
+<%end%>
+<%@printfun=@pos_setting&.extra_settings.present? ? @pos_setting&.extra_settings["printfun"].to_f : 100%>
+<%@redirectfun=@pos_setting&.extra_settings.present? ? @pos_setting&.extra_settings["redirectfun"].to_f : 1200%>
+<%if pos_setting_sys_type!="FastFood" && pos_setting_sys_type!="HousingScheme"%>
+  <script type="text/javascript">
+      window.setTimeout(printfun, <%=@printfun%>);
+      window.setTimeout(redirectfun, <%=@redirectfun%>);
+      function printfun(){window.print(); return false;}
+      function redirectfun(){window.location.replace("/purchase_sale_details/new?product=true&transaction_type=sale"); return true;}
+  </script>
+<%end%>

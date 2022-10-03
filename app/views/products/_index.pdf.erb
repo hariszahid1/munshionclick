@@ -1,0 +1,77 @@
+<% @date = Date.today  %>
+<% @time = DateTime.now %>
+<% @time = Time.zone.now %>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Products details</h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<p style="text-align: center;margin: 0;">Report by: <%=current_user.name%></p>
+<div >
+  <table>
+    <thead class="lite-gray">
+      <th>Item Type</th>
+      <th>Code</th>
+      <th>Title</th>
+      <th>Pdt-ctgy</th>
+      <th>Pdt-sub-ctgy</th>
+      <th>Stock</th>
+      <th>Cost</th>
+      <th>Sale</th>
+      <th>Cost</th>
+      <th>Sale</th>
+      <% if pos_setting_sys_type=="batha"%>
+      <th>Raw Product</th>
+      <%end%>
+      <th>GST</th>
+      <th>VAT</th>
+      <th>HST</th>
+      <th>PST</th>
+      <th>QST</th>
+    </thead>
+
+    <tbody>
+      <% @products.each do |product| %>
+      <tr>
+        <td class="urdu-font"><%= product.item_type.title rescue 'nil'%></td>
+        <td><%= product.code rescue 'nil'%></td>
+        <td class="urdu-font"><%= product.title rescue 'nil'%></td>
+        <td class="urdu-font"><%= product.product_category.title rescue 'nil'%></td>
+        <td class="urdu-font"><%= product.product_sub_category.title rescue 'nil'%></td>
+        <%if current_user.superAdmin.company_type=="batamega"%>
+          <td><%= product.stock %> || <%= product.size_1 %>,<%= product.size_2 %>,<%= product.size_3 %>,<%= product.size_4 %>,<%= product.size_5 %>,<%= product.size_6 %>,<%= product.size_7 %>,<%= product.size_8 %>,<%= product.size_9 %>,<%= product.size_10 %>,<%= product.size_11 %>,<%= product.size_12 %>,<%= product.size_13 %></td>
+        <%elsif%>
+          <td><%= product.stock %>  </td>
+        <%end%>
+        <td><%= product.cost.to_f.round(20) %></td>
+        <td><%= product.sale.to_f.round(20) %></td>
+        <td><%=(product.cost.to_f*product.stock.to_f).round(2)%></td>
+        <td><%=(product.sale.to_f*product.stock.to_f).round(2)%></td>
+        <%if pos_setting_sys_type=="batha"%>
+        <td><%= product.raw_product.present? ? product.raw_product.title : ""%></td>
+        <%end%>
+        <td><%=product.gst%></td>
+        <td><%=product.vat%></td>
+        <td><%=product.hst%></td>
+        <td><%=product.pst%></td>
+        <td><%=product.qst%></td>
+      </tr>
+      <%end%>
+      <tr class="lite-gray">
+        <td ><h4>Total</h4></td>
+        <td><h5></h5></td>
+        <td><h5></h5></td>
+        <td><h5></h5></td>
+        <td><h5></h5></td>
+        <td><h4><%=@total.to_f.round(2)%></h4></td>
+        <td><h5></h5></td>
+        <td><h5></h5></td>
+        <td><h5></h5></td>
+        <td><h5></h5></td>
+        <td><h5></h5></td>
+        <td><h5></h5></td>
+        <td><h5></h5></td>
+        <td><h5></h5></td>
+      </tr>
+    </tbody>
+
+  </table>
+</div>

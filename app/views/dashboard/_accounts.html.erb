@@ -1,0 +1,33 @@
+<%@rev=Hash.new%>
+<div class="row">
+  <div class="col-lg-12 col-sm-12">
+    <div id = "jalai">
+      <table data-toggle="table">
+        <thead>
+          <th><%= sort_link(@q, :title, 'Title') %></th>
+          <th><%= sort_link(@q, :amount, 'Balance') %></th>
+
+        </thead>
+
+        <tbody>
+          <% @accounts.each do |account| %>
+            <tr>
+              <td><%= account.title %></td>
+              <td><%= account.amount.to_f.round(2) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#expenses_list").removeClass('hidden');
+  });
+</script>

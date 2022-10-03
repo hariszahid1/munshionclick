@@ -1,0 +1,157 @@
+
+<div class="hidden" id="account_list">
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <h1>Accounts</h1>
+      <div class="col-lg-2 form-group float-left">
+        <%= link_to new_account_path, class: "btn btn-success" do %>
+           <i class="fa fa-plus" aria-hidden="true"></i>
+           New Account
+         <% end %>
+         </div>
+         <div class="col-lg-3 form-group float-left">
+          <%= link_to transfer_payments_path, class: "btn btn-success" do %>
+             <i class="fa fa-credit-card" aria-hidden="true"></i>
+             Payment Transfer
+          <% end %>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <%= link_to payments_path, class: "btn btn-primary" do %>
+            <i class="fa fa-credit-card" aria-hidden="true"></i>
+            Payments
+         <% end %>
+        </div>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <%= search_form_for @q, url: accounts_path, class: "admin-controls", method: "get" do |f| %>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.select :id_in, options_from_collection_for_select(@accounts, "id", ->(st){"#{st.title} \u{27F6} #{st.bank_name}"},f.object.id_in),{:include_blank => "Select the Title"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Title"} }%>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+        </div>
+        <div class="col-lg-2 form-group float-left">
+        </div>
+        <div class="col-lg-1.5 form-group float-right">
+          <button class="form-control btn btn-secondary" name="submit_pdf_staff_with" type="submit" value="Accounts PDF A4" formtarget="_blank">Accounts <i class="fa fa-file-pdf"></i></button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <table data-toggle="table" data-search="true">
+    <thead>
+      <tr>
+        <th>Profile Image</th>
+        <th><%= sort_link(@q, :id, 'ID') %></th>
+        <th><%= sort_link(@q, :title, 'Title') %></th>
+        <th><%= sort_link(@q, :bank_name, 'Bank') %></th>
+        <th><%= sort_link(@q, :amount, 'Balance') %></th>
+        <th>Jama/Benam</th>
+        <th class="border_none">Action</th>
+
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @accounts.each do |account| %>
+        <tr>
+          <td>
+            <% if  account.profile_image.attached? %>
+              <%= image_tag account.profile_image.service_url, width: 100 %>
+            <% end %>
+          </td>
+          <td><%= account.id %></td>
+          <td class="urdu-font">
+            <%= link_to payments_path('q[account_id_in]':account.id) do%>
+              <i class="fa fa-address-book"></i><%= account.title %>
+            <%end %>
+          </td>
+          <td class="urdu-font"><%= account.bank_name %></td>
+          <td><%= account.amount.to_f.round(2) %></td>
+          <td>
+
+                  <%if account.amount.to_f < 0  %>
+                       <b style="font-size:20px;color:blue;">Jama</b>
+                  <%elsif  account.amount.to_f > 0  %>
+                  <b style="font-size:20px;color:red;">Benam</b>
+                  <%else%>
+                  <b style="font-size:20px;color: #6cec53 ;">Nill</b>
+                  <%end%>
+            </td>
+
+          <% if can?(:add, :all) %>
+          <td>
+            <% if can?(:delete, :all) %>
+              <%= link_to new_payment_path(account_id:account) do %>
+                <i class="fa fa-plus " aria-hidden="true"></i>
+                 Payment |
+               <%end %>
+             <%end %>
+          <% end %>
+          <% if can?(:update, :all) %>
+            <%= link_to edit_account_path(account) do %>
+              <i class="fa fa-edit " aria-hidden="true"></i> |
+            <%end %>
+          <% end %>
+          <% if can?(:delete, :all) %>
+            <%= link_to account, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+              <i class="fa fa-trash " aria-hidden="true"></i> |
+            <%end %>
+          <% end %>
+          <% if can?(:view, :all) %>
+            <%= link_to account do %>
+              <i class="fa fa-eye " aria-hidden="true"></i>
+            <%end %>
+          <%end%>
+          <a href="<%=payments_path('q[account_id_eq]':account.id)%>">
+            <i class="fa fa-address-book"></i>
+          </a>
+          </td>
+        </tr>
+
+      <% end %>
+      <tr>
+        <td><h5>Total</h5></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><h5><%=@account_total.first.to_f.round(2)%></h5></td>
+        <td></td>
+
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="clearfix"></div>
+<div class="row">
+  <div class="col-lg-4 col-sm-4">
+    <%= page_entries_info @accounts %>
+  </div>
+  <div class="col-lg-8 col-sm-8 pagination-left">
+    <%= paginate @accounts %>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#account_list").removeClass('hidden');
+    FontAwesome.dom.i2svg();
+  });
+  $(document).ready(function() {
+    setTimeout(function(){
+      $(".chosen-select").chosen({
+  allow_single_deselect: true,
+  width: '100%'
+});
+    }, 50);
+  });
+</script>

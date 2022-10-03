@@ -1,0 +1,52 @@
+
+<% @date = Date.today  %>
+<% @time = DateTime.now %>
+<% @time = Time.zone.now %>
+<div>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Accounts details</h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<p style="text-align: center;margin: 0;">Report by: <%=current_user.name%></p>
+</div>
+<div >
+  <table>
+    <thead>
+      <tr class="lite-gray">
+        <th>ID</th>
+        <th>Title</th>
+        <th>Bank</th>
+        <th>Balance</th>
+        <th>Jama/Benam</th>
+
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @accounts.each do |account| %>
+        <tr>
+          <td><%= account.id %></td>
+          <td><%= account.title %></td>
+          <td><%= account.bank_name %></td>
+          <td><%= account.amount.to_f.round(2) %><%#@account_total += account.amount.to_f  %></td>
+          <td>
+
+                  <%if account.amount.to_f < 0  %>
+                       <b style="font-size:20px;color:blue;">Jama</b>
+                  <%elsif  account.amount.to_f > 0  %>
+                  <b style="font-size:20px;color:red;">Benam</b>
+                  <%else%>
+                  <b style="font-size:20px;color: #6cec53 ;">Nill</b>
+                  <%end%>
+            </td>
+      <% end %>
+      <tr class="lite-gray">
+        <td><h4>Total</h4></td>
+        <td></td>
+        <td></td>
+        <td><h4><%=@account_total.first.to_f.round(2)%></h4></td>
+        <td></td>
+      </tr>
+    </tbody>
+
+  </table>
+</div>

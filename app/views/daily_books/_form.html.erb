@@ -1,0 +1,149 @@
+<%= bootstrap_form_for(daily_book) do |f| %>
+  <% if daily_book.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(daily_book.errors.count, "error") %> prohibited this daily_book from being saved:</h2>
+
+      <ul>
+      <% daily_book.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <i class="fas fa-edit" aria-hidden="true"></i>
+  <% end %>
+  <table>
+    <thead>
+      <th>
+        <%= f.select :department_id, options_from_collection_for_select(@departments, 'id', 'title', params[:department_id]), {prompt: "Select the Department"},readonly:true%>
+      </th>
+      <th><%= f.date_field :book_date, required:true %></th>
+      <th>
+        <p>
+          Difference: <span id='total_difference'>0.00</span>
+          Wast: <span id='total_wast'>0.00</span> <br>
+          Ready: <span id='ready_for_khakar'>0.00</span> <br>
+          Pay: <span id='kachi_rate'>0.00</span>
+          Pay: <span id='paaki_rate'>0.00</span>
+        </p>
+      </th>
+      <th><%= f.text_area :comment %></th>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <label for="salary_details_wage_rate">Rate</label>
+          <input class="form-control" type="number" placeholder="Enter Paaki Rate" name="salary_details_wage_rate" id="salary_details_wage_rate" value="0.0", step="any", onchange="paakiRate()", onkeyup="paakiRate()">
+          <input class="form-control" type="hidden" placeholder="Enter Kachi Rate" name="salary_details_raw_rate" id="salary_details_raw_rate" value="0.0", step="any", onchange="kachiRate()", onkeyup="kachiRate()", readonly="true">
+        </td>
+        <td>
+        </td>
+        <td>
+          <input class="form-control" type="hidden" placeholder="Enter Gift Rate" name="salary_details_gift_rate" id="salary_details_gift_rate" value="0.0", step="any", onchange="giftRate()", onkeyup="giftRate()">
+        </td>
+        <td>
+          <input class="form-control" type="hidden" placeholder="Enter Coverage Rate" name="salary_details_coverge_rate" id="salary_details_coverge_rate" value="0.0", onchange="covergeRate()", onkeyup="covergeRate()">
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <table>
+    <thead>
+      <th>Name</th>
+      <th>Item</th>
+      <th>Qty</th>
+      <th>Wast</th>
+      <th>Rate</th>
+      <th>Ready</th>
+      <th>Pay</th>
+    </thead>
+    <tbody>
+      <%= f.fields_for :salary_details do |f| %>
+      <tr>
+        <td>
+          <%= f.hidden_field :id %>
+          <%= f.hidden_field :staff_id %>
+          <%= f.object.staff&.coded_full_name %>
+        </td>
+        <td>
+          <%= f.hidden_field :raw_product_id %>
+          <%= f.object.raw_product.title %>
+          <%if  can?(:update, :all)%>
+            <%= f.hidden_field :raw_quantity, hide_label:true, class: "raw-quantity",onchange:"daily_book_update()",onkeyup:"daily_book_update()"%>
+          <%elsif f.object.raw_quantity.present?%>
+            <%= f.hidden_field :raw_quantity, hide_label:true, class: "raw-quantity",onchange:"daily_book_update()",onkeyup:"daily_book_update()", readonly: true%>
+          <%else%>
+            <%= f.hidden_field :raw_quantity, hide_label:true, class: "raw-quantity",onchange:"daily_book_update()",onkeyup:"daily_book_update()"%>
+          <%end%>
+        </td>
+        <td>
+          <%if  can?(:update, :all) %>
+            <%= f.number_field :quantity, hide_label:true, class: "quantity",onchange:"daily_book_update()",onkeyup:"daily_book_update()" %>
+          <%elsif f.object.quantity.present?%>
+            <%= f.number_field :quantity, hide_label:true, class: "quantity",onchange:"daily_book_update()",onkeyup:"daily_book_update()", readonly: true%>
+          <%else%>
+            <%= f.number_field :quantity, hide_label:true, class: "quantity",onchange:"daily_book_update()",onkeyup:"daily_book_update()"%>
+          <%end%>
+          <%= f.hidden_field :pather_remaning_quanity, class: "remaning_quanity" %>
+        </td>
+        <td>
+          <%= f.number_field :extra, hide_label:true, class: "wast",onchange:"daily_book_update()",onkeyup:"daily_book_update()" %>
+        </td >
+        <td class="hidden">
+          <%= f.hidden_field :raw_wage_rate, hide_label:true, readonly: true, class: "raw-wage-rate",onchange:"daily_book_update()",onkeyup:"daily_book_update()" %>
+        </td>
+        <td>
+          <%= f.number_field :wage_rate,value: f.object.wage_rate.present? ? f.object.wage_rate : f.object.raw_product.cost, hide_label:true, class: "wage-rate",onchange:"daily_book_update()",onkeyup:"daily_book_update()" %>
+        </td>
+        <td class="hidden">
+          <%= f.number_field :gift_rate, hide_label:true, readonly: true, class: "gift-rate",onchange:"daily_book_update()",onkeyup:"daily_book_update()" %>
+        </td>
+        <td class="hidden">
+          <%= f.number_field :coverge_rate, hide_label:true, readonly: true, class: "coverge-rate",onchange:"daily_book_update()",onkeyup:"daily_book_update()" %>
+        </td>
+        <td class="hidden">
+          <span class="row-difference">0.00</span>
+        </td>
+        <td>
+          <span class="for-khakar">0.00</span>
+        </td>
+        <td class="hidden">
+          <%= f.hidden_field :wage_debit,value:0.00, class: "pay" %>
+          <span class="pay">0.00</span>
+        </td>
+        <td>
+          <%= f.hidden_field :amount,value:0.00, class: "total_pay" %>
+          <span class="total_pay">0.00</span>
+        </td>
+        <td class="hidden">
+          <span class="total_gift">0.00</span>
+          <%= f.hidden_field :gift_pay,value:0.00, class: "total_gift" %>
+          <span class="total_coverge">0.00</span>
+          <%= f.hidden_field :coverge_pay,value:0.00, class: "total_coverge" %>
+        </td>
+      </tr>
+      <% end %>
+      <tr>
+        <td><h4>Total</h4></td>
+        <td><h5 id="kachi_total" class="hidden">0.00</h5></td>
+        <td><h5 id="paaki_total">0.00</h5></td>
+        <td><h5 id="wast_total">0.00</h5></td>
+        <!-- <td><h5 id="kachi_rate_total">0.00</h5></td>
+        <td><h5 id="paaki_rate_total">0.00</h5></td>
+        <td><h5 id="gift_rate_total">0.00</h5></td>
+        <td><h5 id="coverge_rate_total">0.00</h5></td> -->
+        <td><h5 class="hidden" id="total_diff_total" >0.00</h5></td>
+        <td><h5 id="ready_for_khakar_total">0.00</h5></td>
+        <td class="hidden"><h5 id="pay_total">0.00</h5></td>
+        <td><h5 id="total_pay_total">0.00</h5></td>
+        <td class="hidden"><h5 id="total_gift_total">0.00</h5><h5 id="total_coverge_total">0.00</h5></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="actions">
+    <%= link_to 'Daily Book', daily_books_path, class: "btn btn-info" %>
+    <%= f.submit class: "btn btn-primary", style: "float: right" %>
+  </div>
+
+<% end %>
+<%= javascript_include_tag 'hover', 'data-turbolinks-track': 'reload' %>

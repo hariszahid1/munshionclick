@@ -1,0 +1,164 @@
+
+<div class="card">
+  <div class="card-header">
+    <h3>New User</h3>
+  </div>
+  <div class="card-body">
+    <%= bootstrap_form_for(@sys_user) do |f| %>
+      <% if @sys_user.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@sys_user.errors.count, "error") %> prohibited this sys_user from being saved:</h2>
+
+          <ul>
+          <% @sys_user.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+          </ul>
+        </div>
+      <% end %>
+      <div class="col-lg-6 form-group float-left">
+        <%= f.file_field :profile_image %>
+      </div>
+      <div class="col-lg-6 form-group float-left">
+        <% if  @sys_user.profile_image.attached? %>
+          <%= image_tag @sys_user.profile_image.service_url, width: 300 %>
+        <% end %>
+      </div>
+
+    <div class="clearfix">
+      <hr>
+      <div class="col-lg-12 row ">
+
+              <div class="col-lg-6 form-group float-left">
+                <%= link_to sys_users_path do %>
+                <i class="fa fa-arrow-left " aria-hidden="true"></i>
+                <% end %>
+              </div>
+                <div class="col-lg-6 form-group float-left">
+                  <div class="col-lg-6 form-group float-left">
+                    <%=f.object.id.nil? ? (f.submit class: "btn btn-success", style: "float: left")  :  (f.submit class: "btn btn-warning", style: "float: left")%>
+                  </div>
+                </div>
+              <% end %>
+    </div>
+    </div>
+    <%= javascript_include_tag 'hover', 'data-turbolinks-track': 'reload' %>
+  </div>
+</div>
+
+
+    <div class="card shadow mb-4">
+        <!-- Card Header - Accordion -->
+        <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+          <h6 class="m-0 font-weight-bold text-primary"><h1>Raw product Details</h1></h6>
+        </a>
+        <!-- Card Content - Collapse -->
+        <div class="collapse show" id="collapseCardExample" style="">
+          <div class="card-body">
+
+    <div class="row">
+            <div class="col-lg-12 col-sm-12">
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Id:<h5> <%= @sys_user.id %></h5></h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Name:<h5><%= @sys_user.name %></h5> </h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Code:<h5><%= @sys_user.code %></h5></h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Cnic:<h5><%= @sys_user.cnic %></h5></h3>
+              </div>
+            </div>
+    </div>
+
+    <div class="row">
+            <div class="col-lg-12 col-sm-12">
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>User type: <h5><%= @sys_user.user_type.title %></h5></h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>User group:<h5><%= @sys_user.user_group %></h5></h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Status:<h5><%= @sys_user.status %></h5> </h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Occupation:<h5><%= @sys_user.occupation %></h5></h3>
+              </div>
+            </div>
+    </div>
+
+    <div class="row">
+            <div class="col-lg-12 col-sm-12">
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Credit Status:<h5><%= @sys_user.credit_status %></h5></h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Credit Limit:<h5><%= @sys_user.credit_limit %></h5></h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Opening Blance:<h5><%= @sys_user.balance %></h5></h3>
+              </div>
+            </div>
+    </div>
+    <br>
+    <h2>Contact Form</h2>
+    <br>
+
+    <div class="row">
+            <div class="col-lg-12 col-sm-12">
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Status:<h5><%= @sys_user.contact.status rescue nil%></h5></h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>City:<h5><%= @sys_user.contact.city.title rescue nil%></h5></h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Country:<h5><%= @sys_user.contact.country.title rescue nil%></h5></h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Home:<h5><%= @sys_user.contact.home rescue nil%></h5></h3>
+              </div>
+            </div>
+    </div>
+
+    <div class="row">
+            <div class="col-lg-12 col-sm-12">
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Office:<h5><%= @sys_user.contact.office rescue nil%></h5></h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Fax:<h5><%= @sys_user.contact.fax rescue nil%></h5></h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Mobile:<h5><%= @sys_user.contact.mobile rescue nil%></h5></h3>
+              </div>
+            <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+              <h3>Email:<h5><%= @sys_user.contact.email rescue nil%></h5></h3>
+            </div>
+          </div>
+    </div>
+    <div class="row">
+            <div class="col-lg-12 col-sm-12">
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Address:<h5><%= @sys_user.contact.address rescue nil%></h5></h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>comment:<h5><%= @sys_user.contact.comment rescue nil%></h5></h3>
+              </div>
+            </div>
+    </div>
+
+            <div class="row">
+              <div class="col-lg-1 float-left">
+                <%= link_to products_path do %>
+                <i class="fa fa-arrow-left " aria-hidden="true"></i>
+                <% end %>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>

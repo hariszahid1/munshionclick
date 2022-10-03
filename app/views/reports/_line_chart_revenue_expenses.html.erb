@@ -1,0 +1,34 @@
+<script language = "JavaScript">
+  google.charts.load('current', {packages: ['corechart','line']});
+    function drawChart() {
+      // Define the chart to be drawn.
+      var data = new google.visualization.DataTable();
+      data.addColumn('string', 'Months');
+      data.addColumn('number', 'Revenue');
+      data.addColumn('number', 'Expenses');
+      data.addColumn('number', 'Investment');
+      <% @revenue.each_with_index do |rev, indx| %>
+        data.addRow(['<%=rev[0]%>', <%=rev[1][1]%>, <%=@expense[rev[0]]%>, <%=@investment[rev[0]]%>]);
+      <% end %>
+
+      // Set chart options
+      var options = {'title' : 'Last 12 Months detail',
+          hAxis: {
+            title: 'Months'
+          },
+          vAxis: {
+            title: 'Rupees'
+          },
+          'width':1000,
+          'height':600,
+          pointsVisible: true
+      };
+
+      // Instantiate and draw the chart.
+      var chart = new google.visualization.LineChart(document.getElementById('line_chart_revenue_expenses'));
+      chart.draw(data, options);
+    }
+  google.charts.setOnLoadCallback(drawChart);
+</script>
+
+<div id = "line_chart_revenue_expenses"></div>

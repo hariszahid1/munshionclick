@@ -1,0 +1,47 @@
+<% @time = Time.zone.now %>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Transfer Detail</h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<div style="width:90vw;">
+  <table>
+    <th></th>
+    <th></th>
+    <tr>
+      <td style="width:67vw;">Date Time: <span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%> <%=@time.strftime("at %I:%M%p")%></span> </td>
+    </tr>
+  </table>
+</div>
+<p style="border-bottom: dotted 3px;  margin: 0;"></p>
+<div style="width:90vw;">
+  <table data-toggle="table" data-search="true">
+    <thead>
+      <tr>
+        <th>Booking</th>
+        <th>From</th>
+        <th>To</th>
+        <th>By</th>
+        <th>DateTime</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <%@remarks.each do |remark|%>
+        <tr>
+          <td>
+            <%if remark.remarkable.order_items_names_and_quantity!=0%>
+              <%remark.remarkable.order_items_names_and_quantity.each do |name_quantity|%>
+                <%=name_quantity.first%> <%=name_quantity[5]%>
+                <%=name_quantity.second%>
+                <%= remark.remarkable.amount.to_f.round(2) rescue 0%>
+              <%end%>
+            <%end%>
+          </td>
+          <td><%=remark.comment%></td>
+          <td><%=remark.body%></td>
+          <td><%=remark.message%></td>
+          <td><%= remark.created_at.strftime("%d%b%y at %I:%M %p") %></td>
+        </tr>
+      <%end%>
+    </tbody>
+  </table>
+</div>

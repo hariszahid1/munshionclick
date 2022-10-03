@@ -1,0 +1,33 @@
+<div id="chart_div1"></div>
+<script type="text/javascript">
+    google.charts.load('current', {packages: ['corechart', 'bar']});
+    google.charts.setOnLoadCallback(drawBasic);
+    function drawBasic() {
+        var data = google.visualization.arrayToDataTable([
+        ['day', 'Total sale'],
+            <%if @sale_current_days.present?%>
+              <% @sale_current_days.each do |sale| %>
+              ['<%= sale.first%>',<%= sale.last%>],
+              <% end %>
+            <%else%>
+              ['<%= Date.current.day%>',0],
+            <%end%>
+        ]);
+
+        var options = {
+        title: 'Total Sale Report By days',
+        chartArea: {width: '50%'},
+        hAxis: {
+            title: 'Total Sale',
+            minValue: 0
+        },
+        vAxis: {
+            title: 'Date'
+        }
+        };
+
+        var chart = new google.visualization.BarChart(document.getElementById('chart_div1'));
+
+        chart.draw(data, options);
+    }
+</script>

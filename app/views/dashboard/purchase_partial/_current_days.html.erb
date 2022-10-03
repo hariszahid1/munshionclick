@@ -1,0 +1,45 @@
+
+<%@rev=Hash.new%>
+<div id="chart_div11"></div>
+
+<script type="text/javascript">
+    google.charts.load('current', {packages: ['corechart', 'bar']});
+    google.charts.setOnLoadCallback(drawBasic);
+    function drawBasic() {
+
+        var data = google.visualization.arrayToDataTable([
+        ['day', 'Total sale'],
+          <%if @purchase_current_days.present?%>
+            <% @purchase_current_days.each do |sale| %>
+            ['<%= sale.first.last%>',<%= sale.last%>],
+            <% end %>
+          <% else %>
+            ['<%= Date.current.day%>',0],
+          <% end %>  
+        ]);
+
+        var options = {
+        title: 'Total Sale Report By days',
+        chartArea: {width: '50%'},
+        hAxis: {
+            title: 'Total Sale',
+            minValue: 0
+        },
+        vAxis: {
+            title: 'Date'
+        }
+        };
+
+        var chart = new google.visualization.BarChart(document.getElementById('chart_div11'));
+
+        chart.draw(data, options);
+    }
+</script>
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#expenses_list").removeClass('hidden');
+  });
+</script>

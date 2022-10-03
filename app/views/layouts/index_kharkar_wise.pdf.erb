@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>POS</title>
+    <%= wicked_pdf_stylesheet_link_tag "pdf" -%>
+</head>
+<body class="bond_pos_pdf">
+  <% @time = Time.zone.now %>
+  <% @salary_details.each.with_index do |staff,index| %>
+  <div class="col-table-3 nobreak">
+
+    <table data-toggle="table" data-search="true">
+      <thead>
+        <tr>
+          <th colspan="8"></th>
+        </tr>
+        <tr>
+          <th colspan="8"> <span class="td-bold"><%= staff.code %> <%= staff.full_name %></span></th>
+        </tr>
+
+        <tr>
+          <th class="short-column">Date</th>
+          <th class="short-column">Item</th>
+          <th class="short-column">Quantity</th>
+          <th class="short-column">After wast kat</th>
+          <th class="short-column">Location</th>
+          <th class="short-column">Debit</th>
+          <th class="short-column">Credit</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <%khakar_quanity=0%>
+        <%khakar_remaning=0%>
+        <%khakar_debit=0%>
+        <%khakar_credit=0%>
+        <%@salary_details_full.each do |sal|%>
+          <%if sal[0] == staff.id%>
+          <tr>
+            <td><%=sal[12]%></td>
+            <td><%=RawProduct.find(sal[1]).title%></td>
+            <td><%=sal[2]%></td><% khakar_quanity +=sal[2]%>
+            <td><%=sal[4]%></td><% khakar_remaning +=sal[4]%>
+            <td><%=sal[9]%></td>
+            <td><%=(sal[4].to_f*sal[5].to_f).round(0)%> <% khakar_debit +=(sal[4].to_f*sal[5].to_f).round(0)%></td>
+            <td><%=(sal[4].to_f*(sal[6].to_f/1000)).to_f.round(0)%> <% khakar_credit += (sal[4].to_f*(sal[6].to_f/1000)).to_f.round(0) %></td>
+          </tr>
+          <%end%>
+        <%end%>
+        <tr class="lite-gray">
+          <td class="td-bold">Total</td>
+          <td></td>
+          <td class="td-bold"><%=(khakar_quanity).to_f.round(0) %></td>
+          <td class="td-bold"><%=(khakar_remaning).to_f.round(0) %></td>
+          <td></td>
+          <td class="td-bold"><%=(khakar_debit).to_f.round(0) %></td>
+          <td class="td-bold"><%=(khakar_credit).to_f.round(0)%></td>
+        </tr>
+        <tr class="lite-gray">
+          <td class="td-bold">Total Payable</td>
+          <td class="td-bold"><%=(khakar_debit).to_f.round(0)%></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td class="td-bold">Credit</td>
+          <td class="td-bold"><%=(khakar_credit).to_f.round(0)%></td>
+        </tr>
+
+
+      </tbody>
+    </table>
+  </div>
+  <% end %>
+
+  <p style="text-align: center;margin: 0;"><span><%=@pos_setting.address if @pos_setting.present?%></span></p>
+  <p style="text-align: center;margin: 0;"><span><%=@pos_setting.phone if @pos_setting.present?%></span></p>
+</body>
+</html>

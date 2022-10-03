@@ -1,0 +1,284 @@
+class StaffsController < ApplicationController
+  before_action :set_staff, only: [:show, :edit, :update, :destroy, :salary_info, :salary_wage_rate_info]
+
+  # GET /staffs
+  # GET /staffs.json
+  def index
+    @departments=Department.all
+    @q = Staff.where(deleted: false).ransack(params[:q])
+    if @q.result.count > 0
+      @q.sorts = ['name asc', 'department_id asc'] if @q.sorts.empty?
+    end
+    if params[:q].present?
+      @name = params[:q][:id_eq]
+      @department=params[:q][:department_id_eq]
+    end
+    if params[:submit_remove_wege_debit]
+      @staffs_pdf = @q.result(distinct: true)
+      @staffs_pdf.update_all(wage_debit:0)
+    end
+    @staff_names=Staff.all
+    @staffs_total = @q.result(distinct: true)
+    @staffs = @q.result(distinct: true).page(params[:page]).per(50)
+    @total = @staffs_total.pluck('SUM(advance_amount)','SUM(balance)','SUM(wage_debit)')
+    @staffs_pays = Salary.where("extract(month from created_at) = ? AND extract(year from created_at) = ? AND staff_id IN (?)", Date.today.month, Date.today.year,Staff.pluck(:id)).where(:payment_type=>0)
+    if params[:submit_pdf]
+      request.format = 'pdf'
+      @staffs_pdf = @q.result(distinct: true)
+      respond_to do |format|
+        format.html
+        format.pdf do
+          render pdf: "index_staff_wise",
+          layout: 'pdf.html',
+          page_size: 'A4',
+          margin_top: '0',
+          margin_right: '0',
+          margin_bottom: '0',
+          margin_left: '0',
+          encoding: "UTF-8",
+          footer:  {             # optional, use 'pdf_plain' for a pdf_plain.html.pdf.erb file, defaults to main layout
+            right: '[page] of [topage]'},
+          show_as_html: false
+        end
+      end
+    elsif params[:salary_submit_pdf]
+        request.format = 'pdf'
+        @staffs_pdf = @q.result(distinct: true)
+        respond_to do |format|
+          format.html
+          format.pdf do
+            render pdf: "salary_staff",
+            layout: 'salary_staff.pdf',
+            page_size: 'A4',
+            margin_top: '0',
+            margin_right: '0',
+            margin_bottom: '0',
+            margin_left: '0',
+            footer:  {             # optional, use 'pdf_plain' for a pdf_plain.html.pdf.erb file, defaults to main layout
+              right: '[page] of [topage]'},
+            encoding: "UTF-8",
+            show_as_html: true
+          end
+        end
+      elsif params[:wage_submit_pdf]
+          request.format = 'pdf'
+          @staffs_pdf = @q.result(distinct: true)
+          respond_to do |format|
+            format.html
+            format.pdf do
+              render pdf: "wage_staff",
+              layout: 'wage_staff.pdf',
+              page_size: 'A4',
+              margin_top: '0',
+              margin_right: '0',
+              margin_bottom: '0',
+              margin_left: '0',
+              footer:  {             # optional, use 'pdf_plain' for a pdf_plain.html.pdf.erb file, defaults to main layout
+                right: '[page] of [topage]'},
+              encoding: "UTF-8",
+              show_as_html: false
+            end
+          end
+    end
+  end
+
+  def payable
+    @departments=Department.all
+    @q = Staff.where(deleted: false).ransack(params[:q])
+    if @q.result.count > 0
+      @q.sorts = ['department_id asc','name asc'] if @q.sorts.empty?
+    end
+    if params[:q].present?
+      @name = params[:q][:id_eq]
+      @department=params[:q][:department_id_eq]
+    end
+    @staff_names=Staff.all
+    @staffs = @q.result(distinct: true).page(params[:page]).per(50)
+    @staffs_pays = Salary.where("extract(month from created_at) = ? AND extract(year from created_at) = ? AND staff_id IN (?)", Date.today.month, Date.today.year,Staff.pluck(:id)).where(:payment_type=>0)
+    if params[:submit_pdf]
+      request.format = 'pdf'
+      @staffs_pdf = @q.result(distinct: true)
+      respond_to do |format|
+        format.html
+        format.pdf do
+          render pdf: "index_staff_wise",
+          layout: 'pdf.html',
+          page_size: 'A4',
+          margin_top: '0',
+          margin_right: '0',
+          margin_bottom: '0',
+          margin_left: '0',
+          footer:  {             # optional, use 'pdf_plain' for a pdf_plain.html.pdf.erb file, defaults to main layout
+            right: '[page] of [topage]'},
+          encoding: "UTF-8",
+          show_as_html: false
+        end
+      end
+    end
+
+  end
+
+  def receiveable
+    @departments=Department.all
+    @q = Staff.where(deleted: false).ransack(params[:q])
+    if @q.result.count > 0
+      @q.sorts = ['department_id asc','name asc'] if @q.sorts.empty?
+    end
+    if params[:q].present?
+      @name = params[:q][:id_eq]
+      @department=params[:q][:department_id_eq]
+    end
+    @staff_names=Staff.all
+    @staffs = @q.result(distinct: true).page(params[:page]).per(50)
+    @staffs_pays = Salary.where("extract(month from created_at) = ? AND extract(year from created_at) = ? AND staff_id IN (?)", Date.today.month, Date.today.year,Staff.pluck(:id)).where(:payment_type=>0)
+    if params[:submit_pdf]
+      request.format = 'pdf'
+      @staffs_pdf = @q.result(distinct: true)
+      respond_to do |format|
+        format.html
+        format.pdf do
+          render pdf: "index_staff_wise",
+          layout: 'pdf.html',
+          page_size: 'A4',
+          margin_top: '0',
+          margin_right: '0',
+          margin_bottom: '0',
+          margin_left: '0',
+          footer:  {             # optional, use 'pdf_plain' for a pdf_plain.html.pdf.erb file, defaults to main layout
+            right: '[page] of [topage]'},
+          encoding: "UTF-8",
+          show_as_html: false
+        end
+      end
+    end
+  end
+
+  def dasti
+    @departments=Department.all
+    @q = Staff.where(deleted: false).ransack(params[:q])
+    if @q.result.count > 0
+      @q.sorts = ['department_id asc','name asc'] if @q.sorts.empty?
+    end
+    if params[:q].present?
+      @name = params[:q][:id_eq]
+      @department=params[:q][:department_id_eq]
+    end
+    @staff_names=Staff.all
+    @staffs = @q.result(distinct: true).page(params[:page]).per(50)
+    @staffs_pays = Salary.where("extract(month from created_at) = ? AND extract(year from created_at) = ? AND staff_id IN (?)", Date.today.month, Date.today.year,Staff.pluck(:id)).where(:payment_type=>0)
+    if params[:submit_pdf]
+      request.format = 'pdf'
+      @staffs_pdf = @q.result(distinct: true)
+      respond_to do |format|
+        format.html
+        format.pdf do
+          render pdf: "index_staff_wise",
+          layout: 'pdf.html',
+          page_size: 'A4',
+          margin_top: '0',
+          margin_right: '0',
+          margin_bottom: '0',
+          margin_left: '0',
+          encoding: "UTF-8",
+          footer:  {             # optional, use 'pdf_plain' for a pdf_plain.html.pdf.erb file, defaults to main layout
+            right: '[page] of [topage]'},
+          show_as_html: false
+        end
+      end
+    end
+  end
+
+  # GET /staffs/1
+  # GET /staffs/1.json
+  def show
+    @departments=Department.all
+    @raw_products = RawProduct.all
+  end
+
+  # GET /staffs/new
+  def new
+    @staff = Staff.new
+    @departments=Department.all
+    @raw_products = RawProduct.all
+    @departments=Department.all
+  end
+
+  # GET /staffs/1/edit
+  def edit
+    @departments=Department.all
+    @raw_products = RawProduct.all
+  end
+
+  # POST /staffs
+  # POST /staffs.json
+  def create
+    @staff = Staff.new(staff_params)
+    respond_to do |format|
+      if @staff.save!
+        format.html { redirect_to get_request_referrer, notice: 'Staff was successfully created.' }
+        format.json { render :show, status: :created, location: @staff }
+      else
+        @departments=Department.all
+        @raw_products = RawProduct.all
+        format.html { render :new }
+        format.json { render json: @staff.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # PATCH/PUT /staffs/1
+  # PATCH/PUT /staffs/1.json
+  def update
+    respond_to do |format|
+      if @staff.update!(staff_params)
+        format.html { redirect_to get_request_referrer, notice: 'Staff was successfully updated.' }
+        format.json { render :show, status: :ok, location: @staff }
+      else
+        @departments=Department.all
+        @raw_products = RawProduct.all
+        format.html { render :edit }
+        format.json { render json: @staff.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # DELETE /staffs/1
+  # DELETE /staffs/1.json
+  def destroy
+    @staff.destroy
+    respond_to do |format|
+      format.html { redirect_to get_request_referrer, notice: 'Staff was successfully destroyed.' }
+      format.json { head :no_content }
+      format.js   { render :layout => false }
+    end
+  end
+
+  def salary_info
+    respond_to do |format|
+      format.json { render json: {status: 'success', id: @staff.id,balance: @staff.balance, advance_amount: @staff.advance_amount, monthly_salary: @staff.monthly_salary, daily_Salary: (@staff.monthly_salary.to_f / (Time.days_in_month Date.today.month)).round(2),wage_debit: @staff.wage_debit,wage_rate: @staff.wage_rate }, status: :ok}
+    end
+  end
+
+  def salary_wage_rate_info
+    respond_to do |format|
+      if @staff.staff_department=="Plant 1"
+        @staffs=Staff.where(staff_department:@staff.staff_department).where.not(id:@staff)
+      else
+        @staffs=Staff.where(id:@staff)
+      end
+      format.json { render json: {status: 'success', balance: @staff.balance, advance_amount: @staff.balance, wage_rate: @staff.wage_rate ,staffs: @staffs.pluck(:name),staff_ids: @staffs.pluck(:id),staff_count: @staffs.count}, status: :ok}
+    end
+  end
+  private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_staff
+      @staff = Staff.find(params[:id])
+    end
+
+    # Never trust parameters from the scary internet, only allow the white list through.
+    def staff_params
+      params.require(:staff).permit(:code, :name, :father, :education, :gender, :phone, :address, :cnic, :date_of_joining, :date_of_leaving, :yearly_increment,
+                                    :monthly_salary, :school_branch_id, :wage_rate, :balance, :staff_department, :department_id, :staff_type, :wage_debit,
+                                     :raw_product_quantity, :profile_image, :staff_raw_products_attributes => [:id, :staff_id, :raw_product_id, :_destroy])
+    end
+end

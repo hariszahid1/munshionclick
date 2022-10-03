@@ -1,0 +1,57 @@
+
+
+<div class="card shadow mb-4">
+        <!-- Card Header - Accordion -->
+    <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+      <h6 class="m-0 font-weight-bold text-primary"><h1>Salary details</h1></h6>
+    </a>
+        <!-- Card Content - Collapse -->
+  <div class="collapse show" id="collapseCardExample" style="">
+    <div class="card-body">
+
+      <div class="row">
+            <div class="col-lg-12 col-sm-12">
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Paid to:<h5> <%= @salary.staff.name %></h5></h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Paid:<h5><%= @salary.paid_salary.present? ? @salary.paid_salary : "" %><%= @salary.advance.present? ? @salary.advance : "" %></h5></h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Blance:<h5><%= @salary.staff.balance.to_f.round(2) %></h5></h3>
+              </div>
+            <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+              <h3>leaves:<h5><%= @salary.leaves_in_month %></h5> </h3>
+            </div>
+          </div>
+      </div>
+
+     <div class="row">
+            <div class="col-lg-12 col-sm-12">
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Paid by:<h5><%= @salary.account_id.present? ? @salary.account.title : '' %></h5></h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>comment:<h5><%= @salary.comment %> | <%= @salary.payment_type %></h5> </h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>created at: <h5>  <%if @salary.created_at.strftime("%d%b%y")!=@salary.updated_at.strftime("%d%b%y")%>
+                    <%= @salary.created_at.present? ? @salary.created_at.strftime("%A,  %d-%b-%y at %H:%M%p") : '' %> | <%= @salary.updated_at.present? ? @salary.updated_at.strftime("%d%b%y at %H:%M%p") : '' %>
+                  <%else%>
+                    <%= @salary.created_at.present? ? @salary.created_at.strftime("%A,  %d-%b-%y at %H:%M%p") : '' %>
+                  <%end%></h5></h3>
+              </div>
+            </div>
+     </div>
+<br>
+            <div class="row">
+              <div class="col-lg-1 float-left">
+                <%= link_to products_path do %>
+                <i class="fa fa-arrow-left " aria-hidden="true"></i>
+                <% end %>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>

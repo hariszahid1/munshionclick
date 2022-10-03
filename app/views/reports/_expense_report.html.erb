@@ -1,0 +1,22 @@
+<table data-toggle="table" data-search="true" id="investment_table">
+  <thead>
+    <tr>
+      <th><%= sort_link(@q, :expense_type_id, 'Type Wise') %></th>
+      <th><%= sort_link(@q, :amount) %></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <%@expense_entries.each do |expense_entry|%>
+      <tr>
+        <td><%=expense_entry.first%></td>
+        <td><%=expense_entry.last%></td>
+      </tr>
+      <%=%>
+      <%end%>
+      <td><h5>Total</h5></td>
+      <td><h5><%=@expense_total%></h5></td>
+    </tr>
+  </tbody>
+</table>

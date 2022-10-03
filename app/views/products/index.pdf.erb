@@ -1,0 +1,9 @@
+<% if pos_setting_sys_type=="HousingScheme"%>
+  <% if params[:submit_pdf_staff].present?%>
+    <%= render 'products/hscheme/hscheme_all', product: @product %>
+  <%else%>
+    <%= render 'products/hscheme/index_hscheme', product: @product %>
+  <%end%>
+<% else%>
+  <%= render 'index', product: @product %>
+<% end%>

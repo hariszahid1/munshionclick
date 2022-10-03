@@ -1,0 +1,23 @@
+<div class="row item_type_products">
+  <div class="col-lg-12 col-sm-12 urdu-font-1">
+    <%@products.each do |product|%>
+      <div class="alert-1 alert-info urdu-font-1 btn btn-info font-weight-bold mr-2" style="margin-right: 10px; float:left;" onclick="return productAssign(<%=product.id%>)" onkeyup="return productAssign(<%=product.id%>)">
+        <%= link_to '#', class: "", onclick: "return productAssign(#{product.id})",onkeyup: "return productAssign(#{product.id})" do %>
+          <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+          <%=product.title%>
+        <% end %>
+      </div>
+    <% end %>
+    <div class="alert-1 alert-info urdu-font-1 btn btn-info font-weight-bold mr-2" style="margin-right: 10px; float:left;">
+      <%= link_to item_types_path, class: "", remote: true do %>
+        <i class="fa fa-arrow-left " aria-hidden="true"></i>
+        Back
+      <% end %>
+    </div>
+  </div>
+</div>
+<script>
+  $(document).ready(function() {
+    FontAwesome.dom.i2svg();
+  });
+</script>

@@ -1,0 +1,805 @@
+
+<div class="hidden" id="products_list">
+  <h1>Dashboard</h1>
+
+  <div class="row">
+		<div class="col-lg-12 col-sm-12">
+			<div class="col-xl-2 col-md-6 mb-4 form-group float-left">
+				<div class="card border-left-primary shadow h-100 py-2">
+					<div class="card-body">
+						<div class="row no-gutters align-items-center">
+							<div class="col mr-2">
+								<div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+									<h5  style="text-align: center; color:black;font-weight: bold; ">Products</h5>
+									<hr>
+									<%= link_to products_path do %>
+                    <i class="fas fa-shopping-basket fa-2x text-primary" style="color: black;" aria-hidden="true"></i>
+										<span class="text-primary"><%=@product_count%></span>
+									<% end %>
+									<%= link_to new_product_path do %>
+										<i class="fas fa-plus fa-2x" style="float: right;" aria-hidden="true"></i>
+									<% end %>
+                </div>
+									<%= link_to products_path do %>
+										<span class="h5 mb-0  text-gray-800">List</span>
+									<%end%>
+									<%= link_to new_product_path do %>
+										<span class="h5 mb-0  text-gray-800" style="float: right;">Add</span>
+									<%end%>
+                </div>
+              </div>
+            </div>
+          </div>
+				</div>
+
+        <div class="col-xl-2 col-md-6 mb-4 form-group float-left">
+          <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+										<h5 style="text-align: center; color: black; font-weight: bold;">Users</h5>
+										<hr>
+										<%= link_to sys_users_path do %>
+											<i class="fas fa-users fa-2x text-primary"  aria-hidden="true"></i>
+										<span class="text-primary"><%=@sys_user_count%></span>
+										<% end %>
+										<%= link_to new_sys_user_path do %>
+											<i class="fas fa-plus fa-2x " style="float: right;" aria-hidden="true"></i>
+										<% end %>
+									</div>
+										<%= link_to sys_users_path do %>
+										<span class="h5 mb-0  text-gray-800">List</span>
+										<%end%>
+										<%= link_to new_sys_user_path do %>
+										<span class="h5 mb-0  text-gray-800" style="float: right;">Add</span>
+										<%end%>
+                </div>
+              </div>
+            </div>
+          </div>
+				</div>
+
+        <div class="col-xl-2 col-md-6 mb-4 form-group float-left">
+          <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+										<h5 style="text-align: center;font-weight: bold;color: black;">Staff</h5>
+										<hr>
+										<%= link_to staffs_path do %>
+											<i class="fas fa-users-cog fa-2x text-primary" aria-hidden="true"></i>
+										<span class="font-weight-bold text-primary"><%=@staff_count%></span>
+										<% end %>
+										<%= link_to new_staff_path do %>
+											<i class="fas fa-plus fa-2x" style="float: right;" aria-hidden="true"></i>
+										<% end %>
+									</div>
+									<%= link_to staffs_path do %>
+										<span class="h5 mb-0  text-gray-800">List</span>
+									<%end%>
+									<%= link_to new_staff_path do %>
+										<span	span class="h5 mb-0  text-gray-800" style="float: right;">Add</span>
+									<%end%>
+                </div>
+              </div>
+            </div>
+          </div>
+				</div>
+
+        <div class="col-xl-2 col-md-6 mb-4 form-group float-left">
+          <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                    <h5 style="text-align: center;font-weight: bold;color: black;">Order</h5>
+                    <hr>
+                    <%= link_to orders_path(sale: true) do %>
+                      <i class="fas fa-cart-arrow-down fa-2x text-primary" aria-hidden="true"></i>
+                      <span class="font-weight-bold text-primary"><%=@total_booked.count.to_f.round(0) rescue 0%>/<%=@total_orders.to_f.round(0) rescue 0%></span>
+
+                    <% end %>
+                    <%= link_to biller_orders_path do %>
+                      <i class="fas fa-plus fa-2x" style="float: right;" aria-hidden="true"></i>
+                    <% end %>
+                  </div>
+                  <%= link_to orders_path(sale: true) do %>
+                    <span class="h5 mb-0  text-gray-800">List</span>
+                  <%end%>
+                  <%=link_to biller_orders_path do %>
+                    <span	span class="h5 mb-0  text-gray-800" style="float: right;">Add</span>
+                  <%end%>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col-xl-2 col-md-6 mb-4 form-group float-left">
+          <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+										<h5 style="text-align: center;font-weight: bold;color: black;">Sale</h5>
+										<hr>
+										<%=  link_to purchase_sale_details_path(sale: true) do %>
+											<i class="fas fa-shopping-cart fa-2x" aria-hidden="true"></i>
+										  <%=@total_sale_slips%>
+										<% end %>
+										<%= link_to new_purchase_sale_detail_path(transaction_type: :sale,product: true) do %>
+											<i class="fas fa-plus fa-2x" style="float: right; color: #28a745;" aria-hidden="true"></i>
+										<% end %>
+									</div>
+									<%=  link_to purchase_sale_details_path(sale: true) do %>
+										<span class="h5 mb-0  text-gray-800">List</span>
+									<%end%>
+									<%= link_to new_purchase_sale_detail_path(transaction_type: :sale,product: true) do %>
+										<span	span class="h5 mb-0  text-gray-800" style="float: right;">Add</span>
+									<%end%>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-2 col-md-6 mb-4 form-group float-left">
+          <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                    <h5 style="text-align: center;font-weight: bold;color: black;">Purchase</h5>
+                    <hr>
+                    <%= link_to purchase_sale_details_path do %>
+                      <i class="fas fa-cart-arrow-down fa-2x" aria-hidden="true"></i>
+                    <%=@total_purchase_slips%>
+                    <% end %>
+                    <%= link_to new_purchase_sale_detail_path(product: true) do %>
+                      <i class="fas fa-plus fa-2x" style="float: right;color: #28a745;" aria-hidden="true"></i>
+                    <% end %>
+                  </div>
+                  <%= link_to purchase_sale_details_path do %>
+                    <span class="h5 mb-0  text-gray-800">List</span>
+                  <%end%>
+                  <%=link_to new_purchase_sale_detail_path(product: true) do %>
+                    <span	span class="h5 mb-0  text-gray-800" style="float: right;">Add</span>
+                  <%end%>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+
+
+
+      <div class="col-xl-2 col-md-6 mb-4 form-group float-left">
+        <div class="card border-left-primary shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                  <h5 style="text-align: center; font-weight: bold; color: black;">User Ledger</h5>
+                  <hr>
+                  <%= link_to new_ledger_book_path(Sjama:true) do %>
+                    <i class="fas fa-users fa-2x text-success" aria-hidden="true"></i><i class="fas fa-sign-in-alt fa-2x text-success" aria-hidden="true"></i>
+                  <% end %>
+                  <%= link_to new_ledger_book_path(Sbenam:true) do %>
+                    <i class="fas fa-users fa-2x text-danger" aria-hidden="true" style="float: right"></i><i class="fas fa-sign-out-alt  fa-2x text-danger" aria-hidden="true" style="float: right;"></i>
+                  <% end %>
+                </div>
+                <%= link_to new_ledger_book_path(Sjama:true) do %>
+                  <span class="h5 mb-0  text-gray-800 text-success">Credit/J</span>
+                <% end %>
+                <%= link_to new_ledger_book_path(Sbenam:true) do %>
+                  <span class="h5 mb-0  text-gray-800 text-danger" style="float: right;">Debit/B</span>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-2 col-md-6 mb-4 form-group float-left">
+        <div class="card border-left-primary shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                  <h5 style="text-align: center; font-weight: bold; color: black;">Staff Ledger</h5>
+                  <hr>
+                  <%= link_to advance_all_salary_details_path do %>
+                    <i class="fas fa-users fa-2x text-success" aria-hidden="true"></i><i class="fas fa-sign-in-alt fa-2x text-success" aria-hidden="true"></i>
+                  <% end %>
+                  <%= link_to advance_salaries_path do %>
+                    <i class="fas fa-users fa-2x text-danger" aria-hidden="true" style="float: right"></i><i class="fas fa-sign-out-alt  fa-2x text-danger" aria-hidden="true" style="float: right;"></i>
+                  <% end %>
+                </div>
+                <%= link_to advance_all_salary_details_path do %>
+                  <span class="h5 mb-0  text-gray-800 text-success">Credit/J</span>
+                <% end %>
+                <%= link_to advance_salaries_path do %>
+                  <span class="h5 mb-0  text-gray-800 text-danger" style="float: right;">Debit/B</span>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="col-xl-2 col-md-6 mb-4 form-group float-left">
+        <div class="card border-left-primary shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                <h5 style="text-align: center; font-weight: bold; color: black;">Ledger</h5>
+                <hr>
+                <%= link_to ledger_books_path do %>
+                  <i class="fas fa-calculator fa-2x" aria-hidden="true"></i>
+                <% end %>
+                <%= link_to staff_ledger_books_path do %>
+                  <i class="fas fa-calculator fa-2x" aria-hidden="true" style="float: right;"></i>
+                <% end %>
+              </div>
+              <%= link_to ledger_books_path do %>
+                <span class="h5 mb-0  text-gray-800">User</span>
+              <% end %>
+              <%= link_to staff_ledger_books_path do %>
+                <span class="h5 mb-0  text-gray-800" style="float: right;">Staff</span>
+              <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-2 col-md-6 mb-4 form-group float-left">
+        <div class="card border-left-primary shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                  <h5 style="text-align: center; font-weight: bold; color: black;">Expense</h5>
+                  <hr>
+                  <%= link_to expenses_path do %>
+                    <i class="fas fa-hand-holding-usd fa-2x" aria-hidden="true"></i>
+                  <%=@total_expense_slips%>
+                  <% end %>
+                  <%= link_to new_expense_path do %>
+                    <i class="fas fa-plus fa-2x" style="float: right;color: #28a745;" aria-hidden="true"></i>
+                  <% end %>
+                </div>
+                <%= link_to expenses_path do %>
+                  <span class="h5 mb-0  text-gray-800">List</span>
+                <%end%>
+                <%= link_to new_expense_path do %>
+                  <span	span class="h5 mb-0  text-gray-800" style="float: right;">Add</span>
+                <%end%>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="col-xl-2 col-md-6 mb-4 form-group float-left">
+        <div class="card border-left-primary shadow h-100 py-2">
+          <div class="card-body" style="height: 160px;">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+              <div class="text-xs font-weight-bold  text-uppercase mb-1">
+                <h5 style="text-align: center; font-weight: bold; ">Sale</h5>
+                <hr>
+                <%= link_to purchase_sale_details_path(sale:true,'q[created_at_gteq]': (DateTime.now).strftime('%Y-%m-%d'),'q[created_at_lteq]': (DateTime.now).strftime('%Y-%m-%d')) do %>
+                <i class="fas fa-dollar-sign" aria-hidden="true" style="color: #6c757d;"></i>
+                <i class="h5 mb-0 font-weight-bold text-gray-800" style="color: #6c757d;">
+                  <%=@total_sale_today.to_f.round(2) rescue 0%>
+                </i>
+                <% end %>
+                <%= link_to purchase_sale_details_path(sale:true,'q[created_at_gteq]': (DateTime.now-1).strftime('%Y-%m-%d'),'q[created_at_lteq]': (DateTime.now-1).strftime('%Y-%m-%d') )do %>
+                  <i class="h5 mb-0 font-weight-bold text-gray-800" style="float: right; color: #6c757d;">
+                  <%=@total_sale.to_f.round(2) rescue 0%>
+                  </i>
+                  <i class="fas fa-dollar-sign" aria-hidden="true" style="float: right; color: #6c757d;"></i>
+                <% end %>
+              </div>
+              <%= link_to purchase_sale_details_path(sale:true,'q[created_at_gteq]': (DateTime.now).strftime('%Y-%m-%d'),'q[created_at_lteq]': (DateTime.now).strftime('%Y-%m-%d')) do %>
+                <span class="h5 mb-0  text-gray-800">Today :<%=@total_receipt_today%></span>
+              <% end %>
+              <%= link_to purchase_sale_details_path(sale:true,'q[created_at_gteq]': (DateTime.now-1).strftime('%Y-%m-%d'),'q[created_at_lteq]': (DateTime.now-1).strftime('%Y-%m-%d') )do %>
+                <span class="h5 mb-0  text-gray-800" style="float: right;">Yesterday :
+                <%=@total_receipt%>
+                </span>
+              <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-2 col-md-6 mb-4 form-group float-left">
+        <div class="card border-left-primary shadow h-100 py-2">
+          <div class="card-body" style="height: 160px;">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+              <div class="text-xs font-weight-bold  text-uppercase mb-1">
+                <h5 style="text-align: center; font-weight: bold; ">Purchase</h5>
+                <hr>
+                <%= link_to purchase_sale_details_path('q[created_at_gteq]': (DateTime.now).strftime('%Y-%m-%d') ,'q[created_at_lteq]': (DateTime.now).strftime('%Y-%m-%d')) do %>
+                  <i class="fas fa-dollar-sign" aria-hidden="true" style="color: #6c757d;"></i>
+                  <i class="h5 mb-0 font-weight-bold text-gray-800" style="color: #6c757d;">
+                    <%=@total_purchase_today.to_f.round(2) rescue 0%>
+                  </i>
+                <% end %>
+                <%= link_to purchase_sale_details_path('q[created_at_gteq]': (DateTime.now-1).strftime('%Y-%m-%d') ,'q[created_at_lteq]': (DateTime.now-1).strftime('%Y-%m-%d') )do %>
+                  <i class="h5 mb-0 font-weight-bold text-gray-800" style="float: right; color: #6c757d;">
+                    <%=@total_purchase.to_f.round(2) rescue 0%>
+                  </i>
+                  <i class="fas fa-dollar-sign" aria-hidden="true" style="float: right; color: #6c757d;"></i>
+                <% end %>
+              </div>
+              <%= link_to purchase_sale_details_path('q[created_at_gteq]': (DateTime.now).strftime('%Y-%m-%d') ,'q[created_at_lteq]': (DateTime.now).strftime('%Y-%m-%d')) do %>
+                <span class="h5 mb-0 text-gray-800">Today :<%=@total_purchase_receipt_today%></span>
+              <% end %>
+              <%= link_to purchase_sale_details_path('q[created_at_gteq]': (DateTime.now-1).strftime('%Y-%m-%d') ,'q[created_at_lteq]': (DateTime.now-1).strftime('%Y-%m-%d') )do %>
+                <span class="h5 mb-0  text-gray-800" style="float: right;">Yesterday :
+                <%=@total_purchase_receipt%>
+                </span>
+              <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+    </div>
+  </div>
+
+
+
+
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+
+
+			<%= link_to ledger_books_path(submit_credit:true,'q[created_at_gteq]':(DateTime.now).strftime('%Y-%m-%d'),'q[created_at_lteq]':(DateTime.now).strftime('%Y-%m-%d')),target: :_blank   do %>
+			<div class="col-xl-2 col-md-6 mb-4 form-group float-left">
+			<div class="card border-left-primary shadow h-100 py-2">
+				<div class="card-body">
+					<div class="row no-gutters align-items-center">
+						<div class="col mr-2">
+							<div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+										<i class="fas fa-dollar-sign " aria-hidden="true"></i>
+										<i class="h5 mb-0 font-weight-bold text-gray-800 "><%= @t_debit.to_f.round(2) %></i>
+							</div>
+							<div class="h5 mb-0 text-danger text-gray-800">Today Paid (Debit)</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			</div>
+		<% end %>
+
+		<%= link_to ledger_books_path(submit_debit:true,'q[created_at_gteq]':(DateTime.now).strftime('%Y-%m-%d'),'q[created_at_lteq]':(DateTime.now).strftime('%Y-%m-%d')),target: :_blank  do %>
+			<div class="col-xl-2 col-md-6 mb-4 form-group float-left">
+				<div class="card border-left-primary shadow h-100 py-2">
+					<div class="card-body">
+						<div class="row no-gutters align-items-center">
+							<div class="col mr-2">
+								<div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+											<i class="fas fa-dollar-sign" aria-hidden="true"></i>
+											<i class="h5 mb-0 font-weight-bold text-gray-800"><%= @t_credit.to_f.round(2) %></i>
+								</div>
+								<div class="h5 mb-0  text-gray-800 text-success">Today Received (Credit)</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		<% end %>
+
+			<%= link_to payable_sys_users_sys_users_path do %>
+			<div class="col-xl-2 col-md-6 mb-4 form-group float-left">
+			<div class="card border-left-primary shadow h-100 py-2">
+				<div class="card-body" >
+					<div class="row no-gutters align-items-center">
+						<div class="col mr-2">
+							<div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">
+								<i class="fas fa-dollar-sign" aria-hidden="true"></i>
+								<i class="h5 mb-0 font-weight-bold text-gray-800"><%=@payable%></i>
+							</div>
+							<div class="h5 mb-0  text-gray-800">Net Payable</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			</div>
+		<% end %>
+
+		<%= link_to receiveable_sys_users_path do %>
+			<div class="col-xl-2 col-md-6 mb-4 form-group float-left" >
+				<div class="card border-left-primary shadow h-100 py-2">
+					<div class="card-body" >
+						<div class="row no-gutters align-items-center">
+							<div class="col mr-2">
+								<div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">
+									<i class="fas fa-dollar-sign " aria-hidden="true"></i>
+									<i class="h5 mb-0 font-weight-bold text-gray-800"><%=@receivable%></i>
+								</div>
+								<div class="h5 mb-0  text-gray-800">Net Receivable</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		<% end %>
+
+
+
+
+
+
+
+			<%= link_to reports_chart_of_account_path  do %>
+			<div class="col-xl-2 col-md-6 mb-4 form-group float-left">
+				<div class="card border-left-primary shadow h-100 py-2">
+					<div class="card-body" style="height: 91px;">
+						<div class="row no-gutters align-items-center">
+							<div class="col mr-2">
+								<div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+									<i class="fas fa-chart-line fa-2x" aria-hidden="true"></i>
+								</div>
+								<div class="h5 mb-0  text-gray-800">Chart of Account</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		<% end %>
+		<%= link_to confirm_index_path,target: :_blank  do %>
+		<div class="col-xl-2 col-md-6 mb-4 form-group float-left">
+			<div class="card border-left-primary shadow h-100 py-2">
+				<div class="card-body">
+					<div class="row no-gutters align-items-center">
+						<div class="col mr-2">
+							<div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+								<i class="h5 mb-0 font-weight-bold text-red-800"><%= @transfer %> Confirmable</i>
+							</div>
+							<div class="h5 mb-0  text-gray-800">Remaning Transaction</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	<% end %>
+
+    </div>
+  </div>
+
+  <div class="row">
+		<div class="col-lg-12 col-sm-12">
+
+			<%= link_to reports_sale_report_path do %>
+			<div class="col-xl-2 col-md-6 mb-4 form-group float-left">
+				<div class="card border-left-primary shadow h-100 py-2">
+					<div class="card-body">
+						<div class="row no-gutters align-items-center">
+							<div class="col mr-2">
+								<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+											<i class="fas fa-industry fa-2x" aria-hidden="true"></i>
+								</div>
+								<div class="h5 mb-0  text-gray-800">Income Statement</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		<% end %>
+
+      <%= link_to reports_product_report_path  do %>
+        <div class="col-xl-2 col-md-6 mb-4 form-group float-left">
+          <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                        <i class="fas fa-info fa-2x" aria-hidden="true"></i>
+                  </div>
+                  <div class="h5 mb-0  text-gray-800">Profit Report</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <div class="col-xl-2 col-md-6 mb-4 form-group float-left">
+        <%= link_to logs_path do %>
+          <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body" >
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                    <i class="fas fa-boxes fa-2x" aria-hidden="true"></i>
+                  </div>
+                  <div class="h5 mb-0  text-gray-800">Log Statement</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+      <div class="col-xl-2 col-md-6 mb-4 form-group float-left">
+        <div class="card border-left-primary shadow h-100 py-2">
+          <div class="card-body" style="height: 160px;">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+              <div class="text-xs font-weight-bold  text-uppercase mb-1">
+                <h5 style="text-align: center; font-weight: bold; ">Details</h5>
+                <hr>
+                <%= link_to payments_path, target: :_blank  do %>
+                  <i class="fas fa-book fa-2x text-success" aria-hidden="true"></i>
+                <% end %>
+                <%= link_to reports_day_out_report_path  do %>
+                  <i class="fas fa-balance-scale fa-2x text-success" aria-hidden="true" style="float: right;"></i>
+                <% end %>
+              </div>
+              <%= link_to payments_path, target: :_blank  do %>
+                <span class="h5 mb-0  text-gray-800 ">Day Book</span>
+              <% end %>
+              <%= link_to reports_day_out_report_path  do %>
+                <span class="h5 mb-0  text-gray-800" style="float: right;"> Day Check	</span>
+              <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <%if pos_setting_is_sms.present?%>
+        <div class="col-xl-4 col-md-6 mb-4 form-group float-left">
+          <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                    <h5 style="text-align: center; font-weight: bold; color: black;">SMS</h5>
+                    <hr>
+                    <%= link_to sms_index_path do %>
+                    <i class="fas fa-comment-alt" aria-hidden="true" style="color: #6c757d;"></i>
+                    <% end %>
+                    <%= link_to sms_index_path('from_tabe':'pills-staff-tab') do %>
+                      <i class="fas fa-comment-alt" aria-hidden="true" style="float: right; color: #6c757d;"></i>
+                    <% end %>
+                  </div>
+                  <%= link_to sms_index_path do %>
+                    <span class="h5 mb-0  text-gray-800">SMS to User</span>
+                  <% end %>
+                  <%= link_to sms_index_path('from_tabe':'pills-staff-tab') do %>
+                    <span class="h5 mb-0  text-gray-800" style="float: right;">Sms To Staff</span>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <%end%>
+
+      <div class="col-xl-2 col-md-6 mb-4 form-group float-left">
+        <%= link_to compaigns_path do %>
+          <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body" >
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                    <i class="fa fa-address-card fa-2x" aria-hidden="true"></i>
+                  </div>
+                  <div class="h5 mb-0  text-gray-800">Compaign</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="col-xl-2 col-md-6 mb-4 form-group float-left">
+        <%= link_to reports_trial_balance_path do %>
+          <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body" >
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                    <i class="fas fa-balance-scale fa-2x" aria-hidden="true"></i>
+                  </div>
+                  <div class="h5 mb-0  text-gray-800">Trial Balance</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+    </div>
+  </div>
+
+<div class="clearfix"></div>
+
+
+<div class="card shadow mb-4">
+    		<!-- Card Header - Accordion -->
+    		<a href="#collapseCard" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+    			<h6 class="m-0 font-weight-bold text-primary"><h1 style= "text-align : center">Stock & Accounts</h1></h6>
+    		</a>
+        <div class="collapse show" id="collapseCard" style="">
+          <div class="clearfix"></div>
+
+
+  <div class="row ">
+    <div class="col-lg-12 col-sm-12 ">
+      <%= search_form_for @q, url: dashboard_path, class: "admin-controls font-weight-bold", method: "get" do |f| %>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.select :item_type_title_or_title_or_code_cont, options_from_collection_for_select(@items, "title", ->(st){" #{st.title} \u{27F6} #{st.code} "},@title),{:include_blank => "Select Title/code"},:class=>"form-control chosen-select  font-weight-bold" %>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.select :title_cont, options_from_collection_for_select(@account_title, "title", ->(st){"#{st.title} \u{27F6} #{st.bank_name} "},@code),{:include_blank => "Select Account"},:class=>"form-control chosen-select" %>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px;"><i class="fa fa-search"></i></button>
+        </div>
+        <div class="col-lg-3 form-group float-left">
+        </div>
+        <div class="col-lg-1 form-group float-right">
+        <% if PosSetting.first.sys_type == "MobileShop" %>
+          <button class="form-control btn btn-secondary" name="mobile_pdf_submit" type="submit" value="Total Stock A8" formtarget="_blank"><i class="fa fa-print"></i> Stock</button>
+        <% else %>
+          <button class="form-control btn btn-secondary" name="pdf_submit" type="submit" value="Total Stock A8" formtarget="_blank"><i class="fa fa-print"></i> Stock</button>
+        <% end %>
+
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+    <li class="nav-item" onclick="updatetabs('pills-home')">
+      <a class="<%=params[:from_tabe]=='pills-homes' ? 'nav-link active' : 'nav-link'%> active" id="pills-home-tab" data-toggle="pill" href="#pills-homes" role="tab" aria-controls="pills-home" aria-selected="true"><b>Stock</b></a>
+    </li>
+    <li class="nav-item" onclick="updatetabs('pills-expense-month')">
+        <a class="<%=params[:from_tabe]=='pills-expense-month' ? 'nav-link active' : 'nav-link'%>" id="pills-profile-expense" data-toggle="pill" href="#pills-expenses" role="tab" aria-controls="pills-expense" aria-selected="false"><b>Accounts</b></a>
+    </li>
+  </ul>
+
+  <div class="tab-content" id="pills-tabContent">
+    <div class= "<%=params[:from_tabe]=='pills-homes' ? 'tab-pane fade show active' : 'tab-pane fade show active'%>" id="pills-homes" role="tabpanel" aria-labelledby="pills-home-tab" style="margin:2pc;">
+      <%= render partial: "stock", locals: {} %>
+    </div>
+    <div class="<%=params[:from_tabe]=='pills-expense-month' ? 'tab-pane fade show active' : 'tab-pane fade '%>" id="pills-expenses" role="tabpanel" aria-labelledby="pills-profile-tab">
+      <%= render partial: "accounts", locals: {} %>
+    </div>
+  </div>
+
+</div>
+</div>
+</div>
+
+<div class="clearfix"></div>
+
+<div class="card shadow mb-4">
+  <!-- Card Header - Accordion -->
+	<a href="#collapseCardExample1" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+		<h6 class="m-0 font-weight-bold text-primary"><h1 style= "text-align : center">SALE REPORT</h1></h6>
+	</a>
+  <div class="collapse show" id="collapseCardExample1" style="">
+	<!-- Card Content - Collapse -->
+    <!-- inner card -->
+    <div class="col-lg-12 form-group float-left">
+    <!-- <div class="card shadow mb-4"> -->
+      <div class="card-body">
+        <%@date = Date.today%>
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+          <li class="nav-item" onclick="updatetabs('pills-days')">
+            <a class="<%=params[:from_tabe]=='pills' ? 'nav-link active' : 'nav-link'%> active" id="pills-home-tab" data-toggle="pill" href="#pills-days" role="tab" aria-controls="pills-home" aria-selected="true"><b><%= @date.strftime("%B")%> Days</b></a>
+          </li>
+          <li class="nav-item" onclick="updatetabs('pills-current_month')">
+            <a class="<%=params[:from_tabe]=='pills-current_month' ? 'nav-link active' : 'nav-link'%>" id="pills-profile-expense" data-toggle="pill" href="#pills-current_month" role="tab" aria-controls="pills-expense" aria-selected="false"><b><%= Date.current.year%> Months</b></a>
+          </li>
+          <li class="nav-item" onclick="updatetabs('pills-year')">
+            <a class="<%=params[:from_tabe]=='pills-year' ? 'nav-link active' : 'nav-link'%>" id="pills-profile-year" data-toggle="pill" href="#pills-year" role="tab" aria-controls="pills-expense" aria-selected="false"><b>years</b></a>
+          </li>
+        </ul>
+        <div class="tab-content" id="pills-tabContent">
+          <div class= "<%=params[:from_tabe]=='pills-days' ? 'tab-pane fade show active' : 'tab-pane fade show active'%>" id="pills-days" role="tabpanel" aria-labelledby="pills-home-tab" style="margin:2pc;">
+            <%= render partial: "dashboard/sale_partial/current_days", locals: {} %>
+          </div>
+          <div class="<%=params[:from_tabe]=='pills-current_month' ? 'tab-pane fade show active' : 'tab-pane fade '%>" id="pills-current_month" role="tabpanel" aria-labelledby="pills-profile-tab">
+            <%= render partial: "dashboard/sale_partial/current_month", locals: {} %>
+          </div>
+          <div class="<%=params[:from_tabe]=='pills-year' ? 'tab-pane fade show active' : 'tab-pane fade '%>" id="pills-year" role="tabpanel" aria-labelledby="pills-profile-tab">
+            <%= render partial: "dashboard/sale_partial/years", locals: {} %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card shadow mb-4">
+  <!-- Card Header - Accordion -->
+  <a href="#collapseCardExample2" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+    <h6 class="m-0 font-weight-bold text-primary"><h1 style= "text-align : center">PURCHASE REPORT</h1></h6>
+  </a>
+  <!-- Card Content - Collapse -->
+  <div class="collapse show" id="collapseCardExample2" style="">
+    <!-- inner card -->
+    <div class="col-lg-12 form-group float-left">
+      <div class="card-body">
+        <%@date = Date.today%>
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+        <li class="nav-item" onclick="updatetabs('pills-days-purchase')">
+        <a class="<%=params[:from_tabe]=='pills' ? 'nav-link active' : 'nav-link'%> active" id="pills-home-tab" data-toggle="pill" href="#pills-days-purchase" role="tab" aria-controls="pills-home" aria-selected="true"><b><%= @date.strftime("%B")%> Days</b></a>
+        </li>
+        <li class="nav-item" onclick="updatetabs('pills-current_month-purchase')">
+        <a class="<%=params[:from_tabe]=='pills-current_month-purchase' ? 'nav-link active' : 'nav-link'%>" id="pills-profile-expense" data-toggle="pill" href="#pills-current_month-purchase" role="tab" aria-controls="pills-expense" aria-selected="false"><b><%= Date.current.year%> Months</b></a>
+        </li>
+        <li class="nav-item" onclick="updatetabs('pills-year-purchase')">
+        <a class="<%=params[:from_tabe]=='pills-year-purchase' ? 'nav-link active' : 'nav-link'%>" id="pills-profile-year-purchase" data-toggle="pill" href="#pills-year-purchase" role="tab" aria-controls="pills-expense" aria-selected="false"><b>years</b></a>
+        </li>
+        </ul>
+        <div class="tab-content" id="pills-tabContent">
+          <div class= "<%=params[:from_tabe]=='pills-days-purchase' ? 'tab-pane fade show active' : 'tab-pane fade show active'%>" id="pills-days-purchase" role="tabpanel" aria-labelledby="pills-home-tab" style="margin:2pc;">
+             <%= render partial: "dashboard/purchase_partial/current_days", locals: {} %>
+          </div>
+          <div class="<%=params[:from_tabe]=='pills-current_month-purchase' ? 'tab-pane fade show active' : 'tab-pane fade '%>" id="pills-current_month-purchase" role="tabpanel" aria-labelledby="pills-profile-tab">
+              <%= render partial: "dashboard/purchase_partial/current_month", locals: {} %>
+          </div>
+          <div class="<%=params[:from_tabe]=='pills-year-purchase' ? 'tab-pane fade show active' : 'tab-pane fade '%>" id="pills-year-purchase" role="tabpanel" aria-labelledby="pills-profile-tab">
+              <%= render partial: "dashboard/purchase_partial/years", locals: {} %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#daily_books_list").removeClass('hidden');
+    FontAwesome.dom.i2svg();
+  });
+</script>
+
+
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#products_list").removeClass('hidden');
+    FontAwesome.dom.i2svg();
+  });
+  $(document).ready(function() {
+    setTimeout(function(){
+      $(".chosen-select").chosen({
+  allow_single_deselect: true,
+  width: '100%'
+});
+    }, 50);
+  });
+</script>

@@ -1,0 +1,60 @@
+<div class="hidden" id="products_list">
+  <h1>Stock By Category Status</h1>
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <%= search_form_for @q, url: stock_by_category_path, class: "admin-controls", method: "get" do |f| %>
+        <div class="row col-lg-4 form-group float-left">
+          <div class="col-lg-3" style="padding-right: 0;">
+            <%= select_month(@paid_to_month.to_i, {prompt: "Month", use_short_month: true, prefix: 'daily_sales'},{ field_name: 'month', id: 'start-month', class: 'form-control input-sm select-chosen'}) %>
+          </div>
+          <div class="col-lg-3" style="padding-left: 0;">
+            <%= select_year(@paid_to_year.to_i, {prompt: "Year", start_year: Date.today.year + 1, end_year: Date.today.year - 7, prefix: 'daily_sales'},{ field_name: 'year', id: 'start-year', class: 'form-control input-sm select-chosen'}) %>
+          </div>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <input class="form-control btn btn-primary" name="search_submit" type="submit" value="Search"></input>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <table data-toggle="table" data-search="true">
+    <thead>
+      <tr>
+        <th class="border_none">ItemType</th>
+        <th class="border_none">Category</th>
+        <th class="border_none">Sub Category</th>
+        <th class="border_none">Current Stock</th>
+        <th class="border_none">Receiving</th>
+        <th class="border_none">Return</th>
+        <th class="border_none">Sale</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @stock_by_category.each_with_index do |product,index| %>
+        <tr>
+          <td><%= @stock_report[index].first%>  </td>
+          <td><%= @stock_report[index].second%>  </td>
+          <td><%= @stock_report[index].third%>  </td>
+          <td><%= @stock_report[index].fourth%>  </td>
+          <td><%= @stock_report[index].fifth%>  </td>
+          <td><%= @stock_report[index].last%>  </td>
+          <td><%= @stock_report[index].last%>  </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<div class="clearfix"></div>
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#products_list").removeClass('hidden');
+    FontAwesome.dom.i2svg();
+  });
+</script>

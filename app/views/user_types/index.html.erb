@@ -1,0 +1,68 @@
+<div class="hidden" id="type_list">
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <h1>User Types</h1>
+      <% if can?(:add, :all) %>
+      <div id="new_user_type">
+        <%= link_to new_user_type_path, remote: true, class: "btn btn-success" do %>
+          <i class="fa fa-plus" aria-hidden="true"></i>
+          New Type
+        <% end %>
+      </div>
+      <% end %>
+      </div>
+  </div>
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <%= search_form_for @q, url: user_types_path, class: "admin-controls", method: "get" do |f| %>
+        <div class="col-lg-3 form-group float-left">
+          <%= f.select :title_or_comment_cont, options_from_collection_for_select(@user_types, "title", ->(st){"#{st.title} \u{27F6} #{st.comment} "}),{:include_blank => "Select Title"},:class=>"form-control chosen-select" %>
+       </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <%= render 'map_columns/map_column_partials' %>
+
+  <table data-toggle="table" data-search="true" id="user_type_table">
+    <thead>
+      <tr>
+        <th><%= sort_link(@q, :id, 'ID') %></th>
+        <th><%= sort_link(@q, :title, 'Title') %></th>
+        <th><%= sort_link(@q, :code, 'Code') %></th>
+        <th><%= sort_link(@q, :discount_by_percentage, 'Discount by percentage') %></th>
+        <th><%= sort_link(@q, :discount_by_amount, 'Discount by amount') %></th>
+        <th><%= sort_link(@q, :comment, 'Comment') %></th>
+        <th>Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+    <%= render partial: 'user_type', collection: @user_types %>
+    </tbody>
+  </table>
+</div>
+
+<div class="clearfix"></div>
+<div class="row">
+  <div class="col-lg-4 col-sm-4">
+    <%= page_entries_info @user_types %>
+  </div>
+  <div class="col-lg-8 col-sm-8 pagination-left">
+    <%= paginate @user_types %>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#type_list").removeClass('hidden');
+    FontAwesome.dom.i2svg();
+  });
+</script>

@@ -1,0 +1,18 @@
+<div class="card">
+  <div class="card-header">
+    <% if pos_setting_sys_type=="HousingScheme"%>
+    <h3>Edit Unit</h3>
+    <% else%>
+    <h3>Edit Product</h3>
+    <% end%>
+  </div>
+  <div class="card-body">
+    <% if pos_setting_sys_type=="batamega"%>
+      <%= render 'form_bata', product: @product %>
+    <% elsif pos_setting_sys_type=="HousingScheme"%>
+      <%= render 'products/hscheme/form_hscheme', product: @product %>
+    <% else%>
+      <%= render 'form', product: @product %>
+    <% end%>
+    </div>
+</div>

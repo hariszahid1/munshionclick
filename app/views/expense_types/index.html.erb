@@ -1,0 +1,65 @@
+<h1>Expense Types</h1>
+<% if can?(:add, :all) %>
+<div id="new_expense_type">
+
+  <%= link_to new_expense_type_path, remote: true, class: "btn btn-success" do %>
+            <i class="fa fa-plus" aria-hidden="true"></i>
+            New Expense Type
+<% end %>
+</div>
+<% end %>
+<div class="hidden" id="expense_types_list">
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <%= search_form_for @q, url: expenses_path, class: "admin-controls", method: "get" do |f| %>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.search_field :title_cont, placeholder: "Expense Type", title: "Expense Type" , class: "form-control" %>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.search_field :comment_cont, placeholder: "Comment", title: "Comment" , class: "form-control" %>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <%= render 'map_columns/map_column_partials' %>
+
+  <table data-toggle="table" data-search="true" id="expense_type_table">
+    <thead>
+      <tr>
+        <th><%= sort_link(@q, :id, 'ID') %></th>
+        <th><%= sort_link(@q, :title, 'Title') %></th>
+        <th><%= sort_link(@q, :comment, 'Comment') %></th>
+
+        <th class="border_none">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render partial: 'expense_type', collection: @expense_types %>
+    </tbody>
+  </table>
+</div>
+
+<div class="clearfix"></div>
+<div class="row">
+  <div class="col-lg-4 col-sm-4">
+    <%= page_entries_info @expense_types %>
+  </div>
+  <div class="col-lg-8 col-sm-8 pagination-left">
+    <%= paginate @expense_types %>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#expense_types_list").removeClass('hidden');
+    FontAwesome.dom.i2svg();
+  });
+</script>

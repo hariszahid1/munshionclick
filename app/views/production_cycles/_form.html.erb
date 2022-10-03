@@ -1,0 +1,104 @@
+<%= bootstrap_form_for(production_cycle) do |f| %>
+  <% if production_cycle.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(production_cycle.errors.count, "error") %> prohibited this production_cycle from being saved:</h2>
+
+      <ul>
+      <% production_cycle.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <table>
+    <thead>
+      <th><%= f.date_field :start_date, required:true %></th>
+      <th><%= f.date_field :end_date %></th>
+      <th><%= f.text_area :comment, placeholder:"Enter Comment" %></th>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <%=  f.text_field :status, value:'bhari',readonly: true%>
+        </td>
+        <td>
+          <h4><%=@raw_products.first.title%> For Bhari = <%=@raw_products.first.first_stock%></h4>
+          <h4><%=@raw_products.second.title%> For Bhari = <%=@raw_products.second.first_stock%></h4>
+        </td>
+        <td>
+          <%@production_block_types.each_with_index do |production_block_type,index|%>
+            <h5><%=production_block_type.title%> = <span id="<%=production_block_type.id%>"><%=production_block_type.quantity%></span></h5>
+          <%end%>
+          <h4 id="id_title" class="hidden"><%=@production_cycle.production_blocks.count+1%></h4>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div id="production_blocks" class="task">
+    <div class="row bg-white">
+      <div class="col border">
+        <h5>ID</h5>
+      </div>
+      <div class="col border">
+        <h5>Block Type</h5>
+      </div>
+      <div class="col border">
+        <h5>Bricks Quantity</h5>
+      </div>
+      <div class="col border">
+        <h5>Tiles Quantity</h5>
+      </div>
+      <div class="col border">
+        <h5>Date</h5>
+      </div>
+      <div class="col border">
+        <h5>Phase</h5>
+      </div>
+      <div class="col border">
+        <h5>Action</h5>
+      </div>
+    </div>
+    <div class="links"><%= link_to_add_association 'Add Block', f, :production_blocks, class: "btn btn-info" %></div>
+    <%= f.fields_for :production_blocks do |production_block| %>
+      <%= render 'production_block_fields_edit', f: production_block %>
+    <% end %>
+    <div class="row bg-white">
+      <div class="col border">
+        <h5>Total</h5>
+      </div>
+      <div class="col border">
+      </div>
+      <div class="col border">
+        <h5 id="total_bhari_bricks">0.00</h5>
+      </div>
+      <div class="col border">
+        <h5 id="total_tiles">0.00</h5>
+      </div>
+      <div class="col border">
+      </div>
+      <div class="col border">
+      </div>
+      <div class="col border">
+      </div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <%= link_to 'Bhari Daily Book', production_cycles_path, class: "btn btn-info" %>
+    <%= f.submit class: "btn btn-primary", style: "float: right" %>
+  </div>
+<% end %>
+<script>
+  $(document).ready(function() {
+    daily_bhari_book_update();
+
+    $('#production_blocks').on('cocoon:after-insert', function(event, insertedItem) {
+      id_title=Number($("#id_title").text());
+      var i;
+      for (i = 0; i < $(".new-title").length; i++) {
+      $(".new-title")[i].value=id_title; ++id_title;
+      }
+    });
+  });
+</script>
+<%= javascript_include_tag 'hover', 'data-turbolinks-track': 'reload' %>

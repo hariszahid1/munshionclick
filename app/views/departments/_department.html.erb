@@ -1,0 +1,23 @@
+<tr>
+  <td><%= department.id %></td>
+  <td><%= department.code %></td>
+  <td class= 'urdu-font'><%= department.title %></td>
+  <td><%= department.comment %></td>
+  <td>
+    <% if can?(:update, :all) %>
+      <%= link_to edit_department_path(department) do %>
+        <i class="fa fa-edit " aria-hidden="true"></i> |
+      <%end %>
+    <% end %>
+    <% if can?(:delete, :all) %>
+      <%= link_to department, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+        <i class="fa fa-trash " aria-hidden="true"></i> |
+      <%end %>
+    <% end %>
+    <% if can?(:view, :all) %>
+      <%= link_to department do %>
+        <i class="fa fa-eye " aria-hidden="true"></i>
+      <%end %>
+    <%end%>
+  </td>
+</tr>

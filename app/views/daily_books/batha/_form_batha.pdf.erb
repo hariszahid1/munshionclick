@@ -1,0 +1,96 @@
+<%= bootstrap_form_for(daily_book) do |f| %>
+  <% if daily_book.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(daily_book.errors.count, "error") %> prohibited this daily_book from being saved:</h2>
+
+      <ul>
+      <% daily_book.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <i class="fas fa-edit" aria-hidden="true"></i>
+  <% end %>
+  <table class="table-bordered">
+    <thead>
+    <td class="broder-with"><h5>
+        <label for="pin">Department:</label>
+      </h5></td>
+      <td class="broder-with"><h5>
+      <label for="date">Date:</label>
+      </h5></td>
+
+      <td class="broder-with"><h5>
+        <label for="date">Difference:</label>
+
+      </h5></td>
+      <td class="broder-with"><h5>
+      <label for="date">Wast:</label>
+      </h5></td>
+      <td class="broder-with"><h5>
+        <label for="date">Ready for Kharar:</label>
+      </h5></td>
+      <td class="broder-with"><h5>
+        <label for="date">Comment:</label>
+      </h5></td>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="broder-with">
+          <h5><label for="salary_details_raw_rate">Kachi Rate:</label></h5>
+        </td>
+        <td class="broder-with">
+          <h5><label for="salary_details_wage_rate">Paaki Rate:</label></h5>
+        </td>
+        <td class="broder-with">
+          <h5><label for="salary_details_gift_rate">Gift Rate:</label></h5>
+        </td>
+        <td class="broder-with">
+          <h5><label for="salary_details_converge_rate">Coverge Rate:</label></h5>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <table class="table table-bordered">
+    <thead>
+      <td><h3>Name</h3></td>
+      <td><h3>Item</h3></td>
+      <td><h3>Kachi=K</h3></td>
+      <td><h3>Paaki=P</h3></td>
+      <td><h3>Wast</h3></td>
+      <!-- <th>K Rate</th>
+      <th>P Rate</th>
+      <th>Gift</th>
+      <th>Coverge</th> -->
+      <td><h3>Diff (K/P)</h3></td>
+      <td><h3>Ready</h3></td>
+      <td><h3>K Pay</h3></td>
+      <td><h3>P Pay</h3></td>
+      <td><h3>G/C</h3></td>
+    </thead>
+    <tbody>
+      <%= f.fields_for :salary_details do |salary_detail| %>
+        <%= render 'salary_details_fields', f: salary_detail %>
+      <% end %>
+      <tr>
+        <td class="broder-with"><h4>Total<h4></td>
+        <td class="broder-with"></td>
+        <td class="broder-with">    </td>
+        <td class="broder-with">   </td>
+        <td class="broder-with"></td>
+        <!-- <td><h5 id="kachi_rate_total">0.00</h5></td>
+        <td><h5 id="paaki_rate_total">0.00</h5></td>
+        <td><h5 id="gift_rate_total">0.00</h5></td>
+        <td><h5 id="coverge_rate_total">0.00</h5></td> -->
+        <td class="broder-with"></td>
+        <td class="broder-with"></td>
+        <td class="broder-with"></td>
+        <td class="broder-with"></td>
+        <td class="broder-with"></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+<% end %>
+<%= javascript_include_tag 'hover', 'data-turbolinks-track': 'reload' %>

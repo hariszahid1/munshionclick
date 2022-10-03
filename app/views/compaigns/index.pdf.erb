@@ -1,0 +1,61 @@
+<% @date = Date.today  %>
+<% @time = DateTime.now %>
+<% @time = Time.zone.now %>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Compaign </h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<p style="text-align: center;margin: 0;">Report by: <%=current_user.name%></p>
+<div >
+  <table>
+    <th></th>
+    <th></th>
+    <tr>
+      <td style="width:67vw;">DateTime: <span><%=Time.zone.now%></span> </td>
+      <td style="width:33vw;">From: <span> <%=@start_date%></span> To: <span> <%=@end_date%></span></td>
+    </tr>
+    <tr>
+      <td style="">Payment by: Cash</td>
+      <td style="">Platform: POS</td>
+    </tr>
+  </table>
+</div>
+<p style="border-bottom: dotted 3px;  margin: 0;"></p>
+<div style="width:90vw;">
+  <table>
+    <th style="width:20vw;">ID</th>
+    <th style="width:20vw;">Name</th>
+    <th style="width:20vw;">Phone</th>
+    <th style="width:10vw;">Email</th>
+    <th style="width:10vw;">Comment/Date</th>
+    <% @compaigns.each_with_index do |compaign,i|%>
+
+      <tr>
+        <td style="border-bottom: 1px solid #000; "></td>
+        <td style="border-bottom: 1px solid #000; "><h2><%=compaign.title %></h2></td>
+        <td style="border-bottom: 1px solid #000; "></td>
+        <td style="border-bottom: 1px solid #000; "></td>
+        <td style="border-bottom: 1px solid #000; ">
+          <%=compaign.comment %> |
+          <%if compaign.created_at.strftime("%d%b%y")!=compaign.updated_at.strftime("%d%b%y")%>
+            <%= compaign.created_at.present? ? compaign.created_at.strftime("%d%b%y at %H:%M%p") : '' %> | <%= compaign.updated_at.present? ? compaign.updated_at.strftime("%d%b%y at %H:%M%p") : '' %>
+          <%else%>
+            <%= compaign.created_at.present? ? compaign.created_at.strftime("%A,  %d-%b-%y at %H:%M%p") : '' %>
+          <%end%>
+        </td>
+      </tr>
+      <% compaign.compaign_entries.each_with_index do |compaign_entry,i|%>
+        <tr>
+          <td><%=i+1%></td>
+          <td><%=compaign_entry.name%></td>
+          <td><%=compaign_entry.phone%><%=compaign_entry.mobile%></td>
+          <td><%=compaign_entry.email%></td>
+          <td><%=compaign_entry.comment%></td>
+        </tr>
+      <% end %>
+    <% end %>
+    <tr>
+      <td><h2>Total </h2></td>
+      <td><h2><%=@compaigns.count%></h2></td>
+    </tr>
+  </table>
+</div>

@@ -1,0 +1,25 @@
+<tr>
+  <td><%= user_type.id %></td>
+  <td class='urdu-font'><%= user_type.title %></td>
+  <td><%= user_type.code %></td>
+  <td><%= user_type.discount_by_percentage %></td>
+  <td><%= user_type.discount_by_amount %></td>
+  <td><%= user_type.comment %></td>
+  <td>
+    <% if can?(:update, :all) %>
+      <%= link_to edit_user_type_path(user_type) do %>
+        <i class="fa fa-edit" aria-hidden="true"></i> |
+      <% end %>
+    <% end %>
+    <% if can?(:delete, :all) %>
+      <%= link_to user_type, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+        <i class="fa fa-trash" aria-hidden="true"></i> |
+      <% end %>
+      <% end %>
+    <% if can?(:delete, :all) %>
+      <%= link_to user_type do %>
+        <i class="fa fa-eye" aria-hidden="true"></i>
+        <% end %>
+    <% end %>
+  </td>
+</tr>

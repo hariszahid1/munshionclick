@@ -1,0 +1,98 @@
+<%= bootstrap_form_for(daily_book) do |f| %>
+  <% if daily_book.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(daily_book.errors.count, "error") %> prohibited this daily_book from being saved:</h2>
+
+      <ul>
+      <% daily_book.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <i class="fas fa-edit" aria-hidden="true"></i>
+  <% end %>
+  <table>
+    <thead>
+      <th>
+        <%= f.select :department_id, options_from_collection_for_select(@departments, 'id', 'title', params[:department_id]), {prompt: "Select the Department"},readonly:true%>
+      </th>
+      <th><%= f.date_field :book_date, required:true %></th>
+      <th>
+        <p>
+          Difference: <span id='total_difference'>0.00</span>
+          Wast: <span id='total_wast'>0.00</span> <br>
+          Ready For Khakar: <span id='ready_for_khakar'>0.00</span> <br>
+          Kachi Pay: <span id='kachi_rate'>0.00</span>
+          Paaki Pay: <span id='paaki_rate'>0.00</span>
+        </p>
+      </th>
+      <th><%= f.text_area :comment %></th>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <label for="salary_details_raw_rate">Kachi Rate</label>
+          <input class="form-control" type="number" placeholder="Enter Kachi Rate" name="salary_details_raw_rate" id="salary_details_raw_rate" value="0.0", step="any", onchange="kachiRate()", onkeyup="kachiRate()", readonly="true">
+        </td>
+        <td>
+          <label for="salary_details_wage_rate">Paaki Rate</label>
+          <input class="form-control" type="number" placeholder="Enter Paaki Rate" name="salary_details_wage_rate" id="salary_details_wage_rate" value="0.0", step="any", onchange="paakiRate()", onkeyup="paakiRate()", readonly="true">
+        </td>
+        <td>
+          <label for="salary_details_gift_rate">Gift Rate</label>
+          <input class="form-control" type="number" placeholder="Enter Gift Rate" name="salary_details_gift_rate" id="salary_details_gift_rate" value="0.0", step="any", onchange="giftRate()", onkeyup="giftRate()", readonly="true">
+        </td>
+        <td>
+          <label for="salary_details_converge_rate">Coverge Rate</label>
+          <input class="form-control" type="number" placeholder="Enter Coverage Rate" name="salary_details_coverge_rate" id="salary_details_coverge_rate" value="0.0", onchange="covergeRate()", onkeyup="covergeRate()", readonly="true">
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <table>
+    <thead>
+      <th>Name</th>
+      <th>Item</th>
+      <th>Kachi=K</th>
+      <th>Paaki=P</th>
+      <th>Wast</th>
+      <!-- <th>K Rate</th>
+      <th>P Rate</th>
+      <th>Gift</th>
+      <th>Coverge</th> -->
+      <th>Diff (K/P)</th>
+      <th>Ready</th>
+      <th>K Pay</th>
+      <th>P Pay</th>
+      <th>G/C</th>
+    </thead>
+    <tbody>
+      <%= f.fields_for :salary_details do |salary_detail| %>
+        <%= render 'salary_details_fields', f: salary_detail %>
+      <% end %>
+      <tr>
+        <td><h4>Total</h4></td>
+        <td></td>
+        <td><h5 id="kachi_total">0.00</h5></td>
+        <td><h5 id="paaki_total">0.00</h5></td>
+        <td><h5 id="wast_total">0.00</h5></td>
+        <!-- <td><h5 id="kachi_rate_total">0.00</h5></td>
+        <td><h5 id="paaki_rate_total">0.00</h5></td>
+        <td><h5 id="gift_rate_total">0.00</h5></td>
+        <td><h5 id="coverge_rate_total">0.00</h5></td> -->
+        <td><h5 id="total_diff_total">0.00</h5></td>
+        <td><h5 id="ready_for_khakar_total">0.00</h5></td>
+        <td><h5 id="pay_total">0.00</h5></td>
+        <td><h5 id="total_pay_total">0.00</h5></td>
+        <td><h5 id="total_gift_total">0.00</h5><h5 id="total_coverge_total">0.00</h5></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="actions">
+    <%= link_to 'Daily Book', daily_books_path, class: "btn btn-info" %>
+    <%= f.submit class: "btn btn-primary", style: "float: right" %>
+  </div>
+
+<% end %>
+<%= javascript_include_tag 'hover', 'data-turbolinks-track': 'reload' %>

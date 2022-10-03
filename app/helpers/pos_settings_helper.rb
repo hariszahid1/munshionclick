@@ -1,0 +1,2 @@
+module PosSettingsHelper
+end

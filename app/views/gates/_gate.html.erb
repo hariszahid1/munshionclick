@@ -1,0 +1,48 @@
+<tr>
+  <td>
+    <%= link_to gates_path('q[id_eq]': gate,'q[pather_from_gteq]':'','q[pather_to_lteq]':'','q[kharkar_from_gteq]':'','q[kharkar_to_lteq]':'','q[bhari_from_gteq]':'','q[bhari_to_lteq]':'','q[jalai_from_gteq]':'','q[jalai_to_gteq]':'','q[nakasi_from_lteq]':'','q[nakasi_to_lteq]':'','q[expense_from_lteq]':'','q[expense_to_lteq]':'','q[salary_from_lteq]':'','q[salary_to_lteq]':'') do %>
+      <i class="fa fa-check-circle " aria-hidden="true"></i> |
+    <%end %>
+    <% if can?(:update, :all) %>
+      <%= link_to edit_gate_path(gate) do %>
+        <i class="fa fa-edit " aria-hidden="true"></i> |
+      <%end %>
+    <% end %>
+    <% if can?(:delete, :all) %>
+      <%= link_to gate, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+        <i class="fa fa-trash " aria-hidden="true"></i> |
+      <%end %>
+    <% end %>
+    <% if can?(:view, :all) %>
+      <%= link_to gate do %>
+        <i class="fa fa-eye " aria-hidden="true"></i>
+      <%end %>
+    <%end%>
+  </td>
+  <td><%= gate.pather_from.present? ? gate.pather_from.strftime("%d-%b-%y") : '' %></td>
+  <td><%= gate.pather_to.present? ? gate.pather_to.strftime("%d-%b-%y") : '' %></td>
+  <td><%= gate.kharkar_from.present? ? gate.kharkar_from.strftime("%d-%b-%y") : '' %></td>
+  <td><%= gate.kharkar_to.present? ? gate.kharkar_to.strftime("%d-%b-%y") : '' %></td>
+  <td><%= gate.bhari_from.present? ? gate.bhari_from.strftime("%d-%b-%y") : '' %></td>
+  <td><%= gate.bhari_to.present? ? gate.bhari_to.strftime("%d-%b-%y") : '' %></td>
+  <td><%= gate.jalai_from.present? ? gate.jalai_from.strftime("%d-%b-%y") : '' %></td>
+  <td><%= gate.jalai_to.present? ? gate.jalai_to.strftime("%d-%b-%y") : '' %></td>
+  <td><%= gate.nakasi_from.present? ? gate.nakasi_from.strftime("%d-%b-%y") : '' %></td>
+  <td><%= gate.nakasi_to.present? ? gate.nakasi_to.strftime("%d-%b-%y") : '' %></td>
+  <td><%= gate.purchase_from.present? ? gate.purchase_from.strftime("%d-%b-%y") : '' %></td>
+  <td><%= gate.purchase_to.present? ? gate.purchase_to.strftime("%d-%b-%y") : '' %></td>
+  <td><%= gate.sale_from.present? ? gate.sale_from.strftime("%d-%b-%y") : '' %></td>
+  <td><%= gate.sale_to.present? ? gate.sale_to.strftime("%d-%b-%y") : '' %></td>
+  <td><%= gate.expense_from.present? ? gate.expense_from.strftime("%d-%b-%y") : '' %></td>
+  <td><%= gate.expense_to.present? ? gate.expense_to.strftime("%d-%b-%y") : '' %></td>
+  <td><%= gate.salary_from.present? ? gate.salary_from.strftime("%d-%b-%y") : '' %></td>
+  <td><%= gate.salary_to.present? ? gate.salary_to.strftime("%d-%b-%y") : '' %></td>
+  <td><%= gate.comment %></td>
+  <td>
+    <%if gate.created_at.strftime("%d%b%y")!=gate.updated_at.strftime("%d%b%y")%>
+      <%= gate.created_at.present? ? gate.created_at.strftime("%A, %d-%b-%y at %H:%M%p") : '' %> | <%= gate.updated_at.present? ? gate.updated_at.strftime("%A,   %d-%b-%y at %H:%M%p") : '' %>
+    <%else%>
+      <%= gate.created_at.present? ? gate.created_at.strftime("%A, %d-%b-%y at %H:%M%p") : '' %>
+    <%end%>
+  </td>
+</tr>

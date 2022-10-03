@@ -1,0 +1,97 @@
+<%if current_user.superAdmin.company_type=="batamega"%>
+  <%= render partial: "create_bata", locals: {purchase_sale_detail: @purchase_sale_detail} %>
+<%elsif current_user.superAdmin.company_type=="mianji"%>
+  <%= render partial: "create_fc", locals: {purchase_sale_detail: @purchase_sale_detail} %>
+<%else%>
+<% @time = Time.zone.now %>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Production Detail</h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<div style="width:90vw;">
+  <table>
+    <th></th>
+    <th></th>
+    <tr>
+      <td style="width:67vw;">Date Time: <span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%> <%=@time.strftime("at %I:%M%p")%></span> </td>
+      <td style="width:33vw;">Customer Type: <span> </span></td>
+    </tr>
+    <tr>
+      <td style="">Payment by: Cash</td>
+      <td style="">Platform: POS</td>
+    </tr>
+  </table>
+</div>
+<p style="border-bottom: dotted 3px;  margin: 0;"></p>
+<div style="width:90vw;">
+
+  <table data-toggle="table" data-search="true">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Staff</th>
+        <th>Rate</th>
+        <th>Quantity</th>
+        <th>Total</th>
+        <th>Balance</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @salary_details_pdf.each do |salary_detail| %>
+        <%if salary_detail.product.present? %>
+          <%if ((salary_detail.quantity.to_f*salary_detail.status.to_f) != 0 and salary_detail.amount != 0)%>
+            <tr>
+              <td style="width:20vw;"><%= salary_detail.id %></td>
+              <td style="width:20vw;"><%= salary_detail.staff.name %></td>
+              <td style="width:20vw;"><%= salary_detail.product.present? ? salary_detail.product.title : "" %></td>
+              <td style="width:20vw;"><%= salary_detail.quantity %></td>
+              <td style="width:20vw;"><%= salary_detail.amount %></td>
+              <td style="width:20vw;"><%= salary_detail.remarks.to_f.round(2) %></td>
+              <td style="width:20vw;"><%= salary_detail.created_at.strftime("%d-%b-%Y") %></td>
+            </tr>
+          <%elsif ( (salary_detail.quantity.to_f*salary_detail.status.to_f) == 0 and salary_detail.amount == 0)%>
+            <tr>
+              <td style="width:20vw;"><%= salary_detail.id %></td>
+              <td style="width:20vw;"><%= salary_detail.staff.name %></td>
+              <td style="width:20vw;">Day OFF</td>
+              <td style="width:20vw;">Day OFF</td>
+              <td style="width:20vw;">Day OFF</td>
+              <td style="width:20vw;">Day OFF</td>
+              <td style="width:20vw;"><%= salary_detail.created_at.strftime("%d-%b-%Y") %></td>
+            </tr>
+          <%end%>
+        <%elsif (salary_detail.amount != 0 || salary_detail.khakar_credit != 0) && salary_detail.quantity.to_f>0%>
+          <tr>
+            <td style="width:20vw;"><%= salary_detail.id %></td>
+            <td style="width:20vw;"><%= salary_detail.staff.name %></td>
+            <td style="width:20vw;"><%= salary_detail.wage_rate.present? ? salary_detail.wage_rate : "" %></td>
+            <td style="width:20vw;"><%= salary_detail.quantity %></td>
+            <td style="width:20vw;"><%= salary_detail.amount %><%= salary_detail.khakar_credit %> </td>
+            <td style="width:20vw;"><%= salary_detail.remarks.to_f.round(2) %></td>
+            <td style="width:20vw;"><%= salary_detail.created_at.strftime("%d-%b-%Y") %></td>
+          </tr>
+        <%elsif ( (salary_detail.quantity.to_f*salary_detail.status.to_f) == 0 and salary_detail.amount == 0)%>
+            <tr>
+              <td style="width:20vw;"><%= salary_detail.id %></td>
+              <td style="width:20vw;"><%= salary_detail.staff.name %></td>
+              <td style="width:20vw;">Day OFF</td>
+              <td style="width:20vw;">Day OFF</td>
+              <td style="width:20vw;">Day OFF</td>
+              <td style="width:20vw;">Day OFF</td>
+              <td style="width:20vw;"><%= salary_detail.created_at.strftime("%d-%b-%Y") %></td>
+            </tr>
+        <%end%>
+      <% end %>
+      <tr>
+        <td><h5>Total</h5></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><h5><%=@salary_details.sum(:amount)%></h5></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<%end%>

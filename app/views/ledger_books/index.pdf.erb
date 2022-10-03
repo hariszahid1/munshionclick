@@ -1,0 +1,73 @@
+<%if @debit.present? or params[:submit_debit].present?%>
+  <%if pos_setting_sys_type=="HousingScheme"%>
+    <%= render 'ledger_books/hscheme/index_debit'%>
+  <%else%>
+    <%= render 'index_debit'%>
+  <%end%>
+<%elsif @credit.present? or params[:submit_credit].present?%>
+  <%= render 'index_credit'%>
+<%elsif params[:submit_pdf_without].present? or  params[:submit_form_without].present?%>
+  <%if pos_setting_sys_type=="CustomClear"%>
+  <%= render 'index_without_name_custom_clear'%>
+  <%else%>
+  <%= render 'index_without_name'%>
+  <%end%>
+<%elsif params[:submit_pdf_short].present?%>
+  <%= render 'index_short'%>
+<%else%>
+  <%if @ledger_books.pluck(:sys_user_id).uniq.count>1 || !ApplicationController.new.pos_type_batha%>
+  <%= render 'index'%>
+  <%else%>
+  <%= render 'index_single'%>
+  <%end%>
+<%end%>
+<%if @pos_setting.qr_links.present?%>
+  <div class="col-lg-12 form-group float-left">
+    <h1 style="text-align: center;margin: 0;">QR For Website</h1>
+    <table class="pdf_font">
+      <th>Web Link</th>
+      <th>Instruction</th>
+      <th>Web Link</th>
+        <%@pos_setting.qr_links.values.each_slice(2) do |qr_link|%>
+          <tr>
+            <td>
+              <%
+                require "rqrcode"
+                qrcode = RQRCode::QRCode.new(qr_link.first)
+                @svg = qrcode.as_svg(
+                    color: "000",
+                    shape_rendering: "crispEdges",
+                    module_size: 11,
+                    standalone: true,
+                    use_path: true
+                  )
+                  @str=Base64.encode64(@svg ).gsub("\n", '')
+              %>
+              <img width="150px" height="115px" class="figure" style=""src=<%="data:image/svg+xml;base64,"+@str%> ></img>
+            </td>
+            <td>
+              <h4 style="text-align:left">For verification of your Unit booking:</h4>
+              <p style="text-align:left"> 1) Open Camrea/QRScaner app on your phone</p>
+              <p style="text-align:left"> 2) Point your phone to this QRCODE to capture the code</p>
+              <p style="text-align:left"> 3) After capturing you will redirect to Company Sites</p>
+            </td>
+            <td>
+                  <%
+                    require "rqrcode"
+                    qrcode = RQRCode::QRCode.new(qr_link.last)
+                    @svg = qrcode.as_svg(
+                        color: "000",
+                        shape_rendering: "crispEdges",
+                        module_size: 11,
+                        standalone: true,
+                        use_path: true
+                      )
+                      @str=Base64.encode64(@svg ).gsub("\n", '')
+                  %>
+                  <img width="150px" height="115px" class="figure" style=""src=<%="data:image/svg+xml;base64,"+@str%> ></img>
+            </td>
+          </tr>
+      <%end%>
+    </table>
+  </div>
+<%end%>

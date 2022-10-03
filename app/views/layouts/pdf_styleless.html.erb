@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>POS</title>
+    <%= wicked_pdf_stylesheet_link_tag ("pdf") -%>
+</head>
+<%@pos_setting=PosSetting.first %>
+<%if @pos_setting.multi_language.present?%>
+<style media="screen">
+  @font-face {
+    font-family:"Jameel Noori Nastaleeq";
+    src: url("<%= ApplicationHelper.asset_data_base64('JameelNooriNastaleeqKasheeda.ttf') %>") format('truetype');
+  }
+
+  .urdu-font {
+    font-family: 'Jameel Noori Nastaleeq';
+    font-style: normal;
+    font-weight: 300;
+    font-weight: bold;
+    font-size:18px;
+  }
+</style>
+<%end%>
+<body class="bond_pos_pdf">
+  <%= yield %>
+</body>
+</html>

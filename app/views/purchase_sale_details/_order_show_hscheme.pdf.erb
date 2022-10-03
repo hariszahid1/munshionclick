@@ -1,0 +1,359 @@
+<% @time = Time.zone.now %>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h2 style="text-align: center; margin: 0;">Office Receipt</h2>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<table>
+  <tbody>
+    <tr>
+      <td><h2 style="text-align: left; margin: 0;">Depost No <%= @purchase_sale_detail.sys_user.purchase_sale_details.count.to_i%></h2></td>
+      <td><h2 style="text-align: right; margin: 0;">Voucher no <%=@purchase_sale_detail.id.to_s %></h2></td>
+    </tr>
+
+  </tbody>
+</table>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<div>
+  <table>
+    <th></th>
+    <th></th>
+    <tr>
+      <td>Date Time: <span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%> <%=@time.strftime("at %I:%M%p")%></span> </td>
+    </tr>
+  </table>
+</div>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h2 style="text-align: left;" class="lite-gray">Client's details</h2>
+<div>
+  <table class="pdf_font1">
+    <tr>
+      <td style="width:120px; font-weight: bold;">Registration No:</td>
+      <td style="width:300px;"><%=@purchase_sale_detail.order.sys_user&.code %></td>
+      <td style="width:300px;"></td>
+      <td ></td>
+      <td rowspan="5">
+        <%if @purchase_sale_detail.order.sys_user.profile_image.attached?%>
+        <%= image_tag @purchase_sale_detail.order.sys_user.profile_image.service_url, class:"profile_image"%>
+        <% end %></td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold;">CNIC No:</td>
+      <td><%=@purchase_sale_detail.order.sys_user&.cnic %></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold;">Member Name:</td>
+      <td><%=@purchase_sale_detail.order.sys_user.name %></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold;">Address:</td>
+      <td><%=@purchase_sale_detail.order.sys_user&.contact&.address %></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td style="width:33vw; font-weight: bold;">contacts:</td>
+      <td style="width:33vw;"><%=@purchase_sale_detail.order.sys_user&.contact&.mobile %></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </table>
+</div>
+<h2 style="text-align: left; margin: 0;" class="lite-gray">Property details</h2>
+<div>
+  <%if @purchase_sale_detail.order.order_items_names_and_quantity!=0%>
+    <%@purchase_sale_detail.order.order_items_names_and_quantity.each do |name_quantity|%>
+      <table class="pdf_font">
+        <tr>
+          <td style="width:120px; font-weight: bold;">Block Name:</td>
+          <td ><%=name_quantity[6] %></td>
+          <td style="width:120px; font-weight: bold;">Property Size: </td>
+          <td><%=name_quantity[8] %>-M <%=name_quantity[9] %>-Sqr</td>
+        </tr>
+        <tr>
+          <td style="width:120px; font-weight: bold;">Property No.</td>
+          <td ><%=name_quantity.first %></td>
+          <td style="width:120px; font-weight: bold;">Type:</td>
+          <td ><%=name_quantity[5] %></td>
+        </tr>
+      </table>
+    <% end %>
+  <% end %>
+</div>
+<h2 style="text-align: left; margin: 0;" class="lite-gray">Payment details</h2>
+<div>
+  <table class="pdf_font">
+    <tr>
+      <td style="width:120px; font-weight: bold;">Net Price:</td>
+      <td ><%=@purchase_sale_detail.order&.total_bill %></td>
+      <td style="width:120px; font-weight: bold;">Grand Due Amt: </td>
+      <td><%=@purchase_sale_detail.order&.sys_user&.balance&.to_f %></td>
+      <td style="width:120px; font-weight: bold;">Net Price Received:</td>
+      <td><%= @received = @purchase_sale_detail.order.amount.to_i+@purchase_sale_detail.order.purchase_sale_details.sum(:amount).to_i%> </td>
+    </tr>
+    <tr>
+      <td style="width:120px; font-weight: bold;">Grand Received %: </td>
+      <td><% if @purchase_sale_detail.order.total_bill.present? && @purchase_sale_detail.order.total_bill > 0%><%=@r = ((@received/@purchase_sale_detail.order.total_bill.to_f) * 100).round(2) %><% end %></td>
+      <td style="width:150px; font-weight: bold;">Net Price O.S Amt:</td>
+      <td ><%#=@purchase_sale_detail.order.sys_user.name %></td>
+      <td style="width:150px; font-weight: bold;">Cash Discount: </td>
+      <td><%#=@purchase_sale_detail.order.sys_user.name %></td>
+    </tr>
+  </table>
+</div>
+<h2 style="text-align: left; margin: 0;" class="lite-gray">Deposit details</h2>
+<div>
+<table style="font-weight: bold;">
+  <th style="width:10vw;">SR #</th>
+  <th style="width:60vw;">Unit</th>
+  <th style="width:10vw;">Price</th>
+  <th style="width:20vw;">Size</th>
+  <th style="width:10vw;">Total</th>
+  <%i=1%>
+  <% @purchase_sale_detail.purchase_sale_items.each do |item|%>
+    <tr style="text-align:center">
+      <td style="border-bottom: 1px solid #000; "><%=i%><%i=i+1%></td>
+      <td style="border-bottom: 1px solid #000; "><b><%=item.product.present? ? item.product.title+" "+item.product.item_type.title : "" %></b></td>
+      <td style="border-bottom: 1px solid #000; "><%=item.sale_price %></td>
+      <td style="border-bottom: 1px solid #000; "><%=item.product.marla%>-M <%=item.product.square_feet%>-Sqr</td>
+      <td style="border-bottom: 1px solid #000; "><%=item.purchase_sale_type=="Sale_type" ? "" : "-"%><%=item.total_sale_price %></td>
+    </tr>
+  <% end %>
+  <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td style="font-weight: bold;">Total:</td>
+    <td style="font-weight: bold;"><%=@purchase_sale_detail.total_bill%></td>
+  </tr>
+  <% @purchase_sale_detail&.order&.order_items&.each do |item|%>
+    <tr style="text-align:center">
+      <td style="border-bottom: 1px solid #000; "><%=i%><%i=i+1%></td>
+      <td style="border-bottom: 1px solid #000; "><%=item.product.present? ? item.product.title+" "+item.product.item_type.title : "" %></td>
+      <td style="border-bottom: 1px solid #000; "><%=item.sale_price %></td>
+      <td style="border-bottom: 1px solid #000; "><%=item.product.marla%>-M <%=item.product.square_feet%>-Sqr</td>
+      <td style="border-bottom: 1px solid #000; "><%=item.purchase_sale_type=="Sale_type" ? "" : "-"%><%=item.total_sale_price %></td>
+    </tr>
+  <% end %>
+  <%if @purchase_sale_detail.amount.to_f>0%>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td style="font-weight: bold;">Depost Amount: </td>
+      <td style="font-weight: bold;"><%=@purchase_sale_detail.amount.present? ? @purchase_sale_detail.amount : 0.00%></td>
+    </tr>
+  <%end%>
+  <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td style="font-weight: bold;">Remaning: </td>
+    <td style="text-align:center"><%=@purchase_sale_detail.sys_user.balance%></td>
+  </tr>
+
+</table>
+</div>
+
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<%if @purchase_sale_detail.comment.present?%>
+  <p style="border-bottom: dotted 3px;  margin: 0;"></p>
+  <p style="text-align: center;margin: 0;"><span>Comment: <%=@purchase_sale_detail.comment.titleize%></span></p>
+<%end%>
+<h3>Staff Signature:_____________</h3>
+<h3>Customer Signature:_____________</h3>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<p style="text-align: center;margin: 0;"><span><%=@pos_setting.address if @pos_setting.present?%></span></p>
+<p style="text-align: center;margin: 0;"><span><%=@pos_setting.phone if @pos_setting.present?%></span></p>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+
+<div style="display: block;clear: both;page-break-after: always;"></div>
+<% @time = Time.zone.now %>
+<% if @pos_setting.header.present? %>
+  <div class="header" style="height: <%=@pos_setting.header_hieght%>px; <%=@pos_setting.header_style%> ">
+    <% if @pos_setting.present? && @pos_setting.persisted? && @pos_setting.logo_images.present? && @pos_setting.header_logo_placement != 'logo_disable_text_center'%>
+      <div class="<%= @pos_setting.header_logo_placement%>">
+        <%@pos_setting.logo_images.each do |image| %>
+          <%= image_tag image.service_url, width: @pos_setting.logo_width, hight: @pos_setting.logo_hieght%>
+        <%end%>
+        </div>
+    <% end %>
+    <div class="<%= @pos_setting.header_logo_placement%>_text">
+      <h1 style="padding-top: <%=@pos_setting.title_padding%>px; <%=@pos_setting.title_style%>" > <%=admin_name_on_nav if admin_name_on_nav.present?%></h1>
+    </div>
+  </div>
+<% end %>
+    <p style="border-bottom: double 4px;  margin: 0;"></p>
+<h2 style="text-align: center; margin: 0;">Customer Receipt</h2>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<table>
+  <tbody>
+    <tr>
+      <td><h2 style="text-align: left; margin: 0;">Depost No <%= @purchase_sale_detail.sys_user.purchase_sale_details.count.to_i%></h2></td>
+      <td><h2 style="text-align: right; margin: 0;">Voucher no <%=@purchase_sale_detail.id.to_s %></h2></td>
+    </tr>
+
+  </tbody>
+</table>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<div>
+  <table>
+    <th></th>
+    <th></th>
+    <tr>
+      <td>Date Time: <span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%> <%=@time.strftime("at %I:%M%p")%></span> </td>
+    </tr>
+  </table>
+</div>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h2 style="text-align: left;" class="lite-gray">Client's details</h2>
+<div>
+  <table class="pdf_font1">
+    <tr>
+      <td style="width:120px; font-weight: bold;">Registration No:</td>
+      <td style="width:300px;"><%=@purchase_sale_detail.order.sys_user&.code %></td>
+      <td style="width:300px;"></td>
+      <td ></td>
+      <td rowspan="5">
+        <%if @purchase_sale_detail.order.sys_user.profile_image.attached?%>
+        <%= image_tag @purchase_sale_detail.order.sys_user.profile_image.service_url, class:"profile_image"%>
+        <% end %></td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold;">CNIC No:</td>
+      <td><%=@purchase_sale_detail.order.sys_user&.cnic %></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold;">Member Name:</td>
+      <td><%=@purchase_sale_detail.order.sys_user.name %></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold;">Address:</td>
+      <td><%=@purchase_sale_detail.order.sys_user&.contact&.address %></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td style="width:33vw; font-weight: bold;">contacts:</td>
+      <td style="width:33vw;"><%=@purchase_sale_detail.order.sys_user&.contact&.mobile %></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </table>
+</div>
+<h2 style="text-align: left; margin: 0;" class="lite-gray">Property details</h2>
+<div>
+  <%if @purchase_sale_detail.order.order_items_names_and_quantity!=0%>
+    <%@purchase_sale_detail.order.order_items_names_and_quantity.each do |name_quantity|%>
+      <table class="pdf_font">
+        <tr>
+          <td style="width:120px; font-weight: bold;">Block Name:</td>
+          <td ><%=name_quantity[6] %></td>
+          <td style="width:120px; font-weight: bold;">Property Size: </td>
+          <td><%=name_quantity[11] %>-M <%=name_quantity[12] %>-Sqr</td>
+        </tr>
+        <tr>
+          <td style="width:120px; font-weight: bold;">Property No.</td>
+          <td ><%=name_quantity.first %></td>
+          <td style="width:120px; font-weight: bold;">Type:</td>
+          <td ><%=name_quantity[5] %></td>
+        </tr>
+      </table>
+    <% end %>
+  <% end %>
+</div>
+<h2 style="text-align: left; margin: 0;" class="lite-gray">Payment details</h2>
+<div>
+  <table class="pdf_font">
+    <tr>
+      <td style="width:120px; font-weight: bold;">Net Price:</td>
+      <td ><%=@purchase_sale_detail.order&.total_bill %></td>
+      <td style="width:120px; font-weight: bold;">Grand Due Amt: </td>
+      <td><%=@purchase_sale_detail.order&.sys_user&.balance&.to_f %></td>
+      <td style="width:120px; font-weight: bold;">Net Price Received:</td>
+      <td><%= @received = @purchase_sale_detail.order.amount.to_i+@purchase_sale_detail.order.purchase_sale_details.sum(:amount).to_i%> </td>
+    </tr>
+    <tr>
+      <td style="width:120px; font-weight: bold;">Grand Received %: </td>
+      <td><% if @purchase_sale_detail.order.total_bill.present? && @purchase_sale_detail.order.total_bill > 0%><%=@r = ((@received/@purchase_sale_detail.order.total_bill.to_f) * 100).round(2) %><% end %></td>
+      <td style="width:150px; font-weight: bold;">Net Price O.S Amt:</td>
+      <td ><%#=@purchase_sale_detail.order.sys_user.name %></td>
+      <td style="width:150px; font-weight: bold;">Cash Discount: </td>
+      <td><%#=@purchase_sale_detail.order.sys_user.name %></td>
+    </tr>
+  </table>
+</div>
+<div>
+<h2 style="text-align: left; margin: 0;" class="lite-gray">Deposit details</h2>
+<table>
+  <th style="width:10vw;">SR #</th>
+  <th style="width:60vw;">Unit</th>
+  <th style="width:10vw;">Price</th>
+  <th style="width:20vw;">Size</th>
+  <th style="width:10vw;">Total</th>
+  <%i=1%>
+  <% @purchase_sale_detail.purchase_sale_items.each do |item|%>
+    <tr style="text-align:center">
+      <td style="border-bottom: 1px solid #000; "><%=i%><%i=i+1%></td>
+      <td style="border-bottom: 1px solid #000; "><b><%=item.product.present? ? item.product.title+" "+item.product.item_type.title : "" %></b></td>
+      <td style="border-bottom: 1px solid #000; "><%=item.sale_price %></td>
+      <td style="border-bottom: 1px solid #000; "><%=item.product.marla%>-M <%=item.product.square_feet%>-Sqr</td>
+      <td style="border-bottom: 1px solid #000; "><%=item.purchase_sale_type=="Sale_type" ? "" : "-"%><%=item.total_sale_price %></td>
+    </tr>
+  <% end %>
+  <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td style="font-weight: bold;">Total:</td>
+    <td style="font-weight: bold;"><%=@purchase_sale_detail.total_bill%></td>
+  </tr>
+  <% @purchase_sale_detail&.order&.order_items&.each do |item|%>
+    <tr style="text-align:center">
+      <td style="border-bottom: 1px solid #000; "><%=i%><%i=i+1%></td>
+      <td style="border-bottom: 1px solid #000; "><%=item.product.present? ? item.product.title+" "+item.product.item_type.title : "" %></td>
+      <td style="border-bottom: 1px solid #000; "><%=item.sale_price %></td>
+      <td style="border-bottom: 1px solid #000; "><%=item.product.marla%>-M <%=item.product.square_feet%>-Sqr</td>
+      <td style="border-bottom: 1px solid #000; "><%=item.purchase_sale_type=="Sale_type" ? "" : "-"%><%=item.total_sale_price %></td>
+    </tr>
+  <% end %>
+  <%if @purchase_sale_detail.amount.to_f>0%>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td style="font-weight: bold;">Depost Amount: </td>
+      <td style="font-weight: bold;"><%=@purchase_sale_detail.amount.present? ? @purchase_sale_detail.amount : 0.00%></td>
+    </tr>
+  <%end%>
+  <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td style="font-weight: bold;">Remaning: </td>
+    <td style="text-align:center"><%=@purchase_sale_detail.sys_user.balance%></td>
+  </tr>
+
+</table>
+</div>
+<p style="border-bottom: dotted 3px;  margin: 0;"></p>
+<%if @purchase_sale_detail.comment.present?%>
+  <p style="border-bottom: dotted 3px;  margin: 0;"></p>
+  <p style="text-align: center;margin: 0;"><span>Comment: <%=@purchase_sale_detail.comment.titleize%></span></p>
+<%end%>
+<h3>Staff Signature:_____________</h3>
+<h3>Customer Signature:_____________</h3>

@@ -1,0 +1,150 @@
+<div class="hidden" id="product_list">
+  <h1>Product</h1>
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+  <% if can?(:add, :all) %>
+      <div id="new_product" class="col-lg-12 form-group float-left">
+        <%= link_to new_product_path, class: "btn btn-success" do %>
+          <i class="fa fa-plus" aria-hidden="true"></i>
+          New Product
+          <% end %>
+      </div>
+    <% end %>
+    </div>
+  </div>
+
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <%= search_form_for @q, url: products_path, class: "admin-controls", method: "get" do |f| %>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.select :item_type_id_in, options_for_select(@item_types.map {|i| ["#{i.second} \u{27F6} #{i.last}", i.first]}, f.object.item_type_id_in),{:include_blank => "Select the Block"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Block"} }%>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.select :id_in, options_for_select(@product.map {|i| ["#{i.second} \u{27F6} #{i.last}", i.first]}, f.object.id_in),{:include_blank => "Select Title/Code"},{:multiple => true, :class=>"form-control chosen-select", :data => {:placeholder => "Select the Title/Code"}} %>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.select :product_category_id_in, options_for_select(@product_categories.map {|i| ["#{i.second} \u{27F6} #{i.last}", i.first]}, f.object.product_category_id_in),{:include_blank => "Select Unit category"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Unit category"}} %>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.select :product_sub_category_id_in, options_for_select(@product_sub_categories.map {|i| ["#{i.second} \u{27F6} #{i.last}", i.first]}, f.object.product_sub_category_id_in),{:include_blank => "Select Unit sub category"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Unit sub category"}} %>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px;"><i class="fa fa-search"></i></button>
+        </div>
+        <div class="col-lg-1 form-group float-right">
+          <button class="form-control btn btn-secondary" name="submit_pdf_staff_with" type="submit" value="Products PDF A4" formtarget="_blank"><i class="fa fa-file-pdf"></i></button>
+        </div>
+        <div class="col-lg-2 form-group float-right">
+          <button class="form-control btn btn-secondary" name="submit_pdf_staff_barcode" type="submit" value="Products PDF A4" formtarget="_blank">Barcode </button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <table data-toggle="table" data-search="true" id="product_table">
+    <thead>
+      <th>Image</th>
+      <th><%= sort_link(@q, :item_type_title, 'Item Type') %></th>
+      <th><%= sort_link(@q, :code, 'Code') %></th>
+      <th class="urdu-font"><%= sort_link(@q, :tile, 'Title') %></th>
+      <th class="urdu-font"><%= sort_link(@q, :product_category_title, 'Pdt-ctgy') %></th>
+      <th class="urdu-font"><%= sort_link(@q, :product_sub_category_title, 'Pdt-sub-ctgy') %></th>
+      <th><%= sort_link(@q, :stock, 'Stock') %></th>
+      <th><%= sort_link(@q, :cost, 'Cost') %></th>
+      <th><%= sort_link(@q, :sale, 'Sale') %></th>
+      <th><%= sort_link(@q, :cost, 'Total Cost') %></th>
+      <th><%= sort_link(@q, :sale, 'Total Sale') %></th>
+      <th><%= sort_link(@q, :with_serial, 'Serial') %></th>
+      <% if pos_setting_sys_type=="batha"%>
+      <th><%= sort_link(@q, :raw_product_title, 'Raw Product') %></th>
+      <%end%>
+      <th>Action</th>
+
+    </thead>
+
+    <tbody>
+      <%@products.each do |product|%>
+      <tr>
+        <td>
+        <% if  product.profile_image.attached? %>
+          <%= image_tag product.profile_image.service_url, width: 100 %>
+        <% end %>
+        </td>
+        <td><%= product.item_type.title rescue 'nil'%></td>
+        <td><%= product.code rescue 'nil'%></td>
+        <td><%= product.title rescue 'nil'%></td>
+        <td><%= product.product_category.title rescue 'nil'%></td>
+        <td><%= product.product_sub_category.title rescue 'nil'%></td>
+        <%if current_user.superAdmin.company_type=="batamega"%>
+          <td><%= product.stock %> || <%= product.size_1 %>,<%= product.size_2 %>,<%= product.size_3 %>,<%= product.size_4 %>,<%= product.size_5 %>,<%= product.size_6 %>,<%= product.size_7 %>,<%= product.size_8 %>,<%= product.size_9 %>,<%= product.size_10 %>,<%= product.size_11 %>,<%= product.size_12 %>,<%= product.size_13 %></td>
+        <%elsif%>
+          <td><%= product.stock %></td>
+        <%end%>
+        <td><%= product.cost.to_f.round(20) %></td>
+        <td><%= product.sale.to_f.round(20) %></td>
+        <td><%=(product.cost.to_f*product.stock.to_f).round(2)%></td>
+        <td><%=(product.sale.to_f*product.stock.to_f).round(2)%></td>
+        <%if pos_setting_sys_type=="batha"%>
+          <td><%= product.raw_product.present? ? product.raw_product.title : ""%></td>
+        <%end%>
+        <td><%=product.with_serial%></td>
+
+
+        <td>
+          <% if can?(:update, Product) %>
+            <%= link_to edit_product_path(product) do %>
+              <i class="fa fa-edit " aria-hidden="true"></i> |
+            <%end %>
+          <% end %>
+          <% if can?(:delete, :all) %>
+            <%= link_to product, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+              <i class="fa fa-trash " aria-hidden="true"></i> |
+            <%end %>
+          <% end %>
+          <% if can?(:view, :all) %>
+            <%= link_to product do %>
+              <i class="fa fa-eye " aria-hidden="true"></i>
+            <%end %>
+          <%end%>
+          <% if can?(:view, :all) %>
+            <%= link_to product_path(id:product,barcode: true) do %>
+              <i class="fa fa-barcode " aria-hidden="true"></i>
+            <%end %>
+          <%end%>
+        </td>
+      </tr>
+      <%end%>
+    <tr>
+      <td><h5>Total</h5></td>
+      <td><h5></h5></td>
+      <td><h5></h5></td>
+      <td><h5></h5></td>
+      <td><h5></h5></td>
+      <td><h5></h5></td>
+      <td><h5><%=@total.to_f.round(2)%></h5></td>
+
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="clearfix"></div>
+<div class="row">
+  <div class="col-lg-4 col-sm-4">
+    <%= page_entries_info @products %>
+  </div>
+  <div class="col-lg-8 col-sm-8 pagination-left">
+    <%= paginate @products %>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#product_list").removeClass('hidden');
+    FontAwesome.dom.i2svg();
+  });
+</script>

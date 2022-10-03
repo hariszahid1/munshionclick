@@ -1,0 +1,28 @@
+<tr>
+  <td><%= raw_product.code %></td>
+  <td><%= raw_product.title %></td>
+  <td><%= raw_product.stock %>/<%= raw_product.first_stock %>/<%= raw_product.second_stock %>/<%= raw_product.third_stock %>/<%= raw_product.nakasi_stock %></td>
+  <td><%= raw_product.acquire_type %></td>
+  <td><%= raw_product.cost %></td>
+  <td><%= raw_product.sale %></td>
+  <td><%= raw_product.minimum %></td>
+  <td><%= raw_product.optimal %></td>
+  <td><%= raw_product.maximum %></td>
+  <td>
+    <% if can?(:update, :all) %>
+      <%= link_to edit_raw_product_path(raw_product) do %>
+        <i class="fa fa-edit " aria-hidden="true"></i> |
+      <%end %>
+    <% end %>
+    <% if can?(:delete, :all) %>
+      <%= link_to raw_product, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+        <i class="fa fa-trash " aria-hidden="true"></i> |
+      <%end %>
+    <% end %>
+    <% if can?(:view, :all) %>
+      <%= link_to raw_product do %>
+        <i class="fa fa-eye " aria-hidden="true"></i>
+      <%end %>
+    <%end%>
+  </td>
+</tr>

@@ -1,0 +1,140 @@
+<h1>New <%=@departments&.second&.title%> Daily Book</h1>
+
+<%= bootstrap_form_for(@daily_book) do |f| %>
+  <% if @daily_book.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@daily_book.errors.count, "error") %> prohibited this daily_book from being saved:</h2>
+
+      <ul>
+      <% @daily_book.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <table>
+    <thead>
+      <th>
+        <%= f.select :department_id, options_from_collection_for_select(@departments, 'id', 'title', @departments.second.id), {prompt: "Select the Department"}, readonly:true%>
+      </th>
+      <th><%= f.date_select :book_date,readonly:true%></th>
+      <th>
+        <%= f.date_select :created_at,readonly:true%>
+      </th>
+      <th><%= f.text_area :comment %></th>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <label for="salary_details_raw_rate">Debit Rate</label>
+          <input class="form-control" type="number" name="salary_details_raw_rate" id="salary_details_raw_rate" value="0.0", onchange="daily_debit_rate()", onkeyup="daily_debit_rate()", readonly="true">
+        </td>
+        <td>
+          <label for="salary_details_raw_rate">Credit Rate</label>
+          <input class="form-control" type="number" name="salary_details_raw_rate" id="salary_details_wage_rate" value="0.0", onchange="daily_credit_rate()", onkeyup="daily_credit_rate()", readonly="true">
+        </td>
+        <td>
+          <label for="salary_details_raw_rate">Kat %</label>
+          <input class="form-control" type="number" name="salary_details_kat" id="salary_details_kat" value="<%=@pos_setting.extra_settings.present? ? @pos_setting.extra_settings['kharkar_kat'] : 0%>", onchange="daily_credit_rate()", onkeyup="daily_credit_rate()">
+        </td>
+        <td>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <table>
+    <thead>
+      <th>Name</th>
+      <th>Item</th>
+      <th>Information</th>
+      <th>Location</th>
+      <th>Quantity</th>
+      <th>Kat</th>
+      <th>Wast</th>
+      <th>B/S/C</th>
+      <th>Debit Rate</th>
+      <th>Credit Rate</th>
+      <th>Debit</th>
+      <th>Credit</th>
+    </thead>
+    <tbody>
+      <%= f.fields_for :salary_details do |f| %>
+      <%  staff = Staff.find(f.object.staff_pathera_id) %>
+      <tr <%="class=hidden" if ((f.object.raw_product_id ==1 && (f.object.pather_remaning_quanity==0 || f.object.pather_remaning_quanity.blank?)) || (f.object.raw_product_id ==2 && (f.object.pather_remaning_quanity==0 || f.object.pather_remaning_quanity.blank?))) %> >
+        <td>
+          <%= f.hidden_field :id %>
+          <%= f.hidden_field :staff_pathera_id %>
+          <%= f.object.staff_pathera.full_name %>
+        </td>
+        <td>
+          <%= f.hidden_field :raw_product_id %>
+            <%= f.object.raw_product.title %>
+          <%= f.hidden_field :pather_salary_detail_id %>
+          <span class="remaning_quanity"><%= f.object.pather_remaning_quanity %></span>
+          <span class="pather_remaning_quanity"><%= f.object.pather_remaning_quanity %></span>
+          <%= f.hidden_field :pather_remaning_quanity, class: "pather_remaning_quanity" %>
+        </td>
+        <td>
+          <%= f.select :staff_id, options_from_collection_for_select(@khakar_staffs, 'id', 'name'), {prompt: "Select the #{@departments&.second&.title} Person",hide_label:true}, { onchange: 'set_khakar_info(this.value,this.id);',onkeyup:"set_khakar_info(this.value,this.id); ",class: "chosen-select",required: true }%>
+        </td>
+        <td>
+          <%= f.select :transaction_location, SalaryDetail.transaction_locations.map { |key, value| [key.humanize, key] },{ hide_label:true, class: "form-control", required: true} %>
+        </td>
+        <td>
+          <%= f.number_field :khakar_quanity, {value: f.object.pather_remaning_quanity,hide_label:true, class: "raw-quantity",onchange:"daily_book_khakar_update()",onkeyup:"daily_book_khakar_update()"}%>
+        </td>
+        <td>
+          <span class="kat_quantity">0.00</span>
+        </td>
+        <td>
+          <%= f.number_field :khakar_wast, hide_label:true, class: "wast",onchange:"daily_book_khakar_update()",onkeyup:"daily_book_khakar_update()" %>
+        </td>
+        <td>
+          <%= f.hidden_field :khakar_remaning,value:0.00, class: "quantity" %>
+          <span class="quantity">0.00</span>
+        </td>
+        <td>
+          <%= f.number_field :raw_wage_rate, hide_label:true, class: "raw-wage-rate",onchange:"daily_book_khakar_update()",onkeyup:"daily_book_khakar_update()" %>
+        </td>
+        <td>
+          <%= f.number_field :wage_rate,value: f.object.wage_rate.present? ? f.object.wage_rate : f.object.raw_product.sale, hide_label:true, class: "wage-rate",onchange:"daily_book_khakar_update()",onkeyup:"daily_book_khakar_update()" %>
+        </td>
+        <td>
+          <%= f.hidden_field :khakar_debit,value:0.00, class: "pay" %>
+          <span class="pay">0.00</span>
+        </td>
+        <td>
+          <%= f.hidden_field :khakar_credit,value:0.00, class: "total_pay" %>
+          <span class="total_pay">0.00</span>
+        </td>
+      </tr>
+      <% end %>
+      <tr>
+        <td><h4>Total</h4></td>
+        <td><h5 id="item_quantity_total">0.00</h5></td>
+        <td></td>
+        <td></td>
+        <td><h5 id="quantity_total">0.00</h5></td>
+        <td><h5 id="difference_total">0.00</h5></td>
+        <td><h5 id="wast_total">0.00</h5></td>
+        <td><h5 id="khakar_remaning_total">0.00</h5></td>
+        <td><h5 id="debit_rate_total">0.00</h5></td>
+        <td><h5 id="credit_rate_total">0.00</h5></td>
+        <td><h5 id="debit_total_total">0.00</h5></td>
+        <td><h5 id="credit_total_total">0.00</h5></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="actions">
+    <%= link_to @departments&.second&.title.to_s+' Daily Book', khakar_daily_books_path, class: "btn btn-info" %>
+    <%= f.submit class: "btn btn-primary", style: "float: right" %>
+  </div>
+
+<% end %>
+<%= javascript_include_tag 'hover', 'data-turbolinks-track': 'reload' %>
+<script>
+  setTimeout(function(){
+    daily_book_khakar_update();
+  }, 50);
+</script>

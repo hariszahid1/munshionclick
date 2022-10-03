@@ -1,0 +1,39 @@
+<%= bootstrap_form_with(model: product_stock, local: true) do |form| %>
+  <% if product_stock.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(product_stock.errors.count, "error") %> prohibited this product_stock from being saved:</h2>
+
+      <ul>
+      <% product_stock.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+
+
+<div class="col-lg-12 row">
+
+    <div class="col-lg-6 form-group float-left">
+      <%= form.select :product_id , options_from_collection_for_select(@products, 'id', 'title', form.object.product_id), {prompt: "Select the Product"}, required: true%>
+    </div>
+    <div class="col-lg-6 form-group float-left">
+      <%= form.number_field :in_stock %>
+    </div>
+
+    <div class="col-lg-6 form-group float-left">
+      <%= form.number_field :out_stock %>
+    </div>
+
+    <div class="col-lg-6 form-group float-left">
+      <%= form.number_field :stock %>
+      </div>
+</div>
+<div class="clearfix">
+    <hr>
+      <div class="col-lg-12">
+        <div class="col-lg-6 form-group float-right">
+          <%=form.object.product_id.nil? ? (form.submit class: "btn btn-success", style: "float: right")  :  (form.submit class: "btn btn-warning", style: "float: right")%>
+            <% end %>
+        </div>

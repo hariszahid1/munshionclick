@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>POS</title>
+    <%= wicked_pdf_stylesheet_link_tag "pdf" -%>
+
+</head>
+<body class="bond_pos_pdf">
+  <% @time = Time.zone.now %>
+  <% if @pos_setting.present? && @pos_setting.persisted? && @pos_setting.logo_images.present? %>
+    <div class="col-lg-12">
+      <%= image_tag @pos_setting.logo_images.first.service_url, width: 200, class:"pdf_img" %>
+    </div>
+  <%else%>
+  <h1 style="text-align: center;"><%=admin_name_on_nav%></h1>
+  <% end %>
+  <p style="border-bottom: double 4px;  margin: 0;"></p>
+  <h1 style="text-align: center; margin: 0;">Khakar Production Detail</h1>
+  <p style="border-bottom: double 4px;  margin: 0;"></p>
+  <div>
+    <table>
+      <th></th>
+      <th></th>
+      <tr>
+        <td>Printing Date Time: <span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%> <%=@time.strftime("at %I:%M%p")%></span> </td>
+        <td>Current User: <span><%=@current_user.name%> </span></td>
+      </tr>
+    </table>
+  </div>
+  <div>
+    <table data-toggle="table">
+      <thead>
+        <tr style="font-size:20px;,font-family: Arial Black, Gadget, sans-serif">
+          <th class="short-column">Date</th>
+          <th class="short-column">Code</th>
+          <th class="short-column">Staff</th>
+          <th class="short-column">Raw-p</th>
+          <th class="short-column">quantity</th>
+          <th class="short-column">Wast</th>
+          <th class="short-column">After Kat</th>
+
+        </tr>
+      </thead>
+
+      <tbody>
+        <%@salary_details_full.each do |sal|%>
+        <tr style="font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+          <td><%=sal[12]%></td>
+          <td><%staff=Staff.find_by_id(sal.first)%><%=staff.code%></td>
+          <td><b><%=staff.full_name%></b></td>
+          <td><%=RawProduct.find(sal[1]).title%></td>
+          <td><%=sal[2]%></td>
+          <td><%=sal[3]%></td>
+          <td><%=sal[4]%></td>
+        </tr>
+        <%end%>
+        <tr class="lite-gray" style="font-size:15px;font-family: Arial Black, Gadget, sans-serif">
+          <td class="td-bold">Total</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td class="td-bold"><%= @khakar_quanity.to_f.round(0) %></td>
+          <td class="td-bold"><%= @Wast.to_f.round(0) %></td>
+          <td class="td-bold"><%= @after_kat.to_f.round(0) %></td>
+
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="text-align: center;margin: 0;"><span><%=@pos_setting.address if @pos_setting.present?%></span></p>
+  <p style="text-align: center;margin: 0;"><span><%=@pos_setting.phone if @pos_setting.present?%></span></p>
+</body>
+</html>

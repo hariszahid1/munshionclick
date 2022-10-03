@@ -1,0 +1,266 @@
+<%@daily_book_salary_details_raw_quantity = 0 %>
+<%@daily_book_salary_details_f99_raw_quantity = 0 %>
+<%@daily_book_salary_details_tile_raw_quantity = 0 %>
+<%@daily_book_salary_details_raw_quantity = 0 %>
+<%@daily_book_salary_details_f99_quantity = 0 %>
+<%@daily_book_salary_details_tile_quantity = 0 %>
+<%@daily_book_salary_details_quantity = 0 %>
+<%@daily_book_salary_details_wast = 0 %>
+<%@daily_book_salary_details_raw_quantity_rate = 0 %>
+<%@daily_book_salary_details_quantity_rate = 0 %>
+<%@daily_book_salary_details_coverge_rate=0%>
+<%@daily_book_salary_details_gift_rate=0%>
+<%@salary_details_khakar_f99_raw_quantity=0%>
+<%@salary_details_khakar_tile_raw_quantity=0%>
+<%@daily_book_salary_details_khakar_raw_quantity=0%>
+<%@daily_book_salary_details_wast=0%>
+<%production_blocks_bricks_quantity=0%>
+<%production_blocks_tiles_quantity=0%>
+<%total_cost=0%>
+<%cost_per_line=0%>
+<%per_product_cost=0%>
+<%per_thousand_product_cost=0%>
+<%item_quantity_per_line=0%>
+<%total_item_quantity=0%>
+<%per_ton_bricks=0%>
+<%lines=0%>
+<%total_bricks=0%>
+<%n_lines=0%>
+<%n_total_bricks=0%>
+
+<% @time = Time.zone.now %>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Producion Report</h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<div>
+  <table>
+    <th></th>
+    <th></th>
+    <tr>
+      <td >Date Time: <span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%> <%=@time.strftime("at %I:%M%p")%></span> </td>
+      <td >Current User: <span><%=@current_user.name%> </span></td>
+    </tr>
+  </table>
+</div>
+<p style="border-bottom: dotted 3px;  margin: 0;"></p>
+<div>
+  <table data-toggle="table" data-search="true">
+    <thead>
+      <h3>Pathair</h3>
+      <tr class="lite-gray">
+        <th>Date</th>
+        <th>Kachi</th>
+        <th>K Bricks</th>
+        <th>K Tile</th>
+        <th>Paaki</th>
+        <th>P Bricks</th>
+        <th>P Tile</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @daily_books.each do |daily_book| %>
+        <tr>
+          <td><%= daily_book.book_date.strftime("%A,  %d-%b-%y") if daily_book.book_date%></td>
+          <td><%= daily_book.salary_details_raw_quantity.round(0) %><%@daily_book_salary_details_raw_quantity += daily_book.salary_details_raw_quantity %></td>
+          <td><%= daily_book.salary_details_f99_raw_quantity.round(0)%> <%@daily_book_salary_details_f99_raw_quantity += daily_book.salary_details_f99_raw_quantity %></td>
+          <td><%= daily_book.salary_details_tile_raw_quantity.round(0)%> <%@daily_book_salary_details_tile_raw_quantity += daily_book.salary_details_tile_raw_quantity %></td>
+          <td><%= daily_book.salary_details_quantity.round(0) %> <%@daily_book_salary_details_quantity += daily_book.salary_details_quantity %></td>
+          <td><%= daily_book.salary_details_f99_quantity.round(0)%> <%@daily_book_salary_details_f99_quantity += daily_book.salary_details_f99_quantity %></td>
+          <td><%= daily_book.salary_details_tile_quantity.round(0)%> <%@daily_book_salary_details_tile_quantity += daily_book.salary_details_tile_quantity %></td>
+        </tr>
+      <% end %>
+      <tr class="lite-gray">
+        <td><h4>Total</h4></td>
+        <td><h4><%=@daily_book_salary_details_raw_quantity%></h4></td>
+        <td><h4><%=@daily_book_salary_details_f99_raw_quantity%></h4></td>
+        <td><h4><%=@daily_book_salary_details_tile_raw_quantity%></h4></td>
+        <td><h4><%=@daily_book_salary_details_quantity%></h4></td>
+        <td><h4><%=@daily_book_salary_details_f99_quantity%></h4></td>
+        <td><h4><%=@daily_book_salary_details_tile_quantity%></h4></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <table data-toggle="table" data-search="true">
+    <thead>
+      <h3>Khakar</h3>
+      <tr class="lite-gray">
+        <th>Date</th>
+        <th>Pick up</th>
+        <th>Bricks</th>
+        <th>Tiles</th>
+        <th>Quantity</th>
+        <th>B/S/C</th>
+        <th>waste</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @khakar_daily_books.each do |khakar_daily_book| %>
+        <tr>
+          <td><%= khakar_daily_book.book_date.strftime("%A,  %d-%b-%y") if khakar_daily_book.book_date%></td>
+          <td><%= khakar_daily_book.created_at.strftime("%A,  %d-%b-%y") if khakar_daily_book.created_at%></td>
+          <td><%= khakar_daily_book.salary_details_khakar_f99_raw_quantity.round(0)%> <%@salary_details_khakar_f99_raw_quantity +=khakar_daily_book.salary_details_khakar_f99_raw_quantity.round(0)%></td>
+          <td><%= khakar_daily_book.salary_details_khakar_tile_raw_quantity.round(0)%> <%@salary_details_khakar_tile_raw_quantity +=khakar_daily_book.salary_details_khakar_tile_raw_quantity.round(0)%></td>
+          <td><%= khakar_daily_book.salary_details_khakar_quantity %> <%@daily_book_salary_details_khakar_raw_quantity += khakar_daily_book.salary_details_khakar_quantity %></td>
+          <td><%= khakar_daily_book.salary_details_khakar_remaning %> <%@daily_book_salary_details_wast += khakar_daily_book.salary_details_khakar_remaning %></td>
+          <td><% khakar_daily_book.salary_details_khakar_wast.to_f.round(2) %> <%@daily_book_salary_details_quantity_rate += khakar_daily_book.salary_details_khakar_wast %></td>
+
+        </tr>
+      <% end %>
+      <tr class="lite-gray">
+        <td><h4>Total</h4></td>
+        <td></td>
+        <td><h4><%=@salary_details_khakar_f99_raw_quantity%></h4></td>
+        <td><h4><%=@salary_details_khakar_tile_raw_quantity%></h4></td>
+        <td><h4><%=@daily_book_salary_details_khakar_raw_quantity%></h4></td>
+        <td><h4><%=@daily_book_salary_details_wast %></h4></td>
+        <td><h4><%=@daily_book_salary_details_quantity_rate %></h4></td>
+
+      </tr>
+    </tbody>
+  </table>
+
+  <table data-toggle="table" data-search="true">
+    <thead>
+      <h3>Bharai</h3>
+      <tr class="lite-gray">
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Bricks</th>
+        <th>Tiles</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @production_cycles.each do |production_cycle| %>
+        <tr>
+          <td><%= production_cycle.start_date.strftime("%A,  %d-%b-%y") if production_cycle.start_date%></td>
+          <td><%= production_cycle.end_date %></td>
+          <td>
+            <%= production_cycle.production_blocks_bricks_quantity_with_date %>
+            <h5><%= production_cycle.production_blocks_bricks_quantity %><% production_blocks_bricks_quantity+=production_cycle.production_blocks_bricks_quantity %></h5>
+          </td>
+          <td>
+            <%= production_cycle.production_blocks_tiles_quantity_with_date %>
+            <h5><%= production_cycle.production_blocks_tiles_quantity %><% production_blocks_tiles_quantity+=production_cycle.production_blocks_tiles_quantity %></h5>
+          </td>
+        </tr>
+      <% end %>
+      <tr class="lite-gray">
+        <td><h4>Total</h4></td>
+        <td></td>
+        <td><h4><%=production_blocks_bricks_quantity%></h4></td>
+        <td><h4><%=production_blocks_tiles_quantity%></h4></td>
+        <td><h4><%=production_blocks_bricks_quantity.to_i+production_blocks_tiles_quantity.to_i%></h4></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table data-toggle="table" data-search="true">
+    <thead>
+      <tr class="lite-gray">
+      <h3>Jalai</h3>
+      <th>Date</th>
+      <th>Lines</th>
+      <th>T Bricks</th>
+      <th>T Cost</th>
+      <th>Cost/Line</th>
+      <th>Cost/1000</th>
+      <th>Cost/Brick</th>
+      <th>Total Quantity</th>
+      <th>Qunatity/Line</th>
+      <th>Bricks/Ton</th>
+      <th> Quantiity/Bricks</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @jalai_production_cycles.each do |jalai_production_cycle| %>
+        <tr>
+          <td><%= jalai_production_cycle.start_date.strftime("%A,  %d-%b-%y") if jalai_production_cycle.start_date%></td>
+          <td>
+            <h7><%=jalai_production_cycle.lines %><% lines+=jalai_production_cycle.lines %></h7>
+          </td>
+          <td>
+            <h7><%=jalai_production_cycle.total_bricks.to_i %><% total_bricks+=jalai_production_cycle.total_bricks.to_i %></h7>
+          </td>
+          <td>
+            <h7><%=jalai_production_cycle.total_cost.to_i %><% total_cost+=jalai_production_cycle.total_cost %></h7>
+          </td>
+          <td>
+            <h7><%=jalai_production_cycle.cost_per_line.to_i %><% cost_per_line+=jalai_production_cycle.cost_per_line %></h7>
+          </td>
+          <td>
+            <h7><%=jalai_production_cycle.per_thousand_product_cost.to_i %><% per_thousand_product_cost+=jalai_production_cycle.per_thousand_product_cost %></h7>
+          </td>
+          <td>
+            <h7><%=jalai_production_cycle.per_product_cost%><% per_product_cost+=jalai_production_cycle.per_product_cost%></h7>
+          </td>
+          <td>
+            <h7><%=jalai_production_cycle.total_item_quantity.to_i %><% total_item_quantity+=jalai_production_cycle.total_item_quantity %></h7>
+          </td>
+          <td>
+            <h7><%=jalai_production_cycle.item_quantity_per_line.to_i %><% item_quantity_per_line+=jalai_production_cycle.item_quantity_per_line %></h7>
+          </td>
+          <td>
+            <h7><%=jalai_production_cycle.per_ton_bricks.to_i %><% per_ton_bricks+=jalai_production_cycle.per_ton_bricks %></h7>
+          </td>
+          <td>
+            <h7><%=(jalai_production_cycle.total_item_quantity.to_f/jalai_production_cycle.total_bricks.to_f).round(4) %></h7>
+          </td>
+        </tr>
+      <% end %>
+      <tr class="lite-gray">
+        <td><h4>Total</h4></td>
+        <td><h4><%=lines.to_i%></h4></td>
+        <td><h4><%=total_bricks.to_i%></h4></td>
+        <td><h4><%=total_cost.to_i%></h4></td>
+        <td><h4><%=(total_cost/lines).to_i  if @production_cycles.present?%></h4></td>
+        <td><h4><%=(total_cost/total_bricks).round(2)*1000 if total_cost!=total_bricks%></h4></td>
+        <td><h4><%=(total_cost/total_bricks).round(2) if total_cost!=total_bricks%></h4></td>
+        <td><h4><%=total_item_quantity.to_i%></h4></td>
+        <td><h4><%=(total_item_quantity/lines.to_i).to_i  if @production_cycles.present?%></h4></td>
+        <td><h4><%=((total_bricks/total_item_quantity)*1000.to_i).round(0)  if @production_cycles.present?%></h4></td>
+        <td><h4><%=(total_item_quantity/total_bricks).round(3) if total_item_quantity.positive?%></h4></td>
+      </tr>
+
+    </tbody>
+  </table>
+
+  <table data-toggle="table" data-search="true">
+    <thead>
+      <tr class="lite-gray">
+      <h3>nakasi</h3>
+      <th>Date</th>
+      <th>Lines</th>
+      <th>T Bricks</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @nkasi_production_cycles.each do |nkasi_production_cycle| %>
+        <tr>
+          <td><%= nkasi_production_cycle.start_date.strftime("%A,  %d-%b-%y") if nkasi_production_cycle.start_date%></td>
+          <td>
+            <h7><%=nkasi_production_cycle.lines %><% n_lines+=nkasi_production_cycle.lines %></h7>
+          </td>
+          <td>
+            <h7><%=nkasi_production_cycle.total_bricks.to_i %><% n_total_bricks+=nkasi_production_cycle.total_bricks.to_i %></h7>
+          </td>
+        </tr>
+      <% end %>
+      <tr class="lite-gray">
+        <td><h4>Total</h4></td>
+        <td><h4><%=n_lines.to_i%></h4></td>
+        <td><h4><%=n_total_bricks.to_i%></h4></td>
+      </tr>
+
+    </tbody>
+  </table>
+
+</div>
+<br>

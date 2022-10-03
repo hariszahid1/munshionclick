@@ -1,0 +1,7 @@
+<% if params[:submit_pdf_bulk].present?%>
+  <%= render 'property_installment_bulk'%>
+<% elsif params[:submit_pdf_search].present?%>
+  <%= render 'property_installment_search'%>
+<% else%>
+  <%= render 'property_installment'%>
+<% end%>

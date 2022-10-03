@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>POS</title>
+    <%= wicked_pdf_stylesheet_link_tag "pdf" -%>
+</head>
+<body class="bond_pos_pdf">
+    <% @time = DateTime.now %>
+    <% @total_cost_price=0 %>
+    <% @total_sale_price=0 %>
+    <% @total_profite=0 %>
+    <% @time = Time.zone.now %>
+    <p style="border-bottom: double 4px;  margin: 0;"></p>
+    <h1 style="text-align: center; margin: 0;">Total Stock => <%=@products_sale_total.to_f.round(2)%></h1>
+    <p style="border-bottom: double 4px;  margin: 0;"></p>
+      <div>
+        <table>
+          <th></th>
+          <th></th>
+          <tr>
+            <td>Printing Date Time: <span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%> <%=@time.strftime("at %I:%M%p")%></span> </td>
+            <td><p style="text-align: center;margin: 0;">Report by:asdfsadfsadf <%=current_user.name%></p></td>
+          </tr>
+        </table>
+      </div>
+      <table>
+        <th style="text-align:center; font-size:20px;,font-family: Arial Black, Gadget, sans-serif"><b>Title</b></th>
+        <th style="text-align:center; font-size:20px;,font-family: Arial Black, Gadget, sans-serif"><b>Stock</b></th>
+        <th style="text-align:center; font-size:20px;,font-family: Arial Black, Gadget, sans-serif"><b>Title</b></th>
+        <th style="text-align:center; font-size:20px;,font-family: Arial Black, Gadget, sans-serif"><b>Stock</b></th>
+        <% @products.each_slice(2) do |products| %>
+        <tr style="font-size:16px;font-family: Arial Black, Gadget, sans-serif">
+          <%products.each do |product|%>
+          <td style="text-align:left;border-bottom: 1px solid #000;"><%= product.title %></td>
+          <td style="text-align:center;border-bottom: 1px solid #000;"><%= product.stock.to_f %></td>
+          <%end%>
+        </tr>
+        <% end %>
+      </table>
+      <div class="" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+        <div class="col-table-10" style="border-bottom: 1px solid #000; font-weight: bold;">Total</div>
+        <div  class="col-table-10"style="border-bottom: 1px solid #000; font-weight: bold;"><%=@total_stock.to_f.round(2)%></div>
+      </div>
+      <div class="col-table-10">
+      <p style="border-bottom: dotted 3px;  margin: 0;"></p>
+      <p style="text-align: center;margin: 0;"><span><%=@pos_setting.address if @pos_setting.present?%></span></p>
+      <p style="text-align: center;margin: 0;"><span><%=@pos_setting.phone if @pos_setting.present?%></span></p>
+      <p style="border-bottom: dotted 3px;  margin: 0;"></p>
+      </div>
+</body>
+</html>

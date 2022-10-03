@@ -1,0 +1,153 @@
+<div class="flex">
+  <%= image_tag @pos_setting.logo_images.first.service_url, height: '65px', width: '65px',style: 'margin-bottom: 2px;'%>
+  <div style="margin-left: 70px; margin-top: 20px;">
+    <div style="text-align: center"><b><%=@pos_setting.extra_settings['challan_header'] if @pos_setting.extra_settings.present?%></b></div>
+    <div style="text-align: center; font-size: 13px">Member/Depositor Copy</div>
+  </div>
+  <div style="margin-left: 80px;">
+  </div>
+  <%= image_tag @pos_setting.logo_images.last.service_url, height: '65px', width: '65px',style: 'margin-bottom: 2px;'%>
+</div>
+
+<table class="mt-1">
+  <tr>
+    <td class="width-25">Date</td>
+    <td class="width-25"><%=@property_installment.due_date.present? ? @property_installment.due_date.strftime("%B %Y") : (DateTime+30.day).strftime("%B %Y")%></td>
+    <td class="width-25">Voucher No.</td>
+    <td class="width-25"><%=@property_installment.id%></td>
+  </tr>
+</table>
+<table class="mt-1">
+  <tr>
+    <td class="width-25">Account Title</td>
+    <td colspan = "3" class="width-75"><%=@pos_setting.extra_settings['challan_account_title'] if @pos_setting.extra_settings.present?%></td>
+  </tr>
+  <tr>
+    <td>Account No.</td>
+    <td colspan = "3" class="width-75">Code: <%=@pos_setting.extra_settings['challan_account_code'] if @pos_setting.extra_settings.present?%> Account No. <%=@pos_setting.extra_settings['challan_account_no'] if @pos_setting.extra_settings.present?%></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td colspan = "3" class="width-75"><%=@pos_setting.extra_settings['challan_account_iban'] if @pos_setting.extra_settings.present?%></td>
+  </tr>
+</table>
+<table class="mt-1">
+  <tr>
+    <td>Member Name</td>
+    <td colspan = "3" class="width-75 word-text"><%=@property_plan&.order&.sys_user&.name%></td>
+  </tr>
+</table>
+<table class="mt-1">
+  <tr>
+    <td>CNIC No.</td>
+    <td colspan = "3" class="width-75"><%=@property_plan&.order&.sys_user&.cnic%></td>
+  </tr>
+</table>
+<table class="mt-1">
+  <%if @property_plan.order.order_items_names_and_quantity!=0%>
+    <%@property_plan.order.order_items_names_and_quantity.each do |name_quantity|%>
+        <tr>
+          <td class="width-25">Project</td>
+          <td class="width-25"><%=name_quantity[6] %></td>
+          <td class="width-25">Location</td>
+          <td class="width-25"><%=name_quantity.first %></td>
+        </tr>
+    <% end %>
+  <% end %>
+</table>
+<table class="mt-1">
+  <tr>
+    <td class="width-25">Property No</td>
+    <td class="width-25"><%=@property_plan.order.order_items_names_and_quantity&.first&.first%></td>
+    <td class="width-25">Reg No.</td>
+    <td class="width-25"><%=@property_plan.order.sys_user&.code %></td>
+  </tr>
+</table>
+<table class="mt-1">
+  <%if @property_plan.order.order_items_names_and_quantity!=0%>
+    <%@property_plan.order.order_items_names_and_quantity.each do |name_quantity|%>
+      <tr>
+        <td class="width-25">Type</td>
+        <td class="width-25"><%=name_quantity[5] %></td>
+        <td class="width-25">Size</td>
+        <td class="width-25"><%=name_quantity[8] %>-M <%=name_quantity[9] %>-sqr</td>
+      </tr>
+    <% end %>
+  <% end %>
+</table>
+<table class="mt-1">
+  <tr>
+    <td colspan = "2" class="width-50">Mode of payment</td>
+    <td colspan = "2" class="width-50">
+    <div class="flex">
+      <span class="checkbox">00</span>
+      <span>Cash</span>
+      <span class="checkbox">00</span>
+      <span>DD/PO/CDR/BC</span>
+    </div></td>
+  </tr>
+</table>
+<table class="mt-1">
+  <tr>
+    <td class="width-25">DD/PO/CDR/BC No.</td>
+    <td class="width-25"></td>
+    <td class="width-25">Dated</td>
+    <td class="width-25"></td>
+  </tr>
+</table>
+<table class="mt-1">
+  <tr>
+    <td>Drawn on Bank</td>
+    <td colspan = "3" class="width-75"></td>
+  </tr>
+</table>
+<table class="mt-1">
+  <tr>
+    <td>Amount Rs</td>
+    <td colspan = "3" class="width-75 word-text"><%=@property_installment.installment_price%></td>
+  </tr>
+</table>
+<table class="mt-1">
+  <tr>
+    <td>Amount in words</td>
+    <td colspan = "3" class="width-75 word-text"><%=number_to_words(@property_installment.installment_price.to_i).capitalize%></td>
+  </tr>
+</table>
+
+<div class="border-line"></div>
+<div class="paid-text">Paid on Account of <%=@pos_setting.extra_settings['challan_paid_on'] if @pos_setting.extra_settings.present?%></div>
+
+<table class="mt-1">
+  <tr>
+    <td colspan = "2" class="width-50">Collection Branch Name</td>
+    <td colspan = "2" class="width-50"></td>
+  </tr>
+</table>
+<table class="mt-1">
+  <tr>
+    <td colspan = "2" class="width-50">Branch Code</td>
+    <td colspan = "2" class="width-50"></td>
+  </tr>
+</table>
+
+<div class="flex" style="margin-top: 30px">
+  <div style="width: 40%">
+      <div class="border-line">.</div>
+      <div style="text-align: center; margin-top: 10px;">Member's / Depositor's Sign.</div>
+  </div>
+  <div style="margin-left: 70px; width: 40%">
+      <div class="border-line"><%=@property_plan&.order&.sys_user&.contact&.phone_with_comma%></div>
+      <div style="text-align: center; margin-top: 10px;">Contact No.</div>
+  </div>
+</div>
+<div>
+  <div style="background-color: #d9d9d9; text-align: center; padding: 5px 0px; margin-top: 5px;">FOR OFFICIAL USE</div>
+  <table style="margin-top: 5px;">
+    <tr>
+      <td style="height: 60px;"></td>
+    </tr>
+    <tr>
+      <th style="text-align: center; font-wight: bold;">Teller's Stamp & Signature</th>
+    </tr>
+  </table>
+</div>

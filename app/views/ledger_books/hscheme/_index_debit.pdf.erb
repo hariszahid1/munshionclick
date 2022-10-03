@@ -1,0 +1,159 @@
+
+<p style="text-align: center;margin: 0;">Report by: <%=current_user.name%></p>
+<div>
+  <table>
+    <th></th>
+    <tr>
+      <td>DateTime: <span><%=Time.zone.now%></span> </td>
+    </tr>
+  </table>
+</div>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Received In Accounts (<%=@created_at_gteq%> - <%=@created_at_lteq%>)</h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<div>
+  <table>
+    <tr class="lite-gray">
+      <th><h3>Name</h3></th>
+      <th><h3>Received</h3></th>
+    </tr>
+    <% @account_credit.each do |debit| %>
+        <tr>
+          <td><b><%=debit.first%></b></td>
+          <td><b><%=debit.last%></b></td>
+        </tr>
+      <%end%>
+      <tr class="short-column">
+        <td><h4>Total</h4></td>
+        <td><h4><%list=0%><%@account_credit.collect{|p| list+=p.last}%><%=list%></h4></td>
+      </tr>
+  </table>
+</div>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Received Payments On Booking (<%=@created_at_gteq%> - <%=@created_at_lteq%>)</h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<div>
+  <table>
+    <tr class="lite-gray">
+      <th><h3>Name</h3></th>
+      <th><h3>Received</h3></th>
+    </tr>
+    <% @order_customer_credit.each do |debit| %>
+        <tr>
+          <td><b><%=debit.first%></b></td>
+          <td><b><%=debit.last%></b></td>
+        </tr>
+      <%end%>
+      <tr class="short-column">
+        <td><h4>Total</h4></td>
+        <td><h4><%list=0%><%@order_customer_credit.collect{|p| list+=p.last}%><%=list%></h4></td>
+      </tr>
+  </table>
+</div>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Received Payments On Installment (<%=@created_at_gteq%> - <%=@created_at_lteq%>)</h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<div>
+  <table>
+    <tr class="lite-gray">
+      <th><h3>Name</h3></th>
+      <th><h3>Received</h3></th>
+    </tr>
+    <% @sale_customer_credit.each do |debit| %>
+        <tr>
+          <td><b><%=debit.first%></b></td>
+          <td><b><%=debit.last%></b></td>
+        </tr>
+      <%end%>
+      <tr class="short-column">
+        <td><h4>Total</h4></td>
+        <td><h4><%list=0%><%@sale_customer_credit.collect{|p| list+=p.last}%><%=list%></h4></td>
+      </tr>
+  </table>
+</div>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Received Payments (<%=@created_at_gteq%> - <%=@created_at_lteq%>)</h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<div>
+  <table>
+    <tr class="lite-gray">
+      <th><h3>Name</h3></th>
+      <th><h3>Received</h3></th>
+    </tr>
+    <% @customer_credit.each do |debit| %>
+        <tr>
+          <td><b><%=debit.first%></b></td>
+          <td><b><%=debit.last%></b></td>
+        </tr>
+      <%end%>
+      <tr class="short-column">
+        <td><h4>Total</h4></td>
+        <td><h4><%list=0%><%@customer_credit.collect{|p| list+=p.last}%><%=list%></h4></td>
+      </tr>
+  </table>
+</div>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Received Payments By Date</h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<div>
+  <table>
+    <tr class="lite-gray">
+      <th><h3>Name</h3></th>
+      <th><h3>Received</h3></th>
+    </tr>
+    <% @customer_credit_date.each do |debit| %>
+        <tr>
+          <td><b><%=debit.first%></b></td>
+          <td><b><%=debit.last%></b></td>
+        </tr>
+      <%end%>
+      <tr class="short-column">
+        <td><h4>Total</h4></td>
+        <td><h4><%list=0%><%@customer_credit.collect{|p| list+=p.last}%><%=list%></h4></td>
+      </tr>
+  </table>
+</div>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Paid Payments</h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<div>
+  <table>
+    <tr class="lite-gray">
+      <th><h3>Name</h3></th>
+      <th><h3>Paid</h3></th>
+    </tr>
+    <% @supplier_debit.each do |debit| %>
+        <tr>
+          <td><b><%=debit.first%></b></td>
+          <td><b><%=debit.last%></b></td>
+        </tr>
+      <%end%>
+      <tr class="short-column">
+        <td><h4>Total</h4></td>
+        <td><h4><%list=0%><%@supplier_debit.collect{|p| list+=p.last}%><%=list%></h4></td>
+      </tr>
+  </table>
+</div>
+
+
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Paid Payments By Date</h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<div>
+  <table>
+    <tr class="lite-gray">
+      <th><h3>Name/Date</h3></th>
+      <th><h3>Paid</h3></th>
+    </tr>
+    <% @supplier_debit_date.each do |debit| %>
+        <tr>
+          <td><b><%=debit.first%></b></td>
+          <td><b><%=debit.last%></b></td>
+        </tr>
+      <%end%>
+      <tr class="short-column">
+        <td><h4>Total</h4></td>
+        <td><h4><%list=0%><%@supplier_debit.collect{|p| list+=p.last}%><%=list%></h4></td>
+      </tr>
+  </table>
+</div>

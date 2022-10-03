@@ -1,0 +1,185 @@
+
+<%date=@order.created_at%>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Booking Detail # <%=@order.voucher_id.to_s+'#'+@order.id.to_s %></h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<p style="text-align: center;margin: 0;">Report by: <%=current_user.name%></p>
+<div style="width:90vw;">
+  <table>
+    <th></th>
+    <th></th>
+    <tr>
+      <td style="width:67vw;"><b>Date:  <span><%=Time.zone.now.strftime("%A %d %b %y")%><b></span> </td>
+      <td style="width:33vw;"><b>Customer Name: <span> <%=@order.sys_user.name %><b></span></td>
+    </tr>
+  </table>
+</div>
+<div>
+  <table data-toggle="table" data-search="true">
+    <tbody>
+      <tr class="lite-gray">
+        <td></td>
+        <th>Unit</th>
+        <th>Marla</th>
+        <th>Rate</th>
+        <th>Total</th>
+      </tr>
+      <%if @order.order_items_names_and_quantity!=0%>
+        <%@order.order_items_names_and_quantity.each do |name_quantity|%>
+          <tr style="text-align:center">
+            <td></td>
+            <td><%=name_quantity.first%></td>
+            <td><%=name_quantity.second%></td>
+            <td><%=name_quantity.third%></td>
+            <td><%=name_quantity.fourth%></td>
+          </tr>
+        <%end%>
+      <%end%>
+      <tr class="lite-gray">
+        <th>#</th>
+        <th>Customers</th>
+        <th>Received</th>
+        <th>Date/Time</th>
+        <th>Comment</th>
+      </tr>
+
+        <tr style="text-align:center">
+          <td><%= @order.voucher_id.to_s+'#'+@order.id.to_s %></td>
+          <td><%= @order.sys_user.name rescue '' %></td>
+          <td><%= @order.amount.to_f.round(2) rescue 0%></td>
+          <td>
+            <%if @order.created_at.strftime("%d%b%y")!=@order.updated_at.strftime("%d%b%y")%>
+              <%= @order.created_at.present? ? order.created_at.strftime("%d%b%y at %I:%M %p") : '' %> | <%= order.updated_at.present? ? order.updated_at.strftime("%d%b%y at %H:%M%p") : '' %>
+            <%else%>
+              <%= @order.created_at.present? ? @order.created_at.strftime("%d%b%y at %I:%M %p") : '' %>
+            <%end%>
+          </td>
+          <td><%= @order.comment %></td>
+        </tr>
+    </tbody>
+  </table>
+  <table>
+  <tbody>
+    <%if @order.property_plans.present?%>
+    <% @order.property_plans.each do |properties| %>
+      <tr>
+        <td colspan="4">
+        <p style="border-bottom: double 4px;  margin: 0;"></p>
+        <h2 style="text-align: center; margin: 0;">Property Plan # <%= properties.id.to_s %></h2>
+        <p style="border-bottom: double 4px;  margin: 0;"></p>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="4">
+          Date:
+          <%if properties.created_at.strftime("%d%b%y")!=properties.updated_at.strftime("%d%b%y")%>
+            <%= properties.created_at.present? ? properties.created_at.strftime("%d%b%y at %I:%M%p") : '' %> | <%= properties.updated_at.present? ? properties.updated_at.strftime("%d%b%y at %H:%M%p") : '' %>
+          <%else%>
+            <%= properties.created_at.present? ? properties.created_at.strftime("%d%b%y at %I:%M%p") : '' %>
+          <%end%>
+        </td>
+      </tr>
+      <tr class="lite-gray">
+        <th>SR #</th>
+        <th>Payment</th>
+        <th>SR #</th>
+        <th>Payment</th>
+      </tr>
+      <tr>
+        <td>Down Payment</td>
+        <td style="text-align:center"> <b><%=properties.advance%></b></td>
+      </tr>
+      <%properties.property_installments.each_slice(2) do |installments|%>
+        <tr>
+          <%installments.each do |installment|%>
+              <td> <%=installment.installment_no%>  |  <%=(date+30.day).strftime("%B %Y")%><%(date=date+30.day)%></td>
+              <td style="text-align:center"><b><%=installment.installment_price%></b></td>
+            <%end%>
+          </tr>
+        <%end%>
+        <tr class="lite-gray" style="text-align:center">
+          <td><h4>Total</h4></td>
+          <td></td>
+          <td></td>
+          <td><h4><%=properties.property_installments.sum(:installment_price)%></h4></td>
+        </tr>
+    <% end %>
+  <% end %>
+</tbody>
+  </table>
+    <table data-toggle="table" data-search="true">
+      <tbody>
+          <tr>
+            <td colspan="10">
+            <p style="border-bottom: double 4px;  margin: 0;"></p>
+            <h2 style="text-align: center; margin: 0;">Depost Detail</h2>
+            <p style="border-bottom: double 4px;  margin: 0;"></p>
+            </td>
+          </tr>
+          <tr class="lite-gray">
+            <td></td>
+            <th>Delivery Detail</th>
+            <th>Received</th>
+            <th>Date/Time</th>
+            <th>Comment</th>
+          </tr>
+          <%if @order.purchase_sale_details.present?%>
+          <% @order.purchase_sale_details.each do |purchase_sale_detail| %>
+            <tr style="text-align:center">
+              <td></td>
+              <td><%= purchase_sale_detail.voucher_id.to_s+'#'+purchase_sale_detail.id.to_s %></td>
+              <td><%= purchase_sale_detail.amount.to_f.round(2) rescue 0%></td>
+              <td>
+                <%if purchase_sale_detail.created_at.strftime("%d%b%y")!=purchase_sale_detail.updated_at.strftime("%d%b%y")%>
+                  <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d%b%y at %I:%M%p") : '' %> | <%= purchase_sale_detail.updated_at.present? ? purchase_sale_detail.updated_at.strftime("%d%b%y at %H:%M%p") : '' %>
+                <%else%>
+                  <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d%b%y at %I:%M%p") : '' %>
+                <%end%>
+              </td>
+              <td><%= purchase_sale_detail.comment %></td>
+            </tr>
+          <% end %>
+          <tr class="lite-gray" style="text-align:center">
+            <td><h4>Total</h4></td>
+            <td><h4><%=@order.total_bill%></h4></td>
+            <td><h4><%=@order.amount.to_i+@order.purchase_sale_details.sum(:amount).to_i%></h4></td>
+            <td><h4>Remaing</h4></td>
+            <td><h4><%=@order.sys_user.balance.to_f%></h4></td>
+          </tr>
+        <% end %>
+        <tr>
+          <th style="text-align:left" colspan="4"></th>
+          <th style="text-align:center" colspan="4"></th>
+        </tr>
+        <tr>
+          <th style="text-align:left" colspan="4"></th>
+          <th style="text-align:center" colspan="4"></th>
+        </tr>
+        <tr>
+          <th style="text-align:left" colspan="4"></th>
+          <th style="text-align:center" colspan="4"></th>
+        </tr>
+        <tr>
+          <th style="text-align:left" colspan="4"></th>
+          <th style="text-align:center" colspan="4"></th>
+        </tr>
+        <tr>
+          <th style="text-align:left" colspan="4"></th>
+          <th style="text-align:center" colspan="4"></th>
+        </tr>
+        <tr>
+          <th style="text-align:left" colspan="4"></th>
+          <th style="text-align:center" colspan="4"></th>
+        </tr>
+        <tr>
+          <th style="text-align:left" colspan="4"></th>
+          <th style="text-align:center" colspan="4"></th>
+        </tr>
+        <tr>
+          <th style="text-align:left" colspan="4">Staff Signature</th>
+          <th style="text-align:center">Customer Signature</th>
+        </tr>
+      </tbody>
+    </table>
+
+</div>

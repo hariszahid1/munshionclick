@@ -1,0 +1,5 @@
+<%if params['1_submit_pdf'].present? || params['2_submit_pdf_asc'].present?%>
+  <%= render '1_index'%>
+<%else%>
+  <%= render 'normal_index'%>
+<%end%>

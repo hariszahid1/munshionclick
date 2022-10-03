@@ -1,0 +1,161 @@
+
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Order Detail # <%= @order.voucher_id.to_s+'/'+@order.id.to_s %></h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<p style="text-align: center;margin: 0;">Report by: <%=current_user.name%></p>
+<p style="text-align: left;margin: 0;"><b>Customer: <%=@order.sys_user.name%></b></p>
+<div>
+  <table>
+    <th></th>
+    <th></th>
+    <tr>
+      <td style="width:50vw;"><b>Printing:  <span><%=Time.zone.now.strftime("%d%b%y at %I:%M %p")%><b></span> </td>
+      <td style="width:50vw;"><b>Date: <span> <%=@order.created_at.strftime("%A %d %b %y") %><b></span></td>
+    </tr>
+  </table>
+</div>
+<div>
+  <table data-toggle="table" data-search="true">
+    <thead>
+      <tr class="lite-gray">
+        <th>SR #</th>
+        <th>Service</th>
+        <th>Rate</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <%if @order.order_items_names_and_quantity!=0%>
+        <%@order.order_items_names_and_quantity.each_with_index do |name_quantity,i|%>
+          <tr style="text-align:center">
+            <td style="font-weight: bold;"><%=i+1%></td>
+            <td style="font-weight: bold;"><%=name_quantity.first%></td>
+            <td style="font-weight: bold;"><%=name_quantity.third%></td>
+            <td style="font-weight: bold;"><%=name_quantity.fourth%></td>
+          </tr>
+        <%end%>
+      <%end%>
+      <tr style="text-align:center" class="lite-gray">
+
+        <td><b></b></td>
+        <td style="font-weight: bold;"></td>
+        <td><b>Discount</b></td>
+        <td style="font-weight: bold;"><%= @order.discount_price.to_f.round(2) rescue 0%></td>
+      </tr>
+      <tr style="text-align:center" class="lite-gray">
+        <td></td>
+        <td></td>
+        <td><b>Total Bill</b></td>
+        <td style="font-weight: bold;"><%= @order.total_bill.to_f.round(2) rescue 0 %></td>
+      </tr>
+      <tr style="text-align:center" class="lite-gray">
+        <td></td>
+        <td></td>
+        <td><b>Total Amount</b></td>
+        <td style="font-weight: bold;"><%= @order.amount.to_f.round(2) rescue 0 %></td>
+      </tr>
+      <tr style="text-align:center" class="lite-gray">
+
+        <td colspan="5"> <%= "Comment:"+@order.comment.to_s if  @order.comment.present?%></td>
+      </tr>
+      </tbody>
+    </table>
+
+<table data-toggle="table" data-search="true">
+<tbody>
+
+        <%if @order.purchase_sale_details.present?%>
+        <% @order.purchase_sale_details.each do |purchase_sale_detail| %>
+          <tr>
+            <td colspan="5">
+            <p style="border-bottom: double 4px;  margin: 0;"></p>
+            <h2 style="text-align: center; margin: 0;">Delivery Detail # <%= purchase_sale_detail.voucher_id.to_s+'/'+purchase_sale_detail.id.to_s %></h2>
+            <p style="border-bottom: double 4px;  margin: 0;"></p>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="5">
+              Date:
+              <%if purchase_sale_detail.created_at.strftime("%d%b%y")!=purchase_sale_detail.updated_at.strftime("%d%b%y")%>
+                <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d%b%y at %I:%M%p") : '' %> | <%= purchase_sale_detail.updated_at.present? ? purchase_sale_detail.updated_at.strftime("%d%b%y at %H:%M%p") : '' %>
+              <%else%>
+                <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d%b%y at %I:%M%p") : '' %>
+              <%end%>
+            </td>
+          </tr>
+          <tr class="lite-gray">
+            <th>SR #</th>
+            <th>Service</th>
+            <th>Price</th>
+            <th>Total</th>
+          </tr>
+          <%if purchase_sale_detail.purchase_sale_items_names_and_quantity!=0%>
+            <%purchase_sale_detail.purchase_sale_items_names_and_quantity.each_with_index do |name_quantity,i|%>
+              <tr style="text-align:center">
+                <td  style="font-weight: bold;"><%=i+1%></td>
+                <td  style="font-weight: bold;"><%=name_quantity.first%></td>
+                <td  style="font-weight: bold;"><%=name_quantity.third%></td>
+                <td  style="font-weight: bold;"><%=name_quantity.fourth%></td>
+              </tr>
+            <%end%>
+            <tr style="text-align:center">
+              <td></td>
+              <td><b>Total Qty</b></td>
+              <td  style="font-weight: bold;"><%=purchase_sale_detail.purchase_sale_items.count%></td>
+              <td><b>Discount</b></td>
+              <td  style="font-weight: bold;"><%= purchase_sale_detail.discount_price.to_f.round(2) rescue 0%></td>
+            </tr>
+            <tr style="text-align:center">
+              <td></td>
+              <td><b>Loader</b></td>
+              <td style="font-weight: bold;"><%=purchase_sale_detail.staff.name if purchase_sale_detail.staff.present? %></td>
+              <td><b>Carriage/Loading</b></td>
+              <td style="font-weight: bold;"><%=purchase_sale_detail.carriage%> / <%=purchase_sale_detail.loading%></td>
+            </tr>
+            <tr style="text-align:center">
+              <td></td>
+              <td></td>
+              <td></td>
+              <td><b>Total Bill</b></td>
+              <td style="font-weight: bold;"><%= purchase_sale_detail.total_bill.to_f.round(2) rescue 0 %></td>
+            </tr>
+            <tr style="text-align:center">
+              <td></td>
+              <td></td>
+              <td></td>
+              <td><b>Paid Amount</b></td>
+              <td style="font-weight: bold;"><%= purchase_sale_detail.amount.to_f.round(2) rescue 0%></td>
+            </tr>
+            <tr style="text-align:center">
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td colspan="5"> <%= "Comment:"+purchase_sale_detail.comment.to_s if  purchase_sale_detail.comment.present?%></td>
+            </tr>
+          <%end%>
+        <% end %>
+        <tr class="lite-gray" style="text-align:center">
+          <td><h4>O-Total</h4></td>
+          <td><h4><%=@order.total_bill%></h4></td>
+          <td><h4>D-Total</h4></td>
+          <td><h4><%=@order.purchase_sale_details.sum(:total_bill)%></h4></td>
+          <td><h4>Remaing: <%=@order.total_bill.to_i-@order.purchase_sale_details.sum(:total_bill).to_i%></h4></td>
+
+        </tr>
+      <% end %>
+      <tr>
+
+      </tr>
+      <tr>
+
+      </tr>
+      <tr>
+        <th style="text-align:left" colspan="4">Admin Sign#</th>
+        <th style="text-align:center" colspan="4">Customer Sign#</th>
+      </tr>
+    </tbody>
+  </table>
+
+</div>

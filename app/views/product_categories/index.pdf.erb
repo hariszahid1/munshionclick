@@ -1,0 +1,30 @@
+<% @account_total=0%>
+<% @date = Date.today  %>
+<% @time = DateTime.now %>
+<% @time = Time.zone.now %>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Product Categories details</h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<p style="text-align: center;margin: 0;">Report by: <%=current_user.name%></p>
+<div>
+  <table>
+    <thead>
+      <tr class="lite-gray">
+        <th>Title</th>
+        <th>Code</th>
+        <th>comment</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      <% @product_categories.each do |product_category| %>
+      <tr>
+        <td><%= product_category.title %></td>
+        <td><%= product_category.code %></td>
+        <td><%= product_category.comment %></td>
+      </tr>
+      <%end%>
+    </tbody>
+
+  </table>
+</div>

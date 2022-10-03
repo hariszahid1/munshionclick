@@ -1,0 +1,56 @@
+<h1>Editing Ledger Book</h1>
+
+<%= bootstrap_form_for(@ledger_book) do |f| %>
+  <% if @ledger_book.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@ledger_book.errors.count, "error") %> prohibited this ledger_book from being saved:</h2>
+
+      <ul>
+      <% @ledger_book.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+<div class="col-lg-12 row bg-white nested-fields">
+<%if params[:Sbenam].present? or params[:Sjama].present?%>
+<div class="col-lg-6 col-md-6 col-sm-6">
+  <%= f.select :sys_user_id, options_from_collection_for_select(@suppliers, 'id', 'name', f.object.sys_user_id), {label:"Supplier",prompt: "Select the Customer/Supplier"},class: "form-control select optional",required: true%>
+</div>
+<%else%>
+  <div class="col-lg-6 col-md-6 col-sm-6">
+    <%= f.select :sys_user_id, options_from_collection_for_select(@customers, 'id', 'name', f.object.sys_user_id), {label:"Customer/Supplier",prompt: "Select the Customer/Supplier"},class: "form-control select optional",required: true%>
+  </div>
+  <%end%>
+  <div class="col-lg-6 col-md-6 col-sm-6" >
+    <%= f.datetime_select :created_at %>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6" style="float:left">
+    <%= f.text_field :credit,label: "Credit/Udhar", required:true, onchange:"price_in_words(this.value,'price_in_word_id');",onkeyup:"price_in_words(this.value,'price_in_words');" %>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6" style="float:left">
+    <%= f.text_field :debit ,label: "Debit/Wasool", required:true, onchange:"price_in_words(this.value,'price_in_word_id');",onkeyup:"price_in_words(this.value,'price_in_words');"%>
+  </div>
+  <div  class="col-lg-12 col-md-6 col-sm-6 from-group float-left">
+    <h5>Payment in Words: <span id="price_in_words" style="font-size:20px;color:blue;">0.0</span></h5>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6">
+    <%= f.select :account_id , options_from_collection_for_select(@accounts, 'id', 'title', f.object.account_id), {prompt: "Select the Account"},required: true%>
+  </div>
+  <div class="field col-lg-12" style="float:left">
+    <%= f.label :comment do %>
+        <%= LedgerBook.human_attribute_name :comment %>
+        <i class="fas fa-language"></i>
+    <% end %>
+    <%= f.text_area :comment, hide_label: true ,class: 'urdu-font' %>
+  </div>
+  <div class="actions col-lg-12 col-sm-12">
+    <div class="col-lg-6" style="float:left">
+      <%= link_to 'Ledger Book', ledger_books_path, class: "btn btn-info" %>
+    </div>
+    <div class="col-lg-6" style="float:left">
+      <%= f.submit class: "btn btn-primary", style: "float: right" %>
+    </div>
+  </div>
+<% end %>
+</div>

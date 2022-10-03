@@ -1,0 +1,186 @@
+<%@daily_book_salary_details_raw_quantity = 0 %>
+<%@daily_book_salary_details_f99_raw_quantity = 0 %>
+<%@daily_book_salary_details_tile_raw_quantity = 0 %>
+<%@daily_book_salary_details_raw_quantity = 0 %>
+<%@daily_book_salary_details_f99_quantity = 0 %>
+<%@daily_book_salary_details_tile_quantity = 0 %>
+<%@daily_book_salary_details_quantity = 0 %>
+<%@daily_book_salary_details_wast = 0 %>
+<%@daily_book_salary_details_raw_quantity_rate = 0 %>
+<%@daily_book_salary_details_quantity_rate = 0 %>
+<%@daily_book_salary_details_coverge_rate=0%>
+<%@daily_book_salary_details_gift_rate=0%>
+<%@diff_total=0%>
+<%@quantity_total=0%>
+<%@raw_total=0%>
+
+<%@diff=0%>
+
+<% @time = Time.zone.now %>
+<div class="card shadow mb-4">
+    <!-- Card Header - Accordion -->
+    <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+      <h6 class="m-0 font-weight-bold text-primary"><h1>Details</h1></h6>
+    </a>
+    <!-- Card Content - Collapse -->
+    <div class="collapse show" id="collapseCardExample" style="">
+
+      <div>
+
+        <div class="row">
+                <div class="col-lg-12 col-sm-12">
+                  <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                    <h3>Date:<h5><%= @daily_book.book_date.strftime("%A,  %d-%b-%y") if @daily_book.book_date%></h5></h3>
+                  </div>
+                  <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                    <h3>Department:<h5><%= @daily_book.department.present? ? @daily_book.department.title : "" %></h5></h3>
+                  </div>
+                  <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                    <h3>Kachi:<h5><%= @daily_book.salary_details_raw_quantity.round(0) %><%@daily_book_salary_details_raw_quantity += @daily_book.salary_details_raw_quantity %></h5> </h3>
+                  </div>
+                  <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                    <h3>K Tile:<h5><%= @daily_book.salary_details_f99_raw_quantity.round(0)%> <%@daily_book_salary_details_f99_raw_quantity += @daily_book.salary_details_f99_raw_quantity %></h5></h3>
+                  </div>
+                </div>
+
+        </div>
+        <div class="row">
+                <div class="col-lg-12 col-sm-12">
+                  <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                    <h3>K Brick:<h5><%= @daily_book.salary_details_tile_raw_quantity.round(0)%> <%@daily_book_salary_details_tile_raw_quantity += @daily_book.salary_details_tile_raw_quantity %></h5></h3>
+                  </div>
+                  <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                    <h3>Paaki:<h5><%= @daily_book.salary_details_quantity.round(0) %> <%@daily_book_salary_details_quantity += @daily_book.salary_details_quantity %></h5></h3>
+                  </div>
+                  <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                    <h3>P Tile:<h5><%= @daily_book.salary_details_f99_quantity.round(0)%> <%@daily_book_salary_details_f99_quantity += @daily_book.salary_details_f99_quantity %></h5> </h3>
+                  </div>
+                  <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                    <h3>P Brick:<h5><%= @daily_book.salary_details_tile_quantity.round(0)%> <%@daily_book_salary_details_tile_quantity += @daily_book.salary_details_tile_quantity %></h5></h3>
+                  </div>
+                </div>
+        </div>
+
+        <div class="row">
+                <div class="col-lg-12 col-sm-12">
+                  <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                    <h3>Wast:<h5><%= @daily_book.salary_details_wast.round(0) %> <%@daily_book_salary_details_wast += @daily_book.salary_details_wast %></h5></h3>
+                  </div>
+                  <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                    <h3>Kachi Price:<h5><%= @daily_book.salary_details_raw_quantity_rate.round(0) %> <%@daily_book_salary_details_raw_quantity_rate += @daily_book.salary_details_raw_quantity_rate.round(0) %></h5></h3>
+                  </div>
+                  <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                    <h3>Paaki Price:<h5><%= @daily_book.salary_details_quantity_rate.round(0) %> <%@daily_book_salary_details_quantity_rate += @daily_book.salary_details_quantity_rate.round(0) %></h5> </h3>
+                  </div>
+                  <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                    <h3>Gift:<h5><%= @daily_book.salary_details_gift_rate.round(0) %> <%@daily_book_salary_details_gift_rate += @daily_book.salary_details_gift_rate.round(0) %></h5></h3>
+                  </div>
+                </div>
+        </div>
+
+        <div class="row">
+                <div class="col-lg-12 col-sm-12">
+                  <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                    <h3>Coverge:<h5><%= @daily_book.salary_details_coverge_rate %> <%@daily_book_salary_details_coverge_rate += @daily_book.salary_details_coverge_rate %></h5></h3>
+                  </div>
+                  <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                    <h3>Comment:<h5><%= @daily_book.comment %></h5></h3>
+                  </div>
+                </div>
+        </div>
+<br>
+<h3>Daily details</h3>
+<br>
+        <div class="row">
+                <div class="col-lg-12 col-sm-12">
+                  <div class="col-lg-12 ">
+                    <table>
+                      <thead>
+                        <th>Name</th>
+                        <th>Item</th>
+                        <th>Kachi=K</th>
+                        <th>Paaki=P</th>
+                        <th>Wast</th>
+                        <!-- <th>K Rate</th>
+                        <th>P Rate</th>
+                        <th>Gift</th>
+                        <th>Coverge</th> -->
+                        <th>Diff (K/P)</th>
+                        <th>Ready</th>
+
+                      </thead>
+                      <tbody>
+                      <% @daily_book.salary_details.each do |salary_details| %>
+                      <tr>
+
+                        <td>
+                          <%= Staff.find(salary_details.staff_id).full_name %>
+                        </td>
+                        <td>
+                          <%= salary_details.raw_product.title %>
+                        </td>
+                        <td>
+                          <%= salary_details.raw_quantity%>  <% @raw_total  += salary_details.raw_quantity if salary_details.raw_quantity.present?%>
+                        </td>
+                        <td>
+                          <%= salary_details.quantity %> <%@quantity_total += salary_details.quantity if salary_details.quantity.present? %>
+                        </td>
+                        <td>
+                          <%= salary_details.extra%>
+                        </td >
+                        <td class="hidden">
+                          <%= salary_details.raw_wage_rate %>
+                        </td>
+                        <td class="hidden">
+                          <%= salary_details.wage_rate %>
+                        </td>
+                        <td class="hidden">
+                          <%= salary_details.gift_rate %>
+                        </td>
+                        <td class="hidden">
+                          <%= salary_details.coverge_rate %>
+                        </td>
+                        <td>
+
+                          <%= @diff=(salary_details.raw_quantity.to_f-salary_details.quantity.to_f)%>
+                           <%@diff_total +=  @diff.to_f if @diff.present?%>
+                        </td>
+                        <td>
+                          <%= salary_details.quantity %>
+                        </td>
+
+                      </tr>
+                        <% end %>
+                        <tr>
+                          <td><h4>Total</h4></td>
+                          <td></td>
+                          <td><h5 id="kachi_total"><%=@raw_total%></h5></td>
+                          <td><h5 id="paaki_total"><%=@quantity_total%></h5></td>
+                          <td><h5 id="wast_total">0.00</h5></td>
+                          <!-- <td><h5 id="kachi_rate_total">0.00</h5></td>
+                          <td><h5 id="paaki_rate_total">0.00</h5></td>
+                          <td><h5 id="gift_rate_total">0.00</h5></td>
+                          <td><h5 id="coverge_rate_total">0.00</h5></td> -->
+                          <td><h5 id="total_diff_total"><%=@diff_total%></h5></td>
+                          <td><h5 id="ready_for_khakar_total">0.00</h5></td>
+
+                        </tr>
+                      </tbody>
+                    </table>
+                </div>
+              </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-1 float-left">
+            <%= link_to daily_books_path do %>
+            <i class="fa fa-arrow-left " aria-hidden="true"></i>
+            <% end %>
+          </div>
+
+<br><br>
+        </div>
+
+      </div>
+    </div>
+  </div>

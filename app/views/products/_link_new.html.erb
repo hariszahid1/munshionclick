@@ -1,0 +1,28 @@
+<%if f.object.present?%>
+  <div class="nested-fields">
+    <div class="col-lg-6 form-group float-left">
+      <%= f.text_field :qrcode %>
+    </div>
+    <div class="col-lg-3 form-group float-left">
+      <% if f.object.qrcode.present? %>
+      <%
+        require "rqrcode"
+        qrcode = RQRCode::QRCode.new(f.object.qrcode)
+        @svg = qrcode.as_svg(
+            color: "000",
+            shape_rendering: "crispEdges",
+            module_size: 11,
+            standalone: true,
+            use_path: true
+          )
+          @str=Base64.encode64(@svg ).gsub("\n", '')
+      %>
+      <img width="150px" height="115px" class="figure" style=""src=<%="data:image/svg+xml;base64,"+@str%> ></img>
+      <%end%>
+    </div>
+    <div class="links col-lg-2 form-group float-left">
+      <%= link_to_remove_association "Remove", f , class: "btn btn-info"%>
+    </div>
+
+  </div>
+<% end %>

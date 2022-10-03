@@ -1,0 +1,104 @@
+<% @time = Time.zone.now+15*60 %>
+<% @date = Date.current %>
+<p style="border-bottom: double 6px;  margin: 0;"></p>
+<div>
+ <table>
+    <thead style="text-align: left;">
+      <th style="font-weight: bold;,text-align: left;"><h3>Date <%=@date%> , <%=@time.strftime(" %I:%M%p")%></h3></th>
+      <th></th>
+      <th><h1>RECEIPT NOTE</h1><th>
+    </thead>
+  </table>
+<div>
+<div>
+  <table>
+    <body>
+      <tr style="font-size:20px;text-align: left;,font-family: Arial Black, Gadget, sans-serif">
+      <%if @ledger_book.credit.present?%>
+        <td style="">Received from</td>
+      <%else%>
+        <td>Given to</td>
+      <%end %>
+      <td style="text-align: left;" class = "urdu-font"><%=@ledger_book.sys_user.name%></td>
+      </tr>
+      <tr style="font-size:20px;text-align: left;,font-family: Arial Black, Gadget, sans-serif">
+        <td style="">Cash Type</td>
+        <td style="text-align: left;">Cash</td>
+      </tr>
+      <tr style="font-size:20px;text-align: left;,font-family: Arial Black, Gadget, sans-serif">
+        <td style="">Account</td>
+        <td style="text-align: left;">
+          <%=@ledger_book.purchase_sale_detail.account.title if @ledger_book.purchase_sale_detail.present?%>
+          <%=@ledger_book&.account&.title%>
+        </td>
+      </tr>
+      <tr style="font-size:20px;text-align: left;,font-family: Arial Black, Gadget, sans-serif">
+        <td style="">Comment</td>
+        <td style="text-align: left;"><%=@ledger_book.comment%></td>
+      </tr >
+    </body>
+  </table>
+</div>
+<p style="border-bottom: double 6px;  margin: 0;"></p>
+<div>
+  <table>
+    <body>
+      <tr style="font-size:20px;text-align: left;,font-family: Arial Black, Gadget, sans-serif">
+        <td style="font-weight: bold;">Amount in words</td>
+
+        <td style="font-weight: bold">Amount in Rs</td>
+         <%if @ledger_book.credit.present?%>
+          <td><%=@ledger_book.credit%></td>
+        <%else%>
+          <td><%=@ledger_book.debit%></td>
+        <%end %>
+      </tr>
+      <tr style="font-size:20px;text-align: left;,font-family: Arial Black, Gadget, sans-serif">
+         <%if @ledger_book.credit.present?%>
+          <td><%=number_to_words(@ledger_book.credit)&.capitalize%></td>
+        <%else%>
+          <td><%=number_to_words(@ledger_book.debit)&.capitalize%></td>
+        <%end %>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr style="font-size:20px;text-align: left;,font-family: Arial Black, Gadget, sans-serif">
+        <td></td>
+        <td style="font-weight: bold">Total Balance</td>
+        <td ><%=@ledger_book.balance%></td>
+      </tr>
+      <tr style="font-size:20px;text-align: left;,font-family: Arial Black, Gadget, sans-serif">
+        <td></td>
+        <td style="font-weight: bold">Balance in Words</td>
+        <td><%=number_to_words(@ledger_book.balance).capitalize%></td>
+      </tr>
+    </body>
+  </table>
+</div>
+
+<div style="margin-top: 25%;">
+  <table>
+    <body>
+      <tr style="font-size:20px;text-align: left;,font-family: Arial Black, Gadget, sans-serif">
+          <td style="font-weight: bold">Prepared By</td>
+          <%if @ledger_book.credit.present?%>
+            <td style="font-weight: bold;text-decoration: overline;">Received By</td>
+          <%else%>
+            <td style="font-weight: bold;text-decoration: overline;">Given By</td>
+          <%end %>
+          <td style="font-weight: bold;text-decoration-line: overline;">Approved By</td></td>
+        </tr>
+    </body>
+  </table>
+</div>
+
+<p style="margin: 0;"><span><%#=#@purchase_sale_detail.comment%></span></p>
+<script type="text/javascript">
+    setTimeout(function(){
+      window.print();
+    }, 50);
+    setTimeout(function(){
+    window.location.replace("/ledger_books");
+  }, 500);
+
+</script>

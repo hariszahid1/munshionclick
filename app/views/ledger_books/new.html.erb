@@ -1,0 +1,19 @@
+
+<div class="card">
+  <div class="card-header">
+    <h3>
+      <% if params[:benam].present?%>
+      <h1>Benam Ledger Book / Balance: <span class="oldBalance" id="sys_user_balance">0.0</span> Account Balance: <span  class="oldBalance1" id="sys_user_balance_1">0.0</span></h1>
+      <%elsif params[:Sbenam].present?%>
+      <h1>Benam Ledger Book / Balance: <span class="oldBalance" id="sys_user_balance">0.0</span> Account Balance: <span  class="oldBalance1" id="sys_user_balance_1">0.0</span></h1>
+      <%elsif params[:Sjama].present?%>
+      <h1>Jama Ledger Book / Balance: <span class="oldBalance" id="sys_user_balance">0.0</span> Account Balance: <span  class="oldBalance1" id="sys_user_balance_1">0.0</span></h1>
+      <%else%>
+      <h1>Jama Ledger Book / Balance: <span class"oldBalance" id="sys_user_balance">0.0</span> Account Balance: <span  class="oldBalance1" id="sys_user_balance_1">0.0</span></h1>
+      <%end%>
+    </h3>
+  </div>
+  <div class="card-body">
+    <%= render 'form', ledger_book: @ledger_book %>
+    </div>
+</div>

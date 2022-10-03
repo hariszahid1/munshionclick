@@ -1,0 +1,63 @@
+<p id="notice"> <%= notice %></p>
+
+<div class="hidden" id="production_block_list">
+  <h1>Production Block Type</h1>
+  <% if can?(:add, :all) %>
+  <div id="new_production_block_type">
+
+ <%= link_to new_production_block_type_path, remote: true ,class: "btn btn-success"  do %>
+            <i class="fa fa-plus" aria-hidden="true"></i>
+            New Production Block Type
+<% end %>
+  </div>
+  <% end %>
+
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <%= search_form_for @q, url: production_block_types_path, class: "admin-controls", method: "get" do |f| %>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.search_field :title_cont, value: @title, placeholder: "Title", title: "Title" ,:class=>"form-control" %>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <%= render 'map_columns/map_column_partials' %>
+
+  <table data-toggle="table" data-search="true" id="production_block_type_table">
+    <thead>
+      <th>Title</th>
+      <th>Quantity</th>
+      <th>Comment</th>
+      <th>Action</th>
+    </thead>
+
+    <tbody>
+     <%= render partial: 'production_block_type', collection: @production_block_types %>
+    </tbody>
+  </table>
+</div>
+
+<div class="clearfix"></div>
+<div class="row">
+  <div class="col-lg-4 col-sm-4">
+    <%= page_entries_info @production_block_types %>
+  </div>
+  <div class="col-lg-8 col-sm-8 pagination-left">
+    <%= paginate @production_block_types %>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#production_block_list").removeClass('hidden');
+    FontAwesome.dom.i2svg();
+  });
+</script>

@@ -1,0 +1,77 @@
+<%= bootstrap_form_for(salary_detail) do |f| %>
+  <% if salary_detail.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(salary_detail.errors.count, "error") %> prohibited this salary_detail from being saved:</h2>
+
+      <ul>
+      <% salary_detail.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+<table>
+  <thead>
+    <th>
+      <span id="OtherStaffCount"></span>
+      <p ><h5 id="OtherStaff"></h5></p>
+      <span id="OtherStaffAmount"></span>
+    </th>
+  </thead>
+  <tbody>
+    <tr>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+  <table>
+    <thead>
+      <th>
+        <h1>Salary Detail</h1>
+        <span id="OtherStaffCount"></span>
+        <span id="OtherStaff"></span>
+        <span id="OtherStaffAmount"></span>
+      </th>
+      <th>Balance: <h1><span id='balance'>0.00</span></h1></th>
+      <th >Stock+ <h1 class="salary_detail_stock">0.00</h1></th>
+      <th>WagePrice+ <h1 class="salary_detail_amount">0.00</h1></th>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <%= f.select :staff_id, options_from_collection_for_select(@staffs_list, 'id', 'name',f.object.staff_id), {prompt: "Select the Staff",required: true}, {class: "chosen-select", onchange: 'get_staff_wage_rate_info(this.value); return false;', required: true } %>
+        </td>
+        <td>
+          <%= f.select :product_id, options_from_collection_for_select(@products, 'id', 'title',f.object.product_id), {prompt: "Select the Product",required: true}, {class: ""} %>
+        </td>
+        <td>
+          <%= f.date_select :created_at %>
+        </td>
+        <td>
+          <%= f.number_field :wage_rate , step: :any,onchange: 'salaryCostUpdate(); return false;',onkeyup:"salaryCostUpdate()"%>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <%= f.text_area :comment , placeholder:"Enter Comment"%>
+          <%= f.hidden_field :amount %>
+        </td>
+        <td>
+          <%= f.select :status, options_for_select([1,2,9,10,12],f.object.status), {prompt: "Pack",label:"Pack"}, onchange:"salaryCostUpdate()",onkeyup:"salaryCostUpdate()", class: "pack-price-return"%>
+        </td>
+        <td>
+          <%= f.number_field :quantity ,onchange: 'salaryCostUpdate(); return false;',onkeyup:"salaryCostUpdate()", required: true%>
+        </td>
+        <td>
+          <%= f.number_field :extra , label:"Damage",onchange: 'salaryCostUpdate(); return false;',onkeyup:"salaryCostUpdate()"%>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="actions">
+    <%= link_to 'Salaries Details', salary_details_path, class: "btn btn-info" %>
+    <%= f.submit class: "btn btn-primary", style: "float: right" %>
+  </div>
+
+<% end %>

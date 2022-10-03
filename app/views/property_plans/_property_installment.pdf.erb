@@ -1,0 +1,69 @@
+<% @date = Date.today  %>
+<% @time = DateTime.now %>
+<% @time = Time.zone.now %>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Panding Installment Customer List</h1>
+<h1 style="text-align: center; margin: 0;"> Date: <b><span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%></span>  Time: <span><%=@time.strftime("at %I:%M%p")%></span></b></h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<p style="text-align: center;margin: 0;">Report by: <%=current_user.name%></p>
+<div >
+  <table>
+    <thead class="lite-gray">
+      <th>User</th>
+      <th>Phone</th>
+      <th>Unit</th>
+      <th>Size</th>
+      <th>Possession</th>
+      <th>Last Date</th>
+      <th>Installment</th>
+      <th>Due Date</th>
+      <th>Comment</th>
+      <th>Dealer</th>
+    </thead>
+
+    <tbody>
+      <% @property_installments.each do |property_installment| %>
+        <tr>
+          <td><%= property_installment.property_plan.order&.sys_user&.name if property_installment.property_plan.order&.sys_user&.id.present?%></td>
+          <td><%= property_installment.property_plan.order&.sys_user&.contact&.phone %></td>
+          <td>
+            <% if property_installment.property_plan.order&.order_items_names_and_quantity != 0 %>
+              <%= property_installment.property_plan.order&.order_items_names_and_quantity&.first&.first %>
+            <% end %>
+          </td>
+          <td>
+            <% if property_installment.property_plan.order&.order_items_names_and_quantity != 0 %>
+              <%= property_installment.property_plan.order&.order_items_names_and_quantity&.first[8]%>-M <%= property_installment.property_plan.order&.order_items_names_and_quantity&.first[9]%>-sqr
+            <% end %>
+          </td>
+          <td><%= number_with_delimiter property_installment.property_plan.order&.sys_user&.ledger_books.where('credit>0')&.last&.credit %></td>
+          <td><%= property_installment.property_plan.order&.sys_user&.ledger_books.where('credit>0')&.last&.created_at&.strftime("%d%b%y at %I:%M%p")%></td>
+          <td><%= number_with_delimiter property_installment.installment_price %></td>
+          <td><%= property_installment.due_date.present? ? property_installment.due_date.strftime("%d%b%y") : '' %></td>
+          <td>
+            <%property_installment%>
+          </td>
+          <td>
+            <% if property_installment&.property_plan&.order&.order_plot_dealer != 0 %>
+              <%= property_installment&.property_plan&.order&.order_plot_dealer&.first&.staff&.name%>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+      <tr class="lite-gray">
+        <td ><h4>Total</h4></td>
+        <td><h5><%= @property_installments.count%></h5></td>
+        <td><h5></h5></td>
+        <td><h5></h5></td>
+        <td><h5></h5></td>
+        <td><h5></h5></td>
+        <td><h5><%= number_with_delimiter @short_pay_total%></h5></td>
+        <td><h5></h5></td>
+        <td><h5></h5></td>
+        <td></td>
+
+      </tr>
+    </tbody>
+
+  </table>
+</div>

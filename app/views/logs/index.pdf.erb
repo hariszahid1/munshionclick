@@ -1,0 +1,48 @@
+
+<% @date = Date.today  %>
+<% @time = DateTime.now %>
+<% @time = Time.zone.now %>
+<div>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Activity Log Details</h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<p style="text-align: center;margin: 0;">Report by: <%=current_user.name%></p>
+</div>
+<div >
+  <table>
+    <thead>
+      <tr class="lite-gray">
+        <th>Log</th>
+        <th>Who Done it</th>
+        <th>Date</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @logs.each do |log| %>
+        <tr>
+          <td class="urdu-font"><%=log.item_type %></td>
+          <td class="urdu-font"><%=log&.whodunnit %> <%=@users[log&.whodunnit.to_i] %></td>
+          <td class="urdu-font"><%= log.created_at.present? ? log.created_at.strftime("%d%b%y at %I:%M %p") : '' %></td>
+          <td>
+            <b><%=log.event %></b>
+            <%if log&.changeset.present? %>
+              <%if log&.changeset[:balance].present?  %>
+                <%= log&.changeset[:balance].first %>
+                <%= log&.changeset[:balance].last %>
+              <%end%>
+            <%end%>
+        </tr>
+      <% end %>
+      <tr class="lite-gray">
+        <td><h4>Total</h4></td>
+        <td></td>
+        <td></td>
+        <td><h4><%=@logs.count%></h4></td>
+        <td></td>
+      </tr>
+    </tbody>
+
+  </table>
+</div>

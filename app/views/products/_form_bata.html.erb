@@ -1,0 +1,118 @@
+<%= bootstrap_form_for(product, remote: true) do |f| %>
+  <% if product.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(product.errors.count, "error") %> prohibited this product from being saved:</h2>
+
+      <ul>
+      <% product.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="col-lg-2" style="float:left">
+    <%= f.select :item_type_id, options_from_collection_for_select(@item_types, 'id', 'title', f.object.item_type_id), {prompt: "Select the item type"}, required: true %>
+
+  </div>
+
+  <div class="col-lg-4" style="float:left">
+    <%= f.text_field :code, {placeholder: "Enter the code", required: true , value: (f.object.code.nil? ? ("AGC-"+"%.4i" % (Product.maximum(:id).present? ? Product.maximum(:id).next : 1)) : (f.object.code ))} %>
+  </div>
+
+  <div class="col-lg-5" style="float:left">
+    <%= f.text_field :title, placeholder:"Enter Title" %>
+  </div>
+
+  <div class="col-lg-1" style="float:left">
+    <%= f.number_field :size_1 , :label=>"S#1"%>
+  </div>
+  <div class="col-lg-1" style="float:left">
+    <%= f.number_field :size_2 , :label=>"S#2"%>
+  </div>
+  <div class="col-lg-1" style="float:left">
+    <%= f.number_field :size_3 , :label=>"S#3"%>
+  </div>
+  <div class="col-lg-1" style="float:left">
+    <%= f.number_field :size_4 , :label=>"S#4"%>
+  </div>
+  <div class="col-lg-1" style="float:left">
+    <%= f.number_field :size_5 , :label=>"S#5"%>
+  </div>
+  <div class="col-lg-1" style="float:left">
+    <%= f.number_field :size_6 , :label=>"S#6"%>
+  </div>
+  <div class="col-lg-1" style="float:left">
+    <%= f.number_field :size_7 , :label=>"S#7"%>
+  </div>
+  <div class="col-lg-1" style="float:left">
+    <%= f.number_field :size_8 , :label=>"S#8"%>
+  </div>
+  <div class="col-lg-1" style="float:left">
+    <%= f.number_field :size_9 , :label=>"S#9"%>
+  </div>
+  <div class="col-lg-1" style="float:left">
+    <%= f.number_field :size_10 , :label=>"S#10"%>
+  </div>
+  <div class="col-lg-1" style="float:left">
+    <%= f.number_field :size_11 , :label=>"S#11"%>
+  </div>
+  <div class="col-lg-1" style="float:left">
+    <%= f.number_field :size_12 , :label=>"S#12"%>
+  </div>
+  <div class="col-lg-1" style="float:left">
+    <%= f.number_field :size_13 , :label=>"S#13"%>
+  </div>
+  <div class="col-lg-3" style="float:left">
+    <%= f.number_field :cost %>
+  </div>
+
+  <div class="col-lg-3" style="float:left">
+    <%= f.number_field :sale %>
+  </div>
+
+  <div class="col-lg-6" style="float:left">
+    <%= f.select :product_category_id, options_from_collection_for_select(@product_categories, 'id', 'title', f.object.product_category_id), {prompt: "Select the Category"}, required: true %>
+  </div>
+
+  <div class="col-lg-6" style="float:left">
+    <%= f.select :product_sub_category_id, options_from_collection_for_select(@product_sub_categories, 'id', 'title', f.object.product_sub_category_id), {prompt: "Select the Sub Category"}%>
+  </div>
+
+  <div class="col-lg-6" style="float:left">
+    <%= f.select :acquire_type, Product.acquire_types.map { |key, value| [key.humanize, key] },{class: "form-control", required: true} %>
+  </div>
+
+  <div class="col-lg-6" style="float:left">
+    <%= f.select :purchase_type, Product.purchase_types.map { |key, value| [key.humanize, key] },{class: "form-control", required: true} %>
+  </div>
+
+  <div class="col-lg-6" style="float:left">
+    <%= f.select :purchase_unit, Product.purchase_units.map { |key, value| [key.humanize, key] },{class: "form-control", required: true} %>
+  </div>
+
+  <div class="col-lg-6" style="float:left">
+    <%= f.select :currency, Product.currencies.map { |key, value| [key.humanize, key] },{class: "form-control", required: true} %>
+  </div>
+
+  <div class="col-lg-2" style="float:left">
+    <%= f.text_field :minimum , placeholder:"Enter Minimum"%>
+  </div>
+
+  <div class="col-lg-2" style="float:left">
+    <%= f.text_field :optimal , placeholder:"Enter Optimal"%>
+  </div>
+
+  <div class="col-lg-2" style="float:left">
+    <%= f.text_field :maximum , placeholder:"Enter Maximun"%>
+  </div>
+
+  <div class="actions">
+    <div class="col-lg-6" style="float:left">
+      <%= link_to 'Products', products_path, class: "btn btn-info" %>
+    </div>
+    <div class="col-lg-6" style="float:left">
+      <%= f.submit class: "btn btn-primary", style: "float: right" %>
+    </div>
+  </div>
+<% end %>

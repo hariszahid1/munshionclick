@@ -1,0 +1,9 @@
+<%= render partial: "order_show", locals: {order: @order} %>
+<%@printfun=@pos_setting&.extra_settings.present? ? @pos_setting&.extra_settings["printfun"].to_f : 100%>
+<%@redirectfun=@pos_setting&.extra_settings.present? ? @pos_setting&.extra_settings["redirectfun"].to_f : 1200%>
+<script type="text/javascript">
+    window.setTimeout(printfun, <%=@printfun%>);
+    window.setTimeout(redirectfun, <%=@redirectfun%>);
+    function printfun(){window.print();}
+    function redirectfun(){window.location.replace("/orders/new?product=true&transaction_type=sale"); return true;}
+</script>

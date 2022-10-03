@@ -1,0 +1,138 @@
+<%= bootstrap_form_for(purchase_sale_detail) do |f| %>
+  <% if purchase_sale_detail.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(purchase_sale_detail.errors.count, "error") %> prohibited this purchase_sale_detail from being saved:</h2>
+
+      <ul>
+      <% purchase_sale_detail.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <table>
+    <thead>
+      <th>Status</th>
+      <th>Customer/Supplier</th>
+      <th>Account</th>
+      <th>Paid</th>
+      <th>Discount</th>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <%if params[:transaction_type].present? or @purchase_sale_detail.transaction_type=='Sale'%>
+            <%= f.hidden_field :transaction_type, value: "Sale" %>
+          <%else%>
+            <%= f.hidden_field :transaction_type, value: PurchaseSaleDetail.transaction_types.first.first%>
+          <%end%>
+          <%= f.select :status, PurchaseSaleDetail.statuses.map { |key, value| [key.humanize, key] },{hide_label:true,class: "form-control", required: true} %>
+        </td>
+        <%if params[:transaction_type].present? or @purchase_sale_detail.transaction_type=='Sale'%>
+          <td><%= f.select :sys_user_id, options_from_collection_for_select(@customers, 'id', 'name', f.object.sys_user_id), {hide_label:true,prompt: "Select the Customer"}, required: true %></td>
+        <%else%>
+          <td><%= f.select :sys_user_id, options_from_collection_for_select(@suppliers, 'id', 'name', f.object.sys_user_id), {hide_label:true,prompt: "Select the Supplier"}, required: true %></td>
+        <%end%>
+        <td>
+          <%= f.select :account_id , options_from_collection_for_select(@accounts, 'id', 'title', (f.object.account_id.present? ? f.object.account_id : @account)), {hide_label:true}%>
+        </td>
+        <td ><%= f.hidden_field :total_bill%><%= f.number_field :amount,step: :any,hide_label:true,onchange:"remaingUpdateAmount()",onkeyup:"remaingUpdateAmount()"%></td>
+        <td ><%= f.number_field :discount_price,step: :any,hide_label:true,onchange:"remaingUpdateAmount()",onkeyup:"remaingUpdateAmount()"%></td>
+      </tr>
+    </tbody>
+  </table>
+  <div id="new_links">
+    <div class="links">
+      <%= link_to_add_association 'Add More Items', f, :purchase_sale_items, partial: 'purchase_sale_items_fields_new_atom', class: "btn btn-info new" %>
+    </div>
+  </div>
+  <%if purchase_sale_detail.status.present?%>
+    <br>
+    <div id="return_links">
+      <div class="return_links">
+        <%= link_to_add_association 'Return', f, :purchase_sale_items, partial: 'purchase_sale_items_fields_new_upsi_return', class: "btn btn-info" %>
+      </div>
+    </div>
+  <%end%>
+  <br>
+  <!-- PurchaseSaleItem -->
+  <%if @purchase_sale_detail.purchase_sale_items.present?%>
+    <div id="data_list" class="">
+      <table>
+        <thead>
+          <%if @purchase_sale_detail.transaction_type=='Sale'%>
+            <th class="hidden"></th>
+            <th class="hidden"></th>
+            <th>Items</th>
+            <th>Bori</th>
+            <th>Quantity</th>
+            <th>Sale Price</th>
+            <th>Total Price</th>
+            <th>Discount</th>
+            <th>Action</th>
+          <%else%>
+            <th class="hidden"></th>
+            <th class="hidden"></th>
+            <th>Items</th>
+            <th>Quantity</th>
+            <th>Avg Cost</th>
+            <th>Total Cost</th>
+            <th>Avg Sale</th>
+            <th>Discount</th>
+            <th>Comment</th>
+            <th>Action</th>
+          <%end%>
+        </thead>
+          <body>
+            <%= f.fields_for :purchase_sale_items do |purchase_sale_item| %>
+              <%= render 'purchase_sale_items_fields_atom', f: purchase_sale_item %>
+            <% end %>
+          </body>
+      </table>
+    </div>
+  <%end%>
+
+  <table>
+    <thead>
+      <th>Comment</th>
+      <th>Carriage</th>
+      <th>Loading/Unloading</th>
+      <th>Date</th>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="col-lg-6"><%= f.text_area :comment, placeholder:"Enter Comment",hide_label:true%></td>
+        <td><%= f.number_field :carriage,hide_label:true,onchange:"costAtomUpdateReturn()",onkeyup:"costAtomUpdateReturn()"%></td>
+        <td><%= f.number_field :loading,hide_label:true,onchange:"costAtomUpdateReturn()",onkeyup:"costAtomUpdateReturn()"%></td>
+        <td><%= f.datetime_select :created_at,hide_label:true%></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="actions">
+    <%if params[:transaction_type].present? or @purchase_sale_detail.transaction_type=='Sale'%>
+      <div class="col-lg-6" style="float:left">
+        <%= link_to 'Daily Sale', purchase_sale_details_path(sale: :true), class: "btn btn-info" %>
+      </div>
+      <div class="col-lg-6" style="float:left">
+        <%= f.submit class: "btn btn-primary", style: "float: right",value: "Create Order"%>
+      </div>
+
+    <%else%>
+      <div class="col-lg-6" style="float:left">
+        <%= link_to 'Purchase', purchase_sale_details_path, class: "btn btn-info" %>
+      </div>
+      <div class="col-lg-6" style="float:left">
+        <%= f.submit class: "btn btn-primary", style: "float: right" %>
+      </div>
+
+    <%end%>
+  </div>
+<% end %>
+<script>
+  $(document).ready(function() {
+    setTimeout(function(){
+      costAtomUpdateReturn();
+    }, 50);
+  });
+</script>
+<%= javascript_include_tag 'hover', 'data-turbolinks-track': 'reload' %>

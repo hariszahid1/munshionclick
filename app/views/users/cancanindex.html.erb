@@ -1,0 +1,60 @@
+<h1>Users</h1>
+<%= f.collection_select :role_ids, Role.all.order(name: :asc), :id, :name, {}, { multiple: true, class: "form-control" } %>
+<br />
+<% if can? :read, User %>
+  <%= link_to "View", "#" %>
+<% end %>
+
+<br />
+<% if can? :update, User %>
+  <%= link_to "Update", "#" %>
+<% end %>
+
+<br />
+<% if can? :delete, User %>
+  <%= link_to "Delete", "#" %>
+<% end %>
+
+<br />
+<% if can? :add, User %>
+  <%= link_to "Add", "#" %>
+<% end %>
+
+<h1>-----------Products Objects---------</h1>
+<% Product.all.each do |product|%>
+  <br />
+  <br />
+  <% if can? :read, product %>
+    <%= link_to "[Every one User] can View", "#" %>
+  <% end %>
+
+<br />
+  <% if can? :discount, product %>
+    <%= link_to "[Member only] can get discount", "#" %>
+  <% end %>
+
+<br />
+  <% if can? :update, product %>
+    <%= link_to "[Every one User] can Update", "#" %>
+  <% end %>
+
+<br />
+  <% if can? :delete, product %>
+    <%= link_to "[SimpleUser Admin SuperAdmin] can Delete", "#" %>
+  <% end %>
+
+<br />
+  <% if can? :add, product %>
+    <%= link_to "[SimpleUser] can Add", "#" %>
+  <% end %>
+
+<br />
+  <% if can? :price_update, product %>
+    <%= link_to "[SuperAdmin] can price_update", "#" %>
+  <% end %>
+
+<br />
+  <% if can? :complete, product %>
+    <%= link_to "[Staff Admin, SuperAdmin] Complete", "#" %>
+  <% end %>
+<% end %>

@@ -1,0 +1,92 @@
+<h1>New Daily Book</h1>
+
+<%= bootstrap_form_for(@daily_book) do |f| %>
+  <% if @daily_book.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@daily_book.errors.count, "error") %> prohibited this daily_book from being saved:</h2>
+
+      <ul>
+      <% @daily_book.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <table>
+    <thead>
+      <th>
+        <%= f.select :department_id, options_from_collection_for_select(@departments, 'id', 'title', @departments.second.id), {prompt: "Select the Department"}, readonly:true%>
+      </th>
+      <th><%= f.date_select :book_date,readonly:true%></th>
+      <th>
+        <%= f.date_select :created_at,readonly:true%>
+      </th>
+      <th><%= f.text_area :comment %></th>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <label for="salary_details_raw_rate">Khakar Debit Rate</label>
+          <input class="form-control" type="number" name="salary_details_raw_rate" id="salary_details_raw_rate" value="0.0", onchange="daily_debit_rate()", onkeyup="daily_debit_rate()", readonly="true">
+        </td>
+        <td>
+          <label for="salary_details_raw_rate">Khakar Credit Rate</label>
+          <input class="form-control" type="number" name="salary_details_raw_rate" id="salary_details_wage_rate" value="0.0", onchange="daily_credit_rate()", onkeyup="daily_credit_rate()", readonly="true">
+        </td>
+        <td>
+          <label for="salary_details_raw_rate">Khakar Kat %</label>
+          <input class="form-control" type="number" name="salary_details_kat" id="salary_details_kat" value="<%=@pos_setting.extra_settings.present? ? @pos_setting.extra_settings['kharkar_kat'] : 2%>", onchange="daily_credit_rate()", onkeyup="daily_credit_rate()", readonly="true">
+        </td>
+        <td>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <table>
+    <thead>
+      <th>Name</th>
+      <th>Item</th>
+      <th>Khakar Information</th>
+      <th>Location</th>
+      <th>Quantity</th>
+      <th>Kat</th>
+      <th>Wast</th>
+      <th>B/S/C</th>
+      <th>Debit Rate</th>
+      <th>Credit Rate</th>
+      <th>Debit</th>
+      <th>Credit</th>
+    </thead>
+    <tbody>
+      <%= f.fields_for :salary_details do |salary_detail| %>
+        <%= render 'pathara_salary_details_fields', f: salary_detail %>
+      <% end %>
+      <tr>
+        <td><h4>Total</h4></td>
+        <td><h5 id="item_quantity_total">0.00</h5></td>
+        <td></td>
+        <td></td>
+        <td><h5 id="quantity_total">0.00</h5></td>
+        <td><h5 id="difference_total">0.00</h5></td>
+        <td><h5 id="wast_total">0.00</h5></td>
+        <td><h5 id="khakar_remaning_total">0.00</h5></td>
+        <td><h5 id="debit_rate_total">0.00</h5></td>
+        <td><h5 id="credit_rate_total">0.00</h5></td>
+        <td><h5 id="debit_total_total">0.00</h5></td>
+        <td><h5 id="credit_total_total">0.00</h5></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="actions">
+    <%= link_to 'Khakar Daily Book', khakar_daily_books_path, class: "btn btn-info" %>
+    <%= f.submit class: "btn btn-primary", style: "float: right" %>
+  </div>
+
+<% end %>
+<%= javascript_include_tag 'hover', 'data-turbolinks-track': 'reload' %>
+<script>
+  setTimeout(function(){
+    daily_book_khakar_update();
+  }, 50);
+</script>

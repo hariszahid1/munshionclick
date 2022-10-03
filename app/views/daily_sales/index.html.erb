@@ -1,0 +1,112 @@
+<%@total_sale=0%>
+<%@total_cash=0%>
+<div class="hidden" id="daily_list">
+  <h1>Daily Sale/Cash Out</h1>
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <div class="col-lg-2" style="padding-right: 0;">
+        <% if can?(:add, :all) %>
+        <%= link_to new_daily_sale_path, class: "btn btn-success" do %>
+              <i class="fas fa-plus" aria-hidden="true"></i>
+              Add Sale
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <%= search_form_for @q, url: daily_sales_path, class: "admin-controls", method: "get" do |f| %>
+        <div class="col-lg-3 form-group float-left">
+         <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker',placeholder: "YYYY-MM-DD" %>
+        </div>
+        <div class="col-lg-3 form-group float-left">
+          <%= f.search_field :created_at_lteq,class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width: 100px"><i class="fa fa-search"></i></button>
+        </div>
+        <div class="col-lg-1 form-group float-right">
+          <button class="form-control btn btn-secondary" name="submit_pdf_staff_with" type="submit" value="Sale/Cash PDF A4" formtarget="_blank"><i class="fa fa-file-pdf"></i></button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <table data-toggle="table" data-search="true">
+    <thead>
+      <tr>
+        <th><%= sort_link(@q, :sale, 'Sale') %></th>
+        <th><%= sort_link(@q, :cash_out, 'Cash out') %></th>
+        <th><%= sort_link(@q, :shift, 'Shitf') %></th>
+        <th class="border_none">Action</th>
+        <th><%= sort_link(@q, :comment, 'Comment') %></th>
+
+
+        <th class="border_none">Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @daily_sales.each do |daily_sale| %>
+        <tr>
+          <td><%= daily_sale.sale.to_f.round(2) %><% @total_sale+=daily_sale.sale.to_f.round(2)%></td>
+          <td><%= daily_sale.cash_out.to_f.round(2) %><% @total_cash+=daily_sale.cash_out.to_f.round(2)%></td>
+          <td><%= daily_sale.shift %></td>
+          <td><%= daily_sale.created_at.strftime("%d %B %Y") %> || <%= daily_sale.comment %></td>
+          <td></td>
+          <td>
+            <% if can?(:update, :all) %>
+              <%= link_to edit_daily_sale_path(daily_sale) do %>
+                <i class="fa fa-edit " aria-hidden="true"></i> |
+              <%end %>
+            <% end %>
+            <% if can?(:delete, :all) %>
+              <%= link_to daily_sale, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+                <i class="fa fa-trash " aria-hidden="true"></i> |
+              <%end %>
+            <% end %>
+            <% if can?(:view, :all) %>
+              <%= link_to daily_sale do %>
+                <i class="fa fa-eye " aria-hidden="true"></i>
+              <%end %>
+            <%end%>
+          </td>
+        </tr>
+      <% end %>
+      <tr>
+        <td><h5><%=@total_sale%></h5></td>
+        <td><h5><%=@total_cash%></h5></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="clearfix"></div>
+<div class="row">
+  <div class="col-lg-4 col-sm-4">
+    <%= page_entries_info @daily_sales %>
+  </div>
+  <div class="col-lg-8 col-sm-8 pagination-left">
+    <%= paginate @daily_sales %>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#daily_list").removeClass('hidden');
+    FontAwesome.dom.i2svg();
+  });
+  $(document).ready(function() {
+    setTimeout(function(){
+      $(".chosen-select").chosen({
+  allow_single_deselect: true,
+  width: '100%'
+});
+    }, 50);
+  });
+</script>

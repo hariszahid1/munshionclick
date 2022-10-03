@@ -1,0 +1,42 @@
+<div id="city_list">
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <h1>SMS Log</h1>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+
+  <table data-toggle="table" data-search="true">
+    <thead>
+      <tr>
+        <th><%= sort_link(@p, :property_type, 'SMS TO') %></th>
+        <th><%= sort_link(@p, :property_type, 'SMS Content') %></th>
+        <th><%= sort_link(@p, :area_in_marla, 'Sms By') %></th>
+        <th><%= sort_link(@p, :area_in_marla, 'Response') %></th>
+        <th><%= sort_link(@p, :area_in_marla, 'Date') %></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @sms_log.each do |sms_log| %>
+        <tr>
+          <td><%= sms_log&.sms_to%></td>
+          <td><%= CGI::unescape(sms_log.msg) %></td>
+          <td><%= sms_log&.sms_by %></td>
+          <td><%= sms_log&.response %></td>
+          <td><%= sms_log.created_at.present? ? sms_log.created_at.strftime("%d%b%y at %I:%M%p") : '' %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<div class="clearfix"></div>
+<div class="row">
+  <div class="col-lg-4 col-sm-4">
+    <%= page_entries_info @sms_log %>
+  </div>
+  <div class="col-lg-8 col-sm-8 pagination-left">
+    <%= paginate @sms_log,params: {:from_tabe => "pills-log-tab"} %>
+  </div>
+</div>

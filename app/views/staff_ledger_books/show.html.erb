@@ -1,0 +1,66 @@
+
+
+    <div class="card shadow mb-4">
+        <!-- Card Header - Accordion -->
+        <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+          <h6 class="m-0 font-weight-bold text-primary"><h1>ledger book Detail</h1></h6>
+        </a>
+        <!-- Card Content - Collapse -->
+        <div class="collapse show" id="collapseCardExample" style="">
+          <div class="card-body">
+
+    <div class="row">
+            <div class="col-lg-12 col-sm-12">
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Staff:<h5> <%= @staff_ledger_book.staff.full_name %></h5></h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Salary:<h5><%= @staff_ledger_book.salary %></h5></h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Salary detail:<h5><%=@staff_ledger_book.salary_detail %></h5> </h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Debit:<h5><%=@staff_ledger_book.debit %></h5></h3>
+              </div>
+            </div>
+    </div>
+    <div class="row">
+            <div class="col-lg-12 col-sm-12">
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Credit:<h5> <%= @staff_ledger_book.credit %></h5></h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Balance:<h5><%= @staff_ledger_book.balance rescue nil%></h5></h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Jama/Benam  :<h5><%if @staff_ledger_book.balance.to_f > 0  %>
+                         <b style="font-size:20px;color:blue;">Jama</b>
+                    <%elsif  @staff_ledger_book.balance.to_f < 0  %>
+                    <b style="font-size:20px;color:red;">Benam</b>
+                    <%else%>
+                    <b style="font-size:20px;color: #6cec53 ;">Nill</b>
+                    <%end%></h5></h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Comment:<h5><%= @staff_ledger_book.comment%></h5> </h3>
+              </div>
+
+            </div>
+    </div>
+
+
+
+    <br>
+
+            <div class="row">
+              <div class="col-lg-1 float-left">
+                <%=link_to staff_ledger_books_path do %>
+                <i class="fa fa-arrow-left " aria-hidden="true"></i>
+                <% end %>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>

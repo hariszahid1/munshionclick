@@ -1,0 +1,137 @@
+<div class="hidden" id="products_list">
+  <h1>Product Stock Status</h1>
+  <%= link_to 'Product Purchase', new_purchase_sale_detail_path(product: true), class: "btn btn-primary" %>
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <%= search_form_for @q, url: dashboard_path, class: "admin-controls", method: "get" do |f| %>
+        <div class="col-lg-3 form-group float-left">
+          <%= f.search_field :item_type_title_cont,:autofocus => true value: @item_type, placeholder: "item type", title: "item type" ,:class=>"form-control" %>
+        </div>
+        <div class="col-lg-3 form-group float-left">
+          <%= f.search_field :title_cont, value: @title, placeholder: "Title", title: "Title" ,:class=>"form-control" %>
+        </div>
+        <div class="col-lg-3 form-group float-left">
+          <%= f.search_field :code_cont, value: @code, placeholder: "Code", title: "Code" ,:class=>"form-control" %>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <input class="form-control btn btn-primary" name="search_submit" type="submit" value="Search"></input>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <table data-toggle="table" data-search="true">
+    <thead>
+      <tr>
+        <th><%= sort_link(@q, :item_type, 'Item') %></th>
+        <th><%= sort_link(@q, :title, 'Title') %></th>
+        <th><%= sort_link(@q, :code, 'Article') %></th>
+        <th><%= sort_link(@q, :minimum, 'Min') %></th>
+        <th><%= sort_link(@q, :stock, 'Stock') %></th>
+        <th><%= sort_link(@q, :size_1, '1') %></th>
+        <th><%= sort_link(@q, :size_2, '2') %></th>
+        <th><%= sort_link(@q, :size_3, '3') %></th>
+        <th><%= sort_link(@q, :size_4, '4') %></th>
+        <th><%= sort_link(@q, :size_5, '5') %></th>
+        <th><%= sort_link(@q, :size_6, '6') %></th>
+        <th><%= sort_link(@q, :size_7, '7') %></th>
+        <th><%= sort_link(@q, :size_8, '8') %></th>
+        <th><%= sort_link(@q, :size_9, '9') %></th>
+        <th><%= sort_link(@q, :size_10, '10') %></th>
+        <th><%= sort_link(@q, :size_11, '11') %></th>
+        <th><%= sort_link(@q, :size_12, '12') %></th>
+        <th><%= sort_link(@q, :size_13, '13') %></th>
+        <th><%= sort_link(@q, :cost, 'Cost') %></th>
+        <th><%= sort_link(@q, :sale, 'Sale') %></th>
+
+        <th class="border_none">Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @products.each do |product| %>
+        <%min=product.minimum.present? ? product.minimum : 0 %>
+        <%stock=product.stock.present? ? product.stock : 0 %>
+        <%if min > stock%>
+          <tr class='table-danger'>
+            <td><%= product.item_type.title rescue 'nil'%></td>
+            <td><%= product.title %></td>
+            <td><%= product.code %></td>
+            <td><%= product.minimum %></td>
+            <td><%= product.stock %> </td>
+            <td><%= product.size_1 %></td>
+            <td><%= product.size_2 %></td>
+            <td><%= product.size_3 %></td>
+            <td><%= product.size_4 %></td>
+            <td><%= product.size_5 %></td>
+            <td><%= product.size_6 %></td>
+            <td><%= product.size_7 %></td>
+            <td><%= product.size_8 %></td>
+            <td><%= product.size_9 %></td>
+            <td><%= product.size_10 %></td>
+            <td><%= product.size_11 %></td>
+            <td><%= product.size_12 %></td>
+            <td><%= product.size_13 %></td>
+            <td><%= product.cost %></td>
+            <td><%= product.sale %></td>
+            <td class="border_none"></td>
+            <td class="border_none"><%= link_to 'Edit', edit_product_path(product) %></td>
+          </tr>
+        <%else%>
+          <tr>
+            <td><%= product.item_type.title rescue 'nil'%></td>
+            <td><%= product.title %></td>
+            <td><%= product.code %></td>
+            <td><%= product.minimum %></td>
+            <td><%= product.stock %> </td>
+            <td><%= product.size_1 %></td>
+            <td><%= product.size_2 %></td>
+            <td><%= product.size_3 %></td>
+            <td><%= product.size_4 %></td>
+            <td><%= product.size_5 %></td>
+            <td><%= product.size_6 %></td>
+            <td><%= product.size_7 %></td>
+            <td><%= product.size_8 %></td>
+            <td><%= product.size_9 %></td>
+            <td><%= product.size_10 %></td>
+            <td><%= product.size_11 %></td>
+            <td><%= product.size_12 %></td>
+            <td><%= product.size_13 %></td>
+            <td><%= product.cost %></td>
+            <td><%= product.sale %></td>
+<td class="border_none"></td>
+            <td class="border_none"><%= link_to 'Edit', edit_product_path(product) %></td>
+          </tr>
+        <%end%>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<div class="clearfix"></div>
+<div class="row">
+  <div class="col-lg-4 col-sm-4">
+    <%= page_entries_info @products %>
+  </div>
+  <div class="col-lg-8 col-sm-8 pagination-left">
+    <%= paginate @products %>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#products_list").removeClass('hidden');
+  });
+  $(document).ready(function() {
+    setTimeout(function(){
+      $(".chosen-select").chosen({
+  allow_single_deselect: true,
+  width: '100%'
+});
+    }, 50);
+  });
+</script>

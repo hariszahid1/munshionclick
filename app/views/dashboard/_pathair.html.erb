@@ -1,0 +1,48 @@
+<%@rev=Hash.new%>
+
+<%@daily_book_salary_details_wast = 0 %>
+<%@daily_book_salary_details_raw_quantity_rate = 0 %>
+<%@daily_book_salary_details_quantity_rate = 0 %>
+<%@daily_book_salary_details_coverge_rate=0%>
+<%@daily_book_salary_details_gift_rate=0%>
+<%@salary_details_khakar_f99_raw_quantity=0%>
+<div class="row">
+  <div class="col-lg-12 col-sm-12">
+    <div id = "expenses_detail">
+      <table data-toggle="table">
+        <thead>
+          <tr>
+            <th>Pathair</th>
+            <th><%= sort_link(@q, :salary_details_raw_quantity, 'Kachi') %></th>
+            <th><%= sort_link(@q, :salary_details_raw_quantity, 'K Bricks') %></th>
+            <th><%= sort_link(@q, :salary_details_raw_quantity, 'K Tile') %></th>
+            <th><%= sort_link(@q, :salary_details_quantity, 'Paaki') %></th>
+            <th><%= sort_link(@q, :salary_details_raw_quantity, 'P Bricks') %></th>
+            <th><%= sort_link(@q, :salary_details_raw_quantity, 'P Tile') %></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td><h5>Total</h5></td>
+            <td><h5><%=@daily_book_salary_details_raw_quantity%></h5></td>
+            <td><h5><%=@daily_book_salary_details_f99_raw_quantity%></h5></td>
+            <td><h5><%=@daily_book_salary_details_tile_raw_quantity%></h5></td>
+            <td><h5><%=@daily_book_salary_details_quantity%></h5></td>
+            <td><h5><%=@daily_book_salary_details_f99_quantity%></h5></td>
+            <td><h5><%=@daily_book_salary_details_tile_quantity%></h5></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#expenses_list").removeClass('hidden');
+  });
+</script>

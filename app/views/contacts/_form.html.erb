@@ -1,0 +1,67 @@
+<%= form_for(contact) do |f| %>
+  <% if contact.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(contact.errors.count, "error") %> prohibited this contact from being saved:</h2>
+
+      <ul>
+      <% contact.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :country_id %>
+    <%= f.text_field :country_id , placeholder:"Enter Country ID"%>
+  </div>
+
+  <div class="field">
+    <%= f.label :city_id %>
+    <%= f.text_field :city_id , placeholder:"Enter City ID"%>
+  </div>
+
+  <div class="field">
+    <%= f.label :address %>
+    <%= f.text_field :address , placeholder: "Enter Address"%>
+  </div>
+
+  <div class="field">
+    <%= f.label :home %>
+    <%= f.text_field :home , placeholder:"Enter Home"%>
+  </div>
+
+  <div class="field">
+    <%= f.label :office %>
+    <%= f.text_field :office, placeholder:"Enter Office" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :Mobile %>
+    <%= f.text_field :Mobile , placeholder: "Enter Mobile"%>
+  </div>
+
+  <div class="field">
+    <%= f.label :fax %>
+    <%= f.text_field :fax, placeholder: "Enter fax" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :email %>
+    <%= f.text_field :email, placeholder: "Enter Email" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :comment %>
+    <%= f.text_field :comment, placeholder: "Enter Comment" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :status %>
+    <%= f.number_field :status , placeholder: "Enter Status"%>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>POS</title>
+    <%= wicked_pdf_stylesheet_link_tag "pdf" -%>
+</head>
+<%@total_bil=0%>
+<%@total_am=0%>
+<%@total_dis=0%>
+<%@total_pro=0%>
+<%@total_discont=0%>
+
+
+<body class="bond_pos_pdf">
+  <% @time = Time.zone.now %>
+  <% if @pos_setting.present? && @pos_setting.persisted? && @pos_setting.logo_images.present? %>
+    <div class="col-lg-12">
+      <%= image_tag @pos_setting.logo_images.first.service_url, width: 200, class:"pdf_img" %>
+    </div>
+  <%else%>
+  <% end %>
+  <h1 style="text-align: center; margin: 0;">Nakasi Daily page</h1>
+  <div>
+    <table>
+      <thead>
+        <td class="broder-with"><h5>Department:</h5></td>
+        <td class="broder-with"><h5>Nakasi Date:</h5></td>
+        <td class="broder-with"><h5>comment:</h5></td>
+      </thead>
+    </table>
+    <table>
+      <thead>
+        <th>Name</th>
+        <%@products.each do |product|%>
+          <th><%=product.title%></th>
+        <%end%>
+      </thead>
+      <tbody>
+          <% @staffs_pdf.each do |staff| %>
+        <tr>
+          <td class="broder-with">
+            <h5 style="text-align :center"><%= staff.coded_full_name %></h5>
+          </td>
+          <%@products.each do |product|%>
+            <td class="broder-with"></td>
+          <%end%>
+        </tr>
+        <%end%>
+        <tr>
+          <td  class="broder-with" style="text-align :center" ><h5>Total</h5></td>
+          <%@products.each do |product|%>
+            <td class="broder-with" ></td>
+          <%end%>
+        </tr>
+
+      </tbody>
+    </table>
+
+  </div>
+  <p style="text-align: center;margin: 0;"><span><%=@pos_setting.address if @pos_setting.present?%></span></p>
+  <p style="text-align: center;margin: 0;"><span><%=@pos_setting.phone if @pos_setting.present?%></span></p>
+</body>
+</html>

@@ -1,0 +1,276 @@
+<p id="notice"><%= notice %></p>
+<div class="topnav">
+  <%= link_to daily_books_path() do %>
+    <i class="fa fa-male" aria-hidden="true"></i>
+    <%=@departments.first.title%> Daily
+  <% end %>
+  <%= link_to khakar_daily_books_path(department_id: @departments.second.title) do %>
+    <i class="fas fa-truck" aria-hidden="true"></i>
+    <%=@departments.second.title%> Daily book
+  <% end %>
+  <%= link_to production_cycles_path do %>
+    <i class="fa fa-sign-language" aria-hidden="true"></i>
+    Bhari Daily Book
+  <% end %>
+  <%= link_to jalai_production_cycles_path do %>
+    <i class="fa fa-fire" aria-hidden="true"></i>
+    Jalai Daily Book
+  <% end %>
+  <%= link_to nakasi_production_cycles_path do %>
+    <i class="fa fa-align-justify" aria-hidden="true"></i>
+    <%=@departments.third.title%> Daily Book
+  <% end %>
+</div>
+<%production_blocks_bricks_quantity=0%>
+<%production_blocks_tiles_quantity=0%>
+<div class="hidden" id="production_cycle_list">
+  <h1>Jalai Daily Book</h1>
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <%= search_form_for @q, url: jalai_production_cycles_path, class: "admin-controls", method: "get" do |f| %>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.search_field :start_date_gteq, class: 'form-control input-sm datepicker',value: @book_date_gteq, 'datepicker' => true,placeholder: "YYYY-MM-DD" %>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.search_field :start_date_lteq, class: 'form-control input-sm datepicker',value: @book_date_lteq, 'datepicker' => true ,placeholder: "YYYY-MM-DD"%>
+        </div>
+        <div class="col-lg-3 form-group float-left">
+          <%= f.select :production_blocks_purchase_sale_detail_id_eq, options_from_collection_for_select(@purchase_sale_detail_list, 'id', 'comment',f.object.production_blocks_purchase_sale_detail_id_eq),{:include_blank => "Select Loader"},class: 'form-control chosen-select'%>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.search_field :comment_cont, value: @title, placeholder: "Comment", title: "Comment" ,:class=>"form-control" %>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-secondary" name="submit_pdf_staff_with" type="submit" value="Jalai PDF A4" formtarget="_blank"><i class="fa fa-file-pdf"></i></button>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-info" name="email" type="submit" value="Email"><i class="fas fa-envelope"></i> email</button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+  <div class="row">
+    <%@purchase_sale_detail.each do |purchase_sale_detail|%>
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1"><h5><%=purchase_sale_detail.comment%> = <%=purchase_sale_detail.purchase_item_quantity.to_i%> </h5></div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800"><p>Remaning <span>= <%=((purchase_sale_detail.purchase_item_per_cost.last)-(@jalai_b_quantity[purchase_sale_detail.id].to_f+@jalai_a_quantity[purchase_sale_detail.id].to_f)).round(0)%> kg</span></p> </div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800"><p>Wangi <span>=
+                    <%=((((purchase_sale_detail.purchase_item_per_cost.last)-(@jalai_b_quantity[purchase_sale_detail.id].to_f+@jalai_a_quantity[purchase_sale_detail.id].to_f)).round(0))/purchase_sale_detail.purchase_item_measurement_quantity).round(2)%>
+                    /
+                    <%=((((purchase_sale_detail.purchase_item_per_cost.last)).round(0))/purchase_sale_detail.purchase_item_measurement_quantity).round(2)%>
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <%end%>
+  </div>
+  <div class="clearfix"></div>
+  <div class="card shadow mb-4">
+       <!-- Card Header - Accordion -->
+       <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+         <h6 class="m-0 font-weight-bold text-primary"><h5> Ready For Jalai</h5></h6>
+       </a>
+       <!-- Card Content - Collapse -->
+       <div class="collapse show" id="collapseCardExample" style="">
+         <div class="card-body">
+          <form action=<%= new_jalai_production_cycles_path%> method='get'>
+            <table>
+              <thead>
+                <th>Action</th>
+                <th>Date</th>
+                <th>Chamber No</th>
+                <th>Bricks</th>
+                <th>Tile</th>
+                <th>Status</th>
+              </thead>
+              <tbody>
+                <% @bhari_daily_bricks.each do |bhari_daily| %>
+                  <tr>
+                    <td>
+                      <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="customCheck_<%= bhari_daily.id%>" name="bhari_daily[<%= bhari_daily.id%>]">
+                        <label class="custom-control-label" for="customCheck_<%= bhari_daily.id %>"><span class="text-hide">Check</span></label>
+                      </div>
+                    </td>
+                    <td><%= bhari_daily.date.strftime("%A,  %d-%b-%y") if bhari_daily.date%></td>
+                    <td><%= bhari_daily.title %></td>
+                    <td>
+                      <% if (@jalai_uncomplete_daily_bricks.include? bhari_daily.id)%>
+                        <%=bhari_daily.bricks_quantity.to_f/2%>
+                      <%else%>
+                        <%=bhari_daily.bricks_quantity%>
+                      <%end%>
+                    </td>
+                    <td>
+                      <% if (@jalai_uncomplete_daily_bricks.include? bhari_daily.id)%>
+                        <%= bhari_daily.tiles_quantity.to_f/2%>
+                      <%else%>
+                        <%= bhari_daily.tiles_quantity%>
+                      <%end%>
+
+                    </td>
+                    <td>
+                      <% production_status=""%>
+                      <%= production_status="Uncomplete" if @jalai_uncomplete_daily_bricks.include? bhari_daily.id%>
+                      <input type="hidden" id="status_<%= bhari_daily.id%>" name="status[<%= bhari_daily.id%>]" value=<%=production_status%>>
+                    </td>
+
+                  </tr>
+                <%end%>
+                <tr>
+                  <td><button type="submit" class="btn btn-success">Jalai Phase <i class="fa fa-plus"></i></button></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </form>
+        </div>
+      </div>
+  </div>
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-lg-12">
+      <%total_cost=0%>
+      <%cost_per_line=0%>
+      <%per_product_cost=0%>
+      <%per_thousand_product_cost=0%>
+      <%item_quantity_per_line=0%>
+      <%total_item_quantity=0%>
+      <%per_ton_bricks=0%>
+      <%lines=0%>
+      <%total_bricks=0%>
+      <table data-toggle="table" data-search="true">
+        <thead>
+          <th><%= sort_link(@q, :start_date, 'Date') %></th>
+          <th>Lines</th>
+          <th>Chamber</th>
+          <th>Wangi</th>
+          <th>T Bricks</th>
+          <th>T Cost</th>
+          <th>Cost/Line</th>
+          <th>Cost/1000</th>
+          <th>Cost/Brick</th>
+          <th>T Qty</th>
+          <th>Qty/Line</th>
+          <th>Bricks/Ton</th>
+          <th>Qty/Brick </th>
+          <th>Comment</th>
+          <th>Action</th>
+        </thead>
+        <tbody>
+          <% @production_cycles.each do |production_cycle| %>
+            <tr>
+              <td><%= production_cycle.start_date %></td>
+              <td>
+                <h7><%=production_cycle.lines %> <% lines+=production_cycle.lines %></h7>
+              </td>
+              <td>
+                <h7><%=production_cycle.production_blocks.pluck(:title,:production_status) %></h7>
+              </td>
+              <td><%=production_cycle.quantity%></td>
+              <td>
+                <h7><%=production_cycle.total_bricks.to_i %><% total_bricks+=production_cycle.total_bricks.to_i %></h7>
+                <h7>BK:<%=ProductionBlock.where(id: production_cycle.production_blocks.pluck('bhari_production_block_id')).sum(:bricks_quantity)%></h7>
+                <h7>TL:<%=ProductionBlock.where(id: production_cycle.production_blocks.pluck('bhari_production_block_id')).sum(:tiles_quantity)%></h7>
+              </td>
+              <td>
+                <h7><%=production_cycle.total_cost.to_i %><% total_cost+=production_cycle.total_cost %></h7>
+              </td>
+              <td>
+                <h7><%=production_cycle.cost_per_line.to_i %><% cost_per_line+=production_cycle.cost_per_line %></h7>
+              </td>
+              <td>
+                <h7><%=production_cycle.per_thousand_product_cost.to_i %></h7>
+              </td>
+              <td>
+                <h7><%=production_cycle.per_product_cost%><% per_product_cost+=production_cycle.per_product_cost%></h7>
+              </td>
+              <td>
+                <h7><%=production_cycle.total_item_quantity.to_i %><% total_item_quantity+=production_cycle.total_item_quantity %></h7>
+              </td>
+              <td>
+                <h7><%=production_cycle.item_quantity_per_line.to_i %><% item_quantity_per_line+=production_cycle.item_quantity_per_line %></h7>
+              </td>
+              <td>
+                <h7><%=production_cycle.per_ton_bricks.to_i %><% per_ton_bricks+=production_cycle.per_ton_bricks %></h7>
+              </td>
+              <td>
+                <h7><%=(production_cycle.total_item_quantity.to_f/production_cycle.total_bricks.to_f).round(4) %></h7>
+              </td>
+              <td>
+                <h7><%=production_cycle.comment %></h7>
+              </td>
+
+              <td>
+                <% if can?(:update, ProductionCycle) %>
+                  <%= link_to edit_jalai_production_cycle_path(production_cycle) do %>
+                     <i class="fa fa-edit" aria-hidden="true"></i> |
+                  <% end %>
+                <% end %>
+                <% if can?(:delete, :all) %>
+                  <%= link_to production_cycle, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+                    <i class="fa fa-trash" aria-hidden="true"></i> |
+                  <% end %>
+                <% end %>
+                <%= link_to show_jalai_production_cycle_path(production_cycle) do %>
+                  <i class="fa fa-eye" aria-hidden="true"></i>
+                <% end %>
+              </td>
+            </tr>
+            <% end %>
+          <tr>
+            <td><h6>Total</h6></td>
+            <td><h6><%=lines.to_i%></h6></td>
+            <td></td>
+            <td><%=@production_cycles.pluck(:quantity).sum.to_i%></td>
+            <td><h6><%=total_bricks.to_i%></h6></td>
+            <td><h6><%=total_cost.to_i%></h6></td>
+            <td><h6><%=(total_cost/lines).to_i  if @production_cycles.present?%></h6></td>
+            <td><h6><%=(total_cost/total_bricks).round(2)*1000 if total_cost!=total_bricks%></h6></td>
+            <td><h6><%=(total_cost/total_bricks).round(2) if total_cost!=total_bricks%></h6></td>
+            <td><h6><%=total_item_quantity.to_i%></h6></td>
+            <td><h6><%=(total_item_quantity/lines.to_i).to_i  if @production_cycles.present?%></h6></td>
+            <td><h6><%=((total_bricks/total_item_quantity)*1000.to_i).round(0)  if @production_cycles.present?%></h6></td>
+            <td><h6><%=(total_item_quantity/total_bricks).round(3) if total_item_quantity.positive?%></h6></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-lg-4 col-sm-4">
+      <%= page_entries_info @production_cycles %>
+    </div>
+    <div class="col-lg-8 col-sm-8 pagination-left">
+      <%= paginate @production_cycles %>
+    </div>
+  </div>
+</div>
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#production_cycle_list").removeClass('hidden');
+    FontAwesome.dom.i2svg();
+  });
+</script>

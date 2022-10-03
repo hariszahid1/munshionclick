@@ -1,0 +1,245 @@
+
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">User Ledger Book </h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<p style="text-align: center;margin: 0;">Report by: <%=current_user.name%></p>
+<div>
+  <table>
+    <th></th>
+    <th></th>
+    <tr>
+      <td>DateTime: <span><%=Time.zone.now%></span> </td>
+    </tr>
+  </table>
+</div>
+<div>
+  <table>
+    <tr class="lite-gray">
+      <th><h3>Date</h3></th>
+      <th><h3>User</h3></th>
+      <th><h3>Debit</h3></th>
+      <th><h3>Credit</h3></th>
+      <th><h3>Balance</h3></th>
+      <th><h3>Comment</h3></th>
+    </tr>
+      <%if @ledger_books.total_count == @sys_user.ledger_books.count && (params[:submit_form].present? or params[:submit_form_without].present?)%>
+        <tr>
+          <td><%=@sys_user.created_at.strftime("%d-%b-%y")%></td>
+          <td class="urdu-font" ><%= @sys_user.name %></td>
+          <td>-</td>
+          <td>-</td>
+          <td>
+            <%=number_with_delimiter(@sys_user.opening_balance)%><%@pre_balance=@sys_user.opening_balance%>
+            <%if (@sys_user.opening_balance.to_i > 0 ) %>
+              <b style="font-size:12px;color:blue;">Jama</b>
+            <%elsif (@sys_user.opening_balance.to_i < 0 ) %>
+              <b style="font-size:12px;color:red;">Benam</b>
+            <%else%>
+              <b style="font-size:12px;color: #6cec53 ;">Nill</b>
+            <%end%>
+
+          </td>
+          <td>Opening Balance</td>
+        </tr>
+      <%elsif (params[:submit_form].present? or params[:submit_form_without].present?)%>
+        <tr>
+          <td></td>
+          <td class="urdu-font"><%= @sys_user.name %></td>
+          <td>-</td>
+          <td>-</td>
+          <td>
+            <%=@pre_balance=(@ledger_books&.first&.balance.to_i-(@ledger_books&.first&.credit.to_i-@ledger_books&.first&.debit.to_i)).round(0)%>
+            <%if (@pre_balance > 0 ) %>
+                 <b style="font-size:12px;color:blue;">Jama</b>
+            <%elsif (@pre_balance < 0 ) %>
+            <b style="font-size:12px;color:red;">Benam</b>
+            <%else%>
+            <b style="font-size:12px;color: #6cec53 ;">Nill</b>
+            <%end%>
+          </td>
+          <td>Previous Balance</td>
+        </tr>
+      <%end%>
+      <% @ledger_books_pdf.each do |ledger_book| %>
+        <tr >
+          <td><%=ledger_book.created_at.strftime("%d-%b-%y")%></td>
+          <td class="urdu-font"><%= ledger_book.sys_user.name %></td>
+          <td><%= number_with_delimiter(ledger_book.debit) %></td>
+          <td><%= number_with_delimiter(ledger_book.credit) %></td>
+          <td>
+            <%= number_with_delimiter(ledger_book.balance) %>
+            <%if (ledger_book.balance.to_i > 0 ) %>
+            <b style="font-size:12px;color:blue;">Jama</b>
+            <%elsif (ledger_book.balance.to_i < 0 ) %>
+            <b style="font-size:12px;color:red;">Benam</b>
+            <%else%>
+            <b style="font-size:12px;color: #6cec53 ;">Nill</b>
+            <%end%>
+          </td>
+          <td>
+            <p>
+              <% if ledger_book.purchase_sale_detail_id.present? %>
+                <%= link_to '',edit_purchase_sale_detail_path(ledger_book.purchase_sale_detail_id) if ledger_book.purchase_sale_detail.transaction_type=="Sale"%>
+                <%= link_to 'Purchase',edit_purchase_sale_detail_path(ledger_book.purchase_sale_detail_id) if ledger_book.purchase_sale_detail.transaction_type=="Purchase"%>
+              <% elsif ledger_book.order.present? %>
+                <%= link_to 'Sale Order',edit_order_path(ledger_book.order_id) if ledger_book.order.transaction_type=="Sale"%>
+                <%= link_to 'Purchase Order',edit_order_path(ledger_book.order_id) if ledger_book.order.transaction_type=="Purchase"%>
+              <%else%>
+                Ledger Book
+                <%= ledger_book.comment %>
+              <% end %>
+              <% if ledger_book.order.present? %>
+                <%if ledger_book.order.order_items_names_and_quantity!=0%>
+                  <%ledger_book.order.order_items_names_and_quantity.each do |name_quantity|%>
+                    <span><%=name_quantity.first%></span>
+                    Qty: <span><%=name_quantity.second%></span>
+                    Rate:<span><%=name_quantity.third%></span>
+                    Total:<span><%=name_quantity.fourth%></span>
+                  <%end%>
+                    Total: <span><%=ledger_book.order.total_bill%></span>
+                <%end%>
+              <%elsif ledger_book.purchase_sale_detail.present?%>
+              <% if ledger_book.purchase_sale_detail.purchase_sale_items_names_and_quantity!=0%>
+                <% ledger_book.purchase_sale_detail.purchase_sale_items_names_and_quantity.each do |name_quantity|%>
+                  <%if ledger_book.purchase_sale_detail.transaction_type=="Purchase"%>
+                      <span><%=name_quantity.first%></span>
+                      Qty:  <span><%=name_quantity.second.to_i%></span>
+                      Rate:  <span><%=name_quantity[5].to_f%></span>
+                      Total:  <span><%=(name_quantity.second*(name_quantity[5].to_f)).to_i%></span>
+                      Carriage/Loading : <span><%= ledger_book.purchase_sale_detail.carriage.to_i+ledger_book.purchase_sale_detail.loading.to_i %></span>
+                    <%else%>
+                      <span><%=name_quantity.first%></span>
+                      Qty:  <span><%=name_quantity.second.to_i%></span>
+                      Rate:
+                      <span>
+                        <% if ApplicationController.new.pos_type_batha%>
+                          <%=name_quantity.third.to_f*1000%>
+                        <%else%>
+                          <%=name_quantity.third.to_f%>
+                        <%end%>
+                      </span>
+                      Total:  <span><%=(name_quantity.second*(name_quantity.third.to_f)).to_i%></span>
+                      Carriage/Loading : <span><%= ledger_book.purchase_sale_detail.carriage.to_i+ledger_book.purchase_sale_detail.loading.to_i %></span>
+                    <%end%>
+                <%end%>
+                <%if ledger_book&.purchase_sale_detail&.bill_no.present?%>
+                  <span>PO#: </span> <%=ledger_book&.purchase_sale_detail&.bill_no%>
+                <%end%>
+              <%end%>
+              <%end%>
+              <% if ledger_book.account.present?%>
+                Casher: <span><%=ledger_book.account.title%></span>
+              <%end%>
+            </p>
+          </td>
+
+        </tr>
+      <% end %>
+      <%if @ledger_books.total_count == @sys_user.ledger_books.count && (params[:submit_pdf_without].present? or params[:submit_pdf_without].present?)%>
+        <tr>
+          <td><%=@sys_user.created_at.strftime("%d-%b-%y")%></td>
+          <td class="urdu-font"><%= @sys_user.name %></td>
+          <td>-</td>
+          <td>-</td>
+          <td>
+            <%=number_with_delimiter(@sys_user.opening_balance)%><%@pre_balance=@sys_user.opening_balance%>
+            <%if (@sys_user.opening_balance.to_i > 0 ) %>
+              <b style="font-size:12px;color:blue;">Jama</b>
+            <%elsif (@sys_user.opening_balance.to_i < 0 ) %>
+              <b style="font-size:12px;color:red;">Benam</b>
+            <%else%>
+              <b style="font-size:12px;color: #6cec53 ;">Nill</b>
+            <%end%>
+          </td>
+          <td>Opening Balance</td>
+        </tr>
+      <%elsif (params[:submit_pdf_without].present? or params[:submit_pdf_without].present?)%>
+        <tr>
+          <td></td>
+          <td class="urdu-font"><%= @sys_user.name %></td>
+          <td>-</td>
+          <td>-</td>
+          <td>
+            <%=@pre_balance=(@ledger_books&.first&.balance.to_i-(@ledger_books&.first&.credit.to_i-@ledger_books&.first&.debit.to_i)).round(0)%>
+            <%if (@pre_balance > 0 ) %>
+                 <b style="font-size:12px;color:blue;">Jama</b>
+            <%elsif (@pre_balance < 0 ) %>
+            <b style="font-size:12px;color:red;">Benam</b>
+            <%else%>
+            <b style="font-size:12px;color: #6cec53 ;">Nill</b>
+            <%end%>
+          </td>
+          <td>Previous Balance</td>
+        </tr>
+      <%end%>
+      <tr>
+        <td><h4>Total</h4></td>
+        <td></td>
+        <td><h4><%=@debit=@ledger_books_pdf.pluck(:debit).compact.sum%></h4></td>
+        <td><h4><%=(@credit=@ledger_books_pdf.pluck(:credit).compact.sum)%></h4></td>
+        <td></td>
+        <td><h4><%=@credit%> - <%=@debit%></h4></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td>Previous</td>
+        <td><h4><%=@pre_balance.to_i%></h4></td>
+        <td>-</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr class="short-column">
+        <td><h4>Total</h4></td>
+        <td></td>
+        <td><h4><%=@pre_balance.to_i+(@credit=@ledger_books_pdf.pluck(:credit).compact.sum)%></h4></td>
+        <td></td>
+        <td><h2><%=(@pre_balance.to_i+@credit)-@debit%></h2></td>
+        <td><h4>(<%=@pre_balance.to_i%> + <%=@credit%>) - <%=@debit%></h4></td>
+      </tr>
+  </table>
+</div>
+<%if pos_setting_sys_type!="CustomClear" and pos_setting_sys_type!="Draw" and @products_count.present?%>
+<div >
+  <p style="border-bottom: double 4px;  margin: 0;"></p>
+  <h1 style="text-align: center; margin: 0;">Sale Product Detail </h1>
+  <p style="border-bottom: double 4px;  margin: 0;"></p>
+  <%@total = 0 %>
+  <table>
+    <th style="width:40vw;">Items</th>
+    <th style="width:20vw;">Qty</th>
+    <% @products_count.each_with_index do |item,i|%>
+      <tr style="text-align :center">
+        <td style="border-bottom: 1px solid #000; "><b><%=item.first %><%@total += item&.last&.to_f.round(2) %></b></td>
+        <td style="border-bottom: 1px solid #000; "><%=item&.last&.to_f.round(2) %></td>
+      </tr>
+    <% end %>
+    <tr style="text-align :center">
+      <td><b>Total</b></td>
+      <td><b><%=@total%></b></td>
+    </tr>
+  </table>
+</div>
+<%end%>
+<%if pos_setting_sys_type!="CustomClear" and pos_setting_sys_type!="Draw" and @products_purchase_count.present?%>
+<div >
+  <p style="border-bottom: double 4px;  margin: 0;"></p>
+  <h1 style="text-align: center; margin: 0;">Purchase Product Detail </h1>
+  <p style="border-bottom: double 4px;  margin: 0;"></p>
+  <%@total = 0 %>
+  <table>
+    <th style="width:40vw;">Items</th>
+    <th style="width:20vw;">Qty</th>
+    <% @products_purchase_count.each_with_index do |item,i|%>
+      <tr style="text-align :center">
+        <td style="border-bottom: 1px solid #000; "><b><%=item.first %><%@total += item&.last&.to_f.round(2) %></b></td>
+        <td style="border-bottom: 1px solid #000; "><%=item&.last&.to_f.round(2) %></td>
+      </tr>
+    <% end %>
+    <tr style="text-align :center">
+      <td><b>Total</b></td>
+      <td><b><%=@total%></b></td>
+    </tr>
+  </table>
+</div>
+<%end%>

@@ -1,0 +1,12 @@
+---
+:verbose: false
+:concurrency: 10
+:pidfile: /home/deploy/erp/shared/tmp/pids/sidekiq.pid
+:queues:
+- [critical, 2]
+- default
+- low
+production:
+:concurrency: 25
+staging:
+:concurrency: 15

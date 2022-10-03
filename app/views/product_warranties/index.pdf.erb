@@ -1,0 +1,132 @@
+<% @date = Date.today  %>
+<% @time = DateTime.now %>
+<% @time = Time.zone.now %>
+<% serial_i_cont_any = params[:q][:serial_i_cont_any].reject(&:blank?) %>
+<%if params[:submit_pdf_customer].blank?%>
+  <p style="border-bottom: double 4px;   margin-top: 100px;  margin: 0;"></p>
+  <h1 style="text-align: center; margin: 0;">Purchase Detail </h1>
+  <p style="border-bottom: double 4px;  margin: 0;"></p>
+    <table data-toggle="table" data-search="true">
+    <thead>
+      <tr class="lite-gray" style="font-size:15px;font-family: Arial Black, Gadget, sans-serif">
+        <th>Voucher</th>
+        <th>Item Type</th>
+        <th>Product Category</th>
+        <th>Serial</th>
+        <th>Product</th>
+        <th>Cost Price</th>
+        <th>Suplair Name</th>
+        <th>Create Date</th>
+        <th>Bill no</th>
+        <th>warranty Days</th>
+      </tr>
+    </thead>
+      <tbody>
+        <% @product_warranties.each do |product_warranty| %>
+        <% if product_warranty.purchase_sale_detail.transaction_type=="Purchase"%>
+            <tr  style="font-size:15px; text-align: center; font-family: Arial Black, Gadget, sans-serif">
+                <td><%= product_warranty.purchase_sale_detail_id %></td>
+                <td><%= product_warranty.product.item_type.title %></td>
+                <td><%= product_warranty.product.product_category.title %></td>
+                <td><%= serial_i_cont_any.map(&:downcase) & product_warranty.serial.split("\r\n").map(&:downcase)%></td>
+                <td><%= product_warranty.product.title %></td>
+                <td><%= product_warranty&.purchase_sale_detail&.purchase_sale_items&.find_by(product_id:product_warranty.product)&.cost_price %></td>
+                <td><%= product_warranty.purchase_sale_detail.sys_user.name %></td>
+                <td><%= product_warranty.created_at.strftime("%d%b%y") %></td>
+                <td><%= product_warranty.purchase_sale_detail.bill_no %></td>
+                <td><%= distance_of_time_in_words(product_warranty.created_at,@time) %></td>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  <%end%>
+  <%if params[:submit_pdf_customer].present?%>
+  <p style="border-bottom: double 4px;   margin-top: 100px;  margin: 0;"></p>
+  <h1 style="text-align: center; margin: 0;">Sale Detail  </h1>
+  <p style="border-bottom: double 4px;  margin: 0;"></p>
+
+  <table data-toggle="table" data-search="true">
+    <thead>
+      <tr class="lite-gray" style="font-size:15px;font-family: Arial Black, Gadget, sans-serif">
+        <th>Voucher</th>
+        <th>Item Type</th>
+        <th>Product Category</th>
+        <th>Serial</th>
+        <th>Product</th>
+        <th>Sale Price</th>
+        <th>Customer Name</th>
+        <th>Create Date</th>
+        <th>Warranty Days</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @product_warranties.each do |product_warranty| %>
+          <% if product_warranty.purchase_sale_detail.transaction_type=="Sale"%>
+              <tr style="font-size:15px; text-align: center; font-family: Arial Black, Gadget, sans-serif">
+              <td><%= product_warranty.purchase_sale_detail_id %></td>
+              <td><%= product_warranty.product.item_type.title %></td>
+              <td><%= product_warranty.product.product_category.title %></td>
+              <td><%= serial_i_cont_any.map(&:downcase) & product_warranty.serial.split("\r\n").map(&:downcase)%></td>
+              <td><%= product_warranty.product.title %></td>
+              <td><%= product_warranty&.purchase_sale_detail&.purchase_sale_items&.find_by(product_id:product_warranty.product)&.sale_price %></td>
+              <td><%= product_warranty.purchase_sale_detail.sys_user.name %></td>
+              <td><%= product_warranty.created_at.strftime("%d%b%y") %></td>
+              <td><%= distance_of_time_in_words(product_warranty.created_at,@time) %></td>
+              </tr>
+          <% end %>
+      <% end %>
+
+    </tbody>
+  </table>
+</div>
+<p style="text-align: center;margin: 0;"><span><%=@pos_setting.address if @pos_setting.present?%></span></p>
+<p style="text-align: center;margin: 0;"><span><%=@pos_setting.phone if @pos_setting.present?%></span></p>
+
+<%end%>
+<br>
+<br>
+<hr>
+<br>
+<br>
+<br>
+
+<p style=" margin-top: 100px;  margin: 200;"></p>
+  <p style="border-bottom: double 4px;   margin-top: 100px;  margin: 0;"></p>
+  <h1 style="text-align: center; margin: 0;">Sale Detail  </h1>
+  <p style="border-bottom: double 4px;  margin: 0;"></p>
+
+  <table data-toggle="table" data-search="true">
+    <thead>
+      <tr class="lite-gray" style="font-size:15px;font-family: Arial Black, Gadget, sans-serif">
+        <th>Voucher</th>
+        <th>Item Type</th>
+        <th>Product Category</th>
+        <th>Serial</th>
+        <th>Product</th>
+        <th>Sale Price</th>
+        <th>Customer Name</th>
+        <th>Create Date</th>
+        <th>Warranty days</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @product_warranties.each do |product_warranty| %>
+          <% if product_warranty.purchase_sale_detail.transaction_type=="Sale"%>
+              <tr style="font-size:15px; text-align: center; font-family: Arial Black, Gadget, sans-serif">
+              <td><%= product_warranty.purchase_sale_detail_id %></td>
+              <td><%= product_warranty.product.item_type.title %></td>
+              <td><%= product_warranty.product.product_category.title %></td>
+              <td><%= serial_i_cont_any.map(&:downcase) & product_warranty.serial.split("\r\n").map(&:downcase)%></td>
+              <td><%= product_warranty.product.title %></td>
+              <td><%= product_warranty&.purchase_sale_detail&.purchase_sale_items&.find_by(product_id:product_warranty.product)&.sale_price%></td>
+              <td><%= product_warranty.purchase_sale_detail.sys_user.name %></td>
+              <td><%= product_warranty.created_at.strftime("%d%b%y") %></td>
+              <td><%= distance_of_time_in_words(product_warranty.created_at,@time) %></td>
+              </tr>
+          <% end %>
+      <% end %>
+
+    </tbody>
+  </table>
+</div>

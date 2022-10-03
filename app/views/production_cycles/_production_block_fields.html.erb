@@ -1,0 +1,25 @@
+<div class="row bg-white nested-fields">
+  <div class="col border">
+    <%= f.number_field :title, hide_label:true, class:"new-title"%>
+  </div>
+  <div class="col border">
+    <%= f.hidden_field :id %>
+    <%= f.hidden_field :production_cycle_id %>
+    <%= f.select :production_block_type_id, options_from_collection_for_select(@production_block_types, 'id', 'title'), {hide_label:true,prompt: "Select the Block Type"},class: "",required: true,onchange:"block_type_quantity_update(this.value,this.id)",onkeyup:"block_type_quantity_update(this.value,this.id)"%>
+  </div>
+  <div class="col border">
+    <%= f.number_field :bricks_quantity, hide_label:true, class: "raw-quantity",onchange:"daily_bhari_book_update()",onkeyup:"daily_bhari_book_update()"%>
+  </div>
+  <div class="col border">
+    <%= f.number_field :tiles_quantity, hide_label:true, class: "quantity",onchange:"daily_bhari_book_update()",onkeyup:"daily_bhari_book_update()" %>
+  </div>
+  <div class="col border">
+    <%= f.date_field :date, value:Date.today,hide_label:true, class: "wast",onchange:"daily_bhari_book_update()",onkeyup:"daily_bhari_book_update()" %>
+  </div>
+  <div class="col border">
+    <%= f.select :status, options_for_select(ProductionBlock.statuses.map { |key, value| [key.humanize, key] }, "bhari"),{class: "form-control", required: true,hide_label: true}, readonly: true, disabled:true%>
+  </div>
+  <div class="col border">
+    <%= link_to_remove_association "Remove", f , class: "btn btn-info",onclick:"costAtomUpdateReturn(); return false;",onkeyup:"costAtomUpdateReturn(); return false;"%>
+  </div>
+</div>

@@ -1,0 +1,200 @@
+<% @time = Time.zone.now %>
+<p style="border-bottom: dotted 3px;  margin: 0;"></p>
+<h2 style="text-align: center; margin: 0;">Batha Slip</h2>
+<p style="border-bottom: dotted 3px;  margin: 0;"></p>
+<table>
+  <tbody>
+    <tr>
+      <td><h2 style="text-align: left; margin: 0;">Delivery no <%= @purchase_sale_detail.sys_user.purchase_sale_details.count.to_i%></h2></td>
+      <td><h2 style="text-align: right; margin: 0;">Voucher no <%=@purchase_sale_detail.id.to_s %></h2></td>
+    </tr>
+
+  </tbody>
+</table>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<div style="width:90vw;">
+  <table>
+    <th></th>
+    <th></th>
+    <tr>
+      <td style="width:67vw;">Date Time: <span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%> <%=@time.strftime("at %I:%M%p")%></span> </td>
+      <td style="width:33vw;">Customer Name: <span> <b><%=@purchase_sale_detail.sys_user.name %></b></span></td>
+    </tr>
+    <tr>
+      <td style="">Mobile: <%=@purchase_sale_detail.sys_user.contact.mobile%></td>
+      <td style="">Address: <%=@purchase_sale_detail.sys_user.contact.address%></td>
+
+    </tr>
+  </table>
+</div>
+<p style="border-bottom: dotted 3px;  margin: 0;"></p>
+<div style="width:90vw;">
+  <table>
+    <th style="width:40vw;">Items</th>
+   <th style="width:20vw;">Qty</th>
+    <th style="width:20vw;">Loader no#</th>
+    <% @purchase_sale_detail.purchase_sale_items.each do |item|%>
+      <tr style="text-align:center">
+        <td style="border-bottom: 1px solid #000; "><%=item.purchase_sale_type=="Sale_type" ? "S-" : "R-"%> <%=item.product.present? ? item.product.title : item.item.title %></td>
+        <td style="border-bottom: 1px solid #000; "><%=item.quantity %></td>
+        <td style="border-bottom: 1px solid #000; "><%=item.purchase_sale_detail.staff.name if item.purchase_sale_detail.staff.present? %></td>
+      </tr>
+    <% end %>
+    <tr>
+      <td></td>
+      <th>balance: </th>
+      <td style="text-align:center"><%=@purchase_sale_detail.sys_user.balance%></td>
+    </tr>
+  </table>
+</div>
+<%if @purchase_sale_detail.comment.present?%>
+  <p style="border-bottom: dotted 3px;  margin: 0;"></p>
+  <p style="text-align: center;margin: 0;"><span>Comment: <%=@purchase_sale_detail.comment.titleize%></span></p>
+<%end%>
+<h3>Signature:_____________</h3>
+<p style="border-bottom: dotted 3px;  margin: 0;"></p>
+<p style="text-align: center;margin: 0;"><span><%=@pos_setting.address if @pos_setting.present?%></span></p>
+<p style="text-align: center;margin: 0;"><span><%=@pos_setting.phone if @pos_setting.present?%></span></p>
+<p style="border-bottom: dotted 3px;  margin: 0;"></p><br>
+
+<% @time = Time.zone.now %>
+<% if @pos_setting.header.present? %>
+  <div class="header" style="height: <%=@pos_setting.header_hieght%>px; <%=@pos_setting.header_style%> ">
+    <% if @pos_setting.present? && @pos_setting.persisted? && @pos_setting.logo_images.present? && @pos_setting.header_logo_placement != 'logo_disable_text_center'%>
+      <div class="<%= @pos_setting.header_logo_placement%>">
+        <%@pos_setting.logo_images.each do |image| %>
+          <%= image_tag image.service_url, width: @pos_setting.logo_width, hight: @pos_setting.logo_hieght%>
+        <%end%>
+        </div>
+    <% end %>
+    <div class="<%= @pos_setting.header_logo_placement%>_text">
+      <h1 style="padding-top: <%=@pos_setting.title_padding%>px; <%=@pos_setting.title_style%>" > <%=admin_name_on_nav if admin_name_on_nav.present?%></h1>
+    </div>
+  </div>
+<% end %>
+<p style="border-bottom: dotted 3px;  margin: 0;"></p>
+<h2 style="text-align: center; margin: 0;">Customer Slip</h2>
+<p style="border-bottom: dotted 3px;  margin: 0;"></p>
+<table>
+  <tbody>
+    <tr>
+      <td><h2 style="text-align: left; margin: 0;">Delivery no <%= @purchase_sale_detail.sys_user.purchase_sale_details.count.to_i%></h2></td>
+      <td><h2 style="text-align: right; margin: 0;">Voucher no <%=@purchase_sale_detail.id.to_s %></h2></td>
+    </tr>
+
+  </tbody>
+</table>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<div style="width:90vw;">
+  <table>
+    <th></th>
+    <th></th>
+    <tr>
+      <td style="width:67vw;">Date Time: <span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%> <%=@time.strftime("at %I:%M%p")%></span> </td>
+      <td style="width:33vw;">Customer Name: <span> <b><%=@purchase_sale_detail.sys_user.name %></b></span></td>
+    </tr>
+    <tr>
+      <td style="">Mobile: <%=@purchase_sale_detail.sys_user.contact.mobile%></td>
+      <td style="">address: <%=@purchase_sale_detail.sys_user.contact.address%></td>
+
+    </tr>
+  </table>
+</div>
+<p style="border-bottom: dotted 3px;  margin: 0;"></p>
+<div style="width:90vw;">
+  <table>
+    <th style="width:40vw;">Items</th>
+   <th style="width:20vw;">Qty</th>
+    <th style="width:20vw;">Loader no#</th>
+    <% @purchase_sale_detail.purchase_sale_items.each do |item|%>
+      <tr style="text-align:center">
+        <td style="border-bottom: 1px solid #000; "><%=item.purchase_sale_type=="Sale_type" ? "S-" : "R-"%> <%=item.product.present? ? item.product.title : item.item.title %></td>
+        <td style="border-bottom: 1px solid #000; "><%=item.quantity %></td>
+        <td style="border-bottom: 1px solid #000; "><%=item.purchase_sale_detail.staff.name if item.purchase_sale_detail.staff.present? %></td>
+      </tr>
+    <% end %>
+    <tr>
+      <td></td>
+      <th>balance: </th>
+      <td style="text-align:center"><%=@purchase_sale_detail.sys_user.balance%></td>
+    </tr>
+  </table>
+</div>
+<%if @purchase_sale_detail.comment.present?%>
+  <p style="border-bottom: dotted 3px;  margin: 0;"></p>
+  <p style="text-align: center;margin: 0;"><span>Comment: <%=@purchase_sale_detail.comment.titleize%></span></p>
+<%end%>
+<h3>Signature:_____________</h3>
+<p style="border-bottom: dotted 3px;  margin: 0;"></p>
+<p style="text-align: center;margin: 0;"><span><%=@pos_setting.address if @pos_setting.present?%></span></p>
+<p style="text-align: center;margin: 0;"><span><%=@pos_setting.phone if @pos_setting.present?%></span></p>
+<p style="border-bottom: dotted 3px;  margin: 0;"></p>
+
+<% @time = Time.zone.now %>
+<% if @pos_setting.header.present? %>
+  <div class="header" style="height: <%=@pos_setting.header_hieght%>px; <%=@pos_setting.header_style%> ">
+    <% if @pos_setting.present? && @pos_setting.persisted? && @pos_setting.logo_images.present? && @pos_setting.header_logo_placement != 'logo_disable_text_center'%>
+      <div class="<%= @pos_setting.header_logo_placement%>">
+        <%@pos_setting.logo_images.each do |image| %>
+          <%= image_tag image.service_url, width: @pos_setting.logo_width, hight: @pos_setting.logo_hieght%>
+        <%end%>
+        </div>
+    <% end %>
+    <div class="<%= @pos_setting.header_logo_placement%>_text">
+      <h1 style="padding-top: <%=@pos_setting.title_padding%>px; <%=@pos_setting.title_style%>" > <%=admin_name_on_nav if admin_name_on_nav.present?%></h1>
+    </div>
+  </div>
+<% end %>
+<p style="border-bottom: dotted 3px;  margin: 0;"></p>
+<h2 style="text-align: center; margin: 0;">Customer Signatured Slip</h2>
+<p style="border-bottom: dotted 3px;  margin: 0;"></p>
+<table>
+  <tbody>
+    <tr>
+      <td><h2 style="text-align: left; margin: 0;">Delivery no <%= @purchase_sale_detail.sys_user.purchase_sale_details.count.to_i%></h2></td>
+      <td><h2 style="text-align: right; margin: 0;">Voucher no <%=@purchase_sale_detail.id.to_s %></h2></td>
+    </tr>
+
+  </tbody>
+</table>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<div style="width:90vw;">
+  <table>
+    <th></th>
+    <th></th>
+    <tr>
+      <td style="width:67vw;">Date Time: <span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%> <%=@time.strftime("at %I:%M%p")%></span> </td>
+      <td style="width:33vw;">Customer Name: <span> <b><%=@purchase_sale_detail.sys_user.name %></b></span></td>
+    </tr>
+    <tr>
+      <td style="">Mobile: <%=@purchase_sale_detail.sys_user.contact.mobile%></td>
+      <td style="">address: <%=@purchase_sale_detail.sys_user.contact.address%></td>
+
+    </tr>
+  </table>
+</div>
+<p style="border-bottom: dotted 3px;  margin: 0;"></p>
+<div style="width:90vw;">
+  <table>
+    <th style="width:40vw;">Items</th>
+   <th style="width:20vw;">Qty</th>
+    <th style="width:20vw;">Loader no#</th>
+    <% @purchase_sale_detail.purchase_sale_items.each do |item|%>
+      <tr style="text-align:center">
+        <td style="border-bottom: 1px solid #000; "><%=item.purchase_sale_type=="Sale_type" ? "S-" : "R-"%> <%=item.product.present? ? item.product.title : item.item.title %></td>
+        <td style="border-bottom: 1px solid #000; "><%=item.quantity %></td>
+        <td style="border-bottom: 1px solid #000; "><%=item.purchase_sale_detail.staff.name if item.purchase_sale_detail.staff.present? %></td>
+      </tr>
+    <% end %>
+    <tr>
+      <td></td>
+      <th>balance: </th>
+      <td style="text-align:center"><%=@purchase_sale_detail.sys_user.balance%></td>
+    </tr>
+  </table>
+</div>
+<%if @purchase_sale_detail.comment.present?%>
+  <p style="border-bottom: dotted 3px;  margin: 0;"></p>
+  <p style="text-align: center;margin: 0;"><span>Comment: <%=@purchase_sale_detail.comment.titleize%></span></p>
+<%end%>
+<h3>Signature:_____________</h3>

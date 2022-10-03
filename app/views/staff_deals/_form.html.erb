@@ -1,0 +1,41 @@
+
+<%= bootstrap_form_for(staff_deal) do |f| %>
+  <% if staff_deal.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(staff_deal.errors.count, "error") %> prohibited this staff deal from being saved:</h2>
+
+      <ul>
+      <% staff_deal.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+<div class="col-lg-12 row">
+  <div class="col-lg-6 form-group float-left text-black">
+    <%= f.select :staff_id, options_from_collection_for_select(@staffs, 'id', 'name',f.object.staff_id), {prompt: "Select the Staff",required: true}, {class: "chosen-select", required: true } %>
+  </div>
+
+  <div class="col-lg-6 form-group float-left text-black">
+    <%= f.select :product_id, options_from_collection_for_select(@products, 'id', ->(st){"#{st.title} \u{27F6} #{st.code}"},f.object.product_id), {prompt: "Select the Unit",required: true}, {class: "chosen-select", required: true } %>
+  </div>
+  <div class="col-lg-12 form-group float-left text-black">
+    <%= f.text_area :comment, placeholder: "Enter Comment" %>
+  </div>
+  </div>
+
+  <div class="col-lg-12 row ">
+
+              <div class="col-lg-6 form-group float-left text-black">
+                <%= link_to staff_deals_path do %>
+                <i class="fa fa-arrow-left " aria-hidden="true"></i>
+                Cancel
+                <% end %>
+              </div>
+                <div class="col-lg-6 form-group float-left">
+                  <div class="col-lg-6 form-group float-left">
+                    <%=f.object.id.nil? ? (f.submit class: "btn btn-success", style: "float: left")  :  (f.submit class: "btn btn-warning", style: "float: left")%>
+                  </div>
+                </div>
+  </div>
+<% end %>

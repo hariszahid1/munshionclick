@@ -1,0 +1,111 @@
+<% @date = Date.today  %>
+<% @time = DateTime.now %>
+<% @time = Time.zone.now %>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Payment History Of <%=@account%></h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<p style="text-align: center;margin: 0;">Report by: <%=current_user.name%></p>
+<div>
+  <table>
+    <th></th>
+    <th></th>
+    <tr>
+      <td>DateTime: <span><%=Time.zone.now%></span> </td>
+    </tr>
+  </table>
+</div>
+<div>
+  <table>
+    <tr class="lite-gray">
+      <th ><h3>Comment</h3></th>
+      <th ><h3>Debit</h3></th>
+      <th ><h3>Credit</h3></th>
+      <th ><h3>Balance</h3></th>
+      <th ><h3>Date</h3></th>
+
+    </tr>
+
+    <% @payments.each do |payment| %>
+      <tr>
+        <td>
+          <p>
+          <%= payment.comment %>
+          <% if payment.paymentable.present? and payment.paymentable_type=="Order" %>
+            <%=payment.paymentable.comment%>
+            <%if payment.paymentable.order_items_names_and_quantity!=0%>
+              <%payment.paymentable.order_items_names_and_quantity.each do |name_quantity|%>
+                <span><%=name_quantity.first%></span>
+                Qty: <span><%=name_quantity.second%></span>
+                Rate:<span><%=name_quantity.third%></span>
+                Total:<span><%=name_quantity.fourth%></span>
+              <%end%>
+                Total: <span><%=payment.paymentable.total_bill%></span>
+            <%end%>
+          <%elsif payment.paymentable.present? and payment.paymentable_type=="PurchaseSaleDetail"%>
+            <%=payment.paymentable.comment%>
+            <%if payment.paymentable.purchase_sale_items_names_and_quantity!=0%>
+              <% payment.paymentable.purchase_sale_items_names_and_quantity.each do |name_quantity|%>
+                  <span><%=name_quantity.first%></span>
+                  Qty:  <span><%=name_quantity.second%></span>
+              <%end%>
+            <%end%>
+              Total: <span><%=payment.paymentable.total_bill%></span>
+          <%elsif payment.paymentable.present? and payment.paymentable_type=="ExpenseEntry"%>
+            <%=payment.paymentable.comment%>
+            <%=payment.paymentable.expense.comment if payment.paymentable.expense.present?%>
+              <span>
+                <%if payment.paymentable.expense_type.present?%>
+                  <%=payment.paymentable.expense_type.title%>
+                <%end%>
+              </span>
+          <%elsif payment.paymentable.present? and payment.paymentable_type=="Salary"%>
+            <%=payment.paymentable.comment%>
+              <span>
+                <%if payment.paymentable.staff.present?%>
+                  <%=payment.paymentable.staff.full_name%>
+                <%end%>
+              </span>
+          <%elsif payment.paymentable.present? and payment.paymentable_type=="LedgerBook"%>
+            <%=payment.paymentable.comment%>
+              <span>
+                <%if payment.paymentable.sys_user.present?%>
+                  <%=payment.paymentable.sys_user.name%>
+                <%end%>
+              </span>
+          <%end%>
+          </p>
+        </td>
+        <td><%= number_with_delimiter(payment.debit) %></td>
+        <td><%= number_with_delimiter(payment.credit) %></td>
+        <td><%= number_with_delimiter(payment.amount) %></td>
+        <td>
+          <%if payment.created_at.strftime("%d%b%y")!=payment.updated_at.strftime("%d%b%y")%>
+            <%= payment.created_at.present? ? payment.created_at.strftime("%d%b%y at %H:%M%p") : '' %> | <%= payment.updated_at.present? ? payment.updated_at.strftime("%d%b%y at %H:%M%p") : '' %>
+          <%else%>
+            <%= payment.created_at.present? ? payment.created_at.strftime("%d%b%y at %H:%M%p") : '' %>
+          <%end%>
+        </td>
+      </tr>
+    <%end%>
+    <tr class="lite-gray">
+      <td ><h4>Total</h4></td>
+      <td >
+        <h4>
+          <%@debit=@payments.pluck(:debit).compact.sum%>
+          <%=number_with_delimiter(@debit)%>
+        </h4></td>
+      <td >
+        <h4>
+          <%@credit=@payments.pluck(:credit).compact.sum%>
+          <%=number_with_delimiter(@credit)%>
+        </h4></td>
+      <td >
+        <h4>
+          <%=number_with_delimiter(@payments.last.amount) if @payments.last.present?%>
+        </h4></td>
+      <td >
+        <h4>
+          <%=number_with_delimiter(@credit)%> - <%=number_with_delimiter(@debit)%> = <%=number_with_delimiter(@credit-@debit)%></h4></td>
+    </tr>
+  </table>
+</div>

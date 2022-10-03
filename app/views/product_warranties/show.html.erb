@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Purchase sale detail:</strong>
+  <%= @product_warranty.purchase_sale_detail %>
+</p>
+
+<p>
+  <strong>Product:</strong>
+  <%= @product_warranty.product %>
+</p>
+
+<p>
+  <strong>Serial:</strong>
+  <%= @product_warranty.serial %>
+</p>
+
+<%= link_to 'Edit', edit_product_warranty_path(@product_warranty) %> |
+<%= link_to 'Back', product_warranties_path %>

@@ -1,0 +1,29 @@
+<tr>
+  <td><%= compaign.id %></td>
+  <td class='urdu-font'><%= compaign.title %></td>
+  <td><%= compaign.comment %></td>
+  <td>
+    <%if compaign.created_at.strftime("%d%b%y")!=compaign.updated_at.strftime("%d%b%y")%>
+      <%= compaign.created_at.present? ? compaign.created_at.strftime("%d%b%y at %H:%M%p") : '' %> | <%= compaign.updated_at.present? ? compaign.updated_at.strftime("%d%b%y at %H:%M%p") : '' %>
+    <%else%>
+      <%= compaign.created_at.present? ? compaign.created_at.strftime("%A,  %d-%b-%y at %H:%M%p") : '' %>
+    <%end%>
+  </td>
+  <td>
+    <% if can?(:update, Compaign) %>
+      <%= link_to edit_compaign_path(compaign) do %>
+        <i class="fa fa-edit " aria-hidden="true"></i> |
+      <%end %>
+    <% end %>
+    <% if can?(:delete, :all) %>
+      <%= link_to compaign, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+        <i class="fa fa-trash " aria-hidden="true"></i> |
+      <%end %>
+    <% end %>
+    <% if can?(:view, :all) %>
+      <%= link_to compaign do %>
+        <i class="fa fa-eye " aria-hidden="true"></i>
+      <%end %>
+    <%end%>
+  </td>
+</tr>

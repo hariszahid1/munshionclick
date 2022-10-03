@@ -1,0 +1,101 @@
+<div id="chart_div_pathair_day"></div>
+<div id="chart_div_pathair_month"></div>
+<div id="chart_div_pathair_year"></div>
+
+
+
+<script type="text/javascript">
+    google.charts.load('current', {packages: ['corechart', 'bar']});
+    google.charts.setOnLoadCallback(drawBasic_day);
+    google.charts.setOnLoadCallback(drawBasic_month);
+    google.charts.setOnLoadCallback(drawBasic_year);
+    function drawBasic_year() {
+        var data = google.visualization.arrayToDataTable([
+        ['day', 'Total kachi'],
+            <%if @pathair_kachi_year.present?%>
+              <% @pathair_kachi_year.each do |sale| %>
+              ['<%= sale.first%>',<%= sale.last%>],
+              <% end %>
+            <%else%>
+              ['<%= Date.current.day%>',0],
+            <%end%>
+        ]);
+
+        var options = {
+        title: 'Total kachi Report By year',
+        chartArea: {width: '50%'},
+        hAxis: {
+            title: 'Total kachi',
+            minValue: 0
+        },
+        vAxis: {
+            title: 'Year'
+        }
+        };
+
+        var chart = new google.visualization.BarChart(document.getElementById('chart_div_pathair_year'));
+
+        chart.draw(data, options);
+    }
+
+    function drawBasic_month() {
+
+        var data = google.visualization.arrayToDataTable([
+        ['Months', 'Total Kachi'],
+            <%if @pathair_kachi_month.present?%>
+              <% @pathair_kachi_month.each do |sale| %>
+              ['<%= sale.first.last%>',<%= sale.last%>],
+              <% end %>
+            <%else%>
+              ['<%= Date.current.month%>',0],
+            <%end%>
+
+        ]);
+
+        var options = {
+        title: 'Total Kachi Report By Months',
+        chartArea: {width: '50%'},
+        hAxis: {
+            title: 'Total Sale',
+            minValue: 0
+        },
+        vAxis: {
+            title: 'Months'
+        }
+        };
+
+        var chart = new google.visualization.BarChart(document.getElementById('chart_div_pathair_month'));
+
+        chart.draw(data, options);
+    }
+
+    function drawBasic_day() {
+
+        var data = google.visualization.arrayToDataTable([
+        ['Years', 'Total Kachi'],
+            <%if @pathair_kachi_day.present?%>
+              <% @pathair_kachi_day.each do |sale| %>
+                 ['<%= sale.first.last%>',<%= sale.last%>]
+              <% end %>
+            <%else%>
+              ['<%= Date.current.month%>',0],
+            <%end%>
+        ]);
+
+        var options = {
+        title: 'Total Kachi Report By Day',
+        chartArea: {width: '50%'},
+        hAxis: {
+            title: 'Total Sale',
+            minValue: 0
+        },
+        vAxis: {
+            title: 'Date'
+        }
+        };
+
+        var chart = new google.visualization.BarChart(document.getElementById('chart_div_pathair_day'));
+
+        chart.draw(data, options);
+    }
+</script>

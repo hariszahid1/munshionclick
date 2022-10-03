@@ -1,0 +1,78 @@
+<div class="hidden" id="country_list">
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <h1>Countries</h1>
+      <% if can?(:add, :all) %>
+      <div id="new_country">
+        <%= link_to new_country_path, remote: true, class: "btn btn-success" do %>
+           <i class="fa fa-plus" aria-hidden="true"></i>
+           New Country
+        <% end %>
+      </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <%= search_form_for @q, url: countries_path, class: "admin-controls", method: "get" do |f| %>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.search_field :title_cont, value: @title, placeholder: "title", title: "title" ,:class=>"form-control" %>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.search_field :comment_cont, value: @comment, placeholder: "city comment", title: "City comment" ,:class=>"form-control" %>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <%= render 'map_columns/map_column_partials' %>
+
+  <table data-toggle="table" data-search="true" id="country_table">
+    <thead>
+      <tr>
+        <th><%= sort_link(@q, :id, 'ID') %></th>
+        <th><%= sort_link(@q, :title, 'Title') %></th>
+        <th><%= sort_link(@q, :comment, 'Comment') %></th>
+        <th class="border_none">Action</th>
+
+      </tr>
+    </thead>
+
+    <tbody>
+      <%= render partial: 'country', collection: @countries%>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="clearfix"></div>
+<div class="row">
+  <div class="col-lg-4 col-sm-4">
+    <%= page_entries_info @countries %>
+  </div>
+  <div class="col-lg-8 col-sm-8 pagination-left">
+    <%= paginate @countries %>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#country_list").removeClass('hidden');
+    FontAwesome.dom.i2svg();
+  });
+  $(document).ready(function() {
+    setTimeout(function(){
+      $(".chosen-select").chosen({
+  allow_single_deselect: true,
+  width: '100%'
+});
+    }, 50);
+  });
+</script>

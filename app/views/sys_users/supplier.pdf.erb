@@ -1,0 +1,52 @@
+<% @sys_user_balance=0%>
+<% @date = Date.today  %>
+<% @time = DateTime.now %>
+<% @time = Time.zone.now %>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Supplier details</h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<p style="text-align: center;margin: 0;">Report by: <%=current_user.name%></p>
+<div >
+  <table>
+    <thead>
+      <tr class="lite-gray">
+        <th>Code</th>
+        <th>Name</th>
+        <th>User type</th>
+        <th>User group</th>
+        <th>Status</th>
+        <th>Credit status</th>
+        <th>Credit limit</th>
+        <th>balance</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @sys_users.each do |sys_user| %>
+        <% date = (sys_user.ledger_books.present? ? sys_user.ledger_books.last.created_at : sys_user.created_at)%>
+        <tr  style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif" class=<%=((DateTime.now.to_datetime-date.to_datetime).to_i>30 && !sys_user.balance.zero?) ? 'lite-gray' : ''%> >
+           <td><b><%= sys_user.code %></b></td>
+           <td><b><%= sys_user.name %></b></td>
+           <td><%= sys_user.user_type.title %></td>
+           <td><%= sys_user.user_group %></td>
+           <td><%= sys_user.status %></td>
+           <td><%= sys_user.credit_status %></td>
+           <td><%= sys_user.credit_limit %></td>
+           <td><b><%= sys_user.balance.abs %><%@sys_user_balance += sys_user.balance.abs %> </b></td>
+          </tr>
+        <% end %>
+      <tr class="lite-gray">
+        <td><h4>total</h4></td>
+        <td><%= %></td>
+        <td><%= %></td>
+        <td><%= %></td>
+        <td><%= %></td>
+        <td><%= %></td>
+        <td><%=  %></td>
+        <td><h4><%=@sys_user_balance %></h4></td>
+
+      </tr>
+    </tbody>
+
+  </table>
+</div>

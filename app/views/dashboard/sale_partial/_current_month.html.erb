@@ -1,0 +1,43 @@
+<div id="chart_div2"></div>
+<script type="text/javascript">
+    google.charts.load('current', {packages: ['corechart', 'bar']});
+    google.charts.setOnLoadCallback(drawBasic);
+    function drawBasic() {
+
+        var data = google.visualization.arrayToDataTable([
+        ['Months', 'Total sale'],
+            <%if @sale_current_month.present?%>
+              <% @sale_current_month.each do |sale| %>
+              ['<%= sale.first%>',<%= sale.last%>],
+              <% end %>
+            <%else%>
+              ['<%= Date.current.month%>',0],
+            <%end%>
+
+        ]);
+
+        var options = {
+        title: 'Total Sale Report By Months',
+        chartArea: {width: '50%'},
+        hAxis: {
+            title: 'Total Sale',
+            minValue: 0
+        },
+        vAxis: {
+            title: 'Months'
+        }
+        };
+
+        var chart = new google.visualization.BarChart(document.getElementById('chart_div2'));
+
+        chart.draw(data, options);
+    }
+</script>
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#expenses_list").removeClass('hidden');
+  });
+</script>

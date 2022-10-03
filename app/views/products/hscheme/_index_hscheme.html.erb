@@ -1,0 +1,189 @@
+<%total_price=0%>
+<div class="hidden" id="product_list">
+  <h1>Unit/Inventory</h1>
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+  <% if can?(:add, :all) %>
+      <div id="new_product" class="col-lg-12 form-group float-left">
+        <%= link_to new_product_path, class: "btn btn-success" do %>
+          <i class="fa fa-plus" aria-hidden="true"></i>
+          New Unit
+          <% end %>
+      </div>
+    <% end %>
+    </div>
+  </div>
+
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <%= search_form_for @q, url: products_path, class: "admin-controls", method: "get" do |f| %>
+      <div class='row'>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.select :item_type_id_in, options_for_select(@item_types.map {|i| ["#{i.second} \u{27F6} #{i.last}", i.first]}, f.object.item_type_id_in),{:include_blank => "Select the Block"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Block"} }%>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.select :id_in, options_for_select(@product.map {|i| ["#{i.second} \u{27F6} #{i.last}", i.first]}, f.object.id_in),{:include_blank => "Select Title/Code"},{:multiple => true, :class=>"form-control chosen-select", :data => {:placeholder => "Select the Title/Code"}} %>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.select :product_category_id_in, options_for_select(@product_categories.map {|i| ["#{i.second} \u{27F6} #{i.last}", i.first]}, f.object.product_category_id_in),{:include_blank => "Select Unit category"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Unit category"}} %>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.select :product_sub_category_id_in, options_for_select(@product_sub_categories.map {|i| ["#{i.second} \u{27F6} #{i.last}", i.first]}, f.object.product_sub_category_id_in),{:include_blank => "Select Unit sub category"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Unit sub category"}} %>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.select :size_6_in, options_for_select(Product.plot_statuses.map { |key, value| [key.humanize, value] }, @status),{:include_blank => "Select Unit Status"}, { class: "form-control chosen-select", prompt: 'Select Unit Status' }%>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.select :product_type_eq, [['OnCash','0'],['OnInstallment','1']],{:include_blank => "Select Unit Type"}, { class: "form-control chosen-select", prompt: 'Select Unit Type' } %>
+        </div>
+      </div>
+      <div class='row'>
+        <div class='col-lg-2 form-group float-left'>
+          <%= text_field_tag 'paid_in_per', params[:paid_in_per], class: 'form-control', placeholder: 'Paid in % >=' %>
+        </div>
+        <div class='col-lg-2 form-group float-left'>
+          <%= text_field_tag 'commission_in_per', params[:commission_in_per], class: 'form-control', placeholder: 'Commission in % >=' %>
+        </div>
+        <div class='col-lg-2 form-group float-left'>
+          <%= text_field_tag 'phone_number_in', params[:phone_number_in], class: 'form-control', placeholder: 'like Phone Number' %>
+        </div>
+        <div class='col-lg-2 form-group float-left'>
+          <%= search_field_tag 'last_payment', params[:last_payment], class: 'datepicker form-control', placeholder: 'Last Payment to Today' %>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px;"><i class="fa fa-search"></i></button>
+        </div>
+      </div>
+      <div class='row'>
+        <div class="col-lg-8 form-group float-left">
+        </div>
+        <div class="col-lg-1 form-group float-right">
+          <button class="form-control btn btn-secondary" name="submit_pdf_staff_with" type="submit" value="Products PDF A4" formtarget="_blank"><i class="fa fa-file-pdf"></i></button>
+        </div>
+        <div class="col-lg-1 form-group float-right">
+          <button class="form-control btn btn-secondary" name="submit_pdf_staff" type="submit" value="Products PDF A4" formtarget="_blank"><i class="fa fa-file-pdf"></i></button>
+        </div>
+        <div class="col-lg-1 form-group float-right">
+          <button class="form-control btn btn-success" name="csv_staff_with" type="submit" value="Products PDF A4" formtarget="_blank"><i class="fa fa-file-excel"></i></button>
+        </div>
+        <div class="col-lg-1 form-group float-right">
+          <button class="form-control btn btn-success" name="csv_staff" type="submit" value="Products PDF A4" formtarget="_blank"><i class="fa fa-file-excel"></i></button>
+        </div>
+      </div>
+      <% end %>
+    </div>
+  </div>
+
+  <table data-toggle="table" data-search="true" id="product_table">
+    <thead>
+      <th><%= sort_link(@q, :item_type_title, 'Block') %></th>
+      <th><%= sort_link(@q, :code, 'Code') %></th>
+      <th><%= sort_link(@q, :tile, 'Title') %></th>
+      <th><%= sort_link(@q, :product_category_title, 'Ctgy') %></th>
+      <th><%= sort_link(@q, :product_sub_category_title, 'Sub-Ctgy') %></th>
+      <th><%= sort_link(@q, :cost, 'PerMarla') %></th>
+      <th><%= sort_link(@q, :cost, 'PerSFT') %></th>
+      <th><%= sort_link(@q, :sale, 'Total') %></th>
+      <th><%= sort_link(@q, :area, 'Area') %></th>
+      <th><%= sort_link(@q, :area, 'Status') %></th>
+      <th>Action</th>
+
+    </thead>
+
+    <tbody>
+      <%@products.each do |product|%>
+        <tr>
+          <td><%= product.item_type.title rescue 'nil'%></td>
+          <td><%= product.code rescue 'nil'%></td>
+          <td><%= product.title rescue 'nil'%></td>
+          <td><%= product.product_category.title rescue 'nil'%></td>
+          <td><%= product.product_sub_category.title rescue 'nil'%></td>
+          <td><%= product.sale.to_f.round(2) %></td>
+          <td><%= (product.sale.to_f/225).round(2) %></td>
+          <td><%= (product.sale.to_f.round(2)*(product.marla.to_f+(product.square_feet.to_f/225))).to_f.round(2) %></td>
+          <td><%= product.marla.to_i %> Marla <%= product.square_feet.to_i%> Square Feet</td>
+          <td>
+            <% staff_deal_orders = product.orders%>
+            <%if staff_deal_orders.present?%>
+              <%staff_deal_orders.each do |booking|%>
+                <b>Unit Commission to: </b>
+                  <%token = booking.purchase_sale_details&.first%>
+                  <%=token&.staff&.name%>
+                <br>
+                <%if booking&.status!='Cancel'%>
+                  <%= link_to edit_order_path(booking,product:true) do %>
+                    Name: <%=booking.sys_user.name%>
+                    <%=booking.sys_user.ledger_books.pluck('SUM(debit)','SUM(credit)').map { |sys| "<br> <b>Total:</b> "+sys.first.to_s+" <b>Paid:</b> "+sys.second.to_s+" <b>In %</b> "+((sys.second/sys.first)*100).round(2).to_s+" <br><b>Remaning:</b> "+(sys.first.to_i-sys.second.to_i).to_s+" <b>Commission:</b> "+token&.carriage.to_s+"<b> In % </b>"+((token&.carriage.to_f/sys.first)*100).round(2).to_s}.join(',').html_safe%>
+                  <%end%>
+                  <%=booking.sys_user.contact.phone_with_comma%>
+                  <%= ("<br><b>Last Payment Date: </b>"+booking&.sys_user&.ledger_books&.last&.created_at&.strftime("%d%b%y at %I:%M%p")).html_safe if booking.present?%>
+                <%else%>
+                  <span>
+                    <b>Booking-Canceled</b>
+                    <%= link_to edit_order_path(booking,product:true) do %>
+                      Name: <%=booking.sys_user.name%>
+                      <%=booking.sys_user.ledger_books.pluck('SUM(debit)','SUM(credit)').map { |sys| "<br> <b>Total:</b> "+sys.first.to_s+" <b>Paid:</b> "+sys.second.to_s+" <b>In %</b> "+((sys.second/sys.first)*100).round(2).to_s+"<br><b>Remaning:</b> "+(sys.first.to_i-sys.second.to_i).to_s+" <b>Commission:</b> "+token&.carriage.to_s+"<b> In % </b>"+((token&.carriage.to_f/sys.first)*100).round(2).to_s}.join(',').html_safe%>
+                    <%end%>
+                    <%=booking.sys_user.contact.phone_with_comma%>
+                    <%= ("<br><b>Last Payment Date: </b>"+booking&.sys_user&.ledger_books&.last&.created_at&.strftime("%d%b%y at %I:%M%p")).html_safe if booking.present?%>
+                    <b>Booking-Canceled</b>
+                  </span>
+                <%end%>
+                <br><br>
+              <%end%>
+            <%end%>
+          </td>
+          <td>
+            <% if can?(:update, Product) %>
+              <%= link_to edit_product_path(product) do %>
+                <i class="fa fa-edit " aria-hidden="true"></i> |
+              <%end %>
+            <% end %>
+            <% if can?(:delete, :all) %>
+              <%= link_to product, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+                <i class="fa fa-trash " aria-hidden="true"></i> |
+              <%end %>
+            <% end %>
+            <% if can?(:view, :all) %>
+              <%= link_to product do %>
+                <i class="fa fa-eye " aria-hidden="true"></i>
+              <%end %>
+            <%end%>
+          </td>
+        </tr>
+      <%end%>
+      <tr>
+        <td><h5>Total</h5></td>
+        <td><h5><%= @products.count %></h5></td>
+        <td><h5></h5></td>
+        <td><h5></h5></td>
+        <td><h5></h5></td>
+        <td><h5></h5></td>
+        <td><h5></h5></td>
+        <td><h5><%= @product_price.to_f.round(2) %></h5></td>
+        <td><h5>Marla: <%= @total_marla %>Square Feet: <%= @total_square_feet %></h5></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="clearfix"></div>
+<div class="row">
+  <div class="col-lg-4 col-sm-4">
+    <%= page_entries_info @products %>
+  </div>
+  <div class="col-lg-8 col-sm-8 pagination-left">
+    <%= paginate @products %>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#product_list").removeClass('hidden');
+    FontAwesome.dom.i2svg();
+  });
+</script>

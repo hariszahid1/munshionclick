@@ -1,0 +1,6 @@
+<%if  check_system_type(@pos_setting) == "batha"%>
+  <%= render '/daily_books/batha/form_khakar', daily_book: @daily_book %>
+<%else%>
+  <%= render 'form_step_two', daily_book: @daily_book %>
+<%end%>
+<input class="hidden" value=<%=pos_setting_sys_type%> id="pos_setting_sys_type">

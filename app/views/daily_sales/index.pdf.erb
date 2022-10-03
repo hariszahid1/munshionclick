@@ -1,0 +1,40 @@
+<%@total_sale=0%>
+<%@total_cash=0%>
+<% @date = Date.today  %>
+<% @time = DateTime.now %>
+<% @time = Time.zone.now %>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Daily sale/Cash out details</h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<p style="text-align: center;margin: 0;">Report by: <%=current_user.name%></p>
+<div >
+  <table>
+    <thead>
+      <tr class="lite-gray">
+        <th>Sale</th>
+        <th>Cash out</th>
+        <th>Shitf</th>
+        <th>Comment</th>
+
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @daily_sales.each do |daily_sale| %>
+        <tr>
+          <td><%= daily_sale.sale.to_f.round(2) %><% @total_sale+=daily_sale.sale.to_f.round(2)%></td>
+          <td><%= daily_sale.cash_out.to_f.round(2) %><% @total_cash+=daily_sale.cash_out.to_f.round(2)%></td>
+          <td><%= daily_sale.shift %></td>
+          <td><%= daily_sale.created_at.strftime("%d %B %Y") %> || <%= daily_sale.comment %></td>
+        </tr>
+      <% end %>
+      <tr class="lite-gray">
+        <td><h4><%=@total_sale%></h4></td>
+        <td><h4><%=@total_cash%></h4></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tbody>
+
+  </table>
+</div>

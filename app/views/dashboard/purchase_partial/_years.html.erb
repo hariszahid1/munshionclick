@@ -1,0 +1,44 @@
+<%@rev=Hash.new%>
+years
+<div id="chart_div33"></div>
+<script type="text/javascript">
+    google.charts.load('current', {packages: ['corechart', 'bar']});
+    google.charts.setOnLoadCallback(drawBasic);
+    function drawBasic() {
+
+        var data = google.visualization.arrayToDataTable([
+        ['day', 'Total sale'],
+          <%if @purchase_year.present?%>
+            <% @purchase_year.each do |sale| %>
+            ['<%= sale.first%>',<%= sale.last%>],
+            <% end %>
+          <% else %>
+            ['<%= Date.current.day%>',0],
+          <% end %>  
+        ]);
+
+        var options = {
+        title: 'Total Sale Report By Years',
+        chartArea: {width: '50%'},
+        hAxis: {
+            title: 'Total Sale',
+            minValue: 0
+        },
+        vAxis: {
+            title: 'Year'
+        }
+        };
+
+        var chart = new google.visualization.BarChart(document.getElementById('chart_div33'));
+
+        chart.draw(data, options);
+    }
+</script>
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#expenses_list").removeClass('hidden');
+  });
+</script>

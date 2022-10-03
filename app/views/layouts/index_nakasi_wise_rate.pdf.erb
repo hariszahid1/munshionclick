@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>POS</title>
+    <%= wicked_pdf_stylesheet_link_tag "pdf" -%>
+</head>
+<body class="bond_pos_pdf">
+  <% @time = Time.zone.now %>
+  <% @salary_details.each.with_index do |staff,index| %>
+  <div class="">
+
+    <table data-toggle="table" data-search="true">
+      <thead>
+        <tr>
+          <p style="border-bottom: double 4px;  margin: 0;"></p>
+          <h2 style="text-align: center; margin: 0;">Code#  <%= staff.code %> </h2>
+            <p style="border-bottom: double 4px;  margin: 0;"></p>
+        </tr>
+        <tr>
+          <h2 style="text-align: center; margin: 0;"><%= staff.full_name %> </h2>
+
+        </tr>
+
+        <tr>
+          <th class="short-column">Date</th>
+          <th class="short-column">Quantity</th>
+          <th class="short-column">Debit rate</th>
+          <th class="short-column">Debit</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <%nakasi_quantity=0%>
+        <%khakar_remaning=0%>
+        <%nakasi_debit=0%>
+        <%debit_rate=0%>
+        <% staff.salary_details.each do |salary_detail| %>
+          <tr class="">
+            <td><%= salary_detail.created_at.strftime("%d%b%y") %></td>
+            <td><%= salary_detail.quantity.to_f.round(0) %></td>
+            <td><%= salary_detail.wage_rate.to_f.round(3) %></td>
+            <td><%= salary_detail.wage_debit.to_f.round(0) %>
+                <% nakasi_quantity+=salary_detail.quantity.to_f.round(0) %>
+                <% nakasi_debit+=salary_detail.wage_debit.to_f.round(0) %>
+                <% debit_rate+=salary_detail.wage_rate.to_f.round(0) %>
+            </td>
+          </tr>
+        <%end%>
+        <tr class="lite-gray">
+          <td class="td-bold">Total</td>
+          <td class="td-bold"><%=(nakasi_quantity).to_f.round(0) %></td>
+          <td class="td-bold"></td>
+          <td class="td-bold"><%=(nakasi_debit).to_f.round(0) %></td>
+        </tr>
+      </tbody>
+    </table>
+      <p style="border-bottom: dotted 4px;  margin: 0;"></p>
+      <h2 style="text-align: left; margin: 0;">Total Payable <%=(nakasi_debit).to_f.round(0)%> </h2>
+  </div>
+  <% end %>
+
+  <p style="text-align: center;margin: 0;"><span><%=@pos_setting.address if @pos_setting.present?%></span></p>
+  <p style="text-align: center;margin: 0;"><span><%=@pos_setting.phone if @pos_setting.present?%></span></p>
+</body>
+</html>

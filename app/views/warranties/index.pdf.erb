@@ -1,0 +1,29 @@
+<% @date = Date.today  %>
+<% @time = DateTime.now %>
+<% @time = Time.zone.now %>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Products warranties</h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<p style="text-align: center;margin: 0;">Report by: <%=current_user.name%></p>
+<div >
+    <table>
+        <thead>
+        <tr>
+            <th>Product</th>
+            <th>Serial number</th>
+            <th>Comment</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <% @warranties.each do |warranty| %>
+            <tr style="text-align: center;">
+            <td><%= warranty.product.title %></td>
+            <td><%= warranty.serial_number %></td>
+            <td><%= warranty.comment %></td>
+            </tr>
+        <% end %>
+        </tbody>
+    </table>
+ 
+</div>

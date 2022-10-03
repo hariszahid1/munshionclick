@@ -1,0 +1,37 @@
+<tr>
+  <td><%= product.item_type.title rescue 'nil'%></td>
+  <td><%= product.code rescue 'nil'%></td>
+  <td><%= product.title rescue 'nil'%></td>
+  <td><%= product.product_category.title rescue 'nil'%></td>
+  <td><%= product.product_sub_category.title rescue 'nil'%></td>
+  <%if current_user.superAdmin.company_type=="batamega"%>
+    <td><%= product.stock %> || <%= product.size_1 %>,<%= product.size_2 %>,<%= product.size_3 %>,<%= product.size_4 %>,<%= product.size_5 %>,<%= product.size_6 %>,<%= product.size_7 %>,<%= product.size_8 %>,<%= product.size_9 %>,<%= product.size_10 %>,<%= product.size_11 %>,<%= product.size_12 %>,<%= product.size_13 %></td>
+  <%elsif%>
+    <td><%= product.stock %><% product.stock.to_i%></td>
+  <%end%>
+  <td><%= product.cost.to_f.round(20) %></td>
+  <td><%= product.sale.to_f.round(20) %></td>
+  <%if pos_setting_sys_type=="batha"%>
+  <td><%= product.raw_product.present? ? product.raw_product.title : ""%></td>
+  <%end%>
+  <td><%=product.gst%></td>
+  <td><%=product.vat%></td>
+  <td><%=product.hst%></td>
+  <td><%=product.pst%></td>
+  <td><%=product.qst%></td>
+
+
+  <td>
+    <% if can?(:update, :all) %>
+    <%= link_to edit_product_path(product) do %>
+      <i class="fa fa-edit" aria-hidden="true"></i>
+    <% end %>
+    <% end %>
+
+    <% if can?(:delete, :all) %>
+    <%= link_to product, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+      <i class="fa fa-trash" aria-hidden="true"></i>
+    <% end %>
+    <% end %>
+  </td>
+</tr>

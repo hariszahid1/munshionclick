@@ -1,0 +1,97 @@
+<%@rev=Hash.new%>
+<%@total=0%>
+<div class="row">
+  <div class="col-lg-12 col-sm-12">
+    <div id = "expenses_detail">
+      <table data-toggle="table">
+        <thead>
+          <tr>
+            <th>Year</th>
+            <th>Month</th>
+            <th>Salary</th>
+            <%ExpenseType.pluck(:title).each do |ex|%>
+              <th><%=ex%></th>
+            <%end%>
+            <th>Purchase</th>
+            <th>Investment</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+            <%@expense_by_type.each do |ex|%>
+              <tr>
+                <%total=0%>
+                <td><%=ex.first.last%></td>
+                <td><%=ex.first.first%></td>
+                <td><%=ex.last.first%>       <%total=total+(ex.last.first)%></td>
+                <%ExpenseType.pluck(:title).each_with_index do |rev, indx|%>
+                  <td>
+                    <%with    =ex.second.second[rev].present? ? ex.second.second[rev] : 0%>
+                    <%without =ex.second.third[rev].present? ? ex.second.third[rev] : 0%>
+                    <%=with+without%>  <%@rev[rev]=@rev[rev].present? ? @rev[rev]+with+without : with+without%>     <%total=total+(without+with)%>
+                  </td>
+                <%end%>
+                <td><%=ex.last.fourth%><%total=total+ex.last.fourth%></td>
+                <td><%=ex.last.last%><%total=total+ex.last.last%></td>
+                <td><%=total%><%@total=@total+total%></td>
+              </tr>
+            <%end%>
+            <tr>
+              <td><h5>Total</h5></td>
+              <td></td>
+              <td><h5><%=@total_salary%></h5></td>
+              <%ExpenseType.pluck(:title).each_with_index do |rev, indx|%>
+                <td><h5><%=@rev[rev]%></h5></td>
+              <%end%>
+              <td><h5><%=@purchase_sale_detail%></h5></td>
+              <td><h5><%=@investment_month%></h5></td>
+              <td><h5><%=@total%></h5></td>
+            </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<h1></h1>
+<div class="clearfix">
+
+</div>
+
+<script language = "JavaScript">
+  google.charts.load('current', {packages: ['corechart','line']});
+  google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
+      // Define the chart to be drawn.
+      var data = new google.visualization.DataTable();
+      data.addColumn('string', 'Months');
+      data.addColumn('number', 'Expense');
+      <%@expense_by_type_month.each_with_index do |arr,index|%>
+      data.addRow(['Day <%=index+1%>', <%=arr.to_i%>]);
+      <%end%>
+
+      // Set chart options
+      var options = {'title' : 'Expense By Month',
+          hAxis: {
+            title: 'Days'
+          },
+          vAxis: {
+            title: 'Expense'
+          },
+          'width':1000,
+          'height':600,
+          pointsVisible: true
+      };
+
+      // Instantiate and draw the chart.
+      var chart = new google.visualization.BarChart(document.getElementById('chart_div11'));
+      chart.draw(data, options);
+    }
+    $(document).ready(function() {
+      if ($(".bootstrap-table").length == 0){
+        $("table").bootstrapTable();
+      }
+      $("#expenses_list").removeClass('hidden');
+    });
+</script>
+
+<div id="chart_div11"></div>

@@ -1,0 +1,74 @@
+<% @time = Time.zone.now %>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;"><%=@departments&.second&.title%> Production Detail</h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<div>
+  <table>
+    <th></th>
+    <th></th>
+    <tr>
+      <td>Printing Date Time: <span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%> <%=@time.strftime("at %I:%M%p")%></span> </td>
+      <td>Current User: <span><%=@current_user.name%> </span></td>
+    </tr>
+  </table>
+</div>
+<div>
+  <table data-toggle="table" data-search="true">
+    <thead>
+      <tr class="lite-gray">
+        <th>code</th>
+        <th>Staff</th>
+        <th>Raw-P</th>
+        <th>QTY</th>
+        <th>wast</th>
+        <th>After Kat</th>
+        <th>Debit Rate</th>
+        <th>Credit Rate</th>
+        <th>location</th>
+        <th>Debit/Benam</th>
+        <th>Credit/Jama</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <%@salary_details_full.each do |sal|%>
+      <tr>
+        <td><%staff=Staff.find_by_id(sal.first)%><%=staff.code%></td>
+        <td><h4><%=staff.full_name%></h4></td>
+        <td><%=RawProduct.find(sal[1]).title%></td>
+        <td><%=sal[2]%></td>
+        <td><%=sal[3]%></td>
+        <td><%=sal[4]%></td>
+        <td><%=(sal[5].to_f*1000).round(0)%> | <%=sal[7]%></td>
+        <td><%=sal[6].to_f.round(0)%> | <%=sal[8]%></td>
+        <td><%=sal[9]%></td>
+        <td><%=sal[10]%></td>
+        <td><%=sal[11]%></td>
+        <td><%=sal[12]%></td>
+      </tr>
+      <%end%>
+      <% @salary_details.each do |staff| %>
+        <%wage_debit=0%>
+        <%wage_credit=0%>
+
+
+      <% end %>
+      <tr class="lite-gray">
+        <td><h5>Total</h5></td>
+        <td></td>
+        <td></td>
+        <td><h4><%= @salary_detail_total.first[0] %></h4></td>
+        <td><h4><%= @salary_detail_total.first[1] %></h4></td>
+        <td><h4><%= @salary_detail_total.first[2] %></h4></td>
+        <td><h4><%= @salary_detail_total.first[3] %></h4></td>
+        <td><h4><%= @salary_detail_total.first[4] %></h4></td>
+        <td><h4><%= @salary_detail_total.first[5] %></h4></td>
+        <td><h4><%= @salary_detail_total.first[6] %></h4></td>
+        <td><h4><%= @salary_detail_total.first[7] %></h4></td>
+        <td><h4></h4></td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>

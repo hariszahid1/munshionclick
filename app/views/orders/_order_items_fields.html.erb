@@ -1,0 +1,75 @@
+<%if @order.transaction_type=='Sale'%>
+  <%if f.object.purchase_sale_type!="Sale_type"%>
+    <tr class="nested-fields bg-danger">
+      <td class="hidden"><%= f.text_field :order_id %> </td>
+      <td class="hidden">
+        <%= f.text_field :id %>
+        <%= f.hidden_field :transaction_type, value: "Sale"%>
+        <%= f.hidden_field :purchase_sale_type, value: "Sale_type"%>
+      </td>
+      <td><%= f.select :product_id, options_from_collection_for_select(@products, 'id', 'title',f.object.product_id), {hide_label: true,prompt: "Select the Product"}, onchange: 'set_atom_sale(this.value,this.id); return false;', class: "chosen-select",required: true%></td>
+      <td><%= f.number_field :quantity,step: :any,class:'quantity-price-return', hide_label: true,placeholder: :quantity,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()"%>    </td>
+      <td><%= f.number_field :sale_price,step: :any,class:'cost-price-return',hide_label: true, placeholder: :sale_price,readonly: true,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()"%></td>
+      <td><%= f.number_field :total_sale_price,step: :any,class:'total-cost-price-return', hide_label: true,placeholder: :cost_price,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()"%></td>
+      <td><%= f.number_field :discount_price,step: :any,class:'discount-price-return', hide_label: true,placeholder: :discount,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()"%></td>
+      <td class="return_links"><%= link_to_remove_association "Remove", f , class: "btn btn-info",onclick:"costUpdateReturnOrder(); return false;",onkeyup:"costUpdateReturnOrder(); return false;"%></td>
+    </tr>
+  <%else%>
+    <tr class="nested-fields">
+      <td class="hidden"><%= f.text_field :order_id %> </td>
+      <td class="hidden">
+        <%= f.text_field :id %>
+        <%= f.hidden_field :transaction_type, value: "Sale"%>
+        <%= f.hidden_field :purchase_sale_type, value: "Sale_type"%>
+      </td>
+      <td><%= f.select :product_id, options_from_collection_for_select(@products, 'id', 'title',f.object.product_id), {hide_label: true,prompt: "Select the Product"}, onchange: 'set_atom_sale(this.value,this.id); return false;', class: "chosen-select",required: true%></td>
+      <td><%= f.number_field :quantity,step: :any,class:'quantity-price', hide_label: true,placeholder: :quantity,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()"%>    </td>
+      <td><%= f.number_field :sale_price,step: :any,class:'cost-price',hide_label: true, placeholder: :sale_price,readonly: true,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()"%></td>
+      <td><%= f.number_field :total_sale_price,step: :any,class:'total-cost-price', hide_label: true,placeholder: :cost_price,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()"%></td>
+      <td><%= f.number_field :discount_price,step: :any,class:'discount-price', hide_label: true,placeholder: :discount,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()"%></td>
+      <td class="links"><%= link_to_remove_association "Remove", f , class: "btn btn-info",onclick:"costUpdateReturnOrder(); return false;",onkeyup:"costUpdateReturnOrder(); return false;"%></td>
+    </tr>
+  <%end%>
+<%else%>
+  <tr class="nested-fields">
+    <td class="hidden"><%= f.text_field :order_id %> </td>
+    <td class="hidden"><%= f.text_field :id %></td>
+    <%if f.object.item_id.present?%>
+      <td><%= f.select :item_id, options_from_collection_for_select(@items, 'id', 'title', f.object.item_id), {hide_label: true,prompt: "Select the Items"},onchange: 'set_raw_cost(this.value,this.id); return false;', class: "chosen-select",required: true %></td>
+    <%else%>
+      <td><%= f.select :product_id, options_from_collection_for_select(@products, 'id', 'title', f.object.product_id), {hide_label: true,prompt: "Select the product"}, class: "chosen-select",required: true %></td>
+    <%end%>
+    <td><%= f.number_field :quantity,step: :any,class:'quantity-price', hide_label: true,placeholder: :quantity,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()"%>    </td>
+    <td><%= f.number_field :cost_price,step: :any,class:'cost-price', hide_label: true,placeholder: :cost_price,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()"%></td>
+    <td><%= f.number_field :total_cost_price,step: :any,class:'total-cost-price', hide_label: true,placeholder: :cost_price,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()"%></td>
+    <td><%= f.number_field :sale_price,step: :any, hide_label: true,placeholder: :sale_price,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()"%></td>
+    <td><%= f.number_field :discount_price,step: :any,class:'discount-price', hide_label: true,placeholder: :discount,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()"%></td>
+    <td><%= f.number_field :extra_expence,step: :any,class:'', hide_label: true,placeholder: "Extra/Dute"%></td>
+    <td><%= f.text_area :comment, hide_label: true,placeholder: :comment,title: :comment%></td>
+    <td><%= link_to_remove_association "Remove", f , class: "btn btn-info",onclick:"costUpdateReturnOrder(); return false;",onkeyup:"costUpdateReturnOrder(); return false;"%></td>
+  </tr>
+<%end%>
+<script>
+  $(document).ready(function() {
+    setTimeout(function(){
+      $(".chosen-select").chosen({
+  allow_single_deselect: true,
+  width: '100%'
+});
+    }, 50);
+  });
+  document.addEventListener("turbolinks:load", function() {
+    costUpdateReturnOrder();
+
+    $('.return_links').on("cocoon:after-remove", function() {
+      costUpdateReturnOrder();
+    });
+    $('#new_links').on("cocoon:after-remove", function() {
+      costUpdateReturnOrder();
+    });
+    $('#data_list').on("cocoon:after-remove", function() {
+      costUpdateReturnOrder();
+    });
+  });
+
+</script>

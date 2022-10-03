@@ -1,0 +1,35 @@
+<%= bootstrap_form_for(salary, remote: true) do |f| %>
+<div  id="create_<%=staff.id%>" class="col-lg-12 div-create" >
+  <div class="col-lg-3 form-group" style="float:left">
+    <% if salary.persisted? %>
+      <%= text_field_tag "salary_paid_to", salary.paid_to, class: "form-control", readonly: true %>
+      <%= text_field_tag "salary_paid_to_name", salary.staff.name, class: "form-control", readonly: true %>
+    <% else %>
+      <%= f.select :staff_id, options_from_collection_for_select(@staffs_list, 'id', ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code} "},staff.id), {prompt: "Select the Staff",hide_label:true}, { class:"form-control", required: true }%>
+    <% end %>
+  </div>
+  <div class="col-lg-2 form-group" style="float:left">
+    <% if staff.wage_debit<0 %>
+      <%= text_field_tag :advance_amount, staff.wage_debit, class: "form-control", disabled: true %>
+    <% else %>
+      <%= text_field_tag :advance_amount_taken, 0, class: "form-control", disabled: true %>
+    <% end %>
+  </div>
+  <div class="col-lg-1 form-group" style="float:left">
+    <%=staff.balance%>
+  </div>
+  <div class="col-lg-2 form-group" style="float:left">
+    <%= f.number_field :advance,value:staff.wage_debit, required: true,class:"advance_all",hide_label:true,onchange:"advance_all_total()",onkeyup:"advance_all_total()"%>
+    <%= f.hidden_field :payment_type %>
+  </div>
+  <div class="col-lg-3 form-group" style="float:left">
+    <%= f.select :account_id , options_from_collection_for_select(@accounts, 'id', 'title', (f.object.account_id.present? ? f.object.account_id : @account)), { prompt: "Select the Account",hide_label:true}, html_options = {required:true, class:"account form-control"}%>
+    <div class="hidden">
+      <%= f.datetime_select :created_at%>
+    </div>
+  </div>
+  <div class="col-lg-1 form-group" style="float:left">
+    <%= f.submit "Save", name:staff.id, class: "btn btn-primary create", style: "float: right" %>
+  </div>
+</div>
+<% end %>

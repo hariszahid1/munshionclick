@@ -1,0 +1,69 @@
+<%@rev=Hash.new%>
+<%@daily_book_salary_details_raw_quantity = 0 %>
+<%@daily_book_salary_details_quantity = 0 %>
+<%@daily_book_salary_details_wast = 0 %>
+<%@daily_book_salary_details_raw_quantity_rate = 0 %>
+<%@daily_book_salary_details_quantity_rate = 0 %>
+<%@daily_book_salary_details_coverge_rate=0%>
+<%@daily_book_salary_details_gift_rate=0%>
+<%@salary_details_khakar_f99_raw_quantity=0%>
+<%@salary_details_khakar_tile_raw_quantity=0%>
+<%@daily_book_salary_details_pather_khakar_wast=0%>
+<div class="row">
+  <div class="col-lg-12 col-sm-12">
+    <div id = "expenses_detail">
+      <table data-toggle="table" data-search="true">
+        <thead>
+          <tr>
+            <th><%= sort_link(@q, :book_date, 'Date') %></th>
+            <th><%= sort_link(@q, :created_at, 'Pick up') %></th>
+            <th><%= sort_link(@q, :department, 'Bricks') %></th>
+            <th><%= sort_link(@q, :department, 'Tiles') %></th>
+            <th><%= sort_link(@q, :department, 'Quantity') %></th>
+            <th><%= sort_link(@q, :department, 'B/S/C') %></th>
+            <th><%= sort_link(@q, :department, 'Debit Price') %></th>
+            <th><%= sort_link(@q, :department, 'Credit Price') %></th>
+            <th><%= sort_link(@q, :department, 'Wast') %></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @daily_books.each do |daily_book| %>
+            <tr>
+              <td><%= daily_book.book_date.strftime("%A,  %d-%b-%y") if daily_book.book_date%></td>
+              <td><%= daily_book.created_at.strftime("%A,  %d-%b-%y") if daily_book.created_at%></td>
+              <td><%= daily_book.salary_details_khakar_f99_raw_quantity.round(0)%> <%@salary_details_khakar_f99_raw_quantity +=daily_book.salary_details_khakar_f99_raw_quantity.round(0)%></td>
+              <td><%= daily_book.salary_details_khakar_tile_raw_quantity.round(0)%> <%@salary_details_khakar_tile_raw_quantity +=daily_book.salary_details_khakar_tile_raw_quantity.round(0)%></td>
+              <td><%= daily_book.salary_details_khakar_quantity %> <%@daily_book_salary_details_raw_quantity += daily_book.salary_details_khakar_quantity %></td>
+              <td><%= daily_book.salary_details_khakar_remaning %> <%@daily_book_salary_details_wast += daily_book.salary_details_khakar_remaning %></td>
+              <td><%= daily_book.salary_details_khakar_debit.to_f.round(2) %> <%@daily_book_salary_details_raw_quantity_rate += daily_book.salary_details_khakar_debit %></td>
+              <td><%= daily_book.salary_details_khakar_credit.to_f.round(2) %> <%@daily_book_salary_details_quantity_rate += daily_book.salary_details_khakar_credit %></td>
+              <td><%= daily_book.salary_details_khakar_wast.to_f.round(2) %> <%@daily_book_salary_details_quantity_rate += daily_book.salary_details_khakar_wast %></td>
+
+            </tr>
+          <% end %>
+          <tr>
+            <td><h5>Total</h5></td>
+            <td></td>
+            <td><h5><%=@salary_details_khakar_f99_raw_quantity%></h5></td>
+            <td><h5><%=@salary_details_khakar_tile_raw_quantity%></h5></td>
+            <td><h5><%=@daily_book_salary_details_raw_quantity%></h5></td>
+            <td><h5><%=@daily_book_salary_details_wast %></h5></td>
+            <td><h5><%=@daily_book_salary_details_raw_quantity_rate.to_f.round(2)%></h5></td>
+            <td><h5><%=@daily_book_salary_details_quantity_rate.to_f.round(2)%></h5></td>
+            <td><h5><%=@daily_book_salary_details_pather_khakar_wast%></h5></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#expenses_list").removeClass('hidden');
+  });
+</script>

@@ -1,0 +1,70 @@
+<div class="hidden" id="product_sub_category_list">
+  <h1>Product Sub Categories</h1>
+    <div class="row">
+      <div class="col-lg-12 col-sm-12">
+        <% if can?(:add, :all) %>
+        <div id="new_product_sub_category" class="col-lg-12 form-group float-left">
+            <%= link_to new_product_sub_category_path,remote: true ,class: "btn btn-success" do %>
+            <i class="fas fa-plus" aria-hidden="true"></i>
+            New Sub Category
+            <% end %>
+        </div>
+        <% end %>
+      </div>
+  </div>
+
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <%= search_form_for @q, url: product_sub_categories_path, class: "admin-controls", method: "get" do |f| %>
+        <div class="col-lg-3 form-group float-left">
+          <%= f.select :title_or_code_cont, options_from_collection_for_select(@product_sub_categories, "title", ->(st){"#{st.title} \u{27F6} #{st.code} "}),{:include_blank => "Select Title/Code"},:class=>"form-control chosen-select" %>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px;"><i class="fa fa-search"></i></button>
+        </div>
+        <div class="col-lg-1 form-group float-right">
+          <button class="form-control btn btn-secondary" name="submit_pdf_staff_with" type="submit" value="Prdct sub Catg PDF A4" formtarget="_blank"><i class="fa fa-file-pdf"></i></button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <%= render 'map_columns/map_column_partials' %>
+
+  <table data-toggle="table" data-search="true" id="product_sub_category_table">
+    <thead>
+      <tr>
+        <th><%= sort_link(@q, :product_category, 'Category') %></th>
+        <th><%= sort_link(@q, :tile, 'Title') %></th>
+        <th><%= sort_link(@q, :code, 'Code') %></th>
+        <th><%= sort_link(@q, :comment, 'Comment') %></th>
+        <th>Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <%= render partial: 'product_sub_category', collection: @product_sub_categories %>
+    </tbody>
+  </table>
+</div>
+
+<div class="clearfix"></div>
+<div class="row">
+  <div class="col-lg-4 col-sm-4">
+    <%= page_entries_info @product_sub_categories %>
+  </div>
+  <div class="col-lg-8 col-sm-8 pagination-left">
+    <%= paginate @product_sub_categories %>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#product_sub_category_list").removeClass('hidden');
+    FontAwesome.dom.i2svg();
+  });
+</script>

@@ -1,0 +1,42 @@
+
+<%= bootstrap_form_for(property_plan, remote: true) do |f| %>
+  <% if property_plan.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(property_plan.errors.count, "error") %> prohibited this property_plan from being saved:</h2>
+
+      <ul>
+      <% property_plan.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+<div class="col-lg-12 row">
+  <div class="installments_div installments_div_cash col-lg-6 col-md-3 col-sm-6 form-group float-left ">
+    <%= f.date_select :due_date,class:"form-control" %>
+  </div>
+  <div class="installments_div installments_div_cash col-lg-6 col-md-3 col-sm-6 form-group float-left">
+    <%= f.select :due_status, options_for_select(PropertyPlan.due_statuses.map { |key, value| [key.humanize, key] }, f.object.due_status), { class: "form-control", prompt: 'Select Paid Status' },class:"form-control"%>
+  </div>
+  <div class="col-lg-6 col-md-3 col-sm-6 form-group float-left">
+    <%= f.select :payment_method, options_for_select(PropertyPlan.payment_methods.map { |key, value| [key, key] }, f.object.payment_method), { class: "form-control", prompt: 'Select Payment method' },class:"form-control"%>
+  </div>
+  <div class="col-lg-6 col-md-3 col-sm-6 form-group float-left">
+    <%= f.text_field :bank_detail %>
+  </div>
+</div>
+
+  <div class="col-lg-12 row ">
+    <div class="col-lg-6 form-group float-left text-black">
+      <%= link_to order_path(sale:true) do %>
+      <i class="fa fa-arrow-left " aria-hidden="true"></i>
+      Cancel
+      <% end %>
+    </div>
+    <div class="col-lg-6 form-group float-left">
+      <div class="col-lg-6 form-group float-left">
+        <%=f.object.id.nil? ? (f.submit class: "btn btn-success", style: "float: left")  :  (f.submit class: "btn btn-warning", style: "float: left")%>
+      </div>
+    </div>
+  </div>
+<% end %>

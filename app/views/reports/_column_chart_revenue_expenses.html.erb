@@ -1,0 +1,29 @@
+<script type="text/javascript">
+  google.charts.load('current', {'packages':['bar']});
+  google.charts.setOnLoadCallback(drawChart);
+
+  function drawChart() {
+    var data = google.visualization.arrayToDataTable([
+      ['Last 12 Months', 'Revenue', 'Expense' ,'Investment'],
+      <% @revenue.each_with_index do |rev, indx| %>
+        ['<%=rev[0]%>', <%=rev[1][1]%>, <%=@expense[rev[0]]%>, <%=@investment[rev[0]]%>],
+      <% end %>
+    ]);
+
+    var options = {
+      chart: {
+        title: 'POS Performance',
+        subtitle: 'Expenses of last 12 months',
+      },
+      'width':800,
+      'height':500,
+      pointsVisible: true
+    };
+
+    var chart = new google.charts.Bar(document.getElementById('column_chart_revenue_expenses'));
+
+    chart.draw(data, google.charts.Bar.convertOptions(options));
+  }
+</script>
+
+<div id="column_chart_revenue_expenses"></div>

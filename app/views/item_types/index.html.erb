@@ -1,0 +1,70 @@
+<div class="hidden" id="item_types_list">
+  <h1>Item Types</h1>
+  <% if can?(:add, :all) %>
+<div id="new_item_type">
+  <%= link_to new_item_type_path, remote: true,class: "btn btn-success" do %>
+    <i class="fa fa-plus" aria-hidden="true"></i>
+    New Item Type
+  <% end %>
+</div>
+<% end %>
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <%= search_form_for @q, url: item_types_path, class: "admin-controls", method: "get" do |f| %>
+        <div class="col-lg-3 form-group float-left">
+           <%= f.select :title_or_code_cont, options_from_collection_for_select(@item_types, "title", ->(st){"#{st.title} \u{27F6} #{st.code} "}),{:include_blank => "Select Title"},:class=>"form-control chosen-select" %>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <%= render 'map_columns/map_column_partials' %>
+
+  <table data-toggle="table" data-search="true" id="item_type_table">
+    <thead>
+      <tr>
+        <th><%= sort_link(@q, :id, 'ID') %></th>
+        <th><%= sort_link(@q, :expense_type, 'Title') %></th>
+        <th><%= sort_link(@q, :expense, 'Code') %></th>
+        <th><%= sort_link(@q, :comment, 'Comment') %></th>
+        <th class="border_none">Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+    <%= render partial: 'item_type', collection: @item_types %>
+    </tbody>
+  </table>
+</div>
+
+<div class="clearfix"></div>
+<div class="row">
+  <div class="col-lg-4 col-sm-4">
+    <%= page_entries_info @item_types %>
+  </div>
+  <div class="col-lg-8 col-sm-8 pagination-left">
+    <%= paginate @item_types %>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#item_types_list").removeClass('hidden');
+    FontAwesome.dom.i2svg();
+  });
+  $(document).ready(function() {
+    setTimeout(function(){
+      $(".chosen-select").chosen({
+  allow_single_deselect: true,
+  width: '100%'
+});
+    }, 50);
+  });
+</script>

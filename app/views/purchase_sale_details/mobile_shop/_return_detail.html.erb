@@ -1,0 +1,65 @@
+<% if @return_purchase_sale_detail.present?%>
+  <div class="col-xl-12 col-md-12 mb-12">
+    <div class="card border-left-primary shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="row">
+              <div class="col-lg-6 form-group float-left font-weight-bold ">
+                <h2>
+                  <%= (params[:transaction_type].present? or  @return_purchase_sale_detail.transaction_type=='Sale') ? "Sale Detail For Return # "+@return_purchase_sale_detail.id.to_s : "Purchase Detail For Return # "+@return_purchase_sale_detail.id.to_s%>
+                  <%if purchase_sale_detail.purchase_sale_items.present?%>
+                    <%if purchase_sale_detail.purchase_sale_items.first.product.present? %>
+                      <% if can?(:update, :all) %>
+                        <%if purchase_sale_detail.with_gst=="true"%>
+                          <%= link_to edit_purchase_sale_detail_path(purchase_sale_detail,product: true,with_gst:true) do %>
+                            <i class="fa fa-edit" aria-hidden="true"></i> |
+                          <% end %>
+                        <%else%>
+                          <%= link_to edit_purchase_sale_detail_path(purchase_sale_detail,product: true) do %>
+                            <i class="fa fa-edit" aria-hidden="true"></i> |
+                          <% end %>
+                        <% end %>
+                      <% end %>
+                    <%else%>
+                      <% if can?(:update, :all) %>
+                        <%= link_to edit_purchase_sale_detail_path(purchase_sale_detail) do %>
+                          <i class="fa fa-edit" aria-hidden="true"></i> |
+                        <% end %>
+                      <% end %>
+                    <%end%>
+                  <%end%>
+                </h2>
+              </div>
+              <div class="col-lg-2 form-group float-left font-weight-bold ">
+                Total Bill<h2> <%=@return_purchase_sale_detail.total_bill.to_i%></h2>
+              </div>
+              <div class="col-lg-2 form-group float-left font-weight-bold ">Paid <h2> <%=@return_purchase_sale_detail.amount.to_i%></h2></div>
+              <div class="col-lg-2 form-group float-left font-weight-bold ">Customer Balance <h2> <%=@return_purchase_sale_detail.sys_user.balance.to_i%></h2></div>
+              </div>
+              <div class="row">
+                <%if @return_purchase_sale_detail.purchase_sale_items_names_and_quantity!=0%>
+                    <%@return_purchase_sale_detail.purchase_sale_items_names_and_quantity.each do |name_quantity|%>
+                    <div class="col-lg-4 form-group float-left font-weight-bold ">
+                    </div>
+                    <div class="col-lg-2 form-group float-left font-weight-bold ">
+                      <%=name_quantity.first%>
+                    </div>
+                    <div class="col-lg-2 form-group float-left font-weight-bold ">
+                      <%=name_quantity.second%>
+                    </div>
+                    <div class="col-lg-2 form-group float-left font-weight-bold ">
+                      <%=name_quantity.third%>
+                    </div>
+                    <div class="col-lg-2 form-group float-left font-weight-bold ">
+                      <%=name_quantity.fourth%>
+                    </div>
+                    <%end%>
+                <%end%>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<%end%>

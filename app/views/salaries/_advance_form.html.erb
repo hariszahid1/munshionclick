@@ -1,0 +1,82 @@
+<%= bootstrap_form_for(salary) do |f| %>
+  <% if salary.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(salary.errors.count, "error") %> prohibited this advance from being saved:</h2>
+      <ul>
+      <% salary.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+    <% if salary.persisted? %>
+      <div class="col-lg-12 form-group has-warning">
+        <label for="student_section_id">Paid to</label>
+        <%= text_field_tag "salary_paid_to", salary.paid_to, class: "form-control", readonly: true %>
+      </div>
+
+      <div class="col-lg-12 form-group has-warning">
+        <label for="student_section_id">Name</label>
+        <%= text_field_tag "salary_paid_to_name", salary.staff.name, class: "form-control", readonly: true %>
+      </div>
+    <% else %>
+      <div class="col-lg-12 staff_options_list">
+        <%= f.select :staff_id, options_from_collection_for_select(@staffs_list, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code} "}),{prompt: "Select the Staff"}, { onchange: "set_staff_advance_info(this.value,'balance'); return false;",class: "chosen-select",required: true }%>
+      </div>
+    <% end %>
+
+    <% if f.object.persisted? %>
+      <div class="col-lg-12 field form-group">
+        <label for="student_fee_student_id">Already Advance due</label>
+        <% advance_amount = f.object.staff.advance_amount
+          already_advance_amount = advance_amount.to_i - f.object.advance.to_i
+        %>
+        <%= text_field_tag :advance_amount, already_advance_amount, class: "form-control", disabled: true %>
+      </div>
+    <% else %>
+      <div class="col-lg-12 field form-group hidden" id="advance_amount_taken_div">
+        <label for="">Already Advance due</label>
+        <%= text_field_tag :advance_amount_taken, '', class: "form-control", disabled: true %>
+      </div>
+    <% end %>
+    <div class="col-lg-12 field form-group">
+      <%= f.number_field :advance, label: "New Advance amount", required: true%>
+    </div>
+    <div class="col-lg-12 field form-group">
+    <%= f.hidden_field :balance, label: "New Balance", required: true%>
+    <%= f.hidden_field :total_balance, label: "New Total Balance", required: true%>
+    <%= f.hidden_field :payment_type %>
+    </div>
+    <div class="col-lg-12 row ">
+  <div class="col-lg-6 form-group float-left">
+      <%= f.datetime_select :created_at,{},class:"form-control" %>
+    </div>
+    <div class="col-lg-6 form-group float-left">
+      <%= f.select :account_id , options_from_collection_for_select(@accounts, 'id', 'title', (f.object.account_id.present? ? f.object.account_id : @account)), {prompt: "Select the Account"}, class:"form-control",required: true%>
+    </div>
+  </div>
+    <div class="col-lg-12">
+      <%= f.text_area :comment%>
+    </div>
+
+    <div class="clearfix">
+      <hr>
+      <div class="col-lg-12 row ">
+        <div class="col-lg-6 form-group float-left">
+          <%= link_to salaries_path do %>
+          <i class="fa fa-arrow-left " aria-hidden="true"></i>
+          <% end %>
+        </div>
+        <div class="col-lg-6 form-group float-left">
+          <div class="col-lg-6 form-group float-left">
+            <%=f.object.id.nil? ? (f.submit class: "btn btn-success", style: "float: left",value: "Save")  :  (f.submit class: "btn btn-warning", style: "float: left",value: "Save")%>
+          </div>
+          <div class="actions col-lg-6 form-group float-left font-weight-bold">
+            <%= f.submit class: "btn btn-success  col-lg-12", style: "float: right",value: "Save with Print",target: "_blank" %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <% end %>
+<%= javascript_include_tag 'hover', 'data-turbolinks-track': 'reload' %>

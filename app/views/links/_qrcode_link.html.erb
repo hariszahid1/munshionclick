@@ -1,0 +1,11 @@
+<%if pos_setting_is_qr.present?%>
+  <div class="col-lg-12 form-group float-left">
+    <%= f.fields_for :links do |link| %>
+      <%= render '/links/link_new', f: link %>
+    <% end %>
+  </div>
+  <div class="clearfix"></div>
+  <div class="col-lg-12 form-group float-left links">
+    <%= link_to_add_association '+Link', f, :links, partial: '/links/link_new', class: "btn btn-info new" %>
+  </div>
+<%end%>

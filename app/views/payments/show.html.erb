@@ -1,0 +1,70 @@
+<%@t_dabit=0%>
+<%@t_credit=0%>
+<%@t_balance=0%>
+    <div class="card shadow mb-4">
+        <!-- Card Header - Accordion -->
+        <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+          <h6 class="m-0 font-weight-bold text-primary"><h1>@payment Detail</h1></h6>
+        </a>
+        <!-- Card Content - Collapse -->
+        <div class="collapse show" id="collapseCardExample" style="">
+          <div class="card-body">
+
+    <div class="row">
+            <div class="col-lg-12 col-sm-12">
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Id:<h5> <%= @payment.id %></h5></h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Account:<h5><%= @payment.account.title if @payment.account.present?%></h5></h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Debit:<h5><%= @payment.debit.to_f.round(2) %><%@t_dabit += @payment.debit.to_f.round(2)%></h5> </h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Credit:<h5><%= @payment.credit.to_f.round(2) %><%@t_credit +=@payment.credit.to_f.round(2)%></h5></h3>
+              </div>
+            </div>
+    </div>
+
+    <div class="row">
+            <div class="col-lg-12 col-sm-12">
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Balance: <h5><%= @payment.amount.to_f.round(2) %><%@t_balance +=@payment.amount.to_f.round(2)%></h5></h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Paymentable: <h5>  <%= link_to 'Sale',edit_purchase_sale_detail_path(@payment.paymentable) if @payment.paymentable.present? and @payment.paymentable_type=="PurchaseSaleDetail" and @payment.paymentable.transaction_type=="Sale"%>
+                  <%= link_to 'Purchase',edit_purchase_sale_detail_path(@payment.paymentable) if @payment.paymentable.present? and @payment.paymentable_type=="PurchaseSaleDetail" and @payment.paymentable.transaction_type=="Purchase"%>
+                  <%= link_to 'Sale Order',edit_order_path(@payment.paymentable) if @payment.paymentable.present? and @payment.paymentable_type=="Order" and @payment.paymentable.transaction_type=="Sale"%>
+                  <%= link_to 'Purchase Order',edit_order_path(@payment.paymentable) if @payment.paymentable.present? and @payment.paymentable_type=="Order" and @payment.paymentable.transaction_type=="Purchase"%>
+                  <%= link_to 'Expense',edit_expense_path(@payment.paymentable.expense.id) if @payment.paymentable.present? and @payment.paymentable_type=="ExpenseEntry"%>
+                  <%= link_to 'Salary',edit_salary_path(@payment.paymentable) if @payment.paymentable.present? and @payment.paymentable_type=="Salary" and @payment.paymentable.paid_salary.present?%>
+                  <%= link_to 'Wage Salary',edit_advance_salary_path(@payment.paymentable) if @payment.paymentable.present? and @payment.paymentable_type=="Salary" and @payment.paymentable.advance.present?%>
+                  <%= link_to 'Investment',edit_investment_path(@payment.paymentable) if @payment.paymentable.present? and @payment.paymentable_type=="Investment"%>
+                  <%= link_to 'Ledger Book',edit_ledger_book_path(@payment.paymentable) if @payment.paymentable.present? and @payment.paymentable_type=="LedgerBook"%></h5></h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Comment: <h5><%= @payment.comment %></h5></h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Date: <h5><%if @payment.created_at.strftime("%d%b%y")!=@payment.updated_at.strftime("%d%b%y")%>
+                  <%= @payment.created_at.present? ? @payment.created_at.strftime("%d%b%y at %H:%M%p") : '' %> | <%= @payment.updated_at.present? ? @payment.updated_at.strftime("%d%b%y at %H:%M%p") : '' %>
+                <%else%>
+                  <%= @payment.created_at.present? ? @payment.created_at.strftime("%d%b%y at %H:%M%p") : '' %>
+                <%end%></h5></h3>
+              </div>
+            </div>
+    </div>
+    <br>
+
+            <div class="row">
+              <div class="col-lg-1 float-left">
+                <%= link_to payments_path do %>
+                <i class="fa fa-arrow-left " aria-hidden="true"></i>
+                <% end %>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>

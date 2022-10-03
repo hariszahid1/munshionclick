@@ -1,0 +1,271 @@
+
+
+<div class="card shadow mb-4">
+  <!-- Card Header - Accordion -->
+  <a href="#collapseCardSale" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+    <h6 class="m-0 font-weight-bold text-primary"><h1 style= "text-align : center">Sale Report</h1></h6>
+  </a>
+  <!-- Card Content - Collapse -->
+  <div class="collapse show" id="collapseCardSale" style="">
+  <div class="col-xl-12 col-md-12 mb-4">
+    <div class="row no-gutters align-items-center">
+      <div class="col mr-2">
+        <div class="clearfix"></div>
+        <div class="row">
+          <div class="col-lg-12 col-sm-12">
+            <%= search_form_for @q, url: reports_day_out_report_path, class: "admin-controls", method: "get" do |f| %>
+              <div class="col-lg-2 form-group float-left">
+                <%= f.search_field :book_date_gteq, class: 'form-control input-sm datepicker',value: @book_date_gteq, 'datepicker' => true,placeholder: "YYYY-MM-DD" %>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <%= f.search_field :book_date_lteq, class: 'form-control input-sm datepicker',value: @book_date_lteq, 'datepicker' => true ,placeholder: "YYYY-MM-DD"%>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+              </div>
+              <div class="col-lg-2 form-group float-left">
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <button class="form-control btn btn-secondary" name="submit_pdf" type="submit" value="Daily Production Details PDF A4" formtarget="_blank" ><i class="fa fa-file-pdf"></i> Daily</button>
+              </div>
+            <% end %>
+          </div>
+        </div>
+        <div class="collapse show" id="collapseCardSale" style="">
+          <div class="tab-content" id="pills-tabContent">
+            <%= render partial: "sale_report", locals: {} %>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card shadow mb-4">
+  <!-- Card Header - Accordion -->
+  <a href="#collapseCardPurchase" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+    <h6 class="m-0 font-weight-bold text-primary"><h1 style= "text-align : center">Purchase Report</h1></h6>
+  </a>
+  <!-- Card Content - Collapse -->
+  <div class="collapse show" id="collapseCardPurchase" style="">
+  <div class="col-xl-12 col-md-12 mb-4">
+    <div class="row no-gutters align-items-center">
+      <div class="col mr-2">
+        <div class="clearfix"></div>
+        <div class="row">
+          <div class="col-lg-12 col-sm-12">
+            <%= search_form_for @q, url: reports_day_out_report_path, class: "admin-controls", method: "get" do |f| %>
+              <div class="col-lg-2 form-group float-left">
+                <%= f.search_field :book_date_gteq, class: 'form-control input-sm datepicker',value: @book_date_gteq, 'datepicker' => true,placeholder: "YYYY-MM-DD" %>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <%= f.search_field :book_date_lteq, class: 'form-control input-sm datepicker',value: @book_date_lteq, 'datepicker' => true ,placeholder: "YYYY-MM-DD"%>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+              </div>
+              <div class="col-lg-2 form-group float-left">
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <button class="form-control btn btn-secondary" name="submit_pdf" type="submit" value="Daily Production Details PDF A4" formtarget="_blank" ><i class="fa fa-file-pdf"></i> Daily</button>
+              </div>
+            <% end %>
+          </div>
+        </div>
+        <div class="collapse show" id="collapseCardPurchase" style="">
+          <div class="tab-content" id="pills-tabContent">
+            <%= render partial: "purchase_report", locals: {} %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card shadow mb-4">
+  <!-- Card Header - Accordion -->
+  <a href="#collapseCardExpense" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExpense">
+    <h6 class="m-0 font-weight-bold text-primary"><h1 style= "text-align : center">Expense Report</h1></h6>
+  </a>
+  <!-- Card Content - Collapse -->
+  <div class="collapse show" id="collapseCardExpense" style="">
+  <div class="col-xl-12 col-md-12 mb-4">
+    <div class="row no-gutters align-items-center">
+      <div class="col mr-2">
+        <div class="clearfix"></div>
+        <div class="row">
+          <div class="col-lg-12 col-sm-12">
+            <%= search_form_for @q, url: reports_day_out_report_path, class: "admin-controls", method: "get" do |f| %>
+              <div class="col-lg-2 form-group float-left">
+                <%= f.search_field :book_date_gteq, class: 'form-control input-sm datepicker',value: @book_date_gteq, 'datepicker' => true,placeholder: "YYYY-MM-DD" %>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <%= f.search_field :book_date_lteq, class: 'form-control input-sm datepicker',value: @book_date_lteq, 'datepicker' => true ,placeholder: "YYYY-MM-DD"%>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+              </div>
+              <div class="col-lg-2 form-group float-left">
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <button class="form-control btn btn-secondary" name="submit_pdf" type="submit" value="Daily Production Details PDF A4" formtarget="_blank" ><i class="fa fa-file-pdf"></i> Daily</button>
+              </div>
+            <% end %>
+          </div>
+        </div>
+        <div class="collapse show" id="collapseCardExpense" style="">
+          <div class="tab-content" id="pills-tabContent">
+            <%= render partial: "expense_report", locals: {} %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%if pos_setting_sys_type=="batha"%>
+<div class="card shadow mb-4">
+  <!-- Card Header - Accordion -->
+  <a href="#collapseCardProduction" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardProduction">
+    <h6 class="m-0 font-weight-bold text-primary"><h1 style= "text-align : center">Production Report</h1></h6>
+  </a>
+  <!-- Card Content - Collapse -->
+  <div class="collapse show" id="collapseCardProduction" style="">
+  <div class="col-xl-12 col-md-12 mb-4">
+    <div class="row no-gutters align-items-center">
+      <div class="col mr-2">
+        <div class="clearfix"></div>
+        <div class="row">
+          <div class="col-lg-12 col-sm-12">
+            <%= search_form_for @q, url: reports_day_out_report_path, class: "admin-controls", method: "get" do |f| %>
+              <div class="col-lg-2 form-group float-left">
+                <%= f.search_field :book_date_gteq, class: 'form-control input-sm datepicker',value: @book_date_gteq, 'datepicker' => true,placeholder: "YYYY-MM-DD" %>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <%= f.search_field :book_date_lteq, class: 'form-control input-sm datepicker',value: @book_date_lteq, 'datepicker' => true ,placeholder: "YYYY-MM-DD"%>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+              </div>
+              <div class="col-lg-2 form-group float-left">
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <button class="form-control btn btn-secondary" name="submit_pdf" type="submit" value="Daily Production Details PDF A4" formtarget="_blank" ><i class="fa fa-file-pdf"></i> Daily</button>
+              </div>
+            <% end %>
+          </div>
+        </div>
+        <div class="collapse show" id="collapseCardProduction" style="">
+          <div class="tab-content" id="pills-tabContent">
+              <%= render partial: "dashboard/pathair", locals: {} %>
+              <%= render partial: "dashboard/khakar", locals: {} %>
+              <%= render partial: "dashboard/bharai", locals: {} %>
+              <%= render partial: "dashboard/jalai", locals: {} %>
+              <%= render partial: "dashboard/nakasi", locals: {} %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<%end%>
+
+<div class="card shadow mb-4">
+  <!-- Card Header - Accordion -->
+  <a href="#collapseCardUserLedger" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardUserLedger">
+    <h6 class="m-0 font-weight-bold text-primary"><h1 style= "text-align : center">User Ledger Report</h1></h6>
+  </a>
+  <!-- Card Content - Collapse -->
+  <div class="collapse show" id="collapseCardUserLedger" style="">
+  <div class="col-xl-12 col-md-12 mb-4">
+    <div class="row no-gutters align-items-center">
+      <div class="col mr-2">
+        <div class="clearfix"></div>
+        <div class="row">
+          <div class="col-lg-12 col-sm-12">
+            <%= search_form_for @q, url: reports_day_out_report_path, class: "admin-controls", method: "get" do |f| %>
+              <div class="col-lg-2 form-group float-left">
+                <%= f.search_field :book_date_gteq, class: 'form-control input-sm datepicker',value: @book_date_gteq, 'datepicker' => true,placeholder: "YYYY-MM-DD" %>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <%= f.search_field :book_date_lteq, class: 'form-control input-sm datepicker',value: @book_date_lteq, 'datepicker' => true ,placeholder: "YYYY-MM-DD"%>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+              </div>
+              <div class="col-lg-2 form-group float-left">
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <button class="form-control btn btn-secondary" name="submit_pdf" type="submit" value="Daily Production Details PDF A4" formtarget="_blank" ><i class="fa fa-file-pdf"></i> Daily</button>
+              </div>
+            <% end %>
+          </div>
+        </div>
+        <div class="collapse show" id="collapseCardUserLedger" style="">
+          <div class="tab-content" id="pills-tabContent">
+            <%= render partial: "user_ledger_report", locals: {} %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card shadow mb-4">
+  <!-- Card Header - Accordion -->
+  <a href="#collapseCardStaffLedger" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardStaffLedger">
+    <h6 class="m-0 font-weight-bold text-primary"><h1 style= "text-align : center">Staff Ledger Report</h1></h6>
+  </a>
+  <!-- Card Content - Collapse -->
+  <div class="collapse show" id="collapseCardStaffLedger" style="">
+  <div class="col-xl-12 col-md-12 mb-4">
+    <div class="row no-gutters align-items-center">
+      <div class="col mr-2">
+        <div class="clearfix"></div>
+        <div class="row">
+          <div class="col-lg-12 col-sm-12">
+            <%= search_form_for @q, url: reports_day_out_report_path, class: "admin-controls", method: "get" do |f| %>
+              <div class="col-lg-2 form-group float-left">
+                <%= f.search_field :book_date_gteq, class: 'form-control input-sm datepicker',value: @book_date_gteq, 'datepicker' => true,placeholder: "YYYY-MM-DD" %>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <%= f.search_field :book_date_lteq, class: 'form-control input-sm datepicker',value: @book_date_lteq, 'datepicker' => true ,placeholder: "YYYY-MM-DD"%>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+              </div>
+              <div class="col-lg-2 form-group float-left">
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <button class="form-control btn btn-secondary" name="submit_pdf" type="submit" value="Daily Production Details PDF A4" formtarget="_blank" ><i class="fa fa-file-pdf"></i> Daily</button>
+              </div>
+            <% end %>
+          </div>
+        </div>
+        <div class="collapse show" id="collapseCardStaffLedger" style="">
+          <div class="tab-content" id="pills-tabContent">
+            <%= render partial: "staff_ledger_report", locals: {} %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

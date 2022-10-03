@@ -1,0 +1,42 @@
+<tr>
+  <td class="broder-with">
+    <%= f.hidden_field :id %>
+    <%= f.hidden_field :staff_id %>
+    <b><%= f.object.staff.coded_full_name %></b>
+  </td>
+  <td class="broder-with">
+    <%= f.hidden_field :raw_product_id %>
+    <h5><b><%= f.object.raw_product.title %></b></h5>
+  </td>
+  <td class="broder-with">
+
+  </td>
+  <td class="broder-with">
+    <%= f.hidden_field :quantity, hide_label:true, class: "quantity",onchange:"daily_book_update()",onkeyup:"daily_book_update()" %>
+    <%= f.hidden_field :pather_remaning_quanity, class: "remaning_quanity" %>
+
+  </td>
+  <td class="broder-with">
+    <%= f.hidden_field :extra, hide_label:true, class: "wast",onchange:"daily_book_update()",onkeyup:"daily_book_update()" %>
+
+  </td >
+  <td class="broder-with">
+
+
+  </td>
+  <td class="broder-with">
+
+  </td>
+  <td class="broder-with">
+
+
+  </td>
+  <td class="broder-with">
+
+
+  </td>
+  <td class="broder-with">
+
+
+  </td>
+</tr>

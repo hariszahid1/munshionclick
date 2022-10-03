@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <title><%=check_display_name(@pos_setting)%></title>
+    <%= rescued_csrf_meta_tags %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <link href="https://unpkg.com/bootstrap-table@1.17.1/dist/bootstrap-table.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/bootstrap-table@1.17.1/dist/extensions/sticky-header/bootstrap-table-sticky-header.css" rel="stylesheet">
+
+    <script src="https://unpkg.com/bootstrap-table@1.17.1/dist/bootstrap-table.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.17.1/dist/extensions/sticky-header/bootstrap-table-sticky-header.min.js"></script>
+    <!-- Google Tag Manager -->
+    <script>
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-5VRQK6M');
+    </script>
+    <!-- End Google Tag Manager -->
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-85CLFL48XW"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-85CLFL48XW');
+    </script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-235999526-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-235999526-1');
+    </script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4442427798823552"
+   crossorigin="anonymous"></script>
+  </head>
+
+  <body>
+    <div class="d-flex wrapper" id="wrapper">
+      <%if check_system_type(@pos_setting)=="batamega"%>
+        <%= render 'layouts/shared/sidebar_bata' %>
+      <%elsif check_system_type(@pos_setting)=="batha"%>
+        <%= render 'layouts/shared/sidebar_batha' %>
+      <%elsif check_system_type(@pos_setting)=="FastFood"%>
+        <%= render 'layouts/shared/sidebar_fastfood' %>
+      <%elsif check_system_type(@pos_setting)=="industry"%>
+        <%= render 'layouts/shared/sidebar_industry' %>
+      <%elsif check_system_type(@pos_setting)=="HousingScheme"%>
+        <%= render 'layouts/shared/sidebar_housing_scheme' %>
+      <%elsif check_system_type(@pos_setting)=="Draw"%>
+        <%= render 'layouts/shared/sidebar_draw' %>
+      <%elsif check_system_type(@pos_setting)=="CustomClear"%>
+        <%= render 'layouts/shared/sidebar_custom_clear' %>
+      <%elsif check_system_type(@pos_setting)=="Factory"%>
+        <%= render 'layouts/shared/sidebar_factory' %>
+      <%else%>
+        <%= render 'layouts/shared/sidebar' %>
+      <%end%>
+      <!-- Page Content -->
+      <div id="content">
+        <%= render 'layouts/shared/navigation_bar' %>
+        <div class="container-fluid">
+
+          <div style="margin-top: 2rem"></div>
+          <div id='js-msg'></div>
+          <%= render 'layouts/shared/alerts' %>
+
+          <%=  yield %>
+
+          <%= render 'layouts/shared/footer' %>
+        </div>
+      </div>
+      <!-- /#page-content-wrapper -->
+      <%= render 'layouts/shared/alert_model' %>
+    </div>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DDED5XCG6M"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-DDED5XCG6M');
+    </script>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5VRQK6M"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+  </body>
+</html>

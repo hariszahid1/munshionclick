@@ -1,0 +1,9 @@
+<%if pos_setting_sys_type=="HousingScheme"%>
+  <%= render 'purchase_sale_details/house_scheme/index'%>
+<%elsif pos_setting_sys_type=="CustomClear"%>
+  <%= render 'index_custom_clear'%>
+<%elsif pos_setting_sys_type=="FastFood"%>
+  <%= render 'purchase_sale_details/fast_food/index'%>
+<%else%>
+  <%= render 'index'%>
+<%end%>

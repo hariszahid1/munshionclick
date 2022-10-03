@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>POS</title>
+    <%= wicked_pdf_stylesheet_link_tag "pdf" -%>
+</head>
+<body class="bond_pos_pdf">
+  <% @time = Time.zone.now %>
+  <% @salary_details.each.with_index do |staff,index| %>
+  <div class="col-table-3 nobreak">
+
+    <table data-toggle="table" data-search="true">
+      <thead>
+        <tr>
+          <th colspan="8"></th>
+        </tr>
+        <tr>
+          <th colspan="8"> <span class="td-bold"><%= staff.code %> <%= staff.full_name %></span></th>
+        </tr>
+
+        <tr>
+          <th class="short-column">Date</th>
+          <th class="short-column">Item</th>
+          <th class="short-column">Kachi</th>
+          <th class="short-column">Paaki</th>
+          <th class="short-column">K Price</th>
+          <th class="short-column">P Price</th>
+          <th class="short-column">Gift</th>
+          <th class="short-column">Coverge</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <%raw_quantity=0%>
+        <%quantity=0%>
+        <%wage_debit=0%>
+        <%wage_credit=0%>
+        <%gift_pay=0%>
+        <%coverge_pay=0%>
+        <% staff.salary_details.each do |salary_detail| %>
+          <tr class="">
+            <td><%= salary_detail.created_at.strftime("%d-%b-%y") %></td>
+            <td><%= salary_detail.raw_product_title %></td>
+            <td><%= salary_detail.raw_quantity.to_f.round(0) %></td>
+            <td><%= salary_detail.quantity.to_f.round(0) %></td>
+            <td><%= salary_detail.wage_debit.to_f.round(0) %></td>
+            <td><%= salary_detail.amount.to_f.round(0) %></td>
+            <td><%= gift_pay_sum=salary_detail.gift_pay.to_f.round(0) %></td>
+            <td>
+              <% raw_quantity+=salary_detail.raw_quantity.to_f.round(0) %>
+              <% quantity+=salary_detail.quantity.to_f.round(0) %>
+              <% wage_debit+=salary_detail.wage_debit.to_f.round(0) %>
+              <% wage_credit+=salary_detail.amount.to_f.round(0) %>
+              <% gift_pay+=gift_pay_sum %>
+              <%=coverge_pay_sum=salary_detail.coverge_pay.to_f.round(0) %>
+              <% coverge_pay+=coverge_pay_sum %>
+            </td>
+
+          </tr>
+        <%end%>
+        <tr class="lite-gray">
+          <td class="td-bold">Total</td>
+          <td></td>
+          <td class="td-bold"><%=(raw_quantity).to_f.round(0) %></td>
+          <td class="td-bold"><%=(quantity).to_f.round(0) %></td>
+          <td class="td-bold"><%=(wage_debit).to_f.round(-1) %></td>
+          <td class="td-bold"><%=(wage_credit).to_f.round(-1)%></td>
+          <td class="td-bold"><%=(gift_pay).to_f.round(-1) %></td>
+          <td class="td-bold"><%=(coverge_pay).to_f.round(-1) %></td>
+        </tr>
+        <tr class="lite-gray">
+          <td class="td-bold">Total Payable</td>
+          <td class="td-bold"><%=(wage_debit+gift_pay+coverge_pay).to_f.round(-1)%></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td class="td-bold">Credit</td>
+          <td class="td-bold"><%=(wage_credit).to_f.round(0)%></td>
+        </tr>
+
+
+      </tbody>
+    </table>
+  </div>
+  <% end %>
+
+  <p style="text-align: center;margin: 0;"><span><%=@pos_setting.address if @pos_setting.present?%></span></p>
+  <p style="text-align: center;margin: 0;"><span><%=@pos_setting.phone if @pos_setting.present?%></span></p>
+</body>
+</html>

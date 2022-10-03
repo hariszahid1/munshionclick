@@ -1,0 +1,88 @@
+
+<div class="hidden" id="investment_list">
+  <h1>Investment</h1>
+  <div id="new_investment">
+    <% if can?(:add, :all) %>
+    <%= link_to new_investment_path,remote: true, class: "btn btn-success" do %>
+             <i class="fa fa-plus" aria-hidden="true"></i>
+             New Investment
+    <% end %>
+    <% end %>
+  </div>
+
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <%= search_form_for @q, url: investments_path, class: "admin-controls", method: "get" do |f| %>
+      <div class="col-lg-3 form-group float-left">
+        <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker',placeholder: "YYYY-MM-DD" %>
+      </div>
+      <div class="col-lg-3 form-group float-left">
+        <%= f.search_field :created_at_lteq,class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
+      </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+        </div>
+        <div class="col-lg-2 form-group float-left">
+        </div>
+        <div class="col-lg-2 form-group float-left">
+        </div>
+        <div class="col-lg-1 form-group float-right">
+          <button class="form-control btn btn-secondary" name="submit_pdf_staff_with" type="submit" value="Investment PDF A4" formtarget="_blank"><i class="fa fa-file-pdf"></i></button>
+        </div>
+      <% end %>
+
+    </div>
+  </div>
+
+  <table data-toggle="table" data-search="true" id="investment_table">
+    <thead>
+      <tr>
+        <th><%= sort_link(@q, :id, 'ID') %></th>
+        <th><%= sort_link(@q, :invest, 'Investment') %></th>
+        <th><%= sort_link(@q, :account_id, 'Paid By') %></th>
+        <th class="urdu-font">Comment</th>
+        <th><%= sort_link(@q, :created_at, 'Date') %></th>
+        <th class="border_none">Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <%= render partial: 'investment', collection: @investments %>
+      <tr>
+        <td><h5>Total</h5></td>
+        <td><h5><%=@total_investment.first%></h5></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="clearfix"></div>
+<div class="row">
+  <div class="col-lg-4 col-sm-4">
+    <%= page_entries_info @investments %>
+  </div>
+  <div class="col-lg-8 col-sm-8 pagination-left">
+    <%= paginate @investments %>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#investment_list").removeClass('hidden');
+    FontAwesome.dom.i2svg();
+  });
+  $(document).ready(function() {
+    setTimeout(function(){
+      $(".chosen-select").chosen({
+  allow_single_deselect: true,
+  width: '100%'
+});
+    }, 50);
+  });
+</script>

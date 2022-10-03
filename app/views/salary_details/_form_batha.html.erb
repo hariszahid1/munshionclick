@@ -1,0 +1,54 @@
+<%= bootstrap_form_for(salary_detail) do |f| %>
+  <% if salary_detail.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(salary_detail.errors.count, "error") %> prohibited this salary_detail from being saved:</h2>
+
+      <ul>
+      <% salary_detail.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="row font-weight-bold">
+    <div class="col-lg-6 form-group float-left">
+      <%= f.select :staff_id, options_from_collection_for_select(@staffs_list, 'id', 'name',f.object.staff_id), {prompt: "Select the Staff",required: true, hide_label:true}, {class: "chosen-select", onchange: 'get_staff_wage_rate_info(this.value); return false;', required: true } %>
+    </div>
+    <div class="col-lg-2 form-group float-left">
+      <%= f.number_field :amount, step: :any,placeholder: :amount,onchange:"salary_detail_credit()",onkeyup:"salary_detail_credit()", hide_label:true,required: true%>
+    </div>
+    <div class="col-lg-4 form-group float-left">
+      <%= f.datetime_select :created_at, hide_label:true %>
+      <%= f.hidden_field :comment,value: "Return From Staff" %>
+      <%= f.hidden_field :quantity,value: 1 %>
+    </div>
+  </div>
+  <%= f.fields_for :payments do |payments| %>
+    <%= render 'payments_fields_new', f: payments %>
+  <% end %>
+  <div class="actions">
+    <%= link_to 'Salaries Details', salary_details_path, class: "btn btn-info" %>
+    <%= f.submit class: "btn btn-primary", style: "float: right" %>
+  </div>
+
+<% end %>
+
+
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#purchase_sale_detail_list").removeClass('hidden');
+    FontAwesome.dom.i2svg();
+  });
+  $(document).ready(function() {
+    setTimeout(function(){
+      $(".chosen-select").chosen({
+  allow_single_deselect: true,
+  width: '100%'
+});
+    }, 50);
+  });
+</script>

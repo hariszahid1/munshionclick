@@ -1,0 +1,96 @@
+<%@rev=Hash.new%>
+
+<div class="row">
+  <div class="col-lg-12 col-sm-12">
+    <div id = "expenses_detail">
+
+      <table data-toggle="table" data-search="true">
+        <thead>
+          <tr>
+            <th><%= sort_link(@q, :code, 'code') %></th>
+            <th><%= sort_link(@q, :name, 'Staff') %></th>
+            <th><%= sort_link(@q, :name, 'Raw-P') %></th>
+            <th><%= sort_link(@q, :salary_details_khakar_quantity, 'QTY') %></th>
+            <th><%= sort_link(@q, :salary_details_khakar_wast, 'wast') %></th>
+            <th><%= sort_link(@q, :salary_details_extra, 'After Kat') %></th>
+            <th><%= sort_link(@q, :salary_details_raw_wage_rate, 'Debit Rate') %></th>
+            <th><%= sort_link(@q, :salary_details_wage_rate, 'Credit Rate') %></th>
+            <th><%= sort_link(@q, :salary_details_location, 'location') %></th>
+            <th><%= sort_link(@q, :salary_details_khakar_debit, 'Debit/Benam') %></th>
+            <th><%= sort_link(@q, :salary_details_khakar_credit, 'Credit/Jama') %></th>
+            <th><%= sort_link(@q, :salary_details_khakar_credit, 'Balance') %></th>
+            <th><%= sort_link(@q, :salary_details_created_at, 'Date') %></th>
+            <th class="border_none"></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @salary_details.each do |staff| %>
+            <%wage_debit=0%>
+            <%wage_credit=0%>
+            <% staff.salary_details.each do |salary_detail| %>
+              <tr>
+                <td><%= salary_detail.staff.code %></td>
+                <td><%= salary_detail.staff_full_name %></td>
+                <td><%= salary_detail.raw_product_title %></td>
+                <td><%= salary_detail.khakar_quanity.to_f.round(0) %></td>
+                <td><%= salary_detail.khakar_wast.to_f.round(0) %></td>
+                <td><%= salary_detail.khakar_remaning.to_f.round(0) %></td>
+                <td><<%= salary_detail.raw_wage_rate.to_f.round(2) %>> <%= salary_detail.khakar_debit.to_f.round(2) %> </td>
+                <td><<%= salary_detail.wage_rate.to_f.round(2) %>> <%= salary_detail.khakar_credit.to_f.round(2) %></td>
+                <td><%= salary_detail.transaction_location %></td>
+                <td>
+                  <% wage_debit+=salary_detail.khakar_debit.to_f %>
+                  <%=wage_debit.round(2)%>
+                </td>
+                <td>
+                  <% wage_credit+=salary_detail.khakar_credit.to_f%>
+                  <%=wage_credit.round(2)%>
+                </td>
+                <td><%= salary_detail.total_balance.to_f.round(2)%></td>
+                <td><%= salary_detail.created_at.strftime("%A,  %d-%b-%y") if salary_detail.created_at%></td>
+                <td>
+                  <% if can?(:update, :all) %>
+                  <%= link_to edit_salary_detail_path(salary_detail) do %>
+                             <i class="fa fa-edit" aria-hidden="true"></i> |
+                  <% end %>
+                  <% end %>
+                  <% if can?(:delete, :all) %>
+                   <%= link_to salary_detail, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+                              <i class="fa fa-trash" aria-hidden="true"></i>
+                  <% end %>
+                  <% end %>
+                </td>
+              </tr>
+            <%end%>
+          <% end %>
+          <tr>
+            <td><h5>Total</h5></td>
+            <td></td>
+            <td></td>
+            <td><h5><%= @khakar_quanity %></h5></td>
+            <td><h5><%= @Wast %></h5></td>
+            <td><h5><%= @after_kat %></h5></td>
+            <td><h5><%= @khakar_debit %></h5></td>
+            <td><h5><%= @khakar_credit %></h5></td>
+            <td><h5></h5></td>
+            <td><h5><%= @debit_total %></h5></td>
+            <td><h5><%= @credit_total %></h5></td>
+            <td><h5></h5></td>
+            <td><h5></h5></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#expenses_list").removeClass('hidden');
+  });
+</script>

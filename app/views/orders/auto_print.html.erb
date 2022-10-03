@@ -1,0 +1,49 @@
+<div id="order_list">
+  <%= search_form_for @q, url: print_bulk_orders_path, class: "admin-controls", method: "get" do |f| %>
+    <button class="form-control btn btn-secondary" id="submit_pdf_staff_without_bulk" name="submit_pdf_staff_without_bulk" type="submit" value="Total Sale PDF A8"><i class="fa fa-print"></i>bulk invoices</button>
+  <%end%>
+  <%@user_types.each do |user_type|%>
+  <h1><%=user_type.title%></h1>
+    <div class="row">
+      <div class="col-lg-12 col-sm-12">
+        <%@user_list[user_type.id].each do |user|%>
+          <% if @user_active[user.id]==0%>
+            <div class="col-lg-2 form-group float-left btn btn-success" style="margin-right: 10px;">
+              <%= link_to new_order_path('order[sys_user_id]': user,product: true,transaction_type: "sale",discount_price: user.credit_limit,service_charges:user_type.discount_by_amount), class: "btn btn-success" do %>
+                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                <%=user.name%>
+              <% end %>
+            </div>
+          <% elsif @user_active[user.id] == 2%>
+            <div class="col-lg-2 form-group float-left btn btn-danger" style="margin-right: 10px;">
+              <%= link_to edit_order_path(id: user.orders&.last&.id,product: true), class: "btn btn-success" do %>
+                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                <%=user.name%>
+              <% end %>
+              <%= link_to new_purchase_sale_detail_path(transaction_type: :sale,product: true,sys_user_id: user, order_id: user.orders&.last&.id), class: "btn btn-danger" do %>
+                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                Pay
+              <% end %>
+            </div>
+          <%else%>
+            <div class="col-lg-2 form-group float-left btn btn-warning" style="margin-right: 10px;">
+              <%= link_to edit_order_path(id: user.orders&.last&.id,product: true), class: "btn btn-success" do %>
+                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                <%=user.name%>
+              <% end %>
+              <%= link_to new_purchase_sale_detail_path(transaction_type: :sale,product: true,sys_user_id: user, order_id: user.orders&.last&.id), class: "btn btn-danger" do %>
+                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                Pay
+              <% end %>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+    <%end%>
+  </div>
+  <script type="text/javascript">
+    setInterval(function(){
+      $('#submit_pdf_staff_without_bulk').click();
+    }, 30000);
+  </script>

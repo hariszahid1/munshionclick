@@ -1,0 +1,99 @@
+<div class="hidden" id="staff_deal_list">
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <h1>Dealer Deals</h1>
+      <% if can?(:add, :all) %>
+      <div id="new_staff_deal">
+        <%= link_to new_staff_deal_path ,class: "btn btn-success" do %>
+           <i class="fa fa-plus" aria-hidden="true"></i>
+           New Deal
+           <% end %>
+      </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <%= search_form_for @q, url: staff_deals_path, class: "admin-controls", method: "get" do |f| %>
+        <div class="col-lg-3 form-group float-left">
+          <%= f.select :staff_id_in, options_from_collection_for_select(@staffs, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code}"},f.object.staff_id_in),{:include_blank => "Select Staff"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Staff"} }%>
+        </div>
+        <div class="col-lg-3 form-group float-left">
+          <%= f.select :product_item_type_id_in, options_from_collection_for_select(@item_types, "id", ->(st){"#{st.title} \u{27F6} #{st.code}"},f.object.product_item_type_id_in),{:include_blank => "Select the Block"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Block"} }%>
+        </div>
+        <div class="col-lg-3 form-group float-left">
+          <%= f.select :product_id_in, options_from_collection_for_select(@products, "id", ->(st){"#{st.title} \u{27F6} #{st.code}"},f.object.product_id_in),{:include_blank => "Select Unit"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Unit"} } %>
+        </div>
+        <div class="col-lg-3 form-group float-left">
+          <%= f.search_field :comment_cont, placeholder: "Staff Deal comment", title: "staff_deal comment" ,:class=>"form-control" %>
+        </div>
+        <div class="col-lg-3 form-group float-left">
+          <%= f.select :product_product_category_id_in, options_from_collection_for_select(@product_categories, "id", ->(st){"#{st.title} \u{27F6} #{st.code}"},f.object.product_product_category_id_in),{:include_blank => "Select Unit category"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Unit category"}} %>
+        </div>
+        <div class="col-lg-3 form-group float-left">
+          <%= f.select :product_product_sub_category_id_in, options_from_collection_for_select(@product_sub_categories, "id", ->(st){"#{st.title} \u{27F6} #{st.code}"},f.object.product_product_sub_category_id_in),{:include_blank => "Select Unit Sub category"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Unit Sub category"}} %>
+        </div>
+        <div class="col-lg-3 form-group float-left">
+          <%= f.select :product_size_6_in, options_for_select(Product.plot_statuses.map { |key, value| [key.humanize, value] }, @status),{:include_blank => "Select Unit Status"}, { class: "form-control chosen-select", prompt: 'Select Unit Status' }%>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+        </div>
+        <div class="col-lg-1 form-group float-right">
+          <button class="form-control btn btn-secondary" name="submit_pdf" type="submit" value="Products PDF A4" formtarget="_blank"><i class="fa fa-file-pdf"></i></button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <table data-toggle="table" data-search="true" id="staff_deal_table">
+    <thead>
+      <tr>
+        <th><%= sort_link(@q, :staff, 'Staff/Dealer') %></th>
+        <th><%= sort_link(@q, :product, 'Plot') %></th>
+        <th><%= sort_link(@q, :cost, 'Category') %></th>
+        <th><%= sort_link(@q, :cost, 'Sub Category') %></th>
+        <th><%= sort_link(@q, :cost, 'Per Marla') %></th>
+        <th><%= sort_link(@q, :comment, 'Total') %></th>
+        <th><%= sort_link(@q, :comment, 'Area') %></th>
+        <th><%= sort_link(@q, :comment, 'Booking') %></th>
+        <th><%= sort_link(@q, :comment, 'Advance') %></th>
+        <th><%= sort_link(@q, :comment, 'Short Inst') %></th>
+        <th><%= sort_link(@q, :comment, 'Comment') %></th>
+        <th class="border_none">Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <%= render partial: 'staff_deal', collection: @staff_deals %>
+    </tbody>
+  </table>
+</div>
+
+<div class="clearfix"></div>
+<div class="row">
+  <div class="col-lg-4 col-sm-4">
+    <%= page_entries_info @staff_deals %>
+  </div>
+  <div class="col-lg-8 col-sm-8 pagination-left">
+    <%= paginate @staff_deals %>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#staff_deal_list").removeClass('hidden');
+    FontAwesome.dom.i2svg();
+  });
+  $(document).ready(function() {
+    setTimeout(function(){
+      $(".chosen-select").chosen({
+  allow_single_deselect: true,
+  width: '100%'
+});
+    }, 50);
+  });
+</script>

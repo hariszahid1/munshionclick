@@ -1,0 +1,162 @@
+<%= bootstrap_form_for(product) do |f| %>
+  <% if product.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(product.errors.count, "error") %> prohibited this product from being saved:</h2>
+
+      <ul>
+      <% product.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="row">
+  <div class="col-lg-6" style="float:left">
+    <div id="new_product_category">
+      <%= link_to new_product_category_path,remote: true, class: "btn btn-success" do %>
+            <i class="fa fa-plus" aria-hidden="true"></i>
+            New Product Category
+      <% end %>
+    </div>
+  </div>
+  <div class="col-lg-6" style="float:left">
+    <div id="new_product_sub_category">
+      <%= link_to new_product_sub_category_path,remote: true ,class: "btn btn-success" do %>
+            <i class="fa fa-plus" aria-hidden="true"></i>
+            New Sub Category
+      <% end %>
+    </div>
+  </div>
+  </div>
+<div class="clearfix"></div>
+<hr>
+
+  <div class="col-lg-4 form-group float-left">
+    <%= f.select :item_type_id, options_from_collection_for_select(@item_types, 'id', 'title', f.object.item_type_id),{include_blank: "Please Select Line Item"},{class: "form-control", required: true} %>
+  </div>
+
+  <div class="col-lg-2 form-group float-left">
+    <%= f.text_field :code, {placeholder: "Enter the code", required: true , value: (f.object.code.nil? ? ("AGC-"+"%.4i" % (Product.maximum(:id).present? ? Product.maximum(:id).next : 1)) : (f.object.code ))} %>
+  </div>
+
+  <div class="col-lg-6 form-group float-left">
+    <%= f.label :title do %>
+          <%= Product.human_attribute_name :title %>
+          <i class="fas fa-language"></i>
+        <% end %>
+    <%= f.text_field :title, required: true, hide_label: true ,class: 'urdu-font', placeholder:"Enter Title" %>
+  </div>
+
+  <div class="col-lg-6 form-group float-left">
+    <%= f.text_field :stock , placeholder:"Enter stock"%>
+  </div>
+
+
+  <div class="col-lg-6 form-group float-left">
+    <%= f.select :acquire_type, Product.acquire_types.map { |key, value| [key.humanize, key] },{include_blank: "Please Select Type"},{class: "form-control"} %>
+  </div>
+
+  <div class="col-lg-6 form-group float-left">
+    <%= f.select :product_category_id, options_from_collection_for_select(@product_categories, 'id', 'title', f.object.product_category_id), {prompt: "Select the Category"},{class: "form-control", required: true}  %>
+  </div>
+
+  <div class="col-lg-6 form-group float-left">
+    <%= f.select :product_sub_category_id, options_from_collection_for_select(@product_sub_categories, 'id', 'title', f.object.product_sub_category_id), {prompt: "Select the Sub Category"},{class: "form-control"} %>
+  </div>
+
+  <div class="col-lg-4 form-group float-left">
+    <%= f.select :product_type, Product.product_types.map { |key, value| [key.humanize, key] },{},{class: "form-control"} %>
+  </div>
+
+  <div class="col-lg-4 form-group float-left">
+    <%= f.select :purchase_type, Product.purchase_types.map { |key, value| [key.humanize, key] },{},{class: "form-control"} %>
+  </div>
+
+  <div class="col-lg-4 form-group float-left">
+    <%= f.select :purchase_unit, Product.purchase_units.map { |key, value| [key.humanize, key] },{},{class: "form-control"} %>
+  </div>
+
+
+  <div class="col-lg-4 form-group float-left">
+    <%= f.number_field :cost, required: true %>
+  </div>
+
+  <div class="col-lg-4 form-group float-left">
+    <%= f.number_field :sale, required: true %>
+  </div>
+  <div class="col-lg-4 form-group float-left">
+    <%= f.select :currency, Product.currencies.map { |key, value| [key.humanize, key] },{},{class: "form-control"} %>
+  </div>
+  <div class="col-lg-6 form-group float-left">
+    <%= f.number_field :purchase_factor if pos_setting_sys_type=="P-O-S"%>
+    <%= f.select :raw_product_id, options_from_collection_for_select(@raw_products, 'id', 'title', f.object.raw_product_id), {prompt: "Select the Raw Product"},{class: "form-control"}  if pos_setting_sys_type=="batha"%>
+  </div>
+  <div class="clearfix">
+
+<h3 class="card-header">Stock  WARNING: </h3>
+<div class="col-lg-4 form-group float-left">
+    <%= f.number_field :minimum %>
+  </div>
+
+  <div class="col-lg-4 form-group float-left">
+    <%= f.number_field :optimal %>
+  </div>
+
+  <div class="col-lg-4 form-group float-left">
+    <%= f.number_field :maximum %>
+  </div>
+  <div class="clearfix">
+
+
+<h3 class="card-header">Taxes</h3>
+  <div class="col-lg-3 form-group float-left">
+    <%= f.number_field :gst %>
+  </div>
+  <div class="col-lg-3 form-group float-left">
+    <%= f.number_field :vat %>
+  </div>
+  <div class="col-lg-2 form-group float-left">
+    <%= f.number_field :hst %>
+  </div>
+  <div class="col-lg-2 form-group float-left">
+    <%= f.number_field :pst %>
+  </div>
+  <div class="col-lg-2 form-group float-left">
+    <%= f.number_field :qst %>
+  </div>
+  <div class="clearfix"></div>
+<h3 class="card-header">Serial and List</h3>
+<div class="col-lg-2 form-group float-left">
+  <%= f.label :with_serial, "Product with Serial"%>
+    <%= f.check_box :with_serial, hide_label: true ,class: "form-control", checked: f.object.with_serial%>
+</div>
+
+<div class="col-lg-10 form-group float-left">
+  <%= f.label :warranty_list, "Warranty List of Serial"%>
+  <%= f.text_area :warranty_list, placeholder:"Enter Warranty",hide_label: true %>
+</div>
+
+<div class="col-lg-6 form-group float-left">
+  <%= f.file_field :profile_image %>
+</div>
+<div class="col-lg-6 form-group float-left">
+  <% if  product.profile_image.attached? %>
+    <%= image_tag product.profile_image.service_url, width: 300 %>
+  <% end %>
+</div>
+
+  <div class="col-lg-12 row ">
+    <div class="col-lg-6 form-group float-left">
+      <%= link_to products_path do %>
+      <i class="fa fa-arrow-left " aria-hidden="true"></i>
+      <% end %>
+    </div>
+    <div class="col-lg-6 form-group float-left">
+      <div class="col-lg-6 form-group float-left">
+        <%=f.object.id.nil? ? (f.submit class: "btn btn-success", style: "float: left")  :  (f.submit class: "btn btn-warning", style: "float: left")%>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<%= javascript_include_tag 'hover', 'data-turbolinks-track': 'reload' %>

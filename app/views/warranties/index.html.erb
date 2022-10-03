@@ -1,0 +1,83 @@
+<%= link_to new_warranty_path, class: "btn btn-success" do %>
+  <i class="fa fa-plus" aria-hidden="true"></i>
+  New Product
+  <% end %>
+<div class="clearfix"></div>
+
+
+<div class="row">
+  <div class="col-lg-12 col-sm-12">
+    <%= search_form_for @q, url: warranties_path, class: "admin-controls", method: "get" do |f| %>
+      <div class="col-lg-2 form-group float-left">
+        <%= f.select :comment_or_serial_number_cont, options_from_collection_for_select(@warranty_search, "comment", ->(st){" #{st.product.title} \u{27F6} #{st.serial_number} "},@title),{:include_blank => "Select Product/Serial Number"},:class=>"form-control chosen-select" %>
+      </div>
+      <div class="col-lg-2 form-group float-left">
+        <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker',value: @created_at_gteq, 'datepicker' => true,placeholder: "YYYY-MM-DD" %>
+      </div>
+      <div class="col-lg-2 form-group float-left">
+        <%= f.search_field :created_at_lteq, class: 'form-control input-sm datepicker',value: @created_at_lteq, 'datepicker' => true ,placeholder: "YYYY-MM-DD"%>
+      </div>
+
+      <div class="col-lg-2 form-group float-left">
+        <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px;"><i class="fa fa-search"></i></button>
+      </div>
+      <div class="col-lg-3 form-group float-left">
+      </div>
+      <div class="col-lg-2 form-group float-right">
+        <button class="form-control btn btn-secondary" name="submit_pdf_staff_with" type="submit" value="Total Stock A8" formtarget="_blank" ><i class="fa fa-print"></i> Stock</button>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Product</th>
+      <th>Serial number</th>
+      <th>Comment</th>
+      <th>created at</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @warranties.each do |warranty| %>
+      <tr>
+        <td><%= warranty.product.title %></td>
+        <td><%= warranty.serial_number %></td>
+        <td><%= warranty.comment %></td>
+        <td><%= warranty.created_at.strftime("%d-%b-%y") %></td>
+        <td>
+          <%= link_to warranty do %>
+            <i class="fa fa-eye " aria-hidden="true"></i> |
+          <%end %>
+          <%= link_to edit_warranty_path(warranty) do %>
+            <i class="fa fa-edit " aria-hidden="true"></i> |
+          <%end %>
+          <%= link_to  warranty, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+            <i class="fa fa-trash " aria-hidden="true"></i>
+          <%end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#city_list").removeClass('hidden');
+    FontAwesome.dom.i2svg();
+  });
+  $(document).ready(function() {
+    setTimeout(function(){
+      $(".chosen-select").chosen({
+  allow_single_deselect: true,
+  width: '100%'
+});
+    }, 50);
+  });
+</script>

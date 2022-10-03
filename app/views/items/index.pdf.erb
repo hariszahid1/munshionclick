@@ -1,0 +1,46 @@
+<% @total_stock=0%>
+<% @date = Date.today  %>
+<% @time = DateTime.now %>
+<% @time = Time.zone.now %>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Raw material details</h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<p style="text-align: center;margin: 0;">Report by: <%=current_user.name%></p>
+<div >
+  <table>
+    <thead>
+      <tr class="lite-gray">
+        <th>ID</th>
+        <th>Item type</th>
+        <th>Title</th>
+        <th>Code</th>
+        <th>Cost</th>
+        <th>Sale</th>
+        <th>Minimum</th>
+        <th>Optimal</th>
+        <th>Maximun</th>
+        <th>Comment</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @items.each do |item| %>
+      <tr>
+        <td><%= item.id %></td>
+        <td><%= item.item_type.title %></td>
+        <td class="urdu-font"><%= item.title %></td>
+        <td><%= item.code %></td>
+        <td><%= item.cost.to_f.round(2) %></td>
+        <td><%= item.sale.to_f.round(2) %></td>
+        <td><%= item.minimum %></td>
+        <td><%= item.optimal %></td>
+        <td><%= item.maximun %></td>
+        <td><%= item.comment %></td>
+        <td><%= item.status %></td>
+      </tr>
+      <%end%>
+    </tbody>
+
+  </table>
+</div>

@@ -1,0 +1,2 @@
+module StaffLedgerBooksHelper
+end

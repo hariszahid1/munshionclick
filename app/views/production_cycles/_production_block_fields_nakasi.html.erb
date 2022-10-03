@@ -1,0 +1,35 @@
+<div class="row bg-white nested-fields">
+  <div class="col border">
+    <%= f.hidden_field :title, hide_label:true%>
+    <h6>
+      <%= f.object.title%>
+    </h6>
+    <%= f.hidden_field :id %>
+    <%= f.hidden_field :production_cycle_id %>
+  </div>
+  <div class="col border">
+    <h6>
+      <span id=<%="production_cycle_production_blocks_attributes_"+f.index.to_s+"_bricks_quantity"%>> <%= f.object.bricks_quantity%></span> /
+      <span id=<%="production_cycle_production_blocks_attributes_"+f.index.to_s+"_tiles_quantity"%>> <%=f.object.tiles_quantity%> </span>
+    </h6>
+  </div>
+  <div class="col border">
+    <%= f.hidden_field :bricks_quantity, value: f.object.bricks_quantity, hide_label:true, class: "raw-quantity", readonly: true %>
+    <%= f.hidden_field :tiles_quantity, value: f.object.tiles_quantity, hide_label:true, class: "quantity", readonly: true %>
+    <%= f.number_field :jalai_a_quantity, value: ((f.object.bricks_quantity+(f.object.tiles_quantity/2))/2), hide_label:true, class: "jalai_b_quantity", readonly: true%>
+    <%= f.hidden_field :bhari_production_block_id %>
+  </div>
+  <div class="col border">
+    <%= f.number_field :jalai_b_quantity, value: ((f.object.bricks_quantity+(f.object.tiles_quantity/2))/2), hide_label:true, class: "jalai_b_quantity", readonly: true %>
+    <%= f.date_field :date, hide_label:true, class: "wast hidden"%>
+  </div>
+  <div class="col border">
+    <%= f.select :status, options_for_select(ProductionBlock.statuses.map { |key, value| [key.humanize, key] }, "nakasi"),{class: "form-control", required: true,hide_label: true}%>
+  </div>
+  <div class="col border">
+    <%= f.select :production_status, ProductionBlock.production_statuses.map { |key, value| [key.humanize, key] },{class: "form-control", required: true,hide_label: true}%>
+  </div>
+  <div class="col border">
+    <%= link_to_remove_association "Remove", f , class: "btn btn-info",onclick:"costAtomUpdateReturn(); return false;",onkeyup:"costAtomUpdateReturn(); return false;"%>
+  </div>
+</div>

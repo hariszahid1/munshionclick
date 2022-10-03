@@ -1,0 +1,134 @@
+<% if user.persisted?
+  submit_url = user_path
+  submit_url = submit_url
+  submit_method = :patch
+ else
+  submit_url = create_user_users_path
+  submit_method = :post
+ end
+%>
+
+<%= bootstrap_form_for(user, url: submit_url, method: submit_method) do |f| %>
+  <% if user.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h2>
+
+      <ul>
+      <% user.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="row">
+    <div class="col-lg-6 col-sm-6">
+      <%= f.label :name do %>
+          <%= User.human_attribute_name :name %>
+          <i class="fas fa-language"></i>
+        <% end %>
+      <%= f.text_field :name,required:true,placeholder: "Enter the Name", hide_label: true, class: 'urdu-font'%>
+    </div>
+    <div class="col-lg-6 col-sm-6">
+      <%= f.text_field :user_name, placeholder:"Enter Username", required: true %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-6 col-sm-6">
+      <%= f.label :father_name do %>
+          <%= User.human_attribute_name :father_name %>
+          <i class="fas fa-language"></i>
+        <% end %>
+      <%= f.text_field :father_name, placeholder: "Enter the Father Name", hide_label: true, class: 'urdu-font' %>
+    </div>
+    <div class="col-lg-6 col-sm-6">
+      <%= f.text_field :email, placeholder:"Enter Email", required: true , disabled: true%>
+    </div>
+    <div class="col-lg-6 col-sm-6">
+      <%= f.text_field :email_to %>
+    </div>
+    <div class="col-lg-6 col-sm-6">
+      <%= f.text_field :email_cc %>
+    </div>
+    <div class="col-lg-6 col-sm-6">
+      <%= f.text_field :email_bcc %>
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="col-lg-6 col-sm-6">
+      <%= f.text_field :city, placeholder:"Enter City" %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-6 col-sm-6">
+      <%= f.text_field :phone %>
+    </div>
+    <div class="col-lg-6 col-sm-6">
+      <%= f.text_field :fax %>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col-lg-6 col-sm-6">
+      <%= f.label :address do %>
+          <%= User.human_attribute_name :address %>
+          <i class="fas fa-language"></i>
+        <% end %>
+      <%= f.text_area :address, placeholder: "Enter the Address", hide_label: true, class: 'urdu-font' %>
+    </div>
+  </div>
+  <% if current_user.super_admin? and current_user.id!= f.object.id%>
+    <div class="row">
+      <div class="col-lg-6 form-group float-left">
+        <%= f.select :roles_mask, User.user_roles.map { |key, value| [key.humanize, value] },{class: "form-control", required: true} %>
+      </div>
+    </div>
+  <%end%>
+  <div class="row">
+    <div class="col-lg-6 col-sm-6">
+      <% if f.object.persisted? %>
+        <%= f.password_field :password%>
+      <% else %>
+        <%= f.password_field :password, required: true %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="user_roles_mask"><%= current_user.allowed_valid_roles.to_s.titleize %> Abilities</label>
+    <% divclose = 0
+    user_ability = f.object.user_ability if f.object.persisted? %>
+    <% UserAbility.valid_roles.each_with_index do |rol, ind| %>
+        <% if ind == 0 || ind%6 == 0 %>
+          <% divclose = 6 %>
+          <div class=" col-lg-12 col-sm-12 row">
+        <% end %>
+          <div class=" col-lg-2 col-sm-2">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="<%= rol.to_s %>" name="user[user_ability_roles][]" id="user_ability_mask_<%= rol.to_s %>" <%= user_ability.present? ? user_ability.abilityChecked?(rol) : "" %> >
+              <label class="form-check-label" for="user_ability_mask_<%= rol.to_s %>"><%= rol.to_s.humanize %></label>
+            </div>
+          </div>
+        <% if (divclose -=1) == 0 %>
+          </div>
+        <% end %>
+    <% end %>
+  </div>
+  <%= f.hidden_field :created_by_id %>
+
+  <div class="clearfix"></div>
+    <div class="form-group">
+    <div class="actions">
+      <%= link_to "#{current_user.allowed_valid_roles.to_s.titleize} list", users_path, class: "btn btn-info" %>
+      <%= f.submit @btn_value ,class: "btn btn-primary float-right" %>
+    </div>
+    </div>
+  </div>
+<% end %>
+
+<div class="clearfix"></div>

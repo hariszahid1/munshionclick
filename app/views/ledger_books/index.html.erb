@@ -1,0 +1,284 @@
+<div class="hidden" id="ledger_book_list">
+  <h1>Ledger Book</h1>
+  <% if can?(:add, :all) %>
+    <%= link_to new_ledger_book_path(Sjama: true), class: "btn btn-success" do %>
+       <i class="fa fa-plus" aria-hidden="true"></i>
+       Jama / credit
+    <% end %>
+    <%= link_to new_ledger_book_path(Sbenam: true), class: "btn btn-success" do %>
+       <i class="fa fa-plus" aria-hidden="true"></i>
+       Benam / debit
+    <% end %>
+  <% end %>
+  <%= link_to transfer_ledger_books_path, class: "btn btn-success" do %>
+    <i class="fa fa-credit-card" aria-hidden="true"></i>
+    Payment Transfer
+ <% end %>
+
+  <div class="clearfix"></div>
+  <div class="row">
+    <%= search_form_for @q, url: ledger_books_path, class: "admin-controls", method: "get" do |f| %>
+      <div class="col-lg-12 col-sm-12">
+        <div class="col-lg-4 form-group float-left">
+          <%= f.select :sys_user_id_eq, options_from_collection_for_select(@ledger_searchs, "id", ->(st){"#{st.name} \u{27F6} \u{27F6} #{st.code} "},@title),{:include_blank => "Select Name/Code"},:class=>"form-control chosen-select" %>
+        </div>
+        <div class="col-lg-3 form-group float-left">
+          <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker',placeholder: "YYYY-MM-DD" %>
+        </div>
+        <div class="col-lg-3 form-group float-left">
+          <%= f.search_field :created_at_lteq, class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+        </div>
+      </div>
+      <div class="col-lg-12 col-sm-12">
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-secondary" name="submit_form_without" type="submit" value="Ledger Book PDF A4" formtarget="_blank">1-Asc <i class="fa fa-file-pdf"></i></button>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-secondary" name="submit_pdf_without" type="submit" value="Ledger Book PDF A4" formtarget="_blank">1-Desc <i class="fa fa-file-pdf"></i></button>
+        </div>
+        <%if pos_setting_sys_type!="CustomClear"%>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-secondary" name="submit_form" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Asc <i class="fa fa-file-pdf"></i></button>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-secondary" name="submit_pdf" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Desc <i class="fa fa-file-pdf"></i></button>
+        </div>
+        <%end%>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-secondary" name="submit_pdf_short" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Short<i class="fa fa-file-pdf"></i></button>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-secondary" name="submit_debit" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Debit List<i class="fa fa-file-pdf"></i></button>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-secondary" name="submit_credit" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Credit List<i class="fa fa-file-pdf"></i></button>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-info" name="asc_email" type="submit" value="Email"><i class="fas fa-envelope"></i> Asc email</button>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-info" name="desc_email" type="submit" value="Email"><i class="fas fa-envelope"></i> Desc email</button>
+        </div>
+      </div>
+      </div>
+    <% end %>
+  </div>
+
+  <table data-toggle="table" data-search="true">
+    <thead>
+      <tr>
+        <th><%= sort_link(@q, :sys_user_name, 'ID/P') %></th>
+        <th><%= sort_link(@q, :sys_user_name, 'Customer/Supplier') %></th>
+        <th><%= sort_link(@q, :debit, 'Debit') %></th>
+        <th><%= sort_link(@q, :credit, 'Credit') %></th>
+        <th><%= sort_link(@q, :balance, 'Balance') %></th>
+        <th>Jama/Benam</th>
+        <th><%= sort_link(@q, :purchase_sale_detail_id, 'Voucher') %></th>
+        <th><%= sort_link(@q, :comment, 'Comment') %></th>
+        <th><%= sort_link(@q, :date, 'Date') %></th>
+        <th class="border_none">Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @ledger_books.each do |ledger_book| %>
+        <tr>
+          <td>
+              <% if ledger_book&.purchase_sale_detail.present?%>
+                <%= link_to payments_path('q[id_eq]': ledger_book.purchase_sale_detail.payment_ids.last) do %>
+                    <%=ledger_book.id%><%=ledger_book.purchase_sale_detail.payment_ids%>
+                <% end %>
+              <% elsif ledger_book&.order.present?%>
+                <%= link_to payments_path('q[id_eq]': ledger_book.order.payment_ids.last) do %>
+                    <%=ledger_book.id%><%=ledger_book.order.payment_ids%>
+                <% end %>
+              <% else%>
+                <%= link_to payments_path('q[id_eq]': ledger_book.payment_ids.last) do %>
+                    <%=ledger_book.id%><%=ledger_book.payment_ids%>
+                <% end %>
+              <% end%>
+          </td>
+          <td class="urdu-font">
+            <%= link_to sys_users_path('q[id_eq]':ledger_book.sys_user) do %>
+              <%= ledger_book.sys_user.name %>
+            <%end %>
+          </td>
+          <td><%= number_with_delimiter(ledger_book.debit) %></td>
+          <td><%= number_with_delimiter(ledger_book.credit) %></td>
+          <td><%= number_with_delimiter(ledger_book.balance) %></td>
+          <td>
+            <%if (ledger_book.balance.to_f > 0 ) %>
+              <b style="font-size:20px;color:blue;">Jama / Payable</b>
+            <%elsif (ledger_book.balance.to_f < 0 ) %>
+              <b style="font-size:20px;color:red;">Benam / Receivable</b>
+            <%else%>
+              <b style="font-size:20px;color: #6cec53 ;">Nill</b>
+            <%end%>
+          </td>
+          <td>
+            <% if ledger_book.purchase_sale_detail_id.present? %>
+              <% if can?(:update, :all) %>
+                <%= 'Sale' if ledger_book.purchase_sale_detail.transaction_type=="Sale"%>
+                <%= 'Purchase' if ledger_book.purchase_sale_detail.transaction_type=="Purchase"%>
+                <%= 'SaleReturn' if ledger_book.purchase_sale_detail.transaction_type=="SaleReturn"%>
+                <%= 'PurchaseReturn' if ledger_book.purchase_sale_detail.transaction_type=="PurchaseReturn"%>
+              <% end %>
+            <% elsif ledger_book.order.present? %>
+              <% if can?(:update, :all) %>
+                <%= 'Sale Order' if ledger_book.order.transaction_type=="Sale"%>
+                <%= 'Purchase Order' if ledger_book.order.transaction_type=="Purchase"%>
+              <% end %>
+            <%else%>
+              Ledger Book
+            <% end %>
+          </td>
+          <td>
+            <%if ledger_book.order.present? || ledger_book.purchase_sale_detail.present? %>
+            <%= ledger_book.comment %>
+            <%else%>
+            <%= ledger_book.comment %>
+            <%# ledger_book.created_at.strftime("%d/%m/%Y at %I:%M%p") %>
+            <%end%>
+            <% if ledger_book.account.present?%>
+            <p>
+              <span><%=ledger_book.account.title%></span>
+            </p>
+            <%end%>
+            <% if ledger_book.order.present? %>
+              <%if ledger_book.order.order_items_names_and_quantity!=0%>
+                <%ledger_book.order.order_items_names_and_quantity.each do |name_quantity|%>
+                <p>
+                  <span><%=name_quantity[8].to_s+'-'+name_quantity.first%></span>
+                  Qty: <span><%=name_quantity.second%></span>
+                  Rate:<span><%=name_quantity.third%></span>
+                  Total:<span><%=name_quantity.fourth%></span>
+                </p>
+                <%end%>
+                <p>
+                  Total: <span><%=ledger_book.order.total_bill%></span>
+                </p>
+              <%end%>
+            <%elsif ledger_book.purchase_sale_detail.present?%>
+              <p>Comment:   <%= ledger_book.purchase_sale_detail.comment %></p>
+              <p>Version: <span><%=ledger_book.purchase_sale_detail.versions.count%></span></p>
+              <%if ledger_book.purchase_sale_detail.purchase_sale_items_names_and_quantity!=0%>
+                <% ledger_book.purchase_sale_detail.purchase_sale_items_names_and_quantity.each do |name_quantity|%>
+                  <p>
+                    <span><%=name_quantity[8].to_s+'-'+name_quantity.first%></span>
+                    Qty:  <span><%=name_quantity.second%></span>
+                  </p>
+                <%end%>
+                <%if ledger_book.purchase_sale_detail.with_gst.present?%>
+                  <p>
+                    GST: <span><%= ledger_book.purchase_sale_detail.purchase_sale_items.sum(:gst_amount)%></span>
+                  </p>
+                <%end%>
+              <%end%>
+              <p><span>PO#: </span> <%=ledger_book&.purchase_sale_detail&.bill_no%></p>
+            <%end%>
+          </td>
+          <td><%=ledger_book.created_at.strftime("%A,  %d-%b-%y")%></td>
+          <td>
+            <%= link_to ledger_book, target: "_blank" do %>
+              <i class="fa fa-print" aria-hidden="true"></i> |
+            <%end %>
+
+            <% if can?(:update, :all) %>
+              <% if ledger_book.purchase_sale_detail_id.present? %>
+                <%if ledger_book.purchase_sale_detail.purchase_sale_items.present?%>
+                  <%if ledger_book.purchase_sale_detail.purchase_sale_items.first.product.present? %>
+                    <% if can?(:update, :all) %>
+                          <%= link_to edit_purchase_sale_detail_path(ledger_book.purchase_sale_detail,product: true) do %>
+                                    <i class="fa fa-edit" aria-hidden="true"></i> |
+                          <% end %>
+                    <% end %>
+                  <%else%>
+                  <% if can?(:update, :all) %>
+                    <%= link_to edit_purchase_sale_detail_path(ledger_book.purchase_sale_detail) do %>
+                      <i class="fa fa-edit" aria-hidden="true"></i> |
+                    <% end %>
+                    <% end %>
+                  <%end%>
+                <%end%>
+              <% elsif ledger_book.order.present? %>
+                  <%= link_to edit_order_path(ledger_book.order_id,product: true) do %>
+                    <i class="fa fa-edit " aria-hidden="true"></i> |
+                  <%end %>
+              <%else%>
+                <%= link_to edit_ledger_book_path(ledger_book) do %>
+                  <i class="fa fa-edit " aria-hidden="true"></i> |
+                <%end %>
+              <% end %>
+
+            <% end %>
+            <% if can?(:delete, :all) %>
+            <% if ledger_book.purchase_sale_detail_id.present? %>
+                <%= link_to purchase_sale_detail_path(ledger_book.purchase_sale_detail_id), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+                  <i class="fa fa-trash" aria-hidden="true"></i> |
+                <% end %>
+            <%elsif ledger_book.order.present? %>
+                <%= link_to order_path(ledger_book.order_id), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+                  <i class="fa fa-trash" aria-hidden="true"></i> |
+                <% end %>
+            <%else%>
+              <%= link_to ledger_book, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+              <i class="fa fa-trash " aria-hidden="true"></i> |
+            <%end%>
+            <%end %>
+            <% end %>
+            <% if can?(:view, :all) %>
+              <%= link_to ledger_book do %>
+                <i class="fa fa-eye " aria-hidden="true"></i>
+              <%end %>
+            <%end%>
+
+          </td>
+        </tr>
+      <% end %>
+      <tr>
+        <td><h5>Total</h5></td>
+        <td></td>
+        <td><h5><%=number_with_delimiter(@ledger_books_debit)%></h5></td>
+        <td><h5><%=number_with_delimiter(@ledger_books_credit.to_f+@sys_user.opening_balance.to_f)%></h5></td>
+        <td><h5><%=number_with_delimiter(@sys_user.opening_balance.to_i+@ledger_books_credit-@ledger_books_debit.to_i) if @ledger_books.present?%> <%=@sys_user.balance.to_i if @sys_user.present? and  @ledger_books.blank?%></h5></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="clearfix"></div>
+<div class="row">
+  <div class="col-lg-4 col-sm-4">
+    <%= page_entries_info @ledger_books %>
+  </div>
+  <div class="col-lg-8 col-sm-8 pagination-left">
+    <%= paginate @ledger_books %>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#ledger_book_list").removeClass('hidden');
+    FontAwesome.dom.i2svg();
+  });
+  $(document).ready(function() {
+    setTimeout(function(){
+      $(".chosen-select").chosen({
+  allow_single_deselect: true,
+  width: '100%'
+});
+    }, 50);
+  });
+</script>

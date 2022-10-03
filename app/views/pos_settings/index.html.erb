@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<h1>General Settings</h1>
+
+<table id="pos_table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Display name</th>
+      <th>Account</th>
+      <th>Phone</th>
+      <th>Logo</th>
+      <th>Address</th>
+      <th>Action</th>
+
+    </tr>
+  </thead>
+
+  <tbody>
+  <%= render partial: 'pos_setting', collection: @pos_settings %>
+  </tbody>
+</table>
+
+<br>
+<%if @pos_settings.blank?%>
+<%end%>
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#product_category_list").removeClass('hidden');
+      FontAwesome.dom.i2svg();
+  });
+</script>

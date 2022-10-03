@@ -1,0 +1,47 @@
+<%total_cost=0%>
+<%cost_per_line=0%>
+<%per_product_cost=0%>
+<%per_thousand_product_cost=0%>
+<%item_quantity_per_line=0%>
+<%total_item_quantity=0%>
+<%per_ton_bricks=0%>
+<%lines=0%>
+<%total_bricks=0%>
+
+<% @date = Date.today  %>
+<% @time = DateTime.now %>
+<% @time = Time.zone.now %>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Nakasi details</h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<p style="text-align: center;margin: 0;">Report by: <%=current_user.name%></p>
+<div >
+  <table>
+    <thead class="lite-gray">
+      <th>Date</th>
+      <th>Lines</th>
+      <th>T Bricks</th>
+
+    </thead>
+
+    <tbody>
+      <% @production_cycles.each do |production_cycle| %>
+        <tr>
+          <td><%= production_cycle.start_date.strftime("%A,  %d-%b-%y") if production_cycle.start_date%></td>
+          <td>
+            <h7><%=production_cycle.lines %><% lines+=production_cycle.lines %></h7>
+          </td>
+          <td>
+            <h7><%=production_cycle.total_bricks.to_i %><% total_bricks+=production_cycle.total_bricks.to_i %></h7>
+          </td>
+        </tr>
+      <% end %>
+      <tr class="lite-gray">
+        <td><h4>Total</h4></td>
+        <td><h4><%=lines.to_i%></h4></td>
+        <td><h4><%=total_bricks.to_i%></h4></td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>

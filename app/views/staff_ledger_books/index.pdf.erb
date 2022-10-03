@@ -1,0 +1,9 @@
+<%if  params[:bulk].present?%>
+  <%= render 'index_bulk'%>
+<%elsif pos_setting_sys_type=="batha" or pos_setting_sys_type=="Factory"%>
+  <%= render 'index_batha'%>
+<%elsif pos_setting_sys_type=="HousingScheme"%>
+  <%= render 'staff_ledger_books/hscheme/index'%>
+<%else%>
+  <%= render 'index'%>
+<%end%>

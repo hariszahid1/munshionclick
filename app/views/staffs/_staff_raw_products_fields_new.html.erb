@@ -1,0 +1,8 @@
+<div class="links col-lg-6" style="float:left">
+  <%= f.hidden_field :staff_id %>
+  <%= f.hidden_field :id %>
+  <div class="nested-fields">
+    <div><%= f.select :raw_product_id, options_from_collection_for_select(@raw_products, 'id', 'title',f.object.raw_product_id), {hide_label: true,prompt: "Select the Raw Product"},class: "form-control",required: true%></div>
+    <div class="links"><%= link_to_remove_association "Remove", f , class: "btn btn-info" %></div>
+  </div>
+</div>

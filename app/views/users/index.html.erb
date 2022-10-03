@@ -1,0 +1,111 @@
+<div class="list_content_page">
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <h1><%= current_user.allowed_valid_roles.to_s.titleize+'s' %></h1>
+      <% if can?(:add, :all) %>
+      <%= link_to new_user_path, class: "btn btn-primary" do %>
+          <i class="fas fa-plus"></i>
+          <%= current_user.allowed_valid_roles.to_s.titleize %>
+      <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="clearfix"></div>
+  <div class="row search_form">
+    <div class="col-lg-12 col-sm-12">
+      <%= search_form_for @q, url: users_path, class: "admin-controls", method: "get" do |f| %>
+        <div class="col-lg-2 col-sm-2 form-group float-left padding_left_zero">
+          <%= f.search_field :name_cont, placeholder: "Name", title: "Name" ,class: "form-control" %>
+        </div>
+        <div class="col-lg-2 col-sm-2 form-group float-left">
+          <%= f.search_field :user_name_cont, placeholder: "User name", title: "User name" ,class: "form-control" %>
+        </div>
+        <div class="col-lg-2 col-sm-2 form-group float-left">
+          <%= f.search_field :email_cont, placeholder: "Email", title: "Email" ,class: "form-control" %>
+        </div>
+        <div class="col-lg-2 col-sm-2 form-group float-left">
+          <%= f.search_field :father_name_cont, placeholder: "Father name", title: "Father name" ,class: "form-control" %>
+        </div>
+        <div class="col-lg-2 form-group float-left padding_right_zero">
+          <input class="form-control btn btn-primary" name="search_submit" type="submit" value="Search"></input>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="list_data_table">
+    <table data-toggle="table" data-search="true" class="table table-striped">
+      <thead>
+        <tr>
+          <td><%= sort_link(@q, :id, 'ID') %></td>
+          <th><%= sort_link(@q, :roles_mask, 'Role') %></th>
+          <th><%= sort_link(@q, :name, 'Name') %></th>
+          <th><%= sort_link(@q, :user_name, 'User name') %></th>
+          <th><%= sort_link(@q, :draw_date, 'System Email') %></th>
+          <th><%= sort_link(@q, :draw_date, 'Email_on') %></th>
+          <th><%= sort_link(@q, :father_name, 'Father name') %></th>
+          <th><%= sort_link(@q, :phone, 'Phone') %></th>
+          <th> Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @users.each do |user| %>
+          <tr>
+            <td><%= user.id %></td>
+            <td class='urdu-font'><%= user&.roles&.first %></td>
+            <td class='urdu-font'><%= user.name %></td>
+            <td><%= user.user_name %></td>
+            <td><%= user.email %></td>
+            <td><%= user.email_to %></td>
+            <td class='urdu-font'><%= user.father_name %></td>
+            <td><%= user.phone %></td>
+            <td>
+              <% if can?(:update, :all) %>
+                <%= link_to edit_user_path(user) do %>
+                  <i class="fa fa-edit" aria-hidden="true"></i> |
+                <% end %>
+              <% end %>
+              <% if can?(:delete, :all) %>
+                <%= link_to user, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+                  <i class="fa fa-trash" aria-hidden="true"></i> |
+                <% end %>
+                <% end %>
+              <% if can?(:delete, :all) %>
+                <%= link_to user do %>
+                  <i class="fa fa-eye" aria-hidden="true"></i>
+                  <% end %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <div class="clearfix"></div>
+    <div class="row">
+      <div class="col-lg-4 col-sm-4">
+        <%= page_entries_info @users %>
+      </div>
+      <div class="col-lg-8 col-sm-8 pagination-left">
+        <%= paginate @users %>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $(".list_data_table").removeClass('hidden');
+    FontAwesome.dom.i2svg();
+  });
+  $(document).ready(function() {
+    setTimeout(function(){
+      $(".chosen-select").chosen({
+  allow_single_deselect: true,
+  width: '100%'
+});
+    }, 50);
+  });
+</script>

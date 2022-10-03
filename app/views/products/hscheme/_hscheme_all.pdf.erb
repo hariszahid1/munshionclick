@@ -1,0 +1,78 @@
+<% @date, @time, total_and_extra_sum = [Date.today, Time.zone.now, 0.0]  %>
+<% @time = Time.zone.now %>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Unit/Inventory Detail</h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<p style="text-align: center;margin: 0;">Report by: <%=current_user&.name%></p>
+<div >
+  <table>
+    <thead class="lite-gray">
+      <th>Title</th>
+      <th>Area</th>
+      <th>PerMarla</th>
+      <th>PerSFT</th>
+      <th>Unit Total</th>
+      <th>Total+Extra</th>
+      <th>Received</th>
+      <th>Balance</th>
+      <th>Dealer</th>
+      <th>Sale To</th>
+    </thead>
+
+    <tbody>
+      <% @products.each do |product| %>
+        <% staff_deal_orders = product.orders%>
+        <%if staff_deal_orders.present?%>
+          <%staff_deal_orders.each do |booking|%>
+            <%token = booking.purchase_sale_details&.first%>
+            <tr>
+              <td><%= product.title rescue 'nil'%></td>
+              <td><%= product.marla.to_i %> Marla <%= product.square_feet.to_i%> Square Feet</td>
+              <td><%= number_with_delimiter((product.sale.to_f/225).to_f.round(2)) %></td>
+              <td><%= number_with_delimiter((product.sale.to_f.round(2)*(product.marla.to_f+(product.square_feet.to_f/225))).to_f.round(2)) %></td>
+              <td><%= number_with_delimiter(product.sale.to_f.round(2)) %></td>
+              <%if booking&.status!='Cancel'%>
+                <td>
+                  <% va = '' %>
+                  <%= total_and_extra = booking.sys_user.ledger_books.pluck('SUM(debit)','SUM(credit)').map { |sys| number_with_delimiter(sys.first.to_f.round(2)).to_s }.join(',').html_safe %>
+                  <% total_and_extra.to_s.split(',').map { |i| va += i } %>
+                  <% total_and_extra_sum += va.to_f %>
+                </td>
+                <td>
+                  <%=booking.sys_user.ledger_books.pluck('SUM(debit)','SUM(credit)').map { |sys| sys.second.to_s+" <br>"+((sys.second/sys.first)*100).round(2).to_s+"<b>%</b>"}.join(',').html_safe%>
+                </td>
+                <td>
+                  <%=booking.sys_user.ledger_books.pluck('SUM(debit)','SUM(credit)').map { |sys| (sys.first.to_i-sys.second.to_i).to_s+" <br>"+(((sys.first.to_i-sys.second.to_i)/sys.first)*100).round(2).to_s+"<b>%</b>"}.join(',').html_safe%>
+                </td>
+                <td>
+                  <%=token&.staff&.name%>
+                </td>
+                <td>
+                  <%=booking.sys_user.name%>
+                </td>
+              <%else%>
+                <td>
+                  <b>Canceled: </b>
+                  <%=booking.sys_user.name%>
+                </td>
+              <%end%>
+            </tr>
+          <%end%>
+        <%end%>
+      <%end%>
+      <tr class="lite-gray">
+        <td ><h4>Total <%=@products&.count%></h4></td>
+        <td><h5>Marla: <%=@total_marla%> Square Feet: <%=@total_square_feet%></h5></td>
+        <td><h5></h5></td>
+        <td><h5><%=number_with_delimiter(@product_price.to_f.round(2))%></h5></td>
+        <td><h5></h5></td>
+        <td><h5><%=number_with_delimiter(total_and_extra_sum)%></h5></td>
+        <td><h5></h5></td>
+        <td><h5></h5></td>
+        <td><h5></h5></td>
+        <td><h5></h5></td>
+      </tr>
+    </tbody>
+
+  </table>
+</div>

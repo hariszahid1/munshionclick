@@ -1,0 +1,45 @@
+<div id="csv_div" class="hidden">
+  <%= form_for(MapColumn.new, as: :map_column, url: map_columns_path(MapColumn.new), method: :post) do |f| %>
+    <div class='row'>
+      <div class="form-group col-4">
+        <%= f.label :table_column %>
+        <%= f.select :table_column, options_for_select(controller_name.classify.constantize.new.attributes.keys.map { |col| [col.gsub('_', ' ').titleize, col]}), {prompt: "Select the Column"}, {required: true} %>
+      </div>
+      <div class="form-group col-4">
+        <%= f.label :mapping_column %>
+        <%= f.text_field :mapping_column, class: 'form-control', required: true %>
+        <%= f.text_field :table_name, value: controller_name.classify, class: 'hidden' %>
+      </div>
+      <div class="form-group col-4 pt-2">
+        <%= f.submit 'Create Mapping', class: 'btn btn-primary mt-4' %>
+      </div>
+    </div>
+  <% end %>
+
+  <div class='row'>
+    <div class="form-group col-4">
+      <%= label_tag 'Available Mappings' %>
+      <%= select_tag "available_mapping_id", options_from_collection_for_select(MapColumn.where(table_name: controller_name.classify), "id", ->(mp) {"#{mp.table_column}"}), { include_blank: "Available Mapplings of #{controller_name}'s columns"} %>
+    </div>
+    <div class="form-group col-4">
+      <%= label_tag 'Mapping Column' %>
+      <input type="text" name='mapping_column' class="form-control" id="mapping_column_for_update">
+    </div>
+    <div class="form-group col-4 pt-2">
+      <%= button_tag 'Update Mapping', name: 'update_mapping', id: 'update_mapping', class: 'btn btn-primary mt-4' %>
+    </div>
+  </div>
+
+  <%= form_for('generate_csv', as: :generate_csv, url: generate_csv_path(), method: :get) do |f| %>
+    <div class='row'>
+      <div class="form-group col-4">
+        <%= f.label 'Available Mappings' %>
+        <%= f.select "mapping_ids", options_from_collection_for_select(MapColumn.where(table_name: controller_name.classify), "id", ->(mp) {"#{mp.table_column} -> #{mp.mapping_column}"}), {:include_blank => "Select mapping of #{controller_name}'s columns"}, {:multiple => true, :class => "form-control chosen-select "} %>
+        <%= f.hidden_field 'model_of', value: controller_name %>
+      </div>
+      <div class="form-group col-4 pt-2">
+        <%= f.submit 'Generate CSV', class: 'btn btn-primary mt-4' %>
+      </div>
+    </div>
+  <% end %>
+</div>

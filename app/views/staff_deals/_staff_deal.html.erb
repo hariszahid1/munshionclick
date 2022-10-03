@@ -1,0 +1,63 @@
+<tr>
+  <td class='urdu-font'><%= staff_deal.staff&.name %></td>
+  <td class='urdu-font'><%=staff_deal.product.present? ? staff_deal.product.title+" "+staff_deal.product.item_type.title : "" %></td>
+  <td><%= staff_deal.product.product_category.title rescue 'nil'%></td>
+  <td><%= staff_deal.product.product_sub_category.title rescue 'nil'%></td>
+  <td><%= staff_deal.product.sale.to_f.round(2) %></td>
+  <td><%= (staff_deal.product.sale.to_f.round(2)*(staff_deal.product.marla.to_f+(staff_deal.product.square_feet.to_f/225))).to_f.round(2) %></td>
+  <td><%= staff_deal.product.marla.to_i %> Marla <%= staff_deal.product.square_feet.to_i%> Square Feet | <%= staff_deal.product.size_1.to_i %></td>
+  <td>
+    <% staff_deal_orders = staff_deal.product.orders%>
+    <%if staff_deal_orders.present?%>
+      <%staff_deal_orders.each do |booking|%>
+        <b>Unit Commission to: </b>
+          <%token = booking.purchase_sale_details&.first%>
+          <%=token&.staff&.name%>
+        <br>
+        <%if booking&.status!='Cancel'%>
+          <%= link_to edit_order_path(booking,product:true) do %>
+            Name: <%=booking.sys_user.name%>
+            <%=booking.sys_user.ledger_books.pluck('SUM(debit)','SUM(credit)').map { |sys| "<br> <b>Total:</b> "+sys.first.to_s+" <b>Paid:</b> "+sys.second.to_s+" <b>In %</b> "+((sys.second/sys.first)*100).round(2).to_s+" <br><b>Remaning:</b> "+(sys.first.to_i-sys.second.to_i).to_s+" <b>Commission:</b> "+token&.carriage.to_s+"<b> In % </b>"+((token&.carriage.to_f/sys.first)*100).round(2).to_s}.join(',').html_safe%>
+          <%end%>
+          <%=booking.sys_user.contact.phone_with_comma%>
+          <%= ("<br><b>Last Payment Date: </b>"+booking&.sys_user&.ledger_books&.last&.created_at&.strftime("%d%b%y at %I:%M%p")).html_safe if booking.present?%>
+        <%else%>
+          <span>
+            <b>Booking-Canceled</b>
+            <%= link_to edit_order_path(booking,product:true) do %>
+              Name: <%=booking.sys_user.name%>
+              <%=booking.sys_user.ledger_books.pluck('SUM(debit)','SUM(credit)').map { |sys| "<br> <b>Total:</b> "+sys.first.to_s+" <b>Paid:</b> "+sys.second.to_s+" <b>In %</b> "+((sys.second/sys.first)*100).round(2).to_s+"<br><b>Remaning:</b> "+(sys.first.to_i-sys.second.to_i).to_s+" <b>Commission:</b> "+token&.carriage.to_s+"<b> In % </b>"+((token&.carriage.to_f/sys.first)*100).round(2).to_s}.join(',').html_safe%>
+            <%end%>
+            <%=booking.sys_user.contact.phone_with_comma%>
+            <%= ("<br><b>Last Payment Date: </b>"+booking&.sys_user&.ledger_books&.last&.created_at&.strftime("%d%b%y at %I:%M%p")).html_safe if booking.present?%>
+            <b>Booking-Canceled</b>
+          </span>
+        <%end%>
+        <br><br>
+      <%end%>
+    <%end%>
+  </td>
+  <td><%=staff_deal_orders.joins(:property_plans).where('property_plans.due_status':[nil, PropertyPlan.due_statuses["Unpaid"]],'property_plans.due_date': @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).sum(:advance)%></td>
+  <td><%=staff_deal_orders.joins(property_plans: :property_installments).where('property_installments.due_status':[nil, PropertyPlan.due_statuses["Unpaid"]],'property_installments.due_date': @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).sum(:installment_price)%></td>
+  <td>
+    <%= staff_deal.comment %>
+  </td>
+  <td>
+    <% if can?(:update, :all) %>
+      <%= link_to edit_staff_deal_path(staff_deal) do %>
+        <i class="fa fa-edit " aria-hidden="true"></i> |
+      <%end %>
+    <% end %>
+    <% if can?(:delete, :all) %>
+      <%= link_to staff_deal, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+        <i class="fa fa-trash " aria-hidden="true"></i> |
+      <%end %>
+    <% end %>
+    <% if can?(:view, :all) %>
+      <%= link_to staff_deal do %>
+        <i class="fa fa-eye " aria-hidden="true"></i>
+      <%end %>
+    <%end%>
+
+  </td>
+</tr>

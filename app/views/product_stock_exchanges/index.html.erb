@@ -1,0 +1,87 @@
+
+  <h1>Product Stock Exchanges</h1>
+  <%= link_to new_product_stock_exchange_path, class: "btn btn-success" do %>
+           <i class="fa fa-plus" aria-hidden="true"></i>
+           New Product Stock Exchange
+  <% end %>
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <%= search_form_for @q, url: product_stock_exchanges_path, class: "admin-controls", method: "get" do |f| %>
+
+        <div class="col-lg-3 form-group float-left">
+          <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker',placeholder: "YYYY-MM-DD" %>
+        </div>
+        <div class="col-lg-3 form-group float-left">
+          <%= f.search_field :created_at_lteq,class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+        </div>
+        <div class="col-lg-2 form-group float-right">
+          <button class="form-control btn btn-secondary" name="submit_pdf" type="submit" value="PDF A4" formtarget="_blank">PDF <i class="fa fa-file-pdf"></i></button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+
+<div class="">
+<table data-toggle="table" data-search="true">
+  <thead>
+    <tr>
+      <th><%= sort_link(@q, :product_id, 'Product sent') %></th>
+      <th><%= sort_link(@q, :product_recipient_id, 'Product received') %></th>
+      <th><%= sort_link(@q, :quantity, 'Quantity') %></th>
+      <th><%= sort_link(@q, :created_at, 'Date') %></th>
+      <th>Action</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @product_stock_exchanges.each do |product_stock_exchange| %>
+      <tr>
+        <td><%= product_stock_exchange.product.title if product_stock_exchange.product.present? %></td>
+        <td><%= product_stock_exchange.product_recipient.title if product_stock_exchange.product_recipient.present? %></td>
+        <td><%= product_stock_exchange.quantity %></td>
+        <td><%= product_stock_exchange.created_at.strftime("%d%b%y at %I:%M %p") %></td>
+        <td>
+          <% if can?(:update, :all) %>
+            <%= link_to edit_product_stock_exchange_path(product_stock_exchange) do %>
+              <i class="fa fa-edit " aria-hidden="true"></i> |
+            <%end %>
+          <% end %>
+          <% if can?(:delete, :all) %>
+            <%= link_to product_stock_exchange, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+              <i class="fa fa-trash " aria-hidden="true"></i> |
+            <%end %>
+          <% end %>
+          <% if can?(:view, :all) %>
+            <%= link_to product_stock_exchange do %>
+              <i class="fa fa-eye " aria-hidden="true"></i>
+            <%end %>
+          <%end%>
+        </td>
+
+      </tr>
+    <% end %>
+    <tr>
+      <td><b>Total</b></td>
+      <td></td>
+      <td><b><%=@total_quantity.first %></b></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#staff_list").removeClass('hidden');
+    FontAwesome.dom.i2svg();
+  });
+</script>

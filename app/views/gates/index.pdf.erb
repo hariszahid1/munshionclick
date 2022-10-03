@@ -1,0 +1,956 @@
+<% @date = Date.today  %>
+<% @time = DateTime.now %>
+<% @time = Time.zone.now %>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Income Statement</h1>
+<p style="text-align: center;margin: 0;">Report by: <%=current_user.name%></p>
+<div>
+  <p style="border-bottom: double 4px;  margin: 0;"></p>
+  <h1 style="text-align: center; margin: 0;">Pather Report of <%=(@pather_date).floor%> days </h1>
+  <h2 style="text-align: center; margin: 0;">Pather From <%=@pather_from.strftime("%d-%b-%y")%> Till <%=@pather_to.strftime("%d-%b-%y")%> </h2>
+  <p style="border-bottom: double 4px;  margin: 0;"></p>
+  <%@pather_raw_quantity = 0 %>
+  <%@pather_f99_raw_quantity = 0 %>
+  <%@pather_tile_raw_quantity = 0 %>
+  <%@pather_raw_quantity = 0 %>
+  <%@pather_f99_quantity = 0 %>
+  <%@pather_tile_quantity = 0 %>
+  <%@pather_quantity = 0 %>
+  <%@pather_wast = 0 %>
+  <%@pather_raw_quantity_rate = 0 %>
+  <%@pather_quantity_rate = 0 %>
+  <%@pather_coverge_rate=0%>
+  <%@pather_gift_rate=0%>
+  <%@pather_pather_khakar_wast = 0 %>
+  <!-- <table>
+    <thead>
+      <tr>
+        <th class="short-column">Kachi</th>
+        <th class="short-column">K Tile</th>
+        <th class="short-column">K Brick</th>
+        <th class="short-column">Paaki</th>
+        <th class="short-column">P Tile</th>
+        <th class="short-column">P Brick</th>
+        <th class="short-column">Wast</th>
+        <th class="short-column">Kachi Price</th>
+        <th class="short-column">Paaki Price</th>
+        <th class="short-column">Gift</th>
+        <th class="short-column">Coverge</th>
+      </tr>
+    </thead>
+    <tbody> -->
+      <% @daily_books.each do |daily_book| %>
+          <%@pather_raw_quantity += daily_book.salary_details_raw_quantity %>
+          <%@pather_f99_raw_quantity += daily_book.salary_details_f99_raw_quantity %>
+          <%@pather_tile_raw_quantity += daily_book.salary_details_tile_raw_quantity %>
+          <%@pather_quantity += daily_book.salary_details_quantity %>
+          <%@pather_f99_quantity += daily_book.salary_details_f99_quantity %>
+          <%@pather_tile_quantity += daily_book.salary_details_tile_quantity %>
+          <%@pather_wast += daily_book.salary_details_wast+daily_book.salary_details_pather_khakar_wast %>
+          <%@pather_raw_quantity_rate += daily_book.salary_details_raw_quantity_rate.round(0) %>
+          <%@pather_quantity_rate += daily_book.salary_details_quantity_rate.round(0) %>
+          <%@pather_gift_rate += daily_book.salary_details_gift_rate.round(0) %>
+          <%@pather_coverge_rate += daily_book.salary_details_coverge_rate %>
+      <% end %>
+      <!-- <tr class="">
+        <td><b><%@pather_raw_quantity%></b></td>
+        <td><b><%@pather_f99_raw_quantity%></b></td>
+        <td><b><%@pather_tile_raw_quantity%></b></td>
+        <td><b><%@pather_quantity%></b></td>
+        <td><b><%@pather_f99_quantity%></b></td>
+        <td><b><%@pather_tile_quantity%></b></td>
+        <td><b><%@pather_wast.to_i%></b></td>
+        <td><b><%@pather_raw_quantity_rate.to_f.round(2)%></b></td>
+        <td><b><%@pather_quantity_rate.to_f.round(2)%></b></td>
+        <td><b><%@pather_gift_rate.to_f.round(2)%></b></td>
+        <td><b><%@pather_coverge_rate.to_f.round(2)%></b></td>
+      </tr>
+    </tbody>
+  </table> -->
+  <table>
+    <thead>
+      <tr>
+        <th class="short-column">Name</th>
+        <th class="short-column">Quantity</th>
+        <th class="short-column">Per Day Avg</th>
+        <th class="short-column">Price</th>
+        <th class="short-column">Average/1000</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Kachi Bricks</td>
+        <td><%=@pather_f99_raw_quantity%></td>
+        <td><%=(@pather_f99_raw_quantity/@pather_date).to_i%></td>
+      </tr>
+      <tr>
+        <td>Kachi Tile</td>
+        <td><%=@pather_tile_raw_quantity%></td>
+        <td><%=(@pather_tile_raw_quantity/@pather_date).to_i%> </td>
+      </tr>
+      <tr>
+        <td><b>Total Kachi</b></td>
+        <td><b><%=@pather_raw_quantity%></b></td>
+        <td><b><%=(@pather_raw_quantity/@pather_date).to_i%></b></td>
+        <td><b><%=@pather_raw_quantity_rate%></b></td>
+        <td><b><%=@avg_pather_raw_quantity_rate=((@pather_raw_quantity_rate/@pather_raw_quantity)*1000).to_f.round(2)%> </b> </td>
+      </tr>
+      <tr>
+        <td>Paaki Bricks</td>
+        <td><%=@pather_f99_quantity%></td>
+        <td><%=(@pather_f99_quantity/@pather_date).to_i%></td>
+      </tr>
+      <tr>
+        <td>Paaki Tile</td>
+        <td><%=@pather_tile_quantity%></td>
+        <td><%=(@pather_tile_quantity/@pather_date).to_i%></td>
+      </tr>
+      <tr>
+        <td><b>Total Paaki</b></td>
+        <td><b><%=@pather_quantity%></b></td>
+        <td><b><%=(@pather_quantity/@pather_date).to_i%> </b> </td>
+        <td><b><%=@pather_quantity_rate%></b></td>
+        <td><b><%=@avg_pather_quantity_rate=((@pather_quantity_rate/@pather_quantity)*1000).to_f.round(2)%> </b> </td>
+      </tr>
+      <tr>
+        <td><b>Waste</b></td>
+        <td><b><%=@pather_wast%></b></td>
+        <td><b><%=(@pather_wast/@pather_date).to_f.round(2)%> </b> </td>
+        </tr>
+      <tr>
+        <td><b>Gift</b></td>
+        <td><%=@pather_raw_quantity%></td>
+        <td><%=(@pather_raw_quantity/@pather_date).to_i%></td>
+        <td><b><%=@pather_gift_rate%></b></td>
+        <td><b><%=@avg_pather_gift_rate=((@pather_gift_rate/@pather_raw_quantity)*1000).to_f.round(2)%> </b> </td>
+      </tr>
+      <tr>
+        <td><b>Coverge</b></td>
+        <td><%=@pather_raw_quantity%></td>
+        <td><%=(@pather_raw_quantity/@pather_date).to_i%></td>
+        <td><b><%=@pather_coverge_rate%></b></td>
+        <td><b><%=@avg_pather_coverge_rate=((@pather_coverge_rate/@pather_raw_quantity)*1000).to_f.round(2)%> </b> </td>
+      </tr>
+      <tr>
+        <td class="short-column"><b>Paid Khacha</b></td>
+        <td class="short-column"><b><%=@pather_raw_quantity%></b></td>
+        <td class="short-column"><b><%=(@pather_raw_quantity/@pather_date).to_i%></b></td>
+        <td class="short-column"><b><%=@pather_raw_quantity_rate+@pather_gift_rate+@pather_coverge_rate%></b></td>
+        <td class="short-column"><b><%=(@avg_pather_raw_quantity_rate).to_f.round(2)+(@avg_pather_gift_rate).to_f.round(2)+(@avg_pather_coverge_rate).to_f.round(2)%> </b> </td>
+      </tr>
+      <tr>
+        <td class="short-column"><b>Total Expense</b></td>
+        <td class="short-column"><b><%=@pather_quantity%></b></td>
+        <td class="short-column"><b><%=(@pather_quantity/@pather_date).to_i%> </b> </td>
+        <td class="short-column"><b><%=@pather_quantity_rate+@pather_gift_rate+@pather_coverge_rate%></b></td>
+        <td class="short-column"><b><%=(@avg_pather_quantity_rate).to_f.round(2)+(@avg_pather_gift_rate).to_f.round(2)+(@avg_pather_coverge_rate).to_f.round(2)%> </b> </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Khakar Report of <%=@kharkar_date%> days </h1>
+<h2 style="text-align: center; margin: 0;">Khakar From <%=@kharkar_from.strftime("%d-%b-%y")%> Till <%=@kharkar_to.strftime("%d-%b-%y")%> </h2>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<div>
+
+  <%@kharkar_quantity_from_pather = 0 %>
+  <%@kharkar_quantity_from_stock = 0 %>
+  <%@kharkar_f99_raw_quantity=0%>
+  <%@kharkar_tile_raw_quantity=0%>
+  <%@kharkar_raw_quantity=0%>
+  <%@kharkar_remaning_quanity_bhari=0%>
+  <%@kharkar_remaning_quanity_stock=0%>
+  <%@kharkar_remaning_quanity_chapa=0%>
+
+  <%@kharkar_quantity = 0 %>
+  <%@kharkar_wast = 0 %>
+  <%@kharkar_raw_quantity_rate = 0 %>
+  <%@kharkar_quantity_rate = 0 %>
+  <div class="row">
+    <!-- <table>
+      <thead>
+        <tr>
+          <th class="short-column">Quantity</th>
+          <th class="short-column">From Pather</th>
+          <th class="short-column">From Stock</th>
+          <th class="short-column">Brick</th>
+          <th class="short-column">Tiles</th>
+          <th class="short-column">To Bhari</th>
+          <th class="short-column">To Stock</th>
+          <th class="short-column">To Chapa</th>
+          <th class="short-column">Debit</th>
+          <th class="short-column">Credit</th>
+          <th class="short-column">Wast</th>
+        </tr>
+      </thead>
+
+      <tbody> -->
+        <% @khakar_daily_books.each do |khakar_daily_book| %>
+            <%@kharkar_quantity_from_pather +=khakar_daily_book.salary_details_khakar_quantity_from_pather.round(0)%>
+            <%@kharkar_quantity_from_stock +=khakar_daily_book.salary_details_khakar_quantity_from_stock.round(0)%>
+            <%@kharkar_f99_raw_quantity +=khakar_daily_book.salary_details_khakar_f99_raw_quantity.round(0)%>
+            <%@kharkar_tile_raw_quantity +=khakar_daily_book.salary_details_khakar_tile_raw_quantity.round(0)%>
+            <%@kharkar_raw_quantity += khakar_daily_book.salary_details_khakar_quantity.round(0) %>
+            <%@kharkar_remaning_quanity_bhari += khakar_daily_book.salary_details_pather_remaning_quanity_bhari.round(0) %>
+            <%@kharkar_remaning_quanity_stock += khakar_daily_book.salary_details_pather_remaning_quanity_stock.round(0) %>
+            <%@kharkar_remaning_quanity_chapa += khakar_daily_book.salary_details_pather_remaning_quanity_chapa.round(0) %>
+            <%@kharkar_quantity_rate += khakar_daily_book.salary_details_khakar_remaning %>
+            <%@kharkar_wast += khakar_daily_book.salary_details_khakar_wast %>
+            <%@kharkar_raw_quantity_rate += khakar_daily_book.salary_details_khakar_debit %>
+            <%@kharkar_quantity += khakar_daily_book.salary_details_khakar_credit %>
+        <% end %>
+        <!-- <tr>
+          <td><b><%@kharkar_raw_quantity%></b></td>
+          <td><b><%@kharkar_quantity_from_pather%></b></td>
+          <td><b><%@kharkar_quantity_from_stock%></b></td>
+          <td><b><%@kharkar_f99_raw_quantity%></b></td>
+          <td><b><%@kharkar_tile_raw_quantity%></b></td>
+          <td><b><%@kharkar_remaning_quanity_bhari%></b></td>
+          <td><b><%@kharkar_remaning_quanity_stock%></b></td>
+          <td><b><%@kharkar_remaning_quanity_chapa%></b></td>
+          <td><b><%@kharkar_raw_quantity_rate %></b></td>
+          <td><b><%@kharkar_quantity %></b></td>
+          <td><b><%@kharkar_wast %></b></td>
+        </tr>
+      </tbody>
+    </table> -->
+    <table>
+      <thead>
+        <tr>
+          <th class="short-column">Name</th>
+          <th class="short-column">Quantity</th>
+          <th class="short-column">Per Day Avg</th>
+          <th class="short-column">Price</th>
+          <th class="short-column">Average</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Bricks Transfer</td>
+          <td><%=@kharkar_f99_raw_quantity%></td>
+          <td><%=(@kharkar_f99_raw_quantity/@kharkar_date).to_i%></td>
+        </tr>
+        <tr>
+          <td>Tile Transfer</td>
+          <td><%=@kharkar_tile_raw_quantity%></td>
+          <td><%=(@kharkar_tile_raw_quantity/@kharkar_date).to_i%> </td>
+        </tr>
+        <tr>
+          <td>From Pather</b></td>
+          <td><%=@kharkar_quantity_from_pather%></td>
+          <td><%=(@kharkar_quantity_from_pather/@kharkar_date).to_i%></td>
+        </tr>
+        <tr>
+          <td>From Stock</td>
+          <td><%=@kharkar_quantity_from_stock%></td>
+          <td><%=(@kharkar_quantity_from_stock/@kharkar_date).to_i%></td>
+        </tr>
+        <tr>
+          <td><b>Total Quantity</b></td>
+          <td><b><%=@kharkar_quantity_from_pather+@kharkar_quantity_from_stock%></b></td>
+          <td><b><%=((@kharkar_quantity_from_pather+@kharkar_quantity_from_stock)/@kharkar_date).to_i%></b></td>
+        </tr>
+        <tr>
+          <td><b>Total Transfer</b></td>
+          <td><b><%=@kharkar_quantity_rate%></b></td>
+          <td><b><%=(@kharkar_quantity_rate/@kharkar_date).to_i%></b></td>
+        </tr>
+        <tr>
+          <td><b>Total Bhari</b></td>
+          <td><b><%=@kharkar_remaning_quanity_bhari%></b></td>
+          <td><b><%=(@kharkar_remaning_quanity_bhari/@kharkar_date).to_i%></b></td>
+        </tr>
+        <tr>
+          <td><b>Total Stock</b></td>
+          <td><b><%=@kharkar_remaning_quanity_stock%></b></td>
+          <td><b><%=(@kharkar_remaning_quanity_stock/@kharkar_date).to_i%></b></td>
+        </tr>
+        <tr>
+          <td><b>Kat</b></td>
+          <td><b><%=(@kharkar_raw_quantity-@kharkar_quantity_rate)%></b></td>
+          <td><b><%=((@kharkar_raw_quantity-@kharkar_quantity_rate)/@kharkar_date).to_i%> </b> </td>
+        </tr>
+        <tr>
+          <td><b>Waste</b></td>
+          <td><b><%=(@kharkar_wast)%></b></td>
+          <td><b><%=((@kharkar_wast)/@kharkar_date).to_i%> </b> </td>
+        </tr>
+        <tr>
+          <td class="short-column"><b>Paid Khacha</b></td>
+          <td class="short-column"><b><%=@kharkar_quantity_rate%></b></td>
+          <td class="short-column"><b><%=(@kharkar_quantity_rate/@kharkar_date).to_i%></b></td>
+          <td class="short-column"><b><%=@kharkar_quantity%></b></td>
+          <td class="short-column"><b><%=(@kharkar_quantity/@kharkar_date).to_f.round(2)%> </b> </td>
+        </tr>
+        <tr>
+          <td class="short-column"><b>Total Expense</b></td>
+          <td class="short-column"><b><%=@kharkar_quantity_rate%></b></td>
+          <td class="short-column"><b><%=(@kharkar_quantity_rate/@kharkar_date).to_i%> </b> </td>
+          <td class="short-column"><b><%=@kharkar_raw_quantity_rate%></b></td>
+          <td class="short-column"><b><%=(@kharkar_raw_quantity_rate/@kharkar_date).to_f.round(2)%> </b> </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Bhari Report of <%=@bhari_date%> days </h1>
+<h2 style="text-align: center; margin: 0;">Bhari From <%=@bhari_from.strftime("%d-%b-%y")%> Till <%=@bhari_to.strftime("%d-%b-%y")%> </h2>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<div>
+  <div class="row">
+    <!-- <table data-toggle="table">
+      <thead>
+        <tr>
+          <th class="short-column">Total</th>
+          <th class="short-column">Bricks</th>
+          <th class="short-column">Tiles</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b><%@bhari_bricks_quantity.to_i+@bhari_tiles_quantity.to_i%></b></td>
+          <td><b><%@bhari_bricks_quantity%></b></td>
+          <td><b><%@bhari_tiles_quantity%></b></td>
+        </tr>
+      </tbody>
+    </table> -->
+    <table>
+      <thead>
+        <tr>
+          <th class="short-column">Name</th>
+          <th class="short-column">Quantity</th>
+          <th class="short-column">Brick/Tile Quantity</th>
+          <th class="short-column">Average</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>Total</b></td>
+          <td><b><%=(@bhari_bricks_quantity.to_i+@bhari_tiles_quantity.to_i)%></b></td>
+          <td><b><%=(@bhari_bricks_quantity.to_i+(@bhari_tiles_quantity.to_f/2))%></b></td>
+          <td><b><%=((@bhari_bricks_quantity.to_i+@bhari_tiles_quantity.to_i)/@bhari_date).to_i%></b></td>
+        </tr>
+        <tr>
+          <td><b>Bricks</b></td>
+          <td><b><%=@bhari_bricks_quantity%></b></td>
+          <td><b><%=@bhari_bricks_quantity%></b></td>
+          <td><b><%=(@bhari_bricks_quantity/@bhari_date).to_i%></b></td>
+        </tr>
+        <tr>
+          <td class="short-column"><b>Tiles</b></td>
+          <td class="short-column"><b><%=@bhari_tiles_quantity%></b></td>
+          <td class="short-column"><b><%=((@bhari_tiles_quantity)/2).to_i%> </b> </td>
+          <td class="short-column"><b><%=(@bhari_tiles_quantity/@bhari_date).to_i%> </b> </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Jalai Report of <%=@jalai_date%> days </h1>
+<h2 style="text-align: center; margin: 0;">Jalai From <%=@jalai_from.strftime("%d-%b-%y")%> Till <%=@jalai_to.strftime("%d-%b-%y")%> </h2>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<div>
+  <div class="row">
+    <%@total_cost=0%>
+    <%cost_per_line=0%>
+    <%per_product_cost=0%>
+    <%per_thousand_product_cost=0%>
+    <%item_quantity_per_line=0%>
+    <%total_item_quantity=0%>
+    <%per_ton_bricks=0%>
+    <%lines=0%>
+    <%@total_bricks=0%>
+    <table>
+      <thead>
+        <th class="short-column">Lines/Chamber</th>
+        <th class="short-column">T Bricks</th>
+        <th class="short-column">T Cost</th>
+        <th class="short-column">Cost/Line</th>
+        <th class="short-column">Cost/1000</th>
+        <th class="short-column">Cost/Brick</th>
+        <th class="short-column">T Qty</th>
+        <th class="short-column">Qty/Line</th>
+        <th class="short-column">Bricks/Ton</th>
+        <th class="short-column">Qty/Brick </th>
+      </thead>
+      <tbody>
+        <% @jalai_production_cycles.each do |production_cycle| %>
+            <% lines+=production_cycle.lines %>
+            <% @total_bricks+=production_cycle.total_bricks.to_i %>
+            <% @total_cost+=production_cycle.total_cost %>
+            <% cost_per_line+=production_cycle.cost_per_line %>
+            <% per_product_cost+=production_cycle.per_product_cost%>
+            <% total_item_quantity+=production_cycle.total_item_quantity %>
+            <% item_quantity_per_line+=production_cycle.item_quantity_per_line %>
+            <% per_ton_bricks+=production_cycle.per_ton_bricks %>
+        <% end %>
+        <tr>
+          <td><b><%=lines.to_i%></b></td>
+          <td><b><%=@total_bricks.to_i%></b></td>
+          <td><b><%=@total_cost.to_i%></b></td>
+          <td><b><%=(@total_cost/lines).to_i  if @jalai_production_cycles.present?%></b></td>
+          <td><b><%=(@total_cost/@total_bricks).round(2)*1000 if @total_cost!=@total_bricks%></b></td>
+          <td><b><%=(@total_cost/@total_bricks).round(2) if @total_cost!=@total_bricks%></b></td>
+          <td><b><%=total_item_quantity.to_i%></b></td>
+          <td><b><%=(total_item_quantity/lines.to_i).to_i  if @jalai_production_cycles.present?%></b></td>
+          <td><b><%=((@total_bricks/total_item_quantity)*1000.to_i).round(0)  if @jalai_production_cycles.present?%></b></td>
+          <td><b><%=(total_item_quantity/@total_bricks).round(3) if total_item_quantity.positive?%></b></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+    <table>
+      <thead>
+        <tr>
+          <th class="short-column">Name</th>
+          <th class="short-column">Quantity</th>
+          <th class="short-column">Average</th>
+          <th class="short-column">Price</th>
+          <th class="short-column">Average</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>Bricks</b></td>
+          <td><b><%=(@total_bricks.to_i)%></b></td>
+          <td><b><%=((@total_bricks.to_i)/@jalai_date).to_i%></b></td>
+          <td><b><%=(@total_cost.to_i)%></b></td>
+          <td><b><%=((@total_cost.to_i)/@jalai_date).to_i%></b></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Nakasi Report of <%=@nakasi_date%> days </h1>
+<h2 style="text-align: center; margin: 0;">Nakasi From <%=@nakasi_from.strftime("%d-%b-%y")%> Till <%=@nakasi_to.strftime("%d-%b-%y")%> </h2>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<div>
+  <div class="row">
+    <%@nkasi_raw_quantity_rate = 0 %>
+    <%@nkasi_quantity_rate = 0 %>
+    <table data-toggle="table" data-search="true"  data-sticky-header="true" id="nakasi">
+      <thead>
+        <tr>
+          <th class="short-column">Total</th>
+          <%@products.each do |product|%>
+            <th class="short-column"><%=product.title%></th>
+          <%end%>
+          <th class="short-column">Bricks Rohra</th>
+          <th class="short-column">Tile Rohra</th>
+          <th class="short-column">Total</th>
+          <th class="short-column">Debit</th>
+          <th class="short-column">Credit</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <%@total_count=0%>
+        <% @nkasi_production_cycles.each do |daily_book| %>
+          <%@nkasi_raw_quantity_rate += daily_book.salary_details_raw_quantity_rate.round(0) %>
+          <%@nkasi_quantity_rate += daily_book.salary_details_quantity_rate.round(0) %>
+
+          <%@count=0%>
+          <%product_quantity_function(daily_book).each do |product|%>
+            <%@count+=product.last%>
+          <%end%>
+          <%@total_count+=@count%>
+          <%total=0%>
+          <%product_quantity_function(daily_book).each do |product|%>
+            <%if (product.last!=0 && @count!=0) %>
+              <%total+=((product.last/@count)*100).to_f.round(2)%>
+            <%end%>
+          <%end%>
+        <% end %>
+        <tr>
+          <td><b>Bricks</b></td>
+            <%product_quantity_all_function(@nakasi_from,@nakasi_to).each do |product_quantity|%>
+            <td><b><%=product_quantity.last.to_i%></b></td>
+          <%end%>
+          <td><b><%=@rohra=@nkasi_production_cycles.sum(:brick_rohra)%><%@total_count+=@nkasi_production_cycles.sum(:brick_rohra)%></b></td>
+          <td><b><%=@tile_rohra=@nkasi_production_cycles.sum(:tile_rohra)%><%@total_count+=@nkasi_production_cycles.sum(:tile_rohra)%></b></td>
+          <td><b><%=@total_count.to_i.round(0)%></b></td>
+          <td><b><%=@nkasi_raw_quantity_rate %></b></td>
+          <td><b><%=@nkasi_quantity_rate%></b></td>
+
+        </tr>
+        <tr>
+          <%total_avg=0%>
+          <td><b>Percent</b></td>
+          <%product_quantity_all_function(@nakasi_from,@nakasi_to).each do |product_quantity|%>
+            <td class="table-active">
+              <%if (product_quantity.last!=0 && @total_count!=0) %>
+                <b><b><%=total=((product_quantity.last/@total_count)*100).to_f.round(1)%> %</b></b>
+                <%total_avg+=total%>
+              <%else%>
+                <b>0</b>
+              <%end%>
+            </td>
+          <%end%>
+          <td>
+            <%if (@rohra!=0 && @total_count!=0) %>
+              <b><%=total=((@rohra/@total_count)*100).to_f.round(1)%></b>
+              <%total_avg+=total%>
+            <%else%>
+              <b>0</b>
+            <%end%>
+            </td>
+          <td>
+            <%if (@tile_rohra!=0 && @total_count!=0) %>
+              <b><%=total=((@tile_rohra/@total_count)*100).to_f.round(1)%></b>
+              <%total_avg+=total%>
+            <%else%>
+              <b>0</b>
+            <%end%>
+            </td>
+          <td class="table-active"><b><b><%=total_avg.round(0)%> %</b></b></td>
+          <td><b></b></td>
+
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="">
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Full Production Report of <%=@full_production_date%> days </h1>
+<h2 style="text-align: center; margin: 0;">Production From <%=@pather_from.strftime("%d-%b-%y")%> Till <%=@nakasi_to.strftime("%d-%b-%y")%> </h2>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+  <div class="row">
+    <table>
+      <thead>
+        <tr>
+          <th class="short-column">Pather</th>
+          <th class="short-column">khakar</th>
+          <th class="short-column">Bhari</th>
+          <th class="short-column">Jalai</th>
+          <th class="short-column">Nakasi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td></td>
+          <td>Total: <b><%=@kharkar_raw_quantity%></b></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><b><%=@pather_quantity%></b></td>
+          <td>Transfer: <b><%=@kharkar_remaning_quanity_bhari%></b></td>
+          <td><b><%=@bhari_bricks_quantity.to_i+@bhari_tiles_quantity.to_i%></b></td>
+          <td><b><%=@total_bricks.to_i%></b></td>
+          <td><b><%=@total_count.to_i.round(0)%></b></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>Stock: <b><%=@kharkar_remaning_quanity_stock%></b></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>Chapa: <b><%=@kharkar_remaning_quanity_chapa%></b></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="short-column"><b></b></td>
+          <td class="short-column"><b></b></td>
+          <td class="short-column"><b>Production Expense</b></td>
+          <td class="short-column"><b></b></td>
+          <td class="short-column"><b></b> </td>
+        </tr>
+        <tr>
+          <td><b><%=@pather_total_rate=(@pather_quantity_rate+@pather_gift_rate+@pather_coverge_rate).to_i%></b></td>
+          <td><b><%=@kharkar_quantity.to_i%></b></td>
+          <td><b></b></td>
+          <td><b><%=@total_cost.to_i%></b></td>
+          <td><b><%=@nkasi_quantity_rate.to_i%></b></td>
+        </tr>
+        <tr>
+          <td class="short-column"><b>Total</b></td>
+          <td class="short-column"><b></b></td>
+          <td class="short-column"><b></b></td>
+          <td class="short-column"><b></b></td>
+          <td class="short-column"><b><%=@pather_total_rate+@kharkar_quantity.to_i+@total_cost.to_i+@nkasi_quantity_rate.to_i%></b></td>
+        </tr>
+    </table>
+  </div>
+</div>
+
+<div class="alwaysbreak">
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Expense Report of <%=@expense_date%> days </h1>
+<h2 style="text-align: center; margin: 0;">Expense From <%=@expense_from.strftime("%d-%b-%y")%> Till <%=@expense_to.strftime("%d-%b-%y")%> </h2>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+  <div class="row">
+    <table>
+      <thead>
+        <tr>
+          <th class="short-column">Name</th>
+          <th class="short-column">Amount</th>
+          <th class="short-column">Average</th>
+          <th class="short-column">Per 1000</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%@expenses_with_type.each do |expense|%>
+        <tr>
+          <td><%=expense.first%></td>
+          <td><b><%=expense.last%></b></td>
+          <td><%=(expense.last/@jalai_date).to_i%></td>
+          <td><b><%=((expense.last/(@bhari_bricks_quantity.to_i+@bhari_tiles_quantity.to_i))*1000).to_f.round(3)%></b></td>
+
+        </tr>
+        <%end%>
+        <tr>
+          <td class="short-column"><b>Total</b></td>
+          <td class="short-column"><b><%=@expenses_total.to_f.round(2)%></b></td>
+          <td class="short-column"><b><%=(@expenses_total/@jalai_date).to_i%></b></td>
+          <td class="short-column"><b><%=((@expenses_total/(@bhari_bricks_quantity.to_i+@bhari_tiles_quantity.to_i))*1000).to_f.round(2)%></b></td>
+        </tr>
+    </table>
+  </div>
+</div>
+
+<div class="  ">
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Salary Report of <%=@salary_date%> days </h1>
+<h2 style="text-align: center; margin: 0;">Salary From <%=@salary_from.strftime("%d-%b-%y")%> Till <%=@salary_to.strftime("%d-%b-%y")%> </h2>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+  <div class="row">
+    <table>
+      <thead>
+        <tr>
+          <th class="short-column">Name</th>
+          <th class="short-column">Amount</th>
+          <th class="short-column">Average</th>
+          <th class="short-column">Per 1000</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%@salary_total=0%>
+        <%@salary_amount.each do |salary|%>
+          <tr>
+            <td><%=salary.first%></td>
+            <td><b><%=salary.last%><%@salary_total+=salary.last.to_f.round(2)%></b></td>
+            <td><%=(salary.last/@salary_date).to_i%></td>
+            <td><b><%=((salary.last/(@bhari_bricks_quantity.to_i+@bhari_tiles_quantity.to_i))*1000).to_f.round(3)%></b></td>
+
+          </tr>
+        <%end%>
+        <tr>
+          <td class="short-column"><b>Total</b></td>
+          <td class="short-column"><b><%=@salary_total%></b></td>
+          <td class="short-column"><b><%=(@salary_total/@jalai_date).to_i%></b></td>
+          <td class="short-column"><b><%=((@salary_total/(@bhari_bricks_quantity.to_i+@bhari_tiles_quantity.to_i))*1000).to_f.round(2)%></b></td>
+        </tr>
+    </table>
+  </div>
+</div>
+
+<div class="">
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Purchase Report of <%=@purchase_date%> days </h1>
+<h2 style="text-align: center; margin: 0;">Purchase From <%=@purchase_from.strftime("%d-%b-%y")%> Till <%=@purchase_to.strftime("%d-%b-%y")%> </h2>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+  <div class="row">
+    <table>
+      <thead>
+        <tr>
+          <th class="short-column">Name</th>
+          <th class="short-column">Amount</th>
+          <th class="short-column">Quantity</th>
+          <th class="short-column">Average</th>
+          <th class="short-column">Average by Day</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%@purchase_total=0%>
+        <%@purchase_quantity_total=0%>
+        <%@purchase.each do |purchase|%>
+          <tr>
+            <td><%=purchase.first%></td>
+            <td><b><%=purchase.last.to_f.round(2)%><%@purchase_total+=purchase.last.to_f%></b></td>
+            <td><b><%=@purchase_quantity[purchase.first].to_f.round(2)%><%@purchase_quantity_total+=@purchase_quantity[purchase.first].to_f%></b></td>
+            <td><b><%=(purchase.last.to_f/@purchase_quantity[purchase.first].to_f).to_f.round(2)%></b></td>
+            <td><%=(purchase.last/@jalai_date).to_i%></td>
+          </tr>
+        <%end%>
+        <tr>
+          <td class="short-column"><b>Total</b></td>
+          <td class="short-column"><b><%=@purchase_total.to_f.round(2)%></b></td>
+          <td class="short-column"><b><%=@purchase_quantity_total.to_f.round(2)%></b></td>
+          <td class="short-column"></td>
+          <td class="short-column"><b><%=(@purchase_total/@jalai_date).to_i%></b></td>
+        </tr>
+    </table>
+  </div>
+</div>
+
+<div class="alwaysbreak">
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Sale Report of <%=@sale_date%> days </h1>
+<h2 style="text-align: center; margin: 0;">Sale From <%=@sale_from.strftime("%d-%b-%y")%> Till <%=@sale_to.strftime("%d-%b-%y")%> </h2>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+  <div class="row">
+    <table>
+      <thead>
+        <tr>
+          <th class="short-column">Name</th>
+          <th class="short-column">Amount</th>
+          <th class="short-column">Quantity</th>
+          <th class="short-column">Average</th>
+          <th class="short-column">Average by Day</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%@sale_total=0%>
+        <%@sale_quantity_total=0%>
+        <%@sale.each do |sale|%>
+          <tr>
+            <td><%=sale.first%></td>
+            <td><b><%=sale.last.to_f.round(2)%><%@sale_total+=sale.last.to_f%></b></td>
+            <td><b><%=@sale_quantity[sale.first].to_f.round(2)%><%@sale_quantity_total+=@sale_quantity[sale.first].to_f%></b></td>
+            <td><b><%=(sale.last.to_f/@sale_quantity[sale.first].to_f).to_f.round(2)%></b></td>
+            <td><%=(sale.last/@jalai_date).to_i%></td>
+          </tr>
+        <%end%>
+        <tr>
+          <td class="short-column"><b>Total</b></td>
+          <td class="short-column"><b><%=@sale_total.to_f.round(2)%></b></td>
+          <td class="short-column"><b><%=@sale_quantity_total%></b></td>
+          <td class="short-column"></td>
+          <td class="short-column"><b><%=(@sale_total/@jalai_date).to_i%></b></td>
+        </tr>
+    </table>
+  </div>
+</div>
+
+<div class="  ">
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Previous Stock Report of <%=(@nakasi_from-1).strftime("%d-%b-%y")%></h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+  <div class="row">
+    <table>
+      <thead>
+        <tr>
+          <th class="short-column">Name</th>
+          <th class="short-column">Amount</th>
+          <th class="short-column">Quantity</th>
+          <th class="short-column">Average</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <%@pre_total=0%>
+        <%@pre_quantity_total=0%>
+        <%@pre_stock.each do |sale|%>
+          <tr>
+            <td><%=sale.product.title if sale.product.present?%></td>
+            <td><b><%=sale.stock.to_f.round(2)*sale.sale_price.to_f.round(2)%><%@pre_total+=(sale.stock.to_f.round(2)*sale.sale_price.to_f.round(2))%></b></td>
+            <td><b><%=sale.stock.to_f.round(2).to_f.round(2)%><%@pre_quantity_total+=sale.stock.to_f.round(2).to_f%></b></td>
+            <td><b><%=((sale.stock.to_f.round(2)*sale.sale_price.to_f.round(2))/sale.stock.to_f.round(2)).to_f.round(2)%></b></td>
+          </tr>
+        <%end%>
+        <tr>
+          <td class="short-column"><b>Total</b></td>
+          <td class="short-column"><b><%=@pre_total.to_f.round(2)%></b></td>
+          <td class="short-column"><b><%=@pre_quantity_total%></b></td>
+          <td class="short-column"></td>
+        </tr>
+    </table>
+  </div>
+</div>
+
+<div class="  ">
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Remaning Stock Report of <%=(@nakasi_to).strftime("%d-%b-%y")%></h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+  <div class="row">
+    <table>
+      <thead>
+        <tr>
+          <th class="short-column">Name</th>
+          <th class="short-column">Amount</th>
+          <th class="short-column">Quantity</th>
+          <th class="short-column">Average</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <%@remain_total=0%>
+        <%@remain_quantity_total=0%>
+        <%@remain_stock.each do |sale|%>
+          <tr>
+            <td><%=sale.product.title if sale.product.present?%></td>
+            <td><b><%=sale.stock.to_f.round(2)*sale.sale_price.to_f.round(2)%><%@remain_total+=(sale.stock.to_f.round(2)*sale.sale_price.to_f.round(2))%></b></td>
+            <td><b><%=sale.stock.to_f.round(2).to_f.round(2)%><%@remain_quantity_total+=sale.stock.to_f.round(2).to_f%></b></td>
+            <td><b><%=sale.sale_price.to_f.round(2)%></b></td>
+          </tr>
+        <%end%>
+        <tr>
+          <td class="short-column"><b>Total</b></td>
+          <td class="short-column"><b><%=@remain_total.to_f.round(2)%></b></td>
+          <td class="short-column"><b><%=@remain_quantity_total%></b></td>
+          <td class="short-column"></td>
+        </tr>
+    </table>
+  </div>
+</div>
+
+<div class="alwaysbreak">
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Sale Of the Gate <%=@sale_date%> days </h1>
+<h2 style="text-align: center; margin: 0;">From <%=@sale_from.strftime("%d-%b-%y")%> Till <%=@sale_to.strftime("%d-%b-%y")%> </h2>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+  <div class="row">
+    <table>
+      <thead>
+        <tr>
+          <th class="short-column">Name</th>
+          <th class="short-column">Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <tr>
+            <td><b>Sale</b></td>
+            <td>+<b><%=@sale_total.to_f.round(2)%></b></td>
+          </tr>
+          <tr>
+            <td><b>Remaning Stock</b></td>
+            <td>+<b><%=@remain_total.to_f.round(2)%></b></td>
+          </tr>
+          <tr>
+            <td><b>Previous Stock</b></td>
+            <td>-<b><%=@pre_total.to_f.round(2)%></b></td>
+          </tr>
+        <tr>
+          <td class="short-column"><b>Gate Sale(Sale+Remaining-Previous)</b></td>
+          <td class="short-column"><b><%=(@sale_total+@remain_total-@pre_total).to_f.round(2)%></b></td>
+        </tr>
+    </table>
+  </div>
+</div>
+
+<div class="  ">
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Total Expense Report of <%=@sale_date%> days </h1>
+<h2 style="text-align: center; margin: 0;">From <%=@sale_from.strftime("%d-%b-%y")%> Till <%=@sale_to.strftime("%d-%b-%y")%> </h2>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+  <div class="row">
+    <table>
+      <thead>
+        <tr>
+          <th class="short-column">Name</th>
+          <th class="short-column">Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>Pather Stock (<%=-(@kharkar_remaning_quanity_stock)%>)</b></td>
+          <td><b><%=@pather_stock=-(((@pather_quantity_rate+@pather_gift_rate+@pather_coverge_rate).to_f/@pather_quantity.to_f)*(@kharkar_remaning_quanity_stock)).to_f.round(2)%></b>
+          </td>
+        </tr>
+        <tr>
+          <td><b>Khakar Stock (<%=-(@kharkar_remaning_quanity_stock)%>)</b></td>
+          <td>
+            <%@khakar_stock=-((@kharkar_raw_quantity_rate.to_f/@kharkar_quantity_rate.to_f).to_f*@kharkar_remaning_quanity_stock).to_f.round(2)%>
+            <%@khakar_stock = @khakar_stock.nan? ? 0 : @khakar_stock%>
+            <b><%=@khakar_stock%></b>
+          </td>
+        </tr>
+        <tr>
+          <td><b>Purchase</b></td>
+          <td><b><%=@purchase_total.to_f.round(2)%></b></td>
+        </tr>
+        <tr>
+          <td><b>Expense</b></td>
+          <td><b><%=@expenses_total.to_f.round(2)%></b></td>
+        </tr>
+        <tr>
+          <td><b>Production (Pather: <%=@pather_total_rate.to_i%>,Khakar: <%=@kharkar_quantity.to_i%>,Nakasi: <%=@nkasi_quantity_rate.to_i%>,Jalai: <%=@total_cost.to_i%>)</b></td>
+          <td><b><%=@pather_total_rate.to_i+@kharkar_quantity.to_i+@total_cost.to_i+@nkasi_quantity_rate.to_i%></b></td>
+        </tr>
+        <tr>
+          <td><b>Salary</b></td>
+          <td><b><%=@salary_total.to_f.round(2)%></b></td>
+        </tr>
+        <tr>
+          <td class="short-column"><b>Total</b></td>
+          <td class="short-column"><b><%=(@salary_total.to_f+@pather_stock.to_f.round(2)+@khakar_stock.to_f.round(2)+@purchase_total.to_f.round(2)+@expenses_total.to_f.round(2)+(@pather_total_rate.to_i+@kharkar_quantity.to_i+@total_cost.to_i+@nkasi_quantity_rate.to_i)).to_f.round(2)%></b></td>
+        </tr>
+    </table>
+  </div>
+</div>
+
+<div class="  ">
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Final Statement Report of <%=@sale_date%> days </h1>
+<h2 style="text-align: center; margin: 0;">From <%=@sale_from.strftime("%d-%b-%y")%> Till <%=@sale_to.strftime("%d-%b-%y")%> </h2>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+  <div class="row">
+    <table>
+      <thead>
+        <tr>
+          <th class="short-column">Name</th>
+          <th class="short-column">Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class=""><b>Sale</b></td>
+          <td class=""><b><%=(@sale_total+@remain_total-@pre_total).to_f.round(2)%></b></td>
+        </tr>
+        <tr>
+          <td class=""><b>Expense</b></td>
+          <td class=""><b><%=(@salary_total.to_f+@pather_stock.to_f.round(2)+@khakar_stock.to_f.round(2)+@purchase_total.to_f.round(2)+@expenses_total.to_f.round(2)+(@pather_total_rate.to_i+@kharkar_quantity.to_i+@total_cost.to_i+@nkasi_quantity_rate.to_i)).to_f.round(2)%></b></td>
+        </tr>
+        <tr>
+          <td class="short-column"><b>Loss/Profit</b></td>
+          <td class="short-column"><b><%=((@sale_total+@remain_total-@pre_total)-(@salary_total.to_f+@pather_stock.to_f.round(2)+@khakar_stock.to_f.round(2)+@purchase_total.to_f.round(2)+@expenses_total.to_f.round(2)+(@pather_total_rate.to_i+@kharkar_quantity.to_i+@total_cost.to_i+@nkasi_quantity_rate.to_i))).to_f.round(2)%></b></td>
+        </tr>
+    </table>
+  </div>
+</div>
+
+<div class="">
+  <p style="border-bottom: double 4px;  margin: 0;"></p>
+  <h1 style="text-align: center; margin: 0;">Per 1000 Report </h1>
+  <p style="border-bottom: double 4px;  margin: 0;"></p>
+  <div class="row">
+    <table>
+      <thead>
+        <th class="short-column">Per 1000</th>
+        <th class="short-column">Amount</th>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td><b>Sale</b></td>
+          <td><b><%=(((@sale_total+@remain_total-@pre_total)/(@bhari_bricks_quantity.to_i+@bhari_tiles_quantity.to_i))*1000).to_f.round(2)%></b></td>
+        </tr>
+        <tr>
+          <td><b>Expense</b></td>
+          <td><b><%=(((@salary_total.to_f+@pather_stock.to_f.round(2)+@khakar_stock.to_f.round(2)+@purchase_total.to_f.round(2)+@expenses_total.to_f.round(2)+(@pather_total_rate.to_i+@kharkar_quantity.to_i+@total_cost.to_i+@nkasi_quantity_rate.to_i)).to_f.round(2)/(@bhari_bricks_quantity.to_i+@bhari_tiles_quantity.to_i))*1000).to_f.round(2)%></b></td>
+        </tr>
+        <tr>
+          <td><b>Loss/Profit</b></td>
+          <td><b><%=((((@sale_total+@remain_total-@pre_total)/(@bhari_bricks_quantity.to_i+@bhari_tiles_quantity.to_i))*1000).to_f.round(2)-(((@salary_total.to_f+@pather_stock.to_f.round(2)+@khakar_stock.to_f.round(2)+@purchase_total.to_f.round(2)+@expenses_total.to_f.round(2)+(@pather_total_rate.to_i+@kharkar_quantity.to_i+@total_cost.to_i+@nkasi_quantity_rate.to_i)).to_f.round(2)/(@bhari_bricks_quantity.to_i+@bhari_tiles_quantity.to_i))*1000).to_f.round(2)).to_f.round(2)%></b></td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+</div>

@@ -1,0 +1,66 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Order Items</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Order</th>
+      <th>Product</th>
+      <th>Item</th>
+      <th>Quantity</th>
+      <th>Cost price</th>
+      <th>Sale price</th>
+      <th>Total cost price</th>
+      <th>Total sale price</th>
+      <th>Status</th>
+      <th>Comment</th>
+      <th>Transaction type</th>
+      <th>Discount price</th>
+      <th>Purchase sale type</th>
+      <th>Expiry date</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @order_items.each do |order_item| %>
+      <tr>
+        <td><%= order_item.order %></td>
+        <td><%= order_item.product %></td>
+        <td><%= order_item.item %></td>
+        <td><%= order_item.quantity %></td>
+        <td><%= order_item.cost_price %></td>
+        <td><%= order_item.sale_price %></td>
+        <td><%= order_item.total_cost_price %></td>
+        <td><%= order_item.total_sale_price %></td>
+        <td><%= order_item.status %></td>
+        <td><%= order_item.comment %></td>
+        <td><%= order_item.transaction_type %></td>
+        <td><%= order_item.discount_price %></td>
+        <td><%= order_item.purchase_sale_type %></td>
+        <td><%= order_item.expiry_date %>
+        <td>
+          <% if can?(:update, :all) %>
+            <%= link_to edit_order_item_path(order_item) do %>
+              <i class="fa fa-edit " aria-hidden="true"></i> |
+            <%end %>
+          <% end %>
+          <% if can?(:delete, :all) %>
+            <%= link_to order_item, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+              <i class="fa fa-trash " aria-hidden="true"></i> |
+            <%end %>
+          <% end %>
+          <% if can?(:view, :all) %>
+            <%= link_to order_item do %>
+              <i class="fa fa-eye " aria-hidden="true"></i>
+            <%end %>
+          <%end%>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Order Item', new_order_item_path %>

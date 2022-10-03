@@ -1,0 +1,48 @@
+<% @date = Date.today  %>
+<% @time = DateTime.now %>
+<% @time = Time.zone.now %>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Product Stock Exchange </h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<p style="text-align: center;margin: 0;">Report by: <%=current_user.name%></p>
+<div style="width:90vw;">
+  <table>
+    <th></th>
+    <th></th>
+    <tr>
+      <td style="width:67vw;">DateTime: <span><%=Time.zone.now%></span> </td>
+    </tr>
+    <tr>
+      <td style="">Platform: POS</td>
+    </tr>
+  </table>
+</div>
+<div>
+  <table data-toggle="table" data-search="true">
+    <thead>
+      <tr class="lite-gray">
+        <th>Product sender</th>
+        <th>Product recipient</th>
+        <th>Quantity</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @product_stock_exchanges.each do |product_stock_exchange| %>
+        <tr style="text-align :center">
+          <td><%= product_stock_exchange.product_id %></td>
+          <td><%= product_stock_exchange.product_recipient_id %></td>
+          <td><b><%= product_stock_exchange.quantity %></b></td>
+        </tr>
+      <% end %>
+      <tr class="lite-gray" style="text-align :center">
+        <td><b>Total</b></td>
+        <td></td>
+        <td><b><%=@total_quantity.first %></b></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

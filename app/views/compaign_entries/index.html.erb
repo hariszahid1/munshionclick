@@ -1,0 +1,27 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Compaign Entries</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @compaign_entries.each do |compaign_entry| %>
+      <tr>
+        <td><%= compaign_entry.name %></td>
+        <td><%= link_to 'Show', compaign_entry %></td>
+        <td><%= link_to 'Edit', edit_compaign_entry_path(compaign_entry) %></td>
+        <td><%= link_to 'Destroy', compaign_entry, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Compaign Entry', new_compaign_entry_path %>

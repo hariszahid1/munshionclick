@@ -1,0 +1,60 @@
+<% @time = Time.zone.now+15*60 %>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Order # <%=@purchase_sale_detail.voucher_id.present? ? @purchase_sale_detail.voucher_id : @id %><%=@time.strftime(" %I:%M%p")%></h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<div>
+  <table>
+    <th style="width:40vw;">Items</th>
+    <th style="width:20vw;">Price</th>
+    <th style="width:15vw;">Size</th>
+    <th style="width:15vw;">Qty</th>
+    <th style="width:15vw;">total</th>
+    <% @purchase_sale_detail.purchase_sale_items.each do |item|%>
+      <tr>
+        <td style="border-bottom: 1px solid #000; "><%=item.product.title %></td>
+        <td style="border-bottom: 1px solid #000; "><%=item.sale_price %></td>
+        <td style="border-bottom: 1px solid #000; "><%=item.comment%></td>
+        <td style="border-bottom: 1px solid #000; "><%=item.quantity %></td>
+        <td style="border-bottom: 1px solid #000; "><%=item.total_sale_price %></td>
+      </tr>
+    <% end %>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>Total: </td>
+      <td><%=@purchase_sale_detail.total_bill%></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>Received: </td>
+      <td><%=@purchase_sale_detail.amount.present? ? @purchase_sale_detail.amount : 0.00%></td>
+    </tr>
+    <%if @purchase_sale_detail.discount_price.present?%>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>Discount: </td>
+        <td><%=@purchase_sale_detail.discount_price.present? ? @purchase_sale_detail.discount_price : 0.00%></td>
+      </tr>
+    <%end%>
+    <tr>
+      <td></td>
+      <td></td>
+      <td>Cash: </td>
+      <td><%=@purchase_sale_detail.total_bill-(@purchase_sale_detail.amount.present? ? @purchase_sale_detail.amount : 0.00)-(@purchase_sale_detail.discount_price.present? ? @purchase_sale_detail.discount_price : 0.00)%></td>
+    </tr>
+  </table>
+</div>
+<p style="margin: 0;"><span><%=@purchase_sale_detail.comment%></span></p>
+<%@printfun=@pos_setting&.extra_settings.present? ? @pos_setting&.extra_settings["printfun"].to_f : 100%>
+<%@redirectfun=@pos_setting&.extra_settings.present? ? @pos_setting&.extra_settings["redirectfun"].to_f : 1200%>
+<script type="text/javascript">
+    window.setTimeout(printfun, <%=@printfun%>);
+    window.setTimeout(redirectfun, <%=@redirectfun%>);
+    function printfun(){window.print();}
+    function redirectfun(){window.location.replace("/purchase_sale_details/new?product=true&transaction_type=sale"); return true;}
+</script>

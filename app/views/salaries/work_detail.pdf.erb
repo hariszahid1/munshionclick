@@ -1,0 +1,61 @@
+<%if current_user.superAdmin.company_type=="batamega"%>
+  <%= render partial: "create_bata", locals: {purchase_sale_detail: @purchase_sale_detail} %>
+<%elsif current_user.superAdmin.company_type=="mianji"%>
+  <%= render partial: "create_fc", locals: {purchase_sale_detail: @purchase_sale_detail} %>
+<%else%>
+<% @time = Time.zone.now %>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Salaries Detail</h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<div style="width:90vw;">
+  <table>
+    <th></th>
+    <th></th>
+    <tr>
+      <td style="width:67vw;">Date Time: <span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%> <%=@time.strftime("at %I:%M%p")%></span> </td>
+      <td style="width:33vw;">Customer Type: <span> </span></td>
+    </tr>
+    <tr>
+      <td style="">Payment by: Cash</td>
+      <td style="">Platform: POS</td>
+    </tr>
+  </table>
+</div>
+<p style="border-bottom: dotted 3px;  margin: 0;"></p>
+<div style="width:90vw;">
+
+  <table data-toggle="table" data-search="true">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Paid</th>
+        <th>Balance</th>
+        <th>Leaves</th>
+        <th>Paid By</th>
+        <th>Comment</th>
+        <th>Date/Time</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @salaries.each do |salary| %>
+        <tr>
+          <td style="width:20vw;"><%= salary.staff.name %></td>
+          <td style="width:20vw;"><%= salary.paid_salary.present? ? salary.paid_salary : "" %><%= salary.advance.present? ? salary.advance : "" %> </td>
+          <td style="width:20vw;"><%= salary.staff.balance.to_f.round(2) %></td>
+          <td style="width:20vw;"><%= salary.leaves_in_month %></td>
+          <td style="width:20vw;"><%= salary.account_id.present? ? salary.account.title : '' %></td>
+          <td style="width:20vw;"><%= salary.comment %> | <%= salary.payment_type %></td>
+          <td style="width:20vw;">
+            <%if salary.created_at.strftime("%d%b%y")!=salary.updated_at.strftime("%d%b%y")%>
+              <%= salary.created_at.present? ? salary.created_at.strftime("%A,  %d-%b-%y at %H:%M%p") : '' %> | <%= salary.updated_at.present? ? salary.updated_at.strftime("%d%b%y at %H:%M%p") : '' %>
+            <%else%>
+              <%= salary.created_at.present? ? salary.created_at.strftime("%A,  %d-%b-%y at %H:%M%p") : '' %>
+            <%end%>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<%end%>

@@ -1,0 +1,90 @@
+<h1>Salaries Book by <%=@departments&.second&.title%></h1>
+
+<div class="row col-lg-12 form-group float-left">
+  <div class="col-lg-3 form-group float-left">
+    <%= link_to pather_salary_details_path, class: "btn btn-primary" do %>
+      <i class="fa fa-male" aria-hidden="true"></i>
+      <%= @departments.first.title%> Book
+    <% end %>
+  </div>
+  <div class="col-lg-2 form-group float-left">
+    <%= link_to vehicle_salary_details_path, class: "btn btn-primary" do %>
+      <i class="fa fa-truck" aria-hidden="true"></i>
+      <%= @departments.fourth.title%> Book
+    <% end %>
+  </div>
+</div>
+<div class="clearfix"></div>
+<div class="row">
+  <%= search_form_for @q, url: khakar_salary_details_path, class: "admin-controls", method: "get" do |f| %>
+  <div class="col-lg-12 col-sm-12">
+      <div class="col-lg-3 form-group float-left">
+        <%= f.select :id_in, options_from_collection_for_select(@salary_searchs, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code}"},f.object.id_in),{:include_blank => "Select Staff"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Staff"}}%>
+      </div>
+      <div class="col-lg-3 form-group float-left">
+        <%= f.search_field :salary_details_created_at_gteq, class: 'form-control input-sm datepicker', value: @created_at_gteq,'datepicker' => true,placeholder: "YYYY-MM-DD" %>
+      </div>
+      <div class="col-lg-3 form-group float-left">
+        <%= f.search_field :salary_details_created_at_lteq, class: 'form-control input-sm datepicker',value: @created_at_lteq, 'datepicker' => true ,placeholder: "YYYY-MM-DD"%>
+      </div>
+      <div class="col-lg-2 form-group float-left">
+        <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+      </div>
+      </div>
+    <div class="col-lg-12 col-sm-12 float-left float-left">
+      <div class="col-lg-2 form-group float-left">
+        <button class="form-control btn btn-secondary" name="submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank"><i class="fa fa-file-pdf"></i> Full</button>
+      </div>
+      <div class="col-lg-2 form-group float-left">
+        <button class="form-control btn btn-info" name="email" type="submit" value="Email"><i class="fas fa-envelope"></i> email</button>
+      </div>
+    </div>
+    <% end %>
+  </div>
+
+  <div class="clearfix"></div>
+
+  <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+    <li class="nav-item" onclick="updatetabs('pills-home')">
+      <a class="<%=params[:from_tabe]=='pills-home' ? 'nav-link active' : 'nav-link'%>" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true"><b>Khakar Full</b></a>
+    </li>
+    <li class="nav-item" onclick="updatetabs('pills-profile')">
+      <a class="<%=params[:from_tabe]=='pills-profile' ? 'nav-link active' : 'nav-link'%>" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false"><b>khakar</b></a>
+    </li>
+  </ul>
+
+  <div class="tab-content" id="pills-tabContent">
+    <div class= "<%=params[:from_tabe]=='pills-home' ? 'tab-pane fade show active' : 'tab-pane fade show active'%>" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+      <%= render partial: "khakar_full", locals: {} %>
+    </div>
+    <div class= "<%=params[:from_tabe]=='pills-profile' ? 'tab-pane fade show active' : 'tab-pane fade '%>" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+      <%= render partial: "khakar", locals: {} %>
+    </div>
+  </div>
+
+<div class="clearfix"></div>
+<div class="row">
+  <div class="col-lg-4 col-sm-4">
+    <%= page_entries_info @salary_details %>
+  </div>
+  <div class="col-lg-8 col-sm-8 pagination-left">
+    <%= paginate @salary_details %>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+  });
+</script>
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#students_list").removeClass('hidden');
+    FontAwesome.dom.i2svg();
+  });
+</script>

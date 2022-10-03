@@ -1,0 +1,53 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Purchase Sale Items</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Purchase sale detail</th>
+      <th>Item</th>
+      <th>Quantity</th>
+      <th>Cost price</th>
+      <th>Sale price</th>
+      <th>Status</th>
+      <th>Comment</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @purchase_sale_items.each do |purchase_sale_item| %>
+      <tr>
+        <td><%= purchase_sale_item.purchase_sale_detail_id %></td>
+        <td><%= purchase_sale_item.item_id %></td>
+        <td><%= purchase_sale_item.quantity %></td>
+        <td><%= purchase_sale_item.cost_price %></td>
+        <td><%= purchase_sale_item.sale_price %></td>
+        <td><%= purchase_sale_item.status %></td>
+        <td><%= purchase_sale_item.comment %></td>
+        <td>
+          <% if can?(:update, :all) %>
+            <%= link_to edit_purchase_sale_item_path(purchase_sale_item) do %>
+              <i class="fa fa-edit " aria-hidden="true"></i> |
+            <%end %>
+          <% end %>
+          <% if can?(:delete, :all) %>
+            <%= link_to purchase_sale_item, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+              <i class="fa fa-trash " aria-hidden="true"></i> |
+            <%end %>
+          <% end %>
+          <% if can?(:view, :all) %>
+            <%= link_to purchase_sale_item do %>
+              <i class="fa fa-eye " aria-hidden="true"></i>
+            <%end %>
+          <%end%>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Purchase Sale Item', new_purchase_sale_item_path %>

@@ -1,0 +1,50 @@
+<%@rev=Hash.new%>
+
+<div class="row">
+  <div class="col-lg-12 col-sm-12">
+    <div id = "jalai">
+      <table data-toggle="table">
+        <thead>
+          <th>Jalai</th>
+          <th><%= sort_link(@j, :lines, 'Lines') %></th>
+          <th><%= sort_link(@j, :total_bricks, 'T Bricks') %></th>
+          <th><%= sort_link(@j, :total_cost, 'T Cost') %></th>
+          <th><%= sort_link(@j, :cost_per_line, 'Cost/Line') %></th>
+          <th><%= sort_link(@j, :per_thousand_product_cost, 'Cost/1000') %></th>
+          <th><%= sort_link(@j, :per_product_cost, 'Cost/Brick') %></th>
+          <th><%= sort_link(@j, :total_item_quantity, 'Total Quantity') %></th>
+          <th><%= sort_link(@j, :item_quantity_per_line, 'Qunatity/Line') %></th>
+          <th><%= sort_link(@j, :per_ton_bricks, 'Bricks/Ton') %></th>
+          <th> <%= sort_link(@j, :total_item_quantity, 'Quantiity/Bricks') %></th>
+        </thead>
+
+        <tbody>
+
+          <tr>
+            <td><h6>Total</h6></td>
+            <td><h6><%=@lines%></h6></td>
+            <td><h6><%=@total_bricks%></h6></td>
+            <td><h6><%=@total_cost%></h6></td>
+            <td><h6><%=(@total_cost/@lines).to_i if @jalai_production_cycles.present? && @lines.to_i.positive?%></h6></td>
+            <td><h6><%=(@total_cost/@total_bricks).round(2)*1000 if @jalai_production_cycles.present? && @total_bricks.to_i.positive?%></h6></td>
+            <td><h6><%=(@total_cost/@total_bricks).round(2) if @jalai_production_cycles.present? && @total_bricks.to_i.positive?%></h6></td>
+            <td><h6><%=@total_item_quantity.to_i%></h6></td>
+            <td><h6><%=(@total_item_quantity/@lines.to_i).to_i  if @jalai_production_cycles.present? && @lines.to_i.positive?%></h6></td>
+            <td><h6><%=@per_ton_bricks%></h6></td>
+            <td><h6><%=(@total_item_quantity/@total_bricks).round(4) if @total_item_quantity.to_i.positive? && @total_bricks.to_i.positive?%></h6></td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#expenses_list").removeClass('hidden');
+  });
+</script>

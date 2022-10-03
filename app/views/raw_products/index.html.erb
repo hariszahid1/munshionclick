@@ -1,0 +1,71 @@
+<p id="notice"><%= notice %></p>
+
+<div class="hidden" id="raw_product_list">
+  <h1>Raw Product</h1>
+  <div class="col-lg-12 col-sm-12">
+    <div id="new_raw" class="col-lg-12 form-group float-left">
+      <% if can?(:add, :all) %>
+      <%= link_to new_raw_product_path, remote: true,class: "btn btn-success" do %>
+      <i class="fa fa-plus" aria-hidden="true"></i>
+      New Product
+      <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <%= search_form_for @q, url: raw_products_path, class: "admin-controls", method: "get" do |f| %>
+        <div class="col-lg-3 form-group float-left">
+          <%= f.select :title_or_code_cont, options_from_collection_for_select(@raw_products, "title", ->(st){"#{st.title} \u{27F6} #{st.code} "},@title),{:include_blank => "Select Title/Code"},:class=>"form-control chosen-select" %>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <table data-toggle="table" data-search="true", id="raw_table">
+    <thead>
+      <th>Code</th>
+      <th>Title</th>
+      <th>Stock</th>
+      <th>Acquire type</th>
+      <th>Cost</th>
+      <th>Sale</th>
+      <th>Minimum</th>
+      <th>Optimal</th>
+      <th>Maximum</th>
+      <th>Action</th>
+
+
+
+    </thead>
+
+    <tbody>
+    <%= render partial: 'raw_product', collection: @raw_products %>
+    </tbody>
+  </table>
+</div>
+
+<div class="clearfix"></div>
+<div class="row">
+  <div class="col-lg-4 col-sm-4">
+    <%= page_entries_info @raw_products %>
+  </div>
+  <div class="col-lg-8 col-sm-8 pagination-left">
+    <%= paginate @raw_products %>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#raw_product_list").removeClass('hidden');
+    FontAwesome.dom.i2svg();
+  });
+</script>

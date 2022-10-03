@@ -1,0 +1,59 @@
+# SQLite version 3.x
+#   gem install mysql2
+#
+#   Ensure the SQLite 3 gem is defined in your Gemfile
+#   gem 'mysql2'
+#
+default: &default
+  adapter: mysql2
+  encoding: utf8
+  username: root
+  password: root
+  pool: 5
+  timeout: 5000
+
+development:
+  <<: *default
+  database: pos_dev
+
+development_batha:
+  <<: *default
+  database: batha_development
+development_pos:
+  <<: *default
+  database: pos_development
+
+
+# Warning: The database defined as "test" will be erased and
+# re-generated from your development database when you run "rake".
+# Do not set this db to the same as development or production.
+test:
+  <<: *default
+  database: pos_test
+
+default_prod: &default_prod
+  adapter: mysql2
+  encoding: utf8
+  host: localhost
+  username: sample
+  password: samopleS$123!
+
+production:
+  <<: *default_prod
+  database: default_pos_prod
+
+production_atom:
+  <<: *default_prod
+  database: atom_production
+
+production_batamega:
+  <<: *default_prod
+  database: batamega_production
+
+production_falcon:
+  <<: *default_prod
+  database: falcon_production
+
+production_frichick:
+  <<: *default_prod
+  database: frichick_production

@@ -1,0 +1,36 @@
+<%= bootstrap_form_for(warranty) do |form| %>
+  <% if warranty.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(warranty.errors.count, "error") %> prohibited this warranty from being saved:</h2>
+
+      <ul>
+      <% warranty.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+        <div class="col-lg-6 form-group float-left">
+          <%= form.select :product_id, options_from_collection_for_select(@product, 'id', ->(st){"#{st.title} \u{27F6} #{st.code}"},form.object.product_id), {hide_label: true,prompt: "Select the Product"},required: true,:class=>"form-control chosen-select"%>
+        </div>
+      </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+        <div class="col-lg-6 form-group float-left">
+                <%= form.text_area :serial_number , placeholder:"Enter Serial Number"%>
+              </div>
+
+              <div class="col-lg-6" style="float:left">
+                <%= form.text_area :comment , placeholder:"Enter Comment" %>
+              </div>
+            </div>
+              </div>
+
+
+              <div class="actions">
+                <%= form.submit class: "btn btn-primary", style: "float: right" %>
+              </div>
+<% end %>

@@ -1,0 +1,240 @@
+<div class="topnav">
+  <%= link_to daily_books_path() do %>
+    <i class="fa fa-male" aria-hidden="true"></i>
+    <%=@departments.first.title%> Daily
+  <% end %>
+  <%= link_to khakar_daily_books_path(department_id: @departments.second.title) do %>
+    <i class="fas fa-truck" aria-hidden="true"></i>
+    <%=@departments.second.title%> Daily book
+  <% end %>
+  <%= link_to production_cycles_path do %>
+      <i class="fa fa-sign-language" aria-hidden="true"></i>
+      Bhari Daily Book
+    <% end %>
+  <%= link_to jalai_production_cycles_path do %>
+        <i class="fa fa-fire" aria-hidden="true"></i>
+        Jalai Daily Book
+      <% end %>
+      <%= link_to nakasi_production_cycles_path do %>
+        <i class="fa fa-align-justify" aria-hidden="true"></i>
+        <%=@departments.third.title%> Daily Book
+      <% end %>
+
+</div>
+
+
+<%@daily_book_salary_details_raw_quantity = 0 %>
+<%@daily_book_salary_details_quantity = 0 %>
+<%@daily_book_salary_details_wast = 0 %>
+<%@daily_book_salary_details_raw_quantity_rate = 0 %>
+<%@daily_book_salary_details_quantity_rate = 0 %>
+<%@daily_book_salary_details_coverge_rate=0%>
+<%@daily_book_salary_details_gift_rate=0%>
+<%@total_kakhar=0%>
+<%@salary_details_khakar_f99_raw_quantity=0%>
+<%@salary_details_khakar_tile_raw_quantity=0%>
+<%@daily_book_salary_details_pather_khakar_wast=0%>
+
+<div class="hidden" id="daily_books_list">
+  <h1>Daily books By <%=@departments.second.title%></h1>
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <%= search_form_for @q, url: khakar_daily_books_path, class: "admin-controls", method: "get" do |f| %>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.search_field :book_date_gteq, class: 'form-control input-sm datepicker',value: @book_date_gteq, 'datepicker' => true,placeholder: "YYYY-MM-DD" %>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.search_field :book_date_lteq, class: 'form-control input-sm datepicker',value: @book_date_lteq, 'datepicker' => true ,placeholder: "YYYY-MM-DD"%>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+        </div>
+
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-secondary" name="submit_pdf" type="submit" value="Khakar Daily Production Detail A4" formtarget="_blank"><i class="fa fa-file-pdf"></i> Khakar Daily</button>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-secondary" name="page_pdf" type="submit" value="Khakar Daily Production Detail A4" formtarget="_blank"><i class="fa fa-file-pdf"></i> Daily page</button>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-info" name="email" type="submit" value="Email"><i class="fas fa-envelope"></i> email</button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+
+  <div class="row ">
+                <div class="col-xl-4 col-md-6 mb-4">
+                    <div class="card border-left-primary shadow h-100 py-2">
+                      <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                          <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Bharai</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"><%=@raw_products&.first&.title%> = <%=@raw_products&.first&.first_stock%> </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"><%=@raw_products&.second&.title%> = <%=@raw_products&.second&.first_stock%> </div>
+                          </div>
+                          <div class="col-auto">
+                            <i class="fas fa-check fa-2x text-gray-300"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                         <div class="col-xl-4 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                              <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                  <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Stock</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800"><%=@raw_products&.first&.title%> = <%=@raw_products&.first&.second_stock%> </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800"><%=@raw_products&.second&.title%> = <%=@raw_products&.second&.second_stock%> </div>
+                                  </div>
+                                  <div class="col-auto">
+                                    <i class="fas fa-check fa-2x text-gray-300"></i>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                                    <div class="col-xl-4 col-md-6 mb-4">
+                                        <div class="card border-left-primary shadow h-100 py-2">
+                                          <div class="card-body">
+                                            <div class="row no-gutters align-items-center">
+                                              <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Chapa</div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800"><%=@raw_products&.first&.title%> = <%=@raw_products&.first&.third_stock%></div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800"><%=@raw_products&.second&.title%> = <%=@raw_products&.second&.third_stock%> </div>
+                                              </div>
+                                              <div class="col-auto">
+                                                <i class="fas fa-check fa-2x text-gray-300"></i>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+      </div>
+
+
+
+
+
+  <div class="card shadow mb-4">
+      <!-- Card Header - Accordion -->
+      <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+        <h6 class="m-0 font-weight-bold text-primary"><h5>Ready For Khakar</h5></h6>
+      </a>
+      <!-- Card Content - Collapse -->
+      <div class="collapse show" id="collapseCardExample" style="">
+
+        <div class="row">
+            <div class="col-lg-12 col-sm-12">
+              <div class="col-lg-12 ">
+                <table>
+                  <thead>
+                    <th>Date</th>
+                    <th>For Khakar</th>
+                    <th>Action</th>
+                  </thead>
+                  <tbody>
+                    <% @pathera_daily.each do |pathera_daily| %>
+                    <% if  pathera_daily.salary_details_pather_remaning_quanity > 0 %>
+                    <tr>
+                      <td><%= pathera_daily.book_date.strftime("%A,  %d-%b-%y") if pathera_daily.book_date%></td>
+                      <td><%= pathera_daily.salary_details_pather_remaning_quanity %><% @total_kakhar += pathera_daily.salary_details_pather_remaning_quanity %></td>
+                      <td><%= link_to "#{@departments.second.title} Booking", new_khakar_daily_books_path(department_id: @departments.second.id,id: pathera_daily.id, book_date: pathera_daily.book_date.strftime("%Y-%m-%d") ), class: "btn btn-success" %>
+                        <% if current_user.super_admin? %>
+                          |
+                          <%= link_to "Waste", edit_pather_khakar_waste_daily_book_path(department_id: @departments.second.id,id: pathera_daily.id, book_date: pathera_daily.book_date.strftime("%Y-%m-%d") ), class: "btn btn-danger" %>
+                        <%end%>
+                      </td>
+                    </tr>
+                      <%end%>
+                      <%end%>
+                    <tr>
+                      <td><h5>Total</h5></td>
+                      <td><h5><%=@total_kakhar%><h5></td>
+                      <td><%= link_to "#{@departments.second.title} Booking From Stock", stock_new_khakar_daily_books_path(department_id: @departments.second.id ), class: "btn btn-success" %></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+
+      <div>
+
+
+    <div class="card shadow mb-4">
+        <!-- Card Header - Accordion -->
+        <a href="#collapseCardExample12" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+          <h6 class="m-0 font-weight-bold text-primary"><h5>Khakar Work Details</h5></h6>
+        </a>
+        <!-- Card Content - Collapse -->
+        <div class="collapse show" id="collapseCardExample12" style="">
+
+          <div class="row">
+            <div class="col-lg-12 col-sm-12">
+              <div class="col-lg-12 ">
+  <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+    <li class="nav-item" onclick="updatetabs('pills-home')">
+      <a class="<%=params[:from_tabe]=='pills-home' ? 'nav-link active' : 'nav-link'%> active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true"><b>Khakar</b></a>
+    </li>
+    <li class="nav-item" onclick="updatetabs('pills-profile')">
+      <a class="<%=params[:from_tabe]=='pills-profile' ? 'nav-link active' : 'nav-link'%>" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false"><b>khakar Merge</b></a>
+    </li>
+  </ul>
+
+  <div class="tab-content" id="pills-tabContent">
+
+    <div class= "<%=params[:from_tabe]=='pills-home' ? 'tab-pane fade show active' : 'tab-pane fade show active'%>" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+      <%= render partial: "khakar", locals: {} %>
+    </div>
+    <div class= "<%=params[:from_tabe]=='pills-profile' ? 'tab-pane fade show active' : 'tab-pane fade '%>" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+      <%= render partial: "khakar_merge", locals: {} %>
+    </div>
+
+  </div>
+
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+</div>
+</div>
+
+<div class="clearfix"></div>
+<div class="row">
+  <div class="col-lg-4 col-sm-4">
+    <%= page_entries_info @daily_books %>
+  </div>
+  <div class="col-lg-8 col-sm-8 pagination-left">
+    <%= paginate @daily_books %>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#daily_books_list").removeClass('hidden');
+    FontAwesome.dom.i2svg();
+  });
+  $(document).ready(function() {
+    setTimeout(function(){
+      $(".chosen-select").chosen({
+  allow_single_deselect: true,
+  width: '100%'
+});
+    }, 50);
+  });
+</script>

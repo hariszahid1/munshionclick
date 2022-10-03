@@ -1,0 +1,83 @@
+<%= bootstrap_form_for(raw_product, remote: true) do |f| %>
+  <% if raw_product.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(raw_product.errors.count, "error") %> prohibited this raw product from being saved:</h2>
+      <ul>
+      <% raw_product.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+<div class="col-lg-12 row bg-white nested-fields">
+  <div class="col-lg-6 form-group float-left">
+    <%= f.text_field :code, {placeholder: "Enter the code", required: true , value: (f.object.code.nil? ? ("AGC-"+"%.4i" % (RawProduct.maximum(:id).present? ? RawProduct.maximum(:id).next : 1)) : (f.object.code ))} %>
+  </div>
+
+  <div class="col-lg-6 form-group float-left">
+    <%= f.text_field :title, placeholder:"Enter Title",required:true %>
+  </div>
+
+  <div class="col-lg-6 form-group float-left">
+    <%= f.number_field :stock %>
+  </div>
+
+  <div class="col-lg-6 form-group float-left">
+    <%= f.select :acquire_type, Product.acquire_types.map { |key, value| [key.humanize, key] },{class: "form-control", required: true} %>
+  </div>
+
+  <div class="col-lg-6 form-group float-left">
+    <%= f.number_field :cost,required:true %>
+  </div>
+
+  <div class="col-lg-6 form-group float-left">
+    <%= f.number_field :sale %>
+  </div>
+
+  <div class="col-lg-6 form-group float-left">
+    <%= f.number_field :minimum %>
+  </div>
+
+  <div class="col-lg-6 form-group float-left">
+    <%= f.number_field :optimal %>
+  </div>
+
+  <div class="col-lg-6 form-group float-left">
+    <%= f.number_field :maximum %>
+  </div>
+
+  <div class="col-lg-6 form-group float-left">
+    <%= f.number_field :first_stock %>
+  </div>
+
+  <div class="col-lg-6 form-group float-left">
+    <%= f.number_field :second_stock %>
+  </div>
+
+  <div class="col-lg-6 form-group float-left">
+    <%= f.number_field :third_stock %>
+  </div>
+
+  <div class="col-lg-6 form-group float-left">
+    <%= f.number_field :nakasi_stock,label: 'fourth stock' %>
+  </div>
+
+  <div class="clearfix">
+    <br>
+    <br>
+    <br>
+  <hr>
+  <div class="row ">
+
+          <div class="col-lg-6 form-group float-left">
+            <%= link_to raw_products_path do %>
+            <i class="fa fa-arrow-left " aria-hidden="true"></i>
+            <% end %>
+          </div>
+              <div class="col-lg-6 form-group float-left">
+                <%=f.object.id.nil? ? (f.submit class: "btn btn-success", style: "float: left")  :  (f.submit class: "btn btn-warning", style: "float: left")%>
+              </div>
+          <% end %>
+</div>
+<%= javascript_include_tag 'hover', 'data-turbolinks-track': 'reload' %>

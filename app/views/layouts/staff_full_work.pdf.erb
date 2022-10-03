@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>POS</title>
+    <%= wicked_pdf_stylesheet_link_tag "pdf" -%>
+</head>
+<body class="bond_pos_pdf">
+  <% @time = Time.zone.now.in_time_zone(5) %>
+  <% if @pos_setting.present? && @pos_setting.persisted? && @pos_setting.logo_images.present? %>
+    <div class="col-lg-12">
+      <%= image_tag @pos_setting.logo_images.first.service_url, width: 200, class:"pdf_img" %>
+    </div>
+  <%else%>
+  <h1 style="text-align: center;"><%=admin_name_on_nav%></h1>
+  <% end %>
+  <p style="border-bottom: double 4px;  margin: 0;"></p>
+  <h1 style="text-align: center; margin: 0;">Pather Work Detail</h1>
+  <p style="border-bottom: double 4px;  margin: 0;"></p>
+
+    <table data-toggle="table" data-search="true">
+      <thead>
+
+        <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+          <th class="short-column">Name</th>
+          <th class="short-column">Item</th>
+          <th class="short-column">Kachi</th>
+          <th class="short-column">K Price</th>
+          <th class="short-column">Gift/Coverge</th>
+          <th class="short-column">Total</th>
+          <th class="short-column">Paaki</th>
+          <th class="short-column">P Price</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <% @salary_details_pdf.each do |salary_detail| %>
+          <tr style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+              <td><%= salary_detail.first.first %></td>
+              <td><%= salary_detail.first.last   %></td>
+              <td><%= salary_detail.last if salary_detail.present?%></td>
+              <td><%=@salary_debit_pdf[salary_detail.first].to_i%></td>
+              <td><%=@salary_gift_pdf[salary_detail.first].to_i%> / <%=@salary_cover_pdf[salary_detail.first].to_i%></td>
+              <td><%=@salary_debit_pdf[salary_detail.first].to_i+@salary_gift_pdf[salary_detail.first].to_i+@salary_cover_pdf[salary_detail.first].to_i%></td>
+              <td><%=@salary_queantity_pdf[salary_detail.first] if @salary_queantity_pdf.present?%></td>
+              <td><%=@salary_credit_pdf[salary_detail.first]%></td>
+          </tr>
+        <%end%>
+        <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+           <td>Total</td>
+           <td></td>
+           <td><%= @total_raw_pdf%></td>
+           <td><%= @total_debit_pdf%></td>
+           <td><%= @total_gift_pdf+@total_cover_pdf%></td>
+           <td><%= @total_debit_pdf+@total_gift_pdf+@total_cover_pdf%></td>
+           <td><%= @total_quantity_pdf%></td>
+           <td><%= @total_credit_pdf%></td>
+        </tr>
+      </tbody>
+    </table>
+
+  <p style="text-align: center;margin: 0;"><span><%=@pos_setting.address if @pos_setting.present?%></span></p>
+  <p style="text-align: center;margin: 0;"><span><%=@pos_setting.phone if @pos_setting.present?%></span></p>
+</body>
+</html>

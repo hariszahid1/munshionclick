@@ -1,0 +1,66 @@
+<%= bootstrap_form_for(payment) do |f| %>
+  <% if payment.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(payment.errors.count, "error") %> prohibited this payment from being saved:</h2>
+
+      <ul>
+      <% payment.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="col-lg-6 form-group float-left">
+    <%if params.present? && params[:account_id]%>
+      <%= f.select :account_id , options_from_collection_for_select(@accounts, 'id', 'title', params[:account_id]), {prompt: "Select the Account"},class: "form-control", required: true,onchange:"set_account_balance(this.value,'sys_user_balance')",onkeyup:"set_account_balance(this.value,'sys_user_balance')"%>
+    <%else%>
+      <%= f.select :account_id , options_from_collection_for_select(@accounts, 'id', 'title', (f.object.account_id.present? ? f.object.account_id : @account)), {prompt: "Select the Account"},class: "form-control", required: true,onchange:"set_account_balance(this.value,'sys_user_balance')",onkeyup:"set_account_balance(this.value,'sys_user_balance')"%>
+    <%end%>
+  </div>
+  <% if params[:jama].present?%>
+  <div class="col-lg-6 form-group float-left">
+    <%= f.text_field :debit, required:true, class:"debit",onkeyup:"price_in_words(this.value,'price_in_word_id');newBalance('oldBalance','newBalance1')", onchange:"price_in_words(this.value,'price_in_words');", autocomplete: "off" %>
+  </div>
+  <%else%>
+  <div class="col-lg-6 form-group float-left">
+    <%= f.text_field :credit, required:true, class:"credit",onkeyup:"price_in_words(this.value,'price_in_word_id');newBalance('oldBalance','newBalance1')", onchange:"price_in_words(this.value,'price_in_words');", autocomplete: "off" %>
+  </div>
+  <%if request.original_url.include? 'edit'%>
+    <div class="col-lg-6 form-group float-left">
+      <%= f.text_field :debit, required:true, class:"debit",onkeyup:"price_in_words(this.value,'price_in_word_id');newBalance('oldBalance','newBalance1')", onchange:"price_in_words(this.value,'price_in_words');", autocomplete: "off" %>
+    </div>
+   <%end%>
+  <%end%>
+  <div class="col-lg-6 form-group float-left">
+    <%= f.datetime_select :created_at,{},class: "form-control" %>
+  </div>
+  <div  class="col-lg-12 col-md-6 col-sm-6 from-group float-left">
+    <h5>Payment in Words: <span id="price_in_words" style="font-size:20px;color:blue;">0.0</span></h5>
+  </div>
+  <div class="col-lg-6 form-group float-left">
+    <%= f.label :comment do %>
+        <%= Payment.human_attribute_name :comment %>
+        <i class="fas fa-language"></i>
+    <% end %>
+    <%= f.text_area :comment, hide_label: true ,class: 'urdu-font' %>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6 from-group float-left">
+  <h1>New Balance: <span class="newBalance1">0.0</span></h1>
+
+  </div>
+  <div class="clearfix">
+    <hr>
+    <div class="col-lg-12 row ">
+
+            <div class="col-lg-6 form-group float-left">
+              <%= link_to payments_path do %>
+              <i class="fa fa-arrow-left " aria-hidden="true"></i>
+              <% end %>
+            </div>
+              <div class="col-lg-6 form-group float-left">
+                <div class="col-lg-6 form-group float-left">
+                  <%=f.object.id.nil? ? (f.submit class: "btn btn-success", style: "float: left")  :  (f.submit class: "btn btn-warning", style: "float: left")%>
+                </div>
+              </div>
+            <% end %>
+  </div>

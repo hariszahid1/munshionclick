@@ -1,0 +1,100 @@
+
+<%total_cost=0%>
+<%cost_per_line=0%>
+<%per_product_cost=0%>
+<%per_thousand_product_cost=0%>
+<%item_quantity_per_line=0%>
+<%total_item_quantity=0%>
+<%per_ton_bricks=0%>
+<%lines=0%>
+<%total_bricks=0%>
+
+<% @date = Date.today  %>
+<% @time = DateTime.now %>
+<% @time = Time.zone.now %>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Jalai details</h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<p style="text-align: center;margin: 0;">Report by: <%=current_user.name%></p>
+<div >
+  <table>
+    <thead class="lite-gray" style="font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+      <th>Date</th>
+      <th>Lines</th>
+      <th>Wangi</th>
+      <th>T Bricks</th>
+      <th>T Cost</th>
+      <th>Cost/Line</th>
+      <th>Cost/1000</th>
+      <th>Cost/Brick</th>
+      <th>Total Quantity</th>
+      <th>Quantity/Line</th>
+      <th>Bricks/Ton</th>
+      <th>Quantity/Brick </th>
+      <th>Comment</th>
+      <th></th>
+    </thead>
+
+    <tbody>
+      <% @production_cycles.each do |production_cycle| %>
+        <tr style="font-size:20px;,font-family: Arial Black, Gadget, sans-serif" >
+          <td><%= production_cycle.start_date.strftime("%A,  %d-%b-%y") if production_cycle.start_date%></td>
+          <td>
+            <h7><%=production_cycle.lines %><% lines+=production_cycle.lines %></h7>
+            <h7><%=production_cycle.production_blocks.pluck(:title,:production_status) %></h7>
+          </td>
+          <td><%=production_cycle.quantity%></td>
+          <td>
+            <h7><%=production_cycle.total_bricks.to_i %><% total_bricks+=production_cycle.total_bricks.to_i %></h7>
+            <h7>BK:<%=ProductionBlock.where(id: production_cycle.production_blocks.pluck('bhari_production_block_id')).sum(:bricks_quantity)%></h7>
+            <h7>TL:<%=ProductionBlock.where(id: production_cycle.production_blocks.pluck('bhari_production_block_id')).sum(:tiles_quantity)%></h7>
+          </td>
+          <td>
+            <h7><%=production_cycle.total_cost.to_i %><% total_cost+=production_cycle.total_cost %></h7>
+          </td>
+          <td>
+            <h7><%=production_cycle.cost_per_line.to_i %><% cost_per_line+=production_cycle.cost_per_line %></h7>
+          </td>
+          <td>
+            <h7><%=production_cycle.per_thousand_product_cost.to_i %><% per_thousand_product_cost+=production_cycle.per_thousand_product_cost %></h7>
+          </td>
+          <td>
+            <h7><%=production_cycle.per_product_cost%><% per_product_cost+=production_cycle.per_product_cost%></h7>
+          </td>
+          <td>
+            <h7><%=production_cycle.total_item_quantity.to_i %><% total_item_quantity+=production_cycle.total_item_quantity %></h7>
+          </td>
+          <td>
+            <h7><%=production_cycle.item_quantity_per_line.to_i %><% item_quantity_per_line+=production_cycle.item_quantity_per_line %></h7>
+          </td>
+          <td>
+            <h7><%=production_cycle.per_ton_bricks.to_i %><% per_ton_bricks+=production_cycle.per_ton_bricks %></h7>
+          </td>
+          <td>
+            <h7><%=(production_cycle.total_item_quantity.to_f/production_cycle.total_bricks.to_f).round(4) %></h7>
+          </td>
+          <td>
+            <h7><%=production_cycle.comment %></h7>
+          </td>
+        </tr>
+      <% end %>
+      <tr class="lite-gray" style="font-size:25px;,font-family: Arial Black, Gadget, sans-serif">
+        <td>Total</td>
+        <td><%=lines.to_i%></td>
+        <td><%=@production_cycles.pluck(:quantity).sum.to_i%></td>
+        <td><%=total_bricks.to_i%></td>
+        <td><%=total_cost.to_i%></td>
+        <td><%=(total_cost/lines).to_i  if @production_cycles.present?%></td>
+        <td><%=(total_cost/total_bricks).round(2)*1000 if total_cost!=total_bricks%></td>
+        <td><%=(total_cost/total_bricks).round(2) if total_cost!=total_bricks%></td>
+        <td><%=total_item_quantity.to_i%></td>
+        <td><%=(total_item_quantity/lines.to_i).to_i  if @production_cycles.present?%></td>
+        <td><%=((total_bricks/total_item_quantity)*1000.to_i).round(0)  if @production_cycles.present?%></td>
+        <td><%=(total_item_quantity/total_bricks).round(3) if total_item_quantity.positive?%></td>
+        <td></td>
+        <td></td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,43 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Staff Raw Products</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Staff</th>
+      <th>Raw product</th>
+      <th class="border_none">Action</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @staff_raw_products.each do |staff_raw_product| %>
+      <tr>
+        <td><%= staff_raw_product.staff %></td>
+        <td><%= staff_raw_product.raw_product %> |
+        <td>
+          <% if can?(:update, :all) %>
+            <%= link_to edit_staff_raw_product_path(staff_raw_product) do %>
+              <i class="fa fa-edit " aria-hidden="true"></i> |
+            <%end %>
+          <% end %>
+          <% if can?(:delete, :all) %>
+            <%= link_to staff_raw_product, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+              <i class="fa fa-trash " aria-hidden="true"></i> |
+            <%end %>
+          <% end %>
+          <% if can?(:view, :all) %>
+            <%= link_to staff_raw_product do %>
+              <i class="fa fa-eye " aria-hidden="true"></i>
+            <%end %>
+          <%end%>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Staff Raw Product', new_staff_raw_product_path %>

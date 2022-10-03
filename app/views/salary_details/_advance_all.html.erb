@@ -1,0 +1,31 @@
+<h1>
+  Staff Payment
+</h1>
+<div class="row">
+  <div class="col-lg-12 col-sm-12">
+    <%= search_form_for @q, url: advance_all_salary_details_path, class: "admin-controls", method: "get" do |f| %>
+      <div class="col-lg-4 form-group float-left">
+        <%= f.select :department_id_eq, options_from_collection_for_select(@departments, 'id', 'title', f.object.department_id_eq), {hide_label:true,title: "Select the Department" ,prompt: "Select the Department"},class:"form-control"%>
+      </div>
+      <div class="col=lg-2 form-group float-left">
+        <%= f.select :staff_type_eq, Staff.staff_types.map { |key, value| [key.humanize, value] }, {include_blank: "Select the Status", hide_label:true, required: true },:class=>"form-control  chosen-select"%>
+      </div>
+      <div class="col-lg-2 form-group float-left">
+        <input class="form-control btn btn-primary" name="search_submit" type="submit" value="Search"></input>
+      </div>
+    <% end %>
+  </div>
+</div>
+<br>
+<div class="col-lg-12" >
+  <div class="col-lg-4 form-group float-left"><b>Staff</b></div>
+  <div class="col-lg-2 form-group float-left"><b>Balance</b></div>
+  <div class="col-lg-2 form-group float-left"><b>Amount</b></div>
+  <div class="col-lg-4 form-group float-left"><b>Action</b></div>
+</div>
+<%@staffs_list.each do |staff|%>
+  <%= render 'advance_form_all', salary_detail: @salary_detail ,staff: staff%>
+<%end%>
+<div class="actions">
+  <%= link_to 'Salaries', salary_details_path, class: "btn btn-info" %>
+</div>

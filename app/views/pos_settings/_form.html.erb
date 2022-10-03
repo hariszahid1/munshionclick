@@ -1,0 +1,216 @@
+<%= bootstrap_form_for(pos_setting) do |f| %>
+  <% if pos_setting.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(pos_setting.errors.count, "error") %> prohibited this pos_setting from being saved:</h2>
+
+      <ul>
+      <% pos_setting.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
+    <%= f.label :name do %>
+          <%= PosSetting.human_attribute_name :name %>
+          <i class="fas fa-language"></i>
+        <% end %>
+    <%= f.text_field :name, hide_label: true , placeholder:"Enter Name",class: 'urdu-font' %>
+  </div>
+
+  <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
+        <%= f.label :display_name do %>
+          <%= PosSetting.human_attribute_name :display_name %>
+          <i class="fas fa-language"></i>
+        <% end %>
+    <%= f.text_field :display_name, hide_label: true , placeholder:"Enter Display Name" ,class: 'urdu-font' %>
+  </div>
+
+  <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
+  <%= f.select :account_id , options_from_collection_for_select(@account, 'id', 'title', f.object.account_id), {prompt: "Select the Account"}, required: true%>
+  </div>
+
+  <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
+    <%= f.text_field :phone , placeholder:"Enter Phone"%>
+  </div>
+
+  <div  class="col-lg-6 col-md-6 col-sm-6 form-group float-left hidden">
+    <%= f.datetime_select :expiry_date%>
+  </div>
+
+
+
+  <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
+    <%= f.select :sys_type, PosSetting.sys_types.map { |key, value| [key.humanize, key] },{class: "form-control", required: true},disabled: true %>
+  </div>
+
+  <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
+    <%= f.label :address do %>
+      <%= PosSetting.human_attribute_name :address %>
+      <i class="fas fa-language"></i>
+    <% end %>
+    <%= f.text_field :address, hide_label: true , placeholder:"Enter Address" ,class: 'urdu-font' %>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
+    <%= f.label :invoice_note do %>
+      <%= PosSetting.human_attribute_name :invoice_note %>
+      <i class="fas fa-language"></i>
+    <% end %>
+    <%= f.text_area :invoice_note , hide_label: true ,class: 'urdu-font'%>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
+    <%= f.text_area :website %>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
+    <%= f.text_field :company_mask %>
+  </div>
+  <div class="col-lg-12" style="float:left">
+    <div class="form-group">
+      <label class="" for="pos_setting">Logo Images</label>
+      <div class="clearfix"></div>
+      <% if f.object.persisted? && f.object.logo_images.present? %>
+        <% f.object.logo_images.each do |image| %>
+          <%= image_tag image, width: 200 %>
+          <%= link_to 'Remove', delete_image_attachment_application_path(image.signed_id),
+                  method: :delete,class: 'btn btn-danger',
+                  data: { confirm: 'Are you sure?' }%>
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+
+        <% end %>
+      <% end %>
+      <div class="clearfix"></div>
+      <div class="custom-file">
+           <%= f.file_field :logo_images, multiple: true,'Filelimit' => 10, accept: 'image/*,.png', class: "cursor-pointer upload_field" %>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-12" style="float:left">
+    <div class="form-group">
+      <label class="" for="pos_setting">Extra Images</label>
+      <div class="clearfix"></div>
+      <% if f.object.persisted? && f.object.images.present? %>
+        <% f.object.images.each do |image| %>
+          <%= image_tag image, width: 200 %>
+          <%= link_to 'Remove', delete_image_attachment_application_path(image.signed_id),
+                  method: :delete,class: 'btn btn-danger',
+                  data: { confirm: 'Are you sure?' } %>
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+        <% end %>
+
+      <% end %>
+      <div class="clearfix"></div>
+      <div class="custom-file">
+           <%= f.file_field :images, multiple: true,'Filelimit' => 10, accept: 'image/*,.png', class: "cursor-pointer upload_field" %>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
+    <%= f.number_field :pdf_margin_top %>
+  </div>
+
+  <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
+    <%= f.number_field :pdf_margin_right %>
+  </div>
+
+  <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
+    <%= f.number_field :pdf_margin_left %>
+  </div>
+
+  <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
+    <%= f.number_field :pdf_margin_bottom %>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
+    <%= f.number_field :purchase_sale_detail_show_page_size %>
+  </div>
+
+  <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
+      <%= f.select :header_logo_placement , options_for_select(PosSetting::PLACEMENT_OPTIONS.map {|key, value| [value, key]}, f.object.header_logo_placement), {prompt: "Select the Account"}%>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
+    <%= f.number_field :logo_hieght %>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
+    <%= f.number_field :logo_width %>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
+    <%= f.number_field :header_hieght %>
+  </div>
+
+  <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
+    <%= f.number_field :title_padding %>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
+    <%= f.text_area :title_style %>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
+    <%= f.text_area :image_style %>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
+    <%= f.text_area :header_style %>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
+    <%= f.text_area :footer_style %>
+  </div>
+
+  <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
+      <%= f.select :footer_address_placement , options_for_select(PosSetting::FOOTER_PLACEMENT_OPTIONS.map {|key, value| [value, key]}, f.object.footer_address_placement), {prompt: "Select the Account"}%>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
+    <%= f.text_area :gst %>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
+    <%= f.text_area :ntn %>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
+    <%= f.check_box :header, class: "form-control", checked: f.object.header%>
+  </div>
+
+  <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
+    <%= f.check_box :footer, class: "form-control", checked: f.object.footer%>
+  </div>
+
+  <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
+    <%= f.check_box :multi_language, class: "form-control", checked: f.object.multi_language%>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
+    <%= f.check_box :is_sms, class: "form-control", checked: f.object.is_sms%>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
+    <%= f.check_box :is_qr, class: "form-control", checked: f.object.is_qr%>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
+    <%= f.text_area :sms_user %>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
+    <%= f.text_area :sms_pass %>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
+    <%= f.text_area :sms_mask %>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
+    <%= f.text_area :sms_templates %>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
+    <%= f.text_area :qr_links %>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
+    <%= f.text_area :extra_settings %>
+  </div>
+<div class="clearfix">
+  <hr>
+  <div class="col-lg-12 row ">
+
+          <div class="col-lg-6 form-group float-left">
+            <%= link_to pos_settings_path do %>
+            <i class="fa fa-arrow-left " aria-hidden="true"></i>
+            <% end %>
+          </div>
+            <div class="col-lg-6 form-group float-left">
+              <div class="col-lg-6 form-group float-left">
+                <%=f.object.id.nil? ? (f.submit class: "btn btn-success", style: "float: left")  :  (f.submit class: "btn btn-warning", style: "float: left")%>
+              </div>
+            </div>
+          <% end %>
+</div>

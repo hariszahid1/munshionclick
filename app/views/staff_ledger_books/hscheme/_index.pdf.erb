@@ -1,0 +1,237 @@
+<% @date = Date.today  %>
+<% @time = DateTime.now %>
+<% @time = Time.zone.now %>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Accounts details</h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<p style="text-align: center;margin: 0;">Report by: <%=current_user&.name%></p>
+<div >
+  <table data-toggle="table" data-search="true" id="country_table">
+    <thead>
+      <tr style="font-size:14px;font-family: Arial Black, Gadget, sans-serif">
+
+        <th>Staff</th>
+        <th>Debit/B</th>
+        <th>credit/J</th>
+        <th>Balance</th>
+        <th>Comment</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @staff_ledger_books_pdf.each do |staff_ledger_book| %>
+        <tr style="font-size:14px;,font-family: Arial Black, Gadget, sans-serif">
+          <td><%= staff_ledger_book.staff.full_name %></td>
+          <td style="border-left: 1px solid #000;border-right: 1px solid #000;"><%= staff_ledger_book.debit%></td>
+          <td style="border-right: 1px solid #000;"><%= staff_ledger_book.credit%></td>
+          <td style="border-right: 1px solid #000;"><%= staff_ledger_book.balance%></td>
+          <td>
+            <%= staff_ledger_book.comment %>
+            <%if staff_ledger_book.salary_detail.present?%>
+              <%if staff_ledger_book.salary_detail.purchase_sale_detail.present?%>
+                <% if staff_ledger_book.salary_detail.purchase_sale_detail.present? and staff_ledger_book.salary_detail.purchase_sale_detail.transaction_type=="Sale"%>
+                    <%if staff_ledger_book.salary_detail.purchase_sale_detail.carriage == staff_ledger_book.credit %>
+                    <%= 'Rebate Unit' %>
+                    <%else%>
+                    <%= 'Resale Payment / Own' %>
+                    <%end%>
+                    <%=staff_ledger_book.salary_detail.purchase_sale_detail.purchase_sale_items_names_and_quantity.first&.first%> X <%=staff_ledger_book.salary_detail.purchase_sale_detail.purchase_sale_items_names_and_quantity.first[11]%>-M <%=staff_ledger_book.salary_detail.purchase_sale_detail.purchase_sale_items_names_and_quantity.first[12]%>-sqr
+                <%end%>
+              <%else%>
+                <%= staff_ledger_book.salary_detail.comment %>
+              <%end%>
+            <%end%>
+            <% if staff_ledger_book.salary.present? %>
+              <%= staff_ledger_book.salary.comment%>
+            <%end%>
+          </td>
+          <td>
+            <%= staff_ledger_book.created_at.strftime("%d%b%y at %I:%M:%S %p") %>
+            <% if staff_ledger_book.salary.present? && staff_ledger_book.created_at.strftime("%d%b%y")!=staff_ledger_book.salary.created_at.strftime("%d%b%y") %>
+              <br>
+              <%= staff_ledger_book.salary.created_at.strftime("%d%b%y at %I:%M:%S %p") %>
+            <%end%>
+            <%if staff_ledger_book.salary_detail.present? && staff_ledger_book.created_at.strftime("%d%b%y")!=staff_ledger_book.salary_detail.created_at.strftime("%d%b%y") %>
+              <br>
+              <%= staff_ledger_book.salary_detail.created_at.strftime("%d%b%y at %I:%M:%S %p") %>
+            <%end%>
+          </td>
+
+        </tr>
+      <% end %>
+      <tr style="font-size:20px;,font-family: Arial Black, Gadget, sans-serif">
+        <td><b>Total<b></td>
+        <td style="border: 1px solid #000;"><b><%=@debit.to_i%></b></td>
+        <td style="border: 1px solid #000;"><b><%=@credit.to_i%></b></td>
+        <td style="border: 1px solid #000;"><b><%=@total_balance = @credit.to_i-@debit.to_i%></b></td>
+        <td>
+          <%if @total_balance.to_f > 0  %>
+            <b style="font-size:20px;color:blue;">Payable/Jama</b>
+          <%elsif  @total_balance.to_f < 0  %>
+            <b style="font-size:20px;color:red;">Receivable/Benam</b>
+          <%else%>
+            <b style="font-size:20px;color: #6cec53 ;">Nill</b>
+          <%end%>
+        </td>
+        <td><b><%=@quantity.to_f.round(2)%></b></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<% if pos_setting_is_qr.present? or params[:receivable]=="lmc"%>
+<div class="col-lg-12 form-group float-left">
+  <h1 style="text-align: center;margin: 0;">QR For Transaction History</h1>
+  <table class="pdf_font">
+    <th>Asc Order</th>
+    <th>Instruction</th>
+    <th>Desc Order</th>
+    <% @staff_ledger_books_pdf.pluck(:staff_id).uniq.each do |link| %>
+    <tr>
+      <td>
+          <% if link.present? %>
+            <%
+              require "rqrcode"
+              qrcode = RQRCode::QRCode.new(PosSetting.first.website.to_s+"/staff_ledger_books?utf8=✓&q%5Bstaff_id_eq%5D="+link.to_s+"&submit_pdf_staff_with_asc=Accounts&receivable="+PosSetting.first.company_mask.to_s)
+              @svg = qrcode.as_svg(
+                  color: "000",
+                  shape_rendering: "crispEdges",
+                  module_size: 11,
+                  standalone: true,
+                  use_path: true
+                )
+                @str=Base64.encode64(@svg ).gsub("\n", '')
+            %>
+            <img width="150px" height="115px" class="figure" style=""src=<%="data:image/svg+xml;base64,"+@str%> ></img>
+        <% end %>
+      </td>
+      <td>
+        <h4 style="text-align:left">For verification of your Unit booking:</h4>
+        <p style="text-align:left"> 1) Open Camrea/QRScaner app on your phone</p>
+        <p style="text-align:left"> 2) Point your phone to this QRCODE to capture the code</p>
+        <p style="text-align:left"> 3) After capturing you will redirect to Transaction History</p>
+      </td>
+      <td>
+          <% if link.present? %>
+            <%
+              require "rqrcode"
+              qrcode = RQRCode::QRCode.new(PosSetting.first.website.to_s+"/staff_ledger_books?utf8=✓&q%5Bstaff_id_eq%5D="+link.to_s+"&submit_pdf_staff_with_desc=Accounts&receivable="+PosSetting.first.company_mask.to_s)
+              @svg = qrcode.as_svg(
+                  color: "000",
+                  shape_rendering: "crispEdges",
+                  module_size: 11,
+                  standalone: true,
+                  use_path: true
+                )
+                @str=Base64.encode64(@svg ).gsub("\n", '')
+            %>
+            <img width="150px" height="115px" class="figure" style=""src=<%="data:image/svg+xml;base64,"+@str%> ></img>
+        <% end %>
+      </td>
+    </tr>
+    <%end%>
+  </table>
+</div>
+<div class="col-lg-12 form-group float-left">
+  <h1 style="text-align: center;margin: 0;">QR For Unit Detail</h1>
+  <table class="pdf_font">
+    <th>Dealer Units</th>
+    <th>Instruction</th>
+    <th>Open Units</th>
+    <% @staff_ledger_books_pdf.pluck(:staff_id).uniq.each do |link| %>
+    <tr>
+      <td>
+          <% if link.present? %>
+            <%
+              require "rqrcode"
+              qrcode = RQRCode::QRCode.new(PosSetting.first.website.to_s+"/staff_deals?utf8=%E2%9C%93&q%5Bstaff_id_in%5D%5B%5D="+link.to_s+"&q%5Bproduct_product_sub_category_id_in%5D%5B%5D=&submit_pdf=Products+PDF+A4&receivable="+PosSetting.first.company_mask.to_s)
+              @svg = qrcode.as_svg(
+                  color: "000",
+                  shape_rendering: "crispEdges",
+                  module_size: 11,
+                  standalone: true,
+                  use_path: true
+                )
+                @str=Base64.encode64(@svg ).gsub("\n", '')
+            %>
+            <img width="150px" height="115px" class="figure" style=""src=<%="data:image/svg+xml;base64,"+@str%> ></img>
+        <% end %>
+      </td>
+      <td>
+        <h4 style="text-align:left">For verification of your Unit booking:</h4>
+        <p style="text-align:left"> 1) Open Camrea/QRScaner app on your phone</p>
+        <p style="text-align:left"> 2) Point your phone to this QRCODE to capture the code</p>
+        <p style="text-align:left"> 3) After capturing you will redirect to Dealer Unit/Open Unit Detail</p>
+      </td>
+      <td>
+          <% if link.present? %>
+            <%
+              require "rqrcode"
+              qrcode = RQRCode::QRCode.new(PosSetting.first.website.to_s+"/products?q%5Bsize_6_in%5D=1&submit_pdf_staff_with=Products+PDF+A4&receivable="+PosSetting.first.company_mask.to_s)
+              @svg = qrcode.as_svg(
+                  color: "000",
+                  shape_rendering: "crispEdges",
+                  module_size: 11,
+                  standalone: true,
+                  use_path: true
+                )
+                @str=Base64.encode64(@svg ).gsub("\n", '')
+            %>
+            <img width="150px" height="115px" class="figure" style=""src=<%="data:image/svg+xml;base64,"+@str%> ></img>
+        <% end %>
+      </td>
+    </tr>
+    <%end%>
+  </table>
+</div>
+<div class="col-lg-12 form-group float-left">
+  <h1 style="text-align: center;margin: 0;">QR For Website</h1>
+  <table class="pdf_font">
+    <th>Web Link</th>
+    <th>Instruction</th>
+    <th>Web Link</th>
+    <%if @pos_setting.qr_links.present?%>
+      <%@pos_setting.qr_links.values.each_slice(2) do |qr_link|%>
+        <tr>
+          <td>
+            <%
+              require "rqrcode"
+              qrcode = RQRCode::QRCode.new(qr_link.first)
+              @svg = qrcode.as_svg(
+                  color: "000",
+                  shape_rendering: "crispEdges",
+                  module_size: 11,
+                  standalone: true,
+                  use_path: true
+                )
+                @str=Base64.encode64(@svg ).gsub("\n", '')
+            %>
+            <img width="150px" height="115px" class="figure" style=""src=<%="data:image/svg+xml;base64,"+@str%> ></img>
+          </td>
+          <td>
+            <h4 style="text-align:left">For verification of your Unit booking:</h4>
+            <p style="text-align:left"> 1) Open Camrea/QRScaner app on your phone</p>
+            <p style="text-align:left"> 2) Point your phone to this QRCODE to capture the code</p>
+            <p style="text-align:left"> 3) After capturing you will redirect to Company Sites</p>
+          </td>
+          <td>
+                <%
+                  require "rqrcode"
+                  qrcode = RQRCode::QRCode.new(qr_link.last)
+                  @svg = qrcode.as_svg(
+                      color: "000",
+                      shape_rendering: "crispEdges",
+                      module_size: 11,
+                      standalone: true,
+                      use_path: true
+                    )
+                    @str=Base64.encode64(@svg ).gsub("\n", '')
+                %>
+                <img width="150px" height="115px" class="figure" style=""src=<%="data:image/svg+xml;base64,"+@str%> ></img>
+          </td>
+        </tr>
+    <%end%>
+  <%end%>
+  </table>
+</div>
+<% end %>

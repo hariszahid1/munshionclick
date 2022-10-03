@@ -1,0 +1,53 @@
+<% @time = Time.zone.now %>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Vehicle Production Detail</h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<div>
+  <table>
+    <th></th>
+    <th></th>
+    <tr>
+      <td>Printing Date Time: <span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%> <%=@time.strftime("at %I:%M%p")%></span> </td>
+      <td>Current User: <span><%=@current_user.name%> </span></td>
+    </tr>
+  </table>
+</div>
+<div>
+  <table data-toggle="table" data-search="true">
+    <thead>
+      <tr>
+        <th class="short-column">Date</th>
+        <th class="short-column">Code</th>
+        <th class="short-column">Name</th>
+        <th class="short-column">quantity</th>
+        <th class="short-column">Credit Amount</th>
+        <th class="short-column">Credit Jama</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @salary_details.each.with_index do |staff,index| %>
+        <%wage_debit=0%>
+        <%wage_credit=0%>
+        <% staff.salary_details.each do |salary_detail| %>
+          <tr <%= index.odd? ? "class=lite-red" : "class="%> >
+            <td><%= salary_detail.created_at.strftime("%A,  %d-%b-%y") if salary_detail.created_at%></td>
+            <td><%= salary_detail.staff.code %></td>
+            <td><%= salary_detail.staff_full_name %></td>
+            <td><%= salary_detail.quantity.to_f.round(0) %></td>
+            <td><%= salary_detail.amount.to_f.round(2) %></td>
+            <td><%= wage_credit+=salary_detail.amount.to_f.round(0) %></td>
+          </tr>
+        <%end%>
+      <% end %>
+      <tr class="lite-gray">
+        <td class="td-bold">Total</td>
+        <td></td>
+        <td></td>
+        <td class="td-bold"><%= @quantity.to_f.round(0) %></td>
+        <td class="td-bold"><%= @credit_rate.to_f.round(0) %></td>
+        <td class="td-bold"><%= @amount.to_f.round(0) %></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

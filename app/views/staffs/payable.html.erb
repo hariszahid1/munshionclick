@@ -1,0 +1,145 @@
+<%@monthly_wage=0%>
+<%@advance=0%>
+<%@short_pay=0%>
+<%@balance=0%>
+<div class="hidden" id="staff_list">
+  <h1> Payable Staff (Jama)</h1>
+  <div class="row">
+    <div class="col-lg-2 form-group float-left">
+      <%= link_to staffs_path, class: "btn btn-primary" do %>
+        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+        Staff
+      <% end %>
+    </div>
+    <div class="col-lg-2 form-group float-left">
+      <%= link_to receiveable_staffs_path, class: "btn btn-primary" do %>
+       <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+       Reciveable
+     <% end %>
+    </div>
+    <div class="col-lg-2 form-group float-left">
+      <%= link_to dasti_staffs_path, class: "btn btn-primary" do %>
+       <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+       Dasti
+     <% end %>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <%= search_form_for @q, url: payable_staffs_path, class: "admin-controls", method: "get" do |f| %>
+        <div class="col-lg-3 form-group float-left">
+          <%= f.select :id_eq, options_from_collection_for_select(@staff_names, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code}"},@name),{:include_blank => "Select Staff"},:class=>"form-control chosen-select" %>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.select :department_id_eq, options_from_collection_for_select(@departments, 'id', 'title', @department), {hide_label:true,title: "Select the Department" ,prompt: "Select the Department"},:class=>"form-control chosen-select"%>
+        </div>
+        <div class="col=lg-2 form-group float-left">
+          <%= f.select :staff_type_eq, Staff.staff_types.map { |key, value| [key.humanize, value] },{hide_label:true,class: "form-control", required: true},:class=>"form-control" %>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+        </div>
+        <div class="col-lg-1 form-group float-left">
+        </div>
+        <div class="col-lg-1 form-group float-left">
+          <button class="form-control btn btn-secondary" name="submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank"><i class="fa fa-file-pdf"></i></button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <table data-toggle="table" data-search="true">
+    <thead>
+      <tr>
+        <th>Profile Image</th>
+        <th><%= sort_link(@q, :staff_type, 'Status') %></th>
+        <th><%= sort_link(@q, :code, 'Code') %></th>
+        <th><%= sort_link(@q, :name, 'Name') %></th>
+        <th><%= sort_link(@q, :father, 'Father') %></th>
+        <th><%= sort_link(@q, :date_of_joining, 'Date of joining') %></th>
+        <th><%= sort_link(@q, :monthly_salary, 'Monthly/Wage') %></th>
+        <th><%= sort_link(@q, :advance_amount, 'Advance') %></th>
+        <th><%= sort_link(@q, :department_id, 'Department/Raw') %></th>
+        <th><%= sort_link(@q, :wage_debit, 'Short-Pay') %></th>
+        <th><%= sort_link(@q, :balance, 'Balance') %></th>
+        <th>Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @staffs.each do |staff| %>
+       <% if  staff.balance > 0 %>
+        <tr>
+          <td>
+            <% if  staff.profile_image.attached? %>
+              <%= image_tag staff.profile_image.service_url, width: 100 %>
+            <% end %>
+          </td>
+          <td><%= staff.staff_type %></td>
+          <td><%= staff.code %></td>
+          <td><%= staff.name %></td>
+          <td><%= staff.father %></td>
+          <td><%= staff.date_of_joining.strftime("%A,  %d-%b-%y") if staff.date_of_joining%></td>
+          <td><%= staff.staff_salary_or_wage.to_f.round(2)%><% @monthly_wage += staff.staff_salary_or_wage.to_f.round(2) %></td>
+          <td><%= staff.advance_amount.to_f.round(2) %><% @advance += staff.advance_amount.to_f.round(2) %></td>
+          <td><%= staff.department.present? ? staff.department.title : ""%>:<%= staff.staff_raw_products.present? ? staff.staff_raw_products_titles : ""%></td>
+          <td><%= staff.wage_debit.to_f.round(2) %><% @short_pay += staff.wage_debit.to_f.round(2) %></td>
+          <td><%= staff.balance.to_f.round(2) %><% @balance += staff.balance.to_f.round(2) %></td>
+          <td>
+          <% if can?(:update, :all) %>
+            <%= link_to edit_staff_path(staff) do %>
+              <i class="fa fa-edit " aria-hidden="true"></i> |
+            <%end %>
+          <% end %>
+          <% if can?(:delete, :all) %>
+            <%= link_to staff, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+              <i class="fa fa-trash " aria-hidden="true"></i> |
+            <%end %>
+          <% end %>
+          <% if can?(:view, :all) %>
+            <%= link_to staff do %>
+              <i class="fa fa-eye " aria-hidden="true"></i>
+            <%end %>
+          <%end%>
+          <a href="<%=staff_ledger_books_path('q[staff_id_eq]':staff.id)%>">
+            <i class="fa fa-address-book"></i>
+          </a>
+        </td>
+        </tr>
+        <%end%>
+      <% end %>
+      <tr>
+        <td><h4>Total<h4></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><h4><%= @monthly_wage.round(2) %><h4></td>
+        <td><h4><%= @advance.round(2) %><h4></td>
+        <td></td>
+        <td><h4><%= @short_pay.round(2) %><h4></td>
+        <td><h4><%= @balance.round(2) %><h4></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="clearfix"></div>
+<div class="row">
+  <div class="col-lg-4 col-sm-4">
+    <%= page_entries_info @staffs %>
+  </div>
+  <div class="col-lg-8 col-sm-8 pagination-left">
+    <%= paginate @staffs %>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#staff_list").removeClass('hidden');
+  });
+</script>

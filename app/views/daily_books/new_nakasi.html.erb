@@ -1,0 +1,132 @@
+<h1>New Nakasi Book</h1>
+
+<%= bootstrap_form_for(@daily_book) do |f| %>
+  <% if @daily_book.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@daily_book.errors.count, "error") %> prohibited this daily_book from being saved:</h2>
+
+      <ul>
+      <% @daily_book.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <table>
+    <thead>
+      <th>
+        <%=  f.text_field :department_id, value:@departments.third.id,text:@departments.third.title,readonly: true%>
+      </th>
+      <th><%= f.date_select :created_at %></th>
+      <th>
+        <%= f.text_area :comment %>
+      </th>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <label for="salary_details_raw_rate">Debit Rate</label>
+          <input class="form-control" type="number" name="salary_details_raw_rate" id="salary_details_raw_rate" value="0.0", onchange="debitRate()", onkeyup="debitRate()", readonly="true">
+        </td>
+        <td>
+          <label for="salary_details_wage_rate">Credit Rate</label>
+          <input class="form-control" type="number" name="salary_details_wage_rate" id="salary_details_wage_rate" value="0.0", onchange="creditRate()", onkeyup="creditRate()", readonly="true">
+        </td>
+        <td>
+          <p><%=@raw_products.first.title%> = <span id='brick_quantity'><%=@raw_products.first.nakasi_stock%></span>/<span id='bricks'><%=@raw_products.first.nakasi_stock%></span></p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <%= f.number_field :brick_rohra, onchange:"rohraQuantity()", onkeyup:"rohraQuantity()"%>
+        </td>
+        <td>
+          <%= f.number_field :tile_rohra, onchange:"rohraQuantity()", onkeyup:"rohraQuantity()"%>
+        </td>
+        <td>
+          <p><%=@raw_products.second.title%> = <span id='tile_quantity'><%=@raw_products.second.nakasi_stock%></span>/<span id='tile'><%=@raw_products.second.nakasi_stock%></span></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <table id="nakasi">
+    <thead>
+      <th>Name</th>
+      <%@products.each do |product|%>
+        <th><%=product.title%></th>
+      <%end%>
+      <th class="hidden">Debit</th>
+      <th class="hidden">Credit</th>
+      <th>T QT</th>
+      <th>T DT</th>
+      <th>T CT</th>
+    </thead>
+    <tbody>
+      <%= f.fields_for :salary_details do |salary_detail| %>
+        <%= render 'nakasi_salary_details_fields', f: salary_detail %>
+      <% end %>
+      <tr>
+        <td><h4>Total</h4></td>
+        <%@products.each do |product|%>
+          <td><h5 id="<%="total_product_quantity_"+product.id.to_s%>">0.00</h5></td>
+        <%end%>
+        <td><h5></h5></td>
+        <td><h5></h5></td>
+        <td><h5 id="total_quantity_product">0.00</h5></td>
+        <td><h5 id="total_debit">0.00</h5></td>
+        <td><h5 id="total_credit">0.00</h5></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="actions">
+    <%= link_to 'Nakasi Daily Book', nakasi_daily_books_path, class: "btn btn-info" %>
+    <%= f.submit class: "btn btn-primary", style: "float: right" %>
+  </div>
+
+<% end %>
+<script>
+  var $table = $('#nakasi')
+
+  function buildTable($el, cells, rows) {
+    var i
+    var j
+    var row
+    var columns = []
+    var data = []
+
+    for (i = 0; i < cells; i++) {
+      columns.push({
+        field: 'field' + i,
+        title: 'Cell' + i,
+        sortable: true
+      })
+    }
+    for (i = 0; i < rows; i++) {
+      row = {}
+      for (j = 0; j < cells; j++) {
+        row['field' + j] = 'Row-' + i + '-' + j
+      }
+      data.push(row)
+    }
+
+    var classes = $('.toolbar input:checked').next().text()
+
+    $el.bootstrapTable('destroy').bootstrapTable({
+      showFullscreen: true,
+      search: true,
+      stickyHeader: true,
+      stickyHeaderOffsetLeft: '3em',
+      stickyHeaderOffsetRight: '3em',
+      theadClasses: classes
+    })
+  }
+
+  $(function() {
+    $('.toolbar input').change(function () {
+      buildTable($table, 20, 50)
+    })
+    buildTable($table, 20, 50)
+  })
+</script>
+<%= javascript_include_tag 'hover', 'data-turbolinks-track': 'reload' %>

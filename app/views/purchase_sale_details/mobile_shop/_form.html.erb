@@ -1,0 +1,338 @@
+<%= render 'purchase_sale_details/mobile_shop/order_detail'%>
+
+<div class="col-xl-12 col-md-12 mb-12">
+    <div class="card border-left-primary shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="row">
+                <div class="col-lg-4 form-group float-left">
+                  <div class="col-lg-3 form-group float-left">
+                    <%= link_to new_purchase_sale_detail_path(transaction_type: :sale, with_gst: true,product: true), class: "btn btn-success col-lg-12" do %>
+                      <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                      with GST
+                    <% end %>
+                  </div>
+                  <h2>
+                    <%if params[:transaction_type].present?%>
+                    <%= (params[:transaction_type].present?) ? "New Sale # "+(PurchaseSaleDetail.maximum(:id).present? ? PurchaseSaleDetail.maximum(:id).next : 1).to_s : "New Purchase # "+(PurchaseSaleDetail.maximum(:id).present? ? PurchaseSaleDetail.maximum(:id).next : 1).to_s%> /
+                    <%elsif @purchase_sale_detail.id%>
+                    <%= (@purchase_sale_detail.transaction_type=='Sale') ? "Edit Sale # "+@purchase_sale_detail.id.to_s : "Purchase # "+@purchase_sale_detail.id.to_s%> /
+                    <%else%>
+                    <%= (@purchase_sale_detail.transaction_type=='Sale') ? "New Sale # "+(PurchaseSaleDetail.maximum(:id).present? ? PurchaseSaleDetail.maximum(:id).next : 1).to_s : "Purchase # "+(PurchaseSaleDetail.maximum(:id).present? ? PurchaseSaleDetail.maximum(:id).next : 1).to_s%> /
+                    <%end%>
+                    <span class="oldBalance" id="sys_user_balance">
+                      0.0
+                    </span>
+                    <%if ['Purchase','Sale'].include? PurchaseSaleDetail&.last&.transaction_type.to_s%>
+                      <%= link_to new_purchase_sale_detail_path(purchase_sale_detail_id:purchase_sale_detail.id,product:true,transaction_type:'sale',purchase_sale_type: "Return") do %>
+                        <i class="fa fa-undo"></i>
+                      <% end %>
+                    <%end%>
+                  </h2>
+                </div>
+                <div class="col-lg-2 form-group float-left font-weight-bold">New Balance <h2 class="newBalance1">0.00</h2></div>
+                <div class="col-lg-2 form-group float-left font-weight-bold">Total Bill <h2 class="purchase_sale_detail_total_bill totalBill">0.00</h2></div>
+                <div class="col-lg-2 form-group float-left font-weight-bold">Total <h2 class="purchase_sale_discount_amount">0.00</h2></div>
+                <div class="col-lg-2 form-group float-left font-weight-bold">Remaning <h2 class="purchase_sale_detail_amount">0.00</h2></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<div>
+
+<%= bootstrap_form_for(purchase_sale_detail) do |f| %>
+
+  <% if purchase_sale_detail.errors.any? %>
+    <div class="col-xl-12 col-md-12 mb-12">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="row">
+                <div id="error_explanation">
+                  <h2><%= pluralize(purchase_sale_detail.errors.count, "error") %> prohibited this purchase_sale_detail from being saved:</h2>
+                  <ul>
+                  <% purchase_sale_detail.errors.full_messages.each do |message| %> <li><%= message %></li><% end %>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+  <div class="col-xl-12 col-md-12 mb-12">
+    <div class="card border-left-primary shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="row">
+              <div class='hidden'>
+                <%if params[:transaction_type].present? or @purchase_sale_detail.transaction_type=='Sale'%>
+                <%= f.hidden_field :transaction_type, value: "Sale" %>
+                <%else%>
+                <%= f.hidden_field :transaction_type, value: PurchaseSaleDetail.transaction_types.first.first%>
+                <%end%>
+                <%= f.select :status, PurchaseSaleDetail.statuses.map { |key, value| [key.humanize, key] },{hide_label:true,class: "form-control", required: true} %>
+              </div>
+              <%if params[:transaction_type].present? or @purchase_sale_detail.transaction_type=='Sale'%>
+                <div class="col-lg-3 form-group float-left font-weight-bold ">
+                  <%if super_admin_company_name =="ews"%>
+                  <%= f.select :sys_user_id, options_from_collection_for_select(@customers, 'id', 'name', (f.object.sys_user_id.nil? ? @customers.first.id : f.object.sys_user_id)), {label:'User'}, required: true,'data-rule-chosen-required':"true",:class=>"form-control chosen-select",onchange:"set_sys_user_balance(this.value,'sys_user_balance')",onkeyup:"set_sys_user_balance(this.value,'sys_user_balance')"%>
+                  <%else%>
+                  <%= f.select :sys_user_id, options_from_collection_for_select(@customers, 'id', 'name', f.object.sys_user_id), {label:'User',prompt: "Select the Customer"}, required: true,'data-rule-chosen-required':"true",:class=>"form-control chosen-select",onchange:"set_sys_user_balance(this.value,'sys_user_balance')",onkeyup:"set_sys_user_balance(this.value,'sys_user_balance')" %>
+                  <%end%>
+                </div>
+              <%else%>
+                <div class="col-lg-2 form-group float-left font-weight-bold"><%= f.select :sys_user_id, options_from_collection_for_select(@suppliers, 'id', 'name', f.object.sys_user_id), {label:'User',prompt: "Select the Supplier"}, required: true,:class=>"form-control chosen-select",onchange:"set_sys_user_balance(this.value,'sys_user_balance')",onkeyup:"set_sys_user_balance(this.value,'sys_user_balance')" %></div>
+              <%end%>
+              <div class="col-lg-2 form-group float-left font-weight-bold">
+                <%= f.select :order_id, options_from_collection_for_select(@orders, 'id', ->(st){"#{st.id} \u{27F6} #{st.total_bill} "}, f.object.order_id), {prompt: "Select the Order"},class: "form-control"%>
+              </div>
+              <div class="col-lg-2 form-group float-left font-weight-bold">
+                <%= f.select :account_id , options_from_collection_for_select(@accounts, 'id', 'title', (f.object.account_id.present? ? f.object.account_id : @account)),{},class: "form-control"%>
+              </div>
+              <div class="col-lg-2 form-group float-left font-weight-bold"> <%= f.hidden_field :total_bill%>
+                <%if f.object.order_id.present?%>
+                <%= f.number_field :amount,value:0,step: :any,label:'Paid Amount',onchange:"remaingUpdateAmount()",onkeyup:"remaingUpdateAmount()", required: true%>
+                <%else%>
+                <%= f.number_field :amount,step: :any,label:'Paid Amount',onchange:"remaingUpdateAmount()",onkeyup:"remaingUpdateAmount()", required: true %>
+                <%end%>
+              </div>
+              <div class="col-lg-2 form-group float-left font-weight-bold">
+                <%if f.object.order_id.present? %>
+                <%= f.number_field :discount_price,value:0,step: :any,label:'Discount',onchange:"remaingUpdateAmount()",onkeyup:"remaingUpdateAmount()"%>
+                <%else%>
+                <%= f.number_field :discount_price,step: :any,label:'Discount',onchange:"remaingUpdateAmount()",onkeyup:"remaingUpdateAmount()"%>
+                <%end%>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xl-12 col-md-12 mb-12">
+    <div class="card border-left-primary shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="row">
+              <%if @purchase_sale_detail.transaction_type=='Sale' || params[:transaction_type]=='sale'%>
+                <div class="col-lg-4 form-group float-left">
+                  <%if params[:product].present? %>
+                  <h5>Product</h5>
+                  <%else%>
+                  <h5>Item</h5>
+                  <%end%>
+                </div>
+                <div class="col-lg-1 form-group float-left">
+                  <h5>Stock</h5>
+                </div>
+                <div class="col-lg-2 form-group float-left">
+                  <h5>Qty</h5>
+                </div>
+                <div class="col-lg-2 form-group float-left">
+                  <h5>Rate</h5>
+                </div>
+                <div class="col-lg-2 form-group float-left">
+                  <h5>Total</h5>
+                </div>
+                <div class="col-lg-1 form-group float-left hidden">
+                  <h5>%</h5>
+                </div>
+            <%else%>
+              <div class="col-lg-4 form-group float-left">
+                <%if params[:product].present? %>
+                <h5>Product</h5>
+                <%else%>
+                <h5>Item</h5>
+                <%end%>
+              </div>
+              <div class="col-lg-1 form-group float-left">
+                <h5>Qty</h5>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <h5>Cost</h5>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <h5>Total</h5>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <h5>Sale</h5>
+              </div>
+              <div class="col-lg-1 form-group float-left hidden">
+                <h5></h5>
+              </div>
+            <%end%>
+            </div>
+            <%= f.fields_for :purchase_sale_items do |purchase_sale_item| %>
+              <%= render '/purchase_sale_details/mobile_shop/purchase_sale_items_fields_new', f: purchase_sale_item %>
+            <% end %>
+            <div class="links font-weight-bold text-success text-uppercase">
+              <%= link_to_add_association f, :purchase_sale_items, partial: '/purchase_sale_details/mobile_shop/purchase_sale_items_fields_new', class: "new_product"  do %>
+                <i class="fa fa-plus"></i> Add Product (<span id="total_product_quantity"></span>)
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%if pos_setting_sys_type=="MobileShop"%>
+    <div class="col-xl-12 col-md-12 mb-12">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="row col-lg-12">
+                <%= f.fields_for :product_warranties do |product_warranty| %>
+                  <%= render 'product_warranties_fields', f: product_warranty %>
+                <% end %>
+                <div class="links font-weight-bold text-success text-uppercase">
+                  <%= link_to_add_association f, :product_warranties, partial: 'product_warranties_fields', class: "new_warranty"  do %>
+                    <i class="fa fa-plus"></i> Add Warranty (<span id="total_product_warranty"></span>)
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <%end%>
+  <%if @purchase_sale_detail.transaction_type!='Sale' || params[:transaction_type]!='sale'%>
+    <div class="col-xl-12 col-md-12 mb-12">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="row col-lg-12">
+                <%= f.fields_for :expense_entries do |expense_entry| %>
+                  <%= render 'expense_entries_fields', f: expense_entry %>
+                <% end %>
+              </div>
+              <div class="row col-lg-12">
+                <div class="links font-weight-bold text-success text-uppercase">
+                  <%= link_to_add_association f, :expense_entries, partial: 'expense_entries_fields'  do %>
+                    <i class="fa fa-plus"></i> Add Expense <span id="expense_total"></span>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <%end%>
+  <%if @purchase_sale_detail.versions.present?%>
+    <div class="col-xl-12 col-md-12 mb-12">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+                <%@purchase_sale_detail.versions.each do |purchase|%>
+                  <div class="row col-lg-12">
+                    <div class="links font-weight-bold text-success text-uppercase">
+                      <i class="fa fa-history "></i> Log -> <%=purchase.created_at%>
+                      <% if purchase.event=='update' && purchase&.changeset[:total_bill].present? && purchase&.changeset[:total_bill]&.first.to_i>purchase&.changeset[:total_bill]&.last.to_i%>
+                        <p>Event : <span class="text-danger">Return</span> Event By : <span><%=purchase.whodunnit.to_i%></span></p>
+                      <%elsif purchase.event=='update' && purchase&.changeset[:total_bill].present? && purchase&.changeset[:total_bill]&.first.to_i<purchase&.changeset[:total_bill]&.last.to_i%>
+                        <p>Event : <span class="text-success">Add</span> Event By : <span><%=purchase.whodunnit.to_i%></span></p>
+                      <%else%>
+                        <p>Event : <span><%=purchase.event%></span> Event By : <span><%=purchase.whodunnit.to_i%></span></p>
+                      <%end%>
+                      <p>
+                        Customer/Supper: <span><%=purchase&.reify&.sys_user&.name%></span>
+                        Total Bill: <span><%=purchase&.changeset[:total_bill].present? ? purchase&.changeset[:total_bill] : purchase&.reify&.total_bill%></span>
+                        Paid: <span><%=purchase&.changeset[:amount].present? ? purchase&.changeset[:amount] : purchase&.reify&.amount%></span>
+                        Discount: <span><%=purchase&.changeset[:discount_price].present? ? purchase&.changeset[:discount_price] : purchase&.reify&.discount_price%></span>
+                        Carriage/Loading: <span><%=purchase&.changeset[:carriage].present? ? purchase&.changeset[:carriage] :purchase&.reify&.carriage%> / <%=purchase&.changeset[:loading].present? ? purchase&.changeset[:loading] : purchase&.reify&.loading%></span>
+                        Comment: <span><%=purchase&.changeset[:comment].present? ? purchase&.changeset[:comment] : purchase&.reify&.comment%></span>
+                      </p>
+                      <%PaperTrail::Version.where(item_type: "PurchaseSaleItem").where_object(purchase_sale_detail_id: @purchase_sale_detail.id).order(:created_at).each do |purchase_item|%>
+                        <%if purchase_item.created_at.strftime("%H:%M:%S")==purchase.created_at.strftime("%H:%M:%S")%>
+                          <p>
+                            -- <i class="fa fa-history "></i> Log -> <%=purchase_item.created_at%>
+                            Product: <span><%=purchase_item&.reify&.product&.title%></span>
+                            Quantity: <span><%=purchase_item&.reify&.quantity%></span>
+                            Sale: <span><%=purchase_item&.reify&.sale_price%></span>
+                            Total Sale: <span><%=purchase_item&.reify&.total_sale_price%></span>
+                            Cost: <span><%=purchase_item&.reify&.cost_price%></span>
+                            Total Cost: <span><%=purchase_item&.reify&.total_cost_price%></span>
+                          </p>
+                        <%end%>
+                        <%if purchase_item.created_at.strftime("%H:%M")==purchase.created_at.strftime("%H:%M")%>
+                          <p>
+                            Product: <span><%=purchase_item&.reify&.product&.title%></span>
+                            Quantity: <span><%=purchase_item.changeset[:quantity]%></span>
+                            Cost Price: <span><%=purchase_item.changeset[:cost_price]%></span>
+                            Total Cost: <span><%=purchase_item.changeset[:cost_price]%></span>
+                            Sale Price: <span><%=purchase_item.changeset[:sale_price]%></span>
+                            Total Sale: <span><%=purchase_item.changeset[:total_sale_price]%></span>
+                          </p>
+                        <%end%>
+                      <%end%>
+                    </div>
+                  </div>
+                <%end%>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <%end%>
+  <div class="col-xl-12 col-md-12 mb-12 ">
+    <div class="card border-left-primary shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="row">
+              <div class="col-lg-6 form-group float-left font-weight-bold"><%= f.datetime_select :created_at,{},class: "form-control"%>
+              </div>
+              <%if @pos_type_batha%>
+                <div class="col-lg-2 form-group float-left font-weight-bold"><%= f.select :staff_id, options_from_collection_for_select(@staffs, 'id', 'name', f.object.staff_id), {prompt: "Select the Loader"},class: "form-control"%></div>
+              <%else%>
+                <div class="col-lg-2 form-group float-left font-weight-bold"><%= f.text_field :bill_no%></div>
+              <%end%>
+              <div class="col-lg-2 form-group float-left font-weight-bold"><%= f.text_field :carriage,onchange:"costUpdateReturn()",onkeyup:"costUpdateReturn()", required: true%></div>
+              <div class="col-lg-2 form-group float-left font-weight-bold"><%= f.number_field :loading,onchange:"costUpdateReturn()",onkeyup:"costUpdateReturn()", required: true%></div>
+            </div>
+            <div class="row">
+              <% if f.object.persisted? && f.object.purchase_sale_images.present? %>
+                <% f.object.purchase_sale_images.each do |image| %>
+                  <%= image_tag image, width: 200, style: 'margin-right:20px;' %>
+                <% end %>
+              <% end %>
+              <div class="col-lg-12 form-group float-left font-weight-bold ">
+              <%= f.file_field :purchase_sale_images, multiple: true,'Filelimit' => 10, accept: 'image/*,.png', placeholder: '100 MB', class: "cursor-pointer upload_field" %>
+              </div>
+              <div class="col-lg-6 form-group float-left font-weight-bold"><%= f.text_area :comment%></div>
+              <div class="actions col-lg-6 form-group float-left font-weight-bold">
+                <div class="form-group">
+                  <div class="actions col-lg-12 form-group float-left font-weight-bold">
+                    <label for="commit">Save/Update</label>
+                  </div>
+                  <div class="actions col-lg-6 form-group float-left font-weight-bold">
+                    <%= f.submit class: "btn btn-success  col-lg-12", style: "float: right",value: "Save with Print", onclick:"return save_sale();" %>
+                  </div>
+                  <div class="actions col-lg-6 form-group float-left font-weight-bold">
+                    <%= f.submit class: "btn btn-success col-lg-12", style: "float: right",value: "Save", onclick:"return save_sale();" %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<% end %>
+<%= javascript_include_tag 'hover', 'data-turbolinks-track': 'reload' %>
+</div>

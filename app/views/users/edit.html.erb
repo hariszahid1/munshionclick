@@ -1,0 +1,3 @@
+<h1>Editing <%= current_user.allowed_valid_roles.to_s.titleize %></h1>
+<% @btn_value = "Update "+current_user.allowed_valid_roles.to_s.titleize %>
+<%= render 'form', user: @user %>

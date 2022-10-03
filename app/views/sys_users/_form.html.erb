@@ -1,0 +1,136 @@
+<%= bootstrap_form_for(sys_user) do |f| %>
+  <% if sys_user.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(sys_user.errors.count, "error") %> prohibited this sys_user from being saved:</h2>
+
+      <ul>
+      <% sys_user.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+<div class="bg-white nested-fields">
+  <div class="col-lg-2 form-group float-left">
+    <%= f.text_field :code, {placeholder: "Enter the code", required: true , value: (f.object.code.nil? ? ("AGC-"+"%.4i" % (SysUser.maximum(:id).present? ? SysUser.maximum(:id).next : 1)) : (f.object.code ))} %>
+  </div>
+
+  <div class="col-lg-4 form-group float-left">
+    <%= f.text_field :cnic , placeholder:"Enter CNIC"%>
+  </div>
+
+  <div class="col-lg-6 form-group float-left">
+    <%= f.label :name do %>
+          <%= SysUser.human_attribute_name :name %>
+          <i class="fas fa-language"></i>
+        <% end %>
+    <%= f.text_field :name,required:true, placeholder:"Enter Name", hide_label: true ,class: 'urdu-font' %>
+  </div>
+  <div class="col-lg-6 form-group float-left">
+    <%= f.label :father do %>
+          <%= SysUser.human_attribute_name :father %>
+          <i class="fas fa-language"></i>
+        <% end %>
+    <%= f.text_field :father, placeholder:"Enter Father Name", hide_label: true ,class: 'urdu-font' %>
+  </div>
+  <div class="col-lg-6 form-group float-left">
+    <%= f.select :user_type_id, options_from_collection_for_select(@user_types, 'id', 'title', f.object.user_type_id.present? ? f.object.user_type_id : @user_types.first.id ),{include_blank: "Please Select User Type"}, required: true, class: 'urdu-font form-control'%>
+  </div>
+
+  <div class="col-lg-6 form-group float-left">
+    <%= f.select :user_group, SysUser.user_groups.map { |key, value| [key.humanize, key] },{include_blank: "Please Select User Group"},{class: "form-control", required: true} %>
+  </div>
+
+  <div class="col-lg-6" style="float:left">
+  </div>
+
+  <div class="col-lg-6 form-group float-left">
+    <%= f.select :status, SysUser.statuses.map { |key, value| [key.humanize, key] },{include_blank: "Please Select Status"},{class: "form-control"} %>
+  </div>
+
+  <div class="col-lg-6 form-group float-left">
+    <%= f.text_field :occupation , placeholder:"Enter Occupation"%>
+  </div>
+
+
+  <div class="col-lg-6 form-group float-left">
+    <%= f.number_field :credit_limit %>
+  </div>
+  <div class="col-lg-6 form-group float-left">
+    <%= f.select :credit_status, SysUser.statuses.map { |key, value| [key.humanize, key]},{include_blank: "Please Select Credit Status"},{class: "form-control"} %>
+  </div>
+
+  <div class="col-lg-6 form-group float-left">
+    <%= f.number_field :opening_balance, {required: true, value: f.object.opening_balance.present? ? f.object.opening_balance : 0} %>
+  </div>
+  <div class="col-lg-6 form-group float-left">
+    <%= f.number_field :balance, disabled: true %>
+  </div>
+
+  <div class="col-lg-6 form-group float-left">
+    <%= f.file_field :profile_image %>
+  </div>
+  <div class="col-lg-6 form-group float-left">
+    <% if  sys_user.profile_image.attached? %>
+      <%= image_tag sys_user.profile_image.service_url, width: 300 %>
+    <% end %>
+  </div>
+
+  <div class="clearfix">
+    <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
+      <%= f.text_area :gst %>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
+      <%= f.text_area :ntn %>
+    </div>
+  </div>
+  <div >
+    <h4 class="card-header">
+
+      Nominee Details
+
+    </h4>
+    <div class="col-lg-6 form-group float-left">
+      <%= f.text_field :nom_name , placeholder:"Enter Name"%>
+    </div>
+    <div class="col-lg-6 form-group float-left">
+      <%= f.text_field :nom_father , placeholder:"Enter Father"%>
+    </div>
+    <div class="col-lg-6 form-group float-left">
+      <%= f.text_field :nom_cnic , placeholder:"Enter CNIC"%>
+    </div>
+    <div class="col-lg-6 form-group float-left">
+      <%= f.text_field :nom_relation , placeholder:"Enter Relation with User"%>
+    </div>
+  </div>  <div class="clearfix">
+
+  </div>
+  <div >
+    <h4 class="card-header">
+
+      Contact Form
+
+    </h4>
+    <%= f.fields_for :contact do |af| %>
+      <%= render 'contact', af: af %>
+    <% end %>
+  </div>
+
+<div class="clearfix">
+  <hr>
+  <div class="col-lg-12 row ">
+
+          <div class="col-lg-6 form-group float-left">
+            <%= link_to sys_users_path do %>
+            <i class="fa fa-arrow-left " aria-hidden="true"></i>
+            <% end %>
+          </div>
+            <div class="col-lg-6 form-group float-left">
+              <div class="col-lg-6 form-group float-left">
+                <%=f.object.id.nil? ? (f.submit class: "btn btn-success", style: "float: left")  :  (f.submit class: "btn btn-warning", style: "float: left")%>
+              </div>
+            </div>
+          <% end %>
+</div>
+</div>
+<%= javascript_include_tag 'hover', 'data-turbolinks-track': 'reload' %>

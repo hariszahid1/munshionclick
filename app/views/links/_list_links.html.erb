@@ -1,0 +1,19 @@
+<div class="col-lg-12 form-group float-left">
+  <%= f.links.each do |link| %>
+    <% if link.qrcode.present? %>
+      <%
+        require "rqrcode"
+        qrcode = RQRCode::QRCode.new(link.qrcode)
+        @svg = qrcode.as_svg(
+            color: "000",
+            shape_rendering: "crispEdges",
+            module_size: 11,
+            standalone: true,
+            use_path: true
+          )
+          @str=Base64.encode64(@svg ).gsub("\n", '')
+      %>
+      <img width="150px" height="115px" class="figure" style=""src=<%="data:image/svg+xml;base64,"+@str%> ></img>
+    <%end%>
+  <% end %>
+</div>

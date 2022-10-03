@@ -1,0 +1,30 @@
+<tr>
+  <td><%= expense_entry.expense_type.title %></td>
+  <td><%= expense_entry.account.title %> ------ <%=number_with_delimiter(@expense_payment[expense_entry.id])%></td>
+  <td><%= number_with_delimiter(expense_entry.amount)%></td>
+  <td><%= expense_entry.comment %></td>
+  <td>
+    <%if expense_entry.created_at.strftime("%d%b%y")!=expense_entry.updated_at.strftime("%d%b%y")%>
+      <%= expense_entry.created_at.present? ? expense_entry.created_at.strftime("%d%b%y at %H:%M%p") : '' %> | <%= expense_entry.updated_at.present? ? expense_entry.updated_at.strftime("%d%b%y at %H:%M%p") : '' %>
+    <%else%>
+      <%= expense_entry.created_at.present? ? expense_entry.created_at.strftime("%A,  %d-%b-%y at %H:%M%p") : '' %>
+    <%end%>
+  </td>
+  <td>
+    <% if can?(:update, :all) %>
+      <%= link_to edit_expense_entry_path(expense_entry) do %>
+        <i class="fa fa-edit " aria-hidden="true"></i> |
+      <%end %>
+    <% end %>
+    <% if can?(:delete, :all) %>
+      <%= link_to expense_entry, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+        <i class="fa fa-trash " aria-hidden="true"></i> |
+      <%end %>
+    <% end %>
+    <% if can?(:view, :all) %>
+      <%= link_to expense_entry do %>
+        <i class="fa fa-eye " aria-hidden="true"></i>
+      <%end %>
+    <%end%>
+  </td>
+</tr>

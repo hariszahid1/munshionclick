@@ -1,0 +1,52 @@
+<%= form_for(purchase_sale_item) do |f| %>
+  <% if purchase_sale_item.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(purchase_sale_item.errors.count, "error") %> prohibited this purchase_sale_item from being saved:</h2>
+
+      <ul>
+      <% purchase_sale_item.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :purchase_sale_detail_id %>
+    <%= f.text_field :purchase_sale_detail_id %>
+  </div>
+
+  <div class="field">
+    <%= f.label :item_id %>
+    <%= f.text_field :item_id %>
+  </div>
+
+  <div class="field">
+    <%= f.label :quantity %>
+    <%= f.number_field :quantity %>
+  </div>
+
+  <div class="field">
+    <%= f.label :cost_price %>
+    <%= f.number_field :cost_price %>
+  </div>
+
+  <div class="field">
+    <%= f.label :sale_price %>
+    <%= f.number_field :sale_price %>
+  </div>
+
+  <div class="field">
+    <%= f.label :status %>
+    <%= f.number_field :status %>
+  </div>
+
+  <div class="field">
+    <%= f.label :comment %>
+    <%= f.text_field :comment, placeholder:"Enter Comment" %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

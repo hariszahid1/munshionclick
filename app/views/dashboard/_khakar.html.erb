@@ -1,0 +1,80 @@
+<%@rev=Hash.new%>
+
+<%@salary_details_khakar_quantity_from_pather = 0 %>
+<%@salary_details_khakar_quantity_from_stock = 0 %>
+<%@salary_details_khakar_f99_raw_quantity=0%>
+<%@salary_details_khakar_tile_raw_quantity=0%>
+<%@daily_book_salary_details_khakar_raw_quantity=0%>
+<%@salary_details_pather_remaning_quanity_bhari=0%>
+<%@salary_details_pather_remaning_quanity_stock=0%>
+<%@salary_details_pather_remaning_quanity_chapa=0%>
+<%@daily_book_salary_details_quantity_rate=0%>
+
+<%@daily_book_salary_details_wast = 0 %>
+
+<div class="row">
+  <div class="col-lg-12 col-sm-12">
+    <div id = "khakar">
+      <table data-toggle="table">
+        <thead>
+          <tr>
+            <th>Khakar</th>
+            <th><%= sort_link(@q, :created_at, 'Pick up') %></th>
+            <th><%= sort_link(@q, :created_at, 'From Pather') %></th>
+            <th><%= sort_link(@q, :created_at, 'From Stock') %></th>
+            <th><%= sort_link(@q, :department, 'Bricks') %></th>
+            <th><%= sort_link(@q, :department, 'Tiles') %></th>
+            <th><%= sort_link(@q, :department, 'Quantity') %></th>
+            <th><%= sort_link(@q, :department, 'To Bhari') %></th>
+            <th><%= sort_link(@q, :department, 'To Stock') %></th>
+            <th><%= sort_link(@q, :department, 'To Chapa') %></th>
+            <th><%= sort_link(@q, :department, 'Total') %></th>
+            <th>Wast</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @khakar_daily_books.each do |khakar_daily_book| %>
+            <tr>
+              <% khakar_daily_book.salary_details_khakar_quantity_from_pather.round(0)%> <%@salary_details_khakar_quantity_from_pather +=khakar_daily_book.salary_details_khakar_quantity_from_pather.round(0)%>
+              <% khakar_daily_book.salary_details_khakar_quantity_from_stock.round(0)%> <%@salary_details_khakar_quantity_from_stock +=khakar_daily_book.salary_details_khakar_quantity_from_stock.round(0)%>
+              <% khakar_daily_book.salary_details_khakar_f99_raw_quantity.round(0)%> <%@salary_details_khakar_f99_raw_quantity +=khakar_daily_book.salary_details_khakar_f99_raw_quantity.round(0)%>
+              <% khakar_daily_book.salary_details_khakar_tile_raw_quantity.round(0)%> <%@salary_details_khakar_tile_raw_quantity +=khakar_daily_book.salary_details_khakar_tile_raw_quantity.round(0)%>
+              <% khakar_daily_book.salary_details_khakar_quantity %> <%@daily_book_salary_details_khakar_raw_quantity += khakar_daily_book.salary_details_khakar_quantity.round(0) %>
+              <% khakar_daily_book.salary_details_pather_remaning_quanity_bhari%><%@salary_details_pather_remaning_quanity_bhari += khakar_daily_book.salary_details_pather_remaning_quanity_bhari.round(0) %>
+              <% khakar_daily_book.salary_details_pather_remaning_quanity_stock%><%@salary_details_pather_remaning_quanity_stock += khakar_daily_book.salary_details_pather_remaning_quanity_stock.round(0) %>
+              <% khakar_daily_book.salary_details_pather_remaning_quanity_chapa%><%@salary_details_pather_remaning_quanity_chapa += khakar_daily_book.salary_details_pather_remaning_quanity_chapa.round(0) %>
+              <% khakar_daily_book.salary_details_khakar_remaning %> <%@daily_book_salary_details_wast += khakar_daily_book.salary_details_khakar_remaning %>
+              <% khakar_daily_book.salary_details_khakar_wast.to_f.round(2) %> <%@daily_book_salary_details_quantity_rate += khakar_daily_book.salary_details_khakar_wast %>
+
+            </tr>
+          <% end %>
+          <tr>
+            <td><h5>Total</h5></td>
+            <td></td>
+            <td><h5><%=@salary_details_khakar_quantity_from_pather%></h5></td>
+            <td><h5><%=@salary_details_khakar_quantity_from_stock%></h5></td>
+            <td><h5><%=@salary_details_khakar_f99_raw_quantity%></h5></td>
+            <td><h5><%=@salary_details_khakar_tile_raw_quantity%></h5></td>
+            <td><h5><%=@daily_book_salary_details_khakar_raw_quantity%></h5></td>
+            <td><h5><%=@salary_details_pather_remaning_quanity_bhari%></h5></td>
+            <td><h5><%=@salary_details_pather_remaning_quanity_stock%></h5></td>
+            <td><h5><%=@salary_details_pather_remaning_quanity_chapa%></h5></td>
+            <td><h5><%=@daily_book_salary_details_wast %></h5></td>
+            <td><h5><%=@daily_book_salary_details_quantity_rate %></h5></td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#expenses_list").removeClass('hidden');
+  });
+</script>

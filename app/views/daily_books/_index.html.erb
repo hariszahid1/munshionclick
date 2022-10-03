@@ -1,0 +1,151 @@
+<div class="topnav">
+  <%= link_to daily_books_path() do %>
+    <i class="fa fa-male" aria-hidden="true"></i>
+    <%=@departments.first.title%> Daily
+  <% end %>
+  <%= link_to khakar_daily_books_path(department_id: @departments.second.title) do %>
+    <i class="fas fa-truck" aria-hidden="true"></i>
+    <%=@departments.second.title%> Daily book
+  <% end %>
+</div>
+
+<%@daily_book_salary_details_raw_quantity = 0 %>
+<%@daily_book_salary_details_f99_raw_quantity = 0 %>
+<%@daily_book_salary_details_tile_raw_quantity = 0 %>
+<%@daily_book_salary_details_raw_quantity = 0 %>
+<%@daily_book_salary_details_f99_quantity = 0 %>
+<%@daily_book_salary_details_tile_quantity = 0 %>
+<%@daily_book_salary_details_quantity = 0 %>
+<%@daily_book_salary_details_wast = 0 %>
+<%@daily_book_salary_details_raw_quantity_rate = 0 %>
+<%@daily_book_salary_details_quantity_rate = 0 %>
+<%@daily_book_salary_details_coverge_rate=0%>
+<%@daily_book_salary_details_gift_rate=0%>
+<%@daily_book_salary_details_pather_khakar_wast = 0 %>
+
+<div class="hidden" id="daily_books_list">
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <h1>Daily books By <%=@departments.first.title%></h1>
+      <div class="col-lg-2 form-group float-left">
+        <% if can?(:add, :all) %>
+        <%= link_to new_daily_book_path(department_id: @departments.first.id), class: "btn btn-success" do %>
+          <i class="fa fa-plus" aria-hidden="true"></i>
+          New <%=@departments.first.title%> Daily
+        <% end %>
+        <% end %>
+      </div>
+
+    </div>
+  </div>
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <%= search_form_for @q, url: daily_books_path, class: "admin-controls", method: "get" do |f| %>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.search_field :book_date_gteq, class: 'form-control input-sm datepicker',value: @book_date_gteq, 'datepicker' => true,placeholder: "YYYY-MM-DD" %>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.search_field :book_date_lteq, class: 'form-control input-sm datepicker',value: @book_date_lteq, 'datepicker' => true ,placeholder: "YYYY-MM-DD"%>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-secondary" name="submit_pdf" type="submit" value="Daily Production Details PDF A4" formtarget="_blank" ><i class="fa fa-file-pdf"></i> Daily</button>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-info" name="email" type="submit" value="Email"><i class="fas fa-envelope"></i> email</button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <table data-toggle="table" data-search="true">
+    <thead>
+      <tr>
+        <th><%= sort_link(@q, :book_date, 'Date') %></th>
+        <th><%= sort_link(@q, :department, 'Department') %></th>
+        <th><%= sort_link(@q, :salary_details_quantity, 'Qty') %></th>
+        <th><%= sort_link(@q, :salary_details_wast, 'Wast') %></th>
+        <th><%= sort_link(@q, :salary_details_quantity_rate, 'Price') %></th>
+        <th><%= sort_link(@q, :salary_details_gift_rate, 'Gift') %></th>
+        <th><%= sort_link(@q, :salary_details_coverge_rate, 'Coverge') %></th>
+        <th><%= sort_link(@q, :comment, 'Comment') %></th>
+        <th class="border_none">Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @daily_books.each do |daily_book| %>
+        <tr>
+          <td><%= daily_book.book_date.strftime("%A,  %d-%b-%y") if daily_book.book_date%></td>
+          <td><%= daily_book.department.present? ? daily_book.department.title : "" %></td>
+          <td><%= daily_book.salary_details_quantity.round(0) %> <%@daily_book_salary_details_quantity += daily_book.salary_details_quantity %></td>
+          <td><%= daily_book.salary_details_wast.round(0) %> <%@daily_book_salary_details_wast += daily_book.salary_details_wast %></td>
+          <td><%= daily_book.salary_details_quantity_rate.round(0) %> <%@daily_book_salary_details_quantity_rate += daily_book.salary_details_quantity_rate.round(0) %></td>
+          <td><%= daily_book.salary_details_gift_rate.round(0) %> <%@daily_book_salary_details_gift_rate += daily_book.salary_details_gift_rate.round(0) %></td>
+          <td><%= daily_book.salary_details_coverge_rate %> <%@daily_book_salary_details_coverge_rate += daily_book.salary_details_coverge_rate %></td>
+          <td><%= daily_book.comment %></td>
+          <% if can?(:update, Product) %>
+          <td>
+            <%= link_to edit_daily_book_path(daily_book) do %>
+            <i class="fas fa-edit" aria-hidden="true"></i> |
+            <% end %>
+          <% end %>
+
+          <% if can?(:delete, :all) %>
+
+            <%= link_to daily_book, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+            <i class="fas fa-trash" aria-hidden="true"></i> |
+            <% end %>
+          <% end %>
+            <%= link_to daily_book do %>
+            <i class="fas fa-eye" aria-hidden="true"></i>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+      <tr>
+        <td><h5>Total</h5></td>
+        <td></td>
+        <td><h5><%=@daily_book_salary_details_quantity.round(0)%></h5></td>
+        <td><h5><%=@daily_book_salary_details_wast.round(0)%></h5></td>
+        <td><h5><%=@daily_book_salary_details_quantity_rate.to_f.round(2)%></h5></td>
+        <td><h5><%=@daily_book_salary_details_gift_rate.to_f.round(2)%></h5></td>
+        <td><h5><%=@daily_book_salary_details_coverge_rate.to_f.round(2)%></h5></td>
+        <td><h5></h5></td>
+        <td><h5></h5></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="clearfix"></div>
+<div class="row">
+  <div class="col-lg-4 col-sm-4">
+    <%= page_entries_info @daily_books %>
+  </div>
+  <div class="col-lg-8 col-sm-8 pagination-left">
+    <%= paginate @daily_books %>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#daily_books_list").removeClass('hidden');
+    FontAwesome.dom.i2svg();
+  });
+  $(document).ready(function() {
+    setTimeout(function(){
+      $(".chosen-select").chosen({
+  allow_single_deselect: true,
+  width: '100%'
+});
+    }, 50);
+  });
+</script>

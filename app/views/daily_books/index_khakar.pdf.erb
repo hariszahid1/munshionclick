@@ -1,0 +1,5 @@
+<%if  check_system_type(@pos_setting)=="batha"%>
+  <%= render '/daily_books/batha/index_khakar' %>
+<%else%>
+  <%= render 'index_step_two' %>
+<%end%>

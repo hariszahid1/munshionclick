@@ -1,0 +1,53 @@
+<%@rev=Hash.new%>
+
+<%n_lines = 0 %>
+<%@n_total_bricks = 0 %>
+<%@n_total_tiles = 0 %>
+
+
+
+<div class="row">
+  <div class="col-lg-12 col-sm-12">
+    <div id = "khakar">
+      <table data-toggle="table">
+        <thead>
+          <th>Nakasi</th>
+          <th><%= sort_link(@j, :lines, 'Lines') %></th>
+          <th><%= sort_link(@j, :total_bricks, 'T Bricks') %></th>
+          <th><%= sort_link(@j, :total_bricks, 'T Tiles') %></th>
+        </thead>
+
+        <tbody>
+          <% @nkasi_production_cycles.each do |nkasi_production_cycle| %>
+            <tr>
+              <% nkasi_production_cycle.start_date.strftime("%d-%b-%y") %>
+
+                <%nkasi_production_cycle.lines %><% n_lines+=nkasi_production_cycle.lines %>
+
+                <%nkasi_production_cycle.production_blocks.sum(:bricks_quantity).to_i %><% @n_total_bricks+=nkasi_production_cycle.production_blocks.sum(:bricks_quantity).to_i %>
+                <%nkasi_production_cycle.production_blocks.sum(:tiles_quantity).to_i %><% @n_total_tiles+=nkasi_production_cycle.production_blocks.sum(:tiles_quantity).to_i %>
+
+            </tr>
+          <% end %>
+          <tr>
+            <td><h6>Total</h6></td>
+            <td><h6><%=n_lines.to_i%></h6></td>
+            <td><h6><%=@n_total_bricks.to_i%></h6></td>
+            <td><h6><%=@n_total_tiles.to_i%></h6></td>
+          </tr>
+
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#expenses_list").removeClass('hidden');
+  });
+</script>

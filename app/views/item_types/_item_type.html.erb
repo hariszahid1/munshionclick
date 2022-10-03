@@ -1,0 +1,23 @@
+<tr>
+  <td><%=item_type.id%></td>
+  <td class='urdu-font'><%= item_type.title %></td>
+  <td><%= item_type.code %></td>
+  <td><%= item_type.comment %></td>
+  <td>
+    <% if can?(:update, :all) %>
+      <%= link_to edit_item_type_path(item_type) do %>
+        <i class="fa fa-edit " aria-hidden="true"></i> |
+      <%end %>
+    <% end %>
+    <% if can?(:delete, :all) %>
+      <%= link_to item_type, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+        <i class="fa fa-trash " aria-hidden="true"></i> |
+      <%end %>
+    <% end %>
+    <% if can?(:view, :all) %>
+      <%= link_to item_type do %>
+        <i class="fa fa-eye " aria-hidden="true"></i>
+      <%end %>
+    <%end%>
+  </td>
+</tr>

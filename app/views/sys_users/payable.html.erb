@@ -1,0 +1,123 @@
+<%@sys_user_balance = 0 %>
+<div class="clearfix"></div>
+<h1>Payable Details</h1>
+<div class="row">
+  <div class="col-lg-12 col-sm-12">
+    <div class="col-lg-2 form-group float-left">
+      <%= link_to sys_users_path, class: "btn btn-primary" do %>
+       <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+       User's List
+       <% end %>
+     </div>
+     <div class="col-lg-2 form-group float-left">
+       <%= link_to receiveable_sys_users_path, class: "btn btn-primary" do %>
+        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+        Reciveable
+        <% end %>
+      </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-12 col-sm-12">
+    <%= search_form_for @q, url: payable_sys_users_sys_users_path, class: "admin-controls", method: "get" do |f| %>
+      <div class="col-lg-2 form-group float-left">
+        <%= f.select :name_or_code_cont, options_from_collection_for_select(@all_user, "name", ->(st){"#{st.name} \u{27F6} \u{27F6} #{st.code} "},f.object.name_or_code_cont),{:include_blank => "Select Name/Code"},:class=>"form-control chosen-select" %>
+      </div>
+      <div class="col-lg-2 form-group float-left">
+        <%= f.select :user_group_eq, options_for_select(SysUser.user_groups, f.object.user_group_eq), {:include_blank => "Select User group"},:class=>"form-control chosen-select" %>
+      </div>
+      <div class="col=lg-2 form-group float-left">
+        <%= f.select :status_eq, SysUser.statuses.map { |key, value| [key.humanize, value] },{hide_label:true,class: "form-control", required: true},:class=>"form-control chosen-select" %>
+      </div>
+      <div class="col-lg-2 account_totalform-group float-left">
+        <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+      </div>
+      <div class="col-lg-1.5 form-group float-right">
+        <button class="form-control btn btn-secondary" name="submit_pdf_staff_with" type="submit" value="Accounts PDF A4" formtarget="_blank"> <i class="fa fa-file-pdf"></i></button>
+      </div>
+    <% end %>
+  </div>
+</div>
+<table data-toggle="table" data-search="true">
+  <thead>
+    <tr>
+      <th>Profile Image</th>
+      <th><%= sort_link(@q, :code, 'Code') %></th>
+      <th class="urdu-font"><%= sort_link(@q, :name, 'Name') %></th>
+      <th><%= sort_link(@q, :user_type, 'User type') %></th>
+      <th><%= sort_link(@q, :user_group, 'User group') %></th>
+      <th>Status</th>
+      <th>Occupation</th>
+      <th>Opening</th>
+      <th><%= sort_link(@q, :balance, 'balance') %></th>
+      <th><%= sort_link(@q, :ledger_book_created_at, 'Last Payment') %></th>
+      <th class="border_none">Action</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @sys_users.each do |sys_user| %>
+    <% if  (sys_user.balance > 0)  %>
+      <% date = (sys_user.ledger_books.present? ? sys_user.ledger_books.last.created_at : sys_user.created_at)%>
+      <tr class=<%=((DateTime.now.to_datetime-date.to_datetime).to_i>30 && !sys_user.balance.to_i.zero?) ? 'table-danger' : ''%>>
+        <td>
+          <% if  sys_user.profile_image.attached? %>
+            <%= image_tag sys_user.profile_image.service_url, width: 100 %>
+          <% end %>
+        </td>
+        <td><%= sys_user.code %></td>
+        <td class = "urdu-font"><b><%= sys_user.name %></b></td>
+        <td><%= sys_user.user_type.title %></td>
+        <td><%= sys_user.user_group %></td>
+        <td><%= sys_user.status %></td>
+        <td><%= sys_user.occupation %></td>
+        <td><b><%= sys_user.opening_balance %></b></td>
+        <td><b><%= sys_user.balance %><%@sys_user_balance += sys_user.balance.abs %></b> </td>
+        <td><%= date.strftime("%d%b%y at %I:%M%p") %> </td>
+        <td>
+          <% if can?(:update, :all) %>
+            <%= link_to edit_sys_user_path(sys_user) do %>
+              <i class="fa fa-edit " aria-hidden="true"></i> |
+            <%end %>
+          <% end %>
+          <% if can?(:delete, :all) %>
+            <%= link_to sys_user, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+              <i class="fa fa-trash " aria-hidden="true"></i> |
+            <%end %>
+          <% end %>
+          <% if can?(:view, :all) %>
+            <%= link_to sys_user do %>
+              <i class="fa fa-eye " aria-hidden="true"></i> |
+            <%end %>
+          <%end%>
+          <a href="<%=ledger_books_path('q[sys_user_id_eq]':sys_user.id)%>">
+            <i class="fa fa-address-book"></i>
+          </a>
+        </td>
+      </tr>
+      <% end %>
+    <% end %>
+    <tr>
+      <td><h5>total</h5></td>
+      <td><%= %></td>
+      <td><%= %></td>
+      <td><%= %></td>
+      <td><%= %></td>
+      <td></td>
+      <td><%= %></td>
+      <td><%=  %></td>
+      <td><h5><%=@sys_user_balance %></h5></td>
+
+    </tr>
+
+  </tbody>
+</table>
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#sys_users_list").removeClass('hidden');
+    FontAwesome.dom.i2svg();
+  });
+</script>

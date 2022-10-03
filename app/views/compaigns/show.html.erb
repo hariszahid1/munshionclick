@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @compaign.title %>
+</p>
+
+<p>
+  <strong>Comment:</strong>
+  <%= @compaign.comment %>
+</p>
+
+<%= link_to 'Edit', edit_compaign_path(@compaign) %> |
+<%= link_to 'Back', compaigns_path %>

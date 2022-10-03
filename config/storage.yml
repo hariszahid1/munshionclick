@@ -1,0 +1,18 @@
+
+local:
+  service: Disk
+  root: <%= Rails.root.join("storage") %>
+
+test:
+  service: Disk
+  root: <%= Rails.root.join("tmp/storage") %>
+
+amazon:
+  service: S3
+  access_key_id: AKIATNUCQWJCYEGKPXMG
+  secret_access_key: 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
+  bucket: munshionclick
+  region: us-west-1
+  http_open_timeout: 300
+  http_read_timeout: 300
+  retry_limit: 10

@@ -1,0 +1,29 @@
+<%gate=gate_chart%>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<script type="text/javascript">
+  google.charts.load("current", {packages:["timeline"]});
+  google.charts.setOnLoadCallback(drawChart);
+  function drawChart() {
+    var container = document.getElementById(<%=gate.id%>);
+    var chart = new google.visualization.Timeline(container);
+    var dataTable = new google.visualization.DataTable();
+
+    dataTable.addColumn({ type: 'string', id: 'Term' });
+    dataTable.addColumn({ type: 'string', id: 'Name' });
+    dataTable.addColumn({ type: 'date', id: 'Start' });
+    dataTable.addColumn({ type: 'date', id: 'End' });
+
+    dataTable.addRows([
+      [ '1', 'Pathair', new Date(<%=gate.pather_from.strftime("%Y").to_i%>, <%=gate.pather_from.strftime("%m").to_i%>, <%=gate.pather_from.strftime("%d").to_i%>), new Date(<%=gate.pather_to.strftime("%Y").to_i%>, <%=gate.pather_to.strftime("%m").to_i%>,<%=gate.pather_to.strftime("%d").to_i%>) ],
+      [ '2', 'Khakar', new Date(<%=gate.kharkar_from.strftime("%Y").to_i%>, <%=gate.kharkar_from.strftime("%m").to_i%>, <%=gate.kharkar_to.strftime("%d").to_i%>), new Date(<%=gate.kharkar_to.strftime("%Y").to_i%>, <%=gate.kharkar_to.strftime("%m").to_i%>,<%=gate.kharkar_to.strftime("%d").to_i%>) ],
+      [ '3', 'Bhari', new Date(<%=gate.bhari_from.strftime("%Y").to_i%>, <%=gate.bhari_from.strftime("%m").to_i%>, <%=gate.bhari_from.strftime("%d").to_i%>), new Date(<%=gate.bhari_to.strftime("%Y").to_i%>, <%=gate.bhari_to.strftime("%m").to_i%>,<%=gate.bhari_to.strftime("%d").to_i%>) ],
+      [ '4', 'Jalai', new Date(<%=gate.jalai_from.strftime("%Y").to_i%>, <%=gate.jalai_from.strftime("%m").to_i%>, <%=gate.jalai_from.strftime("%d").to_i%>), new Date(<%=gate.jalai_to.strftime("%Y").to_i%>, <%=gate.jalai_to.strftime("%m").to_i%>,<%=gate.jalai_to.strftime("%d").to_i%>) ],
+      [ '5', 'Nakasi', new Date(<%=gate.nakasi_from.strftime("%Y").to_i%>, <%=gate.nakasi_from.strftime("%m").to_i%>, <%=gate.nakasi_from.strftime("%d").to_i%>), new Date(<%=gate.nakasi_to.strftime("%Y").to_i%>, <%=gate.nakasi_to.strftime("%m").to_i%>,<%=gate.nakasi_to.strftime("%d").to_i%>) ]]
+      );
+    var options = {'height':300};
+    chart.draw(dataTable,options);
+  }
+</script>
+<tr id=<%=gate.id%> >
+</tr>

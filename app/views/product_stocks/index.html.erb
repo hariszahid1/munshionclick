@@ -1,0 +1,91 @@
+<div class="hidden" id="city_list">
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <h1>Product Stock by Day</h1>
+      <% if can?(:add, :all) %>
+      <div id="new_city">
+        <%= link_to new_product_stock_path,class: "btn btn-success" do %>
+           <i class="fa fa-plus" aria-hidden="true"></i>
+           New Product Stock
+           <% end %>
+      </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <%= search_form_for @q, url: product_stocks_path, class: "admin-controls", method: "get" do |f| %>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.select :product_id_eq, options_from_collection_for_select(@products, 'id', 'title',@title),{:include_blank => "Select product"}, class: "chosen-select"%>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.search_field :created_at_gteq,value:@start_date, class: 'form-control input-sm datepicker',placeholder: "YYYY-MM-DD" %>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.search_field :created_at_lteq,value:@end_date,class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <table data-toggle="table" data-search="true" id="city_table">
+    <thead>
+      <tr>
+        <th><%= sort_link(@q, :id, 'Product') %></th>
+        <th><%= sort_link(@q, :in_stock, 'In Stock') %></th>
+        <th><%= sort_link(@q, :out_stock, 'Out Stock') %></th>
+        <th><%= sort_link(@q, :stock, 'Stock') %></th>
+        <th><%= sort_link(@q, :cost_price, 'Stock Cost') %></th>
+        <th><%= sort_link(@q, :sale_price, 'Stock Sale') %></th>
+        <th><%= sort_link(@q, :created_at, 'Date') %></th>
+        <th class="border_none">Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <%= render partial: 'product_stock', collection: @product_stocks %>
+      <tr>
+        <td><b>Total</b></td>
+        <td><b><%=@in_stock%></b></td>
+        <td><b><%=@out_stock%></b></td>
+        <td><b><%=@in_stock-@out_stock%></b></td>
+        <td><b></b></td>
+        <td><b></b></td>
+        <td><b></b></td>
+        <td>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="clearfix"></div>
+<div class="row">
+  <div class="col-lg-4 col-sm-4">
+    <%= page_entries_info @product_stocks %>
+  </div>
+  <div class="col-lg-8 col-sm-8 pagination-left">
+    <%= paginate @product_stocks %>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#city_list").removeClass('hidden');
+    FontAwesome.dom.i2svg();
+  });
+  $(document).ready(function() {
+    setTimeout(function(){
+      $(".chosen-select").chosen({
+  allow_single_deselect: true,
+  width: '100%'
+});
+    }, 50);
+  });
+</script>

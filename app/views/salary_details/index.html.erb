@@ -1,0 +1,16 @@
+<%= render 'index', purchase_sale_detail: @salary_details %>
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#students_list").removeClass('hidden');
+    FontAwesome.dom.i2svg();
+    setTimeout(function(){
+      $(".chosen-select").chosen({
+  allow_single_deselect: true,
+  width: '100%'
+});
+    }, 50);
+  });
+</script>

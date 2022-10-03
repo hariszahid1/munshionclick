@@ -1,0 +1,116 @@
+
+<div class="row">
+  <div class="col-lg-12 col-sm-12">
+    <%= bootstrap_form_for salary_detail_edit_bulk_path,class: "admin-controls", :method => 'get'  do %>
+      <div class="col-lg-3 form-group float-left">
+        <%= text_field_tag :created_at_gteq,@created_at_gteq, class: 'form-control input-sm datepicker', 'datepicker' => true,placeholder: "YYYY-MM-DD" %>
+      </div>
+      <div class="col-lg-3 form-group float-left">
+        <%= text_field_tag :created_at_lteq,@created_at_lteq, class: 'form-control input-sm datepicker', 'datepicker' => true ,placeholder: "YYYY-MM-DD"%>
+      </div>
+      <div class="col-lg-3 form-group float-left">
+        <%= select_tag :department_id_eq, options_from_collection_for_select(@departments, 'id', 'title', @department),{hide_label:true,title: "Select the Department" ,class: 'form-control',prompt: "Select the Department"}%>
+      </div>
+
+      <div class="col-lg-3 form-group float-left">
+        <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+      </div>
+    <%end %>
+  </div>
+</div>
+<div class="col-lg-3 float-left" >
+  <%= number_field_tag "staff_monthly_salary",'',{prompt: "Select the Account",placeholder: "Rate", onchange: 'set_rate_info(this.value); return false;', class:"form-control"}%>
+</div>
+<div class="col-lg-3 float-left" >
+  <%= number_field_tag "staff_monthly_salary",'',{prompt: "Select the Account",placeholder: "Gift", onchange: 'set_gift_rate_info(this.value); return false;', class:"form-control"}%>
+</div>
+<div class="col-lg-3 float-left" >
+  <%= number_field_tag "staff_monthly_salary",'',{prompt: "Select the Account",placeholder: "Coverge", onchange: 'set_coverge_rate_rate_info(this.value); return false;', class:"form-control"}%>
+</div>
+<%= form_tag(salary_detail_update_bulk_path, method: 'post', class: "admin-controls")  do %>
+  <%= hidden_field_tag(:user_created_at_gteq,@created_at_gteq)%>
+  <%= hidden_field_tag(:user_created_at_lteq,@created_at_lteq)%>
+  <%= hidden_field_tag(:department_id_eq,@department)%>
+  <table data-toggle="table" data-search="true">
+    <thead>
+      <tr>
+        <th>Code</th>
+        <th>Staff</th>
+        <th>Daily</th>
+        <th>Rate</th>
+        <%if @department.to_i == @departments.first.id%>
+          <th>Gift</th>
+          <th>Coverge</th>
+          <th>Total</th>
+          <th>Total</th>
+        <%else%>
+          <th class="hidden">Gift</th>
+          <th class="hidden">Coverge</th>
+          <th class="hidden">Total</th>
+          <th class="hidden">Total</th>
+        <%end%>
+        <th>Total</th>
+
+      </tr>
+    </thead>
+
+    <tbody>
+      <%kachi=0%>
+      <% @salary_details.each do |staff| %>
+          <tr>
+            <td>
+              <% staff_date = Staff.find(staff.first) %>
+              <%= staff_date.code %>
+              <%= hidden_field_tag('user[id_'+staff.first.to_s+']',staff.first)%>
+            </td>
+            <td><%= staff_date.name+' '+staff_date.father %></td>
+            <td>
+              <span id=<%='quantities_'+staff.first.to_s %>> <%= staff.second %></span>
+              <%kachi += staff.second%>
+              <%= hidden_field_tag('user[quantity_'+staff.first.to_s+']',staff.second,class:'quantity')%>
+            </td>
+            <%if @department.to_i == @departments.first.id%>
+              <td><%= number_field_tag('user[rate_'+staff.first.to_s+']','', class: "rate form-control", onchange: 'adjustmentUpdate(this.id); return false;',onkeyup:"adjustmentUpdate(this.id)") %> </td>
+              <td><%= number_field_tag('user[gift_rate_'+staff.first.to_s+']','', class: "gift_rate form-control", onchange: 'adjustmentUpdate(this.id); return false;',onkeyup:"adjustmentUpdate(this.id)") %> </td>
+              <td><%= number_field_tag('user[coverge_rate_'+staff.first.to_s+']','',class:'coverge_rate form-control', onchange: 'adjustmentUpdate(this.id); return false;',onkeyup:"adjustmentUpdate(this.id)") %> </td>
+              <td><span class="gift_rate_total_span"></span><%= hidden_field_tag('user[gift_rate_total_'+staff.first.to_s+']','',class:'gift_rate_total form-control')%></td>
+              <td><span class="coverge_rate_total_span"></span><%= hidden_field_tag('user[coverge_rate_total_'+staff.first.to_s+']','',class:'coverge_rate_total form-control',readonly:true)%></td>
+            <%else%>
+              <td><%= number_field_tag('user[rate_'+staff.first.to_s+']','', class: "rate form-control", onchange: 'adjustmentKhakarUpdate(this.id); return false;',onkeyup:"adjustmentKhakarUpdate(this.id)") %> </td>
+              <td  class="hidden"><%= number_field_tag('user[gift_rate_'+staff.first.to_s+']','', class: "gift_rate form-control", onchange: 'adjustmentKhakarUpdate(this.id); return false;',onkeyup:"adjustmentKhakarUpdate(this.id)") %> </td>
+              <td  class="hidden"><%= number_field_tag('user[coverge_rate_'+staff.first.to_s+']','',class:'coverge_rate form-control', onchange: 'adjustmentKhakarUpdate(this.id); return false;',onkeyup:"adjustmentKhakarUpdate(this.id)") %> </td>
+              <td  class="hidden"><span class="gift_rate_total_span"></span><%= hidden_field_tag('user[gift_rate_total_'+staff.first.to_s+']','',class:'gift_rate_total form-control')%></td>
+              <td  class="hidden"><span class="coverge_rate_total_span"></span><%= hidden_field_tag('user[coverge_rate_total_'+staff.first.to_s+']','',class:'coverge_rate_total form-control',readonly:true)%></td>
+            <%end%>
+            <td><span class="wage_debit_span"></span><%= hidden_field_tag('user[wage_debit_'+staff.first.to_s+']','',class:'wage_debit form-control')%></td>
+          </tr>
+      <% end %>
+      <tr>
+        <td><h5>Total</h5></td>
+        <td></td>
+        <td><h5><%=kachi%></h5></td>
+        <td></td>
+        <%if @department.to_i == @departments.first.id%>
+          <td></td>
+          <td></td>
+          <td><h5><span id="total_gift"></span></h5></td>
+          <td><h5><span id="total_coverge"></span></h5></td>
+        <%else%>
+          <td class="hidden"><h5><span id="total_gift"></span></h5></td>
+          <td class="hidden"><h5><span id="total_coverge"></span></h5></td>
+        <%end%>
+        <td><h5><span id="total_wage"></span></h5></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="col-lg-3 form-group float-left">
+  </div>
+  <div class="col-lg-3 form-group float-left">
+  </div>
+  <div class="col-lg-3 form-group float-left">
+  </div>
+  <div class="col-lg-2 form-group float-left">
+    <input class="form-control btn btn-primary" name="search_submit" type="submit" value="Adjustment Update"></input>
+  </div>
+<% end %>
+<%= javascript_include_tag 'hover', 'data-turbolinks-track': 'reload' %>

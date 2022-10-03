@@ -1,0 +1,30 @@
+<tr>
+  <td class= 'urdu-font'><%= pos_setting.name %></td>
+  <td class= 'urdu-font'><%= pos_setting.display_name %></td>
+  <td><%= pos_setting.account.title if pos_setting.account.present? %></td>
+  <td><%= pos_setting.phone %></td>
+  <td><%= pos_setting.logo %></td>
+  <td class= 'urdu-font'><%= pos_setting.address %></td>
+  <td>
+    <% if can?(:update, :all) %>
+      <%= link_to edit_pos_setting_path(pos_setting) do %>
+        <i class="fa fa-edit " aria-hidden="true"></i> |
+      <%end %>
+    <% end %>
+    <% if can?(:delete, :all) %>
+      <%= link_to pos_setting, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+        <i class="fa fa-trash " aria-hidden="true"></i> |
+      <%end %>
+    <% end %>
+    <% if can?(:view, :all) %>
+      <%= link_to pos_setting do %>
+        <i class="fa fa-eye " aria-hidden="true"></i>
+      <%end %>
+    <%end%>
+  </td>
+</tr>
+
+
+<script>
+  FontAwesome.dom.i2svg();
+</script>

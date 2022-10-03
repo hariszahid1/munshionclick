@@ -1,0 +1,97 @@
+<div class="hidden" id="products_list">
+  <h1>Stock Report</h1>
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <%= search_form_for @q, url: reports_stock_report_path, class: "admin-controls", method: "get" do |f| %>
+        <div class="row col-lg-4 form-group float-left">
+          <div class="col-lg-3" style="padding-right: 0;">
+            <%= select_month(@paid_to_month.to_i, {prompt: "Month", use_short_month: true, prefix: 'daily_sales'},{ field_name: 'month', id: 'start-month', class: 'form-control input-sm select-chosen'}) %>
+          </div>
+          <div class="col-lg-3" style="padding-left: 0;">
+            <%= select_year(@paid_to_year.to_i, {prompt: "Year", start_year: Date.today.year + 1, end_year: Date.today.year - 7, prefix: 'daily_sales'},{ field_name: 'year', id: 'start-year', class: 'form-control input-sm select-chosen'}) %>
+          </div>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <input class="form-control btn btn-primary" name="search_submit" type="submit" value="Search"></input>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <table data-toggle="table" data-search="true">
+    <thead>
+      <tr>
+        <th>Month</th>
+        <th>Purchase Stock</th>
+        <th>Sale Stock</th>
+        <th>Remaning Stock</th>
+        <th>Total Stock</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <%@stock_report.each do |ex|%>
+        <tr>
+          <%total=0%>
+          <td><%=ex.first%></td>
+          <td><%=ex.last[0].to_f.round(20)%></td>
+          <td><%=ex.last[1].to_f.round(20)%></td>
+          <td><%=ex.last[2].to_f.round(20)%></td>
+          <td><%=ex.last[3].to_f.round(20)%></td>
+        </tr>
+      <%end%>
+      <tr>
+        <td><h5>Total</h5></td>
+        <td><h5><%=@purchase_stock%></h5></td>
+        <td><h5><%=@sale_stock%></h5></td>
+        <td><h5><%=@remaning_stock%></h5></td>
+        <td><h5></h5></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table data-toggle="table" data-search="true">
+    <thead>
+      <tr>
+        <th>Month</th>
+        <th>Purchase Stock</th>
+        <th>Sale Stock</th>
+        <th>Remaning Stock</th>
+        <th>Total Stock</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <%@stock_report_day.each do |ex|%>
+        <tr>
+          <%total=0%>
+          <td><%=ex.first%></td>
+          <td><%=ex.last[0]%></td>
+          <td><%=ex.last[1]%></td>
+          <td><%=ex.last[2]%></td>
+          <td><%=ex.last[3]%></td>
+        </tr>
+      <%end%>
+      <tr>
+        <td><h5>Total</h5></td>
+        <td><h5><%=@purchase_stock_day%></h5></td>
+        <td><h5><%=@sale_stock_day%></h5></td>
+        <td><h5><%=@remaning_stock_day%></h5></td>
+        <td><h5></h5></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+</div>
+
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#products_list").removeClass('hidden');
+  });
+</script>

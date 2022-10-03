@@ -1,0 +1,104 @@
+<div class="hidden" id="products_list">
+  <h1>Sale Report</h1>
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <%= search_form_for @q, url: reports_sale_report_path, class: "admin-controls", method: "get" do |f| %>
+        <div class="row col-lg-4 form-group float-left">
+          <div class="col-lg-3" style="padding-right: 0;">
+            <%= select_month(@paid_to_month.to_i, {prompt: "Month", use_short_month: true, prefix: 'daily_sales'},{ field_name: 'month', id: 'start-month', class: 'form-control input-sm select-chosen'}) %>
+          </div>
+          <div class="col-lg-3" style="padding-left: 0;">
+            <%= select_year(@paid_to_year.to_i, {prompt: "Year", start_year: Date.today.year + 1, end_year: Date.today.year - 7, prefix: 'daily_sales'},{ field_name: 'year', id: 'start-year', class: 'form-control input-sm select-chosen'}) %>
+          </div>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <input class="form-control btn btn-primary" name="search_submit" type="submit" value="Search"></input>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <table data-toggle="table" data-search="true">
+    <thead>
+      <tr>
+        <th>Month</th>
+        <th>Quantity</th>
+        <th>Cost</th>
+        <th>Sale</th>
+        <th>Discount</th>
+        <th>Expense</th>
+        <th>Total</th>
+        <th>Profit</th>
+        <%if current_user.superAdmin.company_type=="batamega"%>
+          <th>1</th>
+          <th>2</th>
+          <th>3</th>
+          <th>4</th>
+          <th>5</th>
+          <th>6</th>
+          <th>7</th>
+          <th>8</th>
+          <th>9</th>
+          <th>10</th>
+          <th>11</th>
+          <th>12</th>
+          <th>13</th>
+        <%end%>
+      </tr>
+    </thead>
+
+    <tbody>
+      <%@sale_report.each do |ex|%>
+        <tr>
+          <%total=0%>
+          <td><%=ex.first%></td>
+          <td><%=ex.last[0]%></td>
+          <td><%=ex.last[1]%></td>
+          <td><%=ex.last[2]%></td>
+          <td><%=ex.last[3]%></td>
+          <td><%=ex.last[6]%></td>
+          <td><%=ex.last[4]%></td>
+          <td><%=ex.last[5]!=0 ? ex.last[5].to_s+" | "+(ex.last[5]*0.6).round(2).to_s+" | "+(ex.last[5]*0.3).round(2).to_s+" | "+(ex.last[5]*0.1).round(2).to_s : "0"%></td>
+          <%if current_user.superAdmin.company_type=="batamega"%>
+            <td><%=ex.last[6]%></td>
+            <td><%=ex.last[7]%></td>
+            <td><%=ex.last[8]%></td>
+            <td><%=ex.last[9]%></td>
+            <td><%=ex.last[10]%></td>
+            <td><%=ex.last[11]%></td>
+            <td><%=ex.last[12]%></td>
+            <td><%=ex.last[13]%></td>
+            <td><%=ex.last[14]%></td>
+            <td><%=ex.last[15]%></td>
+            <td><%=ex.last[16]%></td>
+            <td><%=ex.last[17]%></td>
+            <td><%=ex.last[18]%></td>
+          <%end%>
+        </tr>
+      <%end%>
+      <tr>
+        <td><h5>Total</h5></td>
+        <td><h5><%= @total_quantity.round(2)%></h5></td>
+        <td><h5><%= @total_cost_price.round(2)%></h5></td>
+        <td><h5><%= @total_sale_price.round(2)%></h5></td>
+        <td><h5><%= @total_discount.round(2)%></h5></td>
+        <td><h5><%= @total_expense.round(2)%></h5></td>
+        <td><h5><%= @total_total.round(2)%></h5></td>
+        <td><h5><%= @total_profit.round(2)%> | <%=(@total_profit*0.6).round(2)%> | <%=(@total_profit*0.3).round(2)%> | <%=(@total_profit*0.1).round(2)%></h5></td>
+
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#products_list").removeClass('hidden');
+  });
+</script>

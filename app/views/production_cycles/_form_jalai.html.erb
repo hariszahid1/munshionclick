@@ -1,0 +1,164 @@
+<%= bootstrap_form_for(production_cycle) do |f| %>
+  <% if production_cycle.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(production_cycle.errors.count, "error") %> prohibited this production_cycle from being saved:</h2>
+
+      <ul>
+      <% production_cycle.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <table>
+    <thead>
+      <th><div class="col-lg-12 float-left"><%= f.date_field :start_date, label: "Jalai Date"%></div>
+        <div class="col-lg-12 float-left">
+          <%=  f.text_field :status, value:'jalai',readonly: true%>
+        </div>
+      </th>
+      <th>
+        <div class="col-lg-12 float-left">
+          <%= f.text_area :comment , placeholder:"Enter Comment"%>
+        </div>
+      </th>
+      <th>
+        <div class="col-lg-12 float-left">
+          <h6>Item Quantity Per Line = <span id="item_quantity_per_line"> </span></h6>
+          <h6>Total Item Quantity = <span id="total_item_quantity"></span></h6>
+          <h5 class="btn-info">Per Ton Bricks = <span id="item_bricks"></span></h5>
+        </div>
+      </th>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <h5>
+            <%#= f.select :item_id, options_from_collection_for_select(@items, 'id', 'title', f.object.item_id), {prompt: "Select the item"}, class: "", required: true, onchange:"item_cost_quantity_update(this.value,this.id)",onkeyup:"item_cost_quantity_update(this.value,this.id)"%>
+          </h5>
+          <div class="col-lg-12">
+            <h6><%= f.number_field :quantity, value: f.object.quantity.present? ? f.object.quantity : 1, onchange:"jalai_cost_calculation()",onkeyup:"jalai_cost_calculation()" %></h6>
+          </div>
+          <div class="col-lg-12">
+            <h6>
+              <div class="form-group">
+                <%= f.number_field :lines,  onchange:"jalai_cost_calculation()",onkeyup:"jalai_cost_calculation()"%>
+                <%= hidden_field_tag :measurement_quantity, @items.first.measurement_quantity,class: "form-control", onchange:"jalai_cost_calculation()",onkeyup:"jalai_cost_calculation()"%>
+              </div>
+            </h6>
+          </div>
+        </td>
+        <td>
+
+          <%= f.hidden_field :total_cost %>
+          <%= f.hidden_field :cost_per_line %>
+          <%= f.hidden_field :per_product_cost %>
+          <%= f.hidden_field :per_thousand_product_cost %>
+          <%= f.hidden_field :item_quantity_per_line %>
+          <%= f.hidden_field :total_item_quantity %>
+          <%= f.hidden_field :per_ton_bricks %>
+
+          <div class="col-lg-12 float-left">
+            <h6 class="btn-info">Total Cost = <span id="total_cost"></span></h6>
+            <h6>Cost Per Line = <span id="per_line"></span></h6>
+            <h6>Per Product Cost = <span id="per_product_cost"></span></h6>
+            <h5 class="btn-info">Per Thousand Product Cost = <span id="thousand_cost"></span></h5>
+            <h5>
+              <div class="form-group">
+                <%#= number_field_tag :line, @line_count,class: "form-control", onchange:"jalai_cost_calculation()",onkeyup:"jalai_cost_calculation()",readonly:true%>
+                <%#= hidden_field_tag :measurement_quantity, @items.first.measurement_quantity,class: "form-control", onchange:"jalai_cost_calculation()",onkeyup:"jalai_cost_calculation()"%>
+              </div>
+            </h5>
+          </div>
+        </td>
+        <td>
+          <%@items.each_with_index do |item,index|%>
+            <h6>Weight Per Wangi = <span id="measurement_quantity_<%=item.id%>"><%=item.measurement_quantity%> kg</span></h6>
+          <%end%>
+          <%@purchase_sale_detail.each_with_index do |purchase_sale_detail,index|%>
+            <%if index<5%>
+              <%if purchase_sale_detail.comment.present?%>
+                <h6>Tuck No = <%=purchase_sale_detail.comment%></h6>
+                <h6>Cost per Kg = <span id="purchase_<%=purchase_sale_detail.id%>"><%=purchase_sale_detail.purchase_item_per_cost.first%></span> </h6>
+                <h6>Total Quantity = <%=((purchase_sale_detail.purchase_item_per_cost.last)-(@jalai_b_quantity[purchase_sale_detail.id].to_f+@jalai_a_quantity[purchase_sale_detail.id].to_f)).round(2)%> kg</h6>
+              <%end%>
+            <%else%>
+              <%if purchase_sale_detail.comment.present?%>
+                <div class="hidden">
+                  <h6>Tuck No = <%=purchase_sale_detail.comment%></h6>
+                  <h6>Cost per Kg = <span id="purchase_<%=purchase_sale_detail.id%>"><%=purchase_sale_detail.purchase_item_per_cost.first%></span> </h6>
+                  <h6>Total Quantity = <%=((purchase_sale_detail.purchase_item_per_cost.last)-(@jalai_b_quantity[purchase_sale_detail.id].to_f+@jalai_a_quantity[purchase_sale_detail.id].to_f)).round(2)%> kg</h6>                  
+                </div>
+              <%end%>
+            <%end%>
+          <%end%>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div id="production_blocks" class="task">
+    <div class="row bg-white">
+      <div class="col border">
+        <h5>ID</h5>
+      </div>
+      <div class="col border">
+        <h5>Bricks/Tiles</h5>
+      </div>
+      <div class="col border">
+        <h5>A Line</h5>
+      </div>
+      <div class="col border">
+        <h5>B Line</h5>
+      </div>
+      <div class="col border">
+        <h5>Phase</h5>
+      </div>
+      <div class="col border">
+        <h5>Status</h5>
+      </div>
+      <div class="col border">
+        <h5>Purchase</h5>
+      </div>
+      <div class="col border">
+        <h5>Action</h5>
+      </div>
+    </div>
+    <%= f.fields_for :production_blocks do |production_block,index| %>
+      <%= render 'production_block_fields_jalai_edit', f: production_block %>
+    <% end %>
+    <div class="row bg-white">
+      <div class="col border">
+        <h6>Total = <%=@total_bricks%> / <%=@total_tiles%></h6>
+      </div>
+      <div class="col border">
+        <h6><span id="total_bricks_hidden"><%=@total_bricks+(@total_tiles/2)%></span></h6>
+        <h6><span id="total_bricks"><%=@total_bricks+(@total_tiles/2)%></span></h6>
+        <%= f.hidden_field :total_bricks %>
+      </div>
+      <div class="col border">
+      </div>
+      <div class="col border">
+      </div>
+      <div class="col border">
+      </div>
+      <div class="col border">
+      </div>
+      <div class="col border">
+      </div>
+      <div class="col border">
+      </div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <%= link_to 'Jalai Daily Book', jalai_production_cycles_path, class: "btn btn-info" %>
+    <%= f.submit class: "btn btn-primary", style: "float: right" %>
+  </div>
+<% end %>
+<script type="text/javascript">
+  $(document).ready(function() {
+    jalai_cost_calculation();
+    all_lines_update();
+  });
+</script>
+<%= javascript_include_tag 'hover', 'data-turbolinks-track': 'reload' %>

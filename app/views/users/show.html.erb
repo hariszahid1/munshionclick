@@ -1,0 +1,73 @@
+<div class="row">
+  <div class="col-sm-12"><h1><%= current_user.allowed_valid_roles.to_s.titleize %> Detail</h1></div>
+</div>
+
+<div class="show_content">
+  <div class="row form-group">
+    <div class="col-lg-6 col-sm-6">
+      <strong>Name: </strong>
+      <%= @user.name %>
+    </div>
+    <div class="col-lg-6 col-sm-6">
+      <strong>User name: </strong>
+      <%= @user.user_name %>
+    </div>
+  </div>
+
+
+  <div class="row form-group">
+    <div class="col-lg-6 col-sm-6">
+      <strong>Email:</strong>
+      <%= @user.email %>
+    </div>
+    <div class="col-lg-6 col-sm-6">
+      <strong>Father name:</strong>
+      <%= @user.father_name %>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-lg-6 col-sm-6">
+      <strong>City:</strong>
+      <%= @user.city %>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-lg-6 col-sm-6">
+      <strong>Phone:</strong>
+      <%= @user.phone %>
+    </div>
+    <div class="col-lg-6 col-sm-6">
+      <strong>Fax:</strong>
+      <%= @user.fax %>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-lg-6 col-sm-6">
+      <strong>Address:</strong>
+      <%= @user.address %>
+    </div>
+  <div class="row form-group">
+    <div class="col-lg-6 col-sm-6">
+      <strong>Role:</strong>
+      <%= @user.role_symbols.join(",") %>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-lg-6 col-sm-6">
+      <strong><%= current_user.allowed_valid_roles.to_s.titleize %> Abilities:</strong>
+      <%= @user.user_ability.role_symbols.join(", ") %>
+    </div>
+  </div>
+</div>
+
+<div class="clearfix"></div>
+<div class="row form-group">
+  <div class="col-lg-6 col-sm-6">
+    <%= link_to " #{current_user.allowed_valid_roles.to_s.titleize} List", users_path, class: "btn btn-info" %>
+  </div>
+
+</div>

@@ -1,0 +1,104 @@
+<h1>New Nakasi Book</h1>
+<%production_cycle = @production_cycle%>
+<%= bootstrap_form_for(production_cycle) do |f| %>
+  <% if production_cycle.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(production_cycle.errors.count, "error") %> prohibited this production_cycle from being saved:</h2>
+
+      <ul>
+      <% production_cycle.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <table>
+    <thead>
+      <th><div class="col-lg-12 float-left"><%= f.date_field :start_date, label: "Nakasi Date"%></div>
+        <div class="col-lg-12 float-left">
+          <%=  f.text_field :status, value:'nakasi',readonly: true%>
+        </div>
+      </th>
+      <th>
+        <div class="col-lg-12 float-left">
+          <%= f.text_area :comment %>
+        </div>
+      </th>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <div class="col-lg-12">
+            <h6>
+              <div class="form-group">
+                <%= f.number_field :lines,  onchange:"jalai_cost_calculation()",onkeyup:"jalai_cost_calculation()",readonly:true %>
+              </div>
+            </h6>
+          </div>
+        </td>
+        <td>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div id="production_blocks" class="task">
+    <div class="row bg-white">
+      <div class="col border">
+        <h5>ID</h5>
+      </div>
+      <div class="col border">
+        <h5>Bricks/Tiles</h5>
+      </div>
+      <div class="col border">
+        <h5>A Line</h5>
+      </div>
+      <div class="col border">
+        <h5>B Line</h5>
+      </div>
+      <div class="col border">
+        <h5>Phase</h5>
+      </div>
+      <div class="col border">
+        <h5>Status</h5>
+      </div>
+      <div class="col border">
+        <h5>Action</h5>
+      </div>
+    </div>
+    <%= f.fields_for :production_blocks do |production_block,index| %>
+      <%= render 'production_block_fields_nakasi', f: production_block %>
+    <% end %>
+    <div class="row bg-white">
+      <div class="col border">
+        <h6>Total = <%=@total_bricks%> / <%=@total_tiles%></h6>
+      </div>
+      <div class="col border">
+        <h6><span id="total_bricks"><%=@total_bricks+(@total_tiles/2)%></span></h6>
+        <%= f.hidden_field :total_bricks %>
+      </div>
+      <div class="col border">
+      </div>
+      <div class="col border">
+      </div>
+      <div class="col border">
+      </div>
+      <div class="col border">
+      </div>
+      <div class="col border">
+      </div>
+      <div class="col border">
+      </div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <%= link_to 'Naksi Daily Book', nakasi_production_cycles_path, class: "btn btn-info" %>
+    <%= f.submit class: "btn btn-primary", style: "float: right" %>
+  </div>
+<% end %>
+<script type="text/javascript">
+  $(document).ready(function() {
+    //jalai_cost_calculation();
+    all_lines_update();
+  });
+</script>

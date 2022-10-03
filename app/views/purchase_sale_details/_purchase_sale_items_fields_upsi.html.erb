@@ -1,0 +1,62 @@
+<%if @purchase_sale_detail.transaction_type=='Sale'%>
+  <%if f.object.purchase_sale_type!="Sale_type"%>
+    <tr class="nested-fields bg-danger">
+      <td class="hidden"><%= f.text_field :purchase_sale_detail_id %> </td>
+      <td class="hidden">
+        <%= f.text_field :id %>
+        <%= f.hidden_field :transaction_type, value: "Sale"%>
+        <%= f.hidden_field :purchase_sale_type%>
+      </td>
+      <td><%= f.select :product_id, options_from_collection_for_select(@products, 'id', ->(st){"#{st.title} \u{27F6} #{st.code}"},f.object.product_id), {hide_label: true,prompt: "Select the Product"}, onchange: 'set_atom_sale(this.value,this.id); return false;', class: "chosen-select",required: true%></td>
+      <td><%= f.select :status, options_for_select([0.9,1,3,3.1,3.5,4,4.4],f.object.status), {hide_label: true,prompt: "Pack"}, onchange:"costAtomUpdateReturn()",onkeyup:"costAtomUpdateReturn()", class: "pack-price-return",required: true%></td>
+      <td><%= f.number_field :quantity,step: :any,class:'quantity-price-return', hide_label: true,placeholder: :quantity,onchange:"costAtomUpdateReturn()",onkeyup:"costAtomUpdateReturn()"%>    </td>
+      <td><%= f.number_field :sale_price,step: :any,class:'cost-price-return',hide_label: true, placeholder: :sale_price,readonly: true,onchange:"costAtomUpdateReturn()",onkeyup:"costAtomUpdateReturn()"%></td>
+      <td><%= f.number_field :total_sale_price,step: :any,class:'total-cost-price-return', hide_label: true,placeholder: :cost_price,onchange:"costAtomUpdateReturn()",onkeyup:"costAtomUpdateReturn()"%></td>
+      <td><%= f.number_field :discount_price,step: :any,class:'discount-price-return', hide_label: true,placeholder: :discount,onchange:"costAtomUpdateReturn()",onkeyup:"costAtomUpdateReturn()"%></td>
+      <td class="links"><%= link_to_remove_association "Remove", f , class: "btn btn-info",onclick:"costAtomUpdateReturn(); return false;",onkeyup:"costAtomUpdateReturn(); return false;"%></td>
+    </tr>
+  <%else%>
+    <tr class="nested-fields">
+      <td class="hidden"><%= f.text_field :purchase_sale_detail_id %> </td>
+      <td class="hidden">
+        <%= f.text_field :id %>
+        <%= f.hidden_field :transaction_type, value: "Sale"%>
+        <%= f.hidden_field :purchase_sale_type%>
+      </td>
+      <td><%= f.select :product_id, options_from_collection_for_select(@products, 'id', ->(st){"#{st.title} \u{27F6} #{st.code}"},f.object.product_id), {hide_label: true,prompt: "Select the Product"}, onchange: 'set_atom_sale(this.value,this.id); return false;', class: "chosen-select",required: true%></td>
+      <td><%= f.select :status, options_for_select([0.9,1,3,3.1,3.5,4,4.4],f.object.status), {hide_label: true,prompt: "Pack"}, onchange:"costAtomUpdateReturn()",onkeyup:"costAtomUpdateReturn()", class: "pack-price",required: true%></td>
+      <td><%= f.number_field :quantity,step: :any,class:'quantity-price', hide_label: true,placeholder: :quantity,onchange:"costAtomUpdateReturn()",onkeyup:"costAtomUpdateReturn()"%>    </td>
+      <td><%= f.number_field :sale_price,step: :any,class:'cost-price',hide_label: true, placeholder: :sale_price,readonly: true,onchange:"costAtomUpdateReturn()",onkeyup:"costAtomUpdateReturn()"%></td>
+      <td><%= f.number_field :total_sale_price,step: :any,class:'total-cost-price', hide_label: true,placeholder: :cost_price,onchange:"costAtomUpdateReturn()",onkeyup:"costAtomUpdateReturn()"%></td>
+      <td><%= f.number_field :discount_price,step: :any,class:'discount-price', hide_label: true,placeholder: :discount,onchange:"costAtomUpdateReturn()",onkeyup:"costAtomUpdateReturn()"%></td>
+      <td class="links"><%= link_to_remove_association "Remove", f , class: "btn btn-info",onclick:"costAtomUpdateReturn(); return false;",onkeyup:"costAtomUpdateReturn(); return false;"%></td>
+    </tr>
+  <%end%>
+<%else%>
+  <tr class="nested-fields">
+    <td class="hidden"><%= f.text_field :purchase_sale_detail_id %> </td>
+    <td class="hidden"><%= f.text_field :id %></td>
+    <%if f.object.item_id.present?%>
+      <td><%= f.select :item_id, options_from_collection_for_select(@items, 'id', ->(st){"#{st.title} \u{27F6} #{st.code}"}, f.object.item_id), {hide_label: true,prompt: "Select the Items"},onchange: 'set_raw_cost(this.value,this.id); return false;', class: "chosen-select",required: true %></td>
+    <%else%>
+      <td><%= f.select :product_id, options_from_collection_for_select(@products, 'id', ->(st){"#{st.title} \u{27F6} #{st.code}"}, f.object.product_id), {hide_label: true,prompt: "Select the product"}, class: "chosen-select",required: true %></td>
+    <%end%>
+    <td><%= f.number_field :quantity,step: :any,class:'quantity-price', hide_label: true,placeholder: :quantity,onchange:"costAtomUpdateReturn()",onkeyup:"costAtomUpdateReturn()"%>    </td>
+    <td><%= f.number_field :cost_price,step: :any,class:'cost-price', hide_label: true,placeholder: :cost_price,onchange:"costAtomUpdateReturn()",onkeyup:"costAtomUpdateReturn()"%></td>
+    <td><%= f.number_field :total_cost_price,step: :any,class:'total-cost-price', hide_label: true,placeholder: :cost_price,onchange:"costAtomUpdateReturn()",onkeyup:"costAtomUpdateReturn()"%></td>
+    <td><%= f.number_field :sale_price,step: :any, hide_label: true,placeholder: :sale_price,onchange:"costAtomUpdateReturn()",onkeyup:"costAtomUpdateReturn()"%></td>
+    <td><%= f.number_field :discount_price,step: :any,class:'discount-price', hide_label: true,placeholder: :discount,onchange:"costAtomUpdateReturn()",onkeyup:"costAtomUpdateReturn()"%></td>
+    <td><%= f.text_area :comment, hide_label: true,placeholder: :comment,title: :comment%></td>
+    <td><%= link_to_remove_association "Remove", f , class: "btn btn-info",onclick:"costAtomUpdateReturn(); return false;",onkeyup:"costAtomUpdateReturn(); return false;"%></td>
+  </tr>
+<%end%>
+<script>
+  $(document).ready(function() {
+    setTimeout(function(){
+      $(".chosen-select").chosen({
+  allow_single_deselect: true,
+  width: '100%'
+});
+    }, 50);
+  });
+</script>

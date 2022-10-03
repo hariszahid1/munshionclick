@@ -1,0 +1,92 @@
+<%= bootstrap_form_for(daily_book) do |f| %>
+  <% if daily_book.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(daily_book.errors.count, "error") %> prohibited this daily_book from being saved:</h2>
+
+      <ul>
+      <% daily_book.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <i class="fas fa-edit" aria-hidden="true"></i>
+  <% end %>
+  <table class="table-bordered">
+    <thead>
+    <td class="broder-with"><h5>
+        <label for="pin">Department:</label>
+      </h5></td>
+      <td class="broder-with"><h5>
+      <label for="date">Date:</label>
+      </h5></td>
+      <td class="broder-with"><h5>
+      <label for="date">Wast:</label>
+      </h5></td>
+      <td class="broder-with"><h5>
+        <label for="date">Ready:</label>
+      </h5></td>
+      <td class="broder-with"><h5>
+        <label for="date">Comment:</label>
+      </h5></td>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="broder-with">
+          <h5><label for="salary_details_wage_rate">Rate:</label></h5>
+        </td>
+        <td class="broder-with">
+          <h5><label for="salary_details_gift_rate">Gift Rate:</label></h5>
+        </td>
+        <td class="broder-with">
+          <h5><label for="salary_details_converge_rate">Coverge Rate:</label></h5>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <table class="table table-bordered">
+    <thead>
+      <td><h3>Name</h3></td>
+      <td><h3>Item</h3></td>
+      <td><h3>Qty</h3></td>
+      <td><h3>Wast</h3></td>
+      <td><h3>Ready</h3></td>
+      <td><h3>Pay</h3></td>
+    </thead>
+    <tbody>
+      <%= f.fields_for :salary_details do |f| %>
+      <tr>
+        <td class="broder-with">
+          <%= f.hidden_field :id %>
+          <%= f.hidden_field :staff_id %>
+          <b><%= f.object.staff.coded_full_name %></b>
+        </td>
+        <td class="broder-with">
+          <%= f.hidden_field :raw_product_id %>
+          <h5><b><%= f.object.raw_product.title %></b></h5>
+        </td>
+
+        <td class="broder-with">
+          <%= f.hidden_field :quantity, hide_label:true, class: "quantity",onchange:"daily_book_update()",onkeyup:"daily_book_update()" %>
+          <%= f.hidden_field :pather_remaning_quanity, class: "remaning_quanity" %>
+        </td>
+        <td class="broder-with">
+          <%= f.hidden_field :extra, hide_label:true, class: "wast",onchange:"daily_book_update()",onkeyup:"daily_book_update()" %>
+        </td >
+        <td class="broder-with"></td>
+        <td class="broder-with"></td>
+      </tr>
+      <% end %>
+      <tr>
+        <td class="broder-with"><h4>Total<h4></td>
+        <td class="broder-with"></td>
+        <td class="broder-with">    </td>
+        <td class="broder-with">   </td>
+        <td class="broder-with"></td>
+        <td class="broder-with"></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+<% end %>
+<%= javascript_include_tag 'hover', 'data-turbolinks-track': 'reload' %>

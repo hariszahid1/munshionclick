@@ -1,0 +1,33 @@
+<div class="nested-fields unequal_installments_div col-lg-6 col-md-6 col-sm-6 form-group float-left">
+  <%= f.hidden_field :property_plan_id %>
+  <%= f.hidden_field :id %>
+  <%= f.hidden_field :installment_no %>
+  <div class="installments_div  col-lg-6 col-md-6 col-sm-6 form-group float-left hidden">
+    <%if f.object.normal_price.to_i < f.object.installment_price.to_i && f.object.high_price>0  %>
+      <%= f.number_field :installment_price, label: "Installment: #{f.index+1} ( #{f.object.high_price} +  #{f.object.normal_price} )" %>
+    <%else%>
+      <%= f.number_field :installment_price, label: "Installment: #{f.index+1}" %>
+    <%end%>
+    <%= f.hidden_field :high_price, label: "High Price: #{f.index+1}" %>
+    <%= f.hidden_field :normal_price, label: "Per Installment: #{f.index+1}" %>
+  </div>
+  <div class="installments_div installments_div_cash col-lg-6 col-md-6 col-sm-6 form-group float-left hidden">
+    <%if f.object.due_date.blank?%>
+      <%@next_month=@next_month.at_beginning_of_month.next_month%>
+      <%f.object.due_date=@next_month%>
+    <%end%>
+    <%= f.date_select :due_date,{},class: "form-control" %>
+  </div>
+  <div class="installments_div installments_div_cash col-lg-6 col-md-6 col-sm-6 form-group float-left hidden">
+    <%= f.select :due_status, options_for_select(PropertyPlan.due_statuses.map { |key, value| [key.humanize, key] }, f.object.due_status), { prompt: 'Select Paid Status' },class: "form-control"%>
+  </div>
+  <div class="installments_div col-lg-6 col-md-3 col-sm-3 form-group float-left hidden">
+    <%= f.select :payment_method, options_for_select(PropertyPlan.payment_methods.map { |key, value| [key, key] }, f.object.payment_method), { class: "form-control", prompt: 'Select Payment method' },class:"form-control"%>
+  </div>
+  <div class="installments_div col-lg-6 col-md-3 col-sm-3 form-group float-left hidden">
+    <%= f.text_field :bank_detail %>
+  </div>
+  <div class="col-lg-1 from-group float-left">
+    <%= link_to_remove_association "Remove", f , class: "btn btn-danger" %>
+  </div>
+</div>

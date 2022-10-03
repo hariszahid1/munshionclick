@@ -1,0 +1,25 @@
+<tr class="nested-fields">
+  <td class="hidden"><%= f.text_field :production_id %> </td>
+  <td class="hidden"><%= f.text_field :id %></td>
+  <% if f.object.item_id.present? %>
+  <td><%= f.select :item_id, options_from_collection_for_select(@items, 'id', 'title', f.object.item_id), {hide_label: true,prompt: "Select the Items"}, class: "chosen-select",required: true %></td>
+  <% else %>
+  <td><%= f.select :product_id, options_from_collection_for_select(@products, 'id', 'title', f.object.product_id), {hide_label: true,prompt: "Select the Products"},onchange: 'set_material_sale(this.value,this.id); return false;', class: "chosen-select",required: true %></td>
+  <%end%>
+  <td><%= f.number_field :quantity,step: :any,class:'quantity-price', hide_label: true,placeholder: :quantity,onchange:"materialCostUpdate()",onkeyup:"materialCostUpdate()"%>    </td>
+  <td><%= f.number_field :cost_price,step: :any,class:'cost-price', hide_label: true,placeholder: :cost_price,onchange:"materialCostUpdate()",onkeyup:"materialCostUpdate()"%></td>
+  <td><%= f.number_field :total_cost_price,step: :any,class:'total-cost-price',hide_label: true, placeholder: :total_cost_price,onchange:"materialCostUpdate()",onkeyup:"materialCostUpdate()"%></td>
+  <td><%= f.number_field :sale_price,step: :any,class:'sale-price',hide_label: true, placeholder: :sale_price,onchange:"materialCostUpdate()",onkeyup:"materialCostUpdate()"%></td>
+  <td><%= f.number_field :total_sale_price,step: :any,class:'total-sale-price',hide_label: true, placeholder: :total_sale_price%></td>
+  <td><%= link_to_remove_association "Remove", f , class: "btn btn-info" %></td>
+</tr>
+<script>
+  $(document).ready(function() {
+    setTimeout(function(){
+      $(".chosen-select").chosen({
+  allow_single_deselect: true,
+  width: '100%'
+});
+    }, 50);
+  });
+</script>

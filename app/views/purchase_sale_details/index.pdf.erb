@@ -1,0 +1,65 @@
+<%@total=0%>
+<% @date = Date.today  %>
+<% @time = DateTime.now %>
+<% @time = Time.zone.now %>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;"><%=params[:sale].present? ? "Total Sale" : "Total Purchase"%> => <%=@products_sale_total.to_f.round(2)%></h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<p style="text-align: center;margin: 0;">Report by: <%=current_user.name%></p>
+<div style="width:90vw;">
+  <table>
+    <th></th>
+    <th></th>
+    <tr>
+      <td style="width:67vw;">Printing On: <span><%=Time.zone.now.strftime("%d %b %y")%></span> </td>
+      <td style="">From: <%=@created_at_gteq%> To: <%=@created_at_lteq%></td>
+    </tr>
+  </table>
+</div>
+<p style="border-bottom: dotted 3px;  margin: 0;"></p>
+<div >
+  <table>
+    <th style="width:40vw;">Items</th>
+    <th style="width:20vw;">Qty</th>
+    <th style="width:20vw;">Rate</th>
+    <th style="width:20vw;">Total Amount</th>
+    <% @products_count.each_with_index do |item,i|%>
+      <tr style="text-align :center">
+        <td style="border-bottom: 1px solid #000; "><b><%=item.first %></b></td>
+        <td style="border-bottom: 1px solid #000; "><%=item.last.to_f.round(2) %><%@total += item.last.to_f.round(2) %></td>
+        <td style="border-bottom: 1px solid #000; "><%=@products_sale_price[item.first].to_f.round(2) %></td>
+        <td style="border-bottom: 1px solid #000; "><%=@products_sale[item.first].to_f.round(2) %></td>
+      </tr>
+    <% end %>
+    <tr style="text-align :center">
+      <td><b>Total</b></td>
+      <td><b><%=@total%></b></td>
+      <td></td>
+      <td><b><%=@products_sale_total.to_f.round(2)%></b></td>
+    </tr>
+    <tr style="text-align :center">
+      <td><b>-</b></td>
+      <td><b>-</b></td>
+      <td></td>
+      <td><b>-</b></td>
+    </tr>
+    <tr style="text-align :center">
+      <td><b>Carriage</b></td>
+      <td><b></b></td>
+      <td></td>
+      <td><b><%=@product_carriage.to_i%></b></td>
+    </tr>
+    <tr style="text-align :center">
+      <td><b>Loading</b></td>
+      <td><b></b></td>
+      <td></td>
+      <td><b><%=@product_loading.to_i%></b></td>
+    </tr>
+    <tr style="text-align :center">
+      <td><b>Total</b></td>
+      <td><b></b></td>
+      <td></td>
+      <td><b><%=(@product_loading.to_f+@product_carriage.to_f+@products_sale_total.to_f).round(2)%></b></td>
+    </tr>
+  </table>
+</div>

@@ -1,0 +1,118 @@
+<%@daily_book_salary_details_raw_quantity = 0 %>
+<%@daily_book_salary_details_quantity = 0 %>
+<%@daily_book_salary_details_wast = 0 %>
+<%@daily_book_salary_details_raw_quantity_rate = 0 %>
+<%@daily_book_salary_details_quantity_rate = 0 %>
+<%@daily_book_salary_details_coverge_rate=0%>
+<%@daily_book_salary_details_gift_rate=0%>
+
+<% @time = Time.zone.now %>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Nakasi Daily Production Detail</h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<div>
+  <table>
+    <th></th>
+    <th></th>
+    <tr>
+      <td >Date Time: <span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%> <%=@time.strftime("at %I:%M%p")%></span> </td>
+      <td >Current User: <span><%=@current_user.name%> </span></td>
+    </tr>
+  </table>
+</div>
+<p style="border-bottom: dotted 3px;  margin: 0;"></p>
+<div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <%@products.each do |product|%>
+          <th><%=product.title%></th>
+        <%end%>
+        <th>Bricks Rohra</th>
+        <th>Tile Rohra</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <%@total_count=0%>
+      <% @daily_books.each do |daily_book| %>
+        <%@count=0%>
+        <tr>
+          <td><%= daily_book.created_at.strftime("%d-%b-%y") if daily_book.created_at.present?%></td>
+          <%product_quantity_function(daily_book).each do |product|%>
+            <td><%=product.last.round(0)%><%@count+=product.last%></td>
+          <%end%>
+          <td><%= daily_book.brick_rohra.to_i.round(0) %></td>
+          <td><%= daily_book.tile_rohra.to_i.round(0) %> </td>
+          <td><%= @count%></td>
+          <td><%= daily_book.comment %></td>
+        </tr>
+        <tr>
+          <%@total_count+=@count%>
+          <td></td>
+          <%total=0%>
+          <%product_quantity_function(daily_book).each do |product|%>
+            <td class="table-active"><b>
+              <%if (product.last!=0 && @count!=0) %>
+                <%=((product.last/@count)*100).to_f.round(2)%>
+                <%total+=((product.last/@count)*100).to_f.round(2)%>
+              <%else%>
+                0
+              <%end%>
+              %</b>
+            </td>
+          <%end%>
+          <td></td>
+          <td></td>
+          <td class="table-active"><b><%=total.round(0)%>%</b></td>
+
+        </tr>
+      <% end %>
+      <tr>
+        <td><h5>Total Bricks</h5></td>
+          <%product_quantity_all_function(@book_date_gteq,@book_date_lteq).each do |product_quantity|%>
+          <td><h5><%=product_quantity.last.to_i%></h5></td>
+        <%end%>
+        <td><h5><%=@rohra=@daily_books.sum(:brick_rohra)%><%@total_count+=@daily_books.sum(:brick_rohra)%></h5></td>
+        <td><h5><%=@tile_rohra=@daily_books.sum(:tile_rohra)%><%@total_count+=@daily_books.sum(:tile_rohra)%></h5></td>
+        <td><h5><%=@total_count.to_i.round(0)%></h5></td>
+
+      </tr>
+      <tr>
+        <%total_avg=0%>
+        <td><h5>Total percent</h5></td>
+        <%product_quantity_all_function(@book_date_gteq,@book_date_lteq).each do |product_quantity|%>
+          <td class="table-active">
+            <%if (product_quantity.last!=0 && @total_count!=0) %>
+              <h5><b><%=total=((product_quantity.last/@total_count)*100).to_f.round(1)%> %</b></h5>
+              <%total_avg+=total%>
+            <%else%>
+              <h5>0</h5>
+            <%end%>
+          </td>
+        <%end%>
+        <td>
+          <%if (@rohra!=0 && @total_count!=0) %>
+            <h5><%=total=((@rohra/@total_count)*100).to_f.round(1)%></h5>
+            <%total_avg+=total%>
+          <%else%>
+            <h5>0</h5>
+          <%end%>
+          </td>
+        <td>
+          <%if (@tile_rohra!=0 && @total_count!=0) %>
+            <h5><%=total=((@tile_rohra/@total_count)*100).to_f.round(1)%></h5>
+            <%total_avg+=total%>
+          <%else%>
+            <h5>0</h5>
+          <%end%>
+          </td>
+        <td class="table-active"><h5><b><%=total_avg.round(0)%> %</b></h5></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<br>

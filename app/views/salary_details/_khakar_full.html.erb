@@ -1,0 +1,76 @@
+<%@rev=Hash.new%>
+
+<div class="row">
+  <div class="col-lg-12 col-sm-12">
+    <div id = "expenses_detail">
+      <table data-toggle="table" data-search="true">
+        <thead>
+          <tr>
+            <th><%= sort_link(@q, :code, 'code') %></th>
+            <th><%= sort_link(@q, :name, 'Staff') %></th>
+            <th><%= sort_link(@q, :name, 'Raw-P') %></th>
+            <th><%= sort_link(@q, :salary_details_khakar_quantity, 'QTY') %></th>
+            <th><%= sort_link(@q, :salary_details_khakar_wast, 'wast') %></th>
+            <th><%= sort_link(@q, :salary_details_extra, 'After Kat') %></th>
+            <th><%= sort_link(@q, :salary_details_raw_wage_rate, 'Debit Rate') %></th>
+            <th><%= sort_link(@q, :salary_details_wage_rate, 'Credit Rate') %></th>
+            <th><%= sort_link(@q, :salary_details_location, 'location') %></th>
+            <th><%= sort_link(@q, :salary_details_khakar_debit, 'Debit/Benam') %></th>
+            <th><%= sort_link(@q, :salary_details_khakar_credit, 'Credit/Jama') %></th>
+            <th><%= sort_link(@q, :salary_details_created_at, 'Date') %></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <%@salary_details_full.each do |sal|%>
+          <tr>
+            <td><%staff=Staff.find_by_id(sal.first)%><%=staff.code%></td>
+            <td><%=staff.full_name%></td>
+            <td><%=RawProduct.find(sal[1]).title%></td>
+            <td><%=sal[2]%></td>
+            <td><%=sal[3]%></td>
+            <td><%=sal[4]%></td>
+            <td><%=(sal[5].to_f*1000).round(0)%> | <%=sal[7]%></td>
+            <td><%=sal[6].to_f.round(0)%> | <%=sal[8]%></td>
+            <td><%=sal[9]%></td>
+            <td><%=sal[10]%></td>
+            <td><%=sal[11]%></td>
+            <td><%=sal[12]%></td>
+          </tr>
+          <%end%>
+          <% @salary_details.each do |staff| %>
+            <%wage_debit=0%>
+            <%wage_credit=0%>
+
+
+          <% end %>
+          <tr>
+            <td><h5>Total</h5></td>
+            <td></td>
+            <td></td>
+            <td><h5><%= @salary_detail_total.first[0] %></h5></td>
+            <td><h5><%= @salary_detail_total.first[1] %></h5></td>
+            <td><h5><%= @salary_detail_total.first[2] %></h5></td>
+            <td><h5><%= @salary_detail_total.first[3] %></h5></td>
+            <td><h5><%= @salary_detail_total.first[4] %></h5></td>
+            <td><h5><%= @salary_detail_total.first[5] %></h5></td>
+            <td><h5><%= @salary_detail_total.first[6] %></h5></td>
+            <td><h5><%= @salary_detail_total.first[7] %></h5></td>
+            <td><h5></h5></td>
+          </tr>
+
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#expenses_list").removeClass('hidden');
+  });
+</script>

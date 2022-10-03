@@ -1,0 +1,47 @@
+<%= bootstrap_form_for(product_category, remote: true) do |f| %>
+  <% if product_category.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(product_category.errors.count, "error") %> prohibited this product_category from being saved:</h2>
+
+      <ul>
+      <% product_category.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="col-lg-6 form-group float-left">
+    <%= f.label :title do %>
+          <%= ProductCategory.human_attribute_name :title %>
+          <i class="fas fa-language"></i> 
+        <% end %>
+    <%= f.text_field :title,required:true,placeholder: "Enter the title", hide_label: true, class: 'urdu-font' %>
+  </div>
+
+<div class="col-lg-6 form-group float-left">
+    <%= f.text_field :code, {placeholder: "Enter the code", required: true , value: (f.object.code.nil? ? ("AGC-"+"%.4i" % (ProductCategory.maximum(:id).present? ? ProductCategory.maximum(:id).next : 1)) : (f.object.code ))} %>
+  </div>
+
+  <div class="col-lg-6 form-group float-left">
+    <%= f.text_area :comment , placeholder:"Enter Comment"%>
+  </div>
+
+
+
+
+<div class="clearfix">
+  <hr>
+  <div class="col-lg-12 row ">
+
+          <div class="col-lg-6 form-group float-left">
+            <%= link_to product_categories_path do %>
+            <i class="fa fa-arrow-left " aria-hidden="true"></i>
+            <% end %>
+          </div>
+            <div class="col-lg-6 form-group float-left">
+              <div class="col-lg-6 form-group float-left">
+                <%=f.object.id.nil? ? (f.submit class: "btn btn-success", style: "float: left")  :  (f.submit class: "btn btn-warning", style: "float: left")%>
+              </div>
+            </div>
+          <% end %>
+</div>

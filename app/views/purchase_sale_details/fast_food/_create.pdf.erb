@@ -1,0 +1,49 @@
+<%= render partial: "queue_show", locals: {purchase_sale_detail: @purchase_sale_detail} %>
+<div style="display: block;clear: both;page-break-after: always;"></div>
+<% @time = Time.zone.now+15*60 %>
+<h2 style="text-align: center;">Order Queue</h2>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Order # <%=@purchase_sale_detail.voucher_id.present? ? @purchase_sale_detail.voucher_id : @id %> <%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%> <%=@time.strftime(" %I:%M%p")%></h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<div style="width:90vw;">
+  <table>
+    <th style="width:40vw;">Items</th>
+    <th style="width:20vw;">Price</th>
+    <th style="width:20vw;">Qty</th>
+    <th style="width:20vw;">total</th>
+    <% @purchase_sale_detail.purchase_sale_items.each do |item|%>
+      <tr>
+        <td style="border-bottom: 1px solid #000; "><%=item.product.title %></td>
+        <td style="border-bottom: 1px solid #000; "><%=item.sale_price %></td>
+        <td style="border-bottom: 1px solid #000; "><%=item.quantity %></td>
+        <td style="border-bottom: 1px solid #000; "><%=item.total_sale_price %></td>
+      </tr>
+    <% end %>
+    <tr>
+      <td style="width:33vw;"><%=@purchase_sale_detail.sys_user.name %></td>
+      <td></td>
+      <td style="font-weight: bold;">Total: </td>
+      <td style="font-weight: bold;"><%=@purchase_sale_detail.total_bill%></td>
+    </tr>
+    <tr>
+      <%if @purchase_sale_detail.discount_price.present?%>
+        <td style="font-weight: bold;">Discount: </td>
+        <td style="font-weight: bold;"><%=@purchase_sale_detail.discount_price.present? ? @purchase_sale_detail.discount_price : 0.00%></td>
+      <%else%>
+        <td></td>
+        <td></td>
+      <%end%>
+      <td style="font-weight: bold;">Received: </td>
+      <td style="font-weight: bold;"><%=@purchase_sale_detail.amount.present? ? @purchase_sale_detail.amount : 0.00%></td>
+    </tr>
+  </table>
+</div>
+<p style="margin: 0;"><span><%=@purchase_sale_detail.comment%></span></p>
+<%@printfun=@pos_setting&.extra_settings.present? ? @pos_setting&.extra_settings["printfun"].to_f : 100%>
+<%@redirectfun=@pos_setting&.extra_settings.present? ? @pos_setting&.extra_settings["redirectfun"].to_f : 1200%>
+<script type="text/javascript">
+    window.setTimeout(printfun, <%=@printfun%>);
+    window.setTimeout(redirectfun, <%=@redirectfun%>);
+    function printfun(){window.print();}
+    function redirectfun(){window.location.replace("/orders/biller"); return true;}
+</script>

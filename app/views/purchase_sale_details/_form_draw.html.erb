@@ -1,0 +1,180 @@
+<% if @purchase_sale_detail.order%>
+<div class="col-xl-12 col-md-12 mb-12">
+    <div class="card border-left-primary shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="row">
+              <div class="col-lg-6 form-group float-left font-weight-bold ">
+                <h2><%= params[:transaction_type].present? ? "Draw Detail" : "Purchase Detail"%></h2>
+              </div>
+              <div class="col-lg-2 form-group float-left font-weight-bold ">
+                Total Bill<h2> <%=@purchase_sale_detail.order.total_bill.to_i%></h2>
+              </div>
+              <div class="col-lg-2 form-group float-left font-weight-bold ">Paid <h2> <%=@purchase_sale_detail.order.amount.to_i%></h2></div>
+              <div class="col-lg-2 form-group float-left font-weight-bold ">Customer Balance <h2> <%=@purchase_sale_detail.order.sys_user.balance.to_i%></h2></div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<%end%>
+<div class="col-xl-12 col-md-12 mb-12">
+    <div class="card border-left-primary shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="row">
+                <div class="col-lg-4 form-group float-left">
+                  <%if current_user.superAdmin.company_type=="batamega"%>
+                  <h2><%=params[:transaction_type].present? ? "Draw Detail" : "Receiving"%></h2>
+                  <%else%>
+                  <h2><%= params[:transaction_type].present? ? "Draw Detail" : "Purchase Detail"%> /
+                    <span id="sys_user_balance">
+                      0.0
+                    </span>
+                  </h2>
+                  <%end%>
+                </div><hr>
+                <div class="col-lg-2 form-group float-left font-weight-bold">Total Bill <h2 class="purchase_sale_detail_total_bill">0.00</h2></div>
+                <div class="col-lg-2 form-group float-left font-weight-bold">Total <h2 class="purchase_sale_discount_amount">0.00</h2></div>
+                <div class="col-lg-2 form-group float-left font-weight-bold">Remaning <h2 class="purchase_sale_detail_amount">0.00</h2></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<%= bootstrap_form_for(purchase_sale_detail) do |f| %>
+  <% if purchase_sale_detail.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(purchase_sale_detail.errors.count, "error") %> prohibited this purchase_sale_detail from being saved:</h2>
+
+      <ul>
+      <% purchase_sale_detail.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="col-xl-12 col-md-12 mb-12">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="row">
+                <div class='hidden'>
+                  <%if params[:transaction_type].present? or @purchase_sale_detail.transaction_type=='Sale'%>
+                  <%= f.hidden_field :transaction_type, value: "Sale" %>
+                  <%else%>
+                  <%= f.hidden_field :transaction_type, value: PurchaseSaleDetail.transaction_types.first.first%>
+                  <%end%>
+                  <%= f.select :status, PurchaseSaleDetail.statuses.map { |key, value| [key.humanize, key] },{hide_label:true,class: "form-control", required: true} %>
+                </div>
+                <div class="col-lg-5 form-group float-left font-weight-bold "><%= f.select :sys_user_id, options_from_collection_for_select(@customers, 'id', ->(st){"#{st.code} \u{27F6} #{st.name}"}, f.object.sys_user_id), {label:'User',prompt: "Select the Customer"}, required: true,'data-rule-chosen-required':"true",:class=>"form-control chosen-select",onchange:"set_sys_user_balance(this.value,'sys_user_balance')",onkeyup:"set_sys_user_balance(this.value,'sys_user_balance')" %></div>
+                <div class="col-lg-2 form-group float-left font-weight-bold hidden">
+                  <%= f.select :order_id, options_from_collection_for_select(@orders, 'id', ->(st){"#{st.id} \u{27F6} #{st.total_bill} "}, f.object.order_id), {prompt: "Select the Order"}%>
+                </div>
+                <div class="col-lg-2 form-group float-left font-weight-bold hidden">
+                  <%= f.select :account_id , options_from_collection_for_select(@accounts, 'id', 'title', (f.object.account_id.present? ? f.object.account_id : @account))%>
+                </div>
+                <div class="col-lg-2 form-group float-left font-weight-bold"> <%= f.hidden_field :total_bill%>
+                  <%if f.object.order_id.present?%>
+                  <%= f.number_field :amount,value:0,step: :any,label:'Debit Amount',onchange:"remaingUpdateAmount()",onkeyup:"remaingUpdateAmount()", required: true, readonly: true%>
+                  <%else%>
+                  <%= f.number_field :amount,value:0,step: :any,label:'Debit Amount',onchange:"remaingUpdateAmount()",onkeyup:"remaingUpdateAmount()", required: true %>
+                  <%end%>
+                </div>
+                <div class="col-lg-2 form-group float-left font-weight-bold hidden">
+                  <%if f.object.order_id.present?%>
+                  <%= f.number_field :discount_price,value:0,step: :any,label:'Discount',onchange:"remaingUpdateAmount()",onkeyup:"remaingUpdateAmount()", readonly: true%>
+                  <%else%>
+                  <%= f.number_field :discount_price,value:0,step: :any,label:'Discount',onchange:"remaingUpdateAmount()",onkeyup:"remaingUpdateAmount()"%>
+                  <%end%>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-12 col-md-12 mb-12">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="row">
+                  <div class="col-lg-4 form-group float-left">
+                    <h5>Draw</h5>
+                  </div>
+                  <div class="col-lg-1 form-group float-left hidden">
+                    <h5>Stock</h5>
+                  </div>
+                  <div class="col-lg-2 form-group float-left hidden">
+                    <h5>Qty</h5>
+                  </div>
+                  <div class="col-lg-2 form-group float-left">
+                    <h5>Credit Amount</h5>
+                  </div>
+                  <div class="col-lg-2 form-group float-left">
+                    <h5>Drop</h5>
+                  </div>
+                  <div class="col-lg-1 form-group float-left hidden">
+                    <h5>%</h5>
+                  </div>
+              </div>
+              <%= f.fields_for :purchase_sale_items do |purchase_sale_item| %>
+                <%= render 'purchase_sale_items_fields_new_draw', f: purchase_sale_item %>
+              <% end %>
+              <div class="links font-weight-bold text-success text-uppercase">
+                <%= link_to_add_association f, :purchase_sale_items, partial: 'purchase_sale_items_fields_new_draw', class: "new"  do %>
+                  <i class="fa fa-plus"></i> Add Draw (<span id="total_product_quantity"></span>)
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-12 col-md-12 mb-12 ">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="row">
+                <div class="col-lg-6 form-group float-left font-weight-bold"><%= f.datetime_select :created_at%>
+                </div>
+                <%if @pos_type_batha%>
+                  <div class="col-lg-2 form-group float-left font-weight-bold hidden"><%= f.select :staff_id, options_from_collection_for_select(@staffs, 'id', 'name', f.object.staff_id), {prompt: "Select the Loader"}%></div>
+                <%else%>
+                  <div class="col-lg-2 form-group float-left font-weight-bold hidden"><%= f.text_field :bill_no%></div>
+                <%end%>
+                <div class="col-lg-2 form-group float-left font-weight-bold hidden"><%= f.text_field :carriage,onchange:"costUpdateReturn()",onkeyup:"costUpdateReturn()", required: true%></div>
+                <div class="col-lg-2 form-group float-left font-weight-bold hidden"><%= f.number_field :loading,onchange:"costUpdateReturn()",onkeyup:"costUpdateReturn()", required: true%></div>
+              </div>
+              <div class="row">
+                <div class="col-lg-6 form-group float-left font-weight-bold"><%= f.text_area :comment, value: "Draw Payment"%></div>
+                <div class="actions col-lg-6 form-group float-left font-weight-bold">
+                  <div class="form-group">
+                    <div class="actions col-lg-12 form-group float-left font-weight-bold">
+                      <label for="commit">Save/Update</label>
+                    </div>
+                    <div class="actions col-lg-6 form-group float-left font-weight-bold">
+                      <%= f.submit class: "btn btn-success  col-lg-12", style: "float: right",value: "Save with Print", onclick:"save_sale()" %>
+                    </div>
+                    <div class="actions col-lg-6 form-group float-left font-weight-bold">
+                      <%= f.submit class: "btn btn-success col-lg-12", style: "float: right",value: "Save", onclick:"save_sale()" %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+<%= javascript_include_tag 'hover', 'data-turbolinks-track': 'reload' %>

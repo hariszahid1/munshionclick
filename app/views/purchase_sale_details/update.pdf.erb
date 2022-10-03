@@ -1,0 +1,17 @@
+<%if current_user.superAdmin.company_type=="batamega"%>
+  <%= render partial: "create_bata", locals: {purchase_sale_detail: @purchase_sale_detail} %>
+<%elsif current_user.superAdmin.company_type=="mianji"%>
+  <%= render partial: "/purchase_sale_details/fast_food/create", locals: {purchase_sale_detail: @purchase_sale_detail} %>
+<%elsif @pos_setting.sys_type=="batha"%>
+    <%= render partial: "create_show_batha", locals: {order: @purchase_sale_detail} %>
+<%else%>
+    <%= render partial: "order_show", locals: {purchase_sale_detail: @purchase_sale_detail} %>
+<%end%>
+<%@printfun=@pos_setting&.extra_settings.present? ? @pos_setting&.extra_settings["printfun"].to_f : 100%>
+<%@redirectfun=@pos_setting&.extra_settings.present? ? @pos_setting&.extra_settings["redirectfun"].to_f : 1200%>
+<script type="text/javascript">
+    window.setTimeout(printfun, <%=@printfun%>);
+    window.setTimeout(redirectfun, <%=@redirectfun%>);
+    function printfun(){window.print();}
+    function redirectfun(){window.location.replace("/purchase_sale_details/new?product=true&transaction_type=sale"); return true;}
+</script>

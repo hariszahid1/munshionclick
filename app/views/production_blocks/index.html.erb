@@ -1,0 +1,51 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Production Blocks</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Production block type</th>
+      <th>Title</th>
+      <th>Bricks quantity</th>
+      <th>Tile quantity</th>
+      <th>Date</th>
+      <th>Status</th>
+      <th>action</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @production_blocks.each do |production_block| %>
+      <tr>
+        <td><%= production_block.production_block_type.title  rescue nil %></td>
+        <td><%= production_block.title rescue nil%></td>
+        <td><%= production_block.bricks_quantity %></td>
+        <td><%= production_block.tiles_quantity %></td>
+        <td><%= production_block.date %></td>
+        <td><%= production_block.status %></td>
+        <td>
+          <% if can?(:update, :all) %>
+            <%= link_to edit_production_block_path(production_block) do %>
+              <i class="fa fa-edit " aria-hidden="true"></i> |
+            <%end %>
+          <% end %>
+          <% if can?(:delete, :all) %>
+            <%= link_to production_block, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+              <i class="fa fa-trash " aria-hidden="true"></i> |
+            <%end %>
+          <% end %>
+          <% if can?(:view, :all) %>
+            <%= link_to production_block do %>
+              <i class="fa fa-eye " aria-hidden="true"></i>
+            <%end %>
+          <%end%>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Production Block', new_production_block_path %>

@@ -1,0 +1,76 @@
+<%if @purchase_sale_detail.transaction_type=='Sale'%>
+  <tr class="nested-fields">
+    <td class="hidden">
+      <%= f.hidden_field :purchase_sale_detail_id %>
+      <%= f.hidden_field :id %>
+      <%= f.hidden_field :transaction_type, value: "Sale"%>
+    </td>
+    <%if current_user.superAdmin.company_type=="batamega"%>
+      <td><%= f.select :product_id, options_from_collection_for_select(@products, 'id',->(st){"#{st.title} \u{27F6} #{st.code}"},f.object.product_id), {hide_label: true,prompt: "Select the Product"}, onchange: 'set_sale(this.value,this.id); return false;', class: "chosen-select",required: true%></td>
+    <%else%>
+      <td><%= f.select :product_id, options_from_collection_for_select(@products, 'id', ->(st){"#{st.title} \u{27F6} #{st.code}"},f.object.product_id), {hide_label: true,prompt: "Select the Product"}, onchange: 'set_sale(this.value,this.id); return false;', class: "chosen-select",required: true%></td>
+    <%end%>
+    <%if current_user.superAdmin.company_type=="atom"%>
+      <td><%= f.select :status, options_for_select([50,40,37,35],f.object.status), {hide_label: true,prompt: "Pack"}, onchange:"costAtomUpdate()",onkeyup:"costAtomUpdate()", class: "pack-price",required: true%></td>
+      <td><%= f.number_field :quantity,step: :any,class:'quantity-price', hide_label: true,placeholder: :quantity,onchange:"costAtomUpdate()",onkeyup:"costAtomUpdate()"%>    </td>
+      <td><%= f.number_field :sale_price,step: :any,class:'cost-price',hide_label: true, placeholder: :sale_price,readonly: true,onchange:"costAtomUpdate()",onkeyup:"costAtomUpdate()"%></td>
+      <td><%= f.number_field :total_sale_price,step: :any,class:'total-cost-price', hide_label: true,placeholder: :cost_price,onchange:"costAtomUpdate()",onkeyup:"costAtomUpdate()"%></td>
+    <%else %>
+      <td>
+        <%=f.number_field :comment,step: :any,class:'stock', hide_label: true,placeholder: :Stock%>
+      </td>
+      <td><%= f.number_field :quantity,step: :any,class:'quantity-price', hide_label: true,placeholder: :quantity,onchange:"costUpdate()",onkeyup:"costUpdate()"%>    </td>
+      <td><%= f.number_field :sale_price,step: :any,class:'cost-price',hide_label: true, placeholder: :sale_price,readonly: true,onchange:"costUpdate()",onkeyup:"costUpdate()"%></td>
+      <td><%= f.number_field :total_sale_price,step: :any,class:'total-cost-price', hide_label: true,placeholder: :cost_price,onchange:"costUpdate()",onkeyup:"costUpdate()"%></td>
+      <td><%= f.number_field :discount_price,step: :any,class:'discount-price', hide_label: true,placeholder: :discount,onchange:"costUpdate()",onkeyup:"costUpdate()"%></td>
+    <%end%>
+    <td class="links"><%= link_to_remove_association "Remove", f , class: "btn btn-info" %></td>
+  </tr>
+<%else%>
+  <div class="nested-fields">
+      <tr>
+        <%= f.hidden_field :id %>
+        <%= f.hidden_field :transaction_type, value: PurchaseSaleItem.transaction_types.first.first%>
+        <td class="w-20" >
+          <%= f.select :product_id, options_from_collection_for_select(@products, 'id', ->(st){"#{st.title} \u{27F6} #{st.code}"},f.object.product_id), {hide_label: true,prompt: "Select the Product"},onchange: 'set_cost(this.value,this.id); return false;',class: "chosen-select",required: true%>
+        </td>
+        <td class="w-20" ><%= f.number_field :quantity,step: :any,class:'quantity-price', hide_label: true,placeholder: :quantity,onchange:"costUpdate()",onkeyup:"costUpdate()"%>    </td>
+        <td class="w-20" ><%= f.number_field :cost_price,step: :any,class:'cost-price',hide_label: true, placeholder: :cost_price,onchange:"costUpdate()",onkeyup:"costUpdate()"%></td>
+        <td class="w-20" ><%= f.number_field :total_cost_price,step: :any,class:'total-cost-price', hide_label: true,placeholder: :total_cost_price,onchange:"costUpdate()",onkeyup:"costUpdate()"%></td>
+        <td class="w-20" ><%= f.number_field :sale_price,step: :any,hide_label: true, placeholder: :sale_price,onchange:"costUpdate()",onkeyup:"costUpdate()"%></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td class="w-20" ><%= f.number_field :size_1,step: :any,class:'size-1', onchange:"bataQuantityUpdate(this.id)",onkeyup:"bataQuantityUpdate(this.id)"%>    </td>
+        <td class="w-20" ><%= f.number_field :size_2,step: :any,class:'size-2', onchange:"bataQuantityUpdate(this.id)",onkeyup:"bataQuantityUpdate(this.id)"%>    </td>
+        <td class="w-20" ><%= f.number_field :size_3,step: :any,class:'size-3', onchange:"bataQuantityUpdate(this.id)",onkeyup:"bataQuantityUpdate(this.id)"%>    </td>
+        <td class="w-20" ><%= f.number_field :size_4,step: :any,class:'size-4', onchange:"bataQuantityUpdate(this.id)",onkeyup:"bataQuantityUpdate(this.id)"%>    </td>
+        <td class="w-20" ><%= f.number_field :size_5,step: :any,class:'size-5', onchange:"bataQuantityUpdate(this.id)",onkeyup:"bataQuantityUpdate(this.id)"%>    </td>
+        <td class="w-20" ><%= f.number_field :size_6,step: :any,class:'size-6', onchange:"bataQuantityUpdate(this.id)",onkeyup:"bataQuantityUpdate(this.id)"%>    </td>
+        <td class="w-20" ><%= f.number_field :size_7,step: :any,class:'size-7', onchange:"bataQuantityUpdate(this.id)",onkeyup:"bataQuantityUpdate(this.id)"%>    </td>
+      </tr>
+      <tr>
+        <td class="w-20" ><%= f.number_field :size_8,step: :any,class:'size-8', onchange:"bataQuantityUpdate(this.id)",onkeyup:"bataQuantityUpdate(this.id)"%>    </td>
+        <td class="w-20" ><%= f.number_field :size_9,step: :any,class:'size-9', onchange:"bataQuantityUpdate(this.id)",onkeyup:"bataQuantityUpdate(this.id)"%>    </td>
+        <td class="w-20" ><%= f.number_field :size_10,step: :any,class:'size-10', onchange:"bataQuantityUpdate(this.id)",onkeyup:"bataQuantityUpdate(this.id)"%>    </td>
+        <td class="w-20" ><%= f.number_field :size_11,step: :any,class:'size-11', onchange:"bataQuantityUpdate(this.id)",onkeyup:"bataQuantityUpdate(this.id)"%>    </td>
+        <td class="w-20" ><%= f.number_field :size_12,step: :any,class:'size-12', onchange:"bataQuantityUpdate(this.id)",onkeyup:"bataQuantityUpdate(this.id)"%>    </td>
+        <td class="w-20" ><%= f.number_field :size_13,step: :any,class:'size-13', onchange:"bataQuantityUpdate(this.id)",onkeyup:"bataQuantityUpdate(this.id)"%>    </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td class="w-20 links" ><%= link_to_remove_association "Remove", f , class: "btn btn-info" %></td>
+      </tr>
+  </div>
+<%end%>
+<script>
+  $(document).ready(function() {
+    setTimeout(function(){
+      $(".chosen-select").chosen({
+  allow_single_deselect: true,
+  width: '100%'
+});
+    }, 50);
+  });
+</script>

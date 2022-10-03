@@ -1,0 +1,578 @@
+<% @date = Date.today  %>
+<% @time = Time.zone.now %>
+<div>
+  <table>
+    <th></th>
+    <th></th>
+    <tr>
+      <td>Printing Date Time: <span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%> <%=@time.strftime("at %I:%M%p")%></span> </td>
+      <td><p style="text-align: center;margin: 0;">Report by: <%=current_user.name%></p></td>
+    </tr>
+  </table>
+</div>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h2 style="text-align: center; margin: 0;">Trail Balance Report => <%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%> <%=@time.strftime(" %I:%M%p")%></h2>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h2 style="text-align: center; margin: 0;">Users</h2>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h2 style="text-align: center; margin: 0;">User Payable</h2>
+<div >
+  <table>
+    <thead>
+      <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+        <th>Code</th>
+        <th>Name</th>
+        <th>User Group</th>
+        <th>Status</th>
+        <th>Debit</th>
+        <th>Credit</th>
+        <th>Balance</th>
+        <th>Check</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @sys_user_payable.each do |sys_user| %>
+        <tr class="" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif" >
+          <td><%= sys_user.code %></td>
+          <td>
+              <i class="fa fa-address-book"></i><%= sys_user.name %>
+          </td>
+          <td><%= sys_user.user_group %></td>
+          <td><%= sys_user.status %></td>
+          <td>
+            <% debit_sum  = @sys_user_payable_ledger_book_debit[sys_user.id].to_d%>
+            <%= number_with_delimiter(debit_sum)%>
+          </td>
+          <td>
+            <% credit_sum = @sys_user_payable_ledger_book_credit[sys_user.id].to_d%>
+            <%= number_with_delimiter(credit_sum)%>
+          </td>
+          <td>
+            <% balance = sys_user.balance %> <%credit_debit = credit_sum-debit_sum%>
+            <%= number_with_delimiter(balance)%>
+          </td>
+          <td>
+            <% if balance == credit_debit%>
+              ok
+            <%else%>
+              <%= number_with_delimiter(balance-credit_debit)%>
+            <%end%>
+          </td>
+        </tr>
+      <% end %>
+      <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif" >
+        <td><h5>Total</h5></td>
+        <td><%= %></td>
+        <td><%= %></td>
+        <td><%= %></td>
+        <td><%= number_with_delimiter(@sys_user_payable_ledger_book_debit_total)%></td>
+        <td><%= number_with_delimiter(@sys_user_payable_ledger_book_credit_total)%></td>
+        <td><%= number_with_delimiter(@sys_user_payable.pluck('balance').map(&:abs).sum) %></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<h2 style="text-align: center; margin: 0;">Users Reciveable</h2>
+<div >
+  <table>
+    <thead>
+      <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+        <th>Code</th>
+        <th>Name</th>
+        <th>User Group</th>
+        <th>Status</th>
+        <th>Debit</th>
+        <th>Credit</th>
+        <th>Balance</th>
+        <th>Check</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @sys_user_receiveable.each do |sys_user| %>
+        <tr class="" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif" >
+          <td><%= sys_user.code %></td>
+          <td>
+              <i class="fa fa-address-book"></i><%= sys_user.name %>
+          </td>
+          <td><%= sys_user.user_group %></td>
+          <td><%= sys_user.status %></td>
+          <td>
+            <% debit_sum  = @sys_user_receiveable_ledger_book_debit[sys_user.id].to_d%>
+            <%= number_with_delimiter(debit_sum)%>
+          </td>
+          <td>
+            <% credit_sum = @sys_user_receiveable_ledger_book_credit[sys_user.id].to_d%>
+            <%= number_with_delimiter(credit_sum)%>
+          </td>
+          <td>
+            <% balance = sys_user.balance %><%credit_debit = credit_sum-debit_sum%>
+            <%= number_with_delimiter(balance)%>
+          </td>
+          <td>
+            <% if balance == credit_debit%>
+              ok
+            <%else%>
+              <%= number_with_delimiter(balance-credit_debit)%>
+            <%end%>
+          </td>
+        </tr>
+      <% end %>
+      <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif" >
+        <td><h5>Total</h5></td>
+        <td><%= %></td>
+        <td><%= %></td>
+        <td><%= %></td>
+        <td><%= @sys_user_receiveable_ledger_book_debit_total%></td>
+        <td><%= @sys_user_receiveable_ledger_book_credit_total%></td>
+        <td><%=@sys_user_receiveable.pluck('balance').map(&:abs).sum %></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<h2 style="text-align: center; margin: 0;">Users Nill</h2>
+<div >
+  <table>
+    <thead>
+      <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+        <th>Code</th>
+        <th>Name</th>
+        <th>User Group</th>
+        <th>Status</th>
+        <th>Debit</th>
+        <th>Credit</th>
+        <th>Balance</th>
+        <th>Check</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @sys_user_nill.each do |sys_user| %>
+        <tr class="" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif" >
+          <td><%= sys_user.code %></td>
+          <td>
+              <i class="fa fa-address-book"></i><%= sys_user.name %>
+          </td>
+          <td><%= sys_user.user_group %></td>
+          <td><%= sys_user.status %></td>
+          <td>
+            <% debit_sum  = @sys_user_nill_ledger_book_debit[sys_user.id].to_d%>
+            <%= number_with_delimiter(debit_sum)%>
+          </td>
+          <td>
+            <% credit_sum = @sys_user_nill_ledger_book_credit[sys_user.id].to_d%>
+            <%= number_with_delimiter(credit_sum)%>
+          </td>
+          <td>
+            <% balance = sys_user.balance %><%credit_debit = credit_sum-debit_sum%>
+            <%= number_with_delimiter(balance)%>
+          </td>
+          <td>
+            <% if balance == credit_debit%>
+              <i class="fa fa-check"></i>
+              ok
+            <%else%>
+              <i class="fa fa-trash"></i>
+              <%=number_with_delimiter(balance-credit_debit)%>
+            <%end%>
+          </td>
+        </tr>
+      <% end %>
+      <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif" >
+        <td><h5>Total</h5></td>
+        <td><%= %></td>
+        <td><%= %></td>
+        <td><%= %></td>
+        <td><%= @sys_user_nill_ledger_book_debit_total%></td>
+        <td><%= @sys_user_nill_ledger_book_credit_total%></td>
+        <td><%=@sys_user_nill.pluck('balance').map(&:abs).sum %></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="alwaysbreak">
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h2 style="text-align: center; margin: 0;">Staff</h2>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h2 style="text-align: center; margin: 0;">Staff Payable</h2>
+<div >
+  <table>
+    <thead>
+      <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+        <th>Status</th>
+        <th>Code</th>
+        <th>Name</th>
+        <th>Monthly/Wage</th>
+        <th>Department/Raw</th>
+        <th>Debit</th>
+        <th>Credit</th>
+        <th>Balance</th>
+        <th>Check</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @staff_payable.each do |staff| %>
+      <tr class="" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif" >
+        <td><%= staff.staff_type %></td>
+          <td>
+              <i class="fa fa-address-book"></i><%= staff.code %>
+          </td>
+          <td><%= staff.full_name %></td>
+          <td><%= staff.staff_salary_or_wage.to_f.round(2)%></td>
+          <td><%= staff.department.present? ? staff.department.title : ""%>:<%= staff.staff_raw_products.present? ? staff.staff_raw_products_titles : ""%></td>
+          <td>
+            <% debit_sum  = @staff_payable_ledger_book_debit[staff.id].to_d%>
+            <%= number_with_delimiter(debit_sum)%>
+          </td>
+          <td>
+            <% credit_sum = @staff_payable_ledger_book_credit[staff.id].to_d%>
+            <%= number_with_delimiter(credit_sum)%>
+          </td>
+          <td>
+            <% balance = staff.balance.to_f.round(2)%><%credit_debit = credit_sum-debit_sum%>
+            <%= number_with_delimiter(balance)%>
+          </td>
+          <td>
+            <% if balance == credit_debit%>
+              <i class="fa fa-check"></i>
+            <%else%>
+              <i class="fa fa-trash"></i>
+              <%=number_with_delimiter(balance-credit_debit)%>
+            <%end%>
+          </td>
+        </tr>
+      <% end %>
+      <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif" >
+        <td><h4>Total<h4></td>
+        <td><h4><%#=@staff_payable.count%></h4></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><h4><%=@staff_payable.sum(:balance)%><h4></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<h2 style="text-align: center; margin: 0;">Staff Reciveable</h2>
+<div >
+  <table>
+    <thead>
+      <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+        <th>Status</th>
+        <th>Code</th>
+        <th>Name</th>
+        <th>Monthly/Wage</th>
+        <th>Department/Raw</th>
+        <th>Debit</th>
+        <th>Credit</th>
+        <th>Balance</th>
+        <th>Check</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @staff_reciveable.each do |staff| %>
+        <tr class="" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif" >
+          <td><%= staff.staff_type %></td>
+          <td>
+              <i class="fa fa-address-book"></i><%= staff.code %>
+          </td>
+          <td><%= staff.full_name %></td>
+          <td><%= staff.staff_salary_or_wage.to_f.round(2)%></td>
+          <td><%= staff.department.present? ? staff.department.title : ""%>:<%= staff.staff_raw_products.present? ? staff.staff_raw_products_titles : ""%></td>
+          <td>
+            <% debit_sum  = @staff_reciveable_ledger_book_debit[staff.id].to_d%>
+            <%= number_with_delimiter(debit_sum)%>
+          </td>
+          <td>
+            <% credit_sum = @staff_reciveable_ledger_book_credit[staff.id].to_d%>
+            <%= number_with_delimiter(credit_sum)%>
+          </td>
+          <td>
+            <% balance = staff.balance.to_f.round(2)%> <%credit_debit = credit_sum-debit_sum%>
+            <%= number_with_delimiter(balance)%>
+          </td>
+          <td>
+            <% if balance == credit_debit%>
+              <i class="fa fa-check"></i>
+              ok
+            <%else%>
+              <i class="fa fa-trash"></i>
+              <%=number_with_delimiter(balance-credit_debit)%>
+            <%end%>
+          </td>
+        </tr>
+      <% end %>
+      <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif" >
+        <td><h4>Total<h4></td>
+        <td><h4><%#=@staff_reciveable.count%></h4></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><h4><%=@staff_reciveable.sum(:balance).abs%><h4></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<h2 style="text-align: center; margin: 0;">Staff Nill</h2>
+<div >
+  <table>
+    <thead>
+      <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+        <th>Status</th>
+        <th>Code</th>
+        <th>Name</th>
+        <th>Monthly/Wage</th>
+        <th>Department/Raw</th>
+        <th>Debit</th>
+        <th>Credit</th>
+        <th>Balance</th>
+        <th>Check</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @staff_nill.each do |staff| %>
+        <tr style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+          <td><%= staff.staff_type %></td>
+          <td>
+              <i class="fa fa-address-book"></i><%= staff.code %>
+          </td>
+          <td><%= staff.full_name %></td>
+          <td><%= staff.staff_salary_or_wage.to_f.round(2)%></td>
+          <td><%= staff.department.present? ? staff.department.title : ""%>:<%= staff.staff_raw_products.present? ? staff.staff_raw_products_titles : ""%></td>
+          <td>
+            <% debit_sum  = @staff_nill_ledger_book_debit[staff.id].to_d%>
+            <%= number_with_delimiter(debit_sum)%>
+          </td>
+          <td>
+            <% credit_sum = @staff_nill_ledger_book_credit[staff.id].to_d%>
+            <%= number_with_delimiter(credit_sum)%>
+          </td>
+          <td>
+            <% balance = staff.balance.to_f.round(2)%><%credit_debit = credit_sum-debit_sum%>
+            <%= number_with_delimiter(balance)%>
+          </td>
+          <td>
+            <% if balance == credit_debit%>
+              <i class="fa fa-check"></i>
+              ok
+            <%else%>
+              <i class="fa fa-trash"></i>
+              <%=number_with_delimiter(balance-credit_debit)%>
+            <%end%>
+          </td>
+        </tr>
+      <% end %>
+      <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+        <td><h4>Total<h4></td>
+        <td><h4><%#=@staff_nill.count%></h4></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><h4><%=@staff_nill.sum(:balance).abs%><h4></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="alwaysbreak">
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h2 style="text-align: center; margin: 0;">Accounts</h2>
+<div >
+  <table>
+    <thead>
+      <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+        <th>Title</th>
+        <th>Bank Name</th>
+        <th>Debit</th>
+        <th>Credit</th>
+        <th>Balance</th>
+        <th>Check</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @accounts.each do |account| %>
+      <tr style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+          <td>
+              <i class="fa fa-address-book"></i><%= account.title %>
+          </td>
+          <td><%= account.bank_name %></td>
+          <td>
+            <% debit_sum  = @account_debit[account.title].to_d%>
+            <%= number_with_delimiter(debit_sum)%>
+          </td>
+          <td>
+            <% credit_sum = @account_credit[account.title].to_d%>
+            <%= number_with_delimiter(credit_sum)%>
+          </td>
+          <td>
+            <% balance = account.amount.to_f.round(2)%> <%credit_debit = credit_sum-debit_sum%>
+            <%= number_with_delimiter(balance)%>
+          </td>
+          <td>
+            <% if balance == credit_debit%>
+              <i class="fa fa-check"></i>
+              ok
+            <%else%>
+              <i class="fa fa-trash"></i>
+              <%=number_with_delimiter(balance-credit_debit)%>
+            <%end%>
+          </td>
+        </tr>
+      <% end %>
+      <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+        <td><h4>Total<h4></td>
+        <td><h4><%#=@accounts.count%></h4></td>
+        <td><h4><%=@account_debit_total.to_f.round(2)%></h4></td>
+        <td><h4><%=@account_credit_total.to_f.round(2)%></h4></td>
+        <td><h4><%=@accounts.sum(:amount).abs.to_f.round(2)%><h4></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<h2 style="text-align: center; margin: 0;">Expense Reciveable</h2>
+<div >
+  <table>
+    <thead>
+      <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+        <th>Title</th>
+        <th>Debit</th>
+        <th>Credit</th>
+        <th>Check</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @expense_list.each do |exp| %>
+        <tr style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+          <td>
+              <i class="fa fa-address-book"></i><%= exp&.first&.last %>
+          </td>
+          <td>
+            <% balance = exp.last.to_f.round(2) %>
+            <%= number_with_delimiter(balance)%>
+          </td>
+          <td>
+            <% credit_expense = @credit_expense[exp&.first&.last].to_f.round(2)%>
+            <%= number_with_delimiter(credit_expense)%>
+          </td>
+          <td>
+            <% if balance == credit_expense%>
+              <i class="fa fa-check"></i>
+              ok
+            <%else%>
+              <i class="fa fa-trash"></i>
+              <%=number_with_delimiter(balance-credit_expense)%>
+            <%end%>
+          </td>
+        </tr>
+      <% end %>
+      <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+        <td><h4>Total</h4></td>
+        <td><h4><%#=@expense_list.count%></h4></td>
+        <td><h4><%=@expense_total.abs.to_f.round(2)%><h4></td>
+        <td><h4><%=@total_credit_expense.abs.to_f.round(2)%><h4></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<h2 style="text-align: center; margin: 0;">Purchase Reciveable</h2>
+<div >
+  <table>
+    <thead>
+      <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+        <th>Title</th>
+        <th>Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @purchase_item_list.each do |exp| %>
+        <tr style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+          <td><%= exp.first %></td>
+          <td><%= exp.last.to_f.round(2) %></td>
+        </tr>
+      <% end %>
+      <% @purchase_product_list.each do |exp| %>
+        <tr style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+          <td><%= exp.first %></td>
+          <td><%= exp.last.to_f.round(2) %></td>
+        </tr>
+      <% end %>
+      <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+        <td><h4>Total : <%=@purchase_item_list.count.to_i+@purchase_product_list.count.to_i%></h4></td>
+        <td><h4><%=@purchase_item_total.to_i+@purchase_product_total.to_i%><h4></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<h2 style="text-align: center; margin: 0;">Sale Payable</h2>
+<div >
+  <table>
+    <thead>
+      <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+        <th>Title</th>
+        <th>Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @sale_item_list.each do |exp| %>
+        <tr style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+          <td><%= exp.first %></td>
+          <td><%= exp.last.to_f.round(2) %></td>
+        </tr>
+      <% end %>
+      <% @sale_product_list.each do |exp| %>
+        <tr style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+          <td><%= exp.first %></td>
+          <td><%= exp.last.to_f.round(2) %></td>
+        </tr>
+      <% end %>
+      <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+        <td><h4>Total : <%=@sale_item_list.count.to_i+@sale_product_list.count.to_i%></h4></td>
+        <td><h4><%=@sale_item_total.to_i+@sale_product_total.to_i%><h4></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<h2 style="text-align: center; margin: 0;">Salary</h2>
+<div >
+  <table>
+    <thead>
+      <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+        <th>Title</th>
+        <th>Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @salary_detail_list.each do |exp| %>
+        <tr style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+          <td><%= exp.first %></td>
+          <td><%= exp.last.to_f.round(2) %></td>
+        </tr>
+      <% end %>
+
+      <% @khakar_salary_detail_list.each do |exp| %>
+        <tr style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+          <td><%= exp.first %></td>
+          <td><%= exp.last.to_f.round(2) %></td>
+        </tr>
+      <% end %>
+      <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+        <td><h4>Total : <%=@salary_detail_list.count.to_i%></h4></td>
+        <td><h4><%=@salary_detail_total.to_i%><h4></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

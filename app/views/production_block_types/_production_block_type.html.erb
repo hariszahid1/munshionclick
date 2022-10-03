@@ -1,0 +1,22 @@
+<tr>
+  <td class='urdu-font'><%= production_block_type.title %></td>
+  <td><%= production_block_type.quantity %></td>
+  <td><%= production_block_type.comment %></td>
+  <td>
+    <% if can?(:update, :all) %>
+      <%= link_to edit_production_block_type_path(production_block_type) do %>
+        <i class="fa fa-edit " aria-hidden="true"></i> |
+      <%end %>
+    <% end %>
+    <% if can?(:delete, :all) %>
+      <%= link_to production_block_type, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+        <i class="fa fa-trash " aria-hidden="true"></i> |
+      <%end %>
+    <% end %>
+    <% if can?(:view, :all) %>
+      <%= link_to production_block_type do %>
+        <i class="fa fa-eye " aria-hidden="true"></i>
+      <%end %>
+    <%end%>
+  </td>
+</tr>

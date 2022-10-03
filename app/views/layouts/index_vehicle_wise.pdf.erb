@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>POS</title>
+    <%= wicked_pdf_stylesheet_link_tag "pdf" -%>
+</head>
+<body class="bond_pos_pdf">
+  <% @time = Time.zone.now %>
+  <% @salary_details.each.with_index do |staff,index| %>
+  <div class="col-table- nobreak">
+
+    <table data-toggle="table" data-search="true">
+      <thead>
+        <tr>
+          <th colspan="8"></th>
+        </tr>
+        <tr>
+          <th colspan="8" class="lite-gray" style="font-size:15px;text-align: center;,font-family: Arial Black, Gadget, sans-serif"> <span class="td-bold"><%= staff.code %> <%= staff.full_name %></span></th>
+        </tr>
+
+            <tr>
+        <th class="short-column">Date</th>
+        <th class="short-column">quantity</th>
+        <th class="short-column">Credit Amount</th>
+        <th class="short-column">Credit Jama</th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <%wage_debit=0%>
+        <%wage_credit=0%>
+        <% staff.salary_details.each do |salary_detail| %>
+          <tr class="" style="font-size:15px;text-align: center;,font-family: Arial Black, Gadget, sans-serif">
+         <td><%= salary_detail.created_at.strftime("%A,  %d-%b-%y") if salary_detail.created_at%></td>
+            <td><%= salary_detail.quantity.to_f.round(0) %></td>
+            <td><%= salary_detail.amount.to_f.round(2) %></td>
+            <td><%= wage_credit+=salary_detail.amount.to_f.round(0) %></td>
+            </td>
+          </tr>
+        <%end%>
+        <tr class="lite-gray" style= "text-align: center;">
+          <td class="td-bold">Total</td>
+          <td class="td-bold"><%= @quantity.to_f.round(0) %></td>
+          <td class="td-bold"> <%= @credit_rate.to_f.round(0) %></td>
+          <td class="td-bold"> <%= @amount.to_f.round(0) %></td>
+        </tr>
+        <tr class="lite-gray" style = "text-align: center;">
+          <td class="td-bold">Total Payable</td>
+          <td class="td-bold"><%= @amount.to_f.round(0) %></td>
+          <td class="td-bold">Credit</td>
+          <td class="td-bold"><%= wage_credit%></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <% end %>
+
+  <p style="text-align: center;margin: 0;"><span><%=@pos_setting.address if @pos_setting.present?%></span></p>
+  <p style="text-align: center;margin: 0;"><span><%=@pos_setting.phone if @pos_setting.present?%></span></p>
+</body>
+</html>

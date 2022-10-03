@@ -1,0 +1,57 @@
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Staff Credit Detail</h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<p style="text-align: center;margin: 0;">Report by: <%=current_user.name%></p>
+<div >
+  <table data-toggle="table" data-search="true" id="country_table">
+    <thead>
+      <tr style="font-size:14px;,font-family: Arial Black, Gadget, sans-serif">
+        <th>Staff</th>
+        <th>credit/Jama</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @staff_ledger_books_pdf_credit.each do |staff_ledger_book| %>
+        <tr style="font-size:14px;,font-family: Arial Black, Gadget, sans-serif">
+          <td><%= staff_ledger_book.first %></td>
+          <td><%= staff_ledger_book.last%></td>
+        </tr>
+      <% end %>
+      <tr style="font-size:20px;,font-family: Arial Black, Gadget, sans-serif">
+        <td><b>Total<b></td>
+        <td><b><%=@staff_ledger_books_pdf_total_credit.to_i%></b></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<br><br><br><br><br>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Staff Debit Detail</h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<p style="text-align: center;margin: 0;">Report by: <%=current_user.name%></p>
+<div >
+  <table data-toggle="table" data-search="true" id="country_table">
+    <thead>
+      <tr style="font-size:14px;,font-family: Arial Black, Gadget, sans-serif">
+        <th>Staff</th>
+        <th>Debit/Benam</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @staff_ledger_books_pdf_debit.each do |staff_ledger_book| %>
+        <%if staff_ledger_book.last>0%>
+        <tr style="font-size:14px;,font-family: Arial Black, Gadget, sans-serif">
+          <td><%= staff_ledger_book.first %></td>
+          <td><%= staff_ledger_book.last%></td>
+        </tr>
+        <% end %>
+      <% end %>
+      <tr style="font-size:20px;,font-family: Arial Black, Gadget, sans-serif">
+        <td><b>Total<b></td>
+        <td><b><%=@staff_ledger_books_pdf_total_debit.to_i%></b></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

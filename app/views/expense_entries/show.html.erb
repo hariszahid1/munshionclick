@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Amount:</strong>
+  <%= @expense_entry.amount %>
+</p>
+
+<p>
+  <strong>Expense:</strong>
+  <%= @expense_entry.expense %>
+</p>
+
+<p>
+  <strong>Expense type:</strong>
+  <%= @expense_entry.expense_type %>
+</p>
+
+<p>
+  <strong>Account:</strong>
+  <%= @expense_entry.account %>
+</p>
+
+<p>
+  <strong>Comment:</strong>
+  <%= @expense_entry.comment %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @expense_entry.status %>
+</p>
+
+<%= link_to 'Back', expense_entries_path %>

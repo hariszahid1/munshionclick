@@ -1,0 +1,12 @@
+<div class="card">
+  <div class="card-header">
+    <%if params[:account_id].present? %>
+    <h3>New Payment / Balance: <span class="oldBalance" id="sys_user_balance"><%=Account.find(params[:account_id]).amount%></span></h3>
+    <%else%>
+    <h3>New Payment / Balance: <span class="oldBalance" id="sys_user_balance">0.0</span></h3>
+    <%end%>
+  </div>
+  <div class="card-body">
+    <%= render 'form', payment: @payment %>
+    </div>
+</div>

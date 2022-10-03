@@ -1,0 +1,101 @@
+<% @time = Time.zone.now %>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;"><%=@departments&.first&.title%> Production Detail</h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<div>
+  <table>
+    <th></th>
+    <th></th>
+    <tr>
+      <td>Printing Date Time: <span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%> <%=@time.strftime("at %I:%M%p")%></span> </td>
+      <td>Current User: <span><%=@current_user.name%> </span></td>
+    </tr>
+  </table>
+</div>
+<div>
+  <table data-toggle="table" data-search="true">
+    <thead>
+      <tr>
+        <th class="short-column">Date</th>
+        <th class="short-column">Code</th>
+        <th class="short-column">Staff</th>
+        <th class="short-column">Item</th>
+        <th class="short-column">QTY</th>
+        <th class="short-column">Wast</th>
+        <th class="short-column">Rate</th>
+        <th class="short-column">Amount</th>
+        <th class="short-column">G Rate</th>
+        <th class="short-column">Gift</th>
+        <th class="short-column">C Rate</th>
+        <th class="short-column">Coverge</th>
+        <th class="short-column">Debit Benam</th>
+        <th class="short-column">Credit Jama</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @salary_details.each.with_index do |staff,index| %>
+        <%wage_debit=0%>
+        <%wage_credit=0%>
+        <%wage_qty=0%>
+        <%wage_waste=0%>
+        <% staff.salary_details.each do |salary_detail| %>
+          <%if salary_detail.raw_product_title%>
+            <tr <%= index.odd? ? "class=lite-red" : "class="%> >
+              <td><%= salary_detail.created_at.strftime("%A,  %d-%b-%y") if salary_detail.created_at%></td>
+              <td><%= salary_detail.staff.code %></td>
+              <td><%= salary_detail.staff_full_name %></td>
+              <td><%= salary_detail.raw_product_title %></td>
+              <td class="right"><%= wage_qty+= salary_detail.quantity.to_f.round(0) %></td>
+              <td class="right"><%= wage_waste+= salary_detail.extra.to_f.round(0) %></td>
+              <td class="right"><%= salary_detail.wage_debit.to_f.round(2) %></td>
+              <td class="right"><%= salary_detail.amount.to_f.round(0) %></td>
+              <td class="right"><%= salary_detail.gift_rate.to_f.round(2)*1000 %></td>
+              <td class="right"><%= salary_detail.gift_pay.to_f.round(0) %></td>
+              <td class="right"><%= salary_detail.coverge_rate.to_f.round(2)*1000 %></td>
+              <td class="right"><%= salary_detail.coverge_pay.to_f.round(0) %></td>
+              <td class="right"><%= (wage_debit+=salary_detail.wage_debit.to_f).to_f.round(0) %></td>
+              <td class="right"><%= (wage_credit+=salary_detail.amount.to_f).to_f.round(0) %></td>
+            </tr>
+          <%end%>
+        <%end%>
+        <tr class="lite-gray">
+          <td class="td-bold right">Total</td>
+          <td class="td-bold right"></td>
+          <td></td>
+          <td></td>
+          <td class="td-bold right"><%= wage_qty.to_f.round(0)   %></td>
+          <td class="td-bold right"><%= wage_waste.to_f.round(0) %></td>
+          <td></td>
+          <td class="td-bold right"><%= wage_credit.to_f.round(0) %></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td class="td-bold right"><%= wage_debit.to_f.round(0) %></td>
+          <td class="td-bold right"><%= wage_credit.to_f.round(0) %></td>
+        </tr>
+      <%end%>
+
+      <tr>
+
+      </tr>
+      <tr class="lite-gray">
+        <td class="td-bold right">Total</td>
+        <td class="td-bold right">Till Today</td>
+        <td></td>
+        <td></td>
+        <td class="td-bold right"><%= @quantity_sum.to_f.round(0) %></td>
+        <td class="td-bold right"><%= @wast_sum.to_f.round(0) %></td>
+        <td></td>
+        <td class="td-bold right"><%= @amount_sum.to_f.round(0) %></td>
+        <td></td>
+        <td></td>
+        <td class="td-bold right"><%= @gift_pay_sum.to_f.round(-1) %></td>
+        <td class="td-bold right"><%= @coverge_pay_sum.to_f.round(-1) %></td>
+        <td class="td-bold right"><%= @wage_debit_sum.to_f.round(0) %></td>
+        <td class="td-bold right"><%= @amount_sum.to_f.round(0) %></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

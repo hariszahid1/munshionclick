@@ -1,0 +1,100 @@
+<div class="hidden" id="items_list">
+  <h1>Items</h1>
+  <div class="row">
+      <div id="new_item" class="col-lg-12 form-group float-left">
+        <% if can?(:add, :all) %>
+          <%= link_to new_item_path,remote:true, class: "btn btn-success" do %>
+          <i class="fa fa-plus" aria-hidden="true"></i>
+            New Items
+          <% end %>
+        <% end %>
+      </div>
+
+    </div>
+
+  <div class="clearfix"></div>
+    <div class="row">
+      <div class="col-lg-12 col-sm-12">
+        <%= search_form_for @q, url: items_path, class: "admin-controls", method: "get" do |f| %>
+          <div class="col-lg-2 form-group float-left">
+            <%= f.select :title_or_code_cont, options_from_collection_for_select(@items, "title", ->(st){"#{st.title} \u{27F6} #{st.code} "},@title),{:include_blank => "Select Title/code"},:class=>"form-control chosen-select" %>
+          </div>
+          <div class="col-lg-2 form-group float-left">
+           <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px;"><i class="fa fa-search"></i></button>
+          </div>
+          <div class="col-lg-3 form-group float-left">
+            <% if can?(:add, :all) %>
+              <%= link_to raw_material_path, class: "btn btn-primary" do %>
+                  <i class="fas fa-list" aria-hidden="true"> </i>
+                  Material Status
+              <% end %>
+            <%end%>
+          </div>
+         <div class="col-lg-1 form-group float-right">
+          <button class="form-control btn btn-secondary" name="submit_pdf_staff_with" type="submit" value="Items PDF A4" formtarget="_blank"><i class="fa fa-file-pdf"></i></button>
+         </div>
+      <% end %>
+      </div>
+    </div>
+
+  <table data-toggle="table" data-search="true" id="item_table">
+    <thead>
+      <tr>
+        <th><%= sort_link(@q, :id, 'ID') %></th>
+        <th>Item type</th>
+        <th class="urdu-font"><%= sort_link(@q, :title, 'Title') %></th>
+        <th><%= sort_link(@q, :code, 'Code') %></th>
+        <th>Cost</th>
+        <th>Sale</th>
+        <th>Stock</th>
+        <th>Minimum</th>
+        <th>Optimal</th>
+        <th>Maximun</th>
+        <th class="urdu-font"><%= sort_link(@q, :comment, 'Comment') %></th>
+        <th>Status</th>
+        <th class="border_none">Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <%= render partial: 'item', collection: @items %>
+      <tr>
+        <td>Total</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><h5><%=@items.sum(:stock)%></h5></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+  <div class="clearfix"></div>
+    <div class="row">
+      <div class="col-lg-4 col-sm-4">
+        <%= page_entries_info @items %>
+      </div>
+    <div class="col-lg-8 col-sm-8 pagination-left">
+    <%= paginate @items %>
+    </div>
+    </div>
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#items_list").removeClass('hidden');
+    FontAwesome.dom.i2svg();
+  });
+  $(document).ready(function() {
+    setTimeout(function(){
+      $(".chosen-select").chosen({
+  allow_single_deselect: true,
+  width: '100%'
+});
+    }, 50);
+  });
+</script>

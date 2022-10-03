@@ -1,0 +1,51 @@
+
+<%production_blocks_bricks_quantity=0%>
+<%production_blocks_tiles_quantity=0%>
+<% @date = Date.today  %>
+<% @time = DateTime.now %>
+<% @time = Time.zone.now %>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Bhari details</h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<p style="text-align: center;margin: 0;">Report by: <%=current_user.name%></p>
+<div >
+  <table class="lite-gray">
+    <thead>
+      <th>Start date</th>
+      <th>End date</th>
+      <th>Bricks </th>
+      <th>Tiles</th>
+      <th>Comment</th>
+      <th></th>
+    </thead>
+
+    <tbody>
+      <% @production_cycles.each do |production_cycle| %>
+        <tr>
+          <td><%= production_cycle.start_date.strftime("%A,  %d-%b-%y") if production_cycle.start_date%></td>
+          <td><%= production_cycle.end_date.strftime("%A,  %d-%b-%y") if production_cycle.end_date%></td>
+          <td>
+            <%= production_cycle.production_blocks_bricks_quantity_with_date %>
+            <h6><%= production_cycle.production_blocks_bricks_quantity %><% production_blocks_bricks_quantity+=production_cycle.production_blocks_bricks_quantity %></h6>
+          </td>
+          <td>
+            <%= production_cycle.production_blocks_tiles_quantity_with_date %>
+            <h6><%= production_cycle.production_blocks_tiles_quantity %><% production_blocks_tiles_quantity+=production_cycle.production_blocks_tiles_quantity %></h6>
+          </td>
+          <td><%= production_cycle.cycle_type %></td>
+
+        </tr>
+      <% end %>
+      <tr class="lite-gray">
+        <td><h4>Total</h4></td>
+        <td></td>
+        <td><h4><%=production_blocks_bricks_quantity%></h4></td>
+        <td><h4><%=production_blocks_tiles_quantity%></h4></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,5 @@
+<% if pos_setting_sys_type=="HousingScheme"%>
+  <%= render 'products/hscheme/index_hscheme', product: @product %>
+<% else%>
+  <%= render 'index', product: @product %>
+<% end%>

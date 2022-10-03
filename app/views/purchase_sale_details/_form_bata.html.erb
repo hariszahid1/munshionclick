@@ -1,0 +1,159 @@
+<%= bootstrap_form_for(purchase_sale_detail) do |f| %>
+  <% if purchase_sale_detail.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(purchase_sale_detail.errors.count, "error") %> prohibited this purchase_sale_detail from being saved:</h2>
+
+      <ul>
+      <% purchase_sale_detail.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <table>
+    <thead>
+      <th>Customer/Supplier</th>
+      <th>Paid</th>
+      <th>Discount</th>
+    </thead>
+    <tbody>
+      <tr>
+        <%if params[:transaction_type].present? or @purchase_sale_detail.transaction_type=='Sale'%>
+          <td><%= f.select :sys_user_id, @customers.collect{|p|[p.name,p.id]}, {hide_label:true,include_blank: false} %></td>
+        <%else%>
+          <td>
+            <%= f.select :sys_user_id, options_from_collection_for_select(@suppliers, 'id', 'name', f.object.sys_user_id), {hide_label:true,prompt: "Select the Supplier"}, required: true %>
+          </td>
+        <%end%>
+
+        <td> <%= f.hidden_field :total_bill%><%= f.number_field :amount,step: :any,hide_label:true,onchange:"remaingUpdateAmount()",onkeyup:"remaingUpdateAmount()"%></td>
+        <td ><%= f.number_field :discount_price,step: :any,hide_label:true,onchange:"remaingUpdateAmount()",onkeyup:"remaingUpdateAmount()"%>
+          <%if params[:transaction_type].present? or @purchase_sale_detail.transaction_type=='Sale'%>
+            <%= f.hidden_field :transaction_type, value: "Sale" %>
+          <%else%>
+            <%= f.hidden_field :transaction_type, value: PurchaseSaleDetail.transaction_types.first.first%>
+          <%end%>
+          <%= f.hidden_field :status, value: "Clear" %>
+          <%= f.hidden_field :account_id , value: @account %>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- PurchaseSaleItem -->
+  <%if @purchase_sale_detail.purchase_sale_items.present?%>
+    <table>
+      <thead>
+        <%if @purchase_sale_detail.transaction_type=='Sale'%>
+          <th class="hidden"></th>
+          <th>Items</th>
+          <th>Stock</th>
+          <th>Quantity</th>
+          <th>Sale Price</th>
+          <th>Total Price</th>
+          <th>Comment</th>
+          <th>Action</th>
+        <%else%>
+          <th class="hidden"></th>
+          <th class="hidden"></th>
+          <th>Product</th>
+          <th>Total Qty</th>
+          <th>Avg Cost</th>
+          <th>Total Cost</th>
+          <th>Avg Sale</th>
+          <th></th>
+        <%end%>
+      </thead>
+      <tbody>
+        <%= f.fields_for :purchase_sale_items do |purchase_sale_item| %>
+          <%= render 'purchase_sale_items_fields_bata', f: purchase_sale_item %>
+        <% end %>
+      </tbody>
+    </table>
+
+  <%end%>
+  <div class="links">
+    <%= link_to_add_association 'Add More Items', f, :purchase_sale_items, partial: 'purchase_sale_items_fields_new_bata', class: "btn btn-info new" %>
+  </div>
+  <%if @purchase_sale_detail.transaction_type=='Sale' or params[:transaction_type].present?%>
+  <br>
+  <table>
+    <thead>
+      <th>1</th>
+      <th>2</th>
+      <th>3</th>
+      <th>4</th>
+      <th>5</th>
+      <th>6</th>
+      <th>7</th>
+      <th>8</th>
+      <th>9</th>
+      <th>10</th>
+      <th>11</th>
+      <th>12</th>
+      <th>13</th>
+      <th>TL</th>
+    </thead>
+    <tbody>
+      <tr>
+        <td><%= number_field_tag :size_1,'',{:class=>"form-control"} %></td>
+        <td><%= number_field_tag :size_2,'',{:class=>"form-control"} %></td>
+        <td><%= number_field_tag :size_3,'',{:class=>"form-control"} %></td>
+        <td><%= number_field_tag :size_4,'',{:class=>"form-control"} %></td>
+        <td><%= number_field_tag :size_5,'',{:class=>"form-control"} %></td>
+        <td><%= number_field_tag :size_6,'',{:class=>"form-control"} %></td>
+        <td><%= number_field_tag :size_7,'',{:class=>"form-control"} %></td>
+        <td><%= number_field_tag :size_8,'',{:class=>"form-control"} %></td>
+        <td><%= number_field_tag :size_9,'',{:class=>"form-control"} %></td>
+        <td><%= number_field_tag :size_10,'',{:class=>"form-control"} %></td>
+        <td><%= number_field_tag :size_11,'',{:class=>"form-control"} %></td>
+        <td><%= number_field_tag :size_12,'',{:class=>"form-control"} %></td>
+        <td><%= number_field_tag :size_13,'',{:class=>"form-control"}%></td>
+        <td><h3 id='total_shoe'>0</h3></td>
+      </tr>
+    </tbody>
+  </table>
+  <%end%>
+  <br>
+  <table>
+    <thead>
+      <th>Comment</th>
+      <th>Carriage</th>
+      <th>Loading/Unloading</th>
+      <th>Date</th>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="col-lg-6"><%= f.text_area :comment,hide_label:true%></td>
+        <td><%= f.number_field :carriage,hide_label:true,onchange:"costUpdate()",onkeyup:"costUpdate()"%></td>
+        <td><%= f.number_field :loading,hide_label:true,onchange:"costUpdate()",onkeyup:"costUpdate()"%></td>
+        <td><%= f.datetime_select :created_at,hide_label:true%></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="actions">
+    <%if params[:transaction_type].present? or @purchase_sale_detail.transaction_type=='Sale'%>
+      <div class="col-lg-6" style="float:left">
+        <%= link_to 'Sale', "#", class: "btn btn-info" %>
+      </div>
+      <div class="col-lg-6" style="float:left">
+        <%= f.submit class: "btn btn-primary", style: "float: right",value: "Create Order"%>
+      </div>
+
+    <%else%>
+      <div class="col-lg-6" style="float:left">
+        <%= link_to 'Purchase', purchase_sale_details_path, class: "btn btn-info" %>
+      </div>
+      <div class="col-lg-6" style="float:left">
+        <%= f.submit class: "btn btn-primary", style: "float: right" %>
+      </div>
+
+    <%end%>
+  </div>
+<% end %>
+<script>
+  $(document).ready(function() {
+    costUpdate();
+  });
+</script>
+<%= javascript_include_tag 'hover', 'data-turbolinks-track': 'reload' %>

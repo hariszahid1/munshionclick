@@ -1,0 +1,198 @@
+<%@monthly_wage=0%>
+<%@short_pay=0%>
+<%@balance=0%>
+<div class="hidden" id="staff_list">
+  <h1>Labour</h1>
+  <div class="row">
+    <div class="col-lg-2 form-group float-left">
+      <% if can?(:add, :all) %>
+        <%= link_to new_staff_path, class: "btn btn-success" do %>
+             <i class="fa fa-plus" aria-hidden="true"></i>
+             New Staff
+        <% end %>
+      <% end %>
+    </div>
+    <div class="col-lg-2 form-group float-left">
+      <%= link_to payable_staffs_path, class: "btn btn-primary" do %>
+        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+        Payable
+      <% end %>
+    </div>
+    <div class="col-lg-2 form-group float-left">
+      <%= link_to receiveable_staffs_path, class: "btn btn-primary" do %>
+        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+        Reciveable
+      <% end %>
+    </div>
+    <div class="col-lg-2 form-group float-left">
+      <%= link_to dasti_staffs_path, class: "btn btn-primary" do %>
+        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+        Dasti
+      <% end %>
+    </div>
+    <div class="col-lg-2 float-left">
+      <%= link_to loan_salaries_path, class: "btn btn-success" do %>
+         <i class="fa fa-envelope-open" aria-hidden="true"></i>
+         Loan/pashgyi
+      <% end %>
+    </div>
+    <div class="col-lg-2 float-left">
+      <%= link_to transfer_staff_ledger_books_path, class: "btn btn-success" do %>
+        <i class="fa fa-credit-card" aria-hidden="true"></i>
+        Payment Transfer
+      <% end %>
+    </div>
+
+  </div>
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-lg-12">
+      <%= search_form_for @q, url: staffs_path, class: "admin-controls", method: "get" do |f| %>
+        <div class="col-lg-3 form-group float-left">
+          <%= f.select :id_eq, options_from_collection_for_select(@staff_names, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code}"},@name),{:include_blank => "Select Staff"},:class=>"form-control chosen-select" %>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.select :department_id_eq, options_from_collection_for_select(@departments, 'id', 'title', @department), {hide_label:true,title: "Select the Department" ,prompt: "Select the Department"},:class=>"form-control chosen-select"%>
+        </div>
+        <div class="col=lg-2 form-group float-left">
+          <%= f.select :staff_type_eq, Staff.staff_types.map { |key, value| [key.humanize, value] }, {include_blank: "Select the Status", hide_label:true, required: true },:class=>"form-control  chosen-select"%>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+        </div>
+
+        <div class="col-lg-1 form-group float-left">
+          <button class="form-control btn btn-secondary" name="submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank"><i class="fa fa-file-pdf"></i></button>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-secondary" name="submit_remove_wege_debit" type="submit" value="Short Pay 0">Short Pay 0</button>
+        </div>
+        <div class="col-lg-2 form-group float-right">
+          <button class="form-control btn btn-secondary" name="wage_submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank"><i class="fa fa-file-pdf"></i>wage sataff</button>
+        </div>
+        <div class="col-lg-2 form-group float-right">
+          <button class="form-control btn btn-secondary" name="salary_submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank"><i class="fa fa-file-pdf"></i>salary staff</button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <table data-toggle="table" data-search="true">
+    <thead>
+      <tr>
+        <th>Profile Image</th>
+        <th><%= sort_link(@q, :staff_type, 'Status') %></th>
+        <th><%= sort_link(@q, :code, 'Code') %></th>
+        <th class="urdu-font"><%= sort_link(@q, :name, 'Name') %></th>
+        <th><%= sort_link(@q, :phone, 'Phone') %></th>
+        <th><%= sort_link(@q, :department_id, 'Department/Raw') %></th>
+        <th><%= sort_link(@q, :monthly_salary, 'Monthly/Wage') %></th>
+        <th><%= sort_link(@q, :advance_amount, 'Advance') %></th>
+        <th><%= sort_link(@q, :wage_debit, 'Short-Pay') %></th>
+        <th><%= sort_link(@q, :balance, 'Balance') %></th>
+        <th>Jama/Benam</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @staffs.each do |staff| %>
+        <tr>
+          <td>
+            <% if  staff.profile_image.attached? %>
+              <%= image_tag staff.profile_image.service_url, width: 100 %>
+            <% end %>
+          </td>
+          <td><%= staff.staff_type %></td>
+          <td><%= staff.code %></td>
+          <td class="urdu-font">
+            <%=link_to staff_ledger_books_path('q[staff_id_eq]':staff.id) do%>
+              <i class="fa fa-address-book"></i><%= staff.full_name %>
+            <%end %>
+          </td>
+          <td><%= staff.phone%></td>
+          <td><%= staff.department.present? ? staff.department.title : ""%>:<%= staff.staff_raw_products.present? ? staff.staff_raw_products_titles : ""%></td>
+          <td><%= staff.staff_salary_or_wage.to_f %><% @monthly_wage += staff.staff_salary_or_wage.to_f.round(2) %></td>
+          <td><%= staff.advance_amount.to_f.round(2) %><%#@advance += staff.advance_amount.to_f.round(2) %></td>
+          <td><%= staff.wage_debit.to_f.round(2) %><% @short_pay += staff.wage_debit.to_f.round(2) %></td>
+          <td><%= staff.balance.to_f.round(2) %><% @balance += staff.balance.to_f.round(2) %></td>
+          <td>      <%if staff.balance.to_f > 0  %>
+                     <b style="font-size:20px;color:blue;">Jama</b>
+                <%elsif  staff.balance.to_f < 0  %>
+                <b style="font-size:20px;color:red;">Benam</b>
+                <%else%>
+                <b style="font-size:20px;color: #6cec53 ;">Nill</b>
+                <%end%>
+          </td>
+          <% already_paid = staff_paid_this_month_salary?(staff) %>
+          <td>
+          <% if already_paid %>
+              <div class="" style="background-color:chartreuse;margin: -12px;padding: 5px;">
+                <%= link_to 'Paid Salary', "javascript:void(0)", title: "Salary already paid for this month", class: "isDisabled" %><br>
+              </div>
+          <%else%>
+          <% if can?(:add, :all) %>
+              <%= link_to new_salary_path(:staff_id=>staff.id) do %>
+                <i class="fa fa-envelope-open" aria-hidden="true"></i>
+                Pay Salary |
+              <% end %>
+            <% end %>
+          <%end%>
+
+          <% if can?(:update, :all) %>
+            <%= link_to edit_staff_path(staff) do %>
+              <i class="fa fa-edit " aria-hidden="true"></i> |
+            <%end %>
+          <% end %>
+          <% if can?(:delete, :all) %>
+            <%= link_to staff, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+              <i class="fa fa-trash " aria-hidden="true"></i> |
+            <%end %>
+          <% end %>
+          <% if can?(:view, :all) %>
+            <%= link_to staff do %>
+              <i class="fa fa-eye " aria-hidden="true"></i>
+            <%end %>
+          <%end%>
+          <%=link_to staff_ledger_books_path('q[staff_id_eq]':staff.id) do%>
+            <i class="fa fa-address-book"></i>
+          <%end %>
+        </td>
+
+        </tr>
+      <% end %>
+      <tr>
+        <td><h4>Total<h4></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><h4><%= @monthly_wage.to_i.round(2) if @monthly_wage.present?%><h4></td>
+        <td><h4><%= @total.first.first.to_i.round(2) if @total.first.present?%><h4></td>
+        <td></td>
+        <td><h4><%= @total.first.last.to_i.round(2) %><h4></td>
+        <td><h4><%= @total.first.second.to_i.round(2) %><h4></td>
+          <td></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="clearfix"></div>
+<div class="row">
+  <div class="col-lg-4 col-sm-4">
+    <%= page_entries_info @staffs %>
+  </div>
+  <div class="col-lg-8 col-sm-8 pagination-left">
+    <%= paginate @staffs %>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#staff_list").removeClass('hidden');
+    FontAwesome.dom.i2svg();
+  });
+</script>

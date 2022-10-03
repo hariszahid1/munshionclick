@@ -1,0 +1,6 @@
+<h1 style="text-align:center">New Daily Book</h1>
+<%if  check_system_type(@pos_setting)=="batha"%>
+  <%= render '/daily_books/batha/form_batha', daily_book: @daily_book %>
+<%else%>
+  <%= render 'form', daily_book: @daily_book %>
+<%end%>

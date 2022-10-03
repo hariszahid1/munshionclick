@@ -1,0 +1,59 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Contacts</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Country</th>
+      <th>City</th>
+      <th>Address</th>
+      <th>Home</th>
+      <th>Office</th>
+      <th>Mobile</th>
+      <th>Fax</th>
+      <th>Email</th>
+      <th>Comment</th>
+      <th>Status</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @contacts.each do |contact| %>
+      <tr>
+        <td><%= contact.country %></td>
+        <td><%= contact.city %></td>
+        <td><%= contact.address %></td>
+        <td><%= contact.home %></td>
+        <td><%= contact.office %></td>
+        <td><%= contact.mobile %></td>
+        <td><%= contact.fax %></td>
+        <td><%= contact.email %></td>
+        <td><%= contact.comment %></td>
+        <td><%= contact.status %></td>
+        <td>
+          <% if can?(:update, :all) %>
+            <%= link_to edit_contact_path(contact) do %>
+              <i class="fa fa-edit " aria-hidden="true"></i> |
+            <%end %>
+          <% end %>
+          <% if can?(:delete, :all) %>
+            <%= link_to contact, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+              <i class="fa fa-trash " aria-hidden="true"></i> |
+            <%end %>
+          <% end %>
+          <% if can?(:view, :all) %>
+            <%= link_to contact do %>
+              <i class="fa fa-eye " aria-hidden="true"></i>
+            <%end %>
+          <%end%>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Contact', new_contact_path %>

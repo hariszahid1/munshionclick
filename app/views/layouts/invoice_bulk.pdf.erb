@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>POS</title>
+    <%= wicked_pdf_stylesheet_link_tag "pdf" -%>
+</head>
+
+<%@total_pro=0%>
+<%@total_discont=0%>
+<%@total=0%>
+
+<body class="bond_pos_pdf">
+<% @purchase_sale_details_pdf.each do |purchase_sale_detail| %>
+
+  <% @time = Time.zone.now %>
+  <p style="margin-top: <%=@pos_setting.pdf_margin_top%>px;"></p>
+  <% if @pos_setting.present? && @pos_setting.persisted? && @pos_setting.logo_images.present? %>
+    <div class="col-lg-12">
+      <%= image_tag @pos_setting.logo_images.first.service_url, width: 200, class:"pdf_img" %>
+    </div>
+  <%else%>
+    <h1 style="text-align: center;"><%=admin_name_on_nav%></h1>
+  <% end %>
+  <p style="border-bottom: double 4px;  margin: 0;"></p>
+  <h3 style="text-align: center; margin: 0;">Delivery Order # <%=purchase_sale_detail.voucher_id.present? ? purchase_sale_detail.voucher_id.to_s+"/"+purchase_sale_detail.id.to_s : @id.to_s+"/"+purchase_sale_detail.id.to_s%></h3>
+  <p style="border-bottom: double 4px;  margin: 0;"></p>
+  <p style="text-align: center;margin: 0;">Cashier: <%=current_user.name%></p>
+  <div style="width:90vw;">
+  <table >
+    <th></th>
+    <th></th>
+    <tr>
+      <td  colspan="2" style="text-align: center; margin: 0;"><span> Customer: <b><%=purchase_sale_detail.sys_user.name %></b></span> <span>P.O# <b><%=purchase_sale_detail.bill_no.to_s%></b></span></td>
+    </tr>
+    <tr>
+      <td>Print: <b><span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%></span>  Time: <span><%=@time.strftime("at %I:%M%p")%></span></b> </td>
+      <td>Created: <b><span><%= purchase_sale_detail.created_at.strftime("%d")%>/<%=purchase_sale_detail.created_at.strftime("%b")%>/<%= purchase_sale_detail.created_at.strftime("%y")%></span></b> </td>
+    </tr>
+  </table>
+  </div>
+  <p style="border-bottom: dotted 3px;  margin: 0;"></p>
+  <div>
+  <table data-toggle="table">
+    <tr class="lite-gray">
+      <th style="width:10vw;">SR #</th>
+      <th style="width:60vw;">Items</th>
+      <th style="width:10vw;">Qty</th>
+      <th style="width:10vw;">Price</th>
+      <th style="width:10vw;">Total</th>
+    </tr>
+    <%i=1%>
+    <% purchase_sale_detail.purchase_sale_items.each do |item|%>
+      <tr style="text-align:center" class="lite-gray">
+        <td style="border-bottom: 1px solid #000; "><%=i%><%i=i+1%></td>
+        <td style="border-bottom: 1px solid #000; "><b><%=item.purchase_sale_type=="Sale_type" ? "S-" : "R-"%> <%=item.product.present? ? item.product.title : "" %></b></td>
+        <td style="border-bottom: 1px solid #000; "><b><%=item.quantity %></b></td>
+        <td style="border-bottom: 1px solid #000; "><b><%=item.sale_price %></b></td>
+        <td style="border-bottom: 1px solid #000; "><b><%=item.purchase_sale_type=="Sale_type" ? "" : "-"%><%=item.total_sale_price %></b></td>
+      </tr>
+      <%if (purchase_sale_detail.product_warranties.pluck(:product_id).include? item.product_id)%>
+        <tr>
+          <td style="border-bottom: 1px solid #000;" colspan="5"><%=purchase_sale_detail.product_warranties.where(product_id: item.product_id).pluck(:serial).first.split("\r\n")%></td>
+        </tr>
+      <%end%>
+    <% end %>
+    <%if PosSetting.first.sys_type != "MobileShop"%>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td style="font-weight: bold;">Loading/Unloading: </td>
+        <td style="font-weight: bold;"><%=purchase_sale_detail.loading%></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td style="font-weight: bold;">Carriage: </td>
+        <td style="font-weight: bold;"><%=purchase_sale_detail.carriage%></td>
+      </tr>
+    <%end%>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td style="font-weight: bold;">Total:</td>
+      <td style="font-weight: bold;"><%=purchase_sale_detail.total_bill%></td>
+    </tr>
+    <%if purchase_sale_detail.amount>0%>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td style="font-weight: bold;">Received: </td>
+        <td style="font-weight: bold;"><%=purchase_sale_detail.amount.to_f%></td>
+      </tr>
+    <%end%>
+    <%if purchase_sale_detail.discount_price.present?%>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td style="font-weight: bold;">Discount: </td>
+        <td style="font-weight: bold;"><%=purchase_sale_detail.discount_price.to_f%></td>
+      </tr>
+    <%end%>
+    <%if (purchase_sale_detail.total_bill-(purchase_sale_detail.amount.to_f)-(purchase_sale_detail.discount_price.to_f))>0%>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td style="font-weight: bold;">Remaining:</td>
+        <td style="font-weight: bold;"><%=purchase_sale_detail.total_bill-(purchase_sale_detail.amount.to_f)-(purchase_sale_detail.discount_price.to_f)%></td>
+      </tr>
+    <%end%>
+    <%if purchase_sale_detail.sys_user.balance.present? and !purchase_sale_detail.sys_user.balance.to_i.zero?%>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td style="font-weight: bold;">Pre Balance:</td>
+        <td style="font-weight: bold;"><%=purchase_sale_detail.sys_user.balance.to_i+purchase_sale_detail.total_bill.to_f-purchase_sale_detail.amount.to_f%></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td style="font-weight: bold;">Balance:</td>
+        <td style="font-weight: bold;"><%=purchase_sale_detail.sys_user.balance %></td>
+      </tr>
+    <%end%>
+
+  </table>
+  </div>
+  <%if purchase_sale_detail.comment.present?%>
+  <p style="border-bottom: dotted 3px;  margin: 0;"></p>
+  <p style="text-align: center;margin: 0;"><span>Comment: <%=purchase_sale_detail.comment.titleize%></span></p>
+  <%end%>
+  <p style="border-bottom: dotted 3px;  margin: 0;"></p>
+  <p style="text-align: center;margin: 0;"><span><%=@pos_setting.address if @pos_setting.present?%></span></p>
+  <p style="text-align: center;margin: 0;"><span><%=@pos_setting.phone if @pos_setting.present?%></span></p>
+  <p style="border-bottom: dotted 3px;  margin: 0;"></p>
+  <%if @pos_setting.present?%>
+  <p><b><%=simple_format(@pos_setting.invoice_note)%></b></p>
+  <p style="border-bottom: double 4px;  margin: 0;"></p>
+  <%end%>  
+  <div class="page-break"></div>
+<% end %>
+
+</body>
+</html>

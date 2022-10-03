@@ -1,0 +1,25 @@
+<%@total=0%>
+<table data-toggle="table" data-search="true">
+  <thead>
+    <tr>
+      <th>User</th>
+      <th>Debit</th>
+      <th>Credit</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @ledger_book_debit.each_with_index do |item,i|%>
+      <tr style="text-align :center">
+        <td style="border-bottom: 1px solid #000; "><b><%=item.first.name %></b></td>
+        <td style="border-bottom: 1px solid #000; "><%=item.last.to_f.round(2) %></td>
+        <td style="border-bottom: 1px solid #000; "><%=@ledger_book_credit[item.first].to_f.round(2) %></td>
+      </tr>
+    <% end %>
+    <tr style="text-align :center">
+      <td><b>Total</b></td>
+      <td><b><%=@ledger_book_total_debit%></b></td>
+      <td><b><%=@ledger_book_total_credit%></b></td>
+    </tr>
+  </tbody>
+</table>

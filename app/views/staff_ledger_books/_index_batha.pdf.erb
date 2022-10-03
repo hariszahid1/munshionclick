@@ -1,0 +1,100 @@
+<% @date = Date.today  %>
+<% @time = DateTime.now %>
+<% @time = Time.zone.now %>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Accounts details</h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<p style="text-align: center;margin: 0;">Report by: <%=current_user.name%></p>
+<div >
+  <table data-toggle="table" data-search="true" id="country_table">
+    <thead>
+      <tr style="font-size:14px;,font-family: Arial Black, Gadget, sans-serif">
+
+        <th>Staff</th>
+        <th>Debit/Benam</th>
+        <th>credit/Jama</th>
+        <th>Balance</th>
+        <th>Jama/Benam</th>
+        <th>Comment</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @staff_ledger_books_pdf.each do |staff_ledger_book| %>
+        <tr style="font-size:14px;,font-family: Arial Black, Gadget, sans-serif">
+          <td><%= staff_ledger_book.staff.full_name %></td>
+          <td><%= staff_ledger_book.debit%></td>
+          <td><%= staff_ledger_book.credit%></td>
+          <td><%= staff_ledger_book.balance%></td>
+          <td>
+            <%if staff_ledger_book.balance.to_f > 0  %>
+                     <b style="font-size:20px;color:blue;">Jama</b>
+                <%elsif  staff_ledger_book.balance.to_f < 0  %>
+                <b style="font-size:20px;color:red;">Benam</b>
+                <%else%>
+                <b style="font-size:20px;color: #6cec53 ;">Nill</b>
+                <%end%>
+          </td>
+          <td>
+            <%= staff_ledger_book.comment %>
+            <%if staff_ledger_book.salary_detail.present? %>
+              <%if staff_ledger_book.salary_detail.staff.department.present? and staff_ledger_book.salary_detail.staff.department&.id==@departments.first&.id%>
+                <%if staff_ledger_book.salary_detail.quantity.to_i>0%>
+                  <p>
+                    <span><%= staff_ledger_book.salary_detail.raw_product_title %></span>
+                    Qty: <span><%= staff_ledger_book.salary_detail.quantity.to_f.round(0) %></span>
+                  </p>
+                <%end%>
+              <%elsif staff_ledger_book.salary_detail.staff.department.present? and staff_ledger_book.salary_detail.staff.department&.id==@departments.second&.id%>
+                <%if staff_ledger_book.salary_detail.khakar_remaning.to_i>0%>
+                  <p>
+                    <span><%= staff_ledger_book.salary_detail.raw_product_title %></span>
+                    Qty: <span><%= staff_ledger_book.salary_detail.khakar_remaning.to_f.round(0) %></span>
+                  </p>
+                <%end%>
+              <%elsif staff_ledger_book.salary_detail.staff.department.present? and staff_ledger_book.salary_detail.staff.department&.id==@departments.third&.id%>
+                <%if staff_ledger_book.salary_detail.quantity.to_i>0%>
+                  <p>
+                    Qty: <span><%= staff_ledger_book.salary_detail.quantity.to_f.round(0) %></span>
+                  </p>
+                <%end%>
+              <%elsif staff_ledger_book.salary_detail.staff.department.present? and staff_ledger_book.salary_detail.staff.department&.id==@departments.fourth&.id%>
+                <%if staff_ledger_book.salary_detail.purchase_sale_detail.present?%>
+                   <% if staff_ledger_book.salary_detail.purchase_sale_detail.purchase_sale_items_names_and_quantity!=0%>
+                     <% staff_ledger_book.salary_detail.purchase_sale_detail.purchase_sale_items_names_and_quantity.each do |p|%>
+                      <p><span><%=p.first%></span> Qty: <span><%=p.second%></span></p>
+                     <%end%>
+                   <%end%>
+                 <%end%>
+              <%end%>
+            <%end%>
+          </td>
+          <td>
+            <%= staff_ledger_book.created_at.strftime("%d%b%y at %I:%M:%S %p") %>
+            <% if staff_ledger_book.salary.present? && staff_ledger_book.created_at.strftime("%d%b%y")!=staff_ledger_book.salary.created_at.strftime("%d%b%y") %>
+              <br>
+              <%= staff_ledger_book.salary.created_at.strftime("%d%b%y at %I:%M:%S %p") %>
+            <%end%>
+            <%if staff_ledger_book.salary_detail.present? && staff_ledger_book.created_at.strftime("%d%b%y")!=staff_ledger_book.salary_detail.created_at.strftime("%d%b%y") %>
+              <br>
+              <%= staff_ledger_book.salary_detail.created_at.strftime("%d%b%y at %I:%M:%S %p") %>
+            <%end%>
+          </td>
+
+        </tr>
+      <% end %>
+      <tr style="font-size:20px;,font-family: Arial Black, Gadget, sans-serif">
+        <td><b>Total<b></td>
+        <td><b><%=@debit.to_i%></b></td>
+        <td><b><%=@credit.to_i%></b></td>
+        <td><b><%=@credit.to_i-@debit.to_i%></b></td>
+        <td></td>
+        <td><b><%=@quantity%></b></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

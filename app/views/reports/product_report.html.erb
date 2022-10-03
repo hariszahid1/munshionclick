@@ -1,0 +1,229 @@
+<div class="hidden" id="products_list">
+  <h1>Profit Report</h1>
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <%= search_form_for @q, url: reports_product_report_path, class: "admin-controls", method: "get" do |f| %>
+        <div class="col-lg-3 form-group float-left">
+          <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker',value: @created_at_gteq, 'datepicker' => true,placeholder: "YYYY-MM-DD" %>
+        </div>
+        <div class="col-lg-3 form-group float-left">
+          <%= f.search_field :created_at_lteq, class: 'form-control input-sm datepicker',value: @created_at_lteq, 'datepicker' => true ,placeholder: "YYYY-MM-DD"%>
+        </div>
+        <div class="col-lg-3 form-group float-left">
+          <%= select_tag 'product_id[]', options_from_collection_for_select(@products, 'id', ->(st){"#{st.title} \u{27F6} #{st.code}"},@products_list),hide_label: true,prompt: "Select the Product",:multiple => true, class: "chosen-select product"%>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <input class="form-control btn btn-primary" name="search_submit" type="submit" value="Search"></input>
+        </div>
+        <div class="col-lg-3 form-group float-left">
+          <input class="form-control btn btn-secondary" name="submit_pdf_staff_with" type="submit" value="Profit Report PDF A4" formtarget="_blank"></input>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <table data-toggle="table" data-search="true">
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Purchase</th>
+        <th>Sale</th>
+        <th>Discount</th>
+        <th>Net Sale</th>
+        <th>Profit</th>
+        <th>GST</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <%@purchase_item.each do |purchase|%>
+      <tr>
+        <td><%=purchase.first%></td>
+        <td>
+          <%=(purchase.second).round(2) if purchase.second%>
+        </td>
+        <td>
+          <%=(purchase.third).round(2) if purchase.third%>
+        </td>
+        <td>
+          <%=(purchase.fourth).round(2)  if purchase.fourth%>
+        </td>
+        <td>
+          <%=(purchase.fifth).round(2)  if purchase.fifth%>
+        </td>
+        <td>
+          <%=net_sale=(purchase.fourth.to_f-purchase.fifth.to_f).round(2)%>
+        </td>
+        <td>
+          <%=(net_sale-purchase.third.to_f).round(2)%>
+        </td>
+        <td>
+          <%=(purchase[5].to_f).round(2)%>
+        </td>
+      </tr>
+      <%end%>
+      <tr class="thead-light">
+        <td><h5>Total</h5></td>
+        <td><h5><%=(@total_all.first.first.to_f).round(2)%></h5></td>
+        <td><h5><%=(@total_all.first.second.to_f).round(2)%></h5></td>
+        <td><h5><%=(@total_all.first.third.to_f).round(2)%></h5></td>
+        <td><h5><%=(@total_all.first.fourth.to_f+@purchase_discount).round(2)%></h5></td>
+        <td><h5><%=total_net_sale=(@total_all.first.third.to_f-@total_all.first.fourth.to_f-@purchase_discount).round(2)%></h5></td>
+        <td><h5><%=@total_profit=(total_net_sale-@total_all.first.second.to_f).round(2)%></h5></td>
+        <td><h5><%=@total_all.first.fifth.to_f%></h5></td>
+      </tr>
+      <tr>
+        <td><h6>Investment</h6></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><%=(@investment).round(2)%></td>
+      </tr>
+      <tr>
+        <td><h6>Expense</h6></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><%=(@expense).round(2)%></td>
+      </tr>
+      <tr>
+        <td><h6>Salary</h6></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><%=(@salary+@advance).round(2)%></td>
+      </tr>
+      <tr class="thead-light">
+        <td><h5>Total</h5></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><h5>
+          <%=total_profit=(@total_profit-(@salary.to_f+@advance.to_f+@expense.to_f+@investment.to_f)).round(2)%>
+          <%if current_user.superAdmin.company_type=="as_traders"%>
+          | <%=(total_profit*0.6).round(2)%> | <%=(total_profit*0.3).round(2)%> | <%=(total_profit*0.1).round(2)%>
+          <%end%>
+        </h5></td>
+        <td><h5><%=total_profit+@total_all.first.fifth.to_f%></h5></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+
+      <div class="col-lg-6 form-group float-left">
+
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+          google.charts.load("current", {packages:["corechart"]});
+          google.charts.setOnLoadCallback(drawChart);
+          function drawChart() {
+            var data = google.visualization.arrayToDataTable([
+            ['Task', 'Hours per Day'],
+            <%@purchase_item.each do |purchase|%>
+             ['<%=purchase.first%>',<%=(purchase.second).round(2) if purchase.second%>],
+            <% end %>
+          ]);
+
+          var options = {
+            title: 'Stock Quantity',
+            is3D: true,
+          };
+
+          var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+          chart.draw(data, options);
+        }
+      </script>
+      <div id="piechart_3d" style="width: 900px; height: 500px;"></div>
+    </div>
+
+
+
+      <div class="col-lg-6 form-group float-left">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load("current", {packages:["corechart"]});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+        ['Task', 'Hours per Day'],
+        <%@purchase_item.each do |purchase|%>
+        ['<%=purchase.first%>',<%=(purchase.fourth).round(2) if purchase.second%>],
+        <% end %>
+        ]);
+
+        var options = {
+          title: 'Product sold',
+          is3D: true,
+
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart_3d2'));
+        chart.draw(data, options);
+      }
+    </script>
+    <div id="piechart_3d2" style="width: 900px; height: 500px;"></div>
+
+  </div>
+</div>
+  </div>
+<div class="clearfix">
+
+</div>
+
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <div class="col-lg-6 form-group float-left">
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+          google.charts.load("current", {packages:["corechart"]});
+          google.charts.setOnLoadCallback(drawChart);
+          function drawChart() {
+            var data = google.visualization.arrayToDataTable([
+            ['Task', 'Hours per Day'],
+            <%@purchase_item.each do |purchase|%>
+            <%net_sale=(purchase.fourth.to_f-purchase.fifth.to_f).round(2)%>
+            ['<%=purchase.first%>',<%=(net_sale-purchase.third.to_f).round(2)%>],
+            <% end %>
+            ]);
+
+            var options = {
+              title: 'PROFIT ACCORDING TO PRODUCT',
+              is3D: true,
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('piechart_3d3'));
+            chart.draw(data, options);
+          }
+        </script>
+        <div id="piechart_3d3" style="width: 900px; height: 500px;"></div>
+      </div>
+    </div>
+  </div>
+
+
+
+</div>
+
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#products_list").removeClass('hidden');
+  });
+</script>

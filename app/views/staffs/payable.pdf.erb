@@ -1,0 +1,60 @@
+<%@monthly_wage=0%>
+<%@advance=0%>
+<%@short_pay=0%>
+<%@balance=0%>
+<% @date = Date.today  %>
+<% @time = DateTime.now %>
+<% @time = Time.zone.now %>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Payable staff details</h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<p style="text-align: center;margin: 0;">Report by: <%=current_user.name%></p>
+<div >
+  <table>
+    <thead>
+      <tr class="lite-gray">
+        <th>Status</th>
+        <th>Code</th>
+        <th>Name</th>
+        <th>Father</th>
+        <th>Date of joining</th>
+        <th>Monthly/Wage</th>
+        <th>Advance</th>
+        <th>Department/Raw</th>
+        <th>Short-Pay</th>
+        <th>Balance</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @staffs.each do |staff| %>
+      <% if  staff.balance > 0 %>
+        <tr>
+          <td><%= staff.staff_type %></td>
+          <td><%= staff.code %></td>
+          <td><%= staff.name %></td>
+          <td><%= staff.father %></td>
+          <td><%= staff.date_of_joining.strftime("%A,  %d-%b-%y") if staff.date_of_joining%></td>
+          <td><%= staff.staff_salary_or_wage.to_f.round(2)%><% @monthly_wage += staff.staff_salary_or_wage.to_f.round(2) %></td>
+          <td><%= staff.advance_amount.to_f.round(2) %><% @advance += staff.advance_amount.to_f.round(2) %></td>
+          <td><%= staff.department.present? ? staff.department.title : ""%>:<%= staff.staff_raw_products.present? ? staff.staff_raw_products_titles : ""%></td>
+          <td><%= staff.wage_debit.to_f.round(2) %><% @short_pay += staff.wage_debit.to_f.round(2) %></td>
+          <td><%= staff.balance.to_f.round(2) %><% @balance += staff.balance.to_f.round(2) %></td>
+        </tr>
+        <%end%>
+      <% end %>
+      <tr class="lite-gray">
+        <td><h4>Total<h4></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><h4><%= @monthly_wage.round(2) %><h4></td>
+        <td><h4><%= @advance.round(2) %><h4></td>
+        <td></td>
+        <td><h4><%= @short_pay.round(2) %><h4></td>
+        <td><h4><%= @balance.round(2) %><h4></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

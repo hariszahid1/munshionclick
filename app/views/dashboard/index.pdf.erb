@@ -1,0 +1,68 @@
+<% @date = Date.today  %>
+<% @time = DateTime.now %>
+<% @total_cost_price=0 %>
+<% @total_sale_price=0 %>
+<% @total_profite=0 %>
+<% @time = Time.zone.now %>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Total Stock => <%=@products_sale_total.to_f.round(2)%></h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<p style="text-align: center;margin: 0;">Report by: <%=current_user.name%></p>
+<div>
+  <table data-toggle="table" data-search="true">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Min Limits</th>
+        <th>Stock</th>
+        <th>Cost Price</th>
+        <th>Sale Price</th>
+        <th>Estimated Profit</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @products.each do |product| %>
+        <%min=product.minimum.present? ? product.minimum : 0 %>
+        <%stock=product.stock.present? ? product.stock : 0 %>
+        <%cost=product.cost.present? ? product.cost : 0 %>
+        <%sale=product.sale.present? ? product.sale : 0 %>
+        <%if min > stock%>
+          <tr class='table-danger'>
+            <td style="border-bottom: 1px solid #000; font-weight: bold;"><%= product.title %></td>
+            <td style="border-bottom: 1px solid #000; font-weight: bold;"><%= product.minimum %></td>
+            <%if current_user.superAdmin.company_type=="batamega"%>
+              <td style="border-bottom: 1px solid #000; font-weight: bold;"><%= stock %> || <%= product.size_1 %>,<%= product.size_2 %>,<%= product.size_3 %>,<%= product.size_4 %>,<%= product.size_5 %>,<%= product.size_6 %>,<%= product.size_7 %>,<%= product.size_8 %>,<%= product.size_9 %>,<%= product.size_10 %>,<%= product.size_11 %>,<%= product.size_12 %>,<%= product.size_13 %></td>
+            <%elsif%>
+              <td style="border-bottom: 1px solid #000; font-weight: bold;"><%= stock %></td>
+            <%end%>
+            <td style="border-bottom: 1px solid #000; font-weight: bold;"><%= cost %> | <%= (cost*stock).round(2)  %></td>
+            <td style="border-bottom: 1px solid #000; font-weight: bold;"><%= sale %> | <%= (sale*stock).round(2)  %></td>
+            <td style="border-bottom: 1px solid #000; font-weight: bold;"><%=((sale*stock)-(cost*stock)).round(2)%></td>
+          </tr>
+        <%else%>
+          <tr >
+            <td style="border-bottom: 1px solid #000; font-weight: bold;"><%= product.title %></td>
+            <td style="border-bottom: 1px solid #000; font-weight: bold;"><%= product.minimum %></td>
+            <%if current_user.superAdmin.company_type=="batamega"%>
+              <td style="border-bottom: 1px solid #000; font-weight: bold;"><%= product.stock %> || <%= product.size_1 %>,<%= product.size_2 %>,<%= product.size_3 %>,<%= product.size_4 %>,<%= product.size_5 %>,<%= product.size_6 %>,<%= product.size_7 %>,<%= product.size_8 %>,<%= product.size_9 %>,<%= product.size_10 %>,<%= product.size_11 %>,<%= product.size_12 %>,<%= product.size_13 %></td>
+            <%elsif%>
+              <td style="border-bottom: 1px solid #000; font-weight: bold;"><%= product.stock %></td>
+            <%end%>
+            <td style="border-bottom: 1px solid #000; font-weight: bold;"><%= cost %> | <%= (cost*stock).round(2)  %><% @total_cost_price+=(cost*stock).round(2)  %></td>
+            <td style="border-bottom: 1px solid #000; font-weight: bold;"><%= sale %> | <%= (sale*stock).round(2)  %><% @total_sale_price+=(sale*stock).round(2)  %></td>
+            <td style="border-bottom: 1px solid #000; font-weight: bold;"><%=((sale*stock)-(cost*stock)).round(2)%><%@total_profite+=((sale*stock)-(cost*stock)).round(2)%></td>
+          </tr>
+        <%end%>
+      <% end %>
+      <tr>
+        <td style="border-bottom: 1px solid #000; font-weight: bold;">Total</td>
+        <td style="border-bottom: 1px solid #000; font-weight: bold;"></td>
+        <td style="border-bottom: 1px solid #000; font-weight: bold;"><%=@total_stock.to_f.round(2)%></td>
+        <td style="border-bottom: 1px solid #000; font-weight: bold;"><%=@total_cost_price.to_f.round(2)%></td>
+        <td style="border-bottom: 1px solid #000; font-weight: bold;"><%=@total_sale_price.to_f.round(2)%></td>
+        <td style="border-bottom: 1px solid #000; font-weight: bold;"><%=@total_profite.to_f.round(2)%></td>
+      </tr>
+
+    </tbody>
+  </table>

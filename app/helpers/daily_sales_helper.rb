@@ -1,0 +1,2 @@
+module DailySalesHelper
+end

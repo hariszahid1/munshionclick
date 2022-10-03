@@ -1,0 +1,53 @@
+<%= bootstrap_form_for(compaign) do |f| %>
+  <% if compaign.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(compaign.errors.count, "error") %> prohibited this compaign from being saved:</h2>
+      <ul>
+      <% compaign.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <table>
+    <thead>
+      <th>Title</th>
+      <th>Comment</th>
+      <th>Created At</th>
+    </thead>
+    <tbody>
+      <tr>
+        <td><%= f.text_area :title, placeholder:"Enter Title" , hide_label: true ,class: 'urdu-font' %></td>
+        <td><%= f.text_area :comment, placeholder:"Enter Comment" , hide_label: true ,class: 'urdu-font' %></td>
+        <td> <%= f.date_select :created_at,{}, hide_label: true,class: "form-control" %> </td>
+      </tr>
+      <tr>
+    </tbody>
+  </table>
+  <%= f.fields_for :compaign_entries do |compaign_entry| %>
+    <%= render 'compaign_entries_fields_new', f: compaign_entry %>
+  <% end %>
+  <div id="new_links">
+    <div class="links">
+      <%= link_to_add_association 'Add More', f, :compaign_entries, partial: 'compaign_entries_fields_new', class: "btn btn-info" %>
+    </div>
+  </div>
+  <br>
+  <div class="clearfix"></div>
+  <hr>
+  <div class="col-lg-12 row ">
+    <div class="col-lg-6 form-group float-left">
+      <%= link_to compaigns_path do %>
+      <i class="fa fa-arrow-left " aria-hidden="true"></i>
+      <% end %>
+    </div>
+    <div class="col-lg-6 form-group float-left">
+      <div class="form-group float-right">
+        <%=f.object.id.nil? ? (f.submit class: "btn btn-success", style: "float: left")  :  (f.submit class: "btn btn-warning", style: "float: left")%>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<%= javascript_include_tag 'hover', 'data-turbolinks-track': 'reload' %>

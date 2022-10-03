@@ -1,0 +1,64 @@
+
+
+  <div class="card shadow mb-4">
+      <!-- Card Header - Accordion -->
+      <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+        <h6 class="m-0 font-weight-bold text-primary"><h1>Raw product Details</h1></h6>
+      </a>
+      <!-- Card Content - Collapse -->
+      <div class="collapse show" id="collapseCardExample" style="">
+        <div class="card-body">
+
+  <div class="row">
+            <div class="col-lg-6 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+              <h3>Pather from:<h5> <%= @gate.pather_from %></h5></h3>
+            </div>
+            <div class="col-lg-6 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+              <h3>Pather to:<h5><%= @gate.pather_to %></h5></h3>
+            </div>
+            <div class="col-lg-6 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+              <h3>Kharkar from:<h5><%= @gate.kharkar_from %></h5> </h3>
+            </div>
+            <div class="col-lg-6 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+              <h3>Kharkar to:<h5><%= @gate.kharkar_to %></h5></h3>
+            </div>
+  </div>
+
+  <div class="row">
+            <div class="col-lg-6 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+              <h3>Bhari from: <h5><%= @gate.bhari_from rescue nil %></h5></h3>
+            </div>
+            <div class="col-lg-6 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+              <h3>Bhari to:<h5><%= @gate.bhari_to %></h5></h3>
+            </div>
+            <div class="col-lg-6 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+              <h3>Jalai from:<h5><%= @gate.jalai_from %></h5> </h3>
+            </div>
+            <div class="col-lg-6 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+              <h3>Jalai to:<h5><%= @gate.jalai_to %></h5></h3>
+            </div>
+  </div>
+
+  <div class="row">
+            <div class="col-lg-6 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+              <h3>Nakasi from:<h5><%= @raw_product.nakasi_from rescue nil%></h5></h3>
+            </div>
+            <div class="col-lg-6 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+              <h3>Nakasi to:<h5><%= @raw_product.nakasi_to  rescue nil%></h5></h3>
+            </div>
+
+
+  </div>
+
+
+          <div class="row">
+            <div class="col-lg-1 float-left">
+              <%= link_to gates_path do %>
+              <i class="fa fa-arrow-left " aria-hidden="true"></i>
+              <% end %>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>POS</title>
+    <%= wicked_pdf_stylesheet_link_tag "pdf" -%>
+</head>
+
+<%@total_pro=0%>
+<%@total_discont=0%>
+<%@total=0%>
+<%if @pos_setting.multi_language.present?%>
+<style media="screen">
+  .urdu-font {
+    font-family: 'Jameel Noori Nastaleeq';
+    font-style: normal;
+    font-weight: 300;
+    font-weight: bold;
+    src: url("<%= ApplicationHelper.asset_data_base64('JameelNooriNastaleeqKasheeda.ttf') %>") format('truetype');
+    font-weight: bold;
+    font-size:18px;
+  }
+</style>
+<%end%>
+<body class="bond_pos_pdf">
+  <% @time = Time.zone.now %>
+  <% if @pos_setting.header.present? %>
+    <div class="header" style="height: <%=@pos_setting.header_hieght%>px; <%=@pos_setting.header_style%> ">
+      <% if @pos_setting.present? && @pos_setting.persisted? && @pos_setting.logo_images.present? && @pos_setting.header_logo_placement != 'logo_disable_text_center'%>
+        <div class="<%= @pos_setting.header_logo_placement%>">
+          <%@pos_setting.logo_images.each do |image| %>
+            <%= image_tag image.service_url, width: @pos_setting.logo_width, hight: @pos_setting.logo_hieght%>
+          <%end%>
+          </div>
+      <% end %>
+      <div class="<%= @pos_setting.header_logo_placement%>_text">
+        <h1 style="padding-top: <%=@pos_setting.title_padding%>px; <%=@pos_setting.title_style%>" > <%=admin_name_on_nav if admin_name_on_nav.present?%></h1>
+      </div>
+    </div>
+  <% end %>
+  <p style="border-bottom: double 4px;  margin: 0;"></p>
+  <h1 style="text-align: center; margin: 0;">Sale Detail</h1>
+  <p style="border-bottom: double 4px;  margin: 0;"></p>
+  <div>
+    <table>
+      <th></th>
+      <th></th>
+      <tr>
+        <td>Printing Date Time: <span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%> <%=@time.strftime("at %I:%M%p")%></span> </td>
+        <td>Current User: <span><%=@current_user.name%> </span></td>
+      </tr>
+    </table>
+  </div>
+  <div>
+
+    <table data-toggle="table" data-search="true">
+      <thead>
+
+        <tr style="font-size:20px;,font-family: Arial Black, Gadget, sans-serif">
+          <th>ID</th>
+          <th>Customers</th>
+          <th>Items</th>
+          <th>Total Bill</th>
+          <th>Paid</th>
+          <th>Discount</th>
+          <%if @pos_type_batha%>
+            <th>Vehicle</th>
+          <%end%>
+          <th>Time</th>
+          <th>Comment</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @purchase_sale_details_pdf.each do |purchase_sale_detail| %>
+          <tr style="font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+            <td><%= purchase_sale_detail.voucher_id.to_s+'#'+purchase_sale_detail.id.to_s %></td>
+            <td class="urdu-font"><b><%= purchase_sale_detail.sys_user.name rescue '' %></b></td>
+            <td><%= purchase_sale_detail.purchase_sale_items.count rescue 0 %></td>
+            <td><%= purchase_sale_detail.total_bill.to_f.round(2) rescue 0 %><%#@total_bil += purchase_sale_detail.total_bill.to_f.round(0) %></td>
+            <td><%= purchase_sale_detail.amount.to_f.round(2) rescue 0%><%#@total_am += purchase_sale_detail.amount.to_f.round(0) %></td>
+            <td><%= purchase_sale_detail.discount_price.to_f.round(2) rescue 0%></td>
+            <%if @pos_type_batha%>
+              <td><b><%= purchase_sale_detail.staff_full_name %></b></td>
+            <%end%>
+            <td>
+              <%if purchase_sale_detail.created_at.strftime("%d%b%y")!=purchase_sale_detail.updated_at.strftime("%d%b%y")%>
+                <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d %b %y at %I:%M %p") : '' %>
+                <br>
+                <%= purchase_sale_detail.updated_at.present? ? purchase_sale_detail.updated_at.strftime("%d %b %y at %H:%M %p") : '' %>
+              <%else%>
+                <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d %b %y at %I:%M %p") : '' %>
+              <%end%>
+            </td>
+            <td><%= purchase_sale_detail.status %> | <%= purchase_sale_detail.comment %></td>
+
+
+          </tr>
+          <%if purchase_sale_detail.purchase_sale_items_names_and_quantity!=0%>
+            <%purchase_sale_detail.purchase_sale_items_names_and_quantity.each do |name_quantity|%>
+              <tr style="font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+                <td></td>
+                <td></td>
+                <td><%=name_quantity.first%></td>
+                <td><b>Qty</b>: <%=name_quantity.second%><% @total_pro += name_quantity.second %></td>
+                <td><%=name_quantity.fifth.strftime("%d%b%y") if name_quantity.fifth.present?%></td>
+                <td><b><%=name_quantity.third%></b> > <%=name_quantity.fourth%><% @total_discont += name_quantity.fourth if name_quantity.fourth.present? %></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            <%end%>
+          <%end%>
+        <% end %>
+        <tr class="lite-gray" style="font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+          <td class="table-active"><b>Total</b><td>
+            <td><b>Qty</b></td>
+            <td><b>Total Bill</b></td>
+            <td><b>Paid</b></td>
+            <td><b>Discount</b></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr class="lite-gray" style="font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+          <td class="table-active"><b></b><td>
+            <td><b><%=@total_pro.to_f.round(2)%></b></td>
+            <td><b><%=@total_bil.to_f.round(2)%></b></td>
+            <td><b><%=@total_am.to_f.round(2)%></b></td>
+            <td><b><%=@total_dis.to_f.round(2)%></b></td>
+            <td><b></b></td>
+            <td><b></b></td>
+            <td><b></b></td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="border-bottom: double 4px;  margin: 0;"></p>
+    <h1 style="text-align: center; margin: 0;">Product Detail </h1>
+    <p style="border-bottom: double 4px;  margin: 0;"></p>
+    <table>
+      <tbody>
+        <% @products_group.each_with_index do |item,i|%>
+          <tr class="lite-gray" style="font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+            <td style="border-bottom: 1px solid #000; "><b><%=item.first %></b></td>
+            <td style="border-bottom: 1px solid #000; "><%=item.last.to_f.round(2) %><%@total += item.last.to_f.round(2) %></td>
+          </tr>
+        <% end %>
+        <tr class="lite-gray" style="font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+          <td><b>Total</b></td>
+          <td><b><%=@products_group_count.to_f.round(2)%></b></td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+
+    <% if @pos_setting.footer.present? %>
+     <div class="<%= @pos_setting&.footer_address_placement%> footer footer1">
+      <p style="border-bottom: dotted 3px;  margin: 0;"></p>
+       <p style="margin: 0;"><span><%=@pos_setting.address if @pos_setting.present?%></span></p>
+       <p style="margin: 0;"><span><%=@pos_setting.phone if @pos_setting.present?%></span></p>
+      <p style="border-bottom: dotted 3px;  margin: 0;"></p>
+     </div>
+     <% end %>
+   </body>
+</html>

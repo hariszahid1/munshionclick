@@ -1,0 +1,318 @@
+
+
+<div class="hidden" id="payment_list">
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <h1>Payments</h1>
+      <% if can?(:delete, :all) %>
+        <%= link_to new_payment_path, class: "btn btn-success" do %>
+         <i class="fa fa-plus" aria-hidden="true"></i>
+          Jama/Credit
+        <% end %>
+        <%= link_to new_payment_path(jama: true), class: "btn btn-success" do %>
+         <i class="fa fa-plus" aria-hidden="true"></i>
+          Benam/Debit
+        <% end %>
+      <% end %>
+      <%= link_to transfer_payments_path, class: "btn btn-success" do %>
+        <i class="fa fa-credit-card" aria-hidden="true"></i>
+        Payment Transfer
+      <% end %>
+      <%= link_to accounts_url, class: "btn btn-primary" do %>
+        <i class="fa fa-address-book" aria-hidden="true"></i>
+        Account
+        <% end %>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <%= search_form_for @q, url: payments_path, class: "admin-controls", method: "get" do |f| %>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.select :account_id_in, options_from_collection_for_select(@accounts, "id", ->(st){"#{st.title} \u{27F6} #{st.bank_name}"},f.object.account_id_in),{:include_blank => "Select the Account Title"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Account Title"} }%>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.search_field :id_eq, class: 'form-control input-sm ', placeholder: "Enter Id" %>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.search_field :created_at_gteq,value: @start_date, class: 'form-control input-sm datepicker', 'datepicker' => true,placeholder: "YYYY-MM-DD" %>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.search_field :created_at_lteq,value: @end_date, class: 'form-control input-sm datepicker', 'datepicker' => true ,placeholder: "YYYY-MM-DD"%>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px;"><i class="fa fa-search"></i></button>
+        </div>
+        <div class="col-lg-2 form-group float-right">
+          <button class="form-control btn btn-secondary" name="submit_pdf" type="submit" value="Payment History PDF A4" formtarget="_blank">Desc <i class="fa fa-file-pdf"></i></button>
+        </div>
+        <div class="col-lg-2 form-group float-right">
+          <button class="form-control btn btn-secondary" name="submit_pdf_asc" type="submit" value="Payment History PDF A4" formtarget="_blank">Asc <i class="fa fa-file-pdf"></i></button>
+        </div>
+        <div class="col-lg-2 form-group float-right">
+          <button class="form-control btn btn-secondary" name="1_submit_pdf" type="submit" value="Payment History PDF A4" formtarget="_blank">1-Desc <i class="fa fa-file-pdf"></i></button>
+        </div>
+        <div class="col-lg-2 form-group float-right">
+          <button class="form-control btn btn-secondary" name="2_submit_pdf_asc" type="submit" value="Payment History PDF A4" formtarget="_blank">1-Asc <i class="fa fa-file-pdf"></i></button>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-info" name="asc_email" type="submit" value="Email"><i class="fas fa-envelope"></i> Asc email</button>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-info" name="desc_email" type="submit" value="Email"><i class="fas fa-envelope"></i> Desc email</button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <table data-toggle="table" data-search="true">
+    <thead>
+      <tr>
+        <th><%= sort_link(@q, :id, 'ID') %></th>
+        <th><%= sort_link(@q, :account, 'Account') %></th>
+        <th><%= sort_link(@q, :debit, 'Debit/Benam') %></th>
+        <th><%= sort_link(@q, :credit, 'Credit/Jama') %></th>
+        <th><%= sort_link(@q, :amount, 'Balance') %></th>
+        <th>Jama/benam</th>
+        <th><%= sort_link(@q, :paymentable, 'Paymentable') %></th>
+        <th class ="urdu-font"><%= sort_link(@q, :comment, 'Comment') %></th>
+        <th><%= sort_link(@q, :created_at, 'Date') %></th>
+        <th class="border_none">Action</th>
+    </tr>
+    </thead>
+
+    <tbody>
+      <% @payments.each do |payment| %>
+        <tr>
+          <td><%= payment.id %></td>
+          <td class="urdu-font">
+            <%= link_to accounts_path('q[id_eq]': payment.account) do %>
+              <%= payment.account.title if payment.account.present?%>
+            <%end %>
+          </td>
+          <td><%= number_with_delimiter(payment.debit) %></td>
+          <td><%= number_with_delimiter(payment.credit) %></td>
+          <td><%= number_with_delimiter(payment.amount) %></td>
+          <td>
+                <%if payment.amount.to_f < 0  %>
+                     <b style="font-size:20px;color:blue;">Jama</b>
+                <%elsif  payment.amount.to_f > 0  %>
+                <b style="font-size:20px;color:red;">Benam</b>
+                <%else%>
+                <b style="font-size:20px;color: #6cec53 ;">Nill</b>
+                <%end%>
+          </td>
+          <td>
+            <%= link_to 'Sale',edit_purchase_sale_detail_path(payment.paymentable,product:true) if payment.paymentable.present? and payment.paymentable_type=="PurchaseSaleDetail" and payment.paymentable.transaction_type=="Sale"%>
+            <%= link_to 'Purchase',edit_purchase_sale_detail_path(payment.paymentable,product:true) if payment.paymentable.present? and payment.paymentable_type=="PurchaseSaleDetail" and payment.paymentable.transaction_type=="Purchase"%>
+            <%= link_to 'Sale Order',edit_order_path(payment.paymentable,product:true) if payment.paymentable.present? and payment.paymentable_type=="Order" and payment.paymentable.transaction_type=="Sale"%>
+            <%= link_to 'Purchase Order',edit_order_path(payment.paymentable,product:true) if payment.paymentable.present? and payment.paymentable_type=="Order" and payment.paymentable.transaction_type=="Purchase"%>
+            <%= link_to 'Expense',edit_expense_path(payment.paymentable.expense.id) if payment.paymentable.present? and payment.paymentable_type=="ExpenseEntry" and payment.paymentable.expense.present?%>
+            <%= link_to 'P-Expense',edit_purchase_sale_detail_path(payment.paymentable.expenseable) if payment.paymentable.present? and payment.paymentable_type=="ExpenseEntry" and payment.paymentable.expense.blank?%>
+            <%= link_to 'Salary',edit_salary_path(payment.paymentable) if payment.paymentable.present? and payment.paymentable_type=="Salary" and payment.paymentable.paid_salary.present?%>
+            <%= link_to 'Wage Salary',edit_advance_salary_path(payment.paymentable) if payment.paymentable.present? and payment.paymentable_type=="Salary" and payment.paymentable.advance.present?%>
+            <%= link_to 'Investment',edit_investment_path(payment.paymentable) if payment.paymentable.present? and payment.paymentable_type=="Investment"%>
+            <%= link_to 'Ledger Book',edit_ledger_book_path(payment.paymentable) if payment.paymentable.present? and payment.paymentable_type=="LedgerBook"%>
+            <%= link_to 'Staff Credit',edit_salary_detail_path(payment.paymentable) if payment.paymentable.present? and payment.paymentable_type=="SalaryDetail"%>
+          </td>
+          <td>
+            <%= payment.comment %>
+            <% if payment.paymentable.present? and payment.paymentable_type=="Order" %>
+              <%=payment.paymentable.comment%>
+              <br>
+              <%if payment.paymentable.order_items_names_and_quantity!=0%>
+                <%payment.paymentable.order_items_names_and_quantity.each do |name_quantity|%>
+                <p>
+                  <span><%=name_quantity.first%></span>
+                  Qty: <span><%=name_quantity.second%></span>
+                  Rate:<span><%=name_quantity.third%></span>
+                  Total:<span><%=name_quantity.fourth%></span>
+                </p>
+                <%end%>
+                <p>
+                  Total: <span><%=payment.paymentable.total_bill%></span>
+                </p>
+              <%end%>
+            <%elsif payment.paymentable.present? and payment.paymentable_type=="PurchaseSaleDetail"%>
+              <%=payment.paymentable.comment%>
+              <br>
+              <%if payment.paymentable.purchase_sale_items_names_and_quantity!=0%>
+                <% payment.paymentable.purchase_sale_items_names_and_quantity.each do |name_quantity|%>
+                  <p>
+                    <span><%=name_quantity.first%></span>
+                    Qty:  <span><%=name_quantity.second%></span>
+                  </p>
+                <%end%>
+              <%end%>
+              <p>
+                Total: <span><%=payment.paymentable.total_bill%></span>
+              </p>
+            <%elsif payment.paymentable.present? and payment.paymentable_type=="ExpenseEntry"%>
+              <%=payment.paymentable.comment%>
+              <%=payment.paymentable.expense.comment if payment.paymentable.expense.present?%>
+              <br>
+              <p>
+                <span>
+                  <%if payment.paymentable.expense_type.present?%>
+                    <%=payment.paymentable.expense_type.title%>
+                  <%end%>
+                </span>
+              </p>
+            <%elsif payment.paymentable.present? and payment.paymentable_type=="Salary"%>
+              <%=payment.paymentable.comment%>
+              <br>
+              <p>
+                <span>
+                  <%if payment.paymentable.staff.present?%>
+                    <%=payment.paymentable.staff.full_name%>
+                  <%end%>
+                </span>
+              </p>
+            <%elsif payment.paymentable.present? and payment.paymentable_type=="LedgerBook"%>
+              <%=payment.paymentable.comment%>
+              <br>
+              <p>
+                <span>
+                  <%if payment.paymentable.sys_user.present?%>
+                    <%=payment.paymentable.sys_user.name%>
+                  <%end%>
+                </span>
+              </p>
+            <%end%>
+          </td>
+
+          <td>
+            <%if payment.created_at.strftime("%d%b%y")!=payment.updated_at.strftime("%d%b%y")%>
+              <%= payment.created_at.present? ? payment.created_at.strftime("%d%b%y at %H:%M%p") : '' %> | <%= payment.updated_at.present? ? payment.updated_at.strftime("%d%b%y at %H:%M%p") : '' %>
+            <%else%>
+              <%= payment.created_at.present? ? payment.created_at.strftime("%d%b%y at %H:%M%p") : '' %>
+            <%end%>
+          </td>
+
+          <td>
+            <% if can?(:update, :all) %>
+               <% if payment.paymentable.present? and payment.paymentable_type=="PurchaseSaleDetail" and payment.paymentable.transaction_type=="Sale"%>
+                  <%= link_to edit_purchase_sale_detail_path(payment.paymentable,product:true) do %>
+                    <i class="fa fa-edit " aria-hidden="true"></i> |
+                  <% end %>
+                <% elsif payment.paymentable.present? and payment.paymentable_type=="PurchaseSaleDetail" and payment.paymentable.transaction_type=="Purchase"%>
+                  <%= link_to edit_purchase_sale_detail_path(payment.paymentable,product:true) do %>
+                     <i class="fa fa-edit " aria-hidden="true"></i> |
+                  <% end %>
+                <% elsif payment.paymentable.present? and payment.paymentable_type=="Order" and payment.paymentable.transaction_type=="Sale"%>
+                  <%= link_to edit_order_path(payment.paymentable,product:true) do %>
+                     <i class="fa fa-edit " aria-hidden="true"></i> |
+                  <% end %>
+                <% elsif payment.paymentable.present? and payment.paymentable_type=="Order" and payment.paymentable.transaction_type=="Purchase"%>
+                  <%= link_to edit_order_path(payment.paymentable,product:true) do %>
+                    <i class="fa fa-edit " aria-hidden="true"></i> |
+                  <% end %>
+                <% elsif payment.paymentable.present? and payment.paymentable_type=="ExpenseEntry" and payment.paymentable.expense.present?%>
+                  <%= link_to edit_expense_path(payment.paymentable.expense.id) do %>
+                    <i class="fa fa-edit " aria-hidden="true"></i> |
+                  <% end %>
+                <% elsif payment.paymentable.present? and payment.paymentable_type=="ExpenseEntry" and payment.paymentable.expense.blank?%>
+                  <%= link_to edit_expense_entry_path(payment.paymentable.expenseable) do %>
+                    <i class="fa fa-edit " aria-hidden="true"></i> |
+                  <% end %>
+                <% elsif payment.paymentable.present? and payment.paymentable_type=="Salary" and payment.paymentable.paid_salary.present?%>
+                  <%= link_to edit_salary_path(payment.paymentable) do %>
+                    <i class="fa fa-edit " aria-hidden="true"></i> |
+                  <% end %>
+                <% elsif payment.paymentable.present? and payment.paymentable_type=="Salary" and payment.paymentable.advance.present?%>
+                  <%= link_to edit_advance_salary_path(payment.paymentable) do %>
+                    <i class="fa fa-edit " aria-hidden="true"></i> |
+                  <% end %>
+                <% elsif payment.paymentable.present? and payment.paymentable_type=="Investment"%>
+                  <%= link_to edit_investment_path(payment.paymentable) do %>
+                    <i class="fa fa-edit " aria-hidden="true"></i> |
+                  <% end %>
+                <% elsif payment.paymentable.present? and payment.paymentable_type=="LedgerBook"%>
+                  <%= link_to edit_ledger_book_path(payment.paymentable) do %>
+                    <i class="fa fa-edit " aria-hidden="true"></i> |
+                  <% end %>
+                <% elsif payment.paymentable.present? and payment.paymentable_type=="SalaryDetail"%>
+                  <%= link_to edit_salary_detail_path(payment.paymentable) do %>
+                    <i class="fa fa-edit " aria-hidden="true"></i> |
+                  <% end %>
+                <% else %>
+                 <%= link_to edit_payment_path(payment,edit: true) do %>
+                    <i class="fa fa-edit " aria-hidden="true"></i> |
+                  <%end %>
+                <% end %>
+
+
+            <% end %>
+            <% if can?(:delete, :all) %>
+              <% if payment.paymentable.present? and payment.paymentable_type=="PurchaseSaleDetail"  %>
+                <%= link_to purchase_sale_detail_path(payment.paymentable), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+                  <i class="fa fa-trash" aria-hidden="true"></i>
+                <% end %>
+              <%elsif payment.paymentable.present? and payment.paymentable_type=="Order"  %>
+                <%= link_to order_path(payment.paymentable), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+                  <i class="fa fa-trash" aria-hidden="true"></i>
+                <% end %>
+              <%elsif payment.paymentable.present? and payment.paymentable_type=="ExpenseEntry"%>
+                <%= link_to expense_entry_path(payment.paymentable), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+                  <i class="fa fa-trash" aria-hidden="true"></i>
+                <% end %>
+              <%elsif payment.paymentable.present? and payment.paymentable_type=="Salary"%>
+                <%= link_to salary_path(payment.paymentable), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+                  <i class="fa fa-trash" aria-hidden="true"></i>
+                <% end %>
+              <%elsif payment.paymentable.present? and payment.paymentable_type=="LedgerBook"%>
+                <%= link_to ledger_book_path(payment.paymentable), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+                  <i class="fa fa-trash" aria-hidden="true"></i>
+                <% end %>
+              <%else%>
+                <%= link_to payment, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+                <i class="fa fa-trash " aria-hidden="true"></i>
+              <%end%>
+              <%end %>
+
+            <% end %>
+            <% if can?(:view, :all) %>
+              <%= link_to payment do %>
+                <i class="fa fa-eye " aria-hidden="true"></i>
+              <%end %>
+            <%end%>
+          </td>
+        </tr>
+      <% end %>
+      <tr>
+        <td><h5>Total</h5></td>
+        <td></td>
+        <td><h5><%=number_with_delimiter(@t_dabit.first.sum_debit)%></h5></td>
+        <td><h5><%=number_with_delimiter(@t_dabit.first.sum_credit) %></h5></td>
+        <td><h5><%=number_with_delimiter(@t_dabit.first.mean_sum)%> </h5></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="clearfix"></div>
+<div class="row">
+  <div class="col-lg-4 col-sm-4">
+    <%= page_entries_info @payments %>
+  </div>
+  <div class="col-lg-8 col-sm-8 pagination-left">
+    <%= paginate @payments %>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#payment_list").removeClass('hidden');
+    FontAwesome.dom.i2svg();
+  });
+  $(document).ready(function() {
+    setTimeout(function(){
+      $(".chosen-select").chosen({
+  allow_single_deselect: true,
+  width: '100%'
+});
+    }, 50);
+  });
+</script>
