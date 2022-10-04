@@ -1,5 +1,5 @@
 class SysUsersController < ApplicationController
-  include CsvMethods
+  include SysUsersCsvMethods
 
 
   before_action :set_sys_user, only: [:show, :edit, :update, :destroy]
