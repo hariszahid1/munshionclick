@@ -36,7 +36,6 @@ class Payment < ApplicationRecord
       # elsif self.account_id? and self.debit.present?
       #   total_balance = already_balance+self.debit.to_i
       # end
-      # byebug
       total_balance = account.payments.sum(:credit)-account.payments.sum(:debit)
       account.update(amount: total_balance)
     end

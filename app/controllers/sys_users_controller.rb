@@ -1,4 +1,5 @@
 class SysUsersController < ApplicationController
+  include CsvMethods
 
 
   before_action :set_sys_user, only: [:show, :edit, :update, :destroy]
@@ -6,7 +7,10 @@ class SysUsersController < ApplicationController
   # GET /sys_users
   # GET /sys_users.json
   def index
-      @q = SysUser.ransack(params[:q])
+		
+    
+		
+		@q = SysUser.ransack(params[:q])
       if @q.result.count > 0
         @q.sorts = 'name asc' if @q.sorts.empty?
       end
@@ -23,7 +27,6 @@ class SysUsersController < ApplicationController
         @credit_limit = params[:q][:credit_limit]
         @opening_balance = params[:q][:opening_balance]
       end
-
       @sys_users = @q.result.page(params[:page])
       @sys_user_balance = @q.result.sum(:balance).to_f.round(2)
       @all_user =SysUser.all
@@ -52,6 +55,15 @@ class SysUsersController < ApplicationController
           end
         end
       end
+      if params[:submit_csv_staff_with].present?
+				@sys_users=@q.result(distinct: true)
+				csv_data = user_csv
+  	    request.format = 'csv'
+    	  respond_to do |format|
+        format.html
+        format.csv { send_data csv_data, filename: "Test - #{Date.today}.csv" }
+      	end
+			end
   end
 
   # GET /sys_users/1

@@ -47,7 +47,6 @@ class OrdersController < ApplicationController
       end
     end
 
-    # byebug
     @q = Order.where(:transaction_type=>"Sale").ransack(params[:q])
     # if params[:submit_pdf_staff_without_bulk].present?
     #   respond_to do |format|
