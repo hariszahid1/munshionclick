@@ -61,7 +61,7 @@ class SysUsersController < ApplicationController
   	    request.format = 'csv'
     	  respond_to do |format|
         format.html
-        format.csv { send_data csv_data, filename: "Test - #{Date.today}.csv" }
+        format.csv { send_data csv_data, filename: "Users - #{Date.today}.csv" }
       	end
 			end
   end
