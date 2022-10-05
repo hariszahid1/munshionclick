@@ -40,19 +40,16 @@
       </div>
       <div class='row'>
         <div class='col-lg-2 form-group float-left'>
-          <%= text_field_tag 'paid_in_per_gteq', params[:paid_in_per_gteq], class: 'form-control', placeholder: 'Paid in % >=' %>
+          <%= text_field_tag 'paid_in_per', params[:paid_in_per], class: 'form-control', placeholder: 'Paid in % >=' %>
         </div>
         <div class='col-lg-2 form-group float-left'>
-          <%= text_field_tag 'paid_in_per_lteq', params[:paid_in_per_lteq], class: 'form-control', placeholder: 'Paid in % <=' %>
+          <%= text_field_tag 'commission_in_per', params[:commission_in_per], class: 'form-control', placeholder: 'Commission in % >=' %>
         </div>
         <div class='col-lg-2 form-group float-left'>
           <%= text_field_tag 'phone_number_in', params[:phone_number_in], class: 'form-control', placeholder: 'like Phone Number' %>
         </div>
         <div class='col-lg-2 form-group float-left'>
-          <%= text_field_tag 'last_payment_gteq', params[:last_payment_gteq], class: 'datepicker form-control', placeholder: 'Last Payment From' %>
-        </div>
-        <div class='col-lg-2 form-group float-left'>
-          <%= text_field_tag 'last_payment_lteq', params[:last_payment_lteq], class: 'datepicker form-control', placeholder: 'Last Payment to To' %>
+          <%= search_field_tag 'last_payment', params[:last_payment], class: 'datepicker form-control', placeholder: 'Last Payment to Today' %>
         </div>
         <div class="col-lg-2 form-group float-left">
           <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px;"><i class="fa fa-search"></i></button>
