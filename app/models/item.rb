@@ -4,7 +4,7 @@ class Item < ApplicationRecord
   enum purchase_type: %i[Local Import]
 
   enum quantity_type: %i[Piece Weight Feet dumper]
-  enum weight_type: %i[KG Grams Sqr dumpar]
+  enum weight_type: %i[KG LTR Grams Sqr dumpar]
 
   has_paper_trail ignore: [:updated_at]
 

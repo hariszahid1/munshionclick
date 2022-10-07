@@ -91,6 +91,14 @@
     <%= f.number_field :purchase_factor if pos_setting_sys_type=="P-O-S"%>
     <%= f.select :raw_product_id, options_from_collection_for_select(@raw_products, 'id', 'title', f.object.raw_product_id), {prompt: "Select the Raw Product"},{class: "form-control"}  if pos_setting_sys_type=="batha"%>
   </div>
+  <div class="col-lg-6 form-group float-left">
+    <%= f.select :quantity_type, Item.quantity_types.map { |key, value| [key.humanize, key] },{prompt: "Select the Quantity Type", class: "form-control", required: true} %>
+  </div>
+
+  <div class="col-lg-6 form-group float-left">
+    <%= f.select :weight_type, Item.weight_types.map { |key, value| [key.humanize, key] },{prompt: "Select the Weight Type",class: "form-control", required: true} %>
+  </div>
+
   <div class="clearfix">
 
 <h3 class="card-header">Stock  WARNING: </h3>

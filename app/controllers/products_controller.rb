@@ -303,6 +303,8 @@ class ProductsController < ApplicationController
         :marla,
         :square_feet,
         :profile_image,
+        :quantity_type,
+        :weight_type,
         :links_attributes => [
           :id,
           :qrcode,

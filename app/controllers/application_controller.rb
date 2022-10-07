@@ -271,7 +271,7 @@ class ApplicationController < ActionController::Base
           },
           show_as_html: html
         end
-      end
+      end		
   end
 
 

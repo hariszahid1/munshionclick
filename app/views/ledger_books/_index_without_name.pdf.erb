@@ -79,9 +79,9 @@
               Ledger Book
             <% end %>
             <%= ledger_book.comment %>
-            <% if ledger_book.purchase_sale_detail.present?%>
+            <!-- <% if ledger_book.purchase_sale_detail.present?%>
               <%ledger_book.purchase_sale_detail.comment%>
-            <%end%>
+            <%end%> -->
             <% if ledger_book.account.present?%>
             <p>
               Casher: <span><%=ledger_book.account.title%></span>

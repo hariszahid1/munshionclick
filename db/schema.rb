@@ -2,17 +2,17 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# Note that this schema.rb definition is the authoritative source for your
-# database schema. If you need to create the application database on another
-# system, you should be using db:schema:load, not running all the migrations
-# from scratch. The latter is a flawed and unsustainable approach (the more migrations
-# you'll amass, the slower it'll run and the greater likelihood for issues).
+# This file is the source Rails uses to define your schema when running `bin/rails
+# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to
+# be faster and is potentially less error prone than running all of your
+# migrations from scratch. Old migrations may fail to apply correctly if those
+# migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_31_124350) do
+ActiveRecord::Schema.define(version: 2022_08_17_103820) do
 
-  create_table "accounts", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "accounts", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.string "title"
     t.string "bank_name"
     t.string "iban_number"
@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(version: 2021_07_31_124350) do
     t.index ["user_id"], name: "index_accounts_on_user_id"
   end
 
-  create_table "active_storage_attachments", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "active_storage_attachments", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
     t.integer "record_id", null: false
@@ -34,7 +34,7 @@ ActiveRecord::Schema.define(version: 2021_07_31_124350) do
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
 
-  create_table "active_storage_blobs", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "active_storage_blobs", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.string "key", null: false
     t.string "filename", null: false
     t.string "content_type"
@@ -42,10 +42,17 @@ ActiveRecord::Schema.define(version: 2021_07_31_124350) do
     t.bigint "byte_size", null: false
     t.string "checksum", null: false
     t.datetime "created_at", null: false
+    t.string "service_name", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
-  create_table "activities", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "active_storage_variant_records", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
+    t.bigint "blob_id", null: false
+    t.string "variation_digest", null: false
+    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "activities", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.string "trackable_type"
     t.bigint "trackable_id"
     t.string "owner_type"
@@ -64,46 +71,66 @@ ActiveRecord::Schema.define(version: 2021_07_31_124350) do
     t.index ["trackable_type", "trackable_id"], name: "index_activities_on_trackable_type_and_trackable_id"
   end
 
-  create_table "cities", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "cities", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.string "title"
-    t.string "comment"
+    t.text "comment"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "contacts", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "compaign_entries", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
+    t.string "name"
+    t.string "phone"
+    t.string "mobile"
+    t.string "email"
+    t.text "comment"
+    t.bigint "compaign_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["compaign_id"], name: "index_compaign_entries_on_compaign_id"
+  end
+
+  create_table "compaigns", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
+    t.string "title"
+    t.text "comment"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "contacts", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.string "address"
     t.string "home"
     t.string "office"
     t.string "mobile"
     t.string "fax"
     t.string "email"
-    t.string "comment"
+    t.text "comment"
     t.integer "status"
     t.integer "country_id"
     t.integer "city_id"
     t.integer "sys_user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "permanent_address"
     t.index ["city_id"], name: "index_contacts_on_city_id"
     t.index ["country_id"], name: "index_contacts_on_country_id"
     t.index ["sys_user_id"], name: "index_contacts_on_sys_user_id"
   end
 
-  create_table "countries", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "countries", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.string "title"
-    t.string "comment"
+    t.text "comment"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "crontests", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "crontests", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "daily_books", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "daily_books", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.datetime "book_date"
     t.float "total_paid"
     t.float "total_remaining"
@@ -123,16 +150,16 @@ ActiveRecord::Schema.define(version: 2021_07_31_124350) do
     t.index ["department_id"], name: "index_daily_books_on_department_id"
   end
 
-  create_table "daily_sales", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "daily_sales", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.decimal "sale", precision: 10
     t.decimal "cash_out", precision: 10
     t.integer "shift"
-    t.string "comment"
+    t.text "comment"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "departments", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "departments", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.string "code"
     t.string "title"
     t.text "comment"
@@ -141,7 +168,7 @@ ActiveRecord::Schema.define(version: 2021_07_31_124350) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "expense_entries", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "expense_entries", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.float "amount"
     t.integer "expense_id"
     t.integer "expense_type_id"
@@ -158,14 +185,14 @@ ActiveRecord::Schema.define(version: 2021_07_31_124350) do
     t.index ["expenseable_type", "expenseable_id"], name: "index_expense_entries_on_expenseable_type_and_expenseable_id"
   end
 
-  create_table "expense_types", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "expense_types", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.string "title"
-    t.string "comment"
+    t.text "comment"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "expenses", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "expenses", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.float "expense"
     t.text "comment"
     t.integer "expense_type_id"
@@ -176,7 +203,7 @@ ActiveRecord::Schema.define(version: 2021_07_31_124350) do
     t.index ["expense_type_id"], name: "index_expenses_on_expense_type_id"
   end
 
-  create_table "gates", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "gates", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.datetime "pather_from"
     t.datetime "pather_to"
     t.datetime "kharkar_from"
@@ -204,7 +231,7 @@ ActiveRecord::Schema.define(version: 2021_07_31_124350) do
     t.datetime "salary_to"
   end
 
-  create_table "investments", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "investments", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "invest"
     t.text "comment"
     t.datetime "created_at", null: false
@@ -213,22 +240,22 @@ ActiveRecord::Schema.define(version: 2021_07_31_124350) do
     t.index ["account_id"], name: "index_investments_on_account_id"
   end
 
-  create_table "item_types", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "item_types", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.string "title"
     t.string "code"
-    t.string "comment"
+    t.text "comment"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "items", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "items", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "item_type_id"
     t.string "title"
     t.string "code"
     t.integer "minimum"
     t.integer "optimal"
     t.integer "maximun"
-    t.string "comment"
+    t.text "comment"
     t.integer "status"
     t.integer "purchase_type"
     t.datetime "created_at", null: false
@@ -243,24 +270,50 @@ ActiveRecord::Schema.define(version: 2021_07_31_124350) do
     t.index ["item_type_id"], name: "index_items_on_item_type_id"
   end
 
-  create_table "ledger_books", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "ledger_books", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "sys_user_id"
     t.decimal "debit", precision: 15, scale: 5
     t.decimal "credit", precision: 15, scale: 5
     t.decimal "balance", precision: 15, scale: 5
-    t.string "comment"
+    t.text "comment"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "purchase_sale_detail_id"
     t.integer "account_id"
     t.bigint "order_id"
+    t.integer "status"
+    t.text "bank_detail"
+    t.integer "payment_method"
+    t.text "payment_detail"
+    t.datetime "deleted_at"
     t.index ["account_id"], name: "index_ledger_books_on_account_id"
+    t.index ["deleted_at"], name: "index_ledger_books_on_deleted_at"
     t.index ["order_id"], name: "index_ledger_books_on_order_id"
     t.index ["purchase_sale_detail_id"], name: "index_ledger_books_on_purchase_sale_detail_id"
     t.index ["sys_user_id"], name: "index_ledger_books_on_sys_user_id"
   end
 
-  create_table "materials", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "links", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
+    t.string "linkable_type"
+    t.bigint "linkable_id"
+    t.text "qrcode"
+    t.text "brcode"
+    t.text "href"
+    t.text "title"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["linkable_type", "linkable_id"], name: "index_links_on_linkable_type_and_linkable_id"
+  end
+
+  create_table "map_columns", charset: "utf8", force: :cascade do |t|
+    t.string "table_column"
+    t.string "mapping_column"
+    t.string "table_name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "materials", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "production_id"
     t.integer "item_id"
     t.integer "product_id"
@@ -269,7 +322,7 @@ ActiveRecord::Schema.define(version: 2021_07_31_124350) do
     t.float "total_cost_price"
     t.float "total_sale_price"
     t.float "quantity"
-    t.string "comment"
+    t.text "comment"
     t.integer "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -278,7 +331,7 @@ ActiveRecord::Schema.define(version: 2021_07_31_124350) do
     t.index ["production_id"], name: "index_materials_on_production_id"
   end
 
-  create_table "order_items", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "order_items", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.bigint "order_id"
     t.bigint "product_id"
     t.bigint "item_id"
@@ -288,7 +341,7 @@ ActiveRecord::Schema.define(version: 2021_07_31_124350) do
     t.float "total_cost_price"
     t.float "total_sale_price"
     t.integer "status"
-    t.string "comment"
+    t.text "comment"
     t.integer "transaction_type"
     t.float "discount_price"
     t.integer "purchase_sale_type"
@@ -297,30 +350,41 @@ ActiveRecord::Schema.define(version: 2021_07_31_124350) do
     t.datetime "updated_at", null: false
     t.float "marla"
     t.float "square_feet"
+    t.decimal "gst", precision: 15, scale: 2
+    t.decimal "gst_amount", precision: 15, scale: 2
+    t.float "extra_expence"
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_order_items_on_deleted_at"
     t.index ["item_id"], name: "index_order_items_on_item_id"
     t.index ["order_id"], name: "index_order_items_on_order_id"
     t.index ["product_id"], name: "index_order_items_on_product_id"
   end
 
-  create_table "orders", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "orders", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.bigint "sys_user_id"
     t.integer "transaction_type"
     t.float "total_bill"
     t.float "amount"
     t.float "discount_price"
     t.integer "status"
-    t.string "comment"
+    t.text "comment"
     t.integer "voucher_id"
     t.bigint "account_id"
     t.float "carriage"
     t.float "loading"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "with_gst"
+    t.text "bank_detail"
+    t.integer "payment_method"
+    t.text "payment_detail"
+    t.datetime "deleted_at"
     t.index ["account_id"], name: "index_orders_on_account_id"
+    t.index ["deleted_at"], name: "index_orders_on_deleted_at"
     t.index ["sys_user_id"], name: "index_orders_on_sys_user_id"
   end
 
-  create_table "payments", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "payments", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.decimal "debit", precision: 15, scale: 5
     t.decimal "credit", precision: 15, scale: 5
     t.integer "account_id"
@@ -334,11 +398,13 @@ ActiveRecord::Schema.define(version: 2021_07_31_124350) do
     t.integer "confirmable"
     t.integer "confirmed_by"
     t.datetime "confirmed_at"
+    t.datetime "deleted_at"
     t.index ["account_id"], name: "index_payments_on_account_id"
+    t.index ["deleted_at"], name: "index_payments_on_deleted_at"
     t.index ["paymentable_type", "paymentable_id"], name: "index_payments_on_paymentable_type_and_paymentable_id"
   end
 
-  create_table "pos_settings", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "pos_settings", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.string "name", null: false
     t.string "display_name"
     t.string "phone"
@@ -350,25 +416,49 @@ ActiveRecord::Schema.define(version: 2021_07_31_124350) do
     t.bigint "account_id"
     t.datetime "expiry_date"
     t.text "invoice_note"
-    t.integer "purchase_sale_detail_show_margin_top", default: 0
-    t.integer "purchase_sale_detail_show_margin_right", default: 0
-    t.integer "purchase_sale_detail_show_margin_bottom", default: 0
-    t.integer "purchase_sale_detail_show_margin_left", default: 0
+    t.integer "pdf_margin_top", default: 0
+    t.integer "pdf_margin_right", default: 0
+    t.integer "pdf_margin_bottom", default: 0
+    t.integer "pdf_margin_left", default: 0
     t.string "purchase_sale_detail_show_page_size", default: "A4"
     t.integer "purchase_sale_detail_show_line_height", default: 20
+    t.boolean "header", default: true
+    t.boolean "footer", default: true
+    t.string "header_logo_placement", default: "logo_disable_text_center"
+    t.string "footer_address_placement", default: "center"
+    t.string "logo_hieght", default: "200"
+    t.string "logo_width", default: "200"
+    t.string "header_hieght", default: "50"
+    t.boolean "multi_language", default: false
     t.string "title_padding", default: "10"
+    t.text "website"
+    t.text "gst"
+    t.text "ntn"
+    t.text "title_style"
+    t.text "image_style"
+    t.text "header_style"
+    t.text "footer_style"
+    t.boolean "is_sms", default: false
+    t.boolean "is_qr", default: false
+    t.text "sms_user"
+    t.text "sms_pass"
+    t.text "sms_mask"
+    t.json "sms_templates"
+    t.string "company_mask"
+    t.json "qr_links"
+    t.json "extra_settings"
     t.index ["account_id"], name: "index_pos_settings_on_account_id"
   end
 
-  create_table "product_categories", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "product_categories", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.string "code"
     t.string "title"
-    t.string "comment"
+    t.text "comment"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "product_stock_exchanges", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "product_stock_exchanges", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.bigint "product_id"
     t.integer "product_recipient_id"
     t.integer "quantity"
@@ -377,7 +467,7 @@ ActiveRecord::Schema.define(version: 2021_07_31_124350) do
     t.index ["product_id"], name: "index_product_stock_exchanges_on_product_id"
   end
 
-  create_table "product_stocks", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "product_stocks", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.bigint "product_id"
     t.integer "in_stock"
     t.integer "out_stock"
@@ -389,27 +479,28 @@ ActiveRecord::Schema.define(version: 2021_07_31_124350) do
     t.index ["product_id"], name: "index_product_stocks_on_product_id"
   end
 
-  create_table "product_sub_categories", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "product_sub_categories", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "product_category_id"
     t.string "code"
     t.string "title"
-    t.string "comment"
+    t.text "comment"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["product_category_id"], name: "index_product_sub_categories_on_product_category_id"
   end
 
-  create_table "product_warranties", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "product_warranties", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.bigint "purchase_sale_detail_id"
     t.bigint "product_id"
     t.text "serial"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "status", default: true
     t.index ["product_id"], name: "index_product_warranties_on_product_id"
     t.index ["purchase_sale_detail_id"], name: "index_product_warranties_on_purchase_sale_detail_id"
   end
 
-  create_table "production_block_types", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "production_block_types", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.string "title"
     t.integer "quantity"
     t.integer "status"
@@ -418,7 +509,7 @@ ActiveRecord::Schema.define(version: 2021_07_31_124350) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "production_blocks", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "production_blocks", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.bigint "production_block_type_id"
     t.string "title"
     t.integer "bricks_quantity"
@@ -441,7 +532,7 @@ ActiveRecord::Schema.define(version: 2021_07_31_124350) do
     t.index ["purchase_sale_detail_id"], name: "index_production_blocks_on_purchase_sale_detail_id"
   end
 
-  create_table "production_cycles", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "production_cycles", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.date "start_date"
     t.date "end_date"
     t.integer "status"
@@ -465,19 +556,19 @@ ActiveRecord::Schema.define(version: 2021_07_31_124350) do
     t.index ["item_id"], name: "index_production_cycles_on_item_id"
   end
 
-  create_table "productions", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "productions", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "product_id"
     t.decimal "operation_cost", precision: 10
     t.decimal "cost_price", precision: 10
     t.decimal "sale_price", precision: 10
-    t.string "comment"
+    t.text "comment"
     t.integer "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["product_id"], name: "index_productions_on_product_id"
   end
 
-  create_table "products", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "products", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "item_type_id"
     t.string "code"
     t.string "title"
@@ -493,7 +584,7 @@ ActiveRecord::Schema.define(version: 2021_07_31_124350) do
     t.float "optimal"
     t.float "maximum"
     t.integer "currency"
-    t.string "comment"
+    t.text "comment"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.float "stock", default: 0.0
@@ -529,19 +620,23 @@ ActiveRecord::Schema.define(version: 2021_07_31_124350) do
     t.index ["raw_product_id"], name: "index_products_on_raw_product_id"
   end
 
-  create_table "program_status_mappings", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-  end
-
-  create_table "property_installments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "property_installments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.bigint "property_plan_id"
     t.integer "installment_no"
     t.decimal "installment_price", precision: 15, scale: 2
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "due_date"
+    t.integer "due_status"
+    t.float "high_price"
+    t.float "normal_price"
+    t.text "bank_detail"
+    t.integer "payment_method"
+    t.text "payment_detail"
     t.index ["property_plan_id"], name: "index_property_installments_on_property_plan_id"
   end
 
-  create_table "property_plans", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "property_plans", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "property_type"
     t.decimal "area_in_marla", precision: 7, scale: 2
     t.decimal "price_per_marla", precision: 15, scale: 2
@@ -555,19 +650,25 @@ ActiveRecord::Schema.define(version: 2021_07_31_124350) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "order_id"
-    t.float "last_instalment"
-    t.decimal "last_instalments", precision: 15, scale: 5, default: "0.0"
+    t.decimal "last_instalment", precision: 15, scale: 5, default: "0.0"
+    t.datetime "due_date"
+    t.integer "due_status"
+    t.text "bank_detail"
+    t.integer "payment_method"
+    t.text "payment_detail"
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_property_plans_on_deleted_at"
     t.index ["order_id"], name: "index_property_plans_on_order_id"
   end
 
-  create_table "purchase_sale_details", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "purchase_sale_details", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "sys_user_id"
     t.integer "transaction_type"
     t.float "total_bill"
     t.float "amount"
     t.float "discount_price"
     t.integer "status"
-    t.string "comment"
+    t.text "comment"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "voucher_id"
@@ -589,13 +690,19 @@ ActiveRecord::Schema.define(version: 2021_07_31_124350) do
     t.string "job_no"
     t.string "reference_no"
     t.string "company_name"
+    t.integer "with_gst"
+    t.text "bank_detail"
+    t.integer "payment_method"
+    t.text "payment_detail"
+    t.datetime "deleted_at"
     t.index ["account_id"], name: "index_purchase_sale_details_on_account_id"
+    t.index ["deleted_at"], name: "index_purchase_sale_details_on_deleted_at"
     t.index ["order_id"], name: "index_purchase_sale_details_on_order_id"
     t.index ["staff_id"], name: "index_purchase_sale_details_on_staff_id"
     t.index ["sys_user_id"], name: "index_purchase_sale_details_on_sys_user_id"
   end
 
-  create_table "purchase_sale_items", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "purchase_sale_items", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "purchase_sale_detail_id"
     t.integer "item_id"
     t.float "quantity"
@@ -604,7 +711,7 @@ ActiveRecord::Schema.define(version: 2021_07_31_124350) do
     t.float "total_cost_price"
     t.float "total_sale_price"
     t.integer "status"
-    t.string "comment"
+    t.text "comment"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "product_id"
@@ -628,12 +735,16 @@ ActiveRecord::Schema.define(version: 2021_07_31_124350) do
     t.float "remaining_quantity"
     t.float "extra_expence"
     t.float "extra_quantity"
+    t.decimal "gst", precision: 15, scale: 2
+    t.decimal "gst_amount", precision: 15, scale: 2
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_purchase_sale_items_on_deleted_at"
     t.index ["item_id"], name: "index_purchase_sale_items_on_item_id"
     t.index ["product_id"], name: "index_purchase_sale_items_on_product_id"
     t.index ["purchase_sale_detail_id"], name: "index_purchase_sale_items_on_purchase_sale_detail_id"
   end
 
-  create_table "raw_products", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "raw_products", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.string "code"
     t.string "title"
     t.float "stock"
@@ -651,7 +762,20 @@ ActiveRecord::Schema.define(version: 2021_07_31_124350) do
     t.integer "nakasi_stock", default: 0
   end
 
-  create_table "salaries", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "remarks", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.integer "user"
+    t.text "body"
+    t.text "message"
+    t.text "comment"
+    t.string "remark_type"
+    t.string "remarkable_type", null: false
+    t.bigint "remarkable_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["remarkable_type", "remarkable_id"], name: "index_remarks_on_remarkable"
+  end
+
+  create_table "salaries", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "paid_salary"
     t.integer "advance", default: 0
     t.integer "leaves_in_month", default: 0
@@ -670,7 +794,7 @@ ActiveRecord::Schema.define(version: 2021_07_31_124350) do
     t.index ["staff_id"], name: "index_salaries_on_staff_id"
   end
 
-  create_table "salary_detail_product_quantities", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "salary_detail_product_quantities", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.bigint "salary_detail_id"
     t.bigint "staff_id"
     t.bigint "product_id"
@@ -682,7 +806,7 @@ ActiveRecord::Schema.define(version: 2021_07_31_124350) do
     t.index ["staff_id"], name: "index_salary_detail_product_quantities_on_staff_id"
   end
 
-  create_table "salary_details", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "salary_details", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "staff_id"
     t.float "wage_rate"
     t.float "quantity"
@@ -724,7 +848,28 @@ ActiveRecord::Schema.define(version: 2021_07_31_124350) do
     t.index ["staff_id"], name: "index_salary_details_on_staff_id"
   end
 
-  create_table "staff_ledger_books", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "sms_logs", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
+    t.string "sms_from"
+    t.text "sms_to"
+    t.text "msg"
+    t.text "sms_by"
+    t.text "response"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "staff_deals", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
+    t.bigint "staff_id"
+    t.bigint "product_id"
+    t.decimal "cost", precision: 10
+    t.text "comment"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_staff_deals_on_product_id"
+    t.index ["staff_id"], name: "index_staff_deals_on_staff_id"
+  end
+
+  create_table "staff_ledger_books", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.bigint "staff_id"
     t.bigint "salary_id"
     t.bigint "salary_detail_id"
@@ -734,12 +879,16 @@ ActiveRecord::Schema.define(version: 2021_07_31_124350) do
     t.text "comment"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "status"
+    t.text "bank_detail"
+    t.integer "payment_method"
+    t.text "payment_detail"
     t.index ["salary_detail_id"], name: "index_staff_ledger_books_on_salary_detail_id"
     t.index ["salary_id"], name: "index_staff_ledger_books_on_salary_id"
     t.index ["staff_id"], name: "index_staff_ledger_books_on_staff_id"
   end
 
-  create_table "staff_raw_products", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "staff_raw_products", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.bigint "staff_id"
     t.bigint "raw_product_id"
     t.datetime "created_at", null: false
@@ -748,7 +897,7 @@ ActiveRecord::Schema.define(version: 2021_07_31_124350) do
     t.index ["staff_id"], name: "index_staff_raw_products_on_staff_id"
   end
 
-  create_table "staffs", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "staffs", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.string "name"
     t.string "father"
     t.string "education"
@@ -779,7 +928,7 @@ ActiveRecord::Schema.define(version: 2021_07_31_124350) do
     t.index ["department_id"], name: "index_staffs_on_department_id"
   end
 
-  create_table "sys_users", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "sys_users", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.string "code"
     t.string "cnic"
     t.string "name"
@@ -793,10 +942,17 @@ ActiveRecord::Schema.define(version: 2021_07_31_124350) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.decimal "balance", precision: 15, scale: 2
+    t.text "gst"
+    t.text "ntn"
+    t.string "father"
+    t.string "nom_name"
+    t.string "nom_father"
+    t.string "nom_cnic"
+    t.string "nom_relation"
     t.index ["user_type_id"], name: "index_sys_users_on_user_type_id"
   end
 
-  create_table "user_abilities", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "user_abilities", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "roles_mask"
     t.integer "user_id"
     t.datetime "created_at", null: false
@@ -804,19 +960,19 @@ ActiveRecord::Schema.define(version: 2021_07_31_124350) do
     t.index ["user_id"], name: "index_user_abilities_on_user_id"
   end
 
-  create_table "user_types", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "user_types", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.string "title"
     t.string "code"
     t.float "discount_by_percentage"
     t.float "discount_by_amount"
-    t.string "comment"
+    t.text "comment"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "users", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "email", default: "", null: false
-    t.string "encrypted_password", default: "", null: false
+  create_table "users", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
+    t.string "email", null: false
+    t.string "encrypted_password", null: false
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
@@ -846,18 +1002,18 @@ ActiveRecord::Schema.define(version: 2021_07_31_124350) do
     t.index ["user_name"], name: "index_users_on_user_name", unique: true
   end
 
-  create_table "versions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "versions", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.string "item_type", limit: 191, null: false
     t.bigint "item_id", null: false
     t.string "event", null: false
     t.string "whodunnit"
-    t.text "object", limit: 4294967295
+    t.text "object", size: :long
     t.datetime "created_at"
     t.text "object_changes"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
-  create_table "warranties", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "warranties", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.text "serial_number"
     t.text "comment"
     t.bigint "product_id"
