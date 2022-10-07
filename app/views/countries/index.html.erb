@@ -17,14 +17,18 @@
     <div class="col-lg-12 col-sm-12">
       <%= search_form_for @q, url: countries_path, class: "admin-controls", method: "get" do |f| %>
         <div class="col-lg-2 form-group float-left">
-          <%= f.search_field :title_cont, value: @title, placeholder: "title", title: "title" ,:class=>"form-control" %>
+          <%= f.search_field :title_cont, placeholder: "title", title: "title" ,:class=>"form-control" %>
         </div>
         <div class="col-lg-2 form-group float-left">
-          <%= f.search_field :comment_cont, value: @comment, placeholder: "city comment", title: "City comment" ,:class=>"form-control" %>
+          <%= f.search_field :comment_cont, placeholder: "country comment", title: "Country comment" ,:class=>"form-control" %>
         </div>
         <div class="col-lg-2 form-group float-left">
           <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
         </div>
+         <div class="col-lg-2 form-group float-right">
+        <button class="form-control btn btn-info" name="submit_pdf_a4" type="submit" value="PDF A4" formtarget="_blank"
+ style="width:100px"><i class="fa fa-file"></i></button>
+      </div>
       <% end %>
     </div>
   </div>

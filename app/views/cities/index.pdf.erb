@@ -1,0 +1,32 @@
+<% @date = Date.today  %>
+<% @time = DateTime.now %>
+<% @time = Time.zone.now %>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Cities List</h1>
+<h1 style="text-align: center; margin: 0;"> 
+Date: <b><span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%></span> 
+ Time: <span><%=@time.strftime("at %I:%M%p")%></span></b></h1>
+ 
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<p style="text-align: center;margin: 0;">Report by: <%=current_user.name%></p>
+<div >
+  <table>
+    <thead class="lite-gray">
+      <th>ID</th>
+      <th>Title</th>
+      <th>Comment</th>
+    </thead>
+    <tbody>
+<% @cities.each_with_index do |city, index| %>
+      <tr>
+        <th><%= index + 1 %></th>
+        <td><%= city.title %></td>
+        <td><%= city.comment %></td>
+      
+      </tr>
+    <% end %>
+
+
+    </tbody>
+  </table>
+</div>

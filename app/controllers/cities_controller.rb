@@ -2,7 +2,7 @@
 
 # Cities Controller
 class CitiesController < ApplicationController
-  before_action :set_city, only: [:show, :edit, :update, :destroy]
+  before_action :set_city, only: %i[show edit update destroy]
   require 'tempfile'
   require 'csv'
   # GET /cities
@@ -10,39 +10,45 @@ class CitiesController < ApplicationController
   def index
     @q = City.ransack(params[:q])
     return export_csv_and_pdf if params[:csv].present?
-    if @q.result.count > 0
-      @q.sorts = 'id asc' if @q.sorts.empty?
-    end
+
+    @q.sorts = 'id asc' if @q.result.count > 0 && @q.sorts.empty?
     if params[:q].present?
       @title = params[:q][:title]
       @comment = params[:q][:comment]
     end
     @cities = @q.result(distinct: true).page(params[:page])
+    
+    if params[:submit_pdf_a4].present?
+      @cities = @q.result
+      print_pdf('Cities', 'pdf.html', 'A4')
+    else
+      @cities = @q.result.page(params[:page])
+    end
   end
 
   def export_csv_and_pdf
-  @cities = @q.result
-  path = Rails.root.join('public/csv')
-  @save_path = Rails.root.join(path, 'cities.csv')
-  CSV.open(@save_path, 'wb') do |csv|
-    headers = City.column_names
-    csv << headers
-    @cities.each do |city|
-      csv << city.as_json.values_at(*headers)
+    @cities = @q.result
+    path = Rails.root.join('public/csv')
+    @save_path = Rails.root.join(path, 'cities.csv')
+    CSV.open(@save_path, 'wb') do |csv|
+      headers = City.column_names
+      csv << headers
+      @cities.each do |city|
+        csv << city.as_json.values_at(*headers)
+      end
     end
+    @pos_setting = PosSetting.first
+    subject = "#{@pos_setting.display_name} - City Detail"
+    email = current_user.superAdmin.email_to.present? ? current_user.superAdmin.email_to : 'info@munshionclick.com'
+    pdf = [[@cities, 'city']]
+    body = ''
+    ReportMailer.new_report_email(pdf, subject, email, '').deliver
+    redirect_to cities_path
   end
-  @pos_setting=PosSetting.first
-  subject = "#{@pos_setting.display_name} - City Detail"
-  email = current_user.superAdmin.email_to.present? ? current_user.superAdmin.email_to : "info@munshionclick.com"
-  pdf=[[@cities,'city']]
-  body=""
-  ReportMailer.new_report_email(pdf,subject,email,"").deliver
-  return redirect_to cities_path
-end
+
   # GET /cities/1
   # GET /cities/1.json
-  def show
-  end
+  def show; end
 
   # GET /cities/new
   def new
@@ -50,8 +56,7 @@ end
   end
 
   # GET /cities/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /cities
   # POST /cities.json
@@ -89,20 +94,21 @@ end
   def destroy
     @city.destroy
     respond_to do |format|
-     format.html { redirect_to cities_url, notice: 'City was successfully destroyed.' }
-     format.json { head :no_content }
-     format.js   { render :layout => false }
+      format.html { redirect_to cities_url, notice: 'City was successfully destroyed.' }
+      format.json { head :no_content }
+      format.js   { render layout: false }
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_city
-      @city = City.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def city_params
-      params.require(:city).permit(:title, :comment)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_city
+    @city = City.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def city_params
+    params.require(:city).permit(:title, :comment)
+  end
 end

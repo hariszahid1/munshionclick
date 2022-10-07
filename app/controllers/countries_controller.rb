@@ -5,14 +5,44 @@ class CountriesController < ApplicationController
   # GET /countries.json
   def index
     @q = Country.ransack(params[:q])
-    if @q.result.count > 0
-      @q.sorts = 'id asc' if @q.sorts.empty?
-    end
+    return export_csv_and_pdf if params[:csv].present?
+      @q.sorts = 'id asc' if @q.result.count > 0 && @q.sorts.empty?
+    
     if params[:q].present?
       @title = params[:q][:title]
       @comment = params[:q][:comment]
     end
     @countries = @q.result(distinct: true).page(params[:page])
+
+    if params[:submit_pdf_a4].present?
+      @countries = @q.result
+      print_pdf('Countries', 'pdf.html', 'A4')
+    else
+      @countries = @q.result.page(params[:page])
+    end
+  end
+
+
+
+
+  def export_csv_and_pdf
+    @countries = @q.result
+    path = Rails.root.join('public/csv')
+    @save_path = Rails.root.join(path, 'countries.csv')
+    CSV.open(@save_path, 'wb') do |csv|
+      headers = Country.column_names
+      csv << headers
+      @countries.each do |country|
+        csv << country.as_json.values_at(*headers)
+      end
+    end
+    @pos_setting = PosSetting.first
+    subject = "#{@pos_setting.display_name} - Country Detail"
+    email = current_user.superAdmin.email_to.present? ? current_user.superAdmin.email_to : 'info@munshionclick.com'
+    pdf = [[@countries, 'country']]
+    body = ''
+    ReportMailer.new_report_email(pdf, subject, email, '').deliver
+    redirect_to countries_path
   end
 
   # GET /countries/1
