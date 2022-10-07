@@ -1,4 +1,5 @@
 class LedgerBooksController < ApplicationController
+	include LedgerBooksCsvMethods
   before_action :set_ledger_book, only: [:show, :edit, :update, :destroy]
 
   # GET /ledger_books
@@ -33,7 +34,8 @@ class LedgerBooksController < ApplicationController
     @ledger_books_all = @ledger_books.select('SUM(debit) as sum_debit','SUM(credit) as sum_credit','SUM(credit)-SUM(debit) as mean_sum')
     @customers=SysUser.all
 
-    if params[:submit_pdf].present? or params[:submit_pdf_without].present? or params[:desc_email].present? or params[:submit_pdf_short].present?
+		
+    if params[:submit_pdf].present? or params[:submit_pdf_without].present? or params[:desc_email].present? or params[:submit_pdf_short].present? or params[:submit_csv_without].present? or params[:submit_csv].present?
       @sys_users = SysUser.all
       sys_user_id = params[:q][:sys_user_id_eq].present? ? params[:q][:sys_user_id_eq] : @sys_users
       @products_sale = PurchaseSaleDetail.joins(purchase_sale_items: :product).where(transaction_type: "Sale",'purchase_sale_items.purchase_sale_type':"Sale_type").where(sys_user_id: sys_user_id, created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day,transaction_type: "Sale").group(:title).sum(:total_sale_price)
@@ -59,23 +61,17 @@ class LedgerBooksController < ApplicationController
         @ledger_books_pdf=@q.result
         request.format = 'pdf'
       end
-      respond_to do |format|
-        format.html
-        format.pdf do
-          render pdf: 'index_staff_wise',
-          layout: 'pdf.html',
-          page_size: 'A4',
-          margin_top: '0',
-          margin_right: '0',
-          margin_bottom: '0',
-          margin_left: '0',
-          encoding: "UTF-8",
-          footer:  {             # optional, use 'pdf_plain' for a pdf_plain.html.pdf.erb file, defaults to main layout
-            right: '[page] of [topage]'},
-          show_as_html: false
-        end
-      end
-    elsif params[:submit_form].present? or params[:submit_form_without].present? or params[:asc_email].present?
+			# submit_csv_without
+			if params[:submit_csv_without].present? or params[:submit_csv].present?
+				@ledger_books_csv=@q.result(distinct: true)
+				createCSV
+			else
+
+				print_pdf('User LedgerBook -'+@created_at_gteq.to_s+' to '+@created_at_lteq.to_s,'pdf.html','A4')
+				
+			end
+# 2nd if
+    elsif params[:submit_form].present? or params[:submit_form_without].present? or params[:asc_email].present? or params[:submit_form_without_csv].present? or params[:submit_form_csv].present?
       @sys_users = SysUser.all
       sys_user_id = params[:q][:sys_user_id_eq].present? ? params[:q][:sys_user_id_eq] : @sys_users
       @products_sale = PurchaseSaleDetail.joins(purchase_sale_items: :product).where(transaction_type: "Sale",'purchase_sale_items.purchase_sale_type':"Sale_type").where(sys_user_id: sys_user_id, created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day,transaction_type: "Sale").group(:title).sum(:total_sale_price)
@@ -103,23 +99,14 @@ class LedgerBooksController < ApplicationController
         @ledger_books_pdf=@q.result
         request.format = 'pdf'
       end
-      respond_to do |format|
-        format.html
-        format.pdf do
-          render pdf: '['+(LedgerBook.where(id:@ledger_books.ids).joins(:sys_user).pluck('name').uniq.join(' '))+']'+@created_at_gteq.to_s+'-'+@created_at_lteq.to_s,
-          layout: 'pdf.html',
-          page_size: 'A4',
-          margin_top: '0',
-          margin_right: '0',
-          margin_bottom: '0',
-          margin_left: '0',
-          encoding: "UTF-8",
-          footer:  {             # optional, use 'pdf_plain' for a pdf_plain.html.pdf.erb file, defaults to main layout
-            right: '[page] of [topage]'},
-          show_as_html: false
-        end
-      end
-    elsif params[:submit_debit].present?
+			# pdf and csv
+			if params[:submit_form_without_csv].present? or params[:submit_form_csv].present?
+				@ledger_books_csv=@q.result(distinct: true)
+				createCSV
+			else
+				print_pdf('User LedgerBook -'+@created_at_gteq.to_s+' to '+@created_at_lteq.to_s,'pdf.html','A4')
+			end
+    elsif params[:submit_debit].present? or params[:submit_debit_csv].present?
       @debit=true
       if params[:q].present?
         @customer_debit = LedgerBook.joins(:sys_user).where.not('sys_users.user_group': ["Both","Supplier"]).where('debit>0').ransack(params[:q]).result.group('sys_users.name').sum(:debit)
@@ -151,24 +138,34 @@ class LedgerBooksController < ApplicationController
         @account_credit = Payment.joins(:account).where(paymentable_type:['PurchaseSaleDetail','Order','LedgerBook'],created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).group('accounts.title').sum(:credit)
         @account_debit = Payment.joins(:account).where(paymentable_type:['PurchaseSaleDetail','Order','LedgerBook'],created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).group('accounts.title').sum(:debit)
       end
-      request.format = 'pdf'
-      respond_to do |format|
-        format.html
-        format.pdf do
-          render pdf: 'index_staff_wise',
-          layout: 'pdf.html',
-          page_size: 'A4',
-          margin_top: '0',
-          margin_right: '0',
-          margin_bottom: '0',
-          margin_left: '0',
-          encoding: "UTF-8",
-          footer:  {             # optional, use 'pdf_plain' for a pdf_plain.html.pdf.erb file, defaults to main layout
-            right: '[page] of [topage]'},
-          show_as_html: false
-        end
-      end
-    elsif params[:submit_credit].present?
+			if params[:submit_debit_csv].present?
+				csv_data = debit_csv
+				request.format = 'csv'
+				respond_to do |format|
+				format.html
+				format.csv { send_data csv_data, filename: "Users - #{Date.today}.csv" }
+				end
+			else
+				request.format = 'pdf'
+      		respond_to do |format|
+						format.html
+						format.pdf do
+						render pdf: 'index_staff_wise',
+						layout: 'pdf.html',
+						page_size: 'A4',
+						margin_top: '0',
+						margin_right: '0',
+						margin_bottom: '0',
+						margin_left: '0',
+						encoding: "UTF-8",
+						footer:  {             # optional, use 'pdf_plain' for a pdf_plain.html.pdf.erb file, defaults to main layout
+							right: '[page] of [topage]'},
+						show_as_html: false
+       		 end
+      	end
+			end
+      
+    elsif params[:submit_credit].present? or params[:submit_credit_csv].present?
       if params[:q].present?
         @customer_debit=LedgerBook.joins(:sys_user).where.not('sys_users.user_group': ["Both","Supplier"]).where('debit>0').ransack(params[:q]).result.group('sys_users.name').sum(:debit)
         @supplier_debit=LedgerBook.joins(:sys_user).where('sys_users.user_group': ["Both","Supplier"]).where('debit>0').ransack(params[:q]).result.group('sys_users.name').sum(:debit)
@@ -193,23 +190,34 @@ class LedgerBooksController < ApplicationController
         @customer_credit_date=LedgerBook.joins(:sys_user).where.not('sys_users.user_group': ["Both","Supplier"]).where('credit>0').ransack().result.group('sys_users.name','created_at').sum(:credit)
         @supplier_credit_date=LedgerBook.joins(:sys_user).where('sys_users.user_group': ["Both","Supplier"]).where('credit>0').ransack().result.group('sys_users.name','created_at').sum(:credit)
       end
-      request.format = 'pdf'
-      respond_to do |format|
-        format.html
-        format.pdf do
-          render pdf: 'index_staff_wise',
-          layout: 'pdf.html',
-          page_size: 'A4',
-          margin_top: '0',
-          margin_right: '0',
-          margin_bottom: '0',
-          margin_left: '0',
-          encoding: "UTF-8",
-          footer:  {             # optional, use 'pdf_plain' for a pdf_plain.html.pdf.erb file, defaults to main layout
-            right: '[page] of [topage]'},
-          show_as_html: false
-        end
-      end
+			if params[:submit_credit_csv].present?
+				csv_data = credit_csv
+				request.format = 'csv'
+				respond_to do |format|
+				format.html
+				format.csv { send_data csv_data, filename: "Users - #{Date.today}.csv" }
+				end
+			else
+				request.format = 'pdf'
+				respond_to do |format|
+					format.html
+					format.pdf do
+						render pdf: 'index_staff_wise',
+						layout: 'pdf.html',
+						page_size: 'A4',
+						margin_top: '0',
+						margin_right: '0',
+						margin_bottom: '0',
+						margin_left: '0',
+						encoding: "UTF-8",
+						footer:  {             # optional, use 'pdf_plain' for a pdf_plain.html.pdf.erb file, defaults to main layout
+							right: '[page] of [topage]'},
+						show_as_html: false
+					end
+				end
+			end
+
+      
     end
 
     if @q.result.count > 0
@@ -389,4 +397,16 @@ class LedgerBooksController < ApplicationController
     def ledger_book_params
       params.require(:ledger_book).permit(:sys_user_id, :debit, :credit, :balance, :comment,:created_at, :account_id,:status)
     end
+		def createCSV
+			if params[:submit_form_csv].present?
+				csv_data = asc_csv
+			else
+				csv_data = single_user_ledger
+			end
+			request.format = 'csv'
+			respond_to do |format|
+			format.html
+			format.csv { send_data csv_data, filename: "Users - #{Date.today}.csv" }
+			end
+		end
 end
