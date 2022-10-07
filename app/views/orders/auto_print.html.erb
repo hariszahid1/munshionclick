@@ -1,6 +1,6 @@
 <div id="order_list">
   <%= search_form_for @q, url: print_bulk_orders_path, class: "admin-controls", method: "get" do |f| %>
-    <button class="form-control btn btn-secondary" id="submit_pdf_staff_without_bulk" name="submit_pdf_staff_without_bulk" type="submit" value="Total Sale PDF A8"><i class="fa fa-print"></i>bulk invoices</button>
+    <button class="form-control btn  badge badge-pill badge-danger" id="submit_pdf_staff_without_bulk" name="submit_pdf_staff_without_bulk" type="submit" value="Total Sale PDF A8"><i class="fa fa-file-pdf"></i>bulk invoices</button>
   <%end%>
   <%@user_types.each do |user_type|%>
   <h1><%=user_type.title%></h1>

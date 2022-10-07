@@ -8,7 +8,6 @@
   <div class="row">
     <div class="col-lg-12 col-sm-12">
       <div class="col-lg-12 form-group float-left">
-        <textarea name="sms_msg" class="form-control" ><%=@phone%></textarea>
       </div>
 
       <%= search_form_for @q, url: property_plans_path, class: "admin-controls", method: "get" do |f| %>
@@ -24,8 +23,8 @@
         <div class="col-lg-2 form-group float-left">
           <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
         </div>
-        <div class="col-lg-2 form-group float-right">
-          <button class="form-control btn btn-secondary" name="submit_pdf" type="submit" value="PDF A4" formtarget="_blank"><i class="fa fa-print"></i></button>
+        <div class="col-lg-1 form-group float-right">
+          <button class="form-control badge badge-pill badge-danger" name="submit_pdf" type="submit" value="PDF A4" formtarget="_blank">Plans<i class="fa fa-file-pdf"></i></button>
         </div>
       <% end %>
     </div>
