@@ -29,7 +29,7 @@
           <%= f.select :product_category_id_in, options_for_select(@product_categories.map {|i| ["#{i.second} \u{27F6} #{i.last}", i.first]}, f.object.product_category_id_in),{:include_blank => "Select Unit category"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Unit category"}} %>
         </div>
         <div class="col-lg-2 form-group float-left">
-          <%= f.select :product_sub_category_id_in, options_for_select(@product_sub_categories.map {|i| ["#{i.second} \u{27F6} #{i.last}", i.first]}, f.object.product_sub_category_id_in),{:include_blank => "Select Unit sub category"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Unit sub category"}} %>
+          <%= f.select :product_sub_category_id_in, options_for_select(@product_sub_categories.map {|i| ["#{i.second} \u{27F6} #{i.last}", i.first]}, f.object.product_sub_category_id_in),{:include_blank => "Select Unit subcategory"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Unit subcategory"}} %>
         </div>
         <div class="col-lg-2 form-group float-left">
           <%= f.select :size_6_in, options_for_select(Product.plot_statuses.map { |key, value| [key.humanize, value] }, @status),{:include_blank => "Select Unit Status"}, { class: "form-control chosen-select", prompt: 'Select Unit Status' }%>
@@ -55,22 +55,15 @@
           <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px;"><i class="fa fa-search"></i></button>
         </div>
       </div>
-      <div class='row'>
-        <div class="col-lg-8 form-group float-left">
+      
+        <div class="col-4 float-right d-flex">
+        
+          <button class="form-control badge badge-pill badge-danger" name="submit_pdf_staff_with" type="submit" value="Products PDF A4" formtarget="_blank">Units&nbsp;<i class="fa fa-file-pdf"></i></button>
+          <button class="form-control badge badge-pill badge-danger" name="submit_pdf_staff" type="submit" value="Products PDF A4" formtarget="_blank">Accounts&nbsp;<i class="fa fa-file-pdf"></i></button>
+          <button class="form-control badge badge-pill badge-success" name="csv_staff_with" type="submit" value="Products PDF A4" formtarget="_blank">Units&nbsp;<i class="fa fa-file-excel"></i></button>
+          <button class="form-control badge badge-pill badge-success" name="csv_staff" type="submit" value="Products PDF A4" formtarget="_blank">Accounts&nbsp;<i class="fa fa-file-excel"></i></button>
         </div>
-        <div class="col-lg-1 form-group float-right">
-          <button class="form-control btn btn-secondary" name="submit_pdf_staff_with" type="submit" value="Products PDF A4" formtarget="_blank"><i class="fa fa-file-pdf"></i></button>
-        </div>
-        <div class="col-lg-1 form-group float-right">
-          <button class="form-control btn btn-secondary" name="submit_pdf_staff" type="submit" value="Products PDF A4" formtarget="_blank"><i class="fa fa-file-pdf"></i></button>
-        </div>
-        <div class="col-lg-1 form-group float-right">
-          <button class="form-control btn btn-success" name="csv_staff_with" type="submit" value="Products PDF A4" formtarget="_blank"><i class="fa fa-file-excel"></i></button>
-        </div>
-        <div class="col-lg-1 form-group float-right">
-          <button class="form-control btn btn-success" name="csv_staff" type="submit" value="Products PDF A4" formtarget="_blank"><i class="fa fa-file-excel"></i></button>
-        </div>
-      </div>
+     
       <% end %>
     </div>
   </div>

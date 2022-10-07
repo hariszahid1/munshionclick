@@ -100,35 +100,35 @@
     <div class="col-lg-12">
       <div class="col-lg-3 form-group float-left">
         <% if params[:sale].present?%>
-          <button class="form-control btn btn-secondary" name="sale_submit" type="submit" value="Total Sale PDF A8" formtarget="_blank"><i class="fa fa-print"></i> Quantity details</button>
+          <button class="form-control badge badge-pill badge-danger" name="sale_submit" type="submit" value="Total Sale PDF A8" formtarget="_blank"><i class="fa fa-file-pdf"></i> Quantity details</button>
         <% elsif params[:return].present?%>
-          <button class="form-control btn btn-secondary" name="sale_submit" type="submit" value="Total Sale Return PDF A8" formtarget="_blank"><i class="fa fa-print"></i> Quantity details</button>
+          <button class="form-control badge badge-pill badge-danger" name="sale_submit" type="submit" value="Total Sale Return PDF A8" formtarget="_blank"><i class="fa fa-file-pdf"></i> Quantity details</button>
         <%else%>
-          <button class="form-control btn btn-secondary" name="purchase_submit" type="submit" value="Total Purchase PDF A8" formtarget="_blank"><i class="fa fa-print"></i> Purchase</button>
+          <button class="form-control badge badge-pill badge-danger" name="purchase_submit" type="submit" value="Total Purchase PDF A8" formtarget="_blank"><i class="fa fa-file-pdf"></i> Purchase</button>
         <%end%>
       </div>
       <div class="col-lg-3 form-group float-left">
         <% if params[:sale].present?%>
-          <button class="form-control btn btn-secondary" name="sale_submit" type="submit" value="Total Sale PDF A4" formtarget="_blank"><i class="fa fa-print"></i> Quantity details</button>
+          <button class="form-control badge badge-pill badge-danger" name="sale_submit" type="submit" value="Total Sale PDF A4" formtarget="_blank"><i class="fa fa-file-pdf"></i> Quantity details</button>
         <% elsif params[:return].present?%>
-          <button class="form-control btn btn-secondary" name="sale_submit" type="submit" value="Total Sale Return PDF A4" formtarget="_blank"><i class="fa fa-print"></i> Quantity details</button>
+          <button class="form-control badge badge-pill badge-danger" name="sale_submit" type="submit" value="Total Sale Return PDF A4" formtarget="_blank"><i class="fa fa-file-pdf"></i> Quantity details</button>
         <%else%>
-          <button class="form-control btn btn-secondary" name="purchase_submit" type="submit" value="Total Purchase PDF A4" formtarget="_blank"><i class="fa fa-print"></i> Purchase</button>
+          <button class="form-control badge badge-pill badge-danger" name="purchase_submit" type="submit" value="Total Purchase PDF A4" formtarget="_blank"><i class="fa fa-file-pdf"></i> Purchase</button>
         <%end%>
       </div>
       <% if params[:sale].present?%>
         <div class="col-lg-3 form-group float-left">
-            <button class="form-control btn btn-secondary" name="submit_pdf_staff_without" type="submit" value="Total Sale PDF A8" formtarget="_blank"><i class="fa fa-print"></i> Sale list</button>
+            <button class="form-control badge badge-pill badge-danger" name="submit_pdf_staff_without" type="submit" value="Total Sale PDF A8" formtarget="_blank"><i class="fa fa-file-pdf"></i> Sale list</button>
         </div>
         <div class="col-lg-3 form-group float-left">
-            <button class="form-control btn btn-secondary" name="submit_pdf_staff_without_bulk" type="submit" value="Total Sale PDF A8" formtarget="_blank"><i class="fa fa-print"></i>bulk invoices</button>
+            <button class="form-control badge badge-pill badge-danger" name="submit_pdf_staff_without_bulk" type="submit" value="Total Sale PDF A8" formtarget="_blank"><i class="fa fa-file-pdf"></i>bulk invoices</button>
         </div>
       <% elsif params[:return].present?%>
         <div class="col-lg-3 form-group float-left">
-            <button class="form-control btn btn-secondary" name="submit_pdf_staff_without" type="submit" value="Total Sale PDF A8" formtarget="_blank"><i class="fa fa-print"></i> Sale Return list</button>
+            <button class="form-control badge badge-pill badge-danger" name="submit_pdf_staff_without" type="submit" value="Total Sale PDF A8" formtarget="_blank"><i class="fa fa-file-pdf"></i> Sale Return list</button>
         </div>
         <div class="col-lg-3 form-group float-left">
-            <button class="form-control btn btn-secondary" name="submit_pdf_staff_without_bulk" type="submit" value="Total Sale PDF A8" formtarget="_blank"><i class="fa fa-print"></i>bulk Return invoices</button>
+            <button class="form-control badge badge-pill badge-danger" name="submit_pdf_staff_without_bulk" type="submit" value="Total Sale PDF A8" formtarget="_blank"><i class="fa fa-file-pdf"></i>bulk Return invoices</button>
         </div>
       <%end%>
       <div class="col-lg-3 form-group float-left">
