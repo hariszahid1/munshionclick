@@ -146,11 +146,18 @@ module LedgerBooksCsvMethods
 			csv.add_row ["Report by : #{@current_user.name}"]
 			csv.add_row ["DateTime : #{Time.zone.now}"]
 			csv.add_row ["------------------"]
-			csv.add_row ['Date', 'User', 'Debit', 'Credit', 'Balance', 'Voucher', 'Comment', 'Balance']
+			csv.add_row ['Date', 'User', 'Debit', 'Credit', 'Balance', 'Voucher', 'Comment']
 
 			if @ledger_books.total_count == @sys_user.ledger_books.count && (params[:submit_form].present? or params[:submit_form_without].present?)
 				@pre_balance=@sys_user.opening_balance
-
+				byebug
+				if (ledger_book.balance.to_i > 0 ) 
+					balance="J/Payable"
+				elsif (ledger_book.balance.to_i < 0 ) 
+					balance="B/Rec"
+				else
+					balance="Nill"
+				end
 
 				csv.add_row [
 					"#{@sys_user.created_at.strftime("%d-%b-%y")}",
@@ -158,12 +165,237 @@ module LedgerBooksCsvMethods
 					"-",
 					"-",
 					"#{@sys_user.opening_balance}",
-					"#{}"
-				
-				
+					"#{balance}",
+					"Opening Balance"
+				]
+			elsif (params[:submit_form].present? or params[:submit_form_without].present?)
+				@pre_balance=(@ledger_books&.first&.balance.to_i-(@ledger_books&.first&.credit.to_i-@ledger_books&.first&.debit.to_i)).round(0)
+				byebug
+				if (@pre_balance > 0 )
+					balance="J/Payable"
+				elsif (@pre_balance < 0 )
+					balance="B/Rec"
+				else
+					balance="Nill"
+				end
+				csv.add_row [
+					"-",
+					"#{@sys_user.name}",
+					"-",
+					"-",
+					"#{@pre_balance}",
+					"#{balance}",
+					"Previous Balance"
 				]
 			end
+
+			@ledger_books_pdf.each do |ledger_book|
+				temp=''
+				if ledger_book.purchase_sale_detail_id.present? 
+					if ledger_book.purchase_sale_detail.transaction_type=="Sale"
+						temp +='Delivery'
+					end
+					if ledger_book.purchase_sale_detail.transaction_type=="Purchase"
+					temp+="Purchase"
+					end
+				elsif ledger_book.order.present? 
+					if ledger_book.order.transaction_type=="Sale"
+						temp+="Sale Order"
+					end
+					if ledger_book.order.transaction_type=="Purchase"
+						temp+="Purchase Order"
+					end
+				else
+						temp+= "Ledger Book"
+				end
+
+				temp+= ledger_book.comment.to_s 
+					# temp +="Casher: #{ledger_book.account.title}"
+					 
+				if ledger_book.order.present?
+					if ledger_book.order.order_items_names_and_quantity!=0
+						ledger_book.order.order_items_names_and_quantity.each do |name_quantity|
+						temp+=name_quantity.first
+						temp+=" || Qty : #{name_quantity.second}"
+						temp+=" || Rate : #{name_quantity.third}"
+						temp+=" || Total : #{name_quantity.fourth}"
+						temp+=" || Total : #{name_quantity.fourth}"
+						end
+					end
+				elsif ledger_book.purchase_sale_detail.present?
+					if ledger_book.purchase_sale_detail.purchase_sale_items_names_and_quantity!=0
+						ledger_book.purchase_sale_detail.purchase_sale_items_names_and_quantity.each do |name_quantity|
+							if ledger_book.purchase_sale_detail.transaction_type=="Purchase"
+								temp+=" || #{name_quantity[9]&.first.to_s} - #{+name_quantity.first}"
+								temp+=" || Qty : #{name_quantity.second.to_i}"
+								temp+=" || Rate : #{name_quantity[5].to_f}"
+								temp+=" || Total : #{(name_quantity.second*(name_quantity[5].to_f)).to_i}"
+								temp+=" || Carriage/Loading : #{ledger_book.purchase_sale_detail.carriage.to_i+ledger_book.purchase_sale_detail.loading.to_i}"
+								temp+=" || Rate : #{name_quantity[5].to_f}"
+							else
+								temp +=" || #{name_quantity[9]&.first.to_s+'-'+name_quantity.first}"
+								temp+=" || Qty : #{name_quantity.second.to_i}"
+								if ApplicationController.new.pos_type_batha
+									temp2=name_quantity.third.to_f*100
+								else
+								temp2=name_quantity.third.to_f
+								end
+								temp+=" || Rate : #{temp2}"
+								temp+=" || total #{(name_quantity.second*(name_quantity.third.to_f)).to_i}"
+								temp+=" || Carriage/loading : #{ledger_book.purchase_sale_detail.carriage.to_i+ledger_book.purchase_sale_detail.loading.to_i}"
+							end
+						end
+						if ledger_book.purchase_sale_detail.with_gst.present?
+							temp+=" || GST : #{ledger_book.purchase_sale_detail.purchase_sale_items.sum(:gst_amount)}"
+						end
+						if ledger_book&.purchase_sale_detail&.bill_no.present?
+							temp+=" || PO# : #{ledger_book&.purchase_sale_detail&.bill_no}"
+						end
+
+					end
+				end
+
+				if ledger_book.account.present?
+					temp+="Casher : #{ledger_book.account.title}"
+				end 
+
+				if (ledger_book.balance.to_i > 0 ) 
+					voucher="J/Payable"
+				elsif (ledger_book.balance.to_i < 0 ) 
+					voucher="B/Rec"
+				else
+					voucher="Nl"
+				end
+
+				csv.add_row [
+					"#{ledger_book.created_at.strftime("%d-%b-%y")}",
+					 "#{ledger_book.sys_user.name}",
+					  "#{ledger_book.debit}",
+						 "#{ledger_book.credit}",
+						  "#{ledger_book.balance}",
+								"#{voucher}",
+								 "#{temp}",
+								  "#{}"
+											]
+			
+			end
+
+			if @ledger_books.total_count == @sys_user.ledger_books.count && (params[:submit_pdf_without].present? or params[:submit_pdf_without].present?)
+				pre_balance=@sys_user.opening_balance
+				if (ledger_book.balance.to_i > 0 ) 
+					balance="J/Payable"
+				elsif (ledger_book.balance.to_i < 0 ) 
+					balance="B/Rec"
+				else
+					balance="Nill"
+				end
+				
+				csv.add_row [
+					@sys_user.created_at.strftime("%d-%b-%y"),
+					@sys_user.name,
+					"-",
+					"-",
+					"#{@balance}",
+					"Opening Balance"
+
+				]
+			elsif (params[:submit_pdf_without].present? or params[:submit_pdf_without].present?)
+				@pre_balance=(@ledger_books&.first&.balance.to_i-(@ledger_books&.first&.credit.to_i-@ledger_books&.first&.debit.to_i)).round(0)
+				if (ledger_book.balance.to_i > 0 ) 
+					balance="J/Payable"
+				elsif (ledger_book.balance.to_i < 0 ) 
+					balance="B/Rec"
+				else
+					balance="Nill"
+				end
+
+				csv.add_row [
+					"",
+					@sys_user.name,
+					"-",
+					"-",
+					"#{@balance}",
+					"Previous Balance"
+				]
+			end
+			# byebug
+			@debit=@ledger_books_pdf.pluck(:debit).compact.sum
+			(@credit=@ledger_books_pdf.pluck(:credit).compact.sum)
+			temp=@credit-@debit
+			csv.add_row [
+				"Total",
+				"",
+				"#{@debit}",
+				"#{@credit}",
+				"",
+				"#{temp}",
+				"#{@credit} - #{@debit}"
+			]
+
+			csv.add_row [
+				"Total",
+				"",
+				"Previous",
+				"#{@pre_balance.to_i}",
+				"",
+				"",
+				""
+			]
+			
+			csv.add_row [
+				"Total",
+				"",
+				"",
+				"#{@pre_balance.to_i+(@credit=@ledger_books_pdf.pluck(:credit).compact.sum)}",
+				"#{(@pre_balance.to_i+@credit)-@debit}",
+				"",
+				"#{@pre_balance.to_i} + #{@credit} -#{@debit}"
+			]
 		
+			if @products_count.present?
+				@total=0
+				@products_count.each_with_index do |item,i|
+					@total += item&.last&.to_f.round(2)
+					csv.add_row [item.first,item&.last.to_f.round(2)]
+				end
+
+				csv.add_row ['Total',"#{@total}"]
+			end
+
+
+			if @products_count_return.present?
+				csv.add_row ["Sale Return Product Detail"]
+				@total=0
+				@products_count_return.each_with_index do |item,i|
+					@total += item&.last&.to_f.round(2)
+					csv.add_row [item.first,item&.last.to_f.round(2)]
+				end
+
+				csv.add_row ['Total',"#{@total}"]
+			end
+
+			if @products_purchase_count.present?
+				csv.add_row ["Purchase Product Detail"]
+				@total=0
+				@products_purchase_count.each_with_index do |item,i|
+					@total += item&.last&.to_f.round(2)
+					csv.add_row [item.first,item&.last.to_f.round(2)]
+				end
+
+				csv.add_row ['Total',"#{@total}"]
+			end
+
+			if @products_purchase_count_return.present?
+				csv.add_row ["Purchase Return Product Detail"]
+				@total=0
+				@products_purchase_count_return.each_with_index do |item,i|
+					@total += item&.last&.to_f.round(2)
+					csv.add_row [item.first,item&.last.to_f.round(2)]
+				end
+
+				csv.add_row ['Total',"#{@total}"]
+			end
+
 		
 		
 		

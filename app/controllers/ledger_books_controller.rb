@@ -35,7 +35,7 @@ class LedgerBooksController < ApplicationController
     @customers=SysUser.all
 
 		
-    if params[:submit_pdf].present? or params[:submit_pdf_without].present? or params[:desc_email].present? or params[:submit_pdf_short].present? or params[:submit_csv_without].present? or params[:submit_csv].present?
+    if params[:submit_pdf].present? or params[:submit_pdf_without].present? or params[:desc_email].present? or params[:submit_pdf_short].present? or params[:submit_csv_without].present? or params[:submit_csv].present? or params[:submit_csv_short].present?
       @sys_users = SysUser.all
       sys_user_id = params[:q][:sys_user_id_eq].present? ? params[:q][:sys_user_id_eq] : @sys_users
       @products_sale = PurchaseSaleDetail.joins(purchase_sale_items: :product).where(transaction_type: "Sale",'purchase_sale_items.purchase_sale_type':"Sale_type").where(sys_user_id: sys_user_id, created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day,transaction_type: "Sale").group(:title).sum(:total_sale_price)
@@ -62,7 +62,7 @@ class LedgerBooksController < ApplicationController
         request.format = 'pdf'
       end
 			# submit_csv_without
-			if params[:submit_csv_without].present? or params[:submit_csv].present?
+			if params[:submit_csv_without].present? or params[:submit_csv].present? or params[:submit_csv_short].present?
 				@ledger_books_csv=@q.result(distinct: true)
 				createCSV
 			else
@@ -398,7 +398,7 @@ class LedgerBooksController < ApplicationController
       params.require(:ledger_book).permit(:sys_user_id, :debit, :credit, :balance, :comment,:created_at, :account_id,:status)
     end
 		def createCSV
-			if params[:submit_form_csv].present?
+			if params[:submit_form_csv].present? or params[:submit_csv].present? or params[:submit_csv_short].present?
 				csv_data = asc_csv
 			else
 				csv_data = single_user_ledger
