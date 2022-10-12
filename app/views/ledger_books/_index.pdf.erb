@@ -61,7 +61,7 @@
         </tr>
       <%end%>
       <% @ledger_books_pdf.each do |ledger_book| %>
-        <tr >
+        <tr>
           <td><%=ledger_book.created_at.strftime("%d-%b-%y")%></td>
           <td class="urdu-font"><%= ledger_book.sys_user.name %></td>
           <td><%= number_with_delimiter(ledger_book.debit) %></td>
@@ -103,42 +103,42 @@
                 </p>
               <%end%>
             <%elsif ledger_book.purchase_sale_detail.present?%>
-            <% if ledger_book.purchase_sale_detail.purchase_sale_items_names_and_quantity!=0%>
-              <% ledger_book.purchase_sale_detail.purchase_sale_items_names_and_quantity.each do |name_quantity|%>
-                <%if ledger_book.purchase_sale_detail.transaction_type=="Purchase"%>
-                  <p>
-                    <span><%=name_quantity[9]&.first.to_s+'-'+name_quantity.first%></span>
-                    Qty:  <span><%=name_quantity.second.to_i%></span>
-                    Rate:  <span><%=name_quantity[5].to_f%></span>
-                    Total:  <span><%=(name_quantity.second*(name_quantity[5].to_f)).to_i%></span>
-                  </p>
-                  <p>Carriage/Loading : <span><%= ledger_book.purchase_sale_detail.carriage.to_i+ledger_book.purchase_sale_detail.loading.to_i %></span></p>
-                  <%else%>
-                  <p>
-                    <span><%=name_quantity[9]&.first.to_s+'-'+name_quantity.first%></span>
-                    Qty:  <span><%=name_quantity.second.to_i%></span>
-                    Rate:
-                    <span>
-                      <% if ApplicationController.new.pos_type_batha%>
-                        <%=name_quantity.third.to_f*1000%>
-                      <%else%>
-                        <%=name_quantity.third.to_f%>
-                      <%end%>
-                    </span>
-                    Total:  <span><%=(name_quantity.second*(name_quantity.third.to_f)).to_i%></span>
-                  </p>
-                  <p>Carriage/Loading : <span><%= ledger_book.purchase_sale_detail.carriage.to_i+ledger_book.purchase_sale_detail.loading.to_i %></span></p>
-                  <%end%>
-              <%end%>
-              <%if ledger_book.purchase_sale_detail.with_gst.present?%>
-                <p>
-                  GST: <span><%= ledger_book.purchase_sale_detail.purchase_sale_items.sum(:gst_amount)%></span>
-                </p>
-              <%end%>
-              <%if ledger_book&.purchase_sale_detail&.bill_no.present?%>
-              <p><span>PO#: </span> <%=ledger_book&.purchase_sale_detail&.bill_no%></p>
-              <%end%>
-            <%end%>
+							<% if ledger_book.purchase_sale_detail.purchase_sale_items_names_and_quantity!=0%>
+								<% ledger_book.purchase_sale_detail.purchase_sale_items_names_and_quantity.each do |name_quantity|%>
+									<%if ledger_book.purchase_sale_detail.transaction_type=="Purchase"%>
+										<p>
+											<span><%=name_quantity[9]&.first.to_s+'-'+name_quantity.first%></span>
+											Qty:  <span><%=name_quantity.second.to_i%></span>
+											Rate:  <span><%=name_quantity[5].to_f%></span>
+											Total:  <span><%=(name_quantity.second*(name_quantity[5].to_f)).to_i%></span>
+										</p>
+										<p>Carriage/Loading : <span><%= ledger_book.purchase_sale_detail.carriage.to_i+ledger_book.purchase_sale_detail.loading.to_i %></span></p>
+									<%else%>
+										<p>
+											<span><%=name_quantity[9]&.first.to_s+'-'+name_quantity.first%></span>
+											Qty:  <span><%=name_quantity.second.to_i%></span>
+											Rate:
+											<span>
+												<% if ApplicationController.new.pos_type_batha%>
+													<%=name_quantity.third.to_f*1000%>
+												<%else%>
+													<%=name_quantity.third.to_f%>
+												<%end%>
+											</span>
+											Total:  <span><%=(name_quantity.second*(name_quantity.third.to_f)).to_i%></span>
+										</p>
+										<p>Carriage/Loading : <span><%= ledger_book.purchase_sale_detail.carriage.to_i+ledger_book.purchase_sale_detail.loading.to_i %></span></p>
+										<%end%>
+								<%end%>
+								<%if ledger_book.purchase_sale_detail.with_gst.present?%>
+									<p>
+										GST: <span><%= ledger_book.purchase_sale_detail.purchase_sale_items.sum(:gst_amount)%></span>
+									</p>
+								<%end%>
+								<%if ledger_book&.purchase_sale_detail&.bill_no.present?%>
+								<p><span>PO#: </span> <%=ledger_book&.purchase_sale_detail&.bill_no%></p>
+								<%end%>
+							<%end%>
             <%end%>
             <% if ledger_book.account.present?%>
             <p>
@@ -150,6 +150,7 @@
 
         </tr>
       <% end %>
+			<!-- 7 oct 2022 monday start from here -->
       <%if @ledger_books.total_count == @sys_user.ledger_books.count && (params[:submit_pdf_without].present? or params[:submit_pdf_without].present?)%>
         <tr>
           <td><%=@sys_user.created_at.strftime("%d-%b-%y")%></td>
