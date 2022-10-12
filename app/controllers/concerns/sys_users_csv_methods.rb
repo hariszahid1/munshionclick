@@ -22,4 +22,37 @@ module SysUsersCsvMethods
 		end
 	end
 
+	def payable_csv
+		@sys_user_balance=0
+		CSV.generate do |csv|
+			csv.add_row ['Code', 'Name','User type','User group','Balance','Last Payment']
+			@count=0
+
+			 @sys_users.each do |sys_user| 
+				 if  (sys_user.balance > 0) 
+					@count=@count+1
+					byebug
+					@sys_user_balance += sys_user.balance.abs
+					date = (sys_user.ledger_books.present? ? sys_user.ledger_books.last.created_at : sys_user.created_at)
+					csv.add_row [ 
+						sys_user.code,
+						sys_user.name,
+						sys_user.user_type.title,
+						sys_user.user_group,
+						sys_user.balance.abs,
+						date.strftime("%d%b%y at %I:%M%p")
+					]
+				  end 
+			  end 
+				csv.add_row [ 
+					"Total",
+					@count,
+					"",
+					"",
+					@sys_user_balance,
+					""
+				]	
+		end
+	end
+
 end
