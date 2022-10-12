@@ -86,24 +86,9 @@ class SysUsersController < ApplicationController
       if @q.result.count > 0
         @q.sorts = 'name desc' if @q.sorts.empty?
       end
-      @sys_users=@q.result(distinct: true)
-      request.format = 'pdf'
-      respond_to do |format|
-        format.html
-        format.pdf do
-          render pdf: 'index_staff_wise',
-          layout: 'pdf.html',
-          page_size: 'A4',
-          margin_top: '0',
-          margin_right: '0',
-          margin_bottom: '0',
-          margin_left: '0',
-          encoding: "UTF-8",
-          footer:  {             # optional, use 'pdf_plain' for a pdf_plain.html.pdf.erb file, defaults to main layout
-            right: '[page] of [topage]'},
-          show_as_html: false
-        end
-      end
+			print_pdf('index_staff_wise','pdf.html','A4')
+		elsif params[:submit_csv_staff_with]
+			createCSV
     end
   end
 
@@ -338,7 +323,6 @@ class SysUsersController < ApplicationController
       @sys_user = SysUser.find(params[:id])
     end
 
-
     # Never trust parameters from the scary internet, only allow the white list through.
     def sys_user_params
       params.require(:sys_user).permit(
@@ -378,4 +362,15 @@ class SysUsersController < ApplicationController
           ]
         )
     end
+
+		def createCSV
+			if params[:submit_csv_staff_with].present?
+				csv_data = payable_csv
+			end
+			request.format = 'csv'
+			respond_to do |format|
+			format.html
+			format.csv { send_data csv_data, filename: "index_staff_wise - #{Date.today}.csv" }
+			end
+		end
 end

@@ -316,6 +316,7 @@ module LedgerBooksCsvMethods
 					"-",
 					"#{@balance}",
 					"Previous Balance"
+					"#{}"
 				]
 			end
 			# byebug
