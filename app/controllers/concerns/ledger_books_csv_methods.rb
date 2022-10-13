@@ -150,7 +150,6 @@ module LedgerBooksCsvMethods
 
 			if @ledger_books.total_count == @sys_user.ledger_books.count && (params[:submit_form].present? or params[:submit_form_without].present?)
 				@pre_balance=@sys_user.opening_balance
-				byebug
 				if (ledger_book.balance.to_i > 0 ) 
 					balance="J/Payable"
 				elsif (ledger_book.balance.to_i < 0 ) 
@@ -170,7 +169,6 @@ module LedgerBooksCsvMethods
 				]
 			elsif (params[:submit_form].present? or params[:submit_form_without].present?)
 				@pre_balance=(@ledger_books&.first&.balance.to_i-(@ledger_books&.first&.credit.to_i-@ledger_books&.first&.debit.to_i)).round(0)
-				byebug
 				if (@pre_balance > 0 )
 					balance="J/Payable"
 				elsif (@pre_balance < 0 )
@@ -319,7 +317,6 @@ module LedgerBooksCsvMethods
 					"#{}"
 				]
 			end
-			# byebug
 			@debit=@ledger_books_pdf.pluck(:debit).compact.sum
 			(@credit=@ledger_books_pdf.pluck(:credit).compact.sum)
 			temp=@credit-@debit

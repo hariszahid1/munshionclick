@@ -111,31 +111,17 @@ class SysUsersController < ApplicationController
       @opening_balance = params[:q][:opening_balance]
     end
     @sys_users = @q.result(distinct: true)
+	
     @all_user =SysUser.all
     @user_types=UserType.all
     if params[:submit_pdf_staff_with].present?
       if @q.result.count > 0
         @q.sorts = 'name desc' if @q.sorts.empty?
       end
-      @sys_users=@q.result(distinct: true)
-      request.format = 'pdf'
-      respond_to do |format|
-        format.html
-        format.pdf do
-          render pdf: 'index_staff_wise',
-          layout: 'pdf.html',
-          page_size: 'A4',
-          margin_top: '0',
-          margin_right: '0',
-          margin_bottom: '0',
-          margin_left: '0',
-          footer:  {             # optional, use 'pdf_plain' for a pdf_plain.html.pdf.erb file, defaults to main layout
-            right: '[page] of [topage]'},
-          encoding: "UTF-8",
-          show_as_html: false
-        end
-      end
-    end
+			print_pdf('index_staff_wise','pdf.html','A4')
+    elsif params[:submit_csv_sys_user_receivable].present?
+			createCSV
+		end
   end
 
   def customer
@@ -366,6 +352,9 @@ class SysUsersController < ApplicationController
 		def createCSV
 			if params[:submit_csv_staff_with].present?
 				csv_data = payable_csv
+			elsif params[:submit_csv_sys_user_receivable].present?
+				puts "-------------------------"
+				csv_data = receiveable_csv 
 			end
 			request.format = 'csv'
 			respond_to do |format|
