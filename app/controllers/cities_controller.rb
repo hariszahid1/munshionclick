@@ -2,28 +2,26 @@
 
 # Cities Controller
 class CitiesController < ApplicationController
-  before_action :set_city, only: %i[show edit update destroy]
+  include PdfCsvEmailMethod
+
+  before_action :set_city, only: [:show, :edit, :update, :destroy]
   require 'tempfile'
   require 'csv'
   # GET /cities
   # GET /cities.json
   def index
     @q = City.ransack(params[:q])
-    return export_csv_and_pdf if params[:csv].present?
-
-    @q.sorts = 'id asc' if @q.result.count > 0 && @q.sorts.empty?
+    @q.sorts = 'id asc' if @q.sorts.empty? && @q.result.count.positive?
     if params[:q].present?
       @title = params[:q][:title]
       @comment = params[:q][:comment]
     end
     @cities = @q.result(distinct: true).page(params[:page])
-    
-    if params[:submit_pdf_a4].present?
-      @cities = @q.result
-      print_pdf('Cities', 'pdf.html', 'A4')
-    else
-      @cities = @q.result.page(params[:page])
-    end
+    generate_csv(@q, 'cities') if params[:csv].present?
+    generate_pdf(@q.result, 'Cities', 'pdf.html', 'A4') if params[:pdf].present?
+    ids = @q.result.pluck(:id)
+    EmailJob.perform_later(current_user, ids, 'City', 'cities', params[:email_value]) if params[:email].present?
+    redirect_to cities_path if params[:email].present?
   end
 
   def export_csv_and_pdf
