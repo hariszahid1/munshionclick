@@ -1,0 +1,48 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+
+        <button type="button" id="sidebarCollapse" class="btn btn-info" onclick="document.getElementById('sidebar').classList.toggle('active');">
+            <i class="fas fa-align-left"></i>
+            <span>Toggle Menue</span>
+        </button>
+        <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fas fa-align-justify"></i>
+        </button>
+        <div class="">
+
+            <span>
+              Cash in Hand: <b><%=@account_amount_total.to_i%></b>
+              Account Balance: <b><%=@total_payable.to_i-@total_reciveable.to_i%></b>
+            </span>
+        </div>
+
+        <button class="btn btn-dark d-inline-block ml-auto" type="button">
+          Hosting Expiry Date <span id="expiryDateDisplay"><%=check_expiry_date(@pos_setting)%></span>
+        </button>
+        <div class="">
+          <a href="#AccountSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+              <i class="fas fa-tasks"></i>
+              Account Balance
+          </a>
+          <ul class="collapse list-unstyled" id="AccountSubmenu">
+              <%@account_balance.each do |account|%>
+              <li>
+                <i class="fas fa-tasks" aria-hidden="true"></i>
+                  <%=account&.first%> <%=account&.last%>
+              </li>
+              <%end%>
+          </ul>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="nav navbar-nav ml-auto">
+              <li class="nav-item active">
+                  <%= link_to current_user.name, root_path, class: "nav-link" %>
+              </li>
+                <li class="nav-item">
+                    <%= link_to 'Logout', destroy_user_session_path, method: :delete, class: "nav-link" %>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
