@@ -1,0 +1,364 @@
+<nav id="sidebar">
+    <div class="sidebar-header">
+        <h3><%= admin_name_on_nav %></h3>
+        <strong>POS</strong>
+    </div>
+
+    <ul class="list-unstyled components">
+        <li class="active">
+          <%= link_to dashboard_path do %>
+              <i class="fas fa-tasks" aria-hidden="true"></i>
+              Dashboard
+          <% end %>
+        </li>
+        <li>
+            <a href="#SaleSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                <i class="fas fa fa-barcode"></i>
+                Sale
+            </a>
+            <ul class="collapse list-unstyled" id="SaleSubmenu">
+              <li>
+                <a href="<%=orders_path(sale: true)%>" aria-expanded="false" class="dropdown-toggle">
+                  <i class="fa fa-shopping-cart"></i>
+                  Order Book
+                </a>
+              </li>
+
+                <li>
+                    <%= link_to new_purchase_sale_detail_path(transaction_type: :sale,product: true) do %>
+                        <i class="fas fa-plus"></i>
+                        Add Invoice
+                    <% end %>
+                </li>
+                <li>
+                    <%= link_to purchase_sale_details_path(sale: true) do %>
+                        <i class="fas fa-th-list"></i>
+                        List of Sale
+                    <% end %>
+                </li>
+                <li>
+                    <%= link_to daily_sales_path do %>
+                        <i class="fas fa-plus"></i>
+                        <i class="fas fa-th-list"></i>
+                        Daily Day Out
+                    <% end %>
+                </li>
+            </ul>
+        </li>
+          <%if pos_setting_sys_type=="MobileShop"%>
+          <li>
+              <%= link_to return_purchase_sale_details_path do %>
+                  <i class="fas fa-undo"></i>
+                    Return S/P
+              <% end %>
+          </li>
+          <%end%>
+        <li>
+          <%= link_to expenses_path do %>
+              <i class="fas fa-th-list"></i>
+              Expense
+          <% end %>
+        </li>
+        <li>
+          <%= link_to ledger_books_path do %>
+          <i class="fas fa-book"></i>
+          Ledger Book
+          <% end %>
+        </li>
+        <li>
+            <%= link_to payments_path do %>
+                <i class="fas fa-th-list"></i>
+                Day Book
+            <% end %>
+        </li>
+        <li>
+            <%= link_to accounts_path do %>
+                <i class="fas fa-book"></i>
+                Account
+            <% end %>
+        </li>
+
+                <% if can?(:view, :sys_user) %>
+                <li>
+                  <a  href="#UserSubMenu"  data-toggle="collapse", aria-expanded="false" class="dropdown-toggle">
+                      <i class="fas fa-user-plus"></i>
+                      User
+                  </a>
+                  <ul class="collapse list-unstyled" id="UserSubMenu">
+                    <li>
+                        <%= link_to ledger_books_path do %>
+                            <i class="fas fa-book"></i>
+                            Ledger Book
+                        <% end %>
+                    </li>
+                      <li>
+                          <%= link_to sys_users_path do %>
+                              <i class="fas fa-plus"></i>
+                              All Users
+                          <% end %>
+                      </li>
+                      <li>
+                          <%= link_to customer_sys_users_path do %>
+                              <i class="fas fa-plus"></i>
+                              Customer
+                          <% end %>
+                      </li>
+                      <li>
+                          <%= link_to supplier_sys_users_path do %>
+                              <i class="fas fa-plus"></i>
+                              Supplier
+                          <% end %>
+                      </li>
+                      <li>
+                          <%= link_to own_sys_users_path do %>
+                              <i class="fas fa-plus"></i>
+                              own
+                          <% end %>
+                      </li>
+                  </ul>
+                </li>
+                <% end %>
+                <li>
+                    <a href="#labourSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="fas fa fa-user-circle"></i>
+                        Staff
+                    </a>
+                    <ul class="collapse list-unstyled" id="labourSubmenu">
+                      <li>
+                        <a href="<%=staff_ledger_books_path%>" aria-expanded="false" class="dropdown-toggle">
+                          <i class="fa fa-address-book"></i>
+                          Staff Ledger Book
+                        </a>
+                      </li>
+                      <li>
+                        <a href="<%=staffs_path%>" aria-expanded="false" class="dropdown-toggle">
+                          <i class="fa fa-address-book"></i>
+                          Labour list
+                        </a>
+                      </li>
+                      <li>
+                          <a href="<%=salaries_path%>" aria-expanded="false" class="dropdown-toggle">
+                            <i class="fa fa-envelope-open"></i>
+                              Salary Debit detail
+                          </a>
+                      </li>
+                      <li>
+                          <a href="<%=salary_details_path%>" aria-expanded="false" class="dropdown-toggle">
+                            <i class="fa fa-envelope-open"></i>
+                              Salary Credit detail
+                          </a>
+                      </li>
+                    </ul>
+                </li>
+
+        <li>
+            <a href="#ReportsSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                <i class="fas fa fa-print"></i>
+                Reports
+            </a>
+            <ul class="collapse list-unstyled" id="ReportsSubmenu">
+                <li>
+                    <%= link_to reports_path do %>
+                        <i class="fas fa-plus"></i>
+                        Total Staff/Customer/Supplier
+                    <% end %>
+                </li>
+                <li>
+                    <%= link_to reports_chart_path do %>
+                        <i class="fas fa-th-list"></i>
+                        Chart/Graph
+                    <% end %>
+                </li>
+                <li>
+                    <%= link_to reports_trial_balance_path do %>
+                        <i class="fas fa-th-list"></i>
+                        Trial Balance
+                    <% end %>
+                </li>
+                <li>
+                    <%= link_to reports_chart_of_account_path do %>
+                        <i class="fas fa-th-list"></i>
+                        Chart of Account
+                    <% end %>
+                </li>
+                <li>
+                    <%= link_to reports_sale_report_path do %>
+                        <i class="fas fa-th-list"></i>
+                        Sale Report
+                    <% end %>
+                </li>
+                <li>
+                    <%= link_to reports_product_report_path do %>
+                        <i class="fas fa-th-list"></i>
+                        Profit Report
+                    <% end %>
+                </li>
+                <li>
+                    <%= link_to reports_stock_report_path do %>
+                        <i class="fas fa-th-list"></i>
+                        Sale/Purchase/Stock
+                    <% end %>
+                </li>
+                <li>
+                    <%= link_to dashboard_path do %>
+                        <i class="fas fa-th-list"></i>
+                        Stock Statment
+                    <% end %>
+                </li>
+            </ul>
+        </li>
+        <% if can?(:view, :product) %>
+        <li>
+            <%= link_to products_path do %>
+            <i class="fa fa-cart-arrow-down"></i>
+            Services
+            <% end %>
+        </li>
+        <% end %>
+
+                <% if can?(:view, :warranty) %>
+                  <li>
+                      <%= link_to product_warranties_path do %>
+                      <i class="fa fa-cart-arrow-down"></i>
+                      warranties
+                      <% end %>
+                  </li>
+                <% end %>
+
+                <li>
+                    <a href="<%=product_stocks_path%>" aria-expanded="false" class="dropdown-toggle">
+                        <i class="fa fa-shopping-cart"></i>
+                          Stock Detail
+                    </a>
+                </li>
+        <li>
+            <%= link_to investments_path do %>
+                <i class="fas fa-tasks"></i>
+                Investment
+            <% end %>
+        </li>
+
+        <li>
+            <%= link_to items_path do %>
+              <i class="fa fa-cart-arrow-down"></i>
+                Raw Material
+            <% end %>
+        </li>
+        <li>
+            <%= link_to productions_path do %>
+              <i class="fa fa-cart-arrow-down"></i>
+                Production
+            <% end %>
+        </li>
+
+        <% if can?(:update, :all) %>
+        <li>
+
+            <a href="#SystemSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                <i class="fas fa-tasks"></i>
+                System Settings
+            </a>
+            <ul class="collapse list-unstyled" id="SystemSubmenu">
+                <li>
+                  <%= link_to pos_settings_path do %>
+                    <i class="fas fa-tasks" aria-hidden="true"></i>
+                      General Setting
+                  <% end %>
+                </li>
+                <li>
+                    <%= link_to product_categories_path do %>
+                        <i class="fas fa-plus"></i>
+                        <i class="fas fa-th-list"></i>
+                        Product Category
+                    <% end %>
+                </li>
+                <li>
+                    <%= link_to product_sub_categories_path do %>
+                        <i class="fas fa-plus"></i>
+                        <i class="fas fa-th-list"></i>
+                        Product Sub Category
+                    <% end %>
+                </li>
+                <li>
+                    <%= link_to countries_path do %>
+                      <i class="fas fa-plus"></i>
+                      <i class="fas fa-th-list"></i>
+                        Country
+                    <% end %>
+                </li>
+                <li>
+                    <%= link_to departments_path do %>
+                      <i class="fas fa-plus"></i>
+                      <i class="fas fa-th-list"></i>
+                        Department
+                    <% end %>
+                </li>
+                <li>
+                    <%= link_to cities_path do %>
+                      <i class="fas fa-plus"></i>
+                      <i class="fas fa-th-list"></i>
+                        City
+                    <% end %>
+                </li>
+                <li>
+                  <%= link_to item_types_path do %>
+                      <i class="fas fa-plus"></i>
+                      <i class="fas fa-th-list"></i>
+                      Line Item Type
+                  <% end %>
+                </li>
+                <li>
+                    <%= link_to user_types_path do %>
+                        <i class="fas fa-plus"></i>
+                        <i class="fas fa-th-list"></i>
+                        User Types
+                    <% end %>
+                </li>
+                <li>
+                    <%= link_to expense_types_path do %>
+                        <i class="fas fa-plus"></i>
+                        <i class="fas fa-th-list"></i>
+                        Expense Type
+                    <% end %>
+                </li>
+                <li>
+                    <%= link_to production_block_types_path do %>
+                        <i class="fas fa-plus"></i>
+                        <i class="fas fa-th-list"></i>
+                        Production Block Types
+                    <% end %>
+                </li>
+                <% if can?(:delete, :all) %>
+                <li>
+                  <%= link_to users_path do %>
+                    <i class="fas fa-plus"></i>
+                    <i class="fas fa-th-list"></i>
+                      Users
+                  <% end %>
+                </li>
+                <li>
+                  <%= link_to bd_backups_path do %>
+                      <i class="fas fa-question"></i>
+                      Import/Export
+                  <% end %>
+                </li>
+                <%end%>
+            </ul>
+        </li>
+        <%end%>
+
+        <li>
+          <%= link_to helps_path do %>
+              <i class="fas fa-question"></i>
+              Help
+          <% end %>
+        </li>
+        <li>
+            <a href="#">
+                <i class="fas fa-paper-plane"></i>
+                Contact
+            </a>
+        </li>
+    </ul>
+
+</nav>
