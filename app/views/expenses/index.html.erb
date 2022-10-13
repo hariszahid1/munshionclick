@@ -17,16 +17,16 @@
   <div class="row">
       <div class="col-lg-12">
         <div class="col-lg-3 form-group float-left">
-          <%= f.select :expense_entries_expense_type_id_eq, options_from_collection_for_select(@expense_types, "id", ->(st){"#{st.id} \u{27F6} #{st.title} "},@expense_type),{:include_blank => "Select type"},:class=>"form-control chosen-select" %>
+          <%= f.select :expense_entries_expense_type_id_eq, options_from_collection_for_select(@expense_types, "id", ->(st){"#{st.id} \u{27F6} #{st.title} "},@expense_type),{:include_blank => "Select expense type"},:class=>"form-control chosen-select" %>
         </div>
         <div class="col-lg-3 form-group float-left">
           <%= f.select :expense_entries_account_id_eq, options_from_collection_for_select(@accounts, "id", "title" ,@account),{:include_blank => "Select Account"},:class=>"form-control chosen-select" %>
         </div>
         <div class="col-lg-2 form-group float-left">
-          <%= f.search_field :created_at_gteq,value:@start_date, class: 'form-control input-sm datepicker',placeholder: "YYYY-MM-DD" %>
+          <%= f.search_field :created_at_gteq,value:@start_date, class: 'form-control input-sm datepicker',title: "Select date from",  placeholder: "YYYY-MM-DD" %>
         </div>
         <div class="col-lg-2 form-group float-left">
-          <%= f.search_field :created_at_lteq,value:@end_date,class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
+          <%= f.search_field :created_at_lteq,value:@end_date,class: 'form-control input-sm datepicker' ,title: "Select date to", placeholder: "YYYY-MM-DD"%>
         </div>
 
         <div class="col-lg-2 form-group float-left">
@@ -34,11 +34,11 @@
         </div>
       </div>
       <div class="col-lg-12">
-        <div class="col-lg-3 form-group float-left">
-          <button class="form-control btn  badge badge-pill badge-danger" name="submit_pdf_a4" type="submit" value="Total Expense PDF A4" formtarget="_blank"><i class="fa fa-file-pdf"></i>PDF A4</button>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn  badge badge-pill badge-danger" name="submit_pdf_a4" title="Download pdf A4 size" type="submit" value="Total Expense PDF A4" formtarget="_blank">PDF A4 &nbsp;<i class="fa fa-file-pdf"></i></button>
         </div>
-        <div class="col-lg-3 form-group float-left">
-          <button class="form-control btn  badge badge-pill badge-danger" name="submit_pdf_a8" type="submit" value="Total Expense PDF A8" formtarget="_blank"><i class="fa fa-file-pdf"></i>PDF A8 </button>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn  badge badge-pill badge-danger" name="submit_pdf_a8" type="submit" title="Download pdf A8 size" value="Total Expense PDF A8" formtarget="_blank">PDF A8 &nbsp;<i class="fa fa-file-pdf"></i></button>
         </div>
         <div class="col-lg-2 form-group float-left">
           <button class="form-control btn btn-info" name="email" type="submit" value="Email"><i class="fas fa-envelope"></i> Email</button>

@@ -47,12 +47,12 @@
           <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
         </div>
 				<div class="col-lg-1 form-group float-right">
-					<button class="form-control btn  badge badge-pill badge-success" name="submit_csv_staff_with" type="submit" value="User CSV" formtarget="_blank"> <i class="fa fa-file-excel" aria-hidden="true"></i></button>
+					<button class="form-control btn  badge badge-pill badge-success" title="Download user csv" name="submit_csv_staff_with" type="submit" value="User CSV" formtarget="_blank">Users &nbsp; <i class="fa fa-file-excel" aria-hidden="true"></i></button>
 				</div>
 
 
         <div class="col-1 float-right d-flex">
-          <button class="form-control btn  badge badge-pill badge-danger" name="submit_pdf_staff_with" type="submit" value="Customer/Salesman PDF A4" formtarget="_blank">Users &nbsp;<i class="fa fa-file-pdf"></i></button>
+          <button class="form-control btn  badge badge-pill badge-danger" title="Download user pdf" name="submit_pdf_staff_with" type="submit" value="Customer/Salesman PDF A4" formtarget="_blank">Users &nbsp;<i class="fa fa-file-pdf"></i></button>
         </div>
       <% end %>
     </div>
@@ -110,21 +110,21 @@
           </td>
           <td>
             <% if can?(:update, SysUser) %>
-              <%= link_to edit_sys_user_path(sys_user) do %>
+              <%= link_to edit_sys_user_path(sys_user), title: "Edit User" do %>
                 <i class="fa fa-edit " aria-hidden="true"></i> |
               <%end %>
             <% end %>
             <% if can?(:delete, SysUser) %>
-              <%= link_to sys_user, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+              <%= link_to sys_user, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'},title: "Delete User", :remote => true, :class => 'delete' do %>
                 <i class="fa fa-trash " aria-hidden="true"></i> |
               <%end %>
             <% end %>
             <% if can?(:view, SysUser) %>
-              <%= link_to sys_user do %>
+              <%= link_to sys_user, title: "View SysUser" do %>
                 <i class="fa fa-eye " aria-hidden="true"></i> |
               <%end %>
             <%end%>
-            <%= link_to ledger_books_path('q[sys_user_id_eq]':sys_user.id) do%>
+            <%= link_to ledger_books_path('q[sys_user_id_eq]':sys_user.id), title: "Ledger book" do%>
               <i class="fa fa-address-book"></i>
             <%end %>
           </td>
