@@ -66,9 +66,9 @@
 
         <div class="col-4 float-right d-flex">
         
-          <button class="form-control badge badge-pill badge-danger" name="submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank">staff&nbsp;<i class="fa fa-file-pdf"></i></button>
-          <button class="form-control badge badge-pill badge-danger" name="wage_submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank">wage staff&nbsp;<i class="fa fa-file-pdf"></i></button>
-          <button class="form-control badge badge-pill badge-danger"name="salary_submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank">salary staff&nbsp;<i class="fa fa-file-excel"></i></button>
+          <button class="form-control badge badge-pill badge-danger" title= "Download staff pdf" name="submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank">staff&nbsp;<i class="fa fa-file-pdf"></i></button>
+          <button class="form-control badge badge-pill badge-danger" title= "Download wage staff pdf" name="wage_submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank">wage staff&nbsp;<i class="fa fa-file-pdf"></i></button>
+          <button class="form-control badge badge-pill badge-danger" title="Download salary staff pdf" name="salary_submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank">salary staff&nbsp;<i class="fa fa-file-excel"></i></button>
         </div>
 
         
@@ -134,7 +134,7 @@
               </div>
           <%else%>
           <% if can?(:add, :all) %>
-              <%= link_to new_salary_path(:staff_id=>staff.id) do %>
+              <%= link_to new_salary_path(:staff_id=>staff.id), title: "pay salary of staff" do %>
                 <i class="fa fa-envelope-open" aria-hidden="true"></i>
                 Pay Salary |
               <% end %>
@@ -142,17 +142,17 @@
           <%end%>
 
           <% if can?(:update, :all) %>
-            <%= link_to edit_staff_path(staff) do %>
+            <%= link_to edit_staff_path(staff), title: "Edit labor details" do %>
               <i class="fa fa-edit " aria-hidden="true"></i> |
             <%end %>
           <% end %>
           <% if can?(:delete, :all) %>
-            <%= link_to staff, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+            <%= link_to staff, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, title:"Delete labor",:remote => true, :class => 'delete' do %>
               <i class="fa fa-trash " aria-hidden="true"></i> |
             <%end %>
           <% end %>
           <% if can?(:view, :all) %>
-            <%= link_to staff do %>
+            <%= link_to staff, title: "View Details" do %>
               <i class="fa fa-eye " aria-hidden="true"></i>
             <%end %>
           <%end%>

@@ -84,28 +84,28 @@
           <% if can?(:add, :all) %>
           <td>
             <% if can?(:delete, :all) %>
-              <%= link_to new_payment_path(account_id:account) do %>
+              <%= link_to new_payment_path(account_id:account), title: "Make New Payment" do %>
                 <i class="fa fa-plus " aria-hidden="true"></i>
                  Payment |
                <%end %>
              <%end %>
           <% end %>
           <% if can?(:update, :all) %>
-            <%= link_to edit_account_path(account) do %>
+            <%= link_to edit_account_path(account), title: "Edit account details" do %>
               <i class="fa fa-edit " aria-hidden="true"></i> |
             <%end %>
           <% end %>
           <% if can?(:delete, :all) %>
-            <%= link_to account, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+            <%= link_to account, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, title: "Delete account details",:remote => true, :class => 'delete' do %>
               <i class="fa fa-trash " aria-hidden="true"></i> |
             <%end %>
           <% end %>
           <% if can?(:view, :all) %>
-            <%= link_to account do %>
+            <%= link_to account, title: "View Account details" do %>
               <i class="fa fa-eye " aria-hidden="true"></i>
             <%end %>
           <%end%>
-          <a href="<%=payments_path('q[account_id_eq]':account.id)%>">
+          <a href="<%=payments_path('q[account_id_eq]':account.id)%>" title= "Ledger book of account details">
             <i class="fa fa-address-book"></i>
           </a>
           </td>

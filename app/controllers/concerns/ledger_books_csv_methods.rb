@@ -313,8 +313,8 @@ module LedgerBooksCsvMethods
 					"-",
 					"-",
 					"#{@balance}",
-					"Previous Balance"
-					"#{}"
+					"Previous Balance",
+					""
 				]
 			end
 			@debit=@ledger_books_pdf.pluck(:debit).compact.sum

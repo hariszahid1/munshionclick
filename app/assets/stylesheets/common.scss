@@ -186,16 +186,25 @@ div#draw_prize_setups, div#commission_setups, .commission_setups_show_content {
     border-radius: 6px;
     padding: 1rem;
 }
-
+.table{
+  width: 100%;
+  margin-bottom: 1rem;
+  color: #212529;
+  background-color: transparent;
+  border-collapse: separate;
+  border-spacing: 0;
+  box-shadow: 0px 0px 36px 15px rgba(0, 0, 0, 0.28);
+}
 .bootstrap-table .fixed-table-container .table thead th {
+  background: #f3f6f9;
     .sort_link{
       color: #4842e4;
     }
     .desc{
-      background-image: none;
+      background-image: none !important;
     }
     .asc {
-      background-image: none;
+      background-image: none !important;
     }
   }
 
@@ -243,6 +252,7 @@ input#prize_info_of_two_numbers {
 .fixed_header.customer{
   thead th, tbody td{
     width: 7.15rem;
+    
   }
 }
 
@@ -491,4 +501,18 @@ thead.cust_prizes_list th.th_value {
 }
 .span-cost-price:hover{
   color: black !important
+}
+// .sorting-arrow:after{
+//   display: none !important;
+  
+// }
+.question {
+  height: 50px;
+  width: 50px;
+  background: rgba(204, 204, 204, 0.956);
+  font-size: 32px;
+  line-height: 40px;
+  text-align: center;
+  border-radius: 100%;
+  cursor: pointer;
 }

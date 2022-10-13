@@ -40,13 +40,12 @@
         <div class="col-lg-2 form-group float-left">
           <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
         </div>
-        <div class="col-lg-0.5 form-group float-left">
-        </div>
-        <div class="col-lg-1.5 form-group float-right">
+       
+        <div class="col-lg-2 form-group float-right">
           <% if params[:sale].present?%>
-            <button class="form-control btn  badge badge-pill badge-danger" name="sale_submit" type="submit" value="Total Sale PDF A8" formtarget="_blank"><i class="fa fa-file-pdf"></i> Sale</button>
+            <button class="form-control btn  badge badge-pill badge-danger" name="sale_submit" title="Download sales pdf" type="submit" value="Total Sale PDF A8" formtarget="_blank">Sale &nbsp;<i class="fa fa-file-pdf"></i></button>
           <%else%>
-            <button class="form-control btn  badge badge-pill badge-danger" name="purchase_submit" type="submit" value="Total Purchase PDF A8" formtarget="_blank"><i class="fa fa-file-pdf"></i> Purchase</button>
+            <button class="form-control btn  badge badge-pill badge-danger" name="purchase_submit" title= "Download purchase pdf" type="submit" value="Total Purchase PDF A8" formtarget="_blank">Purchases &nbsp;<i class="fa fa-file-pdf"></i></button>
           <%end%>
         </div>
       <% end %>
@@ -92,36 +91,36 @@
           </td>
           <td><%= order.comment %></td>
           <td>
-            <%= link_to order, target: "_blank" do %>
+            <%= link_to order, target: "_blank", title: "Download A4 size pdf" do %>
                        <i class="fa fa-print" aria-hidden="true"></i> |
             <% end %>
-            <%= link_to order_path(order,page_size:"legal"), target: "_blank" do %>
+            <%= link_to order_path(order,page_size:"legal"), target: "_blank", title: "Download legal size print" do %>
                        <i class="fa fa-print" aria-hidden="true"></i> |
             <% end %>
-            <%= link_to booking_print_order_path(order,page_size:"legal",style: :new), target: "_blank" do %>
+            <%= link_to booking_print_order_path(order,page_size:"legal",style: :new), target: "_blank", title: "Download booking size print" do %>
                        <i class="fa fa-print" aria-hidden="true"></i> |
             <% end %>
             <%if order.order_items.present?%>
               <%if order.order_items.first.product.present? %>
               <% if can?(:update, :all) %>
-                <%= link_to edit_order_path(order,product: true) do %>
+                <%= link_to edit_order_path(order,product: true), title: "Edit order" do %>
                   <i class="fa fa-edit" aria-hidden="true"></i> |
                 <% end %>
                 <% end %>
               <%else%>
               <% if can?(:update, :all) %>
-                <%= link_to edit_order_path(order) do %>
+                <%= link_to edit_order_path(order), title: "Edit order" do %>
                   <i class="fa fa-edit" aria-hidden="true"></i> |
                 <% end %>
                 <% end %>
               <%end%>
             <%end%>
           <% if can?(:delete, :all) %>
-            <%= link_to order, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+            <%= link_to order, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'},title:"Delete order", :remote => true, :class => 'delete' do %>
                       <i class="fa fa-trash" aria-hidden="true"></i> |
             <% end %>
           <% end %>
-            <%= link_to order do %>
+            <%= link_to order, title: "View detail" do %>
                       <i class="fa fa-eye" aria-hidden="true"></i>
             <% end %>
           </td>

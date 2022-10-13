@@ -27,7 +27,7 @@
         <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
       </div>
       <div class="col-lg-1.5 form-group float-right">
-        <button class="form-control btn  badge badge-pill badge-danger" name="submit_pdf_staff_with" type="submit" value="Accounts PDF A4" formtarget="_blank"> <i class="fa fa-file-pdf"></i></button>
+        <button class="form-control btn  badge badge-pill badge-danger" title="Download customer pdf" name="submit_pdf_staff_with" type="submit" value="Accounts PDF A4" formtarget="_blank"> Customer &nbsp; <i class="fa fa-file-pdf"></i></button>
       </div>
     <% end %>
   </div>
@@ -60,21 +60,21 @@
         <td><%= sys_user.balance.abs %><%@sys_user_balance += sys_user.balance.abs %> </td>
         <td>
           <% if can?(:update, :all) %>
-            <%= link_to edit_sys_user_path(sys_user) do %>
+            <%= link_to edit_sys_user_path(sys_user), title: "Edit customers" do %>
               <i class="fa fa-edit " aria-hidden="true"></i> |
             <%end %>
           <% end %>
           <% if can?(:delete, :all) %>
-            <%= link_to sys_user, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+            <%= link_to sys_user, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, title: "Delete customer", :remote => true, :class => 'delete' do %>
               <i class="fa fa-trash " aria-hidden="true"></i> |
             <%end %>
           <% end %>
           <% if can?(:view, :all) %>
-            <%= link_to sys_user do %>
+            <%= link_to sys_user, title: "View customer detail" do %>
               <i class="fa fa-eye " aria-hidden="true"></i> |
             <%end %>
           <%end%>
-          <a href="<%=ledger_books_path('q[sys_user_id_eq]':sys_user.id)%>">
+          <a href="<%=ledger_books_path('q[sys_user_id_eq]':sys_user.id) %>" title="Ledger book">
             <i class="fa fa-address-book"></i>
           </a>
         </td>
