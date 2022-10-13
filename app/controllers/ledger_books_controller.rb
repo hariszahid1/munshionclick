@@ -67,7 +67,9 @@ class LedgerBooksController < ApplicationController
 				createCSV
 			else
 
-				print_pdf('User LedgerBook -'+@created_at_gteq.to_s+' to '+@created_at_lteq.to_s,'pdf.html','A4')
+				tempName='['+(LedgerBook.where(id:@ledger_books.ids).joins(:sys_user).pluck('name').uniq.join(' '))+']'
+
+				print_pdf("#{tempName}-LedgerBook -"+@created_at_gteq.to_s+" to "+@created_at_lteq.to_s,"pdf.html","A4")
 				
 			end
 # 2nd if
