@@ -124,8 +124,8 @@ class LedgerBooksController < ApplicationController
         @customer_credit_date = LedgerBook.joins(:sys_user).where.not('sys_users.user_group': ["Both","Supplier"]).where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).where('credit>0').ransack(params[:q]).result.group('sys_users.name','created_at').sum(:credit)
         @supplier_credit_date = LedgerBook.joins(:sys_user).where('sys_users.user_group': ["Both","Supplier"]).where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).where('credit>0').ransack(params[:q]).result.group('sys_users.name','created_at').sum(:credit)
 
-        @account_credit = Payment.joins(:account).where(paymentable_type:['PurchaseSaleDetail','Order','LedgerBook'],created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).group('accounts.title').sum(:credit)
-        @account_debit = Payment.joins(:account).where(paymentable_type:['PurchaseSaleDetail','Order','LedgerBook'],created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).group('accounts.title').sum(:debit)
+        @account_credit = Payment.joins(:account).where(paymentable_type:["ExpenseEntry", "LedgerBook", "Order", "PurchaseSaleDetail", "Salary", "SalaryDetail"],created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).group('accounts.title').sum(:credit)
+        @account_debit = Payment.joins(:account).where(paymentable_type:["ExpenseEntry", "LedgerBook", "Order", "PurchaseSaleDetail", "Salary", "SalaryDetail"],created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).group('accounts.title').sum(:debit)
       else
         @customer_debit=LedgerBook.joins(:sys_user).where.not('sys_users.user_group': ["Both","Supplier"]).where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).where('debit>0').ransack().result.group('sys_users.name').sum(:debit)
         @supplier_debit=LedgerBook.joins(:sys_user).where('sys_users.user_group': ["Both","Supplier"]).where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).where('debit>0').ransack().result.group('sys_users.name').sum(:debit)
@@ -137,8 +137,8 @@ class LedgerBooksController < ApplicationController
         @customer_credit=LedgerBook.joins(:sys_user).where.not('sys_users.user_group': ["Both","Supplier"]).where('credit>0').ransack().result.group('sys_users.name','created_at').sum(:credit)
         @supplier_credit=LedgerBook.joins(:sys_user).where('sys_users.user_group': ["Both","Supplier"]).where('credit>0').ransack().result.group('sys_users.name','created_at').sum(:credit)
 
-        @account_credit = Payment.joins(:account).where(paymentable_type:['PurchaseSaleDetail','Order','LedgerBook'],created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).group('accounts.title').sum(:credit)
-        @account_debit = Payment.joins(:account).where(paymentable_type:['PurchaseSaleDetail','Order','LedgerBook'],created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).group('accounts.title').sum(:debit)
+        @account_credit = Payment.joins(:account).where(paymentable_type:["ExpenseEntry", "LedgerBook", "Order", "PurchaseSaleDetail", "Salary", "SalaryDetail"],created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).group('accounts.title').sum(:credit)
+        @account_debit = Payment.joins(:account).where(paymentable_type:["ExpenseEntry", "LedgerBook", "Order", "PurchaseSaleDetail", "Salary", "SalaryDetail"],created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).group('accounts.title').sum(:debit)
       end
 			if params[:submit_debit_csv].present?
 				csv_data = debit_csv

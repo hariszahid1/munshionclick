@@ -1,4 +1,5 @@
 class StaffsController < ApplicationController
+	include StaffCsvMethods
   before_action :set_staff, only: [:show, :edit, :update, :destroy, :salary_info, :salary_wage_rate_info]
 
   # GET /staffs
@@ -22,63 +23,22 @@ class StaffsController < ApplicationController
     @staffs = @q.result(distinct: true).page(params[:page]).per(50)
     @total = @staffs_total.pluck('SUM(advance_amount)','SUM(balance)','SUM(wage_debit)')
     @staffs_pays = Salary.where("extract(month from created_at) = ? AND extract(year from created_at) = ? AND staff_id IN (?)", Date.today.month, Date.today.year,Staff.pluck(:id)).where(:payment_type=>0)
+		@staffs_pdf = @q.result(distinct: true)
     if params[:submit_pdf]
-      request.format = 'pdf'
-      @staffs_pdf = @q.result(distinct: true)
-      respond_to do |format|
-        format.html
-        format.pdf do
-          render pdf: "index_staff_wise",
-          layout: 'pdf.html',
-          page_size: 'A4',
-          margin_top: '0',
-          margin_right: '0',
-          margin_bottom: '0',
-          margin_left: '0',
-          encoding: "UTF-8",
-          footer:  {             # optional, use 'pdf_plain' for a pdf_plain.html.pdf.erb file, defaults to main layout
-            right: '[page] of [topage]'},
-          show_as_html: false
-        end
-      end
+			print_pdf('staff_details','pdf.html','A4')  #pdf's
     elsif params[:salary_submit_pdf]
-        request.format = 'pdf'
-        @staffs_pdf = @q.result(distinct: true)
-        respond_to do |format|
-          format.html
-          format.pdf do
-            render pdf: "salary_staff",
-            layout: 'salary_staff.pdf',
-            page_size: 'A4',
-            margin_top: '0',
-            margin_right: '0',
-            margin_bottom: '0',
-            margin_left: '0',
-            footer:  {             # optional, use 'pdf_plain' for a pdf_plain.html.pdf.erb file, defaults to main layout
-              right: '[page] of [topage]'},
-            encoding: "UTF-8",
-            show_as_html: true
-          end
-        end
-      elsif params[:wage_submit_pdf]
-          request.format = 'pdf'
-          @staffs_pdf = @q.result(distinct: true)
-          respond_to do |format|
-            format.html
-            format.pdf do
-              render pdf: "wage_staff",
-              layout: 'wage_staff.pdf',
-              page_size: 'A4',
-              margin_top: '0',
-              margin_right: '0',
-              margin_bottom: '0',
-              margin_left: '0',
-              footer:  {             # optional, use 'pdf_plain' for a pdf_plain.html.pdf.erb file, defaults to main layout
-                right: '[page] of [topage]'},
-              encoding: "UTF-8",
-              show_as_html: false
-            end
-          end
+			print_pdf('salary_staff_details','salary_staff.pdf','A4',true)
+    elsif params[:wage_submit_pdf]
+			print_pdf('wage_staff_details','wage_staff.pdf','A4')
+		elsif params[:submit_csv]  #csv's
+			csv_data=staff_details_csv
+			createCSV("staff_details",csv_data)
+		elsif params[:salary_submit_csv]
+			csv_data=salary_staff_details_csv
+			createCSV("salary_staff_details",csv_data)
+		elsif params[:wage_submit_csv]
+			csv_data=wage_staff_details_csv
+			createCSV("wage_staff_details",csv_data)
     end
   end
 
@@ -96,24 +56,10 @@ class StaffsController < ApplicationController
     @staffs = @q.result(distinct: true).page(params[:page]).per(50)
     @staffs_pays = Salary.where("extract(month from created_at) = ? AND extract(year from created_at) = ? AND staff_id IN (?)", Date.today.month, Date.today.year,Staff.pluck(:id)).where(:payment_type=>0)
     if params[:submit_pdf]
-      request.format = 'pdf'
-      @staffs_pdf = @q.result(distinct: true)
-      respond_to do |format|
-        format.html
-        format.pdf do
-          render pdf: "index_staff_wise",
-          layout: 'pdf.html',
-          page_size: 'A4',
-          margin_top: '0',
-          margin_right: '0',
-          margin_bottom: '0',
-          margin_left: '0',
-          footer:  {             # optional, use 'pdf_plain' for a pdf_plain.html.pdf.erb file, defaults to main layout
-            right: '[page] of [topage]'},
-          encoding: "UTF-8",
-          show_as_html: false
-        end
-      end
+			print_pdf('payable_staff_details','pdf.html','A4')
+		elsif params[:submit_csv]
+			csv_data=payable_staff_details_csv
+			createCSV("payable_staff_details",csv_data)
     end
 
   end
@@ -132,24 +78,11 @@ class StaffsController < ApplicationController
     @staffs = @q.result(distinct: true).page(params[:page]).per(50)
     @staffs_pays = Salary.where("extract(month from created_at) = ? AND extract(year from created_at) = ? AND staff_id IN (?)", Date.today.month, Date.today.year,Staff.pluck(:id)).where(:payment_type=>0)
     if params[:submit_pdf]
-      request.format = 'pdf'
       @staffs_pdf = @q.result(distinct: true)
-      respond_to do |format|
-        format.html
-        format.pdf do
-          render pdf: "index_staff_wise",
-          layout: 'pdf.html',
-          page_size: 'A4',
-          margin_top: '0',
-          margin_right: '0',
-          margin_bottom: '0',
-          margin_left: '0',
-          footer:  {             # optional, use 'pdf_plain' for a pdf_plain.html.pdf.erb file, defaults to main layout
-            right: '[page] of [topage]'},
-          encoding: "UTF-8",
-          show_as_html: false
-        end
-      end
+			print_pdf('receiveable_staff_details','pdf.html','A4')
+		elsif params[:submit_csv]
+			csv_data=receiveable_staff_details_csv
+			createCSV("receiveable_staff_details",csv_data)
     end
   end
 
@@ -281,4 +214,13 @@ class StaffsController < ApplicationController
                                     :monthly_salary, :school_branch_id, :wage_rate, :balance, :staff_department, :department_id, :staff_type, :wage_debit,
                                      :raw_product_quantity, :profile_image, :staff_raw_products_attributes => [:id, :staff_id, :raw_product_id, :_destroy])
     end
+
+		def createCSV(csv_name,csv_data)
+			request.format = 'csv'
+			respond_to do |format|
+			format.html
+			format.csv { send_data csv_data, filename: "#{csv_name} - #{Date.today}.csv" }
+			end
+		end
+
 end
