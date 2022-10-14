@@ -1,25 +1,33 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
+<nav class="navbar navbar-expand-lg navbar-light bg-light p-1">
 
-        <button type="button" id="sidebarCollapse" class="btn btn-info" onclick="document.getElementById('sidebar').classList.toggle('active');">
-            <i class="fas fa-align-left"></i>
-            <span>Toggle Menue</span>
-        </button>
-        <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <i class="fas fa-align-justify"></i>
-        </button>
-        <div class="">
+        <i type="button" id="sidebarCollapse" class="fas fa-angle-left fa-3x mb-4 sidebarCollapse" onclick="document.getElementById('sidebar').classList.toggle('active'); document.getElementById('sidebarCollapse').classList.toggle('rotate-toggle-button');"></i>
+            
+        <div class="container-fluid">
 
+        <button class="btn btn-dark d-inline-block d-lg-none ml-auto mb-2 mr-2" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fas fa-user fa-2x"></i>
+        </button>
+
+        <div class="d-flex justify-content-center">
+        <span class="navbar nav mr-2">
             <span>
               Cash in Hand: <b><%=@account_amount_total.to_i%></b>
+            </span>
+        </span>
+
+        <span class="navbar nav">
+            <span>
               Account Balance: <b><%=@total_payable.to_i-@total_reciveable.to_i%></b>
             </span>
-        </div>
+        </span>
 
-        <button class="btn btn-dark d-inline-block ml-auto" type="button">
+        <span class="navbar nav ml-3">
+        <span class="btn btn-dark d-inline-block ml-auto" type="button">
           Hosting Expiry Date <span id="expiryDateDisplay"><%=check_expiry_date(@pos_setting)%></span>
-        </button>
-        <div class="">
+        </span>
+        </span>
+
+        <span class="navbar nav ml-3 mr-2">
           <a href="#AccountSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
               <i class="fas fa-tasks"></i>
               Account Balance
@@ -32,17 +40,19 @@
               </li>
               <%end%>
           </ul>
-        </div>
+        </span>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="nav navbar-nav ml-auto">
-              <li class="nav-item active">
-                  <%= link_to current_user.name, root_path, class: "nav-link" %>
-              </li>
-                <li class="nav-item">
-                    <%= link_to 'Logout', destroy_user_session_path, method: :delete, class: "nav-link" %>
-                </li>
-            </ul>
+        <span class="collapse navbar-collapse" id="navbarSupportedContent">
+            <span class="navbar nav ml-2">
+                    <i class="fas fa-user-circle fa-2x" aria-hidden="true"></i>
+                  <%= link_to current_user.name, root_path, class: "nav-link text-primary" %>
+            </span>
+              
+            <span class="navbar nav ml-3 bg-danger text-white"> 
+                <strong><%= link_to 'Logout', destroy_user_session_path, method: :delete, class: "nav-link" %></strong>
+            </span>
+
+        </span>
         </div>
     </div>
 </nav>
