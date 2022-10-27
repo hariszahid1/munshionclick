@@ -116,23 +116,23 @@ class CitiesController < ApplicationController
   end
 
 	def download_cities_csv_file
-    	@cities = @q.result
-			header_for_csv=["Id","Title","Comment"]
-			data_for_csv= get_data_for_cities_csv
-			generate_csv(data_for_csv, header_for_csv,'cities')
+    @cities = @q.result
+    header_for_csv=["Id","Title","Comment"]
+    data_for_csv= get_data_for_cities_csv
+    generate_csv(data_for_csv, header_for_csv,'cities')
 	end
 
 	def download_cities_pdf_file
-    	@cities = @q.result
-			generate_pdf('Cities', 'pdf.html', 'A4') 
+    @cities = @q.result
+    generate_pdf('Cities', 'pdf.html', 'A4')
 	end
 
-	def send_email_file 
-			ids = @q.result.pluck(:id)
-			EmailJob.perform_later(current_user, ids, 'City', 'cities', params[:email_value])
-			redirect_to cities_path
+	def send_email_file
+    EmailJob.perform_later(@q.result.as_json, 'cities/index.pdf.erb', params[:email_value], params[:email_choice], current_user)
+    redirect_to cities_path
 	end
+
 	def export_file
-		export_data('City')    
+		export_data('City')
 	end
 end

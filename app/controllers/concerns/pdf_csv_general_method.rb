@@ -13,6 +13,7 @@ module PdfCsvGeneralMethod
       format.html
       format.pdf do
         render pdf: pdf_title,
+               locals: { data: @cities.as_json },
                layout: pdf_layout,
                page_size: page_size,
                orientation: 'Portrait',
@@ -51,4 +52,18 @@ module PdfCsvGeneralMethod
     # end
     send_data file, type: 'text/csv; charset=utf-8; header=present', disposition: "attachment; filename=#{name}.csv"
   end
+
+  def export_data(table_name)
+    @data = table_name.constantize.all
+    import_mapping = ImportMapping.find_by(table_name: table_name)
+    headers = import_mapping&.included_fields
+    file = CSV.generate(headers: true) do |csv|
+      csv << headers
+      @data.each do |d|
+        csv << d.as_json.values_at(*headers)
+      end
+    end
+    send_data file, type: 'text/csv; charset=utf-8; header=present', disposition: "attachment; filename=#{table_name}.csv"
+  end
+
 end

@@ -10,11 +10,15 @@ class ReportMailer < ApplicationMailer
 
   def send_csv_pdf_email(csv, pdf, subject, email, body)
     @subject = subject
-    csv.each do |csv_s|
-      attachments["#{csv_s.last}.csv"] = csv_s.first
+    if csv[0][0].present?
+      csv.each do |csv_s|
+        attachments["#{csv_s.last}.csv"] = csv_s.first
+      end
     end
-    pdf.each do |pdf_s|
-      attachments["#{pdf_s.last}.pdf"] = pdf_s.first
+    if pdf[0][0].present?
+      pdf.each do |pdf_s|
+        attachments["#{pdf_s.last}.pdf"] = pdf_s.first
+      end
     end
     mail(to: email, subject: "#{subject} report from MunshiOnClick")
   end
