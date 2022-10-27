@@ -1,0 +1,43 @@
+<div class="modal fade" id="showdData" tabindex="-1" role="dialog" aria-labelledby="showdDataLabel">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+          <div class="modal-body">
+            
+            <!-- Card Header - Accordion -->
+            <div class="modal-header">
+          <h2 class="modal-title" id="myModalLabel">City Details</h2>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+             <!-- Card Content - Collapse -->
+              <div class="collapse show" id="collapseCardExample" style="">
+                <div class="card-body">
+                  <table>
+                    <thead>
+                      <th><h4>Id</h4></th>
+                      <th><h4>Name</h4></th>
+                      <th><h4>Comment</h4></th>
+                   </thead>
+                    <tbody>
+                      <tr>
+                        <td><h6><%= city.id %></h6></td>
+                        <td><h6><%= city.title %></h6></td>
+                        <td><h6><%= city.comment %><h6></td>
+                      </tr>
+                   </tbody>
+                  </table>
+                </div>
+              </div>
+            
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger float-right" data-dismiss="modal" aria-label="Close">
+              <span class="text-light p-2">Close</span>
+            </button>
+          </div>
+     </div>  
+    </div>
+    </div>
+  </div>
+</div>
