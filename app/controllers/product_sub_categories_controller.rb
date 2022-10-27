@@ -9,10 +9,8 @@ class ProductSubCategoriesController < ApplicationController
     if @q.result.count > 0
       @q.sorts = 'id asc' if @q.sorts.empty?
     end
-    if params[:q].present?
-      @title = params[:q][:title_eq]
-      @code = params[:q][:code_eq]
-    end
+  
+    @options_for_select = ProductSubCategory.all
     @product_sub_categories = @q.result(distinct: true).page(params[:page])
     if params[:submit_pdf_staff_with].present?
       if @q.result.count > 0
