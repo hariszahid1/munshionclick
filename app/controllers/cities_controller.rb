@@ -13,6 +13,7 @@ class CitiesController < ApplicationController
   def index
     @q = City.ransack(params[:q])
     @q.sorts = 'id asc' if @q.sorts.empty? && @q.result.count.positive?
+    @options_for_select = City.all
     @cities = @q.result.page(params[:page])
 		download_cities_csv_file if params[:csv].present?
 		download_cities_pdf_file if params[:pdf].present?
