@@ -47,7 +47,7 @@ class CitiesController < ApplicationController
   # GET /cities/1
   # GET /cities/1.json
   def show
-    respond_to do |format|
+      respond_to do |format|
       format.js
     end
   end
@@ -55,7 +55,7 @@ class CitiesController < ApplicationController
   # GET /cities/new
   def new
     @city = City.new
-        respond_to do |format|
+      respond_to do |format|
       format.js
     end
 

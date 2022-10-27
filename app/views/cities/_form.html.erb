@@ -1,32 +1,31 @@
-
-<%= bootstrap_form_for(city, remote: true) do |f| %>
-  <% if city.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(city.errors.count, "error") %> prohibited this city from being saved:</h2>
-
-      <ul>
-      <% city.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
+<%= bootstrap_form_for(city) do |f| %>
+      <% if city.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(city.errors.count, "error") %> prohibited this city from being saved:</h2>
+          <ul>
+          <% city.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+          </ul>
+        </div>
       <% end %>
-      </ul>
-    </div>
-  <% end %>
-<div class="col-lg-12 row">
-  <div class="col-lg-12 form-group float-left text-black">
-    <%= f.label :title do %>
-          <%= City.human_attribute_name :title %>
-          <i class="fas fa-language"></i>
-        <% end %>
-    <%= f.text_field :title,required:true, placeholder: "Enter Title", hide_label: true ,class: 'urdu-font' %>
-  </div>
 
-  <div class="col-lg-12 form-group float-left text-black">
-    <%= f.text_area :comment, placeholder: "Enter Comment" %>
-  </div>
-  </div>
+      <div class="col-lg-12 row">
+          <div class="col-lg-12 form-group float-left text-black">
+            <%= f.label :title do %>
+                  <%= City.human_attribute_name :title %>
+                  <i class="fas fa-language"></i>
+                <% end %>
+            <%= f.text_field :title,required:true, placeholder: "Enter Title", hide_label: true ,class: 'urdu-font' %>
+          </div>
 
+          <div class="col-lg-12 form-group float-left text-black">
+            <%= f.text_area :comment, placeholder: "Enter Comment" %>
+          </div>
+        </div>
 
-      <div class="col-lg-2 ml-4 form-group float-left">
-        <%=f.object.id.nil? ? (f.submit class: "btn btn-success", style: "float: right")  :  (f.submit class: "btn btn-warning", style: "float: right")%>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        <%=f.object.id.nil? ? (f.submit class: "btn btn-success mr-4", style: "float: right")  :  (f.submit class: "btn btn-warning mr-4", style: "float: right")%>
       </div>
 <% end %>
