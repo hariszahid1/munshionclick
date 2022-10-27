@@ -1,0 +1,4 @@
+$('.show-data').children().remove();
+$('.show-data').append("<%= escape_javascript(render partial: 'show', locals: { city: @city }) %>");
+$("#showdData").modal('show');
+
