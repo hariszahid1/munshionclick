@@ -43,9 +43,17 @@
   <div class="tab-content mb-5">
     <div class="tab-pane active" id="search" role="tabpanel">
      <p>
-      <div class="col-lg-3 form-group d-flex">
-          <%= f.search_field :title_or_comment_cont, placeholder: "Search in countries", title: "Enter country name" ,:class=>"form-control" %>
-          <button class="form-control btn btn-primary" title="search in country" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+      <div class="col-lg-10 form-group d-flex">
+        <div class='col-lg-3'>
+        <%# , "title", ->(st){"#{st.title} \u{27F6} #{st.code} "} %>
+        <%= f.select :id_eq, options_for_select(@options_for_select.map{ |p| [p.title , p.id]}, f.object.id_eq),{:include_blank => "Select Title"},:class=>"form-control chosen-select" %>
+        </div>
+          <div class='col-lg-3'>
+            <%= f.search_field :title_or_comment_cont, placeholder: "Search in countries", title: "Enter country name" ,:class=>"form-control" %>
+          </div>
+          <div class='col-lg-3'>
+            <button class="form-control btn btn-primary" title="search in country" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+          </div>
       </div>
       </p>
     </div>

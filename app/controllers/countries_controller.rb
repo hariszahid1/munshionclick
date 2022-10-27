@@ -12,6 +12,7 @@ class CountriesController < ApplicationController
       @title = params[:q][:title]
       @comment = params[:q][:comment]
     end
+    @options_for_select = Country.all
     @countries = @q.result(distinct: true).page(params[:page])
 
     if params[:submit_pdf_a4].present?
