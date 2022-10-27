@@ -12,7 +12,7 @@
     </div>
   <% end %>
 <div class="col-lg-12 row">
-  <div class="col-lg-6 form-group float-left text-black">
+  <div class="col-lg-12 form-group float-left text-black">
     <%= f.label :title do %>
           <%= City.human_attribute_name :title %>
           <i class="fas fa-language"></i>
@@ -20,22 +20,13 @@
     <%= f.text_field :title,required:true, placeholder: "Enter Title", hide_label: true ,class: 'urdu-font' %>
   </div>
 
-  <div class="col-lg-6 form-group float-left text-black">
+  <div class="col-lg-12 form-group float-left text-black">
     <%= f.text_area :comment, placeholder: "Enter Comment" %>
   </div>
   </div>
 
-  <div class="col-lg-12 row ">
-    <div class="col-lg-6 form-group float-left text-black">
-      <%= link_to cities_path do %>
-      <i class="fa fa-arrow-left " aria-hidden="true"></i>
-      Cancel
-      <% end %>
-    </div>
-    <div class="col-lg-6 form-group float-left">
-      <div class="col-lg-6 form-group float-left">
-        <%=f.object.id.nil? ? (f.submit class: "btn btn-success", style: "float: left")  :  (f.submit class: "btn btn-warning", style: "float: left")%>
+
+      <div class="col-lg-2 ml-4 form-group float-left">
+        <%=f.object.id.nil? ? (f.submit class: "btn btn-success", style: "float: right")  :  (f.submit class: "btn btn-warning", style: "float: right")%>
       </div>
-    </div>
-  </div>
 <% end %>

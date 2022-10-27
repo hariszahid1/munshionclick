@@ -4,7 +4,7 @@
   <td><%= city.comment %></td>
   <td>
     <% if can?(:update, :all) %>
-      <%= link_to edit_city_path(city) do %>
+      <%= link_to edit_city_path(city), remote: true do %>
         <i class="fa fa-edit " aria-hidden="true"></i> |
       <%end %>
     <% end %>
@@ -14,7 +14,7 @@
       <%end %>
     <% end %>
     <% if can?(:view, :all) %>
-      <%= link_to city do %>
+      <%= link_to city_path(city), remote: true do %>
         <i class="fa fa-eye " aria-hidden="true"></i>
       <%end %>
     <%end%>
