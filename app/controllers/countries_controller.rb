@@ -48,15 +48,26 @@ class CountriesController < ApplicationController
   # GET /countries/1
   # GET /countries/1.json
   def show
+    respond_to do |format|
+      format.js
+    end
   end
 
   # GET /countries/new
   def new
     @country = Country.new
+    respond_to do |format|
+      format.js
+    end
+
   end
 
   # GET /countries/1/edit
   def edit
+        respond_to do |format|
+      format.js
+    end
+
   end
 
   # POST /countries
