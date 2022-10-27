@@ -1,1 +1,5 @@
-$('#new_city a').hide().parent().append("<%= j render 'new_form', city: @city %>");
+$('.show-data').children().remove();
+$('.show-data').append("<%= escape_javascript(render partial: 'new_form', locals: { city: @city }) %>");
+$("#showdData").modal('show');
+
+

@@ -4,7 +4,7 @@
 class CitiesController < ApplicationController
   include PdfCsvEmailMethod
 
-  before_action :set_city, only: [:show, :edit, :update, :destroy]
+  before_action :set_city, only: %i[show edit update destroy]
   require 'tempfile'
   require 'csv'
   # GET /cities
@@ -46,11 +46,19 @@ class CitiesController < ApplicationController
 
   # GET /cities/1
   # GET /cities/1.json
-  def show; end
+  def show
+    respond_to do |format|
+      format.js
+    end
+  end
 
   # GET /cities/new
   def new
     @city = City.new
+        respond_to do |format|
+      format.js
+    end
+
   end
 
   # GET /cities/1/edit
