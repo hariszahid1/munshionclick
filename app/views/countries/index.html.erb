@@ -2,35 +2,125 @@
   <div class="row">
     <div class="col-lg-12 col-sm-12">
       <h1>Countries</h1>
-      <% if can?(:add, :all) %>
-      <div id="new_country">
-        <%= link_to new_country_path, remote: true, class: "btn btn-success" do %>
-           <i class="fa fa-plus" aria-hidden="true"></i>
-           New Country
-        <% end %>
-      </div>
-      <% end %>
-    </div>
-  </div>
-  <div class="clearfix"></div>
-  <div class="row">
-    <div class="col-lg-12 col-sm-12">
-      <%= search_form_for @q, url: countries_path, class: "admin-controls", method: "get" do |f| %>
-        <div class="col-lg-3 form-group float-left">
-          <%= f.search_field :title_or_comment_cont, placeholder: "Search in countries", title: "Enter country name" ,:class=>"form-control" %>
-        </div>
-        
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn btn-primary" title="search in country" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
-        </div>
-         <div class="col-lg-2 form-group float-right">
-        <button class="form-control badge badge-pill badge-danger" title="Download pdf" name="submit_pdf_a4" type="submit" value="PDF A4" formtarget="_blank"
- style="width:100px">Countries &nbsp;<i class="fa fa-file-pdf"></i></button>
-      </div>
-      <% end %>
-    </div>
-  </div>
 
+          <div class="float-right">
+          <div class="dropdown ml-auto mr-4">
+           <span class="btn btn-info" title= "About This page">Help</span>
+            <div class="dropdown-content">
+              <% if @help.present? %>
+              <% @help&.help_links.each do |link| %>
+              <a type="button" class="" target="_blank" href="<%= link[1] %>" >Help in <%= link[0] %></a>
+               <% end %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+     <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link tab-label" data-toggle="tab" href="#create" role="tab">Create</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
+      </li>
+      <%# <li class="nav-item">
+       <a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
+      </li> %>
+</ul>
+      <%= search_form_for @q, url: countries_path, class: "admin-controls", method: "get" do |f| %>
+ <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+       <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
+         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          </div>
+          <div class="modal-body">
+            <%= text_field_tag 'email_value', {}, class: 'form-control', placeholder: 'Enter email to recieve pdf and csv...', type: 'email'%>
+            <br />
+            <label>Please select one of them.</label>
+            <div>
+              <%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV<br />
+              <%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF<br />
+              <%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both (CSV+PDF)<br />
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button name="email" type="submit" value="email" class="btn btn-primary">Send</button>
+          </div>
+          </div>
+      </div>
+    </div>
+  <div class="tab-content mb-5">
+    <div class="tab-pane active" id="search" role="tabpanel">
+     <p>
+      <div class="col-lg-3 form-group d-flex">
+          <%= f.search_field :title_or_comment_cont, placeholder: "Search in countries", title: "Enter country name" ,:class=>"form-control" %>
+          <button class="form-control btn btn-primary" title="search in country" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+      </div>
+      </p>
+    </div>
+    <div class="tab-pane" id="create" role="tabpanel">
+      <p>
+          
+        <% if can?(:add, :all) %>
+        <div id="new_country">
+          <%= link_to new_country_path, remote: true, class: "btn btn-success ml-2" do %>
+            <i class="fa fa-plus" aria-hidden="true"></i>
+            New Country
+          <% end %>
+        </div>
+        <% end %>
+      </p>
+    </div>
+    <div class="tab-pane" id="pdf" role="tabpanel">
+      <p>
+        <div class="col-lg-2 form-group d-flex">
+        <button class="btn btn-danger" title="Download pdf" name="submit_pdf_a4" type="submit" value="PDF A4" formtarget="_blank">Countries &nbsp;<i class="fa fa-file-pdf"></i></button>
+        </div>
+      </p>
+    </div>
+    <div class="tab-pane" id="csv" role="tabpanel">
+      <p>
+        <div class="col-lg-2 form-group d-flex">
+        </div>
+      </p>
+    </div>
+    <div class="tab-pane" id="emails" role="tabpanel">
+      <p>
+        <div class="col-lg-2 form-group d-flex">
+        <button class="form-control btn btn-info" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope"></i>Mail</button>
+        </div>
+     </p>
+    </div>
+    <%# <div class="tab-pane" id="import-export" role="tabpanel">
+      <p>
+        <div class="d-flex">
+        <button class="btn btn-success ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
+        <button class="btn btn-primary ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
+        </div>
+      </p>
+    </div> %>
+    </div>
+  <% end %>
+
+    
+<div class='card p-3'>
   <%= render 'map_columns/map_column_partials' %>
 
   <table data-toggle="table" data-search="true" id="country_table">
@@ -49,15 +139,15 @@
 
     </tbody>
   </table>
-</div>
 
-<div class="clearfix"></div>
+
 <div class="row">
   <div class="col-lg-4 col-sm-4">
     <%= page_entries_info @countries %>
   </div>
   <div class="col-lg-8 col-sm-8 pagination-left">
     <%= paginate @countries %>
+  </div>
   </div>
 </div>
 
