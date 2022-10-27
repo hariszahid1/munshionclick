@@ -2,7 +2,8 @@
 
 # Cities Controller
 class CitiesController < ApplicationController
-  include PdfCsvEmailMethod
+  include PdfCsvGeneralMethod
+	include CitiesHelper
 
   before_action :set_city, only: %i[show edit update destroy]
   require 'tempfile'
@@ -12,16 +13,11 @@ class CitiesController < ApplicationController
   def index
     @q = City.ransack(params[:q])
     @q.sorts = 'id asc' if @q.sorts.empty? && @q.result.count.positive?
-    if params[:q].present?
-      @title = params[:q][:title]
-      @comment = params[:q][:comment]
-    end
-    @cities = @q.result(distinct: true).page(params[:page])
-    generate_csv(@q, 'cities') if params[:csv].present?
-    generate_pdf(@q.result, 'Cities', 'pdf.html', 'A4') if params[:pdf].present?
-    ids = @q.result.pluck(:id)
-    EmailJob.perform_later(current_user, ids, 'City', 'cities', params[:email_value]) if params[:email].present?
-    redirect_to cities_path if params[:email].present?
+    @cities = @q.result.page(params[:page])
+		download_cities_csv_file if params[:csv].present?
+		download_cities_pdf_file if params[:pdf].present?
+		send_email_file if params[:email].present?
+		export_file if params[:export_data].present?
   end
 
   def export_csv_and_pdf
@@ -117,4 +113,25 @@ class CitiesController < ApplicationController
   def city_params
     params.require(:city).permit(:title, :comment)
   end
+
+	def download_cities_csv_file
+    	@cities = @q.result
+			header_for_csv=["Id","Title","Comment"]
+			data_for_csv= get_data_for_cities_csv
+			generate_csv(data_for_csv, header_for_csv,'cities')
+	end
+
+	def download_cities_pdf_file
+    	@cities = @q.result
+			generate_pdf('Cities', 'pdf.html', 'A4') 
+	end
+
+	def send_email_file 
+			ids = @q.result.pluck(:id)
+			EmailJob.perform_later(current_user, ids, 'City', 'cities', params[:email_value])
+			redirect_to cities_path
+	end
+	def export_file
+		export_data('City')    
+	end
 end
