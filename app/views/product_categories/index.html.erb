@@ -1,69 +1,163 @@
 <div class="hidden" id="product_category_list">
-  <h1>Product Categories</h1>
-  <div class="row">
-    <div class="col-lg-12 col-sm-12">
-      <% if can?(:add, :all) %>
-<div id="new_product_category" class="col-lg-12 form-group float-left">
-      <%= link_to new_product_category_path,remote: true, class: "btn btn-success" do %>
-          <i class="fa fa-plus" aria-hidden="true"></i>
-          New Product Category
-      <% end %>
-</div>
-<% end %>
-</div></div>
+<h1>Product Categories</h1>
 
-  <div class="clearfix"></div>
-  <div class="row">
-    <div class="col-lg-12 col-sm-12">
-      <%= search_form_for @q, url: product_categories_path, class: "admin-controls", method: "get" do |f| %>
-        <div class="col-lg-3 form-group float-left">
-          <%= f.select :title_or_code_cont, options_from_collection_for_select(@product_categories, "title", ->(st){"#{st.title} \u{27F6} #{st.code} "}),{:include_blank => "Select Title"},:class=>"form-control chosen-select" %>
-        </div>
-        <div class="col-lg-2 form-group float-left">
+    <div class="float-right">
+      <div class="dropdown ml-auto mr-4">
+        <span class="btn btn-info" title= "About This page">Help</span>
+        <div class="dropdown-content">
+          <% if @help.present? %>
+          <% @help&.help_links.each do |link| %>
+          <a type="button" class="" target="_blank" href="<%= link[1] %>" >Help in <%= link[0] %></a>
+          <% end %>
+          <% end %>
+         </div>
+      </div>
+    </div>
+
+  <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item">
+      <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
+      </li>
+      <li class="nav-item">
+      <a class="nav-link tab-label" data-toggle="tab" href="#create" role="tab">Create</a>
+      </li>
+      <li class="nav-item">
+      <a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
+      </li>
+      <li class="nav-item">
+      <a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
+      </li>
+      <li class="nav-item">
+      <a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
+      </li>
+      <li class="nav-item">
+      <a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
+      </li>
+</ul>
+<%= search_form_for @q, url: product_categories_path, class: "admin-controls", method: "get" do |f| %>
+  <div class="tab-content mb-5">
+    <div class="tab-pane active" id="search" role="tabpanel">
+      <p>
+        <div class="col-lg-10 form-group d-flex">
+            <div class='col-lg-3'>
+            <%# , "title", ->(st){"#{st.title} \u{27F6} #{st.code} "} %>
+            <%= f.select :id_eq, options_for_select(@options_for_select.map{ |p| [p.title + '--->' + p.code, p.id]}, f.object.id_eq),{:include_blank => "Select Title"},:class=>"form-control chosen-select" %>
+            </div>
+          <%#= f.select :title_or_code_cont, options_from_collection_for_select(@product_categories, "title", ->(st){"#{st.title} \u{27F6} #{st.code} "}),{:include_blank => "Select Title"},:class=>"form-control chosen-select" %>
+          <div class='col-lg-3'>
+            <%= f.search_field :title_or_code_or_comment_cont, placeholder: "Search in categories", title: "Enter title" ,:class=>"form-control" %>
+          </div>
           <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px;"><i class="fa fa-search"></i></button>
         </div>
-        <div class="col-lg-2 form-group float-right">
-          <button class="form-control btn  badge badge-pill badge-danger" name="submit_pdf_staff_with" type="submit" value="Product Catg PDF A4" formtarget="_blank">Categories&nbsp;<i class="fa fa-file-pdf"></i></button>
-        </div>
-      <% end %>
-
-    </div>
+      </p>
   </div>
-
-  <%= render 'map_columns/map_column_partials' %>
-
-  <table data-toggle="table" data-search="true" id="product_category_table">
-    <thead>
-      <tr>
-        <th><%= sort_link(@q, :tile, 'Title') %></th>
-        <th><%= sort_link(@q, :code, 'Code') %></th>
-        <th><%= sort_link(@q, :comment, 'Comment') %></th>
-        <th class="border_none">Action</th>
-      </tr>
-    </thead>
-
-    <tbody>
-  <%= render partial: 'product_category', collection: @product_categories %>
-    </tbody>
-  </table>
+  <div class="tab-pane" id="create" role="tabpanel">
+      <p>
+      <% if can?(:add, :all) %>
+      <div id="new_product_category" class="col-lg-12">
+      <%= link_to new_product_category_path,remote: true, class: "btn btn-success" do %>
+      <i class="fa fa-plus" aria-hidden="true"></i>
+      New Product Category
+      <% end %>
+      </div>
+      <% end %>
+      </p>
 </div>
+    <div class="tab-pane" id="pdf" role="tabpanel">
+      <p>
+        <div class="col-lg-2 form-group d-flex">
+        <button class="btn btn-danger" name="submit_pdf_staff_with" type="submit" value="Product Catg PDF A4" formtarget="_blank">Categories&nbsp;<i class="fa fa-file-pdf"></i></button>
+        </div>
+      </p>
+    </div>
+  <div class="tab-pane" id="csv" role="tabpanel">
+    <p>
+    </p>
+  </div>
+<div class="tab-pane" id="emails" role="tabpanel">
+  <p>
+    <div class="col-lg-2 form-group d-flex">
+    <button class="form-control btn btn-info" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope"></i>Mail</button>
+    </div>
+  </p>
+    <!-- Modal -->
+      <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+              </button>
+              </div>
+            <div class="modal-body">
+              <%= text_field_tag 'email_value', {}, class: 'form-control', placeholder: 'Enter email to recieve pdf and csv...', type: 'email'%>
+              <br />
+              <label>Please select one of them.</label>
+              <div>
+                <%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV<br />
+                <%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF<br />
+                <%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both (CSV+PDF)<br />
+              </div>
+           </div>
+          <div class="modal-footer">
+           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button name="email" type="submit" value="email" class="btn btn-primary">Send</button>
+          </div>
+       </div>
+    </div>
+      </div>
+  </div>
+  <div class="tab-pane" id="import-export" role="tabpanel">
+    <p>
+      <div class="d-flex">
+      <button class="btn btn-success ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
+      <button class="btn btn-primary ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
+      </div>
+    </p>
+  </div>
+</div>
+<% end %>
 
-<div class="clearfix"></div>
-<div class="row">
+
+
+<%= render 'map_columns/map_column_partials' %>
+<div class='card p-3'>
+  <table data-toggle="table" data-search="true" id="product_category_table">
+  <thead>
+  <tr>
+    <th>Title<div class='float-right'><%= sort_link(@q, :tile, '', {}, class: 'sorting-button') %></div></th>
+    <th>Code<div class='float-right'><%= sort_link(@q, :code, '', {}, class: 'sorting-button') %></div></th>
+    <th>Comment<div class='float-right'><%= sort_link(@q, :comment, '', {}, class: 'sorting-button') %></div></th>
+    <th class="border_none">Action</th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <%= render partial: 'product_category', collection: @product_categories %>
+  </tbody>
+  </table>
+
+  <div class="row">
   <div class="col-lg-4 col-sm-4">
-    <%= page_entries_info @product_categories %>
+  <%= page_entries_info @product_categories %>
   </div>
   <div class="col-lg-8 col-sm-8 pagination-left">
-    <%= paginate @product_categories %>
+  <%= paginate @product_categories %>
+  </div>
   </div>
 </div>
 
 <script>
-  $(document).ready(function() {
-    if ($(".bootstrap-table").length == 0){
+    $(document).ready(function() {
+      var sortingButtons = $('.sorting-button')
+      for(var i=0; i<sortingButtons.length; i++){
+      $(sortingButtons[i]).html("<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='blue' enable-background='new 0 0 512 512' viewBox='0 0 512 512'><path d='M163.919,494.293c-2.83,0-5.496-1.33-7.196-3.593L45.97,343.348c-2.986-3.974-2.187-9.615,1.787-12.602 c3.974-2.986,9.616-2.187,12.602,1.787l103.557,137.777l103.493-137.775c2.986-3.975,8.627-4.775,12.602-1.791 c3.974,2.985,4.775,8.627,1.79,12.602L171.113,490.698C169.414,492.961,166.749,494.293,163.919,494.293z'/><path d='M163.917 494.293c-4.971 0-9-4.029-9-9V26.192c0-4.971 4.029-9 9-9s9 4.029 9 9v459.101C172.917 490.264 168.888 494.293 163.917 494.293zM459.507 182.622c-2.734 0-5.435-1.241-7.203-3.597L348.78 41.18 245.257 179.025c-2.985 3.975-8.626 4.777-12.601 1.792-3.974-2.984-4.777-8.626-1.792-12.601l110.72-147.43c1.699-2.263 4.365-3.595 7.196-3.595s5.497 1.332 7.196 3.595l110.72 147.43c2.985 3.975 2.183 9.616-1.792 12.601C463.285 182.034 461.388 182.621 459.507 182.622z'/><path d='M348.78,494.293c-4.971,0-9-4.029-9-9V26.192c0-4.971,4.029-9,9-9s9,4.029,9,9v459.101 C357.78,490.264,353.751,494.293,348.78,494.293z'/></svg>")
+      }
+      if ($(".bootstrap-table").length == 0){
       $("table").bootstrapTable();
-    }
-    $("#product_category_list").removeClass('hidden');
+      }
+      $("#product_category_list").removeClass('hidden');
       FontAwesome.dom.i2svg();
-  });
+      });
 </script>
