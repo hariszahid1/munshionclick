@@ -38,6 +38,9 @@ class ProductCategoriesController < ApplicationController
   # GET /product_categories/1
   # GET /product_categories/1.json
   def show
+    respond_to do |format|
+      format.js
+    end
   end
 
   # GET /product_categories/new
@@ -47,6 +50,9 @@ class ProductCategoriesController < ApplicationController
 
   # GET /product_categories/1/edit
   def edit
+    respond_to do |format|
+      format.js
+    end
   end
 
   # POST /product_categories
@@ -57,7 +63,7 @@ class ProductCategoriesController < ApplicationController
     respond_to do |format|
       if @product_category.save
         format.js
-        format.html { redirect_to new_product_url, notice: 'Product category was successfully created.' }
+        format.html { redirect_to product_categories_path, notice: 'Product category was successfully created.' }
         format.json { render :show, status: :created, location: @product_category }
       else
         format.html { render :new }
