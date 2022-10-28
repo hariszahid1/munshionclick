@@ -21,26 +21,6 @@ class CitiesController < ApplicationController
     export_file if params[:export_data].present?
   end
 
-  def export_csv_and_pdf
-    @cities = @q.result
-    path = Rails.root.join('public/csv')
-    @save_path = Rails.root.join(path, 'cities.csv')
-    CSV.open(@save_path, 'wb') do |csv|
-      headers = City.column_names
-      csv << headers
-      @cities.each do |city|
-        csv << city.as_json.values_at(*headers)
-      end
-    end
-    @pos_setting = PosSetting.first
-    subject = "#{@pos_setting.display_name} - City Detail"
-    email = current_user.superAdmin.email_to.present? ? current_user.superAdmin.email_to : 'info@munshionclick.com'
-    pdf = [[@cities, 'city']]
-    body = ''
-    ReportMailer.new_report_email(pdf, subject, email, '').deliver
-    redirect_to cities_path
-  end
-
   # GET /cities/1
   # GET /cities/1.json
   def show
