@@ -25,4 +25,15 @@ class BulkImportsController < ApplicationController
     end
     redirect_to request.referrer
   end
+
+  def bulk_delete_data
+    data = params[:table_name].constantize.where(id: params[:ids])
+    if data.present?
+      data.destroy_all
+      respond_to do |format|
+      format.html { redirect_to cities_url, notice: 'City was successfully destroyed.' }
+      end
+    end
+    
+  end
 end
