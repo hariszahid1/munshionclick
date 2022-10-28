@@ -8,12 +8,8 @@ class DepartmentsController < ApplicationController
     if @q.result.count > 0
       @q.sorts = 'id asc' if @q.sorts.empty?
     end
-    if params[:q].present?
-      @title = params[:q][:title]
-      @comment = params[:q][:comment]
-    end
+    @options_for_select = Department.all
     @departments = @q.result(distinct: true).page(params[:page])
-
   end
 
   # GET /departments/1
