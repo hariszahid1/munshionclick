@@ -30,9 +30,7 @@ class BulkImportsController < ApplicationController
     data = params[:table_name].constantize.where(id: params[:ids])
     if data.present?
       data.destroy_all
-      respond_to do |format|
-        format.html { redirect_to request.referrer, notice: 'Record was successfully deleted.' }
-      end
+      render json: {message: "Record was successfully deleted."}
     end
   end
 end
