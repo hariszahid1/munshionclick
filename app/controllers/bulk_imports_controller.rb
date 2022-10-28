@@ -25,4 +25,12 @@ class BulkImportsController < ApplicationController
     end
     redirect_to request.referrer
   end
+
+  def bulk_delete_data
+    data = params[:table_name].constantize.where(id: params[:ids])
+    if data.present?
+      data.destroy_all
+      render json: {message: "Record was successfully deleted."}
+    end
+  end
 end

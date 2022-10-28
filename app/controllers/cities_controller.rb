@@ -3,7 +3,7 @@
 # Cities Controller
 class CitiesController < ApplicationController
   include PdfCsvGeneralMethod
-	include CitiesHelper
+  include CitiesHelper
 
   before_action :set_city, only: %i[show edit update destroy]
   require 'tempfile'
@@ -15,36 +15,16 @@ class CitiesController < ApplicationController
     @q.sorts = 'id asc' if @q.sorts.empty? && @q.result.count.positive?
     @options_for_select = City.all
     @cities = @q.result.page(params[:page])
-		download_cities_csv_file if params[:csv].present?
-		download_cities_pdf_file if params[:pdf].present?
-		send_email_file if params[:email].present?
-		export_file if params[:export_data].present?
-  end
-
-  def export_csv_and_pdf
-    @cities = @q.result
-    path = Rails.root.join('public/csv')
-    @save_path = Rails.root.join(path, 'cities.csv')
-    CSV.open(@save_path, 'wb') do |csv|
-      headers = City.column_names
-      csv << headers
-      @cities.each do |city|
-        csv << city.as_json.values_at(*headers)
-      end
-    end
-    @pos_setting = PosSetting.first
-    subject = "#{@pos_setting.display_name} - City Detail"
-    email = current_user.superAdmin.email_to.present? ? current_user.superAdmin.email_to : 'info@munshionclick.com'
-    pdf = [[@cities, 'city']]
-    body = ''
-    ReportMailer.new_report_email(pdf, subject, email, '').deliver
-    redirect_to cities_path
+    download_cities_csv_file if params[:csv].present?
+    download_cities_pdf_file if params[:pdf].present?
+    send_email_file if params[:email].present?
+    export_file if params[:export_data].present?
   end
 
   # GET /cities/1
   # GET /cities/1.json
   def show
-      respond_to do |format|
+    respond_to do |format|
       format.js
     end
   end
@@ -52,10 +32,9 @@ class CitiesController < ApplicationController
   # GET /cities/new
   def new
     @city = City.new
-      respond_to do |format|
+    respond_to do |format|
       format.js
     end
-
   end
 
   # GET /cities/1/edit
@@ -72,8 +51,7 @@ class CitiesController < ApplicationController
         format.html { redirect_to cities_path, notice: 'City was successfully created.' }
         format.json { render :show, status: :created, location: @city }
       else
-        format.html { render :new }
-        format.json { render json: @city.errors, status: :unprocessable_entity }
+        format.html { redirect_to cities_path, alert: 'Title is already present!' }
       end
     end
   end
@@ -86,8 +64,7 @@ class CitiesController < ApplicationController
         format.html { redirect_to cities_path, notice: 'City was successfully updated.' }
         format.json { render :show, status: :ok, location: @city }
       else
-        format.html { render :edit }
-        format.json { render json: @city.errors, status: :unprocessable_entity }
+        format.html { redirect_to cities_path, alert: 'Title is already present!' }
       end
     end
   end
@@ -97,9 +74,8 @@ class CitiesController < ApplicationController
   def destroy
     @city.destroy
     respond_to do |format|
-      format.html { redirect_to cities_url, notice: 'City was successfully destroyed.' }
-      format.json { head :no_content }
-      format.js   { render layout: false }
+      format.html { redirect_to cities_path, notice: 'City was successfully Deleted.' }
+      format.json { render :show, status: :ok, location: @city }
     end
   end
 
@@ -115,24 +91,31 @@ class CitiesController < ApplicationController
     params.require(:city).permit(:title, :comment)
   end
 
-	def download_cities_csv_file
+  def download_cities_csv_file
     @cities = @q.result
-    header_for_csv=["Id","Title","Comment"]
-    data_for_csv= get_data_for_cities_csv
-    generate_csv(data_for_csv, header_for_csv,'cities')
-	end
+    header_for_csv = %w[Id Title Comment]
+    data_for_csv = get_data_for_cities_csv
+    generate_csv(data_for_csv, header_for_csv, 'cities')
+  end
 
-	def download_cities_pdf_file
+  def download_cities_pdf_file
     @cities = @q.result
     generate_pdf('Cities', 'pdf.html', 'A4')
-	end
+  end
 
-	def send_email_file
-    EmailJob.perform_later(@q.result.as_json, 'cities/index.pdf.erb', params[:email_value], params[:email_choice], current_user)
+  def send_email_file
+    EmailJob.perform_later(@q.result.as_json, 'cities/index.pdf.erb', params[:email_value],
+                           params[:email_choice], params[:subject], params[:body],
+                           current_user, 'cities')
+    if params[:email_value].present?
+      flash[:notice] = "Email has been sent to #{params[:email_value]}"
+    else
+      flash[:notice] = "Email has been sent to #{current_user.email}"
+    end
     redirect_to cities_path
-	end
+  end
 
-	def export_file
-		export_data('City')
-	end
+  def export_file
+    export_data('City')
+  end
 end
