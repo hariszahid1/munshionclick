@@ -143,9 +143,12 @@
     <%= render 'map_columns/map_column_partials' %>
 
     <table data-toggle="table" data-search="true" id="city_table">
+      <button class='btn btn-outline-danger float-right delete-selected' type='button' style="width:163px"value='City'>Delete Selected</button>
+     
       <thead>
         <tr>
-        <th>ID<div class="float-right"><%= sort_link(@q, :id,"", {}, class: 'sorting-button') %></div></th>
+         <th><input type="checkbox" id="master" class='select-all-checkbox'></th>
+         <th>ID<div class="float-right"><%= sort_link(@q, :id,"", {}, class: 'sorting-button') %></div></th>
           <th>Title<div class="float-right"><%= sort_link(@q, :title, "", {},  class: 'sorting-button') %></div></th>
           <th>Comment<div class="float-right"><%= sort_link(@q, :comment,"", {}, class: 'sorting-button') %></div></th>
 
