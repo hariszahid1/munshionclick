@@ -31,9 +31,8 @@ class BulkImportsController < ApplicationController
     if data.present?
       data.destroy_all
       respond_to do |format|
-      format.html { redirect_to cities_url, notice: 'City was successfully destroyed.' }
+        format.html { redirect_to request.referrer, notice: 'Record was successfully deleted.' }
       end
     end
-    
   end
 end

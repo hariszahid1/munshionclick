@@ -100,7 +100,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
             </div>
@@ -115,9 +115,9 @@
 
               <label>Please select one of them.</label>
               <div>
-                <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %>CSV</label><br />
-                <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %>PDF</label><br />
-                <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %>Both(CSV + PDF)</label><br />
+                <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
+                <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
+                <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
               </div>
             </div>
             <div class="modal-footer">
@@ -143,8 +143,7 @@
     <%= render 'map_columns/map_column_partials' %>
 
     <table data-toggle="table" data-search="true" id="city_table">
-      <button class='btn btn-outline-danger float-right delete-selected' type='button' style="width:163px"value='City'>Delete Selected</button>
-     
+      <button class='btn btn-outline-danger float-right delete-selected' type='button' style="width:163px"value='City' >Delete Selected</button>
       <thead>
         <tr>
          <th><input type="checkbox" id="master" class='select-all-checkbox'></th>
