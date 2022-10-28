@@ -9,9 +9,9 @@ $(document).ready(function(){
     var object_ids = $('input[name="object_ids[]"]:checked')
     var ids = object_ids.map(function (i, e) { return e.value }).toArray();
     var table_name = $(this).val()
-    let text = "Are u sure u want to delete this item?";
+    var text_data = "Are u sure u want to delete this item?";
     if (object_ids.length > 0){
-      if (confirm(text) == true) {
+      if (confirm(text_data) == true) {
         $.ajax({
           url: '/bulk_delete_data',
           type: 'POST',
