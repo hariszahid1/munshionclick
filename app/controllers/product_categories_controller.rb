@@ -66,8 +66,7 @@ class ProductCategoriesController < ApplicationController
         format.html { redirect_to product_categories_path, notice: 'Product category was successfully created.' }
         format.json { render :show, status: :created, location: @product_category }
       else
-        format.html { render :new }
-        format.json { render json: @product_category.errors, status: :unprocessable_entity }
+        format.html { redirect_to product_categories_path, alert: 'Title is already present!' }
       end
     end
   end
@@ -80,8 +79,7 @@ class ProductCategoriesController < ApplicationController
         format.html { redirect_to product_categories_url, notice: 'Product category was successfully updated.' }
         format.json { render :show, status: :ok, location: @product_category }
       else
-        format.html { render :edit }
-        format.json { render json: @product_category.errors, status: :unprocessable_entity }
+        format.html { redirect_to product_categories_path, alert: 'Title is already present!' }
       end
     end
   end
@@ -91,9 +89,8 @@ class ProductCategoriesController < ApplicationController
   def destroy
     @product_category.destroy
     respond_to do |format|
-      format.html { redirect_to product_categories_url, notice: 'Product category was successfully destroyed.' }
-      format.json { head :no_content }
-      format.js   { render :layout => false }
+     format.html { redirect_to product_categories_path, notice: 'Product Category was successfully Deleted.' }
+      format.json { render :show, status: :ok, location: @product_categories }
     end
   end
 

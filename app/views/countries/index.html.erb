@@ -111,7 +111,7 @@
               <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control', type: 'email'%>
               <br />
               <label>Subject:</label>
-              <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Cities Detail report from MunshiOnClick", class: 'form-control'%>
+              <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Countries Detail report from MunshiOnClick", class: 'form-control'%>
               <br />
               <label>Body:</label><br />
               <%= text_area_tag 'body', nil, class: 'form-control'%>
@@ -119,7 +119,7 @@
             <br />
             <label>Please select one of them.</label>
             <div>
-             <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
+                <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
                 <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
                 <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
             </div>

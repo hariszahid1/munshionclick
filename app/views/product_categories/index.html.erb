@@ -91,17 +91,26 @@
               </button>
               </div>
             <div class="modal-body">
-              <%= text_field_tag 'email_value', {}, class: 'form-control', placeholder: 'Enter email to recieve pdf and csv...', type: 'email'%>
+              <% @pos_setting = PosSetting.first %>
+              <label>Email:</label>
+              <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control', type: 'email'%>
               <br />
+              <label>Subject:</label>
+              <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Product Categories Detail report from MunshiOnClick", class: 'form-control'%>
+              <br />
+              <label>Body:</label><br />
+              <%= text_area_tag 'body', nil, class: 'form-control'%>
+              <br />
+            <br />
               <label>Please select one of them.</label>
               <div>
-                <%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV<br />
-                <%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF<br />
-                <%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both (CSV+PDF)<br />
+                <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
+                <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
+                <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
               </div>
            </div>
           <div class="modal-footer">
-           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+           <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
             <button name="email" type="submit" value="email" class="btn btn-primary">Send</button>
           </div>
        </div>
