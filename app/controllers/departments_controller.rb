@@ -1,9 +1,7 @@
 class DepartmentsController < ApplicationController
   include PdfCsvGeneralMethod
-  include CountriesHelper
+  include DepartmentsHelper
   before_action :set_department, only: [:show, :edit, :update, :destroy]
-  require 'tempfile'
-  require 'csv'
   # GET /departments
   # GET /departments.json
   def index
@@ -80,40 +78,40 @@ class DepartmentsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_department
-      @department = Department.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_department
+    @department = Department.find(params[:id])
+  end
 
-    # Only allow a list of trusted parameters through.
-    def department_params
-      params.require(:department).permit(:code, :title, :comment, :status)
+  # Only allow a list of trusted parameters through.
+  def department_params
+    params.require(:department).permit(:code, :title, :comment, :status)
+  end
+  def download_departments_csv_file
+    @departments = @q.result
+    header_for_csv = %w[Id Title Comment Code]
+    data_for_csv = get_data_for_departments_csv
+    generate_csv(data_for_csv, header_for_csv, "Departments-Total-#{@departments.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}")
+  end
+
+  def download_departments_pdf_file
+    @departments = @q.result
+    generate_pdf(@departments.as_json, "Departments-Total-#{@departments.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}", 'pdf.html', 'A4')
+  end
+
+  def send_email_file
+    EmailJob.perform_later(@q.result.as_json, 'departments/index.pdf.erb', params[:email_value],
+                            params[:email_choice], params[:subject], params[:body],
+                            current_user, 'departments')
+    if params[:email_value].present?
+      flash[:notice] = "Email has been sent to #{params[:email_value]}"
+    else
+      flash[:notice] = "Email has been sent to #{current_user.email}"
     end
-    def download_departments_csv_file
-      @departments = @q.result
-      header_for_csv = %w[Id Title Comment]
-      data_for_csv = get_data_for_departments_csv
-      generate_csv(data_for_csv, header_for_csv, 'departments')
-    end
-  
-    def download_departments_pdf_file
-      @departments = @q.result
-      generate_pdf(@departments.as_json, 'Departments', 'pdf.html', 'A4')
-    end
-  
-    def send_email_file
-      EmailJob.perform_later(@q.result.as_json, 'departments/index.pdf.erb', params[:email_value],
-                             params[:email_choice], params[:subject], params[:body],
-                             current_user, 'departments')
-      if params[:email_value].present?
-        flash[:notice] = "Email has been sent to #{params[:email_value]}"
-      else
-        flash[:notice] = "Email has been sent to #{current_user.email}"
-      end
-      redirect_to departments_path
-    end
-  
-    def export_file
-      export_data('Department')
-    end
+    redirect_to departments_path
+  end
+
+  def export_file
+    export_data('Department')
+  end
 end
