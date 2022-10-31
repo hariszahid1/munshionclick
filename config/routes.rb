@@ -159,7 +159,9 @@ Rails.application.routes.draw do
   end
 
   resources :user_types
+
   resources :cities
+
   resources :countries
   resources :expense_types
   resources :expenses
@@ -198,6 +200,8 @@ Rails.application.routes.draw do
   get 'reports/chart_of_account'
   get 'reports/trial_balance'
   get 'reports/chart_of_account_report'
+  post :bulk_import_data, to: 'bulk_imports#bulk_import_data'
+  post :bulk_delete_data, to: 'bulk_imports#bulk_delete_data'
 
   resources :application do
     member do
