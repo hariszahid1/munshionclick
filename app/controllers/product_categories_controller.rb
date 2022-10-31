@@ -17,10 +17,8 @@ class ProductCategoriesController < ApplicationController
     download_product_categories_pdf_file if params[:pdf].present?
     send_email_file if params[:email].present?
     export_file if params[:export_data].present?
-
-    
     end
-      
+
   # GET /product_categories/1
   # GET /product_categories/1.json
   def show
@@ -81,16 +79,17 @@ class ProductCategoriesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_product_category
-      @product_category = ProductCategory.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_product_category
+    @product_category = ProductCategory.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def product_category_params
-      params.require(:product_category).permit(:title,:code,:comment)
-    end
-     def download_product_categories_csv_file
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def product_category_params
+    params.require(:product_category).permit(:title,:code,:comment)
+  end
+
+  def download_product_categories_csv_file
     @product_categories = @q.result
     header_for_csv = %w[Id Title Comment]
     data_for_csv = get_data_for_product_categories_csv
@@ -99,7 +98,7 @@ class ProductCategoriesController < ApplicationController
 
   def download_product_categories_pdf_file
     @product_categories = @q.result
-    generate_pdf('Product_Categories', 'pdf.html', 'A4')
+    generate_pdf(@product_categories.as_json, 'Product_Categories', 'pdf.html', 'A4')
   end
 
   def send_email_file
