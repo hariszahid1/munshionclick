@@ -1,3 +1,9 @@
+<div id="custom-alert" class="alert alert-danger d-none">
+  <span class="custom-alert-text"></span>
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">×</span>
+  </button>
+</div>
 <div class="hidden" id="product_sub_category_list">
   <h1>Product Sub Categories</h1>
 
@@ -40,9 +46,13 @@
     <div class="tab-pane active" id="search" role="tabpanel">
       <p>
         <div class="col-lg-10 form-group d-flex">
-            <div class='col-lg-3'>
+            <div class='col-lg-3 d-flex'>
             <%# , "title", ->(st){"#{st.title} \u{27F6} #{st.code} "} %>
-            <%= f.select :id_eq, options_for_select(@options_for_select.map{ |p| [p.title + '--->' + p.code, p.id]}, f.object.id_eq),{:include_blank => "Select Title"},:class=>"form-control chosen-select" %>
+            <%= f.select :id_eq, options_for_select(@options_for_select.map{ |p| [p.title + '--->' + p.code, p.id]}, f.object.id_eq),{:include_blank => "Select SubCategory"},:class=>"form-control chosen-select" %>
+            </div>
+              <div class='col-lg-3 d-flex'>
+            <%# , "title", ->(st){"#{st.title} \u{27F6} #{st.code} "} %>
+            <%= f.select :id_eq, options_for_select(@options_for_select_cat.map{ |p| [p.title + '--->' + p.code, p.id]}, f.object.id_eq),{:include_blank => "Select Category"},:class=>"form-control chosen-select" %>
             </div>
           <%#= f.select :title_or_code_cont, options_from_collection_for_select(@product_categories, "title", ->(st){"#{st.title} \u{27F6} #{st.code} "}),{:include_blank => "Select Title"},:class=>"form-control chosen-select" %>
           <div class='col-lg-3'>
@@ -55,7 +65,7 @@
   <div class="tab-pane" id="create" role="tabpanel">
       <p>
      <% if can?(:add, :all) %>
-        <div id="new_product_sub_category" class="col-lg-12 form-group float-left">
+        <div id="new_product_sub_category" class="col-lg-12">
             <%= link_to new_product_sub_category_path,remote: true ,class: "btn btn-success" do %>
             <i class="fas fa-plus" aria-hidden="true"></i>
             New Sub Category
@@ -66,13 +76,16 @@
 </div>
     <div class="tab-pane" id="pdf" role="tabpanel">
       <p>
-        <div class="col-lg-2 form-group d-flex">
-          <button class="form-control btn btn-danger" title= "Download sub categories pdf" name="submit_pdf_staff_with" type="submit" value="Prdct sub Catg PDF A4" formtarget="_blank">SubCategories &nbsp;<i class="fa fa-file-pdf"></i></button>
+        <div class="col-lg-2 d-flex">
+        <button class="btn btn-danger" title= "download subcategories pdf" name="pdf" type="submit" value="pdf" formtarget="_blank" >SubCategories &nbsp;<i class="fa fa-file-pdf"></i></button>
         </div>
       </p>
     </div>
   <div class="tab-pane" id="csv" role="tabpanel">
     <p>
+      <div class="col-lg-2 d-flex">
+        <button class="btn btn-success" title= "download sub categories csv" name="csv" type="submit" value="csv">SubCategories &nbsp;<i class="fa fa-file-excel"></i></button>
+        </div>
     </p>
   </div>
 <div class="tab-pane" id="emails" role="tabpanel">
@@ -123,8 +136,11 @@
   <%= render 'map_columns/map_column_partials' %>
 <div class='card p-3'>
   <table data-toggle="table" data-search="true" id="product_sub_category_table">
+    <button class='btn btn-outline-danger float-right delete-selected' type='button' style="width:163px"value='ProductSubCategory' >Delete Selected</button>
     <thead>
       <tr>
+        <th><input type="checkbox" id="master" class='select-all-checkbox'></th>
+         <th>ID<div class='float-right'><%= sort_link(@q, :id, '', {}, class: 'sorting-button') %></div></th>
         <th>Category<div class='float-right'><%= sort_link(@q, :product_category, '', {}, class: 'sorting-button') %></div></th>
         <th>Title<div class='float-right'><%= sort_link(@q, :tile, '', {}, class: 'sorting-button') %></div></th>
         <th>Code<div class='float-right'><%= sort_link(@q, :code, '', {}, class: 'sorting-button') %></div></th>
@@ -148,6 +164,28 @@
 </div>
 </div>
 <div class="show-data"></div>
+<%= form_for :bulk_import, url: bulk_import_data_path, method: :post, html: {class: "bulk-import-form"} do |f| %>
+  <div class="modal fade" id="importFile" tabindex="-1" role="dialog" aria-labelledby="importFileTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Import file</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <%= f.file_field :file, required: true, accept: '.csv' %>
+          <%= f.hidden_field :table_name, value: 'ProductSubCategory' %>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <%= f.submit 'Import', class: 'btn btn-primary' %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
 
 <script>
   $(document).ready(function() {
