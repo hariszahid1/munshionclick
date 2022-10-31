@@ -1,21 +1,22 @@
 <tr>
+  <td><%= check_box_tag 'object_ids[]', country.id %></td>
   <td><%= country.id %></td>
   <td class= 'urdu-font'><%= country.title %></td>
   <td><%= country.comment %></td>
   <td>
       <% if can?(:update, :all) %>
-        <%= link_to edit_country_path(country) do %>
-          <i class="fa fa-edit " aria-hidden="true"></i> |
+        <%= link_to edit_country_path(country), remote: true do %>
+          <i class="fa fa-edit ml-2 mr-2" aria-hidden="true"></i> |
         <%end %>
       <% end %>
       <% if can?(:delete, :all) %>
         <%= link_to country, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
-          <i class="fa fa-trash " aria-hidden="true"></i> |
+          <i class="fa fa-trash ml-2 mr-2" aria-hidden="true"></i> |
         <%end %>
       <% end %>
       <% if can?(:view, :all) %>
-        <%= link_to country do %>
-          <i class="fa fa-eye " aria-hidden="true"></i>
+        <%= link_to country_path(country), remote: true do %>
+          <i class="fa fa-eye ml-2 mr-2" aria-hidden="true"></i>
         <%end %>
       <%end%>
   </td>
