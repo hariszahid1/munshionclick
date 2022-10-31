@@ -1,22 +1,22 @@
 # frozen_string_literal: true
 
 # CSV Methods
-module PdfCsvEmailMethod
+module PdfCsvGeneralMethod
   extend ActiveSupport::Concern
   require 'tempfile'
   require 'csv'
 
-  def generate_pdf(data, pdf_title, pdf_layout, page_size)
+  def generate_pdf(pdf_title, pdf_layout, page_size)
     @pos_setting = PosSetting.first
     request.format = 'pdf'
     @pdf_path = respond_to do |format|
       format.html
       format.pdf do
         render pdf: pdf_title,
+               locals: { data: @cities.as_json },
                layout: pdf_layout,
                page_size: page_size,
                orientation: 'Portrait',
-               locals: { cities: data },
                margin: {
                  margin_top: @pos_setting&.pdf_margin_top.to_f,
                  margin_right: @pos_setting&.pdf_margin_right.to_f,
@@ -32,15 +32,38 @@ module PdfCsvEmailMethod
     end
   end
 
-  def generate_csv(data, name)
-    @data = data.result
-    headers = @data.column_names
+  def generate_csv(data,column_names, name)
+    # @data = data.result
+    # headers = @data.column_names
+
+		file = CSV.generate do |csv|
+			csv.add_row column_names
+			data.each do |item|
+				csv.add_row item
+			end
+		end
+
+
+    # file = CSV.generate(headers: true) do |csv|
+    #   csv << headers
+    #   @data.each do |d|
+    #     csv << d.as_json.values_at(*headers)
+    #   end
+    # end
+    send_data file, type: 'text/csv; charset=utf-8; header=present', disposition: "attachment; filename=#{name}.csv"
+  end
+
+  def export_data(table_name)
+    @data = table_name.constantize.all
+    import_mapping = ImportMapping.find_by(table_name: table_name)
+    headers = import_mapping&.included_fields
     file = CSV.generate(headers: true) do |csv|
       csv << headers
       @data.each do |d|
         csv << d.as_json.values_at(*headers)
       end
     end
-    send_data file, type: 'text/csv; charset=utf-8; header=present', disposition: "attachment; filename=#{name}.csv"
+    send_data file, type: 'text/csv; charset=utf-8; header=present', disposition: "attachment; filename=#{table_name}.csv"
   end
+
 end

@@ -104,7 +104,7 @@ Rails.application.configure do
     :address              => "smtp.gmail.com",
     :port                 => 587,
     :user_name            => "munchionclick@gmail.com",
-    :password             => "munchi@123",
+    :password             => "jhjclhwquckigfpr",
     :authentication       => "plain",
     :enable_starttls_auto => true
   }
