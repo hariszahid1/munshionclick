@@ -31,11 +31,11 @@
           <th>Comment</th>
         </thead>
         <tbody>
-          <% cities.each_with_index do |city, index| %>
+          <% data.each_with_index do |city, index| %>
             <tr>
-              <th><%= city.id %></th>
-              <td><%= city.title %></td>
-              <td><%= city.comment %></td>
+              <th class="text-center"><%= city['id'] %></th> 
+              <td class="text-center"><%= city['title'] %></td>
+              <td class="text-center"><%= city['comment'] %></td>
             </tr>
           <% end %>
         </tbody>
