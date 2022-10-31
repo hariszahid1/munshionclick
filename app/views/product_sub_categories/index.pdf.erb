@@ -18,12 +18,12 @@
     </thead>
 
     <tbody>
-      <% @product_sub_categories.each do |product_sub_category| %>
+      <% data.each do |product_sub_category| %>
       <tr>
-        <td><%= product_sub_category.product_category.title %></td>
-        <td><%= product_sub_category.title %></td>
-        <td><%= product_sub_category.code %></td>
-        <td><%= product_sub_category.comment %></td>
+        <td><%= product_sub_category[:product_category].title %></td>
+        <td><%= product_sub_category['title'] %></td>
+        <td><%= product_sub_category['code'] %></td>
+        <td><%= product_sub_category['comment'] %></td>
       </tr>
       <%end%>
     </tbody>

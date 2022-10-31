@@ -56,14 +56,11 @@
       <p>
         <div class="col-lg-10 form-group d-flex">
             <div class='col-lg-3 d-flex'>
-            <%# , "title", ->(st){"#{st.title} \u{27F6} #{st.code} "} %>
-            <%= f.select :id_eq, options_for_select(@options_for_select.map{ |p| [p.title + '--->' + p.code, p.id]}, f.object.id_eq),{:include_blank => "Select SubCategory"},:class=>"form-control chosen-select" %>
+            <%= f.select :id_eq, options_for_select(@options_for_select.map{ |p| [p.title.to_s + '--->' + p.code.to_s, p.id]}, f.object.id_eq),{:include_blank => "Select SubCategory"},:class=>"form-control chosen-select" %>
             </div>
               <div class='col-lg-3 d-flex'>
-            <%# , "title", ->(st){"#{st.title} \u{27F6} #{st.code} "} %>
-            <%= f.select :id_eq, options_for_select(@options_for_select_cat.map{ |p| [p.title + '--->' + p.code, p.id]}, f.object.id_eq),{:include_blank => "Select Category"},:class=>"form-control chosen-select" %>
+            <%= f.select :id_eq, options_for_select(@options_for_select_cat.map{ |p| [p.title.to_s + '--->' + p.code.to_s, p.id]}, f.object.id_eq),{:include_blank => "Select Category"},:class=>"form-control chosen-select" %>
             </div>
-          <%#= f.select :title_or_code_cont, options_from_collection_for_select(@product_categories, "title", ->(st){"#{st.title} \u{27F6} #{st.code} "}),{:include_blank => "Select Title"},:class=>"form-control chosen-select" %>
           <div class='col-lg-3'>
             <%= f.search_field :title_or_code_or_comment_cont, placeholder: "Search in sub categories", title: "Enter title" ,:class=>"form-control" %>
           </div>
@@ -119,7 +116,7 @@
                 <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control', type: 'email'%>
                 <br />
                 <label>Subject:</label>
-                <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Countries Detail report from MunshiOnClick", class: 'form-control'%>
+                <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Product Sub Categories Detail report from MunshiOnClick", class: 'form-control'%>
                 <br />
                 <label>Body:</label><br />
                 <%= text_area_tag 'body', nil, class: 'form-control'%>

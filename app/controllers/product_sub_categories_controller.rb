@@ -8,7 +8,7 @@ class ProductSubCategoriesController < ApplicationController
   # GET /product_sub_categories
   # GET /product_sub_categories.json
   def index
-    @q = ProductSubCategory.ransack(params[:q])
+    @q = ProductSubCategory.includes(:product_category).joins(:product_category).ransack(params[:q])
     @q.sorts = 'id asc' if @q.sorts.empty? && @q.result.count.positive?
     @options_for_select = ProductSubCategory.all
     @options_for_select_cat = ProductCategory.all
@@ -78,40 +78,42 @@ class ProductSubCategoriesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_product_sub_category
-      @product_sub_category = ProductSubCategory.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_product_sub_category
+    @product_sub_category = ProductSubCategory.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def product_sub_category_params
-      params.require(:product_sub_category).permit(:product_category_id,:code,:title,:comment)
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def product_sub_category_params
+    params.require(:product_sub_category).permit(:product_category_id,:code,:title,:comment)
+  end
+
+  def download_product_sub_categories_csv_file
+    @product_sub_categories = @q.result
+    header_for_csv = %w[Id Title Comment]
+    data_for_csv = get_data_for_product_sub_categories_csv
+    generate_csv(data_for_csv, header_for_csv, 'product_sub_categories')
+  end
+
+  def download_product_sub_categories_pdf_file
+    @product_sub_categories = @q.result
+    generate_pdf(@product_sub_categories.as_json, 'product_sub_categories', 'pdf.html', 'A4')
+  end
+
+  def send_email_file
+    EmailJob.perform_later(@q.result.as_json, 'product_sub_categories/index.pdf.erb', params[:email_value],
+                            params[:email_choice], params[:subject], params[:body],
+                            current_user, 'product_sub_categories')
+    if params[:email_value].present?
+      flash[:notice] = "Email has been sent to #{params[:email_value]}"
+    else
+      flash[:notice] = "Email has been sent to #{current_user.email}"
     end
-    def download_product_sub_categories_csv_file
-      @product_sub_categories = @q.result
-      header_for_csv = %w[Id Title Comment]
-      data_for_csv = get_data_for_product_sub_categories_csv
-      generate_csv(data_for_csv, header_for_csv, 'product_sub_categories')
-    end
-  
-    def download_product_sub_categories_pdf_file
-      @product_sub_categories = @q.result
-      generate_pdf('product_sub_categories', 'pdf.html', 'A4')
-    end
-  
-    def send_email_file
-      EmailJob.perform_later(@q.result.as_json, 'product_sub_categories/index.pdf.erb', params[:email_value],
-                             params[:email_choice], params[:subject], params[:body],
-                             current_user, 'product_sub_categories')
-      if params[:email_value].present?
-        flash[:notice] = "Email has been sent to #{params[:email_value]}"
-      else
-        flash[:notice] = "Email has been sent to #{current_user.email}"
-      end
-      redirect_to product_sub_categories_path
-    end
-  
-    def export_file
-      export_data('ProductSubCategory')
-    end
+    redirect_to product_sub_categories_path
+  end
+
+  def export_file
+    export_data('ProductSubCategory')
+  end
+
 end
