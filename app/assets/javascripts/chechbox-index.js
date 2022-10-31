@@ -1,8 +1,12 @@
 $(document).ready(function(){
-
   $('.select-all-checkbox').on("click", function () {
     var cbxs = $('input[name="object_ids[]"]');
-    cbxs.prop("checked", !cbxs.prop("checked"));
+    if($(this).is(":checked")){
+      cbxs.prop("checked", true);
+    }
+    else{
+      cbxs.prop("checked", false);
+    }
   });
 
   $('.delete-selected').on('click', function () {

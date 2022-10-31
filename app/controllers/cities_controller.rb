@@ -100,7 +100,7 @@ class CitiesController < ApplicationController
 
   def download_cities_pdf_file
     @cities = @q.result
-    generate_pdf('Cities', 'pdf.html', 'A4')
+    generate_pdf(@cities.as_json, 'Cities', 'pdf.html', 'A4')
   end
 
   def send_email_file
