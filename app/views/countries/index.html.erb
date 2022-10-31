@@ -107,10 +107,13 @@
           </div>
           <div class="modal-body">
             <% @pos_setting = PosSetting.first %>
+              <label>Email:</label>
               <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control', type: 'email'%>
               <br />
+              <label>Subject:</label>
               <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Cities Detail report from MunshiOnClick", class: 'form-control'%>
               <br />
+              <label>Body:</label><br />
               <%= text_area_tag 'body', nil, class: 'form-control'%>
               <br />
             <br />
