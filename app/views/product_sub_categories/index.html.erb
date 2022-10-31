@@ -5,8 +5,17 @@
   </button>
 </div>
 <div class="hidden" id="product_sub_category_list">
-  <h1>Product Sub Categories</h1>
-
+    <div class="main-content-header">
+      <h1 class="ml-2 mt-2">Product Sub Categories</h1>
+      <ol class="breadcrumb mt-2 mb-4">
+        <li class="breadcrumb-item">
+          <a href="<%= root_path %>">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">
+          <a href="<%= product_sub_categories_path %>">Product Sub Categories</a>
+        </li>
+      </ol>
+    </div>
    <div class="float-right">
       <div class="dropdown ml-auto mr-4">
         <span class="btn btn-info" title= "About This page">Help</span>
@@ -70,7 +79,7 @@
             <i class="fas fa-plus" aria-hidden="true"></i>
             New Sub Category
             <% end %>
-        </div>
+            </div>
         <% end %>
       </p>
 </div>
@@ -105,17 +114,25 @@
               </button>
               </div>
             <div class="modal-body">
-              <%= text_field_tag 'email_value', {}, class: 'form-control', placeholder: 'Enter email to recieve pdf and csv...', type: 'email'%>
-              <br />
+              <% @pos_setting = PosSetting.first %>
+                <label>Email:</label>
+                <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control', type: 'email'%>
+                <br />
+                <label>Subject:</label>
+                <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Countries Detail report from MunshiOnClick", class: 'form-control'%>
+                <br />
+                <label>Body:</label><br />
+                <%= text_area_tag 'body', nil, class: 'form-control'%>
+                <br />
               <label>Please select one of them.</label>
               <div>
-                <%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV<br />
-                <%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF<br />
-                <%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both (CSV+PDF)<br />
+                <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
+                <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
+                <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
               </div>
            </div>
           <div class="modal-footer">
-           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+           <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
             <button name="email" type="submit" value="email" class="btn btn-primary">Send</button>
           </div>
        </div>

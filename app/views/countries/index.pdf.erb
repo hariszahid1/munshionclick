@@ -14,16 +14,13 @@
       <th>Comment</th>
     </thead>
     <tbody>
-<% @countries.each_with_index do |country, index| %>
+    <% data.each_with_index do |country, index| %>
       <tr>
-        <th><%= index + 1 %></th>
-        <td><%= country.title %></td>
-        <td><%= country.comment %></td>
-      
+        <th><%= country['id'] %></th>
+        <td><%= country['title'] %></td>
+        <td><%= country['comment'] %></td>
       </tr>
     <% end %>
-
-
     </tbody>
   </table>
 </div>
