@@ -1,22 +1,24 @@
 <tr>
+  <td><%= check_box_tag 'object_ids[]', product_sub_category.id %></td>
+  <td><%= product_sub_category.id %></td>
   <td><%= product_sub_category.product_category.title %></td>
   <td class= 'urdu-font'><%= product_sub_category.title %></td>
   <td><%= product_sub_category.code %></td>
   <td><%= product_sub_category.comment %></td>
-  <td>
+  <td class="d-flex">
     <% if can?(:update, :all) %>
-      <%= link_to edit_product_sub_category_path(product_sub_category) do %>
-        <i class="fa fa-edit " aria-hidden="true"></i> |
+      <%= link_to edit_product_sub_category_path(product_sub_category), remote: true do %>
+        <i class="fa fa-edit ml-2 mr-2 " aria-hidden="true"></i>
       <%end %>
-    <% end %>
+    <% end %> |
     <% if can?(:delete, :all) %>
       <%= link_to product_sub_category, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
-        <i class="fa fa-trash " aria-hidden="true"></i> |
+        <i class="fa fa-trash ml-2 mr-2" aria-hidden="true"></i>
       <%end %>
-    <% end %>
+    <% end %> |
     <% if can?(:view, :all) %>
-      <%= link_to product_sub_category do %>
-        <i class="fa fa-eye " aria-hidden="true"></i>
+      <%= link_to product_sub_category_path(product_sub_category), remote: true do %>
+        <i class="fa fa-eye ml-2 mr-2" aria-hidden="true"></i>
       <%end %>
     <%end%>
   </td>

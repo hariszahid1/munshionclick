@@ -1,0 +1,37 @@
+<div class="modal fade" id="showdData" tabindex="-1" role="dialog" aria-labelledby="showdDataLabel">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title ml-4" id="myModalLabel">Product Sub Category Details</h3>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+           </button>
+      </div>
+        <div class="modal-body">
+          <div class="collapse show" id="collapseCardExample" style="">
+            <div class="card-body">
+              <table>
+                <thead>
+                  <th><h5>Id</h5></th>
+                  <th><h5>Title</h5></th>
+                  <th><h5>Category</h5></th>
+                  <th><h5>Comment</h5></th>
+               </thead>
+                <tbody>
+                  <tr>
+                    <td><%= @product_sub_category.id %></td>
+                    <td><%= @product_sub_category.title %> </td>
+                    <td><%= @product_sub_category.product_category.title %></td>
+                    <td><%= @product_sub_category.comment %></td>
+                  </tr>
+               </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+</div>
