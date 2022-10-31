@@ -8,10 +8,7 @@ class ProductCategoriesController < ApplicationController
     if @q.result.count > 0
       @q.sorts = 'id asc' if @q.sorts.empty?
     end
-    if params[:q].present?
-      @title = params[:q][:title_eq]
-      @code = params[:q][:code_eq]
-    end
+    @options_for_select = ProductCategory.all
     @product_categories = @q.result.page(params[:page])
     if params[:submit_pdf_staff_with].present?
       if @q.result.count > 0
@@ -41,6 +38,9 @@ class ProductCategoriesController < ApplicationController
   # GET /product_categories/1
   # GET /product_categories/1.json
   def show
+    respond_to do |format|
+      format.js
+    end
   end
 
   # GET /product_categories/new
@@ -50,6 +50,9 @@ class ProductCategoriesController < ApplicationController
 
   # GET /product_categories/1/edit
   def edit
+    respond_to do |format|
+      format.js
+    end
   end
 
   # POST /product_categories
@@ -60,11 +63,10 @@ class ProductCategoriesController < ApplicationController
     respond_to do |format|
       if @product_category.save
         format.js
-        format.html { redirect_to new_product_url, notice: 'Product category was successfully created.' }
+        format.html { redirect_to product_categories_path, notice: 'Product category was successfully created.' }
         format.json { render :show, status: :created, location: @product_category }
       else
-        format.html { render :new }
-        format.json { render json: @product_category.errors, status: :unprocessable_entity }
+        format.html { redirect_to product_categories_path, alert: 'Title is already present!' }
       end
     end
   end
@@ -77,8 +79,7 @@ class ProductCategoriesController < ApplicationController
         format.html { redirect_to product_categories_url, notice: 'Product category was successfully updated.' }
         format.json { render :show, status: :ok, location: @product_category }
       else
-        format.html { render :edit }
-        format.json { render json: @product_category.errors, status: :unprocessable_entity }
+        format.html { redirect_to product_categories_path, alert: 'Title is already present!' }
       end
     end
   end
@@ -88,9 +89,8 @@ class ProductCategoriesController < ApplicationController
   def destroy
     @product_category.destroy
     respond_to do |format|
-      format.html { redirect_to product_categories_url, notice: 'Product category was successfully destroyed.' }
-      format.json { head :no_content }
-      format.js   { render :layout => false }
+     format.html { redirect_to product_categories_path, notice: 'Product Category was successfully Deleted.' }
+      format.json { render :show, status: :ok, location: @product_categories }
     end
   end
 

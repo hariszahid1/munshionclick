@@ -1,0 +1,3 @@
+$('.show-data').children().remove();
+$('.show-data').append("<%= escape_javascript(render partial: 'edit', locals: { product_category: @product_category }) %>");
+$("#showdData").modal('show');

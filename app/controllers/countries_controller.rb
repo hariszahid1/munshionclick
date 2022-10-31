@@ -12,6 +12,7 @@ class CountriesController < ApplicationController
       @title = params[:q][:title]
       @comment = params[:q][:comment]
     end
+    @options_for_select = Country.all
     @countries = @q.result(distinct: true).page(params[:page])
 
     if params[:submit_pdf_a4].present?
@@ -48,15 +49,26 @@ class CountriesController < ApplicationController
   # GET /countries/1
   # GET /countries/1.json
   def show
+    respond_to do |format|
+      format.js
+    end
   end
 
   # GET /countries/new
   def new
     @country = Country.new
+    respond_to do |format|
+      format.js
+    end
+
   end
 
   # GET /countries/1/edit
   def edit
+        respond_to do |format|
+      format.js
+    end
+
   end
 
   # POST /countries
@@ -70,8 +82,7 @@ class CountriesController < ApplicationController
         format.html { redirect_to countries_path, notice: 'Country was successfully created.' }
         format.json { render :show, status: :created, location: @country }
       else
-        format.html { render :new }
-        format.json { render json: @country.errors, status: :unprocessable_entity }
+        format.html { redirect_to countries_path, alert: 'Title is already present!' }
       end
     end
   end
@@ -84,8 +95,7 @@ class CountriesController < ApplicationController
         format.html { redirect_to countries_path, notice: 'Country was successfully updated.' }
         format.json { render :show, status: :ok, location: @country }
       else
-        format.html { render :edit }
-        format.json { render json: @country.errors, status: :unprocessable_entity }
+        format.html { redirect_to countries_path, alert: 'Title is already present!' }
       end
     end
   end
@@ -95,9 +105,8 @@ class CountriesController < ApplicationController
   def destroy
     @country.destroy
     respond_to do |format|
-      format.html { redirect_to countries_url, notice: 'Country was successfully destroyed.' }
-      format.json { head :no_content }
-      format.js   { render :layout => false }
+      format.html { redirect_to countries_path, notice: 'Country was successfully Deleted.' }
+      format.json { render :show, status: :ok, location: @country }
     end
   end
 
