@@ -1,0 +1,27 @@
+<div class="modal fade" id="showdData" tabindex="-1" role="dialog" aria-labelledby="showdDataLabel">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title ml-4" id="myModalLabel">Edit City</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="card-body">
+          <% if city.errors.any? %>
+            <div id="error_explanation">
+              <h2><%= pluralize(city.errors.count, "error") %> prohibited this city from being saved:</h2>
+              <ul>
+                <% city.errors.full_messages.each do |message| %>
+                  <li><%= message %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+          <%= render 'form', city: @city %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
