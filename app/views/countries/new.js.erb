@@ -1,1 +1,3 @@
-$('#new_country a').hide().parent().append("<%= j render 'new_form', country: @country %>");
+$('.show-data').children().remove();
+$('.show-data').append("<%= escape_javascript(render partial: 'new_form', locals: { country: @country }) %>");
+$("#showdData").modal('show');
