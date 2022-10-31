@@ -20,15 +20,24 @@ class DepartmentsController < ApplicationController
   # GET /departments/1
   # GET /departments/1.json
   def show
+        respond_to do |format|
+      format.js
+    end
   end
 
   # GET /departments/new
   def new
     @department = Department.new
+        respond_to do |format|
+      format.js
+    end
   end
 
   # GET /departments/1/edit
   def edit
+        respond_to do |format|
+      format.js
+    end
   end
 
   # POST /departments
@@ -39,11 +48,10 @@ class DepartmentsController < ApplicationController
     respond_to do |format|
       if @department.save
         format.js
-        format.html { redirect_to @department, notice: 'Department was successfully created.' }
+        format.html { redirect_to departments_path, notice: 'Department was successfully created.' }
         format.json { render :show, status: :created, location: @department }
       else
-        format.html { render :new }
-        format.json { render json: @department.errors, status: :unprocessable_entity }
+        format.html { redirect_to departments_path, alert: 'Title is already present!' }
       end
     end
   end
@@ -54,10 +62,9 @@ class DepartmentsController < ApplicationController
     respond_to do |format|
       if @department.update(department_params)
         format.html { redirect_to departments_path, notice: 'Department was successfully updated.' }
-        format.json { render :show, status: :ok, location: @department }
+        
       else
-        format.html { render :edit }
-        format.json { render json: @department.errors, status: :unprocessable_entity }
+        format.html { redirect_to departments_path, alert: 'Title is already present!' }
       end
     end
   end
@@ -67,9 +74,8 @@ class DepartmentsController < ApplicationController
   def destroy
     @department.destroy
     respond_to do |format|
-      format.html { redirect_to departments_url, notice: 'Department was successfully destroyed.' }
-      format.json { head :no_content }
-      format.js   { render :layout => false }
+      format.html { redirect_to departments_path, notice: 'Department was successfully Deleted.' }
+      format.json { render :show, status: :ok, location: @department }
     end
   end
 
