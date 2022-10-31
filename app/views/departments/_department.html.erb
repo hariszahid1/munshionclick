@@ -19,12 +19,12 @@
       <%= link_to department_path(department), remote: true do %>
         <i class="fa fa-eye ml-2 mr-2 " aria-hidden="true"></i>
       <%end %>
-    <%end%> |
-    <%= link_to department_path(department), remote: true do %>
-        <i class="fa fa-file-pdf text-danger ml-2 mr-2 " aria-hidden="true"></i>
-      <%end %> |
-    <%= link_to department_path(department), remote: true do %>
-      <i class="fa fa-file-excel text-success ml-2 mr-2" aria-hidden="true"></i>
+    <%end%>|
+    <%= link_to departments_path('q[id_eq]':department.id,'pdf':true), title: 'Download PDF', target: '_blank' do %>
+      <i class="fa fa-file-pdf text-danger mr-2 ml-2 " aria-hidden="true"></i>
+    <%end %>|
+    <%= link_to departments_path('q[id_eq]':department.id,'csv':true), title: 'Download CSV' do%>
+      <i class="fa fa-file-excel mr-2 ml-2 text-success" aria-hidden="true"></i>
     <%end %>
   </td>
 </tr>

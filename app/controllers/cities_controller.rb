@@ -95,18 +95,18 @@ class CitiesController < ApplicationController
     @cities = @q.result
     header_for_csv = %w[Id Title Comment]
     data_for_csv = get_data_for_cities_csv
-    generate_csv(data_for_csv, header_for_csv, 'cities')
+    generate_csv(data_for_csv, header_for_csv, "Cities-Total-#{@cities.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}")
   end
 
   def download_cities_pdf_file
     @cities = @q.result
-    generate_pdf(@cities.as_json, 'Cities', 'pdf.html', 'A4')
+    generate_pdf(@cities.as_json, "Cities-Total-#{@cities.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}", 'pdf.html', 'A4')
   end
 
   def send_email_file
     EmailJob.perform_later(@q.result.as_json, 'cities/index.pdf.erb', params[:email_value],
                            params[:email_choice], params[:subject], params[:body],
-                           current_user, 'cities')
+                           current_user, "Cities-Total-#{@q.result.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}")
     if params[:email_value].present?
       flash[:notice] = "Email has been sent to #{params[:email_value]}"
     else
