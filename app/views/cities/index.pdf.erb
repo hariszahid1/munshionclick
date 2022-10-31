@@ -26,14 +26,14 @@
     <div>
       <table>
         <thead class="lite-gray">
-          <th>ID</th>
-          <th>Title</th>
-          <th>Comment</th>
+          <th class="text-center">ID</th>
+          <th class="text-center">Title</th>
+          <th class="text-center">Comment</th>
         </thead>
         <tbody>
           <% data.each_with_index do |city, index| %>
             <tr>
-              <th class="text-center"><%= city['id'] %></th> 
+              <th class="text-center"><%= city['id'] %></th>
               <td class="text-center"><%= city['title'] %></td>
               <td class="text-center"><%= city['comment'] %></td>
             </tr>

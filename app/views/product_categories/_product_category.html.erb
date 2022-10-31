@@ -1,10 +1,12 @@
 <tr>
+  <td><%= check_box_tag 'object_ids[]', product_category.id %></td>
+  <td><%= product_category.id %></td>
   <td class='urdu-font'><%= product_category.title %></td>
   <td><%= product_category.code %></td>
   <td><%= product_category.comment %></td>
   <td>
     <% if can?(:update, :all) %>
-      <%= link_to edit_product_category_path(product_category), remote: true do %>
+      <%= link_to edit_product_category_path(product_category), remote: true, title: "Edit form" do %>
         <i class="fa fa-edit " aria-hidden="true"></i> |
       <%end %>
     <% end %>
@@ -17,6 +19,12 @@
       <%= link_to product_category_path(product_category), remote: true do %>
         <i class="fa fa-eye " aria-hidden="true"></i>
       <%end %>
-    <%end%>
+    <%end%>|
+		<%= link_to product_categories_path('q[id_eq]':product_category.id,'pdf':true), title: 'Download PDF', target: '_blank' do %>
+			<i class="fa fa-file-pdf text-danger mr-2 ml-2 " aria-hidden="true"></i>
+		<%end %>|
+		<%= link_to product_categories_path('q[id_eq]':product_category.id,'csv':true), title: 'Download CSV' do%>
+			<i class="fa fa-file-excel mr-2 ml-2 text-success" aria-hidden="true"></i>
+		<%end %>
   </td>
 </tr>
