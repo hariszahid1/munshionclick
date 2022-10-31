@@ -1,9 +1,14 @@
 $(document).ready(function(){
   $('.select-all-checkbox').on("click", function () {
     var cbxs = $('input[name="object_ids[]"]');
-    cbxs.prop("checked", !cbxs.prop("checked"));
+    if($(this).is(":checked")){
+      cbxs.prop("checked", true);
+    }
+    else{
+      cbxs.prop("checked", false);
+    }
   });
-  
+
   $('.delete-selected').on('click', function () {
     var object_ids = $('input[name="object_ids[]"]:checked')
     var ids = object_ids.map(function (i, e) { return e.value }).toArray();

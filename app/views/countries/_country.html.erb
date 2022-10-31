@@ -18,6 +18,12 @@
         <%= link_to country_path(country), remote: true do %>
           <i class="fa fa-eye ml-2 mr-2" aria-hidden="true"></i>
         <%end %>
-      <%end%>
+      <%end%>|
+      <%= link_to countries_path('q[id_eq]':country.id,'pdf':true), title: 'Download PDF', target: '_blank' do %>
+			  <i class="fa fa-file-pdf text-danger mr-2 ml-2 " aria-hidden="true"></i>
+      <%end %>|
+      <%= link_to countries_path('q[id_eq]':country.id,'csv':true), title: 'Download CSV' do%>
+        <i class="fa fa-file-excel mr-2 ml-2 text-success" aria-hidden="true"></i>
+      <%end %>
   </td>
 </tr>
