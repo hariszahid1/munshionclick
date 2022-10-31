@@ -120,6 +120,34 @@
     <% end %>
   </div>
   <%= f.hidden_field :created_by_id %>
+	<%# user Permission %>
+	<% if !@user.user_permissions.empty?%>
+		<h1>User Permissions</h1>
+		<table>
+			<thead>
+				<th>Module</th>
+				<th>Create <input type="checkbox" id='select-all-checkbox-of-create'></th>
+				<th>Read <input type="checkbox" id='select-all-checkbox-of-read'></th>
+				<th>Update <input type="checkbox" id='select-all-checkbox-of-update'></th>
+				<th>delete <input type="checkbox" id='select-all-checkbox-of-delete'></th>
+			</thead>
+			<tbody>
+					<%= f.fields_for :user_permissions do |perm| %>
+						<% @user.user_permissions.each do |item|%>
+							<%= perm.fields_for "#{item.id}" do |p_of| %>
+								<tr>
+									<td><%= item.module%></td>
+									<td> <%= p_of.check_box :can_create, checked: item.can_create, hide_label: true, class:"form-checkbox h-5 w-4 ml-2 text-blue-600 can-create-checkbox" %></td>
+									<td> <%= p_of.check_box :can_read, checked: item.can_read, hide_label: true, class:"form-checkbox h-5 w-4 ml-2 text-blue-600 can-read-checkbox" %></td>
+									<td> <%= p_of.check_box :can_update, checked: item.can_update, hide_label: true, class:"form-checkbox h-5 w-4 ml-2 text-blue-600 can-update-checkbox" %></td>
+									<td> <%= p_of.check_box :can_delete, checked: item.can_delete, hide_label: true, class:"form-checkbox h-5 w-4 ml-2 text-blue-600 can-delete-checkbox" %></td>
+								</tr>
+							<% end %>
+						<% end %>
+					<%end%>
+			</tbody>
+		</table>			
+	<% end %>
 
   <div class="clearfix"></div>
     <div class="form-group">
@@ -130,5 +158,6 @@
     </div>
   </div>
 <% end %>
+
 
 <div class="clearfix"></div>
