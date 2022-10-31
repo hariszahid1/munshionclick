@@ -1,3 +1,9 @@
+<div id="custom-alert" class="alert alert-danger d-none">
+  <span class="custom-alert-text"></span>
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">×</span>
+  </button>
+</div>
 <div class="hidden" id="product_category_list">
 <h1>Product Categories</h1>
 
@@ -65,19 +71,22 @@
 </div>
     <div class="tab-pane" id="pdf" role="tabpanel">
       <p>
-        <div class="col-lg-2 form-group d-flex">
-        <button class="btn btn-danger" name="submit_pdf_staff_with" type="submit" value="Product Catg PDF A4" formtarget="_blank">Categories&nbsp;<i class="fa fa-file-pdf"></i></button>
+        <div class="col-lg-2  d-flex">
+        <button class="form-control btn btn-danger" title= "download product categories pdf" name="pdf" type="submit" value="pdf" formtarget="_blank" style="width:100px">Categories &nbsp;<i class="fa fa-file-pdf"></i></button>
         </div>
       </p>
     </div>
   <div class="tab-pane" id="csv" role="tabpanel">
     <p>
+    <div class="col-lg-2 form-group d-flex">
+        <button class="form-control btn btn-success" title= "download product categories csv" name="csv" type="submit" value="csv" style="width:100px">Categories &nbsp;<i class="fa fa-file-excel"></i></button>
+        </div>
     </p>
   </div>
 <div class="tab-pane" id="emails" role="tabpanel">
   <p>
-    <div class="col-lg-2 form-group d-flex">
-    <button class="form-control btn btn-info" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope"></i>Mail</button>
+    <div class="col-lg-2  d-flex">
+    <button class="btn btn-info" type="button" data-toggle="modal" data-target="#exampleModalCenter" ><i class="fa fa-envelope"></i>Mail</button>
     </div>
   </p>
     <!-- Modal -->
@@ -133,8 +142,11 @@
 <%= render 'map_columns/map_column_partials' %>
 <div class='card p-3'>
   <table data-toggle="table" data-search="true" id="product_category_table">
+  <button class='btn btn-outline-danger float-right delete-selected' type='button' style="width:163px"value='ProductCategory' >Delete Selected</button>
   <thead>
   <tr>
+    <th><input type="checkbox" id="master" class='select-all-checkbox'></th>
+    <th>ID<div class='float-right'><%= sort_link(@q, :id, '', {}, class: 'sorting-button') %></div></th>
     <th>Title<div class='float-right'><%= sort_link(@q, :tile, '', {}, class: 'sorting-button') %></div></th>
     <th>Code<div class='float-right'><%= sort_link(@q, :code, '', {}, class: 'sorting-button') %></div></th>
     <th>Comment<div class='float-right'><%= sort_link(@q, :comment, '', {}, class: 'sorting-button') %></div></th>
@@ -157,6 +169,28 @@
   </div>
 </div>
 <div class="show-data"></div>
+<%= form_for :bulk_import, url: bulk_import_data_path, method: :post, html: {class: "bulk-import-form"} do |f| %>
+  <div class="modal fade" id="importFile" tabindex="-1" role="dialog" aria-labelledby="importFileTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Import file</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <%= f.file_field :file, required: true, accept: '.csv' %>
+          <%= f.hidden_field :table_name, value: 'ProductCategory' %>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <%= f.submit 'Import', class: 'btn btn-primary' %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
 <script>
     $(document).ready(function() {
       var sortingButtons = $('.sorting-button')

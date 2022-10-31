@@ -1,40 +1,26 @@
 class ProductCategoriesController < ApplicationController
+  include PdfCsvGeneralMethod
+  include ProductCategoriesHelper
   before_action :set_product_category, only: [:show, :edit, :update, :destroy]
   skip_before_action :verify_authenticity_token
+
+  require 'tempfile'
+  require 'csv'
   # GET /product_categories
   # GET /product_categories.json
   def index
     @q = ProductCategory.ransack(params[:q])
-    if @q.result.count > 0
-      @q.sorts = 'id asc' if @q.sorts.empty?
-    end
+    @q.sorts = 'id asc' if @q.sorts.empty? && @q.result.count.positive?
     @options_for_select = ProductCategory.all
     @product_categories = @q.result.page(params[:page])
-    if params[:submit_pdf_staff_with].present?
-      if @q.result.count > 0
-        @q.sorts = 'created_at desc' if @q.sorts.empty?
-      end
-      @product_categories=@q.result(distinct: true)
-      request.format = 'pdf'
-      respond_to do |format|
-        format.html
-        format.pdf do
-          render pdf: 'index_staff_wise',
-          layout: 'pdf.html',
-          page_size: 'A4',
-          margin_top: '0',
-          margin_right: '0',
-          margin_bottom: '0',
-          margin_left: '0',
-          encoding: "UTF-8",
-          footer:  {             # optional, use 'pdf_plain' for a pdf_plain.html.pdf.erb file, defaults to main layout
-            right: '[page] of [topage]'},
-          show_as_html: false
-        end
-      end
-    end
-  end
+    download_product_categories_csv_file if params[:csv].present?
+    download_product_categories_pdf_file if params[:pdf].present?
+    send_email_file if params[:email].present?
+    export_file if params[:export_data].present?
 
+    
+    end
+      
   # GET /product_categories/1
   # GET /product_categories/1.json
   def show
@@ -104,4 +90,31 @@ class ProductCategoriesController < ApplicationController
     def product_category_params
       params.require(:product_category).permit(:title,:code,:comment)
     end
+     def download_product_categories_csv_file
+    @product_categories = @q.result
+    header_for_csv = %w[Id Title Comment]
+    data_for_csv = get_data_for_product_categories_csv
+    generate_csv(data_for_csv, header_for_csv, 'product_categories')
+  end
+
+  def download_product_categories_pdf_file
+    @product_categories = @q.result
+    generate_pdf('Product_Categories', 'pdf.html', 'A4')
+  end
+
+  def send_email_file
+    EmailJob.perform_later(@q.result.as_json, 'product_categories/index.pdf.erb', params[:email_value],
+                           params[:email_choice], params[:subject], params[:body],
+                           current_user, 'product_categories')
+    if params[:email_value].present?
+      flash[:notice] = "Email has been sent to #{params[:email_value]}"
+    else
+      flash[:notice] = "Email has been sent to #{current_user.email}"
+    end
+    redirect_to product_categories_path
+  end
+
+  def export_file
+    export_data('ProductCategory')
+  end
 end
