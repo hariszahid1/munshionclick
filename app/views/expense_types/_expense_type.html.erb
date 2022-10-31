@@ -3,21 +3,27 @@
   <td><%= expense_type.id %></td>
   <td class='urdu-font'><%= expense_type.title %></td>
   <td><%= expense_type.comment %></td>
-  <td>
+  <td class="d-flex">
     <% if can?(:update, :all) %>
-      <%= link_to edit_expense_type_path(expense_type) do %>
-        <i class="fa fa-edit " aria-hidden="true"></i> |
+      <%= link_to edit_expense_type_path(expense_type), remote: true do %>
+        <i class="fa fa-edit mr-2 ml-2" aria-hidden="true"></i>
       <%end %>
-    <% end %>
+    <% end %> |
     <% if can?(:delete, :all) %>
       <%= link_to expense_type, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
-        <i class="fa fa-trash " aria-hidden="true"></i> |
+        <i class="fa fa-trash mr-2 ml-2" aria-hidden="true"></i>
       <%end %>
-    <% end %>
+    <% end %> |
     <% if can?(:view, :all) %>
-      <%= link_to expense_type do %>
-        <i class="fa fa-eye " aria-hidden="true"></i>
+      <%= link_to expense_type_path(expense_type),remote: true do %>
+        <i class="fa fa-eye mr-2 ml-2 " aria-hidden="true"></i>
       <%end %>
-    <%end%>
+    <%end%> |
+    <%= link_to expense_types_path('q[id_eq]':expense_type.id,'pdf':true), title: 'Download PDF', target: '_blank' do %>
+			<i class="fa fa-file-pdf text-danger mr-2 ml-2 " aria-hidden="true"></i>
+		<%end %>|
+		<%= link_to expense_types_path('q[id_eq]':expense_type.id,'csv':true), title: 'Download CSV' do%>
+			<i class="fa fa-file-excel mr-2 ml-2 text-success" aria-hidden="true"></i>
+		<%end %>
   </td>
 </tr>

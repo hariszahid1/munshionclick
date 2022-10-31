@@ -61,7 +61,7 @@
         <p>
            <% if can?(:add, :all) %>
             <div id="new_expense_type">
-              <%= link_to new_expense_type_path, remote: true, class: "btn btn-success" do %>
+              <%= link_to new_expense_type_path, remote: true, class: "btn btn-success ml-3" do %>
               <i class="fa fa-plus" aria-hidden="true"></i>
                   New Expense Type
               <% end %>
@@ -105,7 +105,7 @@
               <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control', type: 'email'%>
               <br />
               <label>Subject:</label>
-              <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Cities Detail report from MunshiOnClick", class: 'form-control'%>
+              <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Expense Types Detail report from MunshiOnClick", class: 'form-control'%>
               <br />
               <label>Body:</label><br />
               <%= text_area_tag 'body', nil, class: 'form-control'%>
@@ -188,6 +188,7 @@
   </div>
 <% end %>
 
+<div class="show-data"></div>
 <script>
   $(document).ready(function() {
      var sortingButtons = $('.sorting-button')

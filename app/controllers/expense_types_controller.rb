@@ -41,8 +41,7 @@ class ExpenseTypesController < ApplicationController
         format.html { redirect_to expense_types_path, notice: 'Expense type was successfully created.' }
         format.json { render :show, status: :created, location: @expense_type }
       else
-        format.html { render :new }
-        format.json { render json: @expense_type.errors, status: :unprocessable_entity }
+        format.html { redirect_to expense_types_path, alert: 'Title is already present!' }
       end
     end
   end
@@ -55,8 +54,7 @@ class ExpenseTypesController < ApplicationController
         format.html { redirect_to expense_types_path, notice: 'Expense type was successfully updated.' }
         format.json { render :show, status: :ok, location: @expense_type }
       else
-        format.html { render :edit }
-        format.json { render json: @expense_type.errors, status: :unprocessable_entity }
+        format.html { redirect_to expense_types_path, alert: 'Title is already present!' }
       end
     end
   end
@@ -66,9 +64,8 @@ class ExpenseTypesController < ApplicationController
   def destroy
     @expense_type.destroy
     respond_to do |format|
-      format.html { redirect_to expense_types_url, notice: 'Expense type was successfully destroyed.' }
-      format.json { head :no_content }
-      format.js   { render :layout => false }
+      format.html { redirect_to expense_types_path, notice: 'Expense Type was successfully Deleted.' }
+      format.json { render :show, status: :ok, location: @expense_type }
     end
   end
 
