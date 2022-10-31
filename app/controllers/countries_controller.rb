@@ -82,8 +82,7 @@ class CountriesController < ApplicationController
         format.html { redirect_to countries_path, notice: 'Country was successfully created.' }
         format.json { render :show, status: :created, location: @country }
       else
-        format.html { render :new }
-        format.json { render json: @country.errors, status: :unprocessable_entity }
+        format.html { redirect_to countries_path, alert: 'Title is already present!' }
       end
     end
   end
@@ -96,8 +95,7 @@ class CountriesController < ApplicationController
         format.html { redirect_to countries_path, notice: 'Country was successfully updated.' }
         format.json { render :show, status: :ok, location: @country }
       else
-        format.html { render :edit }
-        format.json { render json: @country.errors, status: :unprocessable_entity }
+        format.html { redirect_to countries_path, alert: 'Title is already present!' }
       end
     end
   end
@@ -107,9 +105,8 @@ class CountriesController < ApplicationController
   def destroy
     @country.destroy
     respond_to do |format|
-      format.html { redirect_to countries_url, notice: 'Country was successfully destroyed.' }
-      format.json { head :no_content }
-      format.js   { render :layout => false }
+      format.html { redirect_to countries_path, notice: 'Country was successfully Deleted.' }
+      format.json { render :show, status: :ok, location: @country }
     end
   end
 
