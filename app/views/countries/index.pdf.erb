@@ -1,29 +1,45 @@
-<% @date = Date.today  %>
-<% @time = DateTime.now %>
-<% @time = Time.zone.now %>
-<p style="border-bottom: double 4px;  margin: 0;"></p>
-<h1 style="text-align: center; margin: 0;">Countries List</h1>
-
-<p style="border-bottom: double 4px;  margin: 0;"></p>
-<p style="text-align: center;margin: 0;">Report by: <%=current_user.name%></p>
-<div >
-  <table>
-    <thead class="lite-gray">
-      <th>ID</th>
-      <th>Title</th>
-      <th>Comment</th>
-    </thead>
-    <tbody>
-<% @countries.each_with_index do |country, index| %>
-      <tr>
-        <th><%= index + 1 %></th>
-        <td><%= country.title %></td>
-        <td><%= country.comment %></td>
-      
-      </tr>
-    <% end %>
-
-
-    </tbody>
-  </table>
-</div>
+<html>
+  <head>
+    <style>
+      .border-bottom{
+        border-bottom: double 4px;
+      }
+      .text-center{
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <% @date = Date.today  %>
+    <% @time = DateTime.now %>
+    <% @time = Time.zone.now %>
+    <div>
+      <p class="border-bottom"></p>
+      <h1 class="text-center">Countries List</h1>
+      <h1 class="text-center">
+        Date: <b><span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%></span>
+        Time: <span><%=@time.strftime("at %I:%M%p")%></span></b>
+      </h1>
+      <p class="border-bottom"></p>
+      <p class="text-center">Report by: <%=current_user.name%></p>
+    </div>
+    <div>
+      <table>
+        <thead class="lite-gray">
+          <th class="text-center">ID</th>
+          <th class="text-center">Title</th>
+          <th class="text-center">Comment</th>
+        </thead>
+        <tbody>
+          <% data.each_with_index do |country, index| %>
+            <tr>
+              <th class="text-center"><%= country['id'] %></th>
+              <td class="text-center"><%= country['title'] %></td>
+              <td class="text-center"><%= country['comment'] %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

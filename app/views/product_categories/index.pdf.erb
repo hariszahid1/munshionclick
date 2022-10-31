@@ -1,30 +1,45 @@
-<% @account_total=0%>
-<% @date = Date.today  %>
-<% @time = DateTime.now %>
-<% @time = Time.zone.now %>
-<p style="border-bottom: double 4px;  margin: 0;"></p>
-<h1 style="text-align: center; margin: 0;">Product Categories details</h1>
-<p style="border-bottom: double 4px;  margin: 0;"></p>
-<p style="text-align: center;margin: 0;">Report by: <%=current_user.name%></p>
-<div>
-  <table>
-    <thead>
-      <tr class="lite-gray">
-        <th>Title</th>
-        <th>Code</th>
-        <th>comment</th>
-
-      </tr>
-    </thead>
-    <tbody>
-      <% @product_categories.each do |product_category| %>
-      <tr>
-        <td><%= product_category.title %></td>
-        <td><%= product_category.code %></td>
-        <td><%= product_category.comment %></td>
-      </tr>
-      <%end%>
-    </tbody>
-
-  </table>
-</div>
+<html>
+  <head>
+    <style>
+      .border-bottom{
+        border-bottom: double 4px;
+      }
+      .text-center{
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <% @date = Date.today  %>
+    <% @time = DateTime.now %>
+    <% @time = Time.zone.now %>
+    <div>
+      <p class="border-bottom"></p>
+      <h1 class="text-center">Product Categories List</h1>
+      <h1 class="text-center">
+        Date: <b><span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%></span>
+        Time: <span><%=@time.strftime("at %I:%M%p")%></span></b>
+      </h1>
+      <p class="border-bottom"></p>
+      <p class="text-center">Report by: <%=current_user.name%></p>
+    </div>
+    <div>
+      <table>
+        <thead class="lite-gray">
+          <th class="text-center">Title</th>
+          <th class="text-center">Code</th>
+          <th class="text-center">Comment</th>
+        </thead>
+        <tbody>
+          <% data.each_with_index do |cat, index| %>
+            <tr>
+              <th class="text-center"><%= cat['title'] %></th>
+              <td class="text-center"><%= cat['code'] %></td>
+              <td class="text-center"><%= cat['comment'] %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

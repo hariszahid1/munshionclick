@@ -1,8 +1,17 @@
-<div class="card">
-  <div class="card-header">
-    <h3>New Product Category</h3>
-  </div>
-  <div class="card-body">
-    <%= render 'form', product_category: @product_category %>
+<div class="modal fade" id="showdData" tabindex="-1" role="dialog" aria-labelledby="showdDataLabel">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title ml-4" id="myModalLabel">New Product Category</h3>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+           </button>
+      </div>
+        <div class="modal-body">
+          <div class="card-body">
+            <%= render 'form', product_category: @product_category %>
+          </div>
+        </div>
+      </div>
     </div>
 </div>
