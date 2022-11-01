@@ -1,1 +1,3 @@
-$('#new_product_category a').hide().parent().append("<%= j render 'new_form', product_category: @product_category %>");
+$('.show-data').children().remove();
+$('.show-data').append("<%= escape_javascript(render partial: 'new_form', locals: { product_category: @product_category }) %>");
+$("#showdData").modal('show');
