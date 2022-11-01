@@ -74,7 +74,7 @@ class ProductCategoriesController < ApplicationController
     @product_category.destroy
     respond_to do |format|
      format.html { redirect_to product_categories_path, notice: 'Product Category was successfully Deleted.' }
-      format.json { render :show, status: :ok, location: @product_categories }
+      format.json { render :show, status: :ok, location: @product_category }
     end
   end
 
