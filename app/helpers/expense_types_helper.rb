@@ -1,5 +1,5 @@
 module ExpenseTypesHelper
-    def get_data_for_expense_types_csv
+  def get_data_for_expense_types_csv
 		temp=[]
 		@expense_types.each do |expense_type|
 			first=expense_type.id

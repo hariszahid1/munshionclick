@@ -70,40 +70,40 @@ class ExpenseTypesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_expense_type
-      @expense_type = ExpenseType.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_expense_type
+    @expense_type = ExpenseType.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def expense_type_params
-      params.require(:expense_type).permit(:title, :comment)
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def expense_type_params
+    params.require(:expense_type).permit(:title, :comment)
+  end
+  def download_expense_types_csv_file
+    @expense_type = @q.result
+    header_for_csv = %w[Id Title Comment]
+    data_for_csv = get_data_for_expense_types_csv
+    generate_csv(data_for_csv, header_for_csv, "ExpenseTypes-Total-#{@expense_type.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}")
+  end
+
+  def download_expense_types_pdf_file
+    @expense_type = @q.result
+    generate_pdf(@expense_type.as_json, "ExpenseTypes-Total-#{@expense_type.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}", 'pdf.html', 'A4')
+  end
+
+  def send_email_file
+    EmailJob.perform_later(@q.result.as_json, 'expense_types/index.pdf.erb', params[:email_value],
+                            params[:email_choice], params[:subject], params[:body],
+                            current_user, "ExpenseTypes-Total-#{@q.result.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}")
+    if params[:email_value].present?
+      flash[:notice] = "Email has been sent to #{params[:email_value]}"
+    else
+      flash[:notice] = "Email has been sent to #{current_user.email}"
     end
-    def download_expense_types_csv_file
-      @expense_type = @q.result
-      header_for_csv = %w[Id Title Comment]
-      data_for_csv = get_data_for_expense_type_csv
-      generate_csv(data_for_csv, header_for_csv, 'expense_type')
-    end
-  
-    def download_expense_types_pdf_file
-      @expense_type = @q.result
-      generate_pdf(@expense_type.as_json, 'Expense_type', 'pdf.html', 'A4')
-    end
-  
-    def send_email_file
-      EmailJob.perform_later(@q.result.as_json, 'expense_types/index.pdf.erb', params[:email_value],
-                             params[:email_choice], params[:subject], params[:body],
-                             current_user, 'expense_types')
-      if params[:email_value].present?
-        flash[:notice] = "Email has been sent to #{params[:email_value]}"
-      else
-        flash[:notice] = "Email has been sent to #{current_user.email}"
-      end
-      redirect_to expense_types_path
-    end
-  
-    def export_file
-      export_data('ExpenseType')
-    end
+    redirect_to expense_types_path
+  end
+
+  def export_file
+    export_data('ExpenseType')
+  end
 end
