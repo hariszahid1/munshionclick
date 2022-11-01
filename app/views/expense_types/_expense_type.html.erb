@@ -3,7 +3,7 @@
   <td><%= expense_type.id %></td>
   <td class='urdu-font'><%= expense_type.title %></td>
   <td><%= expense_type.comment %></td>
-  <td class="d-flex">
+  <td>
     <% if can?(:update, :all) %>
       <%= link_to edit_expense_type_path(expense_type), remote: true do %>
         <i class="fa fa-edit mr-2 ml-2" aria-hidden="true"></i>

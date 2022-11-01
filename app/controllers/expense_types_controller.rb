@@ -9,7 +9,7 @@ class ExpenseTypesController < ApplicationController
     @q = ExpenseType.ransack(params[:q])
     @q.sorts = 'id asc' if @q.sorts.empty? && @q.result.count.positive?
     @options_for_select = ExpenseType.all
-    @expense_types = @q.result(distinct: true).page(params[:page]).per(50)
+    @expense_types = @q.result.page(params[:page])
     download_expense_types_csv_file if params[:csv].present?
     download_expense_types_pdf_file if params[:pdf].present?
     send_email_file if params[:email].present?
