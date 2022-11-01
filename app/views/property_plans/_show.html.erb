@@ -38,7 +38,7 @@
                         <td>Rs.<%= @property_plan.total_price %></td>
                         <td><%= @property_plan.price_per_marla %></td>
                         <td><%= @property_plan.payment_type %></td>
-                        <td><%= @property_plan.payment_plan.titleize %></td>
+                        <td><%= @property_plan.payment_plan&.titleize %></td>
                         <td><%= @property_plan.no_of_installments %></td>
                         <td><%= @property_plan.advance %></td>
                         <td><%= @property_plan.high_amount_installments %></td>

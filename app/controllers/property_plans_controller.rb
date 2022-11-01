@@ -95,13 +95,15 @@ class PropertyPlansController < ApplicationController
   # GET /property_plans/new
   def new
     @property_plan = PropertyPlan.new
+    @orders = Order.all
     respond_to do |format|
       format.js
     end
   end
-
+  
   # GET /property_plans/1/edit
   def edit
+    @orders = Order.all
     respond_to do |format|
       format.js
     end
@@ -113,7 +115,6 @@ class PropertyPlansController < ApplicationController
   # POST /property_plans.json
   def create
     @property_plan = PropertyPlan.new(property_plan_params)
-    byebug
     respond_to do |format|
       if @property_plan.save
         save_installments
@@ -132,7 +133,7 @@ class PropertyPlansController < ApplicationController
     respond_to do |format|
       if @property_plan.update(property_plan_params)
         # save_installments
-        format.html { redirect_to orders_path(sale: true), notice: 'Property plan was successfully updated.' }
+        format.html { redirect_to property_plans_path, notice: 'Property plan was successfully updated.' }
         format.json { render :show, status: :ok, location: @property_plan }
       else
         format.html { render :edit }
@@ -169,7 +170,6 @@ class PropertyPlansController < ApplicationController
   private
 
   def save_installments
-    byebug
     installments_list = params[:property_plan][:installments_list]
     no_of_installments = property_plan_params[:no_of_installments].to_i
     (1..no_of_installments).each do |no_ins|
