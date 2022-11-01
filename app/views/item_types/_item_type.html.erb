@@ -6,7 +6,7 @@
   <td><%= item_type.comment %></td>
   <td>
     <% if can?(:update, :all) %>
-      <%= link_to edit_item_type_path(item_type) do %>
+      <%= link_to edit_item_type_path(item_type), remote: true do %>
         <i class="fa fa-edit " aria-hidden="true"></i> |
       <%end %>
     <% end %>
@@ -16,7 +16,7 @@
       <%end %>
     <% end %>
     <% if can?(:view, :all) %>
-      <%= link_to item_type do %>
+      <%= link_to item_type, remote: true do %>
         <i class="fa fa-eye " aria-hidden="true"></i>
       <%end %>
     <%end%>

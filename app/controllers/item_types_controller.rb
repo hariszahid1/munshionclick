@@ -19,6 +19,9 @@ class ItemTypesController < ApplicationController
   # GET /item_types/1
   # GET /item_types/1.json
   def show
+    respond_to do |format|
+      format.js
+    end
   end
 
   def get_item_type_products
@@ -30,6 +33,9 @@ class ItemTypesController < ApplicationController
   # GET /item_types/new
   def new
     @item_type = ItemType.new
+    respond_to do |format|
+      format.js
+    end
   end
 
   # GET /item_types/1/edit
@@ -47,8 +53,7 @@ class ItemTypesController < ApplicationController
         format.html { redirect_to item_types_url, notice: 'Item type was successfully created.' }
         format.json { render :show, status: :created, location: @item_type }
       else
-        format.html { render :new }
-        format.json { render json: @item_type.errors, status: :unprocessable_entity }
+        format.html { redirect_to item_types_path, alert: 'Title is already present!' }
       end
     end
   end
@@ -61,8 +66,7 @@ class ItemTypesController < ApplicationController
         format.html { redirect_to item_types_url, notice: 'Item type was successfully updated.' }
         format.json { render :show, status: :ok, location: @item_type }
       else
-        format.html { render :edit }
-        format.json { render json: @item_type.errors, status: :unprocessable_entity }
+        format.html { redirect_to item_types_path, alert: 'Title is already present!' }
       end
     end
   end
@@ -72,9 +76,8 @@ class ItemTypesController < ApplicationController
   def destroy
     @item_type.destroy
     respond_to do |format|
-      format.html { redirect_to item_types_url, notice: 'Item type was successfully destroyed.' }
-      format.json { head :no_content }
-      format.js   { render :layout => false }
+      format.html { redirect_to item_types_path, notice: 'Item type was successfully Deleted.' }
+      format.json { render :show, status: :ok, location: @item_type }
     end
   end
 
@@ -109,7 +112,7 @@ class ItemTypesController < ApplicationController
       else
         flash[:notice] = "Email has been sent to #{current_user.email}"
       end
-      redirect_to cities_path
+      redirect_to item_types_path
     end
   
     def export_file

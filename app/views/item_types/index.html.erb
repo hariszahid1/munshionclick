@@ -4,8 +4,18 @@
     <span aria-hidden="true">×</span>
   </button>
 </div>
-<div class="hidden" id="item_types_list">
-   <h1>Item Types</h1>
+  <div class="hidden" id="item_types_list">
+          <div class="main-content-header">
+            <h1 class="ml-2">Item Types</h1>
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a href="<%= root_path %>">Dashboard</a>
+              </li>
+              <li class="breadcrumb-item active">
+                <a href="<%= item_types_path %>">Item Types</a>
+              </li>
+            </ol>
+          </div>
         <div class="float-right">
               <div class="dropdown ml-auto mr-4">
                 <span class="btn btn-info" title= "About This page">Help</span>
@@ -58,7 +68,7 @@
         <p>
            <% if can?(:add, :all) %>
               <div id="new_item_type">
-                <%= link_to new_item_type_path, remote: true,class: "btn btn-success" do %>
+                <%= link_to new_item_type_path, remote: true,class: "btn btn-success ml-3" do %>
                   <i class="fa fa-plus" aria-hidden="true"></i>
                   New Item Type
                   <% end %>
@@ -102,7 +112,7 @@
               <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control', type: 'email'%>
               <br />
               <label>Subject:</label>
-              <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Cities Detail report from MunshiOnClick", class: 'form-control'%>
+              <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Item Types Detail report from MunshiOnClick", class: 'form-control'%>
               <br />
               <label>Body:</label><br />
               <%= text_area_tag 'body', nil, class: 'form-control'%>
