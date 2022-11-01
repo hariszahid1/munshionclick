@@ -2,7 +2,8 @@ class PropertyPlansController < ApplicationController
   before_action :set_property_plan, only: %i[show edit update destroy]
   before_action :set_property_installment, only: [:show]
   before_action :set_property_installment_edit, only: %i[edit_property_installment update_installment]
-
+  include PdfCsvGeneralMethod
+  include PropertyPlansHelper
   # GET /property_plans
   # GET /property_plans.json
   def index
@@ -19,6 +20,10 @@ class PropertyPlansController < ApplicationController
          end
     @property_plans = @q.result
     @total_advance = @property_plans.sum(:advance)
+    download_property_plans_csv_file if params[:csv].present?
+    download_property_plans_pdf_file if params[:pdf].present?
+    send_email_file if params[:email].present?
+    export_file if params[:export_data].present?
     print_pdf('properties', 'pdf.html', 'A4') if params[:submit_pdf].present?
 
     sys_users  = Order.joins(:property_plans).where('property_plans.id': @property_plans.pluck(:id)).pluck(:sys_user_id)
@@ -53,13 +58,7 @@ class PropertyPlansController < ApplicationController
     @mobile     = @sys_users.pluck('mobile').uniq
     @phone      = (@mobile + @office + @home).uniq.compact.reject(&:empty?).join(',')
 
-    if params[:submit_pdf].present? or params[:submit_pdf_search].present?
-      print_pdf('properties', 'pdf.html', 'A4')
-    elsif params[:submit_pdf_bulk].present?
-      @property_installments_count = @property_installments.group(:property_plan_id).count
-      @property_installments_sum = @property_installments.group(:property_plan_id).sum(:installment_price)
-      print_pdf('properties', 'pdf.html', 'A4')
-    end
+   
 
     @property_installments = @property_installments.page(params[:page])
   end
@@ -237,5 +236,35 @@ class PropertyPlansController < ApplicationController
       :payment_method,
       :bank_detail
     )
+  end
+  def download_property_plans_csv_file
+    @property_plan= @q.result
+    header_for_csv = %w[Id Title Comment]
+    data_for_csv = get_data_for_property_plan_csv
+    generate_csv(data_for_csv, header_for_csv,
+                 "Property-Plan-Total-#{@property_plan.count}-#{DateTime.now.strftime('%d-%m-%Y-%H-%M')}")
+  end
+
+  def download_property_plans_pdf_file
+    @property_plan = @q.result
+  
+    generate_pdf(@property_plan.as_json, "Property-Plan-Total-#{@property_plan.count}-#{DateTime.now.strftime('%d-%m-%Y-%H-%M')}",
+                 'pdf.html', 'A4')
+  end
+
+  def send_email_file
+    EmailJob.perform_later(@q.result.as_json, 'property_plans/index.pdf.erb', params[:email_value],
+                           params[:email_choice], params[:subject], params[:body],
+                           current_user, "Property-Plan-Total-#{@q.result.count}-#{DateTime.now.strftime('%d-%m-%Y-%H-%M')}")
+    flash[:notice] = if params[:email_value].present?
+                       "Email has been sent to #{params[:email_value]}"
+                     else
+                       "Email has been sent to #{current_user.email}"
+                     end
+    redirect_to property-plans_path
+  end
+
+  def export_file
+    export_data('PropertyPlan')
   end
 end
