@@ -104,9 +104,9 @@ class ItemTypesController < ApplicationController
   end
 
   def send_email_file
-    EmailJob.perform_later(@q.result.as_json, 'item_type/index.pdf.erb', params[:email_value],
+    EmailJob.perform_later(@q.result.as_json, 'item_types/index.pdf.erb', params[:email_value],
                             params[:email_choice], params[:subject], params[:body],
-                            current_user, "ItemTypes-Total-#{@q.rsult.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}")
+                            current_user, "ItemTypes-Total-#{@q.result.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}")
     if params[:email_value].present?
       flash[:notice] = "Email has been sent to #{params[:email_value]}"
     else

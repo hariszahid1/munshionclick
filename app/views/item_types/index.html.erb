@@ -58,7 +58,7 @@
       <%= f.select :id_eq, options_for_select(@options_for_select.map{ |p| [p.title , p.id]}, f.object.id_eq),{:include_blank => "Select Title"},:class=>"form-control chosen-select" %>
       </div>
       <div class='col-lg-3'>
-      <%= f.search_field :title_or_comment_cont, placeholder: "Search in Item types", title: "Enter city name" ,:class=>"form-control" %>
+      <%= f.search_field :title_or_comment_or_code_cont, placeholder: "Search in Item types", title: "Enter city name" ,:class=>"form-control" %>
       </div>
       <button class="form-control btn btn-primary" title="search item types" name="search_submit"type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
       </div>
