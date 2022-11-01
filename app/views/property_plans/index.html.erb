@@ -1,101 +1,265 @@
+<div id="custom-alert" class="alert alert-danger d-none">
+  <span class="custom-alert-text"></span>
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">×</span>
+  </button>
+</div>
 <div class="hidden" id="city_list">
   <div class="row">
     <div class="col-lg-12 col-sm-12">
-      <h1>Advance Payments</h1>
+      <div class="main-content-header">
+            <h1 class="ml-2">Advance Payments</h1>
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a href="<%= root_path %>">Dashboard</a>
+              </li>
+              <li class="breadcrumb-item active">
+                <a href="<%= property_plans_path %>">Advance Payments</a>
+              </li>
+            </ol>
+          </div>
+          <div class="float-right">
+          <div class="dropdown ml-auto mr-4">
+           <span class="btn btn-info" title= "About This page">Help</span>
+            <div class="dropdown-content">
+              <% if @help.present? %>
+              <% @help&.help_links.each do |link| %>
+              <a type="button" class="" target="_blank" href="<%= link[1] %>" >Help in <%= link[0] %></a>
+               <% end %>
+              <% end %>
+            </div>
+          </div>
+        </div>
     </div>
   </div>
-  <div class="clearfix"></div>
-  <div class="row">
-    <div class="col-lg-12 col-sm-12">
-      <div class="col-lg-12 form-group float-left">
-      </div>
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link tab-label" data-toggle="tab" href="#create" role="tab">Create</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
+      </li>
+      <li class="nav-item">
+       <a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
+      </li>
+  </ul>
 
       <%= search_form_for @q, url: property_plans_path, class: "admin-controls", method: "get" do |f| %>
-        <div class="col-lg-3 form-group float-left">
-          <%= f.select :order_sys_user_id_eq, options_from_collection_for_select(@customers, 'id', 'name', f.object.order_sys_user_id_eq),{:include_blank => "Select Customer"},class: 'form-control chosen-select'%>
+      <div class="tab-content mb-5">
+        <div class="tab-pane active" id="search" role="tabpanel">
+        <p>
+          <div class="col-lg-12 d-flex">
+            <div class="col-lg-3 form-group float-left">
+              <%= f.select :order_sys_user_id_eq, options_from_collection_for_select(@customers, 'id', 'name', f.object.order_sys_user_id_eq),{:include_blank => "Select Customer"},class: 'form-control chosen-select'%>
+            </div>
+            <div class="col-lg-2 form-group float-left">
+              <%= f.search_field :due_date_gteq,class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
+            </div>
+            <div class="col-lg-2 form-group float-left">
+              <%= f.search_field :due_date_lteq,class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
+            </div>
+            <div class="col-lg-2 form-group float-left">
+              <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+            </div>
+          </div> 
+          <p>
+          </div>
+
+          <div class="tab-pane" id="create" role="tabpanel">
+            <p>
+              <% if can?(:add, :all) %>
+                <div id="new_city">
+                  <%= link_to new_property_plan_path, remote: true,class: "btn btn-success ml-3" do %>
+                    <i class="fa fa-plus" aria-hidden="false"></i>
+                    Create Property Plan
+                  <% end %>
+                </div>
+              <% end %>
+            </p>
+          </div>
+
+        <div class="tab-pane" id="pdf" role="tabpanel">
+          <p>
+             <div class="col-lg-2 d-flex">
+              <button class="form-control btn btn-danger" name="submit_pdf" type="submit" value="PDF A4" formtarget="_blank">Plans<i class="fa fa-file-pdf ml-2"></i></button>
+            </div>
+          </p>
         </div>
-        <div class="col-lg-2 form-group float-left">
-          <%= f.search_field :due_date_gteq,class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
+
+        <div class="tab-pane" id="csv" role="tabpanel">
+          <p>
+            <div class="col-lg-2 d-flex">
+            <button class="form-control btn btn-success" title= "download plans csv" name="csv" type="submit" value="csv">Plans &nbsp;<i class="fa fa-file-excel"></i></button>
+            </div>
+          </p>
         </div>
-        <div class="col-lg-2 form-group float-left">
-          <%= f.search_field :due_date_lteq,class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
+
+        <div class="tab-pane" id="emails" role="tabpanel">
+      <p>
+        <div class="col-lg-2 d-flex">
+        <button class="form-control btn btn-info" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope"></i>&nbsp;Mail</button>
         </div>
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+     </p>
+      <!-- Modal -->
+          <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                  <% @pos_setting = PosSetting.first %>
+                  <label>Email:</label>
+                  <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control', type: 'email'%>
+                  <br />
+                  <label>Subject:</label>
+                  <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Property Plans Detail report from MunshiOnClick", class: 'form-control'%>
+                  <br />
+                  <label>Body:</label><br />
+                  <%= text_area_tag 'body', nil, class: 'form-control'%>
+                  <br />
+
+                  <label>Please select one of them.</label>
+                  <div>
+                    <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
+                    <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
+                    <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                  <button name="email" type="submit" value="email" class="btn btn-primary">Send</button>
+                </div>
+                </div>
+            </div>
+          </div>
         </div>
-        <div class="col-lg-1 form-group float-right">
-          <button class="form-control badge badge-pill badge-danger" name="submit_pdf" type="submit" value="PDF A4" formtarget="_blank">Plans<i class="fa fa-file-pdf"></i></button>
-        </div>
+
+        <div class="tab-pane" id="import-export" role="tabpanel">
+         <p>
+           <div class="d-flex">
+           <button class="btn btn-success ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
+           <button class="btn btn-primary ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
+           </div>
+         </p>
+       </div>
+       </div>
       <% end %>
-    </div>
-  </div>
-  <table data-toggle="table" data-search="true">
-    <thead>
-      <tr>
-        <th><%= sort_link(@q, :property_type, 'User') %></th>
-        <th><%= sort_link(@q, :property_type, 'Phone') %></th>
-        <th><%= sort_link(@q, :area_in_marla, 'Plot') %></th>
-        <th><%= sort_link(@q, :area_in_marla, 'Last Payment') %></th>
-        <th><%= sort_link(@q, :area_in_marla, 'Last Payment Date') %></th>
-        <th><%= sort_link(@q, :price_per_marla, 'Advance') %></th>
-        <th><%= sort_link(@q, :area_in_marla, 'Size') %></th>
-        <th><%= sort_link(@q, :area_in_marla, 'Due Date') %></th>
-        <th>Dealer</th>
-        <th>Action</th>
-      </tr>
-    </thead>
+   <div class='card p-3'>
+    <%= render 'map_columns/map_column_partials' %>
+      <table data-toggle="table" data-search="true">
+      <button class='btn btn-outline-danger float-right delete-selected mb-3' type='button' style="width:163px"value='Property_Plan' >Delete Selected</button>
+        <thead>
+          <tr>
+            <th><input type="checkbox" id="master" class='select-all-checkbox'></th>
+            <th>ID<div class="float-right"><%= sort_link(@q, :id,"", {}, class: 'sorting-button') %></div></th>
+            <th><%= sort_link(@q, :property_type, 'User',  {}, class: 'sorting-button') %></th>
+            <th><%= sort_link(@q, :property_type, 'Phone',  {}, class: 'sorting-button') %></th>
+            <th><%= sort_link(@q, :area_in_marla, 'Plot',  {}, class: 'sorting-button') %></th>
+            <th><%= sort_link(@q, :area_in_marla, 'Last Payment',  {}, class: 'sorting-button') %></th>
+            <th><%= sort_link(@q, :area_in_marla, 'Last Payment Date',  {}, class: 'sorting-button') %></th>
+            <th><%= sort_link(@q, :price_per_marla, 'Advance',  {}, class: 'sorting-button') %></th>
+            <th><%= sort_link(@q, :area_in_marla, 'Size',  {}, class: 'sorting-button') %></th>
+            <th><%= sort_link(@q, :area_in_marla, 'Due Date',  {}, class: 'sorting-button') %></th>
+            <th>Dealer</th>
+            <th>Action</th>
+          </tr>
+        </thead>
 
-    <tbody>
-      <% @property_plans.each do |property_plan| %>
-        <tr>
-          <td><%= link_to property_plan.order&.sys_user&.name, orders_path('q[sys_user_id_eq]': property_plan.order&.sys_user.id.to_s,"sale":true) if property_plan.order&.sys_user&.id.present?%></td>
-          <td><%= property_plan.order&.sys_user&.contact&.phone %></td>
-          <td><%= property_plan.order&.order_items_names_and_quantity&.first&.first %></td>
-          <td><%= number_with_delimiter property_plan.order&.sys_user&.ledger_books.where('credit>0')&.last&.credit %></td>
-          <td><%= property_plan.order&.sys_user&.ledger_books.where('credit>0')&.last&.created_at&.strftime("%d%b%y at %I:%M%p")%></td>
-          <td><%= number_with_delimiter property_plan.advance %></td>
-          <td><%= property_plan.order&.order_items_names_and_quantity&.first[8]%>-M <%= property_plan.order&.order_items_names_and_quantity&.first[9]%>-sqr</td>
-          <td><%= property_plan.due_date.present? ? property_plan.due_date.strftime("%d%b%y at %I:%M%p") : '' %></td>
-          <td><%= property_plan&.order&.order_plot_dealer&.first&.staff&.name%></td>
-          <td>
-            <% if property_plan.order.present? %>
-              <%= link_to order_path(property_plan&.order,product: true) do %>
-                <i class="fa fa-eye " aria-hidden="true"></i> |
-              <%end %>
-            <%end %>
+        <tbody>
+          <% @property_plans.each do |property_plan| %>
+            <tr>
+              <td><%= check_box_tag 'object_ids[]', property_plan.id %></td>
+              <td><%= property_plan.id %></td>
+              <td><%= link_to property_plan.order&.sys_user&.name, orders_path('q[sys_user_id_eq]': property_plan.order&.sys_user.id.to_s,"sale":true) if property_plan.order&.sys_user&.id.present?%></td>
+              <td><%= property_plan.order&.sys_user&.contact&.phone %></td>
+              <td><%= property_plan.order&.order_items_names_and_quantity&.first&.first %></td>
+              <td><%= number_with_delimiter property_plan.order&.sys_user&.ledger_books.where('credit>0')&.last&.credit %></td>
+              <td><%= property_plan.order&.sys_user&.ledger_books.where('credit>0')&.last&.created_at&.strftime("%d%b%y at %I:%M%p")%></td>
+              <td><%= number_with_delimiter property_plan.advance %></td>
+              <td><%= property_plan.order&.order_items_names_and_quantity&.first[8]%>-M <%= property_plan.order&.order_items_names_and_quantity&.first[9]%>-sqr</td>
+              <td><%= property_plan.due_date.present? ? property_plan.due_date.strftime("%d%b%y at %I:%M%p") : '' %></td>
+              <td><%= property_plan&.order&.order_plot_dealer&.first&.staff&.name%></td>
+              <td>
+              <div class="d-flex">
+                <% if property_plan.order.present? %>
+                  <%= link_to property_plan_path(property_plan), remote: true do %>
+                    <i class="fa fa-eye ml-2 mr-2" aria-hidden="true"></i>
+                  <%end %>
+                <%end %> |
 
-            <% if can?(:update, Product) %>
+                <% if can?(:delete, :all) %>
+                  <%= link_to property_plan.order, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+                    <i class="fa fa-trash mr-2 ml-2" aria-hidden="true"></i>
+                  <%end %>
+                <% end %> |
 
-            <% if property_plan.order.present? %>
-              <%= link_to edit_order_path(property_plan&.order,product: true) do %>
-                <i class="fa fa-edit " aria-hidden="true"></i>
-              <%end %>
-            <%end %>
-            <% end %>
-          </td>
-        </tr>
-      <% end %>
-      <tr>
-        <td>Total</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td><h4><%= number_with_delimiter @total_advance%></h4></td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+                <% if can?(:update, Product) %>
+                  <% if property_plan.order.present? %>
+                    <%= link_to edit_property_plan_path(property_plan), remote: true do %>
+                      <i class="fa fa-edit ml-2 mr-2" aria-hidden="true"></i>
+                    <%end %>
+                  <%end %>
+                <% end %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+          <tr>
+            <td>Total</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><h4><%= number_with_delimiter @total_advance%></h4></td>
+          </tr>
+        </tbody>
+      </table>
+        <div class="row">
+          <div class="col-lg-4 col-sm-4">
+            <%= page_entries_info @property_plans %>
+          </div>
+          <div class="col-lg-8 col-sm-8 pagination-left">
+            <%= paginate @property_plans %>
+          </div>
+        </div>
+        <%= form_for :bulk_import, url: bulk_import_data_path, method: :post, html: {class: "bulk-import-form"} do |f| %>
+          <div class="modal fade" id="importFile" tabindex="-1" role="dialog" aria-labelledby="importFileTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLongTitle">Import file</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <%= f.file_field :file, required: true, accept: '.csv' %>
+                  <%= f.hidden_field :table_name, value: 'City' %>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <%= f.submit 'Import', class: 'btn btn-primary' %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
 
-<div class="clearfix"></div>
-<div class="row">
-  <div class="col-lg-4 col-sm-4">
-    <%= page_entries_info @property_plans %>
-  </div>
-  <div class="col-lg-8 col-sm-8 pagination-left">
-    <%= paginate @property_plans %>
-  </div>
-</div>
+<div class="show-data"></div>
+
 
 <script>
   $(document).ready(function() {
