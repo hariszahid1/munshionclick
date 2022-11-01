@@ -9,7 +9,7 @@ class ItemTypesController < ApplicationController
     @q = ItemType.ransack(params[:q])
     @q.sorts = 'id asc' if @q.sorts.empty? && @q.result.count.positive?
     @options_for_select = ItemType.all
-    @item_types = @q.result(distinct: true).page(params[:page])
+    @item_types = @q.result.page(params[:page])
     download_item_types_csv_file if params[:csv].present?
     download_item_types_pdf_file if params[:pdf].present?
     send_email_file if params[:email].present?
@@ -95,18 +95,18 @@ class ItemTypesController < ApplicationController
     @item_type = @q.result
     header_for_csv = %w[Id Title Code Comment]
     data_for_csv = get_data_for_item_types_csv
-    generate_csv(data_for_csv, header_for_csv, 'item_type')
+    generate_csv(data_for_csv, header_for_csv, "ItemTypes-Total-#{@item_type.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}")
   end
 
   def download_item_types_pdf_file
     @item_type = @q.result
-    generate_pdf(@item_type.as_json, 'Item_type', 'pdf.html', 'A4')
+    generate_pdf(@item_type.as_json, "ItemTypes-Total-#{@item_type.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}", 'pdf.html', 'A4')
   end
 
   def send_email_file
     EmailJob.perform_later(@q.result.as_json, 'item_type/index.pdf.erb', params[:email_value],
                             params[:email_choice], params[:subject], params[:body],
-                            current_user, 'item_type')
+                            current_user, "ItemTypes-Total-#{@q.rsult.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}")
     if params[:email_value].present?
       flash[:notice] = "Email has been sent to #{params[:email_value]}"
     else
