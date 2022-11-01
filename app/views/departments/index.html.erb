@@ -54,7 +54,7 @@
       <p>
         <div class="col-lg-10 form-group d-flex">
             <div class='col-lg-3'>
-            <%= f.select :id_eq, options_for_select(@options_for_select.map{ |p| [p.title + '--->' + p.code, p.id]}, f.object.id_eq),{:include_blank => "Select Title"},:class=>"form-control chosen-select" %>
+            <%= f.select :id_eq, options_for_select(@options_for_select.map{ |p| [p.title.to_s + '--->' + p.code.to_s, p.id]}, f.object.id_eq),{:include_blank => "Select Title"},:class=>"form-control chosen-select" %>
             </div>
           <div class='col-lg-3'>
           <%= f.search_field :title_or_comment_cont, placeholder: "title", title: "title" ,:class=>"form-control" %>
