@@ -1,30 +1,27 @@
 class ItemTypesController < ApplicationController
+  include PdfCsvGeneralMethod
+  include ItemTypesHelper
   before_action :set_item_type, only: [:show, :edit, :update, :destroy, :get_item_type_products]
 
   # GET /item_types
   # GET /item_types.json
   def index
     @q = ItemType.ransack(params[:q])
-    if @q.result.count > 0
-      @q.sorts = 'id asc' if @q.sorts.empty?
-    end
-    if params[:q].present?
-      @title = params[:q][:title_eq]
-      @code = params[:q][:code_eq]
-    end
-    @item_types = @q.result(distinct: true).page(params[:page])
-    respond_to do |format|
-      format.js {
-        @item_types = @q.result(distinct: true)
-        format.js
-      }
-      format.html
-    end
+    @q.sorts = 'id asc' if @q.sorts.empty? && @q.result.count.positive?
+    @options_for_select = ItemType.all
+    @item_types = @q.result.page(params[:page])
+    download_item_types_csv_file if params[:csv].present?
+    download_item_types_pdf_file if params[:pdf].present?
+    send_email_file if params[:email].present?
+    export_file if params[:export_data].present?
   end
 
   # GET /item_types/1
   # GET /item_types/1.json
   def show
+    respond_to do |format|
+      format.js
+    end
   end
 
   def get_item_type_products
@@ -36,6 +33,9 @@ class ItemTypesController < ApplicationController
   # GET /item_types/new
   def new
     @item_type = ItemType.new
+    respond_to do |format|
+      format.js
+    end
   end
 
   # GET /item_types/1/edit
@@ -53,8 +53,7 @@ class ItemTypesController < ApplicationController
         format.html { redirect_to item_types_url, notice: 'Item type was successfully created.' }
         format.json { render :show, status: :created, location: @item_type }
       else
-        format.html { render :new }
-        format.json { render json: @item_type.errors, status: :unprocessable_entity }
+        format.html { redirect_to item_types_path, alert: 'Title is already present!' }
       end
     end
   end
@@ -67,8 +66,7 @@ class ItemTypesController < ApplicationController
         format.html { redirect_to item_types_url, notice: 'Item type was successfully updated.' }
         format.json { render :show, status: :ok, location: @item_type }
       else
-        format.html { render :edit }
-        format.json { render json: @item_type.errors, status: :unprocessable_entity }
+        format.html { redirect_to item_types_path, alert: 'Title is already present!' }
       end
     end
   end
@@ -78,20 +76,46 @@ class ItemTypesController < ApplicationController
   def destroy
     @item_type.destroy
     respond_to do |format|
-      format.html { redirect_to item_types_url, notice: 'Item type was successfully destroyed.' }
-      format.json { head :no_content }
-      format.js   { render :layout => false }
+      format.html { redirect_to item_types_path, notice: 'Item type was successfully Deleted.' }
+      format.json { render :show, status: :ok, location: @item_type }
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_item_type
-      @item_type = ItemType.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_item_type
+    @item_type = ItemType.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def item_type_params
-      params.require(:item_type).permit(:title, :code, :comment)
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def item_type_params
+    params.require(:item_type).permit(:title, :code, :comment)
+  end
+  def download_item_types_csv_file
+    @item_type = @q.result
+    header_for_csv = %w[Id Title Code Comment]
+    data_for_csv = get_data_for_item_types_csv
+    generate_csv(data_for_csv, header_for_csv, "ItemTypes-Total-#{@item_type.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}")
+  end
+
+  def download_item_types_pdf_file
+    @item_type = @q.result
+    generate_pdf(@item_type.as_json, "ItemTypes-Total-#{@item_type.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}", 'pdf.html', 'A4')
+  end
+
+  def send_email_file
+    EmailJob.perform_later(@q.result.as_json, 'item_type/index.pdf.erb', params[:email_value],
+                            params[:email_choice], params[:subject], params[:body],
+                            current_user, "ItemTypes-Total-#{@q.rsult.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}")
+    if params[:email_value].present?
+      flash[:notice] = "Email has been sent to #{params[:email_value]}"
+    else
+      flash[:notice] = "Email has been sent to #{current_user.email}"
     end
+    redirect_to item_types_path
+  end
+
+  def export_file
+    export_data('ItemType')
+  end
 end
