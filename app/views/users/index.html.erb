@@ -31,9 +31,6 @@
           <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link tab-label" data-toggle="tab" href="#create" role="tab">Create</a>
-        </li>
-        <li class="nav-item">
           <a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
         </li>
         <li class="nav-item">
@@ -74,18 +71,6 @@
             </div>
           </p>
         </div>
-
-         <div class="tab-pane" id="create" role="tabpanel">
-            <p>
-                <% if can?(:add, :all) %>
-                    <%= link_to new_user_path, remote: true, class: "btn btn-primary ml-3 mt-3" do %>
-                      <i class="fas fa-plus"></i>
-                      <%= current_user.allowed_valid_roles.to_s.titleize %>
-                <% end %>
-              <% end %>
-            </p>
-          </div>
-
            <div class="tab-pane" id="pdf" role="tabpanel">
             <p>
               <div class="col-lg-2 d-flex">
