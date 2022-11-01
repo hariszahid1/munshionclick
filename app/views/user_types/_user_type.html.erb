@@ -6,20 +6,22 @@
   <td><%= user_type.discount_by_amount %></td>
   <td><%= user_type.comment %></td>
   <td>
+  <div class="d-flex">
     <% if can?(:update, :all) %>
-      <%= link_to edit_user_type_path(user_type) do %>
-        <i class="fa fa-edit" aria-hidden="true"></i> |
+      <%= link_to edit_user_type_path(user_type), remote: true, class: "hover-zoom" do %>
+        <i class="fa fa-edit ml-2 mr-2" aria-hidden="true"></i>
       <% end %>
-    <% end %>
+    <% end %> |
     <% if can?(:delete, :all) %>
       <%= link_to user_type, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
-        <i class="fa fa-trash" aria-hidden="true"></i> |
+        <i class="fa fa-trash ml-2 mr-2" aria-hidden="true"></i>
       <% end %>
-      <% end %>
+      <% end %> |
     <% if can?(:delete, :all) %>
-      <%= link_to user_type do %>
-        <i class="fa fa-eye" aria-hidden="true"></i>
+      <%= link_to user_type_path(user_type), remote: true do %>
+        <i class="fa fa-eye ml-2 mr-2" aria-hidden="true"></i>
         <% end %>
     <% end %>
+    </div>
   </td>
 </tr>

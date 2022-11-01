@@ -1,0 +1,46 @@
+<div class="modal fade" id="showdData" tabindex="-1" role="dialog" aria-labelledby="showdDataLabel">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+          <div class="modal-body">
+            <!-- Card Header - Accordion -->
+            <div class="modal-header">
+          <h2 class="modal-title" id="myModalLabel">User Type Details</h2>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+             <!-- Card Content - Collapse -->
+              <div class="collapse show" id="collapseCardExample" style="">
+                <div class="card-body">
+                    <table>
+                      <thead>
+                        <th>Id</th>
+                        <th>code</th>
+                        <th>Title</th>
+                        <th>Discount By percentage</th>
+                        <th>Comment</th>
+
+                     </thead>
+                      <tbody>
+                        <tr>
+                          <td><%= @user_type.id %></td>
+                          <td><%= @user_type.code %> </td>
+                          <td><%= @user_type.title %> </td>
+                          <td><%= @user_type.discount_by_percentage %> </td>
+                          <td><%= @user_type.comment %></td>
+                        </tr>
+                     </tbody>
+                    </table>
+                </div>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger float-right" data-dismiss="modal" aria-label="Close">
+              <span class="text-light p-2">Close</span>
+            </button>
+          </div>
+     </div>
+    </div>
+    </div>
+  </div>
+</div>
