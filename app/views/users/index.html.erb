@@ -140,18 +140,19 @@
       </div>
     <% end %>
         
-  <div class="list_data_table">
+  <div class="list_data_table card p-3">
     <table data-toggle="table" data-search="true" class="table table-striped">
       <thead>
         <tr>
-          <td><%= sort_link(@q, :id, 'ID') %></td>
-          <th><%= sort_link(@q, :roles_mask, 'Role') %></th>
-          <th><%= sort_link(@q, :name, 'Name') %></th>
-          <th><%= sort_link(@q, :user_name, 'User name') %></th>
-          <th><%= sort_link(@q, :draw_date, 'System Email') %></th>
-          <th><%= sort_link(@q, :draw_date, 'Email_on') %></th>
-          <th><%= sort_link(@q, :father_name, 'Father name') %></th>
-          <th><%= sort_link(@q, :phone, 'Phone') %></th>
+          <th><input type="checkbox" id="master" class='select-all-checkbox'></th>
+          <th>ID<div class='float-right'><%= sort_link(@q, :id, "", {}, class: 'sorting-button') %></div></th>
+          <th>Role<div class='float-right'><%= sort_link(@q, :roles_mask, "", {}, class: 'sorting-button') %></div></th>
+          <th>Name<div class='float-right'><%= sort_link(@q, :name, "", {}, class: 'sorting-button') %></div></th>
+          <th>User Name<div class='float-right'><%= sort_link(@q, :user_name, "", {}, class: 'sorting-button') %></div></th>
+          <th>System Email<div class='float-right'><%= sort_link(@q, :draw_date, "", {}, class: 'sorting-button') %></div></th>
+          <th>Email_on<div class='float-right'><%= sort_link(@q, :draw_date, "", {}, class: 'sorting-button') %></div></th>
+          <th>Father Name<div class='float-right'><%= sort_link(@q, :father_name, "", {}, class: 'sorting-button') %></div></th>
+          <th>Phone<div class='float-right'><%= sort_link(@q, :phone, "", {}, class: 'sorting-button') %></div></th>
           <th> Actions</th>
         </tr>
       </thead>
@@ -159,6 +160,7 @@
       <tbody>
         <% @users.each do |user| %>
           <tr>
+            <td><%= check_box_tag 'object_ids[]', user.id %></td>
             <td><%= user.id %></td>
             <td class='urdu-font'><%= user&.roles&.first %></td>
             <td class='urdu-font'><%= user.name %></td>
@@ -190,7 +192,7 @@
         <% end %>
       </tbody>
     </table>
-    <div class="clearfix"></div>
+
     <div class="row">
       <div class="col-lg-4 col-sm-4">
         <%= page_entries_info @users %>
@@ -204,6 +206,12 @@
 <div class="show-data"></div>
 <script>
   $(document).ready(function() {
+
+    var sortingButtons = $('.sorting-button')
+    for(var i=0; i<sortingButtons.length; i++){
+      $(sortingButtons[i]).html("<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='blue' enable-background='new 0 0 512 512' viewBox='0 0 512 512'><path d='M163.919,494.293c-2.83,0-5.496-1.33-7.196-3.593L45.97,343.348c-2.986-3.974-2.187-9.615,1.787-12.602 c3.974-2.986,9.616-2.187,12.602,1.787l103.557,137.777l103.493-137.775c2.986-3.975,8.627-4.775,12.602-1.791 c3.974,2.985,4.775,8.627,1.79,12.602L171.113,490.698C169.414,492.961,166.749,494.293,163.919,494.293z'/><path d='M163.917 494.293c-4.971 0-9-4.029-9-9V26.192c0-4.971 4.029-9 9-9s9 4.029 9 9v459.101C172.917 490.264 168.888 494.293 163.917 494.293zM459.507 182.622c-2.734 0-5.435-1.241-7.203-3.597L348.78 41.18 245.257 179.025c-2.985 3.975-8.626 4.777-12.601 1.792-3.974-2.984-4.777-8.626-1.792-12.601l110.72-147.43c1.699-2.263 4.365-3.595 7.196-3.595s5.497 1.332 7.196 3.595l110.72 147.43c2.985 3.975 2.183 9.616-1.792 12.601C463.285 182.034 461.388 182.621 459.507 182.622z'/><path d='M348.78,494.293c-4.971,0-9-4.029-9-9V26.192c0-4.971,4.029-9,9-9s9,4.029,9,9v459.101 C357.78,490.264,353.751,494.293,348.78,494.293z'/></svg>")
+    }
+
     if ($(".bootstrap-table").length == 0){
       $("table").bootstrapTable();
     }
