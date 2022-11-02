@@ -3,7 +3,6 @@
   <td><%= city.id %></td>
   <td class='urdu-font'><%= city.title %></td>
   <td><%= city.comment %></td>
-  <td><%= city.versions.count%></td>
   <td>
     <% if can?(:update, :all) %>
       <%= link_to edit_city_path(city), remote: true do %>
@@ -26,5 +25,6 @@
 		<%= link_to cities_path('q[id_eq]':city.id,'csv':true), title: 'Download CSV' do%>
 			<i class="fa fa-file-excel mr-2 ml-2 text-success" aria-hidden="true"></i>
 		<%end %>
+    <b>Total changes: <%= city.versions.count%></b>
   </td>
 </tr>
