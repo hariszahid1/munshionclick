@@ -122,10 +122,10 @@
                 <div class="modal-body">
                   <% @pos_setting = PosSetting.first %>
                   <label>Email:</label>
-                  <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control', type: 'email'%>
+                  <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
                   <br />
                   <label>Subject:</label>
-                  <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Property Plans Detail report from MunshiOnClick", class: 'form-control'%>
+                  <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Property Plans Detail report from MunshiOnClick", class: 'form-control email-fields'%>
                   <br />
                   <label>Body:</label><br />
                   <%= text_area_tag 'body', nil, class: 'form-control'%>
@@ -140,7 +140,7 @@
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                  <button name="email" type="submit" value="email" class="btn btn-primary">Send</button>
+                  <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
                 </div>
                 </div>
             </div>
@@ -164,15 +164,15 @@
         <thead>
           <tr>
             <th><input type="checkbox" id="master" class='select-all-checkbox'></th>
-            <th>ID<div class="float-right"><%= sort_link(@q, :id,"", {}, class: 'sorting-button') %></div></th>
-            <th>User<div class="float-right"><%= sort_link(@q, :property_type, 'User',  {}, class: 'sorting-button') %></th>
-            <th>Phone<div class="float-right"><%= sort_link(@q, :property_type, 'Phone',  {}, class: 'sorting-button') %></th>
-            <th>Plot<div class="float-right"><%= sort_link(@q, :area_in_marla, 'Plot',  {}, class: 'sorting-button') %></th>
-            <th>Last Payment<div class="float-right"><%= sort_link(@q, :area_in_marla, 'Last Payment',  {}, class: 'sorting-button') %></th>
-            <th>Last Payment Date<div class="float-right"><%= sort_link(@q, :area_in_marla, 'Last Payment Date',  {}, class: 'sorting-button') %></th>
-            <th>Advance<div class="float-right"><%= sort_link(@q, :price_per_marla, 'Advance',  {}, class: 'sorting-button') %></th>
-            <th>Size<div class="float-right"><%= sort_link(@q, :area_in_marla, 'Size',  {}, class: 'sorting-button') %></th>
-            <th>Due Date<div class="float-right"><%= sort_link(@q, :area_in_marla, 'Due Date',  {}, class: 'sorting-button') %></th>
+            <th><div class="d-flex">ID<%= sort_link(@q, :id,"", {}, class: 'sorting-button ml-auto') %></div></th>
+            <th><div class="d-flex">User<%= sort_link(@q, :property_type, 'User',  {}, class: 'sorting-button ml-auto') %></div></th>
+            <th><div class="d-flex">Phone<%= sort_link(@q, :property_type, 'Phone',  {}, class: 'sorting-button ml-auto') %></div></th>
+            <th><div class="d-flex">Plot<%= sort_link(@q, :area_in_marla, 'Plot',  {}, class: 'sorting-button ml-auto') %></div></th>
+            <th><div class="d-flex">Last Payment<%= sort_link(@q, :area_in_marla, 'Last Payment',  {}, class: 'sorting-button ml-auto') %></div></th>
+            <th><div class="d-flex">Last Payment Date<%= sort_link(@q, :area_in_marla, 'Last Payment Date',  {}, class: 'sorting-button ml-auto') %></div></th>
+            <th><div class="d-flex">Advance<%= sort_link(@q, :price_per_marla, 'Advance',  {}, class: 'sorting-button ml-auto') %></div></th>
+            <th><div class="d-flex">Size<%= sort_link(@q, :area_in_marla, 'Size',  {}, class: 'sorting-button ml-auto') %></div></th>
+            <th><div class="d-flex">Due Date<%= sort_link(@q, :area_in_marla, 'Due Date',  {}, class: 'sorting-button ml-auto') %></div></th>
             <th>Dealer</th>
             <th>Action</th>
           </tr>
@@ -212,7 +212,13 @@
                       <i class="fa fa-edit ml-2 mr-2" aria-hidden="true"></i>
                     <%end %>
                   <%end %>
-                <% end %>
+                <% end %>|
+                <%= link_to property_plans_path('q[id_eq]':property_plan.id,'pdf':true), title: 'Download PDF', target: '_blank' do %>
+                  <i class="fa fa-file-pdf text-danger mr-2 ml-2 " aria-hidden="true"></i>
+                <%end %>|
+                <%= link_to property_plans_path('q[id_eq]':property_plan.id,'csv':true), title: 'Download CSV' do%>
+                  <i class="fa fa-file-excel mr-2 ml-2 text-success" aria-hidden="true"></i>
+                <%end %>
                 </div>
               </td>
             </tr>
@@ -223,7 +229,7 @@
             <td></td>
             <td></td>
             <td></td>
-            <td><h4><%= number_with_delimiter @total_advance%></h4></td>
+            <td colspan="7"><h4><%= number_with_delimiter @total_advance%></h4></td>
           </tr>
         </tbody>
       </table>
