@@ -21,11 +21,17 @@ class UserTypesController < ApplicationController
   # GET /user_types/1
   # GET /user_types/1.json
   def show
+     respond_to do |format|
+      format.js
+    end
   end
 
   # GET /user_types/new
   def new
     @user_type = UserType.new
+    respond_to do |format|
+      format.js
+    end
   end
 
   # GET /user_types/1/edit
@@ -43,8 +49,7 @@ class UserTypesController < ApplicationController
         format.html { redirect_to user_types_path, notice: 'User type was successfully created.' }
         format.json { render :show, status: :created, location: @user_type }
       else
-        format.html { render :new }
-        format.json { render json: @user_type.errors, status: :unprocessable_entity }
+        format.html { redirect_to user_types_path, alert: 'Title is already present!' }
       end
     end
   end
@@ -57,8 +62,7 @@ class UserTypesController < ApplicationController
         format.html { redirect_to user_types_path, notice: 'User type was successfully updated.' }
         format.json { render :show, status: :ok, location: @user_type }
       else
-        format.html { render :edit }
-        format.json { render json: @user_type.errors, status: :unprocessable_entity }
+        format.html { redirect_to user_types_path, alert: 'Title is already present!' }
       end
     end
   end
@@ -68,9 +72,8 @@ class UserTypesController < ApplicationController
   def destroy
     @user_type.destroy
     respond_to do |format|
-      format.html { redirect_to user_types_url, notice: 'User type was successfully destroyed.' }
-      format.json { head :no_content }
-      format.js   { render :layout => false }
+      format.html { redirect_to user_types_path, notice: 'User type was successfully Deleted.' }
+      format.json { render :show, status: :ok, location: @user_type }
     end
   end
 

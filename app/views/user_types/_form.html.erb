@@ -1,54 +1,43 @@
-<%= bootstrap_form_for(user_type, remote: true) do |f| %>
-  <% if user_type.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(user_type.errors.count, "error") %> prohibited this user_type from being saved:</h2>
-
-      <ul>
-      <% user_type.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-  <div class="col-lg-6 form-group float-left">
-    <%= f.label :title do %>
-          <%= UserType.human_attribute_name :title %>
-          <i class="fas fa-language"></i> 
-        <% end %>
-    <%= f.text_field :title,required:true,placeholder: "Enter the title", hide_label: true, class: 'urdu-font' %>
-  </div>
-
-<div class="col-lg-6 form-group float-left">
-    <%= f.text_field :code, {placeholder: "Enter the code", required: true , value: (f.object.code.nil? ? ("AGC-"+"%.4i" % (UserType.maximum(:id).present? ? UserType.maximum(:id).next : 1)) : (f.object.code ))} %>
-  </div>
-
-  <div class="col-lg-6 form-group float-left">
-    <%= f.text_field :discount_by_percentage , placeholder:"Enter Discount Percentage"%>
-  </div>
-
-  <div class="col-lg-6 form-group float-left">
-    <%= f.text_field :discount_by_amount, placeholder:"Enter Discount Amount" %>
-  </div>
-
-  <div class="col-lg-6 form-group float-left">
-    <%= f.text_area :comment , placeholder:"Enter Comment" %>
-  </div>
-
-
-<div class="clearfix">
-  <hr>
-  <div class="col-lg-12 row ">
-
-          <div class="col-lg-6 form-group float-left">
-            <%= link_to user_types_path do %>
-            <i class="fa fa-arrow-left " aria-hidden="true"></i>
-            <% end %>
-          </div>
-            <div class="col-lg-6 form-group float-left">
-              <div class="col-lg-6 form-group float-left">
-                <%=f.object.id.nil? ? (f.submit class: "btn btn-success", style: "float: left")  :  (f.submit class: "btn btn-warning", style: "float: left")%>
-              </div>
-            </div>
+<%= bootstrap_form_for(user_type) do |f| %>
+      <% if user_type.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(user_type.errors.count, "error") %> prohibited this user_type from being saved:</h2>
+          <ul>
+          <% user_type.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
           <% end %>
-</div>
+          </ul>
+        </div>
+      <% end %>
+      <div class="col-lg-12 form-group float-left">
+        <%= f.label :title do %>
+              <%= UserType.human_attribute_name :title %>
+              <i class="fas fa-language"></i> 
+            <% end %>
+        <%= f.text_field :title,required:true,placeholder: "Enter the title", hide_label: true, class: 'urdu-font' %>
+      </div>
+
+    <div class="col-lg-12 form-group float-left">
+        <%= f.text_field :code, {placeholder: "Enter the code", required: true , value: (f.object.code.nil? ? ("AGC-"+"%.4i" % (UserType.maximum(:id).present? ? UserType.maximum(:id).next : 1)) : (f.object.code ))} %>
+      </div>
+
+      <div class="col-lg-12 form-group float-left">
+        <%= f.text_field :discount_by_percentage , placeholder:"Enter Discount Percentage"%>
+      </div>
+
+      <div class="col-lg-12 form-group float-left">
+        <%= f.text_field :discount_by_amount, placeholder:"Enter Discount Amount" %>
+      </div>
+
+      <div class="col-lg-12 form-group float-left">
+        <%= f.text_area :comment , placeholder:"Enter Comment" %>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        <%=f.object.id.nil? ? (f.submit class: "btn btn-success", style: "float: right")  :  (f.submit class: "btn btn-warning", style: "float: right")%>
+      </div>
+  
+    <% end %>
+  </div>
 </div>

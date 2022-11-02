@@ -5,8 +5,17 @@
   </button>
 </div>
 <div class="hidden" id="product_category_list">
-<h1>Product Categories</h1>
-
+    <div class="main-content-header">
+      <h1 class="ml-2 mt-2">Product Categories</h1>
+      <ol class="breadcrumb mt-2 mb-4">
+        <li class="breadcrumb-item">
+          <a href="<%= root_path %>">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">
+          <a href="<%= product_categories_path %>">Product Categories</a>
+        </li>
+      </ol>
+    </div>
     <div class="float-right">
       <div class="dropdown ml-auto mr-4">
         <span class="btn btn-info" title= "About This page">Help</span>

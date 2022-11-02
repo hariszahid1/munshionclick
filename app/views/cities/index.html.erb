@@ -92,21 +92,21 @@
     </div>
     <div class="tab-pane" id="pdf" role="tabpanel">
       <p>
-        <div class="col-lg-2 form-group d-flex">
+        <div class="col-lg-2 d-flex">
         <button class="form-control btn btn-danger" title= "download cities pdf" name="pdf" type="submit" value="pdf" formtarget="_blank" style="width:100px">Cities &nbsp;<i class="fa fa-file-pdf"></i></button>
         </div>
       </p>
     </div>
     <div class="tab-pane" id="csv" role="tabpanel">
       <p>
-        <div class="col-lg-2 form-group d-flex">
-        <button class="form-control btn btn-success" title= "download cities csv" name="csv" type="submit" value="csv" style="width:100px">Cities &nbsp;<i class="fa fa-file-excel"></i></button>
+        <div class="col-lg-2 d-flex">
+        <button class="btn btn-success" title= "download cities csv" name="csv" type="submit" value="csv">Cities &nbsp;<i class="fa fa-file-excel"></i></button>
         </div>
       </p>
     </div>
     <div class="tab-pane" id="emails" role="tabpanel">
       <p>
-        <div class="col-lg-2 form-group d-flex">
+        <div class="col-lg-2 d-flex">
         <button class="form-control btn btn-info" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope"></i>&nbsp;Mail</button>
         </div>
      </p>
@@ -178,9 +178,6 @@
         <%= render partial: 'city', collection: @cities %>
       </tbody>
    </table>
-
-
-
   <div class="row">
     <div class="col-lg-4 col-sm-4">
       <%= page_entries_info @cities %>
