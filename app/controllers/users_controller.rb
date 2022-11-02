@@ -22,11 +22,27 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
+		# @user_permissions = UserPermission.joins(:user).where('user.id': params[:id])
   end
+	
+	def updated_user_permissions
+		@user.user_permissions.each do |item|
+			temp_can_create = params[:user][:user_permissions][item.id.to_s][:can_create].eql?('1') ? true :false
+			temp_can_read = params[:user][:user_permissions][item.id.to_s][:can_read].eql?('1') ? true :false
+			temp_can_update = params[:user][:user_permissions][item.id.to_s][:can_update].eql?('1') ? true :false
+			temp_can_delete = params[:user][:user_permissions][item.id.to_s][:can_delete].eql?('1') ? true :false
+			byebug
+			item.update(
+				can_create:temp_can_create,
+				can_read:temp_can_read,
+				can_update:temp_can_update,
+				can_delete:temp_can_delete
+			)
+		end
+	end
 
   def create_user
     @user = User.new(user_params)
-
     respond_to do |format|
       if @user.save
         save_user_ability
@@ -41,6 +57,7 @@ class UsersController < ApplicationController
   end
 
   def update
+		updated_user_permissions if params[:user][:user_permissions].present?
     if params[:user][:password].blank?
       params[:user].delete :password
     end
@@ -95,6 +112,11 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:name, :user_name, :email, :father_name, :city, :phone, :fax, :address, :roles, :password, :confirm_password, :user_ability_roles, :created_by_id, :email_to,:email_cc,:email_bcc,:roles_mask)
+			byebug
+      params.require(:user).permit(
+				:name, :user_name, :email, :father_name, :city, :phone, :fax,
+				:address, :roles, :password, :confirm_password, :user_ability_roles,
+				:created_by_id, :email_to,:email_cc,:email_bcc,:roles_mask
+			).except(:user_permissions)
     end
 end
