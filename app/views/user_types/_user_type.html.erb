@@ -46,7 +46,30 @@
           <% end %>
         </span>
       </div>
+      <div class="my-icon my-view">
+            <div class="my-tooltip">
+              PDF
+            </div>
+            <span class="icon-div">
+                <%= link_to user_types_path('q[id_eq]':user_type.id,'pdf':true), title: 'Download PDF', target: '_blank' do %>
+    			      <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
+    		      <%end %>
+            </span>
+      </div>
+
+       <div class="my-icon my-view">
+            <div class="my-tooltip">
+              CSV
+            </div>
+            <span class="icon-div">
+                  <%= link_to user_types_path('q[id_eq]':user_type.id,'csv':true), title: 'Download CSV' do%>
+    			        <i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
+    		      <%end %>
+            </span>
+          </div>
+    </div>
     </div> 
+    
 
       
     
