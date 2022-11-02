@@ -33,8 +33,8 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
-        respond_to do |format|
-      format.js
+      respond_to do |format|
+    format.js
     end
   end
 	
