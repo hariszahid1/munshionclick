@@ -36,21 +36,31 @@
       <li class="nav-item">
         <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link tab-label" data-toggle="tab" href="#create" role="tab">Create</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
-      </li>
-      <li class="nav-item">
-       <a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
-      </li>
+			<%if (ApplicationHelper.current_user_permissions(current_user,"cities","can_create"))%>
+				<li class="nav-item">
+					<a class="nav-link tab-label" data-toggle="tab" href="#create" role="tab">Create</a>
+				</li>
+			<%end%>
+			<%if (ApplicationHelper.current_user_permissions(current_user,"cities","can_download_pdf"))%>
+				<li class="nav-item">
+					<a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
+				</li>
+			<%end%>
+			<%if (ApplicationHelper.current_user_permissions(current_user,"cities","can_download_csv"))%>
+				<li class="nav-item">
+					<a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
+				</li>
+			<%end%>
+			<%if (ApplicationHelper.current_user_permissions(current_user,"cities","can_send_email"))%>
+				<li class="nav-item">
+					<a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
+				</li>
+			<%end%>
+			<%if (ApplicationHelper.current_user_permissions(current_user,"cities","can_import_export"))%>
+				<li class="nav-item">
+				<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
+				</li>
+			<%end%>
 </ul>
 <%= search_form_for @q, url: cities_path, class: "admin-controls", method: "get" do |f| %>
     

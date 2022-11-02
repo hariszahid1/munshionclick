@@ -1,7 +1,6 @@
 $(document).ready(function () {
 	// for create
 	$('#select-all-checkbox-of-create').on('click',function(){
-		debugger;
 			if(this.checked){
 					$('.can-create-checkbox').each(function(){
 							this.checked = true;
@@ -23,7 +22,6 @@ $(document).ready(function () {
 
 	// for read
 	$('#select-all-checkbox-of-read').on('click',function(){
-		debugger;
 			if(this.checked){
 					$('.can-read-checkbox').each(function(){
 							this.checked = true;
@@ -45,7 +43,6 @@ $(document).ready(function () {
 
 	// for update
 	$('#select-all-checkbox-of-update').on('click',function(){
-		debugger;
 			if(this.checked){
 					$('.can-update-checkbox').each(function(){
 							this.checked = true;
@@ -67,7 +64,6 @@ $(document).ready(function () {
 
 	// for delete
 	$('#select-all-checkbox-of-delete').on('click',function(){
-		debugger;
 			if(this.checked){
 					$('.can-delete-checkbox').each(function(){
 							this.checked = true;
@@ -86,4 +82,118 @@ $(document).ready(function () {
 					$('#select-all-checkbox-of-delete').prop('checked',false);
 			}
 	});
+	
+		// for hidden
+	$('#select-all-checkbox-of-hidden').on('click',function(){
+			if(this.checked){
+					$('.is-hidden-checkbox').each(function(){
+							this.checked = true;
+					});
+			}else{
+						$('.is-hidden-checkbox').each(function(){
+							this.checked = false;
+					});
+			}
+	});
+		
+		$('.is-hidden-checkbox').on('click',function(){
+				if($('.is-hidden-checkbox:checked').length == $('.is-hidden-checkbox').length){
+						$('#select-all-checkbox-of-hidden').prop('checked',true);
+				}else{
+						$('#select-all-checkbox-of-hidden').prop('checked',false);
+				}
+		});
+	
+		// for pdf
+		$('#select-all-checkbox-of-can-download-pdf').on('click',function(){
+			if(this.checked){
+					$('.can-download-pdf-checkbox').each(function(){
+							this.checked = true;
+					});
+			}else{
+						$('.can-download-pdf-checkbox').each(function(){
+							this.checked = false;
+					});
+			}
+	});
+		
+		$('.can-download-pdf-checkbox').on('click',function(){
+				if($('.can-download-pdf-checkbox:checked').length == $('.can-download-pdf-checkbox').length){
+						$('#select-all-checkbox-of-can-download-pdf').prop('checked',true);
+				}else{
+						$('#select-all-checkbox-of-can-download-pdf').prop('checked',false);
+				}
+		});
+	
+			// for csv
+			$('#select-all-checkbox-of-can-download-csv').on('click',function(){
+				if(this.checked){
+						$('.can-download-csv-checkbox').each(function(){
+								this.checked = true;
+						});
+				}else{
+							$('.can-download-csv-checkbox').each(function(){
+								this.checked = false;
+						});
+				}
+		});
+			
+			$('.can-download-csv-checkbox').on('click',function(){
+					if($('.can-download-csv-checkbox:checked').length == $('.can-download-csv-checkbox').length){
+							$('#select-all-checkbox-of-can-download-csv').prop('checked',true);
+					}else{
+							$('#select-all-checkbox-of-can-download-csv').prop('checked',false);
+					}
+			});
+	
+				// for eamil
+				$('#select-all-checkbox-of-can-send-email').on('click',function(){
+					if(this.checked){
+							$('.can-send-email-checkbox').each(function(){
+									this.checked = true;
+							});
+					}else{
+								$('.can-send-email-checkbox').each(function(){
+									this.checked = false;
+							});
+					}
+			});
+				
+				$('.can-send-email-checkbox').on('click',function(){
+						if($('.can-send-email-checkbox:checked').length == $('.can-send-email-checkbox').length){
+								$('#select-all-checkbox-of-can-send-email').prop('checked',true);
+						}else{
+								$('#select-all-checkbox-of-can-send-email').prop('checked',false);
+						}
+				});
+	
+			// for import export
+			$('#select-all-checkbox-of-can-import-export').on('click',function(){
+				if(this.checked){
+						$('.can-import-export-checkbox').each(function(){
+								this.checked = true;
+						});
+				}else{
+							$('.can-import-export-checkbox').each(function(){
+								this.checked = false;
+						});
+				}
+		});
+			
+			$('.can-import-export-checkbox').on('click',function(){
+					if($('.can-import-export-checkbox:checked').length == $('.can-import-export-checkbox').length){
+							$('#select-all-checkbox-of-can-import-export').prop('checked',true);
+					}else{
+							$('#select-all-checkbox-of-can-import-export').prop('checked',false);
+					}
+			});
+	
+
+	// for disabling entire tr
+	$('.can-access-checkbox').on('click', function () {
+		$(this).closest('tr').find('input').prop('disabled', !$(this).is(':checked'))
+		$(this).closest('td').find('input').removeAttr('disabled')
+	})
+
+
 });

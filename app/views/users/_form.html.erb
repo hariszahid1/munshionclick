@@ -125,25 +125,21 @@
 		<h1>User Permissions</h1>
 		<table>
 			<thead>
+				<th>Accessed</th>
 				<th>Module</th>
 				<th>Create <input type="checkbox" id='select-all-checkbox-of-create'></th>
 				<th>Read <input type="checkbox" id='select-all-checkbox-of-read'></th>
 				<th>Update <input type="checkbox" id='select-all-checkbox-of-update'></th>
 				<th>delete <input type="checkbox" id='select-all-checkbox-of-delete'></th>
+				<th>PDF <input type="checkbox" id='select-all-checkbox-of-can-download-pdf'></th>
+				<th>CSV <input type="checkbox" id='select-all-checkbox-of-can-download-csv'></th>
+				<th>Email <input type="checkbox" id='select-all-checkbox-of-can-send-email'></th>
+				<th>Import/Export <input type="checkbox" id='select-all-checkbox-of-can-import-export'></th>
+				<th>Hidden <input type="checkbox" id='select-all-checkbox-of-hidden'></th>
 			</thead>
 			<tbody>
 					<%= f.fields_for :user_permissions do |perm| %>
-						<% @user.user_permissions.each do |item|%>
-							<%= perm.fields_for "#{item.id}" do |p_of| %>
-								<tr>
-									<td><%= item.module%></td>
-									<td> <%= p_of.check_box :can_create, checked: item.can_create, hide_label: true, class:"form-checkbox h-5 w-4 ml-2 text-blue-600 can-create-checkbox" %></td>
-									<td> <%= p_of.check_box :can_read, checked: item.can_read, hide_label: true, class:"form-checkbox h-5 w-4 ml-2 text-blue-600 can-read-checkbox" %></td>
-									<td> <%= p_of.check_box :can_update, checked: item.can_update, hide_label: true, class:"form-checkbox h-5 w-4 ml-2 text-blue-600 can-update-checkbox" %></td>
-									<td> <%= p_of.check_box :can_delete, checked: item.can_delete, hide_label: true, class:"form-checkbox h-5 w-4 ml-2 text-blue-600 can-delete-checkbox" %></td>
-								</tr>
-							<% end %>
-						<% end %>
+						<%= render 'user_permission_fields', f: perm %>
 					<%end%>
 			</tbody>
 		</table>			
@@ -161,3 +157,13 @@
 
 
 <div class="clearfix"></div>
+
+<script>
+	$(document).ready(function () {
+		var checkboxes = $('.can-access-checkbox')
+		for(var i = 0; i < checkboxes.length; i++ ){
+			$(checkboxes[i]).closest('tr').find('input').prop('disabled', !$(checkboxes[i]).is(':checked'))
+			$(checkboxes[i]).closest('td').find('input').removeAttr('disabled')
+		}
+	})
+</script>

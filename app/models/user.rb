@@ -12,6 +12,8 @@ class User < ApplicationRecord
     where("roles_mask = ?", mask_no("admin"))
   }, class_name: :User, foreign_key: :created_by_id
 
+	accepts_nested_attributes_for :user_permissions
+
   after_create :create_user_ability
   after_create :create_user_permission
   # has_many_attached :backup_files
@@ -61,7 +63,6 @@ class User < ApplicationRecord
   end
 
   def create_user_ability
-		byebug
     unless user_ability.present?
       userAbility = build_user_ability
       userAbility.save
