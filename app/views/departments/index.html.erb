@@ -105,10 +105,10 @@
             <div class="modal-body">
               <% @pos_setting = PosSetting.first %>
                 <label>Email:</label>
-                <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control', type: 'email'%>
+                <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
                 <br />
                 <label>Subject:</label>
-                <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Departments Detail report from MunshiOnClick", class: 'form-control'%>
+                <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Departments Detail report from MunshiOnClick", class: 'form-control email-fields'%>
                 <br />
                 <label>Body:</label><br />
                 <%= text_area_tag 'body', nil, class: 'form-control'%>
@@ -123,7 +123,7 @@
            </div>
           <div class="modal-footer">
            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-            <button name="email" type="submit" value="email" class="btn btn-primary">Send</button>
+            <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
           </div>
        </div>
     </div>

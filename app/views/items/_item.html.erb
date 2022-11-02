@@ -9,7 +9,7 @@
   <td><%= item.minimum %></td>
   <td><%= item.optimal %></td>
   <td><%= item.maximun %></td>
-  <td><%= item.comment %></td>
+  <td><span title="<%= item.comment %>" class='truncate-text'><%= item.comment %></span></td>
   <td><%= item.status %></td>
   <td>
     <% if can?(:update, :all) %>

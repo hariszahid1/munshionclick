@@ -2,7 +2,7 @@
   <td><%= check_box_tag 'object_ids[]', city.id %></td>
   <td><%= city.id %></td>
   <td class='urdu-font'><%= city.title %></td>
-  <td><%= city.comment %></td>
+  <td><span title="<%= city.comment %>" class='truncate-text'><%= city.comment %></span></td>
   <td>
     <% if can?(:update, :all) %>
       <%= link_to edit_city_path(city), remote: true do %>
