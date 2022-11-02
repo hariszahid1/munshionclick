@@ -7,7 +7,6 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   has_one :user_ability, dependent: :destroy
-	has_many :user_permissions
   has_many :admins, -> (object) {
     where("roles_mask = ?", mask_no("admin"))
   }, class_name: :User, foreign_key: :created_by_id
