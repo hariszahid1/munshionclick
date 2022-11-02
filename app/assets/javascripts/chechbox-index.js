@@ -1,4 +1,4 @@
-$(document).ready(function(){
+document.addEventListener("turbolinks:load", function() {
   $('.select-all-checkbox').on("click", function () {
     var cbxs = $('input[name="object_ids[]"]');
     if($(this).is(":checked")){
@@ -33,5 +33,12 @@ $(document).ready(function(){
       $('#custom-alert').removeClass('d-none')
     }
   })
+
+  $(".email-fields").keydown(function (e) {
+    if (e.keyCode == 13){
+      e.preventDefault();
+      $('.email-send-btn').click();
+    }
+  });
 
 })

@@ -15,6 +15,7 @@ class User < ApplicationRecord
   after_create :create_user_ability
   after_create :create_user_permission
   # has_many_attached :backup_files
+  validates :name, presence: true, uniqueness: { case_sensitive: false }
   has_many :accounts
   include RoleModel
   # Declare the valid roles. Do not change the order if you add more roles later, always append them

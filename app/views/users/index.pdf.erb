@@ -1,0 +1,55 @@
+<html>
+  <head>
+    <style>
+      .border-bottom{
+        border-bottom: double 4px;
+      }
+      .text-center{
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <% @date = Date.today  %>
+    <% @time = DateTime.now %>
+    <% @time = Time.zone.now %>
+    <div>
+      <p class="border-bottom"></p>
+      <h1 class="text-center">Cities List</h1>
+      <h1 class="text-center">
+        Date: <b><span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%></span>
+        Time: <span><%=@time.strftime("at %I:%M%p")%></span></b>
+      </h1>
+      <p class="border-bottom"></p>
+      <p class="text-center">Report by: <%=current_user.name%></p>
+    </div>
+    <div>
+      <table>
+        <thead class="lite-gray">
+          <th class="text-center">ID</th>
+          <th class="text-center">Role</th>
+          <th class="text-center">Name</th>
+          <th class="text-center">User Name</th>
+          <th class="text-center">System Email</th>
+          <th class="text-center">Email_on</th>
+          <th class="text-center">Father Name</th>
+          <th class="text-center">Phone</th>
+        </thead>
+        <tbody>
+          <% data.each_with_index do |user, index| %>
+            <tr>
+              <th class="text-center"><%= user['id'] %></th>
+              <td class="text-center"><%= user['role'] %></td>
+              <td class="text-center"><%= user['name'] %></td>
+              <td class="text-center"><%= user['user_name'] %></td>
+              <td class="text-center"><%= user['email'] %></td>
+              <td class="text-center"><%= user['email_to'] %></td>
+              <td class="text-center"><%= user['father_name'] %></td>
+              <td class="text-center"><%= user['phone'] %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

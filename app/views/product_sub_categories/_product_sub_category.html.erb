@@ -4,8 +4,8 @@
   <td><%= product_sub_category.product_category.title %></td>
   <td class= 'urdu-font'><%= product_sub_category.title %></td>
   <td><%= product_sub_category.code %></td>
-  <td><%= product_sub_category.comment %></td>
-  <td class="d-flex">
+  <td><span title="<%= product_sub_category.comment %>" class='truncate-text'><%= product_sub_category.comment %></span></td>
+  <td>
     <% if can?(:update, :all) %>
       <%= link_to edit_product_sub_category_path(product_sub_category), remote: true do %>
         <i class="fa fa-edit ml-2 mr-2 " aria-hidden="true"></i>
