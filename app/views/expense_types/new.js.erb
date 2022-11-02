@@ -1,1 +1,3 @@
-$('#new_expense_type a').hide().parent().append("<%= j render 'new_form', expense_type: @expense_type %>");
+$('.show-data').children().remove();
+$('.show-data').append("<%= escape_javascript(render partial: 'new_form', locals: { expense_type: @expense_type }) %>");
+$("#showdData").modal('show');

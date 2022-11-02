@@ -1,22 +1,72 @@
 <tr>
+  <td><%= check_box_tag 'object_ids[]', expense_type.id %></td>
   <td><%= expense_type.id %></td>
   <td class='urdu-font'><%= expense_type.title %></td>
-  <td><%= expense_type.comment %></td>
+  <td><span title="<%= expense_type.comment %>" class='truncate-text'><%= expense_type.comment %></span></td>
   <td>
-    <% if can?(:update, :all) %>
-      <%= link_to edit_expense_type_path(expense_type) do %>
-        <i class="fa fa-edit " aria-hidden="true"></i> |
-      <%end %>
-    <% end %>
-    <% if can?(:delete, :all) %>
-      <%= link_to expense_type, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
-        <i class="fa fa-trash " aria-hidden="true"></i> |
-      <%end %>
-    <% end %>
-    <% if can?(:view, :all) %>
-      <%= link_to expense_type do %>
-        <i class="fa fa-eye " aria-hidden="true"></i>
-      <%end %>
-    <%end%>
+         <div class="icon-container">
+          <div class="my-icon my-view">
+          <div class="my-tooltip">
+            Edit
+          </div>
+          <span class="icon-div">
+                <% if can?(:update, :all) %>
+              <%= link_to edit_expense_type_path(expense_type), remote: true do %>
+                <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+              <%end %>
+            <% end %>
+          </span>
+        </div>
+
+          <div class="my-icon my-view">
+              <div class="my-tooltip">
+                Delete
+              </div>
+                <span class="icon-div">
+                  <% if can?(:delete, :all) %>
+                    <%= link_to expense_type, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+                    <i class="fa fa-trash mt-2" aria-hidden="true"></i>
+                  <%end %>
+                <% end %>
+              </span>
+          </div>
+
+      <div class="my-icon my-view">
+                <div class="my-tooltip">
+                  Show
+                </div>
+                <span class="icon-div">
+                   <% if can?(:view, :all) %>
+                    <%= link_to expense_type_path(expense_type), remote: true do %>
+                    <i class="fa fa-eye mt-2" aria-hidden="true"></i>
+                <%end %>
+            <%end%>
+          </span>
+      </div>
+
+      <div class="my-icon my-view">
+            <div class="my-tooltip">
+              PDF
+            </div>
+            <span class="icon-div">
+               <%= link_to expense_types_path('q[id_eq]':expense_type.id,'pdf':true), title: 'Download PDF', target: '_blank' do %>
+			<i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
+		<%end %>
+            </span>
+      </div>
+
+       <div class="my-icon my-view">
+            <div class="my-tooltip">
+              CSV
+            </div>
+            <span class="icon-div">
+                  <%= link_to expense_types_path('q[id_eq]':expense_type.id,'csv':true), title: 'Download CSV' do%>
+			<i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
+		<%end %>
+            </span>
+          </div>
+    <b class="ml-2 mt-1">Total changes: <%= expense_type.versions.count%></b>
+    </div>
+
   </td>
 </tr>

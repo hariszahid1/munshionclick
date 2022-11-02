@@ -92,18 +92,18 @@ class ProductSubCategoriesController < ApplicationController
     @product_sub_categories = @q.result
     header_for_csv = %w[Id Title Comment]
     data_for_csv = get_data_for_product_sub_categories_csv
-    generate_csv(data_for_csv, header_for_csv, 'product_sub_categories')
+    generate_csv(data_for_csv, header_for_csv, "ProductSubCategories-Total-#{@product_sub_categories.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}")
   end
 
   def download_product_sub_categories_pdf_file
     @product_sub_categories = @q.result
-    generate_pdf(@product_sub_categories.as_json, 'product_sub_categories', 'pdf.html', 'A4')
+    generate_pdf(@product_sub_categories.as_json, "ProductSubCategories-Total-#{@product_sub_categories.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}", 'pdf.html', 'A4')
   end
 
   def send_email_file
     EmailJob.perform_later(@q.result.as_json, 'product_sub_categories/index.pdf.erb', params[:email_value],
                             params[:email_choice], params[:subject], params[:body],
-                            current_user, 'product_sub_categories')
+                            current_user, "ProductSubCategories-Total-#{@q.result.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}")
     if params[:email_value].present?
       flash[:notice] = "Email has been sent to #{params[:email_value]}"
     else

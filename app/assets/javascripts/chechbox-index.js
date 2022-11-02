@@ -1,5 +1,5 @@
-$(document).ready(function(){
-  $('.select-all-checkbox').on("click", function () {
+$( document ).ready(function() {
+    $('.select-all-checkbox').on("click", function () {
     var cbxs = $('input[name="object_ids[]"]');
     if($(this).is(":checked")){
       cbxs.prop("checked", true);
@@ -33,5 +33,12 @@ $(document).ready(function(){
       $('#custom-alert').removeClass('d-none')
     }
   })
+
+  $(".email-fields").keydown(function (e) {
+    if (e.keyCode == 13){
+      e.preventDefault();
+      $('.email-send-btn').click();
+    }
+  });
 
 })
