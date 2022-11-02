@@ -4,7 +4,7 @@
   <td><%= department.code %></td>
   <td class= 'urdu-font'><%= department.title %></td>
   <td><%= department.comment %></td>
-  <td class="d-flex">
+  <td>
     <% if can?(:update, :all) %>
       <%= link_to edit_department_path(department), remote: true do %>
         <i class="fa fa-edit ml-2 mr-2 " aria-hidden="true"></i>
