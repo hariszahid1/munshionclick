@@ -4,7 +4,7 @@
     <%= f.date_select :due_date,class:"form-control" %>
   </div>
   <div class="installments_div installments_div_cash col-lg-12 col-md-3 col-sm-6 form-group float-left">
-    <%= f.select :order_id, options_for_select(@orders.map{ |p| [p.transaction_type , p.id]}, f.object.order_id),{:include_blank => "Select Order"},:class=>"form-control chosen-select" %>
+    <%#= f.select :order_id, options_for_select(@orders.map{ |p| [p.sys_user&.name.to_s + ' --> ' + p.id.to_s , p.id]}, f.object.order_id),{:include_blank => "Select Order"},:class=>"form-control chosen-select" %>
   </div>
   <div class="installments_div installments_div_cash col-lg-12 col-md-3 col-sm-6 form-group float-left">
     <%= f.select :due_status, options_for_select(PropertyPlan.due_statuses.map { |key, value| [key.humanize, key] }, f.object.due_status), { class: "form-control", prompt: 'Select Paid Status' },class:"form-control"%>

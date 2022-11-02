@@ -4,6 +4,7 @@ class PropertyPlansController < ApplicationController
   before_action :set_property_installment_edit, only: %i[edit_property_installment update_installment]
   include PdfCsvGeneralMethod
   include PropertyPlansHelper
+
   # GET /property_plans
   # GET /property_plans.json
   def index
@@ -24,10 +25,9 @@ class PropertyPlansController < ApplicationController
     download_property_plans_pdf_file if params[:pdf].present?
     send_email_file if params[:email].present?
     export_file if params[:export_data].present?
-    print_pdf('properties', 'pdf.html', 'A4') if params[:submit_pdf].present?
 
-    sys_users  = Order.joins(:property_plans).where('property_plans.id': @property_plans.pluck(:id)).pluck(:sys_user_id)
-    @sys_users = SysUser.joins(:contact).where(id: sys_users)
+    sys_user_ids  = Order.joins(:property_plans).where('property_plans.id': @property_plans.pluck(:id)).pluck(:sys_user_id)
+    @sys_users = SysUser.joins(:contact).where(id: sys_user_ids)
     @home   = @sys_users.pluck('home').uniq
     @office = @sys_users.pluck('office').uniq
     @mobile = @sys_users.pluck('mobile').uniq
@@ -239,29 +239,47 @@ class PropertyPlansController < ApplicationController
   end
   def download_property_plans_csv_file
     @property_plan= @q.result
-    header_for_csv = %w[Id Title Comment]
+    header_for_csv = %w[Id User Phone Plot Last_Payment Last_Payment_Date Advance Size Due_Date Dealer]
     data_for_csv = get_data_for_property_plan_csv
     generate_csv(data_for_csv, header_for_csv,
                  "Property-Plan-Total-#{@property_plan.count}-#{DateTime.now.strftime('%d-%m-%Y-%H-%M')}")
   end
 
   def download_property_plans_pdf_file
-    @property_plan = @q.result
-  
-    generate_pdf(@property_plan.as_json, "Property-Plan-Total-#{@property_plan.count}-#{DateTime.now.strftime('%d-%m-%Y-%H-%M')}",
+    sort_data_according
+    generate_pdf(@sorted_data.as_json, "Property-Plan-Total-#{@sorted_data.count}-#{DateTime.now.strftime('%d-%m-%Y-%H-%M')}",
                  'pdf.html', 'A4')
   end
 
   def send_email_file
-    EmailJob.perform_later(@q.result.as_json, 'property_plans/index.pdf.erb', params[:email_value],
+    sort_data_according
+    EmailJob.perform_later(@sorted_data.as_json, 'property_plans/index.pdf.erb', params[:email_value],
                            params[:email_choice], params[:subject], params[:body],
-                           current_user, "Property-Plan-Total-#{@q.result.count}-#{DateTime.now.strftime('%d-%m-%Y-%H-%M')}")
+                           current_user, "Property-Plan-Total-#{@sorted_data.count}-#{DateTime.now.strftime('%d-%m-%Y-%H-%M')}")
     flash[:notice] = if params[:email_value].present?
                        "Email has been sent to #{params[:email_value]}"
                      else
                        "Email has been sent to #{current_user.email}"
                      end
-    redirect_to property-plans_path
+    redirect_to property_plans_path
+  end
+
+  def sort_data_according
+    @sorted_data = []
+    @q.result.each do |d|
+      @sorted_data << {
+                        Id: d.id,
+                        User: d.order&.sys_user&.name,
+                        Phone:  d.order&.sys_user&.contact&.phone,
+                        Plot: d.order&.order_items_names_and_quantity&.first&.first,
+                        Last_Payment: d.order&.sys_user&.ledger_books.where('credit>0')&.last&.credit,
+                        Last_Payment_Date: d.order&.sys_user&.ledger_books.where('credit>0')&.last&.created_at&.strftime("%d%b%y at %I:%M%p"),
+                        Advance: d.advance,
+                        Size: d.order&.order_items_names_and_quantity&.first[8].to_s + "-M" + d.order&.order_items_names_and_quantity&.first[9].to_s + "-sqr",
+                        Due_Date: d.due_date.present? ? d.due_date.strftime("%d%b%y at %I:%M%p") : '',
+                        Dealer: d&.order&.order_plot_dealer&.first&.staff&.name
+                      }
+    end
   end
 
   def export_file
