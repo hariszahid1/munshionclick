@@ -22,59 +22,59 @@
   <% end %>
 
   <div class="row">
-    <div class="col-lg-6 col-sm-6">
+    <div class="col-lg-12 col-sm-6">
       <%= f.label :name do %>
           <%= User.human_attribute_name :name %>
           <i class="fas fa-language"></i>
         <% end %>
       <%= f.text_field :name,required:true,placeholder: "Enter the Name", hide_label: true, class: 'urdu-font'%>
     </div>
-    <div class="col-lg-6 col-sm-6">
+    <div class="col-lg-12 col-sm-6">
       <%= f.text_field :user_name, placeholder:"Enter Username", required: true %>
     </div>
   </div>
 
   <div class="row">
-    <div class="col-lg-6 col-sm-6">
+    <div class="col-lg-12 col-sm-6">
       <%= f.label :father_name do %>
           <%= User.human_attribute_name :father_name %>
           <i class="fas fa-language"></i>
         <% end %>
       <%= f.text_field :father_name, placeholder: "Enter the Father Name", hide_label: true, class: 'urdu-font' %>
     </div>
-    <div class="col-lg-6 col-sm-6">
+    <div class="col-lg-12 col-sm-6">
       <%= f.text_field :email, placeholder:"Enter Email", required: true , disabled: true%>
     </div>
-    <div class="col-lg-6 col-sm-6">
+    <div class="col-lg-12 col-sm-6">
       <%= f.text_field :email_to %>
     </div>
-    <div class="col-lg-6 col-sm-6">
+    <div class="col-lg-12 col-sm-6">
       <%= f.text_field :email_cc %>
     </div>
-    <div class="col-lg-6 col-sm-6">
+    <div class="col-lg-12 col-sm-6">
       <%= f.text_field :email_bcc %>
     </div>
 
   </div>
 
   <div class="row">
-    <div class="col-lg-6 col-sm-6">
+    <div class="col-lg-12 col-sm-6">
       <%= f.text_field :city, placeholder:"Enter City" %>
     </div>
   </div>
 
   <div class="row">
-    <div class="col-lg-6 col-sm-6">
+    <div class="col-lg-12 col-sm-6">
       <%= f.text_field :phone %>
     </div>
-    <div class="col-lg-6 col-sm-6">
+    <div class="col-lg-12 col-sm-6">
       <%= f.text_field :fax %>
     </div>
   </div>
 
 
   <div class="row">
-    <div class="col-lg-6 col-sm-6">
+    <div class="col-lg-12 col-sm-6">
       <%= f.label :address do %>
           <%= User.human_attribute_name :address %>
           <i class="fas fa-language"></i>
@@ -84,13 +84,13 @@
   </div>
   <% if current_user.super_admin? and current_user.id!= f.object.id%>
     <div class="row">
-      <div class="col-lg-6 form-group float-left">
+      <div class="col-lg-12 form-group float-left">
         <%= f.select :roles_mask, User.user_roles.map { |key, value| [key.humanize, value] },{class: "form-control", required: true} %>
       </div>
     </div>
   <%end%>
   <div class="row">
-    <div class="col-lg-6 col-sm-6">
+    <div class="col-lg-12 col-sm-6">
       <% if f.object.persisted? %>
         <%= f.password_field :password%>
       <% else %>
@@ -110,8 +110,7 @@
         <% end %>
           <div class=" col-lg-2 col-sm-2">
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="<%= rol.to_s %>" name="user[user_ability_roles][]" id="user_ability_mask_<%= rol.to_s %>" <%= user_ability.present? ? user_ability.abilityChecked?(rol) : "" %> >
-              <label class="form-check-label" for="user_ability_mask_<%= rol.to_s %>"><%= rol.to_s.humanize %></label>
+              <label style="cursor: pointer" class="form-check-label" for="user_ability_mask_<%= rol.to_s %>"><input style="cursor: pointer" class="form-check-input" type="checkbox" value="<%= rol.to_s %>" name="user[user_ability_roles][]" id="user_ability_mask_<%= rol.to_s %>" <%= user_ability.present? ? user_ability.abilityChecked?(rol) : "" %>><%= rol.to_s.humanize %></label>
             </div>
           </div>
         <% if (divclose -=1) == 0 %>
@@ -121,13 +120,10 @@
   </div>
   <%= f.hidden_field :created_by_id %>
 
-  <div class="clearfix"></div>
-    <div class="form-group">
-    <div class="actions">
-      <%= link_to "#{current_user.allowed_valid_roles.to_s.titleize} list", users_path, class: "btn btn-info" %>
-      <%= f.submit @btn_value ,class: "btn btn-primary float-right" %>
-    </div>
-    </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+    <%= f.submit @btn_value ,class: "btn btn-primary float-right" %>
   </div>
 <% end %>
 

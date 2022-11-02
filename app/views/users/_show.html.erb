@@ -1,0 +1,53 @@
+<div class="modal fade" id="showdData" tabindex="-1" role="dialog" aria-labelledby="showdDataLabel">
+  <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+    <div class="modal-content">
+          <div class="modal-body">
+            <!-- Card Header - Accordion -->
+            <div class="modal-header">
+          <h2 class="modal-title" id="myModalLabel">Admin Details</h2>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+             <!-- Card Content - Collapse -->
+              <div class="collapse show" id="collapseCardExample" style="">
+                <div class="card-body">
+                  <table>
+                    <thead>
+                      <th>Name</th>
+                      <th>User Name</th>
+                      <th>Email</th>
+                      <th>Father Name</th>
+                      <th>City</th>
+                      <th>Phone</th>
+                      <th>Fax</th>
+                      <th>Address</th>
+                      <th>Role</th>
+                   </thead>
+                    <tbody>
+                      <tr>
+                        <td><%= user.name %></td>
+                        <td><%= user.user_name %></td>
+                        <td><%= user.email %></td>
+                        <td><%= user.father_name %></td>
+                        <td><%= user.city %></td>
+                        <td><%= user.phone %></td>
+                        <td><%= user.fax %></td>
+                        <td><%= user.address %></td>
+                        <td><%= user.user_ability.role_symbols.join(", ") %><h6></td>
+                      </tr>
+                   </tbody>
+                  </table>
+                </div>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger float-right" data-dismiss="modal" aria-label="Close">
+              <span class="text-light p-2">Close</span>
+            </button>
+          </div>
+     </div>
+    </div>
+    </div>
+  </div>
+</div>
