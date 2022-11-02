@@ -41,7 +41,6 @@
                     <tbody>
                       <%@user_type.versions.each do |version|%>
                         <tr>
-                        <%byebug%>
                           <% next if version.whodunnit.nil? %>
                           <td><h6><%= User.find(version.whodunnit).user_name %></h6></td>
                               <td>

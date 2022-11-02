@@ -44,7 +44,6 @@ class UsersController < ApplicationController
 			temp_can_read = params[:user][:user_permissions][item.id.to_s][:can_read].eql?('1') ? true :false
 			temp_can_update = params[:user][:user_permissions][item.id.to_s][:can_update].eql?('1') ? true :false
 			temp_can_delete = params[:user][:user_permissions][item.id.to_s][:can_delete].eql?('1') ? true :false
-			byebug
 			item.update(
 				can_create:temp_can_create,
 				can_read:temp_can_read,

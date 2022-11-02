@@ -62,7 +62,6 @@ class User < ApplicationRecord
   end
 
   def create_user_ability
-		byebug
     unless user_ability.present?
       userAbility = build_user_ability
       userAbility.save
