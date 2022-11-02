@@ -6,22 +6,45 @@
   <td><%= user_type.discount_by_amount %></td>
   <td><%= user_type.comment %></td>
   <td>
-  <div class="d-flex">
-    <% if can?(:update, :all) %>
-      <%= link_to edit_user_type_path(user_type), remote: true, class: "hover-zoom" do %>
-        <i class="fa fa-edit ml-2 mr-2" aria-hidden="true"></i>
-      <% end %>
-    <% end %> |
-    <% if can?(:delete, :all) %>
-      <%= link_to user_type, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
-        <i class="fa fa-trash ml-2 mr-2" aria-hidden="true"></i>
-      <% end %>
-      <% end %> |
-    <% if can?(:delete, :all) %>
-      <%= link_to user_type_path(user_type), remote: true do %>
-        <i class="fa fa-eye ml-2 mr-2" aria-hidden="true"></i>
+    <div class="icon-container">
+      <div class="my-icon my-view">
+        <div class="my-tooltip">
+          Edit
+        </div>
+        <span class="icon-div">
+        <% if can?(:update, :all) %>
+          <%= link_to edit_user_type_path(user_type), remote: true do %>
+            <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+          <% end %>
         <% end %>
-    <% end %>
-    </div>
+        </span>
+      </div>
+
+      <div class="my-icon my-view">
+        <div class="my-tooltip">
+          Delete
+        </div>
+        <span class="icon-div">
+          <% if can?(:delete, :all) %>
+            <%= link_to user_type, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+              <i class="fa fa-trash mt-2" aria-hidden="true"></i>
+            <% end %>
+          <% end %> 
+        </span>
+      </div>
+
+      <div class="my-icon my-view">
+        <div class="my-tooltip">
+          Show
+        </div>
+        <span class="icon-div">
+          <% if can?(:delete, :all) %>
+            <%= link_to user_type_path(user_type), remote: true do %>
+              <i class="fa fa-eye mt-2" aria-hidden="true"></i>
+            <% end %>
+          <% end %>
+        </span>
+      </div>
+    </div> 
   </td>
 </tr>
