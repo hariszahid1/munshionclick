@@ -193,33 +193,72 @@
               <td><%= property_plan.due_date.present? ? property_plan.due_date.strftime("%d-%b-%y at %I:%M %p") : '' %></td>
               <td><%= property_plan&.order&.order_plot_dealer&.first&.staff&.name%></td>
               <td>
-              <div class="d-flex">
-                <% if property_plan.order.present? %>
-                  <%= link_to property_plan_path(property_plan), remote: true do %>
-                    <i class="fa fa-eye ml-2 mr-2" aria-hidden="true"></i>
-                  <%end %>
-                <%end %> |
-
-                <% if can?(:delete, :all) %>
-                  <%= link_to property_plan.order, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
-                    <i class="fa fa-trash mr-2 ml-2" aria-hidden="true"></i>
-                  <%end %>
-                <% end %> |
-
+              <div>
+                   <div class="icon-container">
+          <div class="my-icon my-view">
+          <div class="my-tooltip">
+            Edit
+          </div>
+          <span class="icon-div">
                 <% if can?(:update, Product) %>
                   <% if property_plan.order.present? %>
                     <%= link_to edit_property_plan_path(property_plan), remote: true do %>
-                      <i class="fa fa-edit ml-2 mr-2" aria-hidden="true"></i>
+                      <i class="fa fa-edit mt-2" aria-hidden="true"></i>
                     <%end %>
                   <%end %>
-                <% end %>|
-                <%= link_to property_plans_path('q[id_eq]':property_plan.id,'pdf':true), title: 'Download PDF', target: '_blank' do %>
-                  <i class="fa fa-file-pdf text-danger mr-2 ml-2 " aria-hidden="true"></i>
-                <%end %>|
-                <%= link_to property_plans_path('q[id_eq]':property_plan.id,'csv':true), title: 'Download CSV' do%>
-                  <i class="fa fa-file-excel mr-2 ml-2 text-success" aria-hidden="true"></i>
-                <%end %>
+                <% end %>
+          </span>
+        </div>
+
+          <div class="my-icon my-view">
+              <div class="my-tooltip">
+                Delete
+              </div>
+                <span class="icon-div">
+                  <% if can?(:delete, :all) %>
+                  <%= link_to property_plan.order, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+                    <i class="fa fa-trash mt-2" aria-hidden="true"></i>
+                  <%end %>
+                <% end %>
+              </span>
+          </div>
+
+      <div class="my-icon my-view">
+                <div class="my-tooltip">
+                  Show
                 </div>
+                <span class="icon-div">
+                   <% if property_plan.order.present? %>
+                  <%= link_to property_plan_path(property_plan), remote: true do %>
+                    <i class="fa fa-eye mt-2" aria-hidden="true"></i>
+                  <%end %>
+                <%end %> 
+          </span>
+      </div>
+
+      <div class="my-icon my-view">
+            <div class="my-tooltip">
+              PDF
+            </div>
+            <span class="icon-div">
+               <%= link_to property_plans_path('q[id_eq]':property_plan.id,'pdf':true), title: 'Download PDF', target: '_blank' do %>
+			<i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
+		<%end %>
+            </span>
+      </div>
+
+       <div class="my-icon my-view">
+            <div class="my-tooltip">
+              CSV
+            </div>
+            <span class="icon-div">
+                  <%= link_to property_plans_path('q[id_eq]':property_plan.id,'csv':true), title: 'Download CSV' do%>
+			<i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
+		<%end %>
+            </span>
+          </div>
+    <b class="ml-2 mt-1">Total changes: <%= property_plan.versions.count%></b>
+    </div>
               </td>
             </tr>
           <% end %>
