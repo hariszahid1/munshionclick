@@ -1,3 +1,10 @@
+<div id="custom-alert" class="alert alert-danger d-none">
+  <span class="custom-alert-text"></span>
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">×</span>
+  </button>
+</div>
+
 <%@sys_user_balance = 0 %>
 <div class="clearfix"></div>
 <h1>Payable Details</h1>
@@ -41,82 +48,89 @@
     <% end %>
   </div>
 </div>
-<table data-toggle="table" data-search="true">
-  <thead>
-    <tr>
-      <th>Profile Image</th>
-      <th><%= sort_link(@q, :code, 'Code') %></th>
-      <th class="urdu-font"><%= sort_link(@q, :name, 'Name') %></th>
-      <th><%= sort_link(@q, :user_type, 'User type') %></th>
-      <th><%= sort_link(@q, :user_group, 'User group') %></th>
-      <th>Status</th>
-      <th>Occupation</th>
-      <th>Opening</th>
-      <th><%= sort_link(@q, :balance, 'balance') %></th>
-      <th><%= sort_link(@q, :ledger_book_created_at, 'Last Payment') %></th>
-      <th class="border_none">Action</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @sys_users.each do |sys_user| %>
-    <% if  (sys_user.balance > 0)  %>
-      <% date = (sys_user.ledger_books.present? ? sys_user.ledger_books.last.created_at : sys_user.created_at)%>
-      <tr class=<%=((DateTime.now.to_datetime-date.to_datetime).to_i>30 && !sys_user.balance.to_i.zero?) ? 'table-danger' : ''%>>
-        <td>
-          <% if  sys_user.profile_image.attached? %>
-            <%= image_tag sys_user.profile_image.service_url, width: 100 %>
-          <% end %>
-        </td>
-        <td><%= sys_user.code %></td>
-        <td class = "urdu-font"><b><%= sys_user.name %></b></td>
-        <td><%= sys_user.user_type.title %></td>
-        <td><%= sys_user.user_group %></td>
-        <td><%= sys_user.status %></td>
-        <td><%= sys_user.occupation %></td>
-        <td><b><%= sys_user.opening_balance %></b></td>
-        <td><b><%= sys_user.balance %><%@sys_user_balance += sys_user.balance.abs %></b> </td>
-        <td><%= date.strftime("%d%b%y at %I:%M%p") %> </td>
-        <td>
-          <% if can?(:update, :all) %>
-            <%= link_to edit_sys_user_path(sys_user) do %>
-              <i class="fa fa-edit " aria-hidden="true"></i> |
-            <%end %>
-          <% end %>
-          <% if can?(:delete, :all) %>
-            <%= link_to sys_user, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
-              <i class="fa fa-trash " aria-hidden="true"></i> |
-            <%end %>
-          <% end %>
-          <% if can?(:view, :all) %>
-            <%= link_to sys_user do %>
-              <i class="fa fa-eye " aria-hidden="true"></i> |
-            <%end %>
-          <%end%>
-          <a href="<%=ledger_books_path('q[sys_user_id_eq]':sys_user.id)%>">
-            <i class="fa fa-address-book"></i>
-          </a>
-        </td>
+<div class='card p-3'>
+  <table data-toggle="table" data-search="true">
+    <thead>
+      <tr>
+        <th><input type="checkbox" id="master" class='select-all-checkbox'></th>
+        <th>ID<div class='float-right'><%= sort_link(@q, :id, "", {}, class: 'sorting-button') %></div></th>
+        <th>Profile Image</th>
+        <th>Code<div class='float-right'><%= sort_link(@q, :code, "", {}, class: 'sorting-button') %></div></th>
+        <th class="urdu-font">Name<div class='float-right'><%= sort_link(@q, :name, "", {}, class: 'sorting-button') %></div></th>
+        <th>User type<div class='float-right'><%= sort_link(@q, :user_type, "", {}, class: 'sorting-button') %></div></th>
+        <th>User group<div class='float-right'><%= sort_link(@q, :user_group, "", {}, class: 'sorting-button') %></div></th>
+        <th>Status</th>
+        <th>Occupation</th>
+        <th>Opening</th>
+        <th>Balance<div class='float-right'><%= sort_link(@q, :balance, "", {}, class: 'sorting-button') %></div></th>
+        <th>Last Payment<div class='float-right'><%= sort_link(@q, :ledger_book_created_at,"", {}, class: 'sorting-button') %></div></th>
+        <th class="border_none">Action</th>
       </tr>
+    </thead>
+    <tbody>
+      <% @sys_users.each do |sys_user| %>
+      <% if  (sys_user.balance > 0)  %>
+        <% date = (sys_user.ledger_books.present? ? sys_user.ledger_books.last.created_at : sys_user.created_at)%>
+        <tr class=<%=((DateTime.now.to_datetime-date.to_datetime).to_i>30 && !sys_user.balance.to_i.zero?) ? 'table-danger' : ''%>>
+          <td><%= check_box_tag 'object_ids[]', sys_user.id %></td>
+          <td><%= sys_user.id %></td>
+          <td>
+            <% if  sys_user.profile_image.attached? %>
+              <%= image_tag sys_user.profile_image.service_url, width: 100 %>
+            <% end %>
+          </td>
+          <td><%= sys_user.code %></td>
+          <td class = "urdu-font"><b><%= sys_user.name %></b></td>
+          <td><%= sys_user.user_type.title %></td>
+          <td><%= sys_user.user_group %></td>
+          <td><%= sys_user.status %></td>
+          <td><%= sys_user.occupation %></td>
+          <td><b><%= sys_user.opening_balance %></b></td>
+          <td><b><%= sys_user.balance %><%@sys_user_balance += sys_user.balance.abs %></b> </td>
+          <td><%= date.strftime("%d%b%y at %I:%M%p") %> </td>
+          <td>
+            <% if can?(:update, :all) %>
+              <%= link_to edit_sys_user_path(sys_user) do %>
+                <i class="fa fa-edit " aria-hidden="true"></i> |
+              <%end %>
+            <% end %>
+            <% if can?(:delete, :all) %>
+              <%= link_to sys_user, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+                <i class="fa fa-trash " aria-hidden="true"></i> |
+              <%end %>
+            <% end %>
+            <% if can?(:view, :all) %>
+              <%= link_to sys_user do %>
+                <i class="fa fa-eye " aria-hidden="true"></i> |
+              <%end %>
+            <%end%>
+            <a href="<%=ledger_books_path('q[sys_user_id_eq]':sys_user.id)%>">
+              <i class="fa fa-address-book"></i>
+            </a>
+          </td>
+        </tr>
+        <% end %>
       <% end %>
-    <% end %>
-    <tr>
-      <td><h5>total</h5></td>
-      <td><%= %></td>
-      <td><%= %></td>
-      <td><%= %></td>
-      <td><%= %></td>
-      <td></td>
-      <td><%= %></td>
-      <td><%=  %></td>
-      <td><h5><%=@sys_user_balance %></h5></td>
-
-    </tr>
-
-  </tbody>
-</table>
+      <tr>
+        <td><h5>total</h5></td>
+        <td><%= %></td>
+        <td><%= %></td>
+        <td><%= %></td>
+        <td><%= %></td>
+        <td></td>
+        <td><%= %></td>
+        <td><%=  %></td>
+        <td><h5><%=@sys_user_balance %></h5></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 <script>
   $(document).ready(function() {
+     var sortingButtons = $('.sorting-button')
+    for(var i=0; i<sortingButtons.length; i++){
+      $(sortingButtons[i]).html("<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='blue' enable-background='new 0 0 512 512' viewBox='0 0 512 512'><path d='M163.919,494.293c-2.83,0-5.496-1.33-7.196-3.593L45.97,343.348c-2.986-3.974-2.187-9.615,1.787-12.602 c3.974-2.986,9.616-2.187,12.602,1.787l103.557,137.777l103.493-137.775c2.986-3.975,8.627-4.775,12.602-1.791 c3.974,2.985,4.775,8.627,1.79,12.602L171.113,490.698C169.414,492.961,166.749,494.293,163.919,494.293z'/><path d='M163.917 494.293c-4.971 0-9-4.029-9-9V26.192c0-4.971 4.029-9 9-9s9 4.029 9 9v459.101C172.917 490.264 168.888 494.293 163.917 494.293zM459.507 182.622c-2.734 0-5.435-1.241-7.203-3.597L348.78 41.18 245.257 179.025c-2.985 3.975-8.626 4.777-12.601 1.792-3.974-2.984-4.777-8.626-1.792-12.601l110.72-147.43c1.699-2.263 4.365-3.595 7.196-3.595s5.497 1.332 7.196 3.595l110.72 147.43c2.985 3.975 2.183 9.616-1.792 12.601C463.285 182.034 461.388 182.621 459.507 182.622z'/><path d='M348.78,494.293c-4.971,0-9-4.029-9-9V26.192c0-4.971,4.029-9,9-9s9,4.029,9,9v459.101 C357.78,490.264,353.751,494.293,348.78,494.293z'/></svg>")
+    }
     if ($(".bootstrap-table").length == 0){
       $("table").bootstrapTable();
     }
