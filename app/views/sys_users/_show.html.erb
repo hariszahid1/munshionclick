@@ -1,0 +1,128 @@
+<div class="modal fade" id="showdData" tabindex="-1" role="dialog" aria-labelledby="showdDataLabel">
+  <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+    <div class="modal-content">
+          <div class="modal-body">
+            <!-- Card Header - Accordion -->
+            <div class="modal-header">
+          <h2 class="modal-title" id="myModalLabel">Raw Product Details</h2>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+             <!-- Card Content - Collapse -->
+             
+    <div class="card shadow mb-4">
+        <!-- Card Content - Collapse -->
+        <div class="collapse show" id="collapseCardExample" style="">
+          <div class="card-body">
+
+    <div class="row">
+            <div class="col-lg-12 col-sm-12">
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Id:<h5> <%= @sys_user.id %></h5></h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Name:<h5><%= @sys_user.name %></h5> </h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Code:<h5><%= @sys_user.code %></h5></h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Cnic:<h5><%= @sys_user.cnic %></h5></h3>
+              </div>
+            </div>
+    </div>
+
+    <div class="row">
+            <div class="col-lg-12 col-sm-12">
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>User type: <h5><%= @sys_user.user_type.title %></h5></h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>User group:<h5><%= @sys_user.user_group %></h5></h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Status:<h5><%= @sys_user.status %></h5> </h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Occupation:<h5><%= @sys_user.occupation %></h5></h3>
+              </div>
+            </div>
+    </div>
+
+    <div class="row">
+            <div class="col-lg-12 col-sm-12">
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Credit Status:<h5><%= @sys_user.credit_status %></h5></h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Credit Limit:<h5><%= @sys_user.credit_limit %></h5></h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Opening Blance:<h5><%= @sys_user.balance %></h5></h3>
+              </div>
+            </div>
+    </div>
+    <br>
+    <h2>Contact Form</h2>
+    <br>
+
+    <div class="row">
+            <div class="col-lg-12 col-sm-12">
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Status:<h5><%= @sys_user.contact.status rescue nil%></h5></h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>City:<h5><%= @sys_user.contact.city.title rescue nil%></h5></h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Country:<h5><%= @sys_user.contact.country.title rescue nil%></h5></h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Home:<h5><%= @sys_user.contact.home rescue nil%></h5></h3>
+              </div>
+            </div>
+    </div>
+
+    <div class="row">
+            <div class="col-lg-12 col-sm-12">
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Office:<h5><%= @sys_user.contact.office rescue nil%></h5></h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Fax:<h5><%= @sys_user.contact.fax rescue nil%></h5></h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Mobile:<h5><%= @sys_user.contact.mobile rescue nil%></h5></h3>
+              </div>
+            <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+              <h3>Email:<h5><%= @sys_user.contact.email rescue nil%></h5></h3>
+            </div>
+          </div>
+    </div>
+    <div class="row">
+            <div class="col-lg-12 col-sm-12">
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Address:<h5><%= @sys_user.contact.address rescue nil%></h5></h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>comment:<h5><%= @sys_user.contact.comment rescue nil%></h5></h3>
+              </div>
+            </div>
+    </div>
+
+            
+          </div>
+        </div>
+      </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger float-right" data-dismiss="modal" aria-label="Close">
+              <span class="text-light p-2">Close</span>
+            </button>
+          </div>
+     </div>
+    </div>
+    </div>
+  </div>
+</div>
