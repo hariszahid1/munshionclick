@@ -1,0 +1,3 @@
+$('.show-data').children().remove();
+$('.show-data').append("<%= escape_javascript(render partial: 'show', locals: { expense_type: @expense_type }) %>");
+$("#showdData").modal('show');

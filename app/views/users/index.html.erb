@@ -1,50 +1,155 @@
+<div id="custom-alert" class="alert alert-danger d-none">
+  <span class="custom-alert-text"></span>
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">×</span>
+  </button>
+</div>
 <div class="list_content_page">
   <div class="row">
     <div class="col-lg-12 col-sm-12">
-      <h1><%= current_user.allowed_valid_roles.to_s.titleize+'s' %></h1>
-      <% if can?(:add, :all) %>
-      <%= link_to new_user_path, class: "btn btn-primary" do %>
-          <i class="fas fa-plus"></i>
-          <%= current_user.allowed_valid_roles.to_s.titleize %>
-      <% end %>
-      <% end %>
-    </div>
-  </div>
+      <div class="main-content-header">
+        <h1><%= current_user.allowed_valid_roles.to_s.titleize+'s' %></h1>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="<%= root_path %>">Dashboard</a>
+          </li>
+          <li class="breadcrumb-item active">
+            <a href="<%= users_path %>">Admins</a>
+          </li>
+        </ol>
+      </div>
 
-  <div class="clearfix"></div>
-  <div class="row search_form">
-    <div class="col-lg-12 col-sm-12">
+      <div class="float-right">
+          <div class="dropdown ml-auto mr-4">
+           <span class="btn btn-info" title= "About This page">Help</span>
+            <div class="dropdown-content">
+              <% if @help.present? %>
+              <% @help&.help_links.each do |link| %>
+              <a type="button" class="" target="_blank" href="<%= link[1] %>" >Help in <%= link[0] %></a>
+               <% end %>
+              <% end %>
+            </div>
+          </div>
+      </div>
+
+      <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
+        </li>
+        <!--li class="nav-item">
+         <a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
+        </li-->
+      </ul>
+
       <%= search_form_for @q, url: users_path, class: "admin-controls", method: "get" do |f| %>
-        <div class="col-lg-2 col-sm-2 form-group float-left padding_left_zero">
-          <%= f.search_field :name_cont, placeholder: "Name", title: "Name" ,class: "form-control" %>
+        <div class="tab-content mb-5">
+          <div class="tab-pane active" id="search" role="tabpanel">
+            <p>
+             <div class="row search_form ml-2">
+               <div class="col-lg-12 col-sm-12">
+                  <%= search_form_for @q, url: users_path, class: "admin-controls", method: "get" do |f| %>
+                  <div class="col-lg-2 col-sm-2 form-group float-left padding_left_zero">
+                    <%= f.search_field :name_or_user_name_or_email_or_father_name_cont, placeholder: "Search in Admins", title: "Name" ,class: "form-control" %>
+                  </div>
+                  <div class="col-lg-2 float-left">
+                    <button class="btn btn-primary" name="search_submit" type="submit"><i class="fa fa-search"></i></button>
+                  </div>
+            <% end %>
+              </div>
+            </div>
+          </p>
         </div>
-        <div class="col-lg-2 col-sm-2 form-group float-left">
-          <%= f.search_field :user_name_cont, placeholder: "User name", title: "User name" ,class: "form-control" %>
-        </div>
-        <div class="col-lg-2 col-sm-2 form-group float-left">
-          <%= f.search_field :email_cont, placeholder: "Email", title: "Email" ,class: "form-control" %>
-        </div>
-        <div class="col-lg-2 col-sm-2 form-group float-left">
-          <%= f.search_field :father_name_cont, placeholder: "Father name", title: "Father name" ,class: "form-control" %>
-        </div>
-        <div class="col-lg-2 form-group float-left padding_right_zero">
-          <input class="form-control btn btn-primary" name="search_submit" type="submit" value="Search"></input>
-        </div>
-      <% end %>
-    </div>
-  </div>
-  <div class="list_data_table">
+           <div class="tab-pane" id="pdf" role="tabpanel">
+            <p>
+              <div class="col-lg-2 d-flex">
+              <button class="btn btn-danger" title= "download users pdf" name="pdf" type="submit" value="pdf" formtarget="_blank">Admins &nbsp;<i class="fa fa-file-pdf"></i></button>
+              </div>
+            </p>
+          </div>
+          <div class="tab-pane" id="csv" role="tabpanel">
+            <p>
+              <div class="col-lg-2 d-flex">
+              <button class="btn btn-success" title= "download users csv" name="csv" type="submit" value="csv">Admins &nbsp;<i class="fa fa-file-excel"></i></button>
+              </div>
+            </p>
+          </div>
+          <div class="tab-pane" id="emails" role="tabpanel">
+            <p>
+              <div class="col-lg-2 d-flex">
+              <button class="form-control btn btn-info" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope"></i>&nbsp;Mail</button>
+              </div>
+           </p>
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  </div>
+                  <div class="modal-body">
+                    <% @pos_setting = PosSetting.first %>
+                    <label>Email:</label>
+                    <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
+                    <br />
+                    <label>Subject:</label>
+                    <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Admins Detail report from MunshiOnClick", class: 'form-control email-fields'%>
+                    <br />
+                    <label>Body:</label><br />
+                    <%= text_area_tag 'body', nil, class: 'form-control'%>
+                    <br />
+
+                    <label>Please select one of them.</label>
+                    <div>
+                      <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
+                      <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
+                      <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
+                  </div>
+                  </div>
+              </div>
+            </div>
+          </div>
+           <div class="tab-pane" id="import-export" role="tabpanel">
+            <p>
+              <div class="d-flex">
+              <button class="btn btn-success ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
+              <button class="btn btn-primary ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
+              </div>
+            </p>
+          </div>
+      </div>
+    <% end %>
+
+  <div class="list_data_table card p-3">
     <table data-toggle="table" data-search="true" class="table table-striped">
+      <button class='btn btn-outline-danger float-right delete-selected' type='button' style="width:163px"value='User' >Delete Selected</button>
       <thead>
         <tr>
-          <td><%= sort_link(@q, :id, 'ID') %></td>
-          <th><%= sort_link(@q, :roles_mask, 'Role') %></th>
-          <th><%= sort_link(@q, :name, 'Name') %></th>
-          <th><%= sort_link(@q, :user_name, 'User name') %></th>
-          <th><%= sort_link(@q, :draw_date, 'System Email') %></th>
-          <th><%= sort_link(@q, :draw_date, 'Email_on') %></th>
-          <th><%= sort_link(@q, :father_name, 'Father name') %></th>
-          <th><%= sort_link(@q, :phone, 'Phone') %></th>
+          <th><input type="checkbox" id="master" class='select-all-checkbox'></th>
+          <th>ID<div class='float-right'><%= sort_link(@q, :id, "", {}, class: 'sorting-button') %></div></th>
+          <th>Role<div class='float-right'><%= sort_link(@q, :roles_mask, "", {}, class: 'sorting-button') %></div></th>
+          <th>Name<div class='float-right'><%= sort_link(@q, :name, "", {}, class: 'sorting-button') %></div></th>
+          <th>User Name<div class='float-right'><%= sort_link(@q, :user_name, "", {}, class: 'sorting-button') %></div></th>
+          <th>System Email<div class='float-right'><%= sort_link(@q, :draw_date, "", {}, class: 'sorting-button') %></div></th>
+          <th>Email_on<div class='float-right'><%= sort_link(@q, :draw_date, "", {}, class: 'sorting-button') %></div></th>
+          <th>Father Name<div class='float-right'><%= sort_link(@q, :father_name, "", {}, class: 'sorting-button') %></div></th>
+          <th>Phone<div class='float-right'><%= sort_link(@q, :phone, "", {}, class: 'sorting-button') %></div></th>
           <th> Actions</th>
         </tr>
       </thead>
@@ -52,6 +157,7 @@
       <tbody>
         <% @users.each do |user| %>
           <tr>
+            <td><%= check_box_tag 'object_ids[]', user.id %></td>
             <td><%= user.id %></td>
             <td class='urdu-font'><%= user&.roles&.first %></td>
             <td class='urdu-font'><%= user.name %></td>
@@ -61,27 +167,76 @@
             <td class='urdu-font'><%= user.father_name %></td>
             <td><%= user.phone %></td>
             <td>
-              <% if can?(:update, :all) %>
-                <%= link_to edit_user_path(user) do %>
-                  <i class="fa fa-edit" aria-hidden="true"></i> |
+            <div class="icon-container">
+                  <div class="my-icon my-view">
+          <div class="my-tooltip">
+            Edit
+          </div>
+          <span class="icon-div">
+                <% if can?(:update, :all) %>
+              <%= link_to edit_user_path(user), remote: true do %>
+                <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+              <%end %>
+            <% end %>
+          </span>
+        </div>
+
+          <div class="my-icon my-view">
+              <div class="my-tooltip">
+                Delete
+              </div>
+                <span class="icon-div">
+                  <% if can?(:delete, :all) %>
+                    <%= link_to user, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+                    <i class="fa fa-trash mt-2" aria-hidden="true"></i>
+                  <%end %>
                 <% end %>
-              <% end %>
-              <% if can?(:delete, :all) %>
-                <%= link_to user, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
-                  <i class="fa fa-trash" aria-hidden="true"></i> |
-                <% end %>
-                <% end %>
-              <% if can?(:delete, :all) %>
-                <%= link_to user do %>
-                  <i class="fa fa-eye" aria-hidden="true"></i>
-                  <% end %>
-              <% end %>
+              </span>
+          </div>
+
+      <div class="my-icon my-view">
+                <div class="my-tooltip">
+                  Show
+                </div>
+                <span class="icon-div">
+                   <% if can?(:view, :all) %>
+                    <%= link_to user_path(user), remote: true do %>
+                    <i class="fa fa-eye mt-2" aria-hidden="true"></i>
+                <%end %>
+            <%end%>
+          </span>
+      </div>
+
+      <div class="my-icon my-view">
+            <div class="my-tooltip">
+              PDF
+            </div>
+            <span class="icon-div">
+                <%= link_to users_path('q[id_eq]':user.id,'pdf':true), title: 'Download PDF', target: '_blank' do %>
+      <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
+    <%end %>
+            </span>
+      </div>
+
+       <div class="my-icon my-view">
+            <div class="my-tooltip">
+              CSV
+            </div>
+            <span class="icon-div">
+                 <%= link_to users_path('q[id_eq]':user.id,'csv':true), title: 'Download CSV' do%>
+      <i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
+    <%end %>
+            </span>
+          </div>
+    <b class="ml-2 mt-1">Total changes: <%= user.versions.count%></b>
+    </div>
+</div>
             </td>
           </tr>
         <% end %>
       </tbody>
     </table>
-    <div class="clearfix"></div>
+
     <div class="row">
       <div class="col-lg-4 col-sm-4">
         <%= page_entries_info @users %>
@@ -92,8 +247,15 @@
     </div>
   </div>
 </div>
+<div class="show-data"></div>
 <script>
   $(document).ready(function() {
+
+    var sortingButtons = $('.sorting-button')
+    for(var i=0; i<sortingButtons.length; i++){
+      $(sortingButtons[i]).html("<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='blue' enable-background='new 0 0 512 512' viewBox='0 0 512 512'><path d='M163.919,494.293c-2.83,0-5.496-1.33-7.196-3.593L45.97,343.348c-2.986-3.974-2.187-9.615,1.787-12.602 c3.974-2.986,9.616-2.187,12.602,1.787l103.557,137.777l103.493-137.775c2.986-3.975,8.627-4.775,12.602-1.791 c3.974,2.985,4.775,8.627,1.79,12.602L171.113,490.698C169.414,492.961,166.749,494.293,163.919,494.293z'/><path d='M163.917 494.293c-4.971 0-9-4.029-9-9V26.192c0-4.971 4.029-9 9-9s9 4.029 9 9v459.101C172.917 490.264 168.888 494.293 163.917 494.293zM459.507 182.622c-2.734 0-5.435-1.241-7.203-3.597L348.78 41.18 245.257 179.025c-2.985 3.975-8.626 4.777-12.601 1.792-3.974-2.984-4.777-8.626-1.792-12.601l110.72-147.43c1.699-2.263 4.365-3.595 7.196-3.595s5.497 1.332 7.196 3.595l110.72 147.43c2.985 3.975 2.183 9.616-1.792 12.601C463.285 182.034 461.388 182.621 459.507 182.622z'/><path d='M348.78,494.293c-4.971,0-9-4.029-9-9V26.192c0-4.971,4.029-9,9-9s9,4.029,9,9v459.101 C357.78,490.264,353.751,494.293,348.78,494.293z'/></svg>")
+    }
+
     if ($(".bootstrap-table").length == 0){
       $("table").bootstrapTable();
     }

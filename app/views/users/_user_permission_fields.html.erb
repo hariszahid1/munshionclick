@@ -1,6 +1,6 @@
 	<tr class="">
 		<td>
-			<%= f.number_field :id, class: 'd-none user-permission-id' %>
+			<%= f.number_field :id, class: 'd-none user-permission-id',skip_label: true %>
 			<%= f.check_box :can_accessed, checked: f.object.can_accessed, skip_label: true,class:"form-checkbox h-5 w-4 ml-2 can-access-checkbox" %>
 		</td>
 		<td> <%= f.object.module%> </td>

@@ -348,4 +348,18 @@ class ApplicationController < ActionController::Base
     @image.attachments.first.purge_later
     redirect_back(fallback_location: request.referer)
   end
+
+	def check_access
+		if (ApplicationHelper.check_is_hidden(current_user,"#{controller_name}"))
+			respond_to do |format|
+				format.html { redirect_to dashboard_path, alert: "Your system does not have this module" }
+			end
+		else
+			if (ApplicationHelper.check_can_accessed(current_user,"#{controller_name}")==false)
+				respond_to do |format|
+					format.html { redirect_to dashboard_path, alert: "you are not authorized." }
+				end
+			end
+		end	
+	end
 end

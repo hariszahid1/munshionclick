@@ -1,0 +1,47 @@
+<html>
+  <head>
+    <style>
+      .border-bottom{
+        border-bottom: double 4px;
+      }
+      .text-center{
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <% @date = Date.today  %>
+    <% @time = DateTime.now %>
+    <% @time = Time.zone.now %>
+    <div>
+      <p class="border-bottom"></p>
+      <h1 class="text-center">Item Types List</h1>
+      <h1 class="text-center">
+        Date: <b><span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%></span>
+        Time: <span><%=@time.strftime("at %I:%M%p")%></span></b>
+      </h1>
+      <p class="border-bottom"></p>
+      <p class="text-center">Report by: <%=current_user.name%></p>
+    </div>
+    <div>
+      <table>
+        <thead class="lite-gray">
+          <th class="text-center">ID</th>
+          <th class="text-center">Title</th>
+          <th class="text-center">Code</th>
+          <th class="text-center">Comment</th>
+        </thead>
+        <tbody>
+          <% data.each_with_index do |it, index| %>
+            <tr>
+              <th class="text-center"><%= it['id'] %></th>
+              <td class="text-center"><%= it['title'] %></td>
+              <td class="text-center"><%= it['code'] %></td>
+              <td class="text-center"><%= it['comment'] %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

@@ -97,7 +97,7 @@
 <div class="tab-pane" id="emails" role="tabpanel">
   <p>
     <div class="col-lg-2 form-group d-flex">
-    <button class="form-control btn btn-info" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope"></i>Mail</button>
+    <button class="form-control btn btn-info" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-2"></i>Mail</button>
     </div>
   </p>
     <!-- Modal -->
@@ -113,10 +113,10 @@
             <div class="modal-body">
               <% @pos_setting = PosSetting.first %>
                 <label>Email:</label>
-                <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control', type: 'email'%>
+                <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
                 <br />
                 <label>Subject:</label>
-                <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Product Sub Categories Detail report from MunshiOnClick", class: 'form-control'%>
+                <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Product Sub Categories Detail report from MunshiOnClick", class: 'form-control email-fields'%>
                 <br />
                 <label>Body:</label><br />
                 <%= text_area_tag 'body', nil, class: 'form-control'%>
@@ -130,7 +130,7 @@
            </div>
           <div class="modal-footer">
            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-            <button name="email" type="submit" value="email" class="btn btn-primary">Send</button>
+            <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
           </div>
        </div>
     </div>

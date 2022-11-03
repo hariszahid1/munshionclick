@@ -184,7 +184,6 @@ Rails.application.routes.draw do
   resources :users, except: :create do
     collection do
       post :create_user
-			post :updated_user_permissions
     end
   end
   get 'reports/index'

@@ -1,4 +1,5 @@
 class CountriesController < ApplicationController
+	before_action :check_access
   before_action :set_country, only: [:show, :edit, :update, :destroy]
   include PdfCsvGeneralMethod
   include CountriesHelper
@@ -95,18 +96,18 @@ class CountriesController < ApplicationController
     @countries = @q.result
     header_for_csv = %w[Id Title Comment]
     data_for_csv = get_data_for_countries_csv
-    generate_csv(data_for_csv, header_for_csv, 'countries')
+    generate_csv(data_for_csv, header_for_csv, "Countries-Total-#{@countries.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}")
   end
 
   def download_countries_pdf_file
     @countries = @q.result
-    generate_pdf(@countries.as_json, 'Countries', 'pdf.html', 'A4')
+    generate_pdf(@countries.as_json, "Countries-Total-#{@countries.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}", 'pdf.html', 'A4')
   end
 
   def send_email_file
     EmailJob.perform_later(@q.result.as_json, 'countries/index.pdf.erb', params[:email_value],
                             params[:email_choice], params[:subject], params[:body],
-                            current_user, 'countries')
+                            current_user, "Countries-Total-#{@q.result.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}")
     if params[:email_value].present?
       flash[:notice] = "Email has been sent to #{params[:email_value]}"
     else

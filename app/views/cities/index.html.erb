@@ -4,6 +4,8 @@
     <span aria-hidden="true">×</span>
   </button>
 </div>
+
+
 <div class="hidden" id="city_list">
   <div class="row">
     <div class="col-lg-12 col-sm-12">
@@ -36,32 +38,32 @@
       <li class="nav-item">
         <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
       </li>
-			<%if (ApplicationHelper.current_user_permissions(current_user,"cities","can_create"))%>
+			<%if (ApplicationHelper.check_can_create(current_user,"cities"))%>
 				<li class="nav-item">
 					<a class="nav-link tab-label" data-toggle="tab" href="#create" role="tab">Create</a>
 				</li>
 			<%end%>
-			<%if (ApplicationHelper.current_user_permissions(current_user,"cities","can_download_pdf"))%>
+			<%if (ApplicationHelper.check_can_download_pdf(current_user,"cities"))%>
 				<li class="nav-item">
 					<a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
 				</li>
 			<%end%>
-			<%if (ApplicationHelper.current_user_permissions(current_user,"cities","can_download_csv"))%>
+			<%if (ApplicationHelper.check_can_download_csv(current_user,"cities"))%>
 				<li class="nav-item">
 					<a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
 				</li>
 			<%end%>
-			<%if (ApplicationHelper.current_user_permissions(current_user,"cities","can_send_email"))%>
+			<%if (ApplicationHelper.check_can_send_email(current_user,"cities"))%>
 				<li class="nav-item">
 					<a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
 				</li>
 			<%end%>
-			<%if (ApplicationHelper.current_user_permissions(current_user,"cities","can_import_export"))%>
+			<%if (ApplicationHelper.check_can_import_export(current_user,"cities"))%>
 				<li class="nav-item">
-				<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
+					<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
 				</li>
 			<%end%>
-</ul>
+	</ul>
 <%= search_form_for @q, url: cities_path, class: "admin-controls", method: "get" do |f| %>
     
   <div class="tab-content mb-5">
@@ -107,7 +109,7 @@
     <div class="tab-pane" id="emails" role="tabpanel">
       <p>
         <div class="col-lg-2 d-flex">
-        <button class="form-control btn btn-info" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope"></i>&nbsp;Mail</button>
+        <button class="form-control btn btn-info" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-2"></i>&nbsp;Mail</button>
         </div>
      </p>
       <!-- Modal -->
@@ -123,10 +125,10 @@
             <div class="modal-body">
               <% @pos_setting = PosSetting.first %>
               <label>Email:</label>
-              <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control', type: 'email'%>
+              <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
               <br />
               <label>Subject:</label>
-              <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Cities Detail report from MunshiOnClick", class: 'form-control'%>
+              <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Cities Detail report from MunshiOnClick", class: 'form-control email-fields'%>
               <br />
               <label>Body:</label><br />
               <%= text_area_tag 'body', nil, class: 'form-control'%>
@@ -141,7 +143,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-              <button name="email" type="submit" value="email" class="btn btn-primary">Send</button>
+              <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
             </div>
             </div>
         </div>
@@ -169,7 +171,6 @@
          <th>ID<div class="float-right"><%= sort_link(@q, :id,"", {}, class: 'sorting-button') %></div></th>
           <th>Title<div class="float-right"><%= sort_link(@q, :title, "", {},  class: 'sorting-button') %></div></th>
           <th>Comment<div class="float-right"><%= sort_link(@q, :comment,"", {}, class: 'sorting-button') %></div></th>
-
           <th class="border_none">Action</th>
         </tr>
       </thead>

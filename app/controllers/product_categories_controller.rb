@@ -74,7 +74,7 @@ class ProductCategoriesController < ApplicationController
     @product_category.destroy
     respond_to do |format|
      format.html { redirect_to product_categories_path, notice: 'Product Category was successfully Deleted.' }
-      format.json { render :show, status: :ok, location: @product_categories }
+      format.json { render :show, status: :ok, location: @product_category }
     end
   end
 
@@ -93,18 +93,18 @@ class ProductCategoriesController < ApplicationController
     @product_categories = @q.result
     header_for_csv = %w[Id Title Comment]
     data_for_csv = get_data_for_product_categories_csv
-    generate_csv(data_for_csv, header_for_csv, 'product_categories')
+    generate_csv(data_for_csv, header_for_csv, "ProductCategories-Total-#{@product_categories.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}")
   end
 
   def download_product_categories_pdf_file
     @product_categories = @q.result
-    generate_pdf(@product_categories.as_json, 'Product_Categories', 'pdf.html', 'A4')
+    generate_pdf(@product_categories.as_json, "ProductCategories-Total-#{@product_categories.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}", 'pdf.html', 'A4')
   end
 
   def send_email_file
     EmailJob.perform_later(@q.result.as_json, 'product_categories/index.pdf.erb', params[:email_value],
                            params[:email_choice], params[:subject], params[:body],
-                           current_user, 'product_categories')
+                           current_user, "ProductCategories-Total-#{@q.result.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}")
     if params[:email_value].present?
       flash[:notice] = "Email has been sent to #{params[:email_value]}"
     else
