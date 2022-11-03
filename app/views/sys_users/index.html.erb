@@ -192,28 +192,35 @@
           </div>
       <% end %>  
 
-  <table data-toggle="table" data-search="true">
-  <%= render 'map_columns/map_column_partials' %>
-    <thead>
-      <tr>
-        <th>Profile Image</th>
-        <th><%= sort_link(@q, :code, 'Code') %></th>
-        <th><%= sort_link(@q, :cnic, 'Name') %></th>
-        <th><%= sort_link(@q, :user_group, 'User group') %></th>
-        <th>Status</th>
-        <th>Occupation</th>
-        <th>Opening Balance</th>
-        <th><%= sort_link(@q, :balance, 'balance') %></th>
-        <th>Jama/Benam</th>
-        <th>Address</th>
-        <th>Action</th>
-      </tr>
-    </thead>
 
+ <div class='card p-3'>
+ <div class="table-responsive">
+  <table data-toggle="table" data-search="true">
+    <%= render 'map_columns/map_column_partials' %>
+      <button class='btn btn-outline-danger float-right delete-selected' type='button' style="width:163px"value='SysUser' >Delete Selected</button>
+      <thead>
+        <tr>
+          <th><input type="checkbox" id="master" class='select-all-checkbox'></th>
+          <th>ID<div class='float-right'><%= sort_link(@q, :id, "", {}, class: 'sorting-button') %></div></th>
+          <th>Profile Image</th>
+          <th>Code<div class='float-right'><%= sort_link(@q, :code, "", {}, class: 'sorting-button') %></div></th>
+          <th>Name<div class='float-right'><%= sort_link(@q, :cnic, "", {}, class: 'sorting-button') %></div></th>
+          <th>User group<div class='float-right'><%= sort_link(@q, :user_group, "", {}, class: 'sorting-button') %></div></th>
+          <th>Status</th>
+          <th>Occupation</th>
+          <th>Opening Balance</th>
+          <th>Balance<div class='float-right'><%= sort_link(@q, :balance, "", {}, class: 'sorting-button') %></div></th>
+          <th>Jama/Benam</th>
+          <th>Address</th>
+          <th>Action</th>
+        </tr>
+      </thead>
     <tbody>
-      <% @sys_users.each do |sys_user| %>
+       <% @sys_users.each do |sys_user| %>
         <% date = (sys_user.ledger_books.present? ? sys_user.ledger_books.last.created_at : sys_user.created_at)%>
         <tr class=<%=((DateTime.now.to_datetime-date.to_datetime).to_i>30 && !sys_user.balance.to_i.zero?) ? 'table-danger' : ''%>>
+          <td><%= check_box_tag 'object_ids[]', sys_user.id %></td>
+          <td><%= sys_user.id %></td>
           <td>
           <% if  sys_user.profile_image.attached? %>
             <%= image_tag sys_user.profile_image.service_url, width: 100 %>
@@ -314,6 +321,7 @@
         </tr>
       </tbody>
   </table>
+</div>
     <div class="row">
       <div class="col-lg-4 col-sm-4">
         <%= page_entries_info @sys_users %>
@@ -322,6 +330,7 @@
           <%= paginate @sys_users %>
         </div>
     </div>
+</div>
 </div>
 
 <%= form_for :bulk_import, url: bulk_import_data_path, method: :post, html: {class: "bulk-import-form"} do |f| %>
