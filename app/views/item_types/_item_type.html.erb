@@ -5,13 +5,16 @@
   <td><%= item_type.code %></td>
   <td><span title="<%= item_type.comment %>" class='truncate-text'><%= item_type.comment %></span></td>
   <td>
+  <div class="icon-container-1">
+                <div class="my-icon-1 my-view-1">
+                  <div class="my-tooltip-1">
 
       <div class="icon-container">
           <div class="my-icon my-view">
           <div class="my-tooltip">
             Edit
           </div>
-          <span class="icon-div">
+          <span class="icon-div mt-3">
                 <% if can?(:update, :all) %>
               <%= link_to edit_item_type_path(item_type), remote: true do %>
                 <i class="fa fa-edit mt-2" aria-hidden="true"></i>
@@ -24,7 +27,7 @@
               <div class="my-tooltip">
                 Delete
               </div>
-                <span class="icon-div">
+                <span class="icon-div mt-3">
                   <% if can?(:delete, :all) %>
                     <%= link_to item_type, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
                     <i class="fa fa-trash mt-2" aria-hidden="true"></i>
@@ -37,7 +40,7 @@
                 <div class="my-tooltip">
                   Show
                 </div>
-                <span class="icon-div">
+                <span class="icon-div mt-3">
                    <% if can?(:view, :all) %>
                     <%= link_to item_type_path(item_type), remote: true do %>
                     <i class="fa fa-eye mt-2" aria-hidden="true"></i>
@@ -50,7 +53,7 @@
             <div class="my-tooltip">
               PDF
             </div>
-            <span class="icon-div">
+            <span class="icon-div mt-3">
                <%= link_to item_types_path('q[id_eq]':item_type.id,'pdf':true), title: 'Download PDF', target: '_blank' do %>
       <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
     <%end %>
@@ -61,13 +64,18 @@
             <div class="my-tooltip">
               CSV
             </div>
-            <span class="icon-div">
+            <span class="icon-div mt-3">
                  <%= link_to item_types_path('q[id_eq]':item_type.id,'csv':true), title: 'Download CSV' do%>
       <i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
     <%end %>
             </span>
           </div>
-    <b class="ml-2 mt-1">Total changes: <%= item_type.versions.count%></b>
+    </div>
+          </div>
+          <span class="icon-div-1">
+                <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+          </span>
+      </div>
     </div>
 
   </td>

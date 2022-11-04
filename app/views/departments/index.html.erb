@@ -28,7 +28,7 @@
       </div>
     </div>
 
-<ul class="nav nav-tabs" role="tablist">
+<ul class="nav nav-pills" role="tablist">
         <li class="nav-item">
         <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
         </li>
@@ -50,7 +50,7 @@
   </ul>
  <%= search_form_for @q, url: departments_path, class: "admin-controls", method: "get" do |f| %>
 <div class="tab-content mb-5">
-    <div class="tab-pane active" id="search" role="tabpanel">
+    <div class="tab-pane active mb-3 card shadow-sm mt-2 border-radius-1" id="search" role="tabpanel">
       <p>
         <div class="col-lg-10 form-group d-flex">
             <div class='col-lg-3'>
@@ -63,7 +63,7 @@
         </div>
       </p>
   </div>
-  <div class="tab-pane" id="create" role="tabpanel">
+  <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="create" role="tabpanel">
       <p>
      <% if can?(:add, :all) %>
       <div id="new_department">
@@ -72,21 +72,21 @@
       <% end %>
       </p>
 </div>
-    <div class="tab-pane" id="pdf" role="tabpanel">
+    <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="pdf" role="tabpanel">
       <p>
         <div class="col-lg-2 d-flex">
         <button class="btn btn-danger" title= "download cities pdf" name="pdf" type="submit" value="pdf" formtarget="_blank">Departments &nbsp;<i class="fa fa-file-pdf"></i></button>
         </div>
       </p>
     </div>
-  <div class="tab-pane" id="csv" role="tabpanel">
+  <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="csv" role="tabpanel">
     <p>
       <div class="col-lg-2 d-flex">
         <button class="btn btn-success" title= "download cities csv" name="csv" type="submit" value="csv">Departments &nbsp;<i class="fa fa-file-excel"></i></button>
         </div>
     </p>
   </div>
-<div class="tab-pane" id="emails" role="tabpanel">
+<div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="emails" role="tabpanel">
   <p>
     <div class="col-lg-2 d-flex">
     <button class="btn btn-info" type="button" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-envelope mr-2"></i>Mail</button>
@@ -129,7 +129,7 @@
     </div>
       </div>
   </div>
-  <div class="tab-pane" id="import-export" role="tabpanel">
+  <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="import-export" role="tabpanel">
     <p>
       <div class="d-flex">
       <button class="btn btn-success ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
@@ -142,12 +142,22 @@
 
 
   <%= render 'map_columns/map_column_partials' %>
-  <div class='card p-3'>
+  <div class='card p-3 mb-3 shadow-sm mt-2 border-radius-1'>
   <table data-toggle="table" data-search="true" id="department_table">
-    <button class='btn btn-outline-danger float-right delete-selected' type='button' style="width:163px"value='Department' >Delete Selected</button>
     <thead>
       <tr>
-        <th><input type="checkbox" id="master" class='select-all-checkbox'></th>
+        <th><input type="checkbox" id="master" class='select-all-checkbox'>
+            <div class="icon-container float-center">
+            <span class="ml-2 mt-2">
+            <div class="my-icon my-view">
+            
+                        <span class="icon-div btn delete-selected p-2 " type='button' value='Expense'>
+                                  <i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i> 
+                        </span>
+                    </div>
+                    </span>
+              </div>
+        </th>
         <th>ID<div class='float-right'><%= sort_link(@q, :id, '', {}, class: 'sorting-button') %></div></th>
         <th>Code<div class='float-right'><%= sort_link(@q, :code, '', {}, class: 'sorting-button') %></div></th>
         <th>Title<div class='float-right'><%= sort_link(@q, :title, '', {}, class: 'sorting-button') %></div></th>

@@ -32,7 +32,7 @@
           </div>
       </div>
 
-      <ul class="nav nav-tabs" role="tablist">
+      <ul class="nav nav-pills" role="tablist">
         <li class="nav-item">
           <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
         </li>
@@ -52,7 +52,7 @@
 
       <%= search_form_for @q, url: users_path, class: "admin-controls", method: "get" do |f| %>
         <div class="tab-content mb-5">
-          <div class="tab-pane active" id="search" role="tabpanel">
+          <div class="tab-pane active mb-3 card shadow-sm mt-2 border-radius-1" id="search" role="tabpanel">
             <p>
              <div class="row search_form ml-2">
                <div class="col-lg-12 col-sm-12">
@@ -68,21 +68,21 @@
             </div>
           </p>
         </div>
-           <div class="tab-pane" id="pdf" role="tabpanel">
+           <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="pdf" role="tabpanel">
             <p>
               <div class="col-lg-2 d-flex">
               <button class="btn btn-danger" title= "download users pdf" name="pdf" type="submit" value="pdf" formtarget="_blank">Admins &nbsp;<i class="fa fa-file-pdf"></i></button>
               </div>
             </p>
           </div>
-          <div class="tab-pane" id="csv" role="tabpanel">
+          <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="csv" role="tabpanel">
             <p>
               <div class="col-lg-2 d-flex">
               <button class="btn btn-success" title= "download users csv" name="csv" type="submit" value="csv">Admins &nbsp;<i class="fa fa-file-excel"></i></button>
               </div>
             </p>
           </div>
-          <div class="tab-pane" id="emails" role="tabpanel">
+          <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="emails" role="tabpanel">
             <p>
               <div class="col-lg-2 d-flex">
               <button class="form-control btn btn-info" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope"></i>&nbsp;Mail</button>
@@ -125,7 +125,7 @@
               </div>
             </div>
           </div>
-           <div class="tab-pane" id="import-export" role="tabpanel">
+           <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="import-export" role="tabpanel">
             <p>
               <div class="d-flex">
               <button class="btn btn-success ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
@@ -137,11 +137,21 @@
     <% end %>
 
   <div class="list_data_table card p-3">
-    <table data-toggle="table" data-search="true" class="table table-striped">
-      <button class='btn btn-outline-danger float-right delete-selected' type='button' style="width:163px"value='User' >Delete Selected</button>
+    <table data-toggle="table" data-search="true">
       <thead>
         <tr>
-          <th><input type="checkbox" id="master" class='select-all-checkbox'></th>
+          <th><input type="checkbox" id="master" class='select-all-checkbox'>
+              <div class="icon-container float-center">
+            <span class="ml-2 mt-2">
+            <div class="my-icon my-view">
+                        <span class="icon-div btn delete-selected p-2 " type='button' value='Expense'>
+                                  <i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i> 
+                        </span>
+                    </div>
+                    </span>
+              </div>
+          
+          </th>
           <th>ID<div class='float-right'><%= sort_link(@q, :id, "", {}, class: 'sorting-button') %></div></th>
           <th>Role<div class='float-right'><%= sort_link(@q, :roles_mask, "", {}, class: 'sorting-button') %></div></th>
           <th>Name<div class='float-right'><%= sort_link(@q, :name, "", {}, class: 'sorting-button') %></div></th>
@@ -167,12 +177,16 @@
             <td class='urdu-font'><%= user.father_name %></td>
             <td><%= user.phone %></td>
             <td>
+            <div class="icon-container-1">
+                <div class="my-icon-1 my-view-1">
+                  <div class="my-tooltip-1">
+            
             <div class="icon-container">
                   <div class="my-icon my-view">
           <div class="my-tooltip">
             Edit
           </div>
-          <span class="icon-div">
+          <span class="icon-div mt-3">
                 <% if can?(:update, :all) %>
               <%= link_to edit_user_path(user), remote: true do %>
                 <i class="fa fa-edit mt-2" aria-hidden="true"></i>
@@ -185,7 +199,7 @@
               <div class="my-tooltip">
                 Delete
               </div>
-                <span class="icon-div">
+                <span class="icon-div mt-3">
                   <% if can?(:delete, :all) %>
                     <%= link_to user, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
                     <i class="fa fa-trash mt-2" aria-hidden="true"></i>
@@ -198,7 +212,7 @@
                 <div class="my-tooltip">
                   Show
                 </div>
-                <span class="icon-div">
+                <span class="icon-div mt-3">
                    <% if can?(:view, :all) %>
                     <%= link_to user_path(user), remote: true do %>
                     <i class="fa fa-eye mt-2" aria-hidden="true"></i>
@@ -211,7 +225,7 @@
             <div class="my-tooltip">
               PDF
             </div>
-            <span class="icon-div">
+            <span class="icon-div mt-3">
                 <%= link_to users_path('q[id_eq]':user.id,'pdf':true), title: 'Download PDF', target: '_blank' do %>
       <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
     <%end %>
@@ -222,13 +236,18 @@
             <div class="my-tooltip">
               CSV
             </div>
-            <span class="icon-div">
+            <span class="icon-div mt-3">
                  <%= link_to users_path('q[id_eq]':user.id,'csv':true), title: 'Download CSV' do%>
       <i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
     <%end %>
             </span>
           </div>
-    <b class="ml-2 mt-1">Total changes: <%= user.versions.count%></b>
+          </div>
+            </div>
+            <span class="icon-div-1">
+                  <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+            </span>
+        </div>
     </div>
 </div>
             </td>
