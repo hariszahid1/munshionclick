@@ -1,4 +1,4 @@
-$(document).on('ready turbolinks:load', function() {
+$( document ).ready(function() {
   $('.select-all-checkbox').on("click", function () {
     var cbxs = $('input[name="object_ids[]"]');
     if($(this).is(":checked")){
