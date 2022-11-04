@@ -1,58 +1,78 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light p-1">
+<nav class="navbar navbar-light navbar-top py-3">
+  <h4 class="ml-3"><%= admin_name_on_nav %></h4>
+  <svg version="1.1" id="Layer_1" class="cursor-pointer sidebar-toggle-icon d-none d-lg-block mx-3" style="margin-top: -10px;" height="50px" width="40px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+    viewBox="0 0 455 455" style="enable-background:new 0 0 455 455;" xml:space="preserve"><g><rect y="312.5" width="455" height="50"/><rect y="212.5" width="455" height="50"/><rect y="112.5" width="455" height="50"/></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g>
+  </svg>
+  <svg version="1.1" id="Layer_1" class="cursor-pointer sidebar-toggle-icon-mobile d-block d-lg-none mx-3" style="margin-top: -10px;" height="50px" width="40px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+    viewBox="0 0 455 455" style="enable-background:new 0 0 455 455;" xml:space="preserve"><g><rect y="312.5" width="455" height="50"/><rect y="212.5" width="455" height="50"/><rect y="112.5" width="455" height="50"/></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g>
+  </svg>
+  <div class="d-flex">
+    <div class="d-flex">
+      <div class="navbar-tabs d-none d-lg-block">
+        <span>
+          Cash in Hand: <b><%=@account_amount_total.to_i%></b>
+        </span>
+      </div>
 
-        <i type="button" id="sidebarCollapse" class="fas fa-angle-left fa-3x mb-4 sidebarCollapse" onclick="document.getElementById('sidebar').classList.toggle('active'); document.getElementById('sidebarCollapse').classList.toggle('rotate-toggle-button');"></i>
-            
-        <div class="container-fluid">
+      <div class="navbar-tabs d-none d-lg-block">
+        <span>
+          Account Balance: <b><%=@total_payable.to_i-@total_reciveable.to_i%></b>
+        </span>
+      </div>
 
-        <button class="btn btn-dark d-inline-block d-lg-none ml-auto mb-2 mr-2" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <i class="fas fa-user fa-2x"></i>
-        </button>
+      <div class="navbar-tabs d-none d-lg-block">
+        <strong class="text-danger">
+          Hosting Expiry Date <span id="expiryDateDisplay"><%=check_expiry_date(@pos_setting)%></span>
+        </strong>
+      </div>
 
-        <div class="d-flex justify-content-center">
-        <span class="navbar nav mr-2">
+      <div class="navbar-tabs">
+        <a href="#AccountSubmenuDetails" data-toggle="collapse" aria-expanded="false">
+          <i class="fas fa-tasks"></i>
+          Account Details
+        </a>
+        <ul class="collapse list-unstyled position-absolute bg-white" style="border: 1px solid lightgray;" id="AccountSubmenuDetails">
+          <li class="px-2 py-1">
             <span>
               Cash in Hand: <b><%=@account_amount_total.to_i%></b>
             </span>
-        </span>
+          </li>
 
-        <span class="navbar nav">
+          <li class="px-2 py-1">
             <span>
               Account Balance: <b><%=@total_payable.to_i-@total_reciveable.to_i%></b>
             </span>
-        </span>
+          </li>
 
-        <span class="navbar nav ml-3">
-        <span class="btn btn-dark d-inline-block ml-auto" type="button">
-          Hosting Expiry Date <span id="expiryDateDisplay"><%=check_expiry_date(@pos_setting)%></span>
-        </span>
-        </span>
+          <li class="px-2 py-1">
+            <strong class="text-danger">
+              Hosting Expiry Date <span id="expiryDateDisplay"><%=check_expiry_date(@pos_setting)%></span>
+            </strong>
+          </li>
+        </ul>
+      </div>
 
-        <span class="navbar nav ml-3 mr-2">
-          <a href="#AccountSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-              <i class="fas fa-tasks"></i>
-              Account Balance
-          </a>
-          <ul class="collapse list-unstyled" id="AccountSubmenu">
-              <%@account_balance.each do |account|%>
-              <li>
-                <i class="fas fa-tasks" aria-hidden="true"></i>
-                  <%=account&.first%> <%=account&.last%>
-              </li>
-              <%end%>
-          </ul>
-        </span>
-
-        <span class="collapse navbar-collapse" id="navbarSupportedContent">
-            <span class="navbar nav ml-2">
-                    <i class="fas fa-user-circle fa-2x" aria-hidden="true"></i>
-                  <%= link_to current_user.name, root_path, class: "nav-link text-primary" %>
-            </span>
-              
-            <span class="navbar nav ml-3 bg-danger text-white"> 
-                <strong><%= link_to 'Logout', destroy_user_session_path, method: :delete, class: "nav-link" %></strong>
-            </span>
-
-        </span>
-        </div>
+      <div class="navbar-tabs">
+        <a href="#AccountSubmenu" data-toggle="collapse" aria-expanded="false">
+          <i class="fas fa-tasks"></i>
+          Account Balance
+        </a>
+        <ul class="collapse list-unstyled position-absolute bg-white" style="border: 1px solid lightgray;" id="AccountSubmenu">
+          <%@account_balance.each do |account|%>
+            <li class="px-2 py-1">
+              <i class="fas fa-tasks" aria-hidden="true"></i>
+                <%=account&.first%> <%=account&.last%>
+            </li>
+          <%end%>
+        </ul>
+      </div>
     </div>
+  </div>
+  <div class="d-flex ml-auto" id="navbarSupportedContent">
+    <span class="nav ml-2">
+      <i class="fas fa-user-circle fa-2x" aria-hidden="true"></i>
+      <%= link_to current_user.name, root_path, class: "nav-link text-primary" %>
+    </span>
+    <%= link_to 'Logout', destroy_user_session_path, method: :delete, class: "btn btn-danger mr-2" %>
+  </div>
 </nav>
