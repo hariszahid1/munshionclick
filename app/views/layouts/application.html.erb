@@ -41,6 +41,8 @@
   </head>
 
   <body>
+    <%= render 'layouts/shared/navigation_bar' %>
+    <%= render 'layouts/shared/loader' %>
     <div class="d-flex wrapper" id="wrapper">
       <%if check_system_type(@pos_setting)=="batamega"%>
         <%= render 'layouts/shared/sidebar_bata' %>

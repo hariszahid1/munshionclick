@@ -1,17 +1,16 @@
 
-    <div class="nested-fields font-weight-bold">
-      <div class="row font-weight-bold">
-        <div class="col-lg-2 form-group float-left font-weight-bold">
-          <%= f.hidden_field :expense_id %>
-          <%= f.hidden_field :id %>
-          <%=f.text_field :amount,step: :any,class:'expense', required: true, hide_label: true,placeholder: :Amount,onchange:"expenseUpdate()",onkeyup:"expenseUpdate()"%>
-        </div>
-        <div class="col-lg-3 form-group float-left"><%= f.select :expense_type_id, options_from_collection_for_select(@expense_types, 'id', 'title', f.object.expense_type_id), {hide_label:true,prompt: "Select the Expense Type"}, required: true,class: "form-control" %></div>
-        <div class="col-lg-2 form-group float-left"><%= f.select :account_id , options_from_collection_for_select(@accounts, 'id', 'title', (f.object.account_id.present? ? f.object.account_id : @account)), {prompt: "Select the Account", hide_label: true},required: true,class: "form-control"%></div>
-        <div class="col-lg-3 form-group float-left"><%= f.text_area :comment , hide_label: true%></div>
-        <div class="col-lg-2 form-group float-left links"><%= link_to_remove_association "Remove", f , class: "btn btn-danger" %></div>
-      </div>
-
+<div class="nested-fields font-weight-bold mt-2">
+  <div class="row font-weight-bold">
+    <div class="col-lg-2 form-group float-left font-weight-bold">
+      <%= f.hidden_field :expense_id %>
+      <%= f.hidden_field :id %>
+      <%=f.text_field :amount,step: :any,class:'expense', required: true, hide_label: true,placeholder: :Amount,onchange:"expenseUpdate()",onkeyup:"expenseUpdate()"%>
+    </div>
+    <div class="col-lg-4 form-group float-left"><%= f.select :expense_type_id, options_from_collection_for_select(@expense_types, 'id', 'title', f.object.expense_type_id), {hide_label:true,prompt: "Select the Expense Type"}, required: true,class: "form-control" %></div>
+    <div class="col-lg-4 form-group float-left"><%= f.select :account_id , options_from_collection_for_select(@accounts, 'id', 'title', (f.object.account_id.present? ? f.object.account_id : @account)), {prompt: "Select the Account", hide_label: true},required: true,class: "form-control"%></div>
+    <div class="col-lg-6 form-group float-left"><%= f.text_area :comment , hide_label: true%></div>
+    <div class="col-lg-3 form-group float-left links"><%= link_to_remove_association "Remove", f , class: "btn btn-danger" %></div>
+  </div>
 </div>
 <script>
   $(document).ready(function() {

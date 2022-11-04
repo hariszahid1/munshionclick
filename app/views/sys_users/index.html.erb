@@ -1,83 +1,225 @@
+<div id="custom-alert" class="alert alert-danger d-none">
+  <span class="custom-alert-text"></span>
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">×</span>
+  </button>
+</div>
+
 <div class="hidden" id="sys_users_list">
   <div class="row">
     <div class="col-lg-12 col-sm-12">
-      <h1>User's List</h1>
-      <div class="col-lg-2 form-group float-left">
-        <% if can?(:add, :all) %>
-        <%= link_to new_sys_user_path, class: "btn btn-success" do %>
-          <i class="fa fa-plus" aria-hidden="true"></i>
-          New User
-        <% end %>
-        <% end %>
-      </div>
-      <div class="col-lg-2 form-group float-left">
-        <%= link_to payable_sys_users_sys_users_path, class: "btn btn-primary" do %>
-          <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-          Payable
-        <% end %>
-      </div>
-      <div class="col-lg-2 form-group float-left">
-        <%= link_to receiveable_sys_users_path, class: "btn btn-primary" do %>
-          <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-          Reciveable
-        <% end %>
-      </div>
-      <div class="col-lg-3 form-group float-left">
-        <%= link_to transfer_ledger_books_path, class: "btn btn-success" do %>
-          <i class="fa fa-credit-card" aria-hidden="true"></i>
-          Payment Transfer
-       <% end %>
-     </div>
-    </div>
-  </div>
-  <div class="clearfix"></div>
-  <div class="row">
-    <div class="col-lg-12 col-sm-12">
-      <%= search_form_for @q, url: sys_users_path, class: "admin-controls", method: "get" do |f| %>
-        <div class="col-lg-3 form-group float-left">
-          <%= f.select :id_eq, options_from_collection_for_select(@all_user, "id", ->(st){"#{st.name} \u{27F6} \u{27F6} #{st.code} "},@name),{:include_blank => "Select Name/Code"},:class=>"form-control chosen-select" %>
+        <div class="main-content-header">
+            <h1 class="ml-2">User's List</h1>
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a href="<%= root_path %>">Dashboard</a>
+              </li>
+              <li class="breadcrumb-item active">
+                <a href="<%= sys_users_path %>">User's List</a>
+              </li>
+            </ol>
+          </div>
+        <div class="float-right">
+          <div class="dropdown ml-auto mr-4">
+           <span class="btn btn-info" title= "About This page">Help</span>
+            <div class="dropdown-content">
+              <% if @help.present? %>
+              <% @help&.help_links.each do |link| %>
+              <a type="button" class="" target="_blank" href="<%= link[1] %>" >Help in <%= link[0] %></a>
+               <% end %>
+              <% end %>
+            </div>
+          </div>
         </div>
-        <div class='col-lg-3 form-group float-left'>
-          <%= f.select :user_group_id_eq, options_for_select(@user_groups.map{ |p| [p.title , p.id]}, f.object.id_eq),{:include_blank => "Select User Group"},:class=>"form-control chosen-select" %>
-        </div>
-        <div class="col=lg-2 form-group float-left">
-          <%= f.select :status_eq, SysUser.statuses.map { |key, value| [key.humanize, value] },{include_blank: "Select Status", hide_label:true, required: true },:class=>"form-control chosen-select" %>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
-        </div>
-				<div class="col-lg-1 form-group float-right">
-					<button class="form-control btn  badge badge-pill badge-success" title="Download user csv" name="submit_csv_staff_with" type="submit" value="User CSV" formtarget="_blank">Users &nbsp; <i class="fa fa-file-excel" aria-hidden="true"></i></button>
-				</div>
+        <ul class="nav nav-tabs" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link tab-label" data-toggle="tab" href="#create" role="tab">Create</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link tab-label" data-toggle="tab" href="#payable" role="tab">Payable</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link tab-label" data-toggle="tab" href="#receivable" role="tab">Receiveable</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link tab-label" data-toggle="tab" href="#payment" role="tab">Payment Transfer</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
+          </li>
+          <li class="nav-item">
+           <a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
+          </li>
+      </ul>
+
+    <%= search_form_for @q, url: sys_users_path, class: "admin-controls", method: "get" do |f| %>
+       <div class="tab-content mb-5">
+          <div class="tab-pane active" id="search" role="tabpanel">
+           <p>
+              <%= search_form_for @q, url: sys_users_path, class: "admin-controls", method: "get" do |f| %>
+              <span class="mt-5 col-lg-12">
+                  <span class="col-lg-3 form-group float-left">
+                    <%= f.select :id_eq, options_from_collection_for_select(@all_user, "id", ->(st){"#{st.name} \u{27F6} \u{27F6} #{st.code} "},@name),{:include_blank => "Select Name/Code"},:class=>"form-control chosen-select " %>
+                  </span>
+                  <span class="col-lg-2 form-group float-left">
+                    <%= f.select :user_group_eq, options_for_select(SysUser.user_groups, @user_group), {:include_blank => "Select User group"},:class=>"form-control chosen-select" %>
+                  </span>
+                  <span class="col=lg-2 form-group float-left">
+                    <%= f.select :status_eq, SysUser.statuses.map { |key, value| [key.humanize, value] },{include_blank: "Select Status", hide_label:true, required: true },:class=>"form-control chosen-select" %>
+                  </span>
+                  <span class="col-lg-2 form-group float-left">
+                    <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+                  </span>
+                </span>
+              <% end %>
+            </p>
+          </div>
+
+          <div class="tab-pane" id="create" role="tabpanel">
+              <p>
+                <% if can?(:add, :all) %>
+                  <%= link_to new_sys_user_path, remote: true, class: "btn btn-success mt-3 ml-3" do %>
+                    <i class="fa fa-plus" aria-hidden="true"></i>
+                      New User
+                  <% end %>
+                <% end %>
+              </p>
+          </div>
+
+          <div class="tab-pane" id="payable" role="tabpanel">
+              <p>
+                <%= link_to payable_sys_users_sys_users_path, class: "btn btn-primary mt-3 ml-3" do %>
+                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                      Payable
+                <% end %>
+              </p>
+          </div>
+
+          <div class="tab-pane" id="receivable" role="tabpanel">
+              <p>
+                <%= link_to receiveable_sys_users_path, class: "btn btn-primary mt-3 ml-3" do %>
+                  <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                    Reciveable
+                <% end %>
+              </p>
+          </div>
+
+          <div class="tab-pane" id="payment" role="tabpanel">
+              <p>
+                <%= link_to transfer_ledger_books_path, class: "btn btn-success mt-3 ml-3" do %>
+                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                      Payment Transfer
+                <% end %>
+              </p>
+          </div>
+
+          <div class="tab-pane" id="pdf" role="tabpanel">
+            <p>
+              <div class="col-lg-1 d-flex">
+                <button class="form-control btn  btn-danger" title="Download user pdf" name="submit_pdf_staff_with" type="submit" value="Customer/Salesman PDF A4" formtarget="_blank">Users &nbsp;<i class="fa fa-file-pdf"></i></button>
+              </div>
+            </p>
+          </div>
+          <div class="tab-pane" id="csv" role="tabpanel">
+            <p>
+              <div class="col-lg-1 d-flex">
+                <button class="form-control btn btn-success" title="Download user csv" name="submit_csv_staff_with" type="submit" value="User CSV" formtarget="_blank">Users &nbsp; <i class="fa fa-file-excel" aria-hidden="true"></i></button>
+              </div>
+            </p>
+          </div>
+          <div class="tab-pane" id="emails" role="tabpanel">
+            <p>
+              <div class="col-lg-2 d-flex">
+                <button class="form-control btn btn-info" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-2"></i>&nbsp;Mail</button>
+              </div>
+           </p>
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                  <div class="modal-body">
+                    <% @pos_setting = PosSetting.first %>
+                      <label>Email:</label>
+                      <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
+                      <br />
+                      <label>Subject:</label>
+                        <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Users List Detail report from MunshiOnClick", class: 'form-control email-fields'%>
+                      <br />
+                      <label>Body:</label><br />
+                        <%= text_area_tag 'body', nil, class: 'form-control'%>
+                      <br />
+
+                    <label>Please select one of them.</label>
+                    <div>
+                      <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
+                      <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
+                      <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
+                  </div>
+                  </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-pane" id="import-export" role="tabpanel">
+              <p>
+                <div class="d-flex">
+                  <button class="btn btn-success ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
+                  <button class="btn btn-primary ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
+                </div>
+              </p>
+            </div>
+          </div>
+      <% end %>  
 
 
-        <div class="col-1 float-right d-flex">
-          <button class="form-control btn  badge badge-pill badge-danger" title="Download user pdf" name="submit_pdf_staff_with" type="submit" value="Customer/Salesman PDF A4" formtarget="_blank">Users &nbsp;<i class="fa fa-file-pdf"></i></button>
-        </div>
-      <% end %>
-    </div>
-  </div>
+ <div class='card p-3'>
   <table data-toggle="table" data-search="true">
-    <thead>
-      <tr>
-        <th>Profile Image</th>
-        <th><%= sort_link(@q, :code, 'Code') %></th>
-        <th><%= sort_link(@q, :cnic, 'Name') %></th>
-        <th><%= sort_link(@q, :user_group, 'User group') %></th>
-        <th>Status</th>
-        <th>Occupation</th>
-        <th>Opening Balance</th>
-        <th><%= sort_link(@q, :balance, 'balance') %></th>
-        <th>Jama/Benam</th>
-        <th>Address</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-
+    <%= render 'map_columns/map_column_partials' %>
+      <button class='btn btn-outline-danger float-right delete-selected' type='button' style="width:163px"value='SysUser' >Delete Selected</button>
+      <thead>
+        <tr>
+          <th><input type="checkbox" id="master" class='select-all-checkbox'></th>
+          <th>ID<div class='float-right'><%= sort_link(@q, :id, "", {}, class: 'sorting-button') %></div></th>
+          <th>Profile Image</th>
+          <th>Code<div class='float-right'><%= sort_link(@q, :code, "", {}, class: 'sorting-button') %></div></th>
+          <th>Name<div class='float-right'><%= sort_link(@q, :cnic, "", {}, class: 'sorting-button') %></div></th>
+          <th>User group<div class='float-right'><%= sort_link(@q, :user_group, "", {}, class: 'sorting-button') %></div></th>
+          <th>Status</th>
+          <th>Occupation</th>
+          <th>Opening Balance</th>
+          <th>Balance<div class='float-right'><%= sort_link(@q, :balance, "", {}, class: 'sorting-button') %></div></th>
+          <th>Jama/Benam</th>
+          <th>Address</th>
+          <th>Action</th>
+        </tr>
+      </thead>
     <tbody>
-      <% @sys_users.each do |sys_user| %>
+       <% @sys_users.each do |sys_user| %>
         <% date = (sys_user.ledger_books.present? ? sys_user.ledger_books.last.created_at : sys_user.created_at)%>
         <tr class=<%=((DateTime.now.to_datetime-date.to_datetime).to_i>30 && !sys_user.balance.to_i.zero?) ? 'table-danger' : ''%>>
+          <td><%= check_box_tag 'object_ids[]', sys_user.id %></td>
+          <td><%= sys_user.id %></td>
           <td>
           <% if  sys_user.profile_image.attached? %>
             <%= image_tag sys_user.profile_image.service_url, width: 100 %>
@@ -109,55 +251,117 @@
             <%end%>
           </td>
           <td>
-            <% if can?(:update, SysUser) %>
-              <%= link_to edit_sys_user_path(sys_user), title: "Edit User" do %>
-                <i class="fa fa-edit " aria-hidden="true"></i> |
-              <%end %>
-            <% end %>
-            <% if can?(:delete, SysUser) %>
-              <%= link_to sys_user, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'},title: "Delete User", :remote => true, :class => 'delete' do %>
-                <i class="fa fa-trash " aria-hidden="true"></i> |
-              <%end %>
-            <% end %>
-            <% if can?(:view, SysUser) %>
-              <%= link_to sys_user, title: "View SysUser" do %>
-                <i class="fa fa-eye " aria-hidden="true"></i> |
-              <%end %>
-            <%end%>
-            <%= link_to ledger_books_path('q[sys_user_id_eq]':sys_user.id), title: "Ledger book" do%>
-              <i class="fa fa-address-book"></i>
-            <%end %>
+              <div class="icon-container">
+                  <div class="my-icon my-view">
+                  <div class="my-tooltip">
+                    Edit
+                  </div>
+                  <span class="icon-div">
+                        <% if can?(:update, :all) %>
+                      <%= link_to edit_sys_user_path(sys_user), remote: true do %>
+                        <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+                      <%end %>
+                    <% end %>
+                  </span>
+                </div>
+
+                  <div class="my-icon my-view">
+                      <div class="my-tooltip">
+                        Delete
+                      </div>
+                        <span class="icon-div">
+                          <% if can?(:delete, :all) %>
+                            <%= link_to sys_user, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+                            <i class="fa fa-trash mt-2" aria-hidden="true"></i>
+                          <%end %>
+                        <% end %>
+                      </span>
+                  </div>
+
+              <div class="my-icon my-view">
+                        <div class="my-tooltip">
+                          Show
+                        </div>
+                        <span class="icon-div">
+                           <% if can?(:view, :all) %>
+                            <%= link_to sys_user_path(sys_user), remote: true do %>
+                            <i class="fa fa-eye mt-2" aria-hidden="true"></i>
+                        <%end %>
+                    <%end%>
+                  </span>
+              </div>
+
+               <div class="my-icon my-view">
+                    <div class="my-tooltip">
+                      Ledger Book
+                    </div>
+                    <span class="icon-div">
+                          <%= link_to ledger_books_path('q[sys_user_id_eq]':sys_user.id), title: "Ledger book" do%>
+                            <i class="fa fa-address-book mt-2"></i>
+                          <%end %>
+                    </span>
+                  </div>
+            <b class="ml-2 mt-1">Total changes: <%= sys_user.versions.count%></b>
+            </div>
           </td>
         </tr>
         <% end %>
 
-      <tr>
-        <td><h5>total</h5></td>
-        <td><%= %></td>
-        <td><%= %></td>
-        <td><%= %></td>
-        <td></td>
-        <td><%= %></td>
-        <td><%= %></td>
-        <td><b><%=@sys_user_balance.to_f.round(2) %></b></td>
+        <tr>
+          <td><h5>total</h5></td>
+          <td><%= %></td>
+          <td><%= %></td>
+          <td><%= %></td>
+          <td></td>
+          <td><%= %></td>
+          <td><%= %></td>
+          <td><b><%=@sys_user_balance.to_f.round(2) %></b></td>
 
-      </tr>
-    </tbody>
+        </tr>
+      </tbody>
   </table>
+
+    <div class="row">
+      <div class="col-lg-4 col-sm-4">
+        <%= page_entries_info @sys_users %>
+      </div>
+        <div class="col-lg-8 col-sm-8 pagination-left">
+          <%= paginate @sys_users %>
+        </div>
+    </div>
+</div>
 </div>
 
-<div class="clearfix"></div>
-<div class="row">
-  <div class="col-lg-4 col-sm-4">
-    <%= page_entries_info @sys_users %>
+<%= form_for :bulk_import, url: bulk_import_data_path, method: :post, html: {class: "bulk-import-form"} do |f| %>
+  <div class="modal fade" id="importFile" tabindex="-1" role="dialog" aria-labelledby="importFileTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Import file</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <%= f.file_field :file, required: true, accept: '.csv' %>
+          <%= f.hidden_field :table_name, value: 'SysUser' %>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <%= f.submit 'Import', class: 'btn btn-primary' %>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="col-lg-8 col-sm-8 pagination-left">
-    <%= paginate @sys_users %>
-  </div>
-</div>
+<% end %>
+<div class="show-data"></div>
 
 <script>
   $(document).ready(function() {
+     var sortingButtons = $('.sorting-button')
+    for(var i=0; i<sortingButtons.length; i++){
+      $(sortingButtons[i]).html("<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='blue' enable-background='new 0 0 512 512' viewBox='0 0 512 512'><path d='M163.919,494.293c-2.83,0-5.496-1.33-7.196-3.593L45.97,343.348c-2.986-3.974-2.187-9.615,1.787-12.602 c3.974-2.986,9.616-2.187,12.602,1.787l103.557,137.777l103.493-137.775c2.986-3.975,8.627-4.775,12.602-1.791 c3.974,2.985,4.775,8.627,1.79,12.602L171.113,490.698C169.414,492.961,166.749,494.293,163.919,494.293z'/><path d='M163.917 494.293c-4.971 0-9-4.029-9-9V26.192c0-4.971 4.029-9 9-9s9 4.029 9 9v459.101C172.917 490.264 168.888 494.293 163.917 494.293zM459.507 182.622c-2.734 0-5.435-1.241-7.203-3.597L348.78 41.18 245.257 179.025c-2.985 3.975-8.626 4.777-12.601 1.792-3.974-2.984-4.777-8.626-1.792-12.601l110.72-147.43c1.699-2.263 4.365-3.595 7.196-3.595s5.497 1.332 7.196 3.595l110.72 147.43c2.985 3.975 2.183 9.616-1.792 12.601C463.285 182.034 461.388 182.621 459.507 182.622z'/><path d='M348.78,494.293c-4.971,0-9-4.029-9-9V26.192c0-4.971,4.029-9,9-9s9,4.029,9,9v459.101 C357.78,490.264,353.751,494.293,348.78,494.293z'/></svg>")
+    }
     if ($(".bootstrap-table").length == 0){
       $("table").bootstrapTable();
     }

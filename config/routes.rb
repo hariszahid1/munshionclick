@@ -159,6 +159,9 @@ Rails.application.routes.draw do
   end
 
   resources :user_types
+  resources :customer_management_systems
+  resources :notes, only: [:create, :new]
+  resources :follow_ups, only: [:create, :new]
 
   resources :cities
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_17_103820) do
+ActiveRecord::Schema.define(version: 2022_11_04_120926) do
 
   create_table "accounts", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.string "title"
@@ -24,17 +24,17 @@ ActiveRecord::Schema.define(version: 2022_08_17_103820) do
     t.index ["user_id"], name: "index_accounts_on_user_id"
   end
 
-  create_table "active_storage_attachments", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
+  create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
-    t.integer "record_id", null: false
-    t.integer "blob_id", null: false
+    t.bigint "record_id", null: false
+    t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
 
-  create_table "active_storage_blobs", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
+  create_table "active_storage_blobs", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.string "key", null: false
     t.string "filename", null: false
     t.string "content_type"
@@ -52,23 +52,20 @@ ActiveRecord::Schema.define(version: 2022_08_17_103820) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "activities", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
+  create_table "activities", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.string "trackable_type"
-    t.bigint "trackable_id"
+    t.integer "trackable_id"
     t.string "owner_type"
-    t.bigint "owner_id"
+    t.integer "owner_id"
     t.string "key"
     t.text "parameters"
     t.string "recipient_type"
-    t.bigint "recipient_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer "recipient_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.index ["owner_id", "owner_type"], name: "index_activities_on_owner_id_and_owner_type"
-    t.index ["owner_type", "owner_id"], name: "index_activities_on_owner_type_and_owner_id"
     t.index ["recipient_id", "recipient_type"], name: "index_activities_on_recipient_id_and_recipient_type"
-    t.index ["recipient_type", "recipient_id"], name: "index_activities_on_recipient_type_and_recipient_id"
     t.index ["trackable_id", "trackable_type"], name: "index_activities_on_trackable_id_and_trackable_type"
-    t.index ["trackable_type", "trackable_id"], name: "index_activities_on_trackable_type_and_trackable_id"
   end
 
   create_table "cities", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
@@ -168,11 +165,11 @@ ActiveRecord::Schema.define(version: 2022_08_17_103820) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "expense_entries", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
+  create_table "expense_entries", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.float "amount"
-    t.integer "expense_id"
-    t.integer "expense_type_id"
-    t.integer "account_id"
+    t.bigint "expense_id"
+    t.bigint "expense_type_id"
+    t.bigint "account_id"
     t.text "comment"
     t.integer "status"
     t.datetime "created_at", null: false
@@ -203,6 +200,20 @@ ActiveRecord::Schema.define(version: 2022_08_17_103820) do
     t.index ["expense_type_id"], name: "index_expenses_on_expense_type_id"
   end
 
+  create_table "follow_ups", charset: "utf8mb3", force: :cascade do |t|
+    t.string "reminder_type"
+    t.string "task_type"
+    t.string "priority"
+    t.integer "assigned_to_id"
+    t.integer "created_by"
+    t.datetime "date"
+    t.string "followable_type"
+    t.bigint "followable_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["followable_type", "followable_id"], name: "index_follow_ups_on_followable"
+  end
+
   create_table "gates", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.datetime "pather_from"
     t.datetime "pather_to"
@@ -229,6 +240,23 @@ ActiveRecord::Schema.define(version: 2022_08_17_103820) do
     t.datetime "expense_to"
     t.datetime "salary_from"
     t.datetime "salary_to"
+  end
+
+  create_table "helps", charset: "utf8mb3", force: :cascade do |t|
+    t.string "controller"
+    t.string "function"
+    t.string "page"
+    t.string "system_link"
+    t.json "help_links"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "import_mappings", charset: "utf8mb3", force: :cascade do |t|
+    t.string "table_name"
+    t.json "included_fields"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "investments", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
@@ -278,16 +306,14 @@ ActiveRecord::Schema.define(version: 2022_08_17_103820) do
     t.text "comment"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "purchase_sale_detail_id"
+    t.bigint "purchase_sale_detail_id"
     t.integer "account_id"
     t.bigint "order_id"
     t.integer "status"
     t.text "bank_detail"
     t.integer "payment_method"
     t.text "payment_detail"
-    t.datetime "deleted_at"
     t.index ["account_id"], name: "index_ledger_books_on_account_id"
-    t.index ["deleted_at"], name: "index_ledger_books_on_deleted_at"
     t.index ["order_id"], name: "index_ledger_books_on_order_id"
     t.index ["purchase_sale_detail_id"], name: "index_ledger_books_on_purchase_sale_detail_id"
     t.index ["sys_user_id"], name: "index_ledger_books_on_sys_user_id"
@@ -305,7 +331,7 @@ ActiveRecord::Schema.define(version: 2022_08_17_103820) do
     t.index ["linkable_type", "linkable_id"], name: "index_links_on_linkable_type_and_linkable_id"
   end
 
-  create_table "map_columns", charset: "utf8", force: :cascade do |t|
+  create_table "map_columns", charset: "utf8mb3", force: :cascade do |t|
     t.string "table_column"
     t.string "mapping_column"
     t.string "table_name"
@@ -331,6 +357,17 @@ ActiveRecord::Schema.define(version: 2022_08_17_103820) do
     t.index ["production_id"], name: "index_materials_on_production_id"
   end
 
+  create_table "notes", charset: "utf8mb3", force: :cascade do |t|
+    t.text "message"
+    t.integer "assigned_to_id"
+    t.integer "created_by"
+    t.string "notable_type"
+    t.bigint "notable_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["notable_type", "notable_id"], name: "index_notes_on_notable"
+  end
+
   create_table "order_items", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.bigint "order_id"
     t.bigint "product_id"
@@ -353,8 +390,6 @@ ActiveRecord::Schema.define(version: 2022_08_17_103820) do
     t.decimal "gst", precision: 15, scale: 2
     t.decimal "gst_amount", precision: 15, scale: 2
     t.float "extra_expence"
-    t.datetime "deleted_at"
-    t.index ["deleted_at"], name: "index_order_items_on_deleted_at"
     t.index ["item_id"], name: "index_order_items_on_item_id"
     t.index ["order_id"], name: "index_order_items_on_order_id"
     t.index ["product_id"], name: "index_order_items_on_product_id"
@@ -378,18 +413,16 @@ ActiveRecord::Schema.define(version: 2022_08_17_103820) do
     t.text "bank_detail"
     t.integer "payment_method"
     t.text "payment_detail"
-    t.datetime "deleted_at"
     t.index ["account_id"], name: "index_orders_on_account_id"
-    t.index ["deleted_at"], name: "index_orders_on_deleted_at"
     t.index ["sys_user_id"], name: "index_orders_on_sys_user_id"
   end
 
-  create_table "payments", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
+  create_table "payments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.decimal "debit", precision: 15, scale: 5
     t.decimal "credit", precision: 15, scale: 5
-    t.integer "account_id"
+    t.bigint "account_id"
     t.string "paymentable_type"
-    t.integer "paymentable_id"
+    t.bigint "paymentable_id"
     t.decimal "amount", precision: 15, scale: 5
     t.integer "status"
     t.text "comment"
@@ -398,18 +431,16 @@ ActiveRecord::Schema.define(version: 2022_08_17_103820) do
     t.integer "confirmable"
     t.integer "confirmed_by"
     t.datetime "confirmed_at"
-    t.datetime "deleted_at"
     t.index ["account_id"], name: "index_payments_on_account_id"
-    t.index ["deleted_at"], name: "index_payments_on_deleted_at"
     t.index ["paymentable_type", "paymentable_id"], name: "index_payments_on_paymentable_type_and_paymentable_id"
   end
 
   create_table "pos_settings", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
-    t.string "name", null: false
+    t.string "name"
     t.string "display_name"
     t.string "phone"
     t.string "logo"
-    t.text "address"
+    t.string "address"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "sys_type"
@@ -495,7 +526,6 @@ ActiveRecord::Schema.define(version: 2022_08_17_103820) do
     t.text "serial"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "status", default: true
     t.index ["product_id"], name: "index_product_warranties_on_product_id"
     t.index ["purchase_sale_detail_id"], name: "index_product_warranties_on_purchase_sale_detail_id"
   end
@@ -614,6 +644,8 @@ ActiveRecord::Schema.define(version: 2022_08_17_103820) do
     t.text "warranty_list"
     t.float "marla"
     t.float "square_feet"
+    t.integer "quantity_type"
+    t.integer "weight_type"
     t.index ["item_type_id"], name: "index_products_on_item_type_id"
     t.index ["product_category_id"], name: "index_products_on_product_category_id"
     t.index ["product_sub_category_id"], name: "index_products_on_product_sub_category_id"
@@ -656,8 +688,6 @@ ActiveRecord::Schema.define(version: 2022_08_17_103820) do
     t.text "bank_detail"
     t.integer "payment_method"
     t.text "payment_detail"
-    t.datetime "deleted_at"
-    t.index ["deleted_at"], name: "index_property_plans_on_deleted_at"
     t.index ["order_id"], name: "index_property_plans_on_order_id"
   end
 
@@ -694,9 +724,7 @@ ActiveRecord::Schema.define(version: 2022_08_17_103820) do
     t.text "bank_detail"
     t.integer "payment_method"
     t.text "payment_detail"
-    t.datetime "deleted_at"
     t.index ["account_id"], name: "index_purchase_sale_details_on_account_id"
-    t.index ["deleted_at"], name: "index_purchase_sale_details_on_deleted_at"
     t.index ["order_id"], name: "index_purchase_sale_details_on_order_id"
     t.index ["staff_id"], name: "index_purchase_sale_details_on_staff_id"
     t.index ["sys_user_id"], name: "index_purchase_sale_details_on_sys_user_id"
@@ -737,8 +765,6 @@ ActiveRecord::Schema.define(version: 2022_08_17_103820) do
     t.float "extra_quantity"
     t.decimal "gst", precision: 15, scale: 2
     t.decimal "gst_amount", precision: 15, scale: 2
-    t.datetime "deleted_at"
-    t.index ["deleted_at"], name: "index_purchase_sale_items_on_deleted_at"
     t.index ["item_id"], name: "index_purchase_sale_items_on_item_id"
     t.index ["product_id"], name: "index_purchase_sale_items_on_product_id"
     t.index ["purchase_sale_detail_id"], name: "index_purchase_sale_items_on_purchase_sale_detail_id"
@@ -806,8 +832,8 @@ ActiveRecord::Schema.define(version: 2022_08_17_103820) do
     t.index ["staff_id"], name: "index_salary_detail_product_quantities_on_staff_id"
   end
 
-  create_table "salary_details", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
-    t.integer "staff_id"
+  create_table "salary_details", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
+    t.bigint "staff_id"
     t.float "wage_rate"
     t.float "quantity"
     t.float "amount"
@@ -815,7 +841,7 @@ ActiveRecord::Schema.define(version: 2022_08_17_103820) do
     t.text "comment"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "product_id"
+    t.bigint "product_id"
     t.integer "status"
     t.integer "extra"
     t.bigint "daily_book_id"
@@ -933,15 +959,15 @@ ActiveRecord::Schema.define(version: 2022_08_17_103820) do
     t.string "cnic"
     t.string "name"
     t.integer "user_type_id"
-    t.integer "user_group"
+    t.integer "user_group_id"
     t.integer "status"
     t.string "occupation"
     t.integer "credit_status"
-    t.decimal "credit_limit", precision: 15, scale: 2
-    t.decimal "opening_balance", precision: 15, scale: 2
+    t.decimal "credit_limit", precision: 15, scale: 5
+    t.decimal "opening_balance", precision: 15, scale: 5
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.decimal "balance", precision: 15, scale: 2
+    t.decimal "balance", precision: 15, scale: 5
     t.text "gst"
     t.text "ntn"
     t.string "father"
@@ -958,6 +984,13 @@ ActiveRecord::Schema.define(version: 2022_08_17_103820) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_user_abilities_on_user_id"
+  end
+
+  create_table "user_groups", charset: "utf8mb3", force: :cascade do |t|
+    t.string "title"
+    t.text "comment"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "user_types", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
@@ -991,7 +1024,7 @@ ActiveRecord::Schema.define(version: 2022_08_17_103820) do
     t.string "city"
     t.string "phone"
     t.string "fax"
-    t.text "address"
+    t.string "address"
     t.integer "created_by_id"
     t.string "company_type"
     t.text "email_to"

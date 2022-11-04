@@ -1,0 +1,109 @@
+<div class="modal fade" id="showdData" tabindex="-1" role="dialog" aria-labelledby="showdDataLabel">
+  <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title ml-4" id="myModalLabel">Expense Details</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+          <div class="card shadow mb-4">
+          <!-- Card Content - Collapse -->
+            <div class="collapse show" id="collapseCardExample" style="">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-lg-12 col-sm-12">
+                    <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                      <h3>Comment:<h5><%= @expense.comment %></h5></h3>
+                    </div>
+                    <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                      <h3>Total expense:<h5><%= @expense.expense.to_f.round(2) %></h5> </h3>
+                    </div>
+                    <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                      <h3>
+                        Date:
+                        <h5>
+                          <%if @expense.created_at.strftime("%d%b%y")!=@expense.updated_at.strftime("%d%b%y")%>
+                            <%= @expense.created_at.present? ? @expense.created_at.strftime("%d%b%y at %H:%M%p") : '' %> | <%= @expense.updated_at.present? ? @expense.updated_at.strftime("%d%b%y at %H:%M%p") : '' %>
+                          <%else%>
+                            <%= @expense.created_at.present? ? @expense.created_at.strftime("%A,  %d-%b-%y at %H:%M%p") : '' %>
+                          <%end%>
+                        </h5>
+                      </h3>
+                    </div>
+                    <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                      <h3>
+                        Paid by:
+                        <h5><%=Account.where(id: @expense.expense_entries.distinct.pluck(:account_id)).pluck(:title)  %></h5>
+                      </h3>
+                    </div>
+                  </div>
+                </div>
+                <br>
+                <br>
+                <div class="row">
+                  <div class="col-lg-12 col-sm-12">
+                    <table>
+                      <th><h3>Expense type</h3></th>
+                      <th><h3>Account title</h3></th>
+                      <th><h3>Ammount</h3></th>
+                      <th><h3>Comment</h3></th>
+                      <tbody>
+                        <% @expense.expense_entries.each do |expense_entry| %>
+                          <tr>
+                            <td><%= expense_entry.expense_type.title%></td>
+                            <td><%= expense_entry.account.title%></td>
+                            <td><%= expense_entry.amount%></td>
+                            <td>  <%= expense_entry.comment%></td>
+                          </tr>
+                        <% end %>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <%if @expense.versions.present?%>
+            <div class="">
+              <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <%@expense.versions.each do |expense|%>
+                        <div class="row col-lg-12">
+                          <div class="links font-weight-bold text-success text-uppercase">
+                            <i class="fa fa-history "></i> Log -> <%=expense.created_at%>
+                              <p>Event : <span><%=expense.event%></span> Event By : <span><%=expense.whodunnit.to_i%></span></p>
+                              <p>
+                                Total: <span><%=expense&.changeset[:expense].present? ? expense&.changeset[:expense] : expense&.reify&.expense%></span>
+                                Comment: <span><%=expense&.changeset[:comment].present? ? expense&.changeset[:comment] : expense&.reify&.comment%></span>
+                              </p>
+                          </div>
+                        </div>
+                      <%end%>
+                      <%PaperTrail::Version.where(item_type: "ExpenseEntry").where(item_id: @expense.expense_entries.pluck(:id)).order(:created_at).each do |expense_item|%>
+                        <p>
+                          -- <i class="fa fa-history "></i> Log -> <%=expense_item.created_at%>
+                                Event By : <span><%=expense_item.whodunnit.to_i%></span>
+                                AMOUNT: <span><%=expense_item&.changeset[:amount].present? ? expense_item&.changeset[:amount] : expense_item&.reify&.amount%></span>
+                                EXPENSE_TYPE_ID: <span><%=expense_item&.changeset[:expense_type_id].present? ? expense_item&.changeset[:expense_type_id] : expense_item&.reify&.expense_type_id%></span>
+                                ACCOUNT_ID: <span><%=expense_item&.changeset[:account_id].present? ? expense_item&.changeset[:account_id] : expense_item&.reify&.account_id%></span>
+                                COMMENT: <span><%=expense_item&.changeset[:comment].present? ? expense_item&.changeset[:comment] : expense_item&.reify&.comment%></span>
+                        </p>
+                      <%end%>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <%end%>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
