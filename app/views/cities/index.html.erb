@@ -5,10 +5,7 @@
   </button>
 </div>
 
-
 <div class="hidden" id="city_list">
-  <div class="row">
-    <div class="col-lg-12 col-sm-12">
           <div class="main-content-header">
             <h1 class="ml-2">Cities</h1>
             <ol class="breadcrumb">
@@ -32,9 +29,6 @@
               </div>
             </div>
           </div>
-      </div>
-    </div>
-<div class="card shadow p-4" style="border-radius: 15px">
     
   <ul class="nav nav-pills" role="tablist">
       <li class="nav-item">
@@ -56,7 +50,7 @@
        <a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
       </li>
   </ul>
-  
+
 <%= search_form_for @q, url: cities_path, class: "admin-controls", method: "get" do |f| %>
     
   <div class="tab-content">
@@ -73,7 +67,7 @@
       </div>
       </p>
     </div>
-    <div class="tab-pane" id="create" role="tabpanel">
+    <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="create" role="tabpanel">
         <p>
           <% if can?(:add, :all) %>
           <div id="new_city">
@@ -85,21 +79,21 @@
           <% end %>
         </p>
     </div>
-    <div class="tab-pane" id="pdf" role="tabpanel">
+    <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="pdf" role="tabpanel">
       <p>
         <div class="col-lg-2 d-flex">
         <button class="form-control btn btn-danger" title= "download cities pdf" name="pdf" type="submit" value="pdf" formtarget="_blank" style="width:100px">Cities &nbsp;<i class="fa fa-file-pdf"></i></button>
         </div>
       </p>
     </div>
-    <div class="tab-pane" id="csv" role="tabpanel">
+    <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="csv" role="tabpanel">
       <p>
         <div class="col-lg-2 d-flex">
         <button class="btn btn-success" title= "download cities csv" name="csv" type="submit" value="csv">Cities &nbsp;<i class="fa fa-file-excel"></i></button>
         </div>
       </p>
     </div>
-    <div class="tab-pane" id="emails" role="tabpanel">
+    <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="emails" role="tabpanel">
       <p>
         <div class="col-lg-2 d-flex">
         <button class="form-control btn btn-info" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-2"></i>&nbsp;Mail</button>
@@ -142,7 +136,7 @@
         </div>
       </div>
     </div>
-    <div class="tab-pane" id="import-export" role="tabpanel">
+    <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="import-export" role="tabpanel">
       <p>
         <div class="d-flex">
         <button class="btn btn-success ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
@@ -165,7 +159,17 @@
       <thead>
         <tr>
         
-         <th><input type="checkbox" id="master" class='select-all-checkbox' style="cursor: pointer;"></th>
+         <th><input type="checkbox" id="master" class='select-all-checkbox' style="cursor: pointer;">
+         <div class="icon-container float-center">
+            <span class="ml-2 mt-2">
+            <div class="my-icon my-view">
+                        <span class="icon-div btn delete-selected p-2 " type='button' value='City'>
+                                  <i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i> 
+                        </span>
+                    </div>
+                    </span>
+              </div></th>
+         
          <th>ID<div class="float-right"><%= sort_link(@q, :id,"", {}, class: 'sorting-button') %></div></th>
           <th>Title<div class="float-right"><%= sort_link(@q, :title, "", {},  class: 'sorting-button') %></div></th>
           <th>Comment<div class="float-right"><%= sort_link(@q, :comment,"", {}, class: 'sorting-button') %></div></th>

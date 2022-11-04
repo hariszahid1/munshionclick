@@ -5,8 +5,7 @@
   </button>
 </div>
 <div class="hidden" id="city_list">
-  <div class="row">
-    <div class="col-lg-12 col-sm-12">
+  
       <div class="main-content-header">
             <h1 class="ml-2">Property Plan</h1>
             <ol class="breadcrumb">
@@ -28,11 +27,9 @@
                <% end %>
               <% end %>
             </div>
-          </div>
-        </div>
     </div>
   </div>
-    <ul class="nav nav-tabs" role="tablist">
+    <ul class="nav nav-pills" role="tablist">
       <li class="nav-item">
         <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
       </li>
@@ -55,7 +52,7 @@
 
       <%= search_form_for @q, url: property_plans_path, class: "admin-controls", method: "get" do |f| %>
       <div class="tab-content mb-5">
-        <div class="tab-pane active" id="search" role="tabpanel">
+        <div class="tab-pane active mb-3 card shadow-sm mt-2 border-radius-1" id="search" role="tabpanel">
         <p>
           <div class="col-lg-12 d-flex">
             <div class="col-lg-3 form-group float-left">
@@ -87,7 +84,7 @@
             </p>
           </div-->
 
-        <div class="tab-pane" id="pdf" role="tabpanel">
+        <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="pdf" role="tabpanel">
           <p>
              <div class="col-lg-2 d-flex">
               <button class="btn btn-danger" title= "download plans pdf" name="pdf" type="submit" value="pdf" formtarget="_blank" >Plans &nbsp;<i class="fa fa-file-pdf"></i></button>
@@ -95,7 +92,7 @@
           </p>
         </div>
 
-        <div class="tab-pane" id="csv" role="tabpanel">
+        <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="csv" role="tabpanel">
           <p>
             <div class="col-lg-2 d-flex">
             <button class="btn btn-success" title= "download plans csv" name="csv" type="submit" value="csv">Plans &nbsp;<i class="fa fa-file-excel"></i></button>
@@ -103,7 +100,7 @@
           </p>
         </div>
 
-        <div class="tab-pane" id="emails" role="tabpanel">
+        <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="emails" role="tabpanel">
       <p>
         <div class="col-lg-2 d-flex">
         <button class="btn btn-info" type="button" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-envelope mr-2"></i>&nbsp;Mail</button>
@@ -160,10 +157,23 @@
    <div class='card p-3'>
     <%= render 'map_columns/map_column_partials' %>
       <table data-toggle="table" data-search="true">
-      <button class='btn btn-outline-danger float-right delete-selected mb-3' type='button' style="width:163px"value='PropertyPlan' >Delete Selected</button>
+      
         <thead>
           <tr>
-            <th><input type="checkbox" id="master" class='select-all-checkbox'></th>
+            <th><input type="checkbox" id="master" class='select-all-checkbox'>
+                <div class="icon-container float-center">
+            <span class="ml-2 mt-2">
+            <div class="my-icon my-view">
+            
+                        <span class="icon-div btn delete-selected p-2 " type='button' value='Expense'>
+                                  <i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i> 
+                        </span>
+                    </div>
+                    </span>
+              </div>
+            
+            
+            </th>
             <th><div class="d-flex">ID<%= sort_link(@q, :id,"", {}, class: 'sorting-button ml-auto') %></div></th>
             <th><div class="d-flex">User<%= sort_link(@q, :property_type, 'User',  {}, class: 'sorting-button ml-auto') %></div></th>
             <th><div class="d-flex">Phone<%= sort_link(@q, :property_type, 'Phone',  {}, class: 'sorting-button ml-auto') %></div></th>
@@ -194,12 +204,16 @@
               <td><%= property_plan&.order&.order_plot_dealer&.first&.staff&.name%></td>
               <td>
               <div>
+
+                   <div class="icon-container-1">
+                <div class="my-icon-1 my-view-1">
+                  <div class="my-tooltip-1">
                    <div class="icon-container">
           <div class="my-icon my-view">
           <div class="my-tooltip">
             Edit
           </div>
-          <span class="icon-div">
+          <span class="icon-div mt-3">
                 <% if can?(:update, Product) %>
                   <% if property_plan.order.present? %>
                     <%= link_to edit_property_plan_path(property_plan), remote: true do %>
@@ -214,7 +228,7 @@
               <div class="my-tooltip">
                 Delete
               </div>
-                <span class="icon-div">
+                <span class="icon-div mt-3">
                   <% if can?(:delete, :all) %>
                   <%= link_to property_plan.order, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
                     <i class="fa fa-trash mt-2" aria-hidden="true"></i>
@@ -227,7 +241,7 @@
                 <div class="my-tooltip">
                   Show
                 </div>
-                <span class="icon-div">
+                <span class="icon-div mt-3">
                    <% if property_plan.order.present? %>
                   <%= link_to property_plan_path(property_plan), remote: true do %>
                     <i class="fa fa-eye mt-2" aria-hidden="true"></i>
@@ -240,7 +254,7 @@
             <div class="my-tooltip">
               PDF
             </div>
-            <span class="icon-div">
+            <span class="icon-div mt-3">
                <%= link_to property_plans_path('q[id_eq]':property_plan.id,'pdf':true), title: 'Download PDF', target: '_blank' do %>
 			<i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
 		<%end %>
@@ -251,13 +265,18 @@
             <div class="my-tooltip">
               CSV
             </div>
-            <span class="icon-div">
+            <span class="icon-div mt-3">
                   <%= link_to property_plans_path('q[id_eq]':property_plan.id,'csv':true), title: 'Download CSV' do%>
 			<i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
 		<%end %>
             </span>
           </div>
-    <b class="ml-2 mt-1">Total changes: <%= property_plan.versions.count%></b>
+           </div>
+              </div>
+              <span class="icon-div-1">
+                    <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+              </span>
+          </div>
     </div>
               </td>
             </tr>
