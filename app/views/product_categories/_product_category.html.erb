@@ -5,6 +5,9 @@
   <td><%= product_category.code %></td>
   <td><span title="<%= product_category.comment %>" class='truncate-text'><%= product_category.comment %></span></td>
   <td>
+     <div class="icon-container-1">
+        <div class="my-icon-1 my-view-1">
+          <div class="my-tooltip-1">
         <div class="icon-container">
           <div class="my-icon my-view">
           <div class="my-tooltip">
@@ -23,7 +26,7 @@
               <div class="my-tooltip">
                 Delete
               </div>
-                <span class="icon-div">
+                <span class="icon-div mt-3">
                   <% if can?(:delete, :all) %>
                     <%= link_to product_category, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
                     <i class="fa fa-trash mt-2" aria-hidden="true"></i>
@@ -36,7 +39,7 @@
                 <div class="my-tooltip">
                   Show
                 </div>
-                <span class="icon-div">
+                <span class="icon-div mt-3">
                    <% if can?(:view, :all) %>
                     <%= link_to product_category_path(product_category), remote: true do %>
                     <i class="fa fa-eye mt-2" aria-hidden="true"></i>
@@ -49,7 +52,7 @@
             <div class="my-tooltip">
               PDF
             </div>
-            <span class="icon-div">
+            <span class="icon-div mt-3">
                 <%= link_to product_categories_path('q[id_eq]':product_category.id,'pdf':true), title: 'Download PDF', target: '_blank' do %>
 			<i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
 		<%end %>
@@ -60,13 +63,18 @@
             <div class="my-tooltip">
               CSV
             </div>
-            <span class="icon-div">
+            <span class="icon-div mt-3">
                  <%= link_to product_categories_path('q[id_eq]':product_category.id,'csv':true), title: 'Download CSV' do%>
 			<i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
 		<%end %>
             </span>
           </div>
-    <b class="ml-2 mt-1">Total changes: <%= product_category.versions.count%></b>
+          </div>
+              </div>
+              <span class="icon-div-1">
+                    <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+              </span>
+          </div>
     </div>
     
   </td>
