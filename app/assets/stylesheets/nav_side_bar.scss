@@ -3,7 +3,7 @@
   background: #fff;
   border: none;
   border-radius: 0;
-  margin-bottom: 40px;
+  // margin-bottom: 40px;
   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
   justify-content: inherit !important;
   flex-wrap: inherit !important;
@@ -31,6 +31,10 @@
   border: none;
 }
 
+.sidebar-icon-color{
+  color: #2854d7;
+}
+
 .line {
   width: 100%;
   height: 1px;
@@ -53,17 +57,23 @@ span {
 }
 
 #sidebar {
-  min-width: 250px;
-  max-width: 250px;
   background: #7386D5;
   color: #fff;
   transition: all 0.3s;
+  border-right: 1px solid lightgray;
+  position: fixed;
+  height: calc(100vh - 3rem);
+  overflow-y: auto;
+  z-index: 9;
 }
 
 #sidebar.active {
-  min-width: 80px;
-  max-width: 80px;
+  min-width: 100px;
+  max-width: 100px;
   text-align: center;
+  .link-text{
+    display: none;
+  }
 }
 
 #sidebar.active .sidebar-header h3,
