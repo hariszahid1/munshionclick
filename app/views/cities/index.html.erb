@@ -20,7 +20,7 @@
               </li>
             </ol>
           </div>
-        <div class="float-right">
+          <div class="float-right">
           <div class="dropdown ml-auto mr-4">
            <span class="btn btn-info" title= "About This page">Help</span>
             <div class="dropdown-content">
@@ -34,7 +34,9 @@
         </div>
       </div>
     </div>
-  <ul class="nav nav-tabs" role="tablist">
+  <div class="card shadow p-4" style="border-radius: 15px">
+    
+  <ul class="nav nav-pills" role="tablist">
       <li class="nav-item">
         <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
       </li>
@@ -66,8 +68,8 @@
 	</ul>
 <%= search_form_for @q, url: cities_path, class: "admin-controls", method: "get" do |f| %>
     
-  <div class="tab-content mb-5">
-    <div class="tab-pane active" id="search" role="tabpanel">
+  <div class="tab-content">
+    <div class="tab-pane active mb-3 card shadow-sm mt-2" style="border-radius: 20px" id="search" role="tabpanel">
      <p>
       <div class="col-lg-10 form-group d-flex">
       <div class='col-lg-3'>
@@ -159,15 +161,20 @@
     </div>
     </div>
   <% end %>
-  <div class='card p-3'>
+  </div>
+  <div>
 
+  <div class="card shadow mt-2 p-2" style="border-radius: 15px">
+  
+  <%# <button class='btn btn-outline-danger float-right delete-selected' type='button' style="width:163px"value='City' >Delete Selected</button> %>
     <%= render 'map_columns/map_column_partials' %>
-
-    <table data-toggle="table" data-search="true" id="city_table">
-      <button class='btn btn-outline-danger float-right delete-selected' type='button' style="width:163px"value='City' >Delete Selected</button>
+    
+    <table data-toggle="table" id="city_table" style="border-collapse: collapse; overflow-y: hidden;">
+    <h4 class="m-3">Cities Summary</h4>
       <thead>
         <tr>
-         <th><input type="checkbox" id="master" class='select-all-checkbox'></th>
+        
+         <th><input type="checkbox" id="master" class='select-all-checkbox' style="cursor: pointer;"></th>
          <th>ID<div class="float-right"><%= sort_link(@q, :id,"", {}, class: 'sorting-button') %></div></th>
           <th>Title<div class="float-right"><%= sort_link(@q, :title, "", {},  class: 'sorting-button') %></div></th>
           <th>Comment<div class="float-right"><%= sort_link(@q, :comment,"", {}, class: 'sorting-button') %></div></th>
@@ -179,13 +186,13 @@
         <%= render partial: 'city', collection: @cities %>
       </tbody>
    </table>
-  <div class="row">
+   </div>
+  <div class="row mt-2">
     <div class="col-lg-4 col-sm-4">
       <%= page_entries_info @cities %>
     </div>
     <div class="col-lg-8 col-sm-8 pagination-left">
       <%= paginate @cities %>
-    </div>
     </div>
   </div>
 
