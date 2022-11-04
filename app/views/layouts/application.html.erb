@@ -9,8 +9,6 @@
     <link href="https://unpkg.com/bootstrap-table@1.17.1/dist/bootstrap-table.min.css" rel="stylesheet">
     <link href="https://unpkg.com/bootstrap-table@1.17.1/dist/extensions/sticky-header/bootstrap-table-sticky-header.css" rel="stylesheet">
 
-
-
     <script src="https://unpkg.com/bootstrap-table@1.17.1/dist/bootstrap-table.min.js"></script>
     <script src="https://unpkg.com/bootstrap-table@1.17.1/dist/extensions/sticky-header/bootstrap-table-sticky-header.min.js"></script>
     <!-- Google Tag Manager -->
@@ -43,31 +41,29 @@
   </head>
 
   <body>
-    <%= render 'layouts/shared/navigation_bar' %>
     <div class="d-flex wrapper" id="wrapper">
-      <div id="sidebar-container" style="margin-top: 75px;" class="col-1 col-2 p-0 d-none d-lg-block">
-        <%if check_system_type(@pos_setting)=="batamega"%>
-          <%= render 'layouts/shared/sidebar_bata' %>
-        <%elsif check_system_type(@pos_setting)=="batha"%>
-          <%= render 'layouts/shared/sidebar_batha' %>
-        <%elsif check_system_type(@pos_setting)=="FastFood"%>
-          <%= render 'layouts/shared/sidebar_fastfood' %>
-        <%elsif check_system_type(@pos_setting)=="industry"%>
-          <%= render 'layouts/shared/sidebar_industry' %>
-        <%elsif check_system_type(@pos_setting)=="HousingScheme"%>
-          <%= render 'layouts/shared/sidebar_housing_scheme' %>
-        <%elsif check_system_type(@pos_setting)=="Draw"%>
-          <%= render 'layouts/shared/sidebar_draw' %>
-        <%elsif check_system_type(@pos_setting)=="CustomClear"%>
-          <%= render 'layouts/shared/sidebar_custom_clear' %>
-        <%elsif check_system_type(@pos_setting)=="Factory"%>
-          <%= render 'layouts/shared/sidebar_factory' %>
-        <%else%>
-          <%= render 'layouts/shared/sidebar' %>
-        <%end%>
-      </div>
+      <%if check_system_type(@pos_setting)=="batamega"%>
+        <%= render 'layouts/shared/sidebar_bata' %>
+      <%elsif check_system_type(@pos_setting)=="batha"%>
+        <%= render 'layouts/shared/sidebar_batha' %>
+      <%elsif check_system_type(@pos_setting)=="FastFood"%>
+        <%= render 'layouts/shared/sidebar_fastfood' %>
+      <%elsif check_system_type(@pos_setting)=="industry"%>
+        <%= render 'layouts/shared/sidebar_industry' %>
+      <%elsif check_system_type(@pos_setting)=="HousingScheme"%>
+        <%= render 'layouts/shared/sidebar_housing_scheme' %>
+      <%elsif check_system_type(@pos_setting)=="Draw"%>
+        <%= render 'layouts/shared/sidebar_draw' %>
+      <%elsif check_system_type(@pos_setting)=="CustomClear"%>
+        <%= render 'layouts/shared/sidebar_custom_clear' %>
+      <%elsif check_system_type(@pos_setting)=="Factory"%>
+        <%= render 'layouts/shared/sidebar_factory' %>
+      <%else%>
+        <%= render 'layouts/shared/sidebar' %>
+      <%end%>
       <!-- Page Content -->
-      <div id="content" style="margin-top: 75px;" class="col-10 p-0">
+      <div id="content">
+        <%= render 'layouts/shared/navigation_bar' %>
         <div class="container-fluid">
 
           <div style="margin-top: 2rem"></div>

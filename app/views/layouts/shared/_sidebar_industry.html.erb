@@ -1,9 +1,14 @@
-<nav id="sidebar" class="col-2 p-0">
+<nav id="sidebar">
+    <div class="sidebar-header">
+        <h3><%= admin_name_on_nav %></h3>
+        <strong><%= admin_name_on_nav %></strong>
+    </div>
+
     <ul class="list-unstyled components">
         <li class="active">
           <%= link_to dashboard_path do %>
               <i class="fas fa-tasks" aria-hidden="true"></i>
-              <span class="link-text">Dashboard</span>
+              Dashboard
           <% end %>
         </li>
         <!-- only Developer can start-->
@@ -11,39 +16,39 @@
           <li>
             <%= link_to pos_settings_path do %>
               <i class="fas fa-tasks" aria-hidden="true"></i>
-              <span class="link-text">General Setting</span>
+                General Setting
             <% end %>
           </li>
         <% end %>
         <li>
             <a href="#SaleSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                 <i class="fas fa fa-barcode"></i>
-                <span class="link-text">Sale</span>
+                Sale
             </a>
             <ul class="collapse list-unstyled" id="SaleSubmenu">
               <li>
-                <a href="<%=orders_path(sale: true)%>">
+                <a href="<%=orders_path(sale: true)%>" aria-expanded="false" class="dropdown-toggle">
                   <i class="fa fa-shopping-cart"></i>
-                  <span class="link-text">Order Book</span>
+                  Order Book
                 </a>
               </li>
                 <li>
                     <%= link_to new_purchase_sale_detail_path(transaction_type: :sale,product: true) do %>
                         <i class="fas fa-plus"></i>
-                        <span class="link-text">Add Invoice</span>
+                        Add Invoice
                     <% end %>
                 </li>
                 <li>
                     <%= link_to purchase_sale_details_path(sale: true) do %>
                         <i class="fas fa-th-list"></i>
-                        <span class="link-text">List of Sale</span>
+                        List of Sale
                     <% end %>
                 </li>
                 <li>
                     <%= link_to daily_sales_path do %>
                         <i class="fas fa-plus"></i>
                         <i class="fas fa-th-list"></i>
-                        <span class="link-text">Daily Day Out</span>
+                        Daily Day Out
                     <% end %>
                 </li>
             </ul>
@@ -53,32 +58,28 @@
           <li>
               <a href="#InventorySubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                   <i class="fa fa-cart-arrow-down"></i>
-                  <span class="link-text">
-                    <%if current_user.superAdmin.company_type=="batamega"%>
-                      Receiving/Stock
-                    <%else%>
-                      Purchase/Stock
-                    <%end%>
-                  </span>
+                  <%if current_user.superAdmin.company_type=="batamega"%>
+                    Receiving/Stock
+                  <%else%>
+                    Purchase/Stock
+                  <%end%>
               </a>
               <ul class="collapse list-unstyled" id="InventorySubmenu">
                 <li>
                     <%= link_to purchase_sale_details_path do %>
                         <i class="fas fa-plus"></i>
                         <i class="fas fa-th-list"></i>
-                        <span class="link-text">
-                          <%if current_user.superAdmin.company_type=="batamega"%>
-                            Receiving
-                          <%else%>
-                            Purchase
-                          <%end%>
-                        </span>
+                        <%if current_user.superAdmin.company_type=="batamega"%>
+                          Receiving
+                        <%else%>
+                          Purchase
+                        <%end%>
                     <% end %>
                 </li>
                 <li>
                     <%= link_to dashboard_path do %>
                         <i class="fas fa-th-list"></i>
-                        <span class="link-text">Stock Statment</span>
+                        Stock Statment
                     <% end %>
                 </li>
               </ul>
@@ -87,213 +88,212 @@
         <li>
             <a href="#ExpenseSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                 <i class="fas fa-tasks"></i>
-                <span class="link-text">Expense</span>
+                Expense
             </a>
             <ul class="collapse list-unstyled" id="ExpenseSubmenu">
                 <li>
                     <%= link_to expenses_path do %>
                         <i class="fas fa-plus"></i>
                         <i class="fas fa-th-list"></i>
-                        <span class="link-text">Add/List EXP</span>
+                        Add/List EXP
                     <% end %>
                 </li>
                 <li>
                     <%= link_to payments_path do %>
                         <i class="fas fa-plus"></i>
                         <i class="fas fa-th-list"></i>
-                        <span class="link-text">Cash Book</span>
+                        Cash Book
                     <% end %>
                 </li>
 
             </ul>
         </li>
         <li>
-            <a href="<%=  investments_path %>">
+            <a href="<%=  investments_path %>" aria-expanded="false" class="dropdown-toggle">
                 <i class="fas fa-tasks"></i>
-                <span class="link-text">Investment</span>
+                Investment
             </a>
         </li>
         <li>
           <a  href="#UserSubMenu"  data-toggle="collapse", aria-expanded="false" class="dropdown-toggle">
               <i class="fas fa-user-plus"></i>
-              <span class="link-text">User</span>
+              User
           </a>
           <ul class="collapse list-unstyled" id="UserSubMenu">
             <li>
                 <%= link_to ledger_books_path do %>
                     <i class="fas fa-book"></i>
-                    <span class="link-text">Ledger Book</span>
+                    Ledger Book
                 <% end %>
             </li>
               <li>
                   <%= link_to sys_users_path do %>
                       <i class="fas fa-plus"></i>
-                      <span class="link-text">All Users</span>
+                      All Users
                   <% end %>
               </li>
               <li>
                   <%= link_to customer_sys_users_path do %>
                       <i class="fas fa-plus"></i>
-                      <span class="link-text">Customer</span>
+                      Customer
                   <% end %>
               </li>
               <li>
                   <%= link_to supplier_sys_users_path do %>
                       <i class="fas fa-plus"></i>
-                      <span class="link-text">Supplier</span>
+                      Supplier
                   <% end %>
               </li>
               <li>
                   <%= link_to own_sys_users_path do %>
                       <i class="fas fa-plus"></i>
-                      <span class="link-text">own</span>
+                      own
                   <% end %>
               </li>
           </ul>
         </li>
         <li>
-            <a href="<%= accounts_path%>">
+            <a href="<%= accounts_path%>" aria-expanded="false" class="dropdown-toggle">
                 <i class="fas fa-book"></i>
-                <span class="link-text">Account</span>
+                Account
             </a>
         </li>
 
         <li>
             <a href="#ReportsSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                 <i class="fas fa fa-print"></i>
-                <span class="link-text">Reports</span>
+                Reports
             </a>
             <ul class="collapse list-unstyled" id="ReportsSubmenu">
                 <li>
                     <%= link_to reports_path do %>
                         <i class="fas fa-plus"></i>
-                        <span class="link-text">Total Staff/Customer/Supplier</span>
+                        Total Staff/Customer/Supplier
                     <% end %>
                 </li>
                 <li>
                     <%= link_to reports_chart_path do %>
                         <i class="fas fa-th-list"></i>
-                        <span class="link-text">Chart/Graph
+                        Chart/Graph
                     <% end %>
                 </li>
                 <li>
                     <%= link_to reports_trial_balance_path do %>
                         <i class="fas fa-th-list"></i>
-                        <span class="link-text">Trial Balance</span>
+                        Trial Balance
                     <% end %>
                 </li>
                 <li>
                     <%= link_to reports_sale_report_path do %>
                         <i class="fas fa-th-list"></i>
-                        <span class="link-text">Sale Report</span>
+                        Sale Report
                     <% end %>
                 </li>
                 <li>
                     <%= link_to reports_stock_report_path do %>
                         <i class="fas fa-th-list"></i>
-                        <span class="link-text">Sale/Purchase/Stock</span>
+                        Sale/Purchase/Stock
                     <% end %>
                 </li>
             </ul>
         </li>
         <li>
-            <a href="<%=items_path%>">
+            <a href="<%=items_path%>"  aria-expanded="false" class="dropdown-toggle">
                 <i class="fa fa-cart-arrow-down"></i>
-                <span class="link-text">Raw Material</span>
+                Raw Material
             </a>
         </li>
         <% if can?(:view, :product) %>
           <li>
               <a href="#ProductSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                   <i class="fa fa-cart-arrow-down"></i>
-                  <span class="link-text">Product</span>
+                  Product
               </a>
               <ul class="collapse list-unstyled" id="ProductSubmenu">
                 <li>
                     <%= link_to product_categories_path do %>
                         <i class="fas fa-plus"></i>
                         <i class="fas fa-th-list"></i>
-                        <span class="link-text">Product Category</span>
+                        Product Category
                     <% end %>
                 </li>
                 <li>
                     <%= link_to product_sub_categories_path do %>
                         <i class="fas fa-plus"></i>
                         <i class="fas fa-th-list"></i>
-                        <span class="link-text">Product Sub Category</span>
+                        Product Sub Category
                     <% end %>
                 </li>
                 <li>
                     <%= link_to products_path do %>
                         <i class="fas fa-plus"></i>
                         <i class="fas fa-th-list"></i>
-                        <span class="link-text">Products</span>
+                        Products
                     <% end %>
                 </li>
               </ul>
           </li>
         <% end %>
         <li>
-            <a href="<%=productions_path%>">
+            <a href="<%=productions_path%>" aria-expanded="false" class="dropdown-toggle">
                 <i class="fa fa-cart-arrow-down"></i>
-                <span class="link-text">Production</span>
+                Production
             </a>
         </li>
 
         <li>
             <a href="#adminSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                 <i class="fas fa-user-circle"></i>
-                <span class="link-text"><%= "Staff" %></span>
+                <%= "Staff" %>
             </a>
             <ul class="collapse list-unstyled" id="adminSubmenu">
                 <li>
                     <%= link_to staffs_path do %>
                         <i class="fas fa-plus"></i>
                         <i class="fas fa-th-list"></i>
-                        <span class="link-text">Add/List</span>
+                        Add/List
                     <% end %>
                 </li>
                 <li>
-                    <a href="<%=  salaries_path  %>">
+                    <a href="<%=  salaries_path  %>" aria-expanded="false" class="dropdown-toggle">
                       <i class="fa fa-user-circle"></i>
                       <i class="fa fa-id-card"></i>
-                      <span class="link-text">Staff Salaries</span>
+                        Staff Salaries
                     </a>
                 </li>
                 <li>
-                    <a href="<%=salary_details_path%>">
+                    <a href="<%=salary_details_path%>" aria-expanded="false" class="dropdown-toggle">
                       <i class="fa fa-user-circle"></i>
                       <i class="fa fa-id-card"></i>
-                      <span class="link-text">Salary Book</span>
+                        Salary Book
                     </a>
                 </li>
 
             </ul>
         </li>
         <li>
-            <a href="<%=product_stocks_path%>">
+            <a href="<%=product_stocks_path%>" aria-expanded="false" class="dropdown-toggle">
                 <i class="fa fa-shopping-cart"></i>
-                <span class="link-text">Stock Detail</span>
+                  Stock Detail
             </a>
         </li>
 
         <li>
             <a href="#SystemSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                 <i class="fas fa-tasks"></i>
-                <span class="link-text">System Settings</span>
+                System Settings
             </a>
             <ul class="collapse list-unstyled" id="SystemSubmenu">
               <li>
                 <a href="#ExpenseTypeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                     <i class="fas fa-tasks"></i>
-                    <span class="link-text">Expense Types</span>
+                    Expense Types
                 </a>
                 <ul class="collapse list-unstyled" id="ExpenseTypeSubmenu">
                     <li>
                         <%= link_to expense_types_path do %>
                             ---> <i class="fas fa-plus"></i>
-                                 <i class="fas fa-th-list"></i>
-                                 <span class="link-text">Add/List EXPTYPE</span>
+                                 <i class="fas fa-th-list"></i>Add/List EXPTYPE
                         <% end %>
                     </li>
                 </ul>
@@ -301,35 +301,35 @@
                 <li>
                   <%= link_to pos_settings_path do %>
                     <i class="fas fa-tasks" aria-hidden="true"></i>
-                    <span class="link-text">General Setting</span>
+                      General Setting
                   <% end %>
                 </li>
                 <li>
                     <%= link_to countries_path do %>
                       <i class="fas fa-plus"></i>
                       <i class="fas fa-th-list"></i>
-                      <span class="link-text">Country</span>
+                        Country
                     <% end %>
                 </li>
                 <li>
                     <%= link_to cities_path do %>
                       <i class="fas fa-plus"></i>
                       <i class="fas fa-th-list"></i>
-                      <span class="link-text">City</span>
+                        City
                     <% end %>
                 </li>
                 <li>
                     <%= link_to user_types_path do %>
                         <i class="fas fa-plus"></i>
                         <i class="fas fa-th-list"></i>
-                        <span class="link-text">User Types</span>
+                        User Types
                     <% end %>
                 </li>
                 <li>
                     <%= link_to item_types_path do %>
                         <i class="fas fa-plus"></i>
                         <i class="fas fa-th-list"></i>
-                        <span class="link-text">Line Item Type</span>
+                        Line Item Type
                     <% end %>
                 </li>
 
@@ -338,7 +338,7 @@
         <li>
             <a href="#">
                 <i class="fas fa-paper-plane"></i>
-                <span class="link-text">Contact</span>
+                Contact
             </a>
         </li>
     </ul>
