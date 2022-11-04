@@ -5,130 +5,337 @@
   </button>
 </div>
 <div class="hidden" id="expenses_list">
-  <h1>General Expenses</h1>
-  <% if can?(:add, :all) %>
-  <%= link_to new_expense_path, class: "btn btn-success" do %>
-    <i class="fa fa-plus" aria-hidden="true"></i>
-    New Expense
-  <% end %>
-  <% end %>
-  <%= link_to expense_entries_path, class: "btn btn-primary" do %>
-   <i class="fa fa-tasks" aria-hidden="true"></i>
-   Expense Details
-  <% end %>
+          <div class="main-content-header">
+            <h1 class="ml-2">General Expense</h1>
+            <ol class="breadcrumb mb-5">
+              <li class="breadcrumb-item">
+                <a href="<%= root_path %>">Dashboard</a>
+              </li>
+              <li class="breadcrumb-item active">
+                <a href="<%= expenses_path %>">General Expense</a>
+              </li>
+            </ol>
+          </div>
+          <div class="float-right">
+            <div class="dropdown ml-auto mr-4">
+             <span class="btn btn-info" title= "About This page">Help</span>
+              <div class="dropdown-content">
+                <% if @help.present? %>
+                <% @help&.help_links.each do |link| %>
+                <a type="button" class="" target="_blank" href="<%= link[1] %>" >Help in <%= link[0] %></a>
+                 <% end %>
+                <% end %>
+              </div>
+            </div>
+          </div>
 
-  <div class="clearfix"></div>
-  <%= search_form_for @q, url: expenses_path, class: "admin-controls", method: "get" do |f| %>
-  <div class="row">
-      <div class="col-lg-12">
-        <div class="col-lg-3 form-group float-left">
-          <%= f.select :expense_entries_expense_type_id_eq, options_from_collection_for_select(@expense_types, "id", ->(st){"#{st.id} \u{27F6} #{st.title} "},@expense_type),{:include_blank => "Select expense type"},:class=>"form-control chosen-select" %>
-        </div>
-        <div class="col-lg-3 form-group float-left">
-          <%= f.select :expense_entries_account_id_eq, options_from_collection_for_select(@accounts, "id", "title" ,@account),{:include_blank => "Select Account"},:class=>"form-control chosen-select" %>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <%= f.search_field :created_at_gteq,value:@start_date, class: 'form-control input-sm datepicker',title: "Select date from",  placeholder: "YYYY-MM-DD" %>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <%= f.search_field :created_at_lteq,value:@end_date,class: 'form-control input-sm datepicker' ,title: "Select date to", placeholder: "YYYY-MM-DD"%>
-        </div>
+          <ul class="nav nav-pills" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link tab-label" data-toggle="tab" href="#create" role="tab">Create</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link tab-label" data-toggle="tab" href="#details" role="tab">Expense Details</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download PDF</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download CSV</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
+            </li>
+            <li class="nav-item">
+             <a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
+            </li>
+        </ul>
 
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+      <%= search_form_for @q, url: expenses_path, class: "admin-controls", method: "get" do |f| %>
+        <div class="tab-content">
+          <div class="tab-pane active mb-3 card shadow-sm mt-2 border-radius-1" id="search" role="tabpanel">
+           <p>
+              <span class="col-lg-12 mt-4">
+                <span class="col-lg-3 form-group float-left">
+                  <%= f.select :expense_entries_expense_type_id_eq, options_from_collection_for_select(@expense_types, "id", ->(st){"#{st.id} \u{27F6} #{st.title} "},@expense_type),{:include_blank => "Select expense type"},:class=>"form-control chosen-select" %>
+                </span>
+                <span class="col-lg-3 form-group float-left">
+                  <%= f.select :expense_entries_account_id_eq, options_from_collection_for_select(@accounts, "id", "title" ,@account),{:include_blank => "Select Account"},:class=>"form-control chosen-select" %>
+                </span>
+                <span class="col-lg-2 form-group float-left">
+                  <%= f.search_field :created_at_gteq,value:@start_date, class: 'form-control input-sm datepicker',title: "Select date from",  placeholder: "YYYY-MM-DD" %>
+                </span>
+                <span class="col-lg-2 form-group float-left">
+                  <%= f.search_field :created_at_lteq,value:@end_date,class: 'form-control input-sm datepicker' ,title: "Select date to", placeholder: "YYYY-MM-DD"%>
+                </span>
+
+                <span class="col-lg-2 form-group float-left">
+                  <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+                </span>
+              </span>
+            </p>
+          </div>
+          <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="create" role="tabpanel">
+              <p>
+                <% if can?(:add, :all) %>
+                  <%= link_to new_expense_path, remote: true,class: "btn btn-success ml-3 mt-3" do %>
+                    <i class="fa fa-plus" aria-hidden="false"></i>
+                      Create Expense
+                  <% end %>
+                <% end %>
+              </p>
+          </div>
+          <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="details" role="tabpanel">
+              <p>
+                  <%= link_to expense_entries_path,class: "btn btn-success ml-3 mt-3" do %>
+                    <i class="fa fa-tasks" aria-hidden="false"></i>
+                      Expense Details
+                  <% end %>
+              </p>
+          </div>
+          <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="pdf" role="tabpanel">
+            <p>
+              <div class="col-lg-2 d-flex">
+              <button class="form-control btn btn-danger" name="submit_pdf_a4" title="Download pdf A4 size" type="submit" value="Total Expense PDF A4" formtarget="_blank">PDF A4 &nbsp;<i class="fa fa-file-pdf"></i></button>
+              <button class="form-control btn  btn-danger ml-2" name="submit_pdf_a8" type="submit" title="Download pdf A8 size" value="Total Expense PDF A8" formtarget="_blank">PDF A8 &nbsp;<i class="fa fa-file-pdf"></i></button>
+              </div>
+            </p>
+          </div>
+          <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="csv" role="tabpanel">
+            <p>
+              <div class="col-lg-2 d-flex">
+              
+              </div>
+            </p>
+          </div>
+          <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="emails" role="tabpanel">
+            <p>
+              <div class="col-lg-2 d-flex">
+              <button class="form-control btn btn-info" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-2"></i>&nbsp;Mail</button>
+              </div>
+           </p>
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  </div>
+                  <div class="modal-body">
+                    <% @pos_setting = PosSetting.first %>
+                    <label>Email:</label>
+                    <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
+                    <br />
+                    <label>Subject:</label>
+                    <%= text_field_tag 'subject', "#{@pos_setting.display_name} - General Expense Details Report from MunshiOnClick", class: 'form-control email-fields'%>
+                    <br />
+                    <label>Body:</label><br />
+                    <%= text_area_tag 'body', nil, class: 'form-control'%>
+                    <br />
+
+                    <label>Please select one of them.</label>
+                    <div>
+                      <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
+                      <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
+                      <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
+                  </div>
+                  </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="import-export" role="tabpanel">
+            <p>
+              <div class="d-flex">
+              <button class="btn btn-success ml-3" name="export_data" type="submit" value="export_data">Export Data</button>
+              <button class="btn btn-primary ml-3" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
+              </div>
+            </p>
+          </div>
+          </div>
+        <% end %>
         </div>
+        <div>
+
+  <div class="card shadow mt-4 p-2 border-radius-1">
+    <%= render 'map_columns/map_column_partials' %>
+      <table data-toggle="table mt-3" data-search="true">       
+        <thead>
+          <tr>
+            <th><input type="checkbox" id="master" class='select-all-checkbox'>
+            <div class="icon-container float-center">
+            <span class="ml-2 mt-2">
+            <div class="my-icon my-view">
+            
+                        <span class="icon-div btn delete-selected p-2 " type='button' value='Expense'>
+                                  <i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i> 
+                        </span>
+                    </div>
+                    </span>
+              </div>
+            </th>
+            <th>ID<div class='float-right'><%= sort_link(@q, :id,"", {}, class: 'sorting-button') %></div></th>
+            <th>Type Wise<div class='float-right'><%= sort_link(@q, :expense, "", {}, class: 'sorting-button') %></div></th>
+            <th>Expense<div class='float-right'><%= sort_link(@q, :expense, "", {}, class: 'sorting-button') %></div></th>
+            <th>Paid By</th>
+            <th>Comment<div class='float-right'><%= sort_link(@q, :comment, "", {}, class: 'sorting-button') %></div></th>
+            <th>Date</th>
+
+            <th class="border_none">Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @expenses.each do |expense| %>
+            <tr>
+             <td><%= check_box_tag 'object_ids[]', expense.id %></td>
+              <td><%= expense.id %></td>
+              <td>
+                <%expense.expense_entries.joins(:expense_type).group(:expense_type).sum(:amount).each do |expense| %>
+                <%= expense.first.title %> : <%= expense.last %>
+                <br>
+                <%end%>
+              </td>
+              <td><%= expense.expense.to_f.round(2) %></td>
+              <td>
+                <%=Account.where(id: expense.expense_entries.distinct.pluck(:account_id)).pluck(:title)  %>
+                <%=@expense_payment[expense.id]%>
+              </td>
+              <td class="urdu-font"><%= expense.comment %> <%=expense.expense_entries.distinct.pluck(:comment) %></td>
+              <td>
+                <%if expense.created_at.strftime("%d%b%y")!=expense.updated_at.strftime("%d%b%y")%>
+                  <%= expense.created_at.present? ? expense.created_at.strftime("%d%b%y at %H:%M%p") : '' %> | <%= expense.updated_at.present? ? expense.updated_at.strftime("%d%b%y at %H:%M%p") : '' %>
+                <%else%>
+                  <%= expense.created_at.present? ? expense.created_at.strftime("%A,  %d-%b-%y at %H:%M%p") : '' %>
+                <%end%>
+              </td>
+              <td>
+
+              <div class="icon-container-1">
+                <div class="my-icon-1 my-view-1">
+                  <div class="my-tooltip-1">
+                    <div class="icon-container">
+                      <div class="my-icon my-view">
+                          <div class="my-tooltip">
+                            Edit
+                          </div>
+                          <span class="icon-div">
+                                <% if can?(:update, :all) %>
+                              <%= link_to edit_expense_path(expense), remote: true do %>
+                                <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+                              <%end %>
+                            <% end %>
+                          </span>
+                      </div>
+
+                        <div class="my-icon my-view">
+                            <div class="my-tooltip">
+                              Delete
+                            </div>
+                              <span class="icon-div mt-3">
+                                <% if can?(:delete, :all) %>
+                                  <%= link_to expense, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+                                  <i class="fa fa-trash mt-2" aria-hidden="true"></i>
+                                <%end %>
+                              <% end %>
+                            </span>
+                        </div>
+
+                       <div class="my-icon my-view">
+                              <div class="my-tooltip">
+                                Show
+                              </div>
+                              <span class="icon-div mt-3">
+                                 <% if can?(:view, :all) %>
+                                  <%= link_to expense_path(expense), remote: true do %>
+                                  <i class="fa fa-eye mt-2" aria-hidden="true"></i>
+                              <%end %>
+                          <%end%>
+                        </span>
+                    </div>
+
+                    <div class="my-icon my-view">
+                          <div class="my-tooltip">
+                            PDF
+                          </div>
+                          <span class="icon-div mt-3">
+                              <%= link_to expenses_path('q[id_eq]':expense.id,'pdf':true), title: 'Download PDF', target: '_blank' do %>
+                  			      <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
+                  		      <%end %>
+                          </span>
+                    </div>
+
+                     <div class="my-icon my-view">
+                          <div class="my-tooltip">
+                            CSV
+                          </div>
+                          <span class="icon-div mt-3">
+                                <%= link_to expenses_path('q[id_eq]':expense.id,'csv':true), title: 'Download CSV' do%>
+                  			        <i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
+                  		      <%end %>
+                          </span>
+                        </div>
+                      </div>
+                          </div>
+                          <span class="icon-div-1">
+                                <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+                          </span>
+                      </div>
+              </div>
+              </td>
+            </tr>
+          <% end %>
+          <tr>
+            <td><h5>Total</h5></td>
+            <td></td>
+            <td><h5><%=@expense_total.to_f.round(2)%></h5></td>
+            <td><h5><%=@expense_payment_total%></h5></td>
+          </tr>
+        </tbody>
+      </table>
+      
+    <div class="row">
+      <div class="col-lg-4 col-sm-4">
+        <%= page_entries_info @expenses %>
       </div>
-      <div class="col-lg-12">
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn  badge badge-pill badge-danger" name="submit_pdf_a4" title="Download pdf A4 size" type="submit" value="Total Expense PDF A4" formtarget="_blank">PDF A4 &nbsp;<i class="fa fa-file-pdf"></i></button>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn  badge badge-pill badge-danger" name="submit_pdf_a8" type="submit" title="Download pdf A8 size" value="Total Expense PDF A8" formtarget="_blank">PDF A8 &nbsp;<i class="fa fa-file-pdf"></i></button>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn btn-info" name="email" type="submit" value="Email"><i class="fas fa-envelope"></i> Email</button>
-        </div>
+      <div class="col-lg-8 col-sm-8 pagination-left text-dark">
+        <%= paginate @expenses %>
       </div>
-  </div>
-  <% end %>
-<div class='card p-3'>
-  <table data-toggle="table" data-search="true">
-   <button class='btn btn-outline-danger float-right delete-selected' type='button' style="width:163px"value='Expense' >Delete Selected</button>
-    <thead>
-      <tr>
-         <th><input type="checkbox" id="master" class='select-all-checkbox'></th>
-        <th>ID<div class='float-right'><%= sort_link(@q, :id,"", {}, class: 'sorting-button') %></div></th>
-        <th>Type Wise<div class='float-right'><%= sort_link(@q, :expense, "", {}, class: 'sorting-button') %></div></th>
-        <th>Expense<div class='float-right'><%= sort_link(@q, :expense, "", {}, class: 'sorting-button') %></div></th>
-        <th>Paid By</th>
-        <th>Comment<div class='float-right'><%= sort_link(@q, :comment, "", {}, class: 'sorting-button') %></div></th>
-        <th>Date</th>
-
-        <th class="border_none">Action</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <% @expenses.each do |expense| %>
-        <tr>
-         <td><%= check_box_tag 'object_ids[]', expense.id %></td>
-          <td><%= expense.id %></td>
-          <td>
-            <%expense.expense_entries.joins(:expense_type).group(:expense_type).sum(:amount).each do |expense| %>
-            <%= expense.first.title %> : <%= expense.last %>
-            <br>
-            <%end%>
-          </td>
-          <td><%= expense.expense.to_f.round(2) %></td>
-          <td>
-            <%=Account.where(id: expense.expense_entries.distinct.pluck(:account_id)).pluck(:title)  %>
-            <%=@expense_payment[expense.id]%>
-          </td>
-          <td class="urdu-font"><%= expense.comment %> <%=expense.expense_entries.distinct.pluck(:comment) %></td>
-          <td>
-            <%if expense.created_at.strftime("%d%b%y")!=expense.updated_at.strftime("%d%b%y")%>
-              <%= expense.created_at.present? ? expense.created_at.strftime("%d%b%y at %H:%M%p") : '' %> | <%= expense.updated_at.present? ? expense.updated_at.strftime("%d%b%y at %H:%M%p") : '' %>
-            <%else%>
-              <%= expense.created_at.present? ? expense.created_at.strftime("%A,  %d-%b-%y at %H:%M%p") : '' %>
-            <%end%>
-          </td>
-          <td>
-            <% if can?(:update, :all) %>
-              <%= link_to edit_expense_path(expense) do %>
-                <i class="fa fa-edit " aria-hidden="true"></i> |
-              <%end %>
-            <% end %>
-            <% if can?(:delete, :all) %>
-              <%= link_to expense, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
-                <i class="fa fa-trash " aria-hidden="true"></i> |
-              <%end %>
-            <% end %>
-            <% if can?(:view, :all) %>
-              <%= link_to expense do %>
-                <i class="fa fa-eye " aria-hidden="true"></i>
-              <%end %>
-            <%end%>
-          </td>
-        </tr>
-      <% end %>
-      <tr>
-        <td><h5>Total</h5></td>
-        <td></td>
-        <td><h5><%=@expense_total.to_f.round(2)%></h5></td>
-        <td><h5><%=@expense_payment_total%></h5></td>
-      </tr>
-    </tbody>
-  </table>
-  <div class="row">
-    <div class="col-lg-4 col-sm-4">
-      <%= page_entries_info @expenses %>
-    </div>
-    <div class="col-lg-8 col-sm-8 pagination-left">
-      <%= paginate @expenses %>
     </div>
   </div>
 </div>
-
+<%= form_for :bulk_import, url: bulk_import_data_path, method: :post, html: {class: "bulk-import-form"} do |f| %>
+  <div class="modal fade" id="importFile" tabindex="-1" role="dialog" aria-labelledby="importFileTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Import file</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <%= f.file_field :file, required: true, accept: '.csv' %>
+          <%= f.hidden_field :table_name, value: 'Expense' %>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <%= f.submit 'Import', class: 'btn btn-primary' %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+<div class="show-data"></div>
 <script>
   $(document).ready(function() {
      var sortingButtons = $('.sorting-button')
