@@ -37,8 +37,8 @@
     <%= f.select :user_type_id, options_from_collection_for_select(@user_types, 'id', 'title', f.object.user_type_id.present? ? f.object.user_type_id : @user_types.first.id ),{include_blank: "Please Select User Type"}, required: true, class: 'urdu-font form-control'%>
   </div>
 
-  <div class="col-lg-6 form-group float-left">
-    <%= f.select :user_group, SysUser.user_groups.map { |key, value| [key.humanize, key] },{include_blank: "Please Select User Group"},{class: "form-control", required: true} %>
+  <div class="col-lg-6" style="float:left">
+    <%= f.select :user_group_id, options_from_collection_for_select(@user_group, 'id', 'title',f.object.user_group_id.present? ? f.object.user_group_id : @user_group.first.id ),{},{class: "form-control"} %>
   </div>
 
   <div class="col-lg-6" style="float:left">
