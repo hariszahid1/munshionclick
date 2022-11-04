@@ -21,7 +21,6 @@ class User < ApplicationRecord
   # at the end! To remove roles, don't forget to re-assign all roles as they're position dependent.
   roles :developer, :super_admin, :admin, :staff, :salesman, :editor, :visitor
   enum user_roles: { admin: 4, staff: 8, salesman: 16, editor: 32, visitor: 64 }
-
   has_paper_trail ignore: [:updated_at]
 
   def self.mask_no(rol)
