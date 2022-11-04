@@ -16,19 +16,21 @@
         <%= Expense.human_attribute_name :comment %>
         <i class="fas fa-language"></i>
         <% end %></th>
-      <th>Total Expence</th>
-      <th>Created At</th>
+      <th><h3 class="ml-5">Total Expense</h3></th>
     </thead>
     <tbody>
       <tr>
-        <td><%= f.text_area :comment, placeholder:"Enter Comment" , hide_label: true ,class: 'urdu-font' %></td>
-        <td> <%= f.hidden_field :expense%><h1 class="expense_total_bill">0.00</h1></td>
+        <td><%= f.text_area :comment, placeholder:"Enter Comment" , hide_label: true ,class: 'urdu-font col-lg-12' %></td>
+        <td> <%= f.hidden_field :expense%><h1 class="expense_total_bill ml-5">0.00</h1></td>
+        
+      </tr>
+
+      <tr class="mt-2">
         <td> <%= f.date_select :created_at,{}, hide_label: true,class: "form-control" %> </td>
       </tr>
-      <tr>
     </tbody>
   </table>
-  <%= f.fields_for :expense_entries do |expense_entry| %>
+  <%= f.fields_for :expense_entries, class: "mt-2" do |expense_entry| %>
     <%= render 'expenses_fields_new', f: expense_entry %>
   <% end %>
   <div id="new_links">
@@ -38,19 +40,12 @@
   </div>
   <br>
   <div class="clearfix"></div>
-  <hr>
-  <div class="col-lg-12 row ">
-    <div class="col-lg-6 form-group float-left">
-      <%= link_to expenses_path do %>
-      <i class="fa fa-arrow-left " aria-hidden="true"></i>
-      <% end %>
+    
+    <div class="modal-footer">
+      <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      <%=f.object.id.nil? ? (f.submit class: "btn btn-success mr-4", style: "float: right")  :  (f.submit class: "btn btn-warning mr-4", style: "float: right")%>
     </div>
-    <div class="col-lg-6 form-group float-left">
-      <div class="form-group float-right">
-        <%=f.object.id.nil? ? (f.submit class: "btn btn-success", style: "float: left")  :  (f.submit class: "btn btn-warning", style: "float: left")%>
-      </div>
-    </div>
-  </div>
+
 <% end %>
 
 <%= javascript_include_tag 'hover', 'data-turbolinks-track': 'reload' %>

@@ -1,0 +1,3 @@
+$('.show-data').children().remove();
+$('.show-data').append("<%= escape_javascript(render partial: 'edit', locals: { staff: @staff }) %>");
+$("#showdData").modal('show');

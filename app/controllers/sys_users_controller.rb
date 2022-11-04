@@ -72,6 +72,10 @@ class SysUsersController < ApplicationController
     @user_types=UserType.all
     @cities=City.all
     @countries=Country.all
+
+    respond_to do |format|
+      format.js
+    end
   end
 
   def payable
@@ -246,6 +250,10 @@ class SysUsersController < ApplicationController
     @user_types=UserType.all
     @cities=City.all
     @countries=Country.all
+
+    respond_to do |format|
+      format.js
+    end
   end
 
   # POST /sys_users
@@ -286,9 +294,8 @@ class SysUsersController < ApplicationController
   def destroy
     @sys_user.destroy!
     respond_to do |format|
-      format.html { redirect_to get_request_referrer, notice: 'Sys user was successfully destroyed.' }
-      format.json { head :no_content }
-      format.js   { render :layout => false }
+      format.html { redirect_to sys_users_path, notice: 'Sys User was successfully Deleted.' }
+      format.json { render :show, status: :ok, location: @sys_user }
     end
   end
 
