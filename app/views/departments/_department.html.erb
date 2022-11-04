@@ -5,20 +5,20 @@
   <td class= 'urdu-font'><%= department.title %></td>
   <td><span title="<%= department.comment %>" class='truncate-text'><%= department.comment %></span></td>
   <td>
-         <div class="icon-container">
-          <div class="my-icon my-view">
+		<div class="icon-container">
+			<%if (ApplicationHelper.check_can_update(current_user,"departments"))%>
+				<div class="my-icon my-view">
           <div class="my-tooltip">
             Edit
           </div>
           <span class="icon-div">
-                <% if can?(:update, :all) %>
-              <%= link_to edit_department_path(department), remote: true do %>
+						<%= link_to edit_department_path(department), remote: true do %>
                 <i class="fa fa-edit mt-2" aria-hidden="true"></i>
               <%end %>
-            <% end %>
-          </span>
-        </div>
-
+					</span>
+				</div>			
+			<% end %>
+			<%if (ApplicationHelper.check_can_delete(current_user,"departments"))%>
           <div class="my-icon my-view">
               <div class="my-tooltip">
                 Delete
@@ -31,42 +31,44 @@
                 <% end %>
               </span>
           </div>
-
-      <div class="my-icon my-view">
-                <div class="my-tooltip">
-                  Show
-                </div>
-                <span class="icon-div">
-                   <% if can?(:view, :all) %>
-                    <%= link_to department_path(department), remote: true do %>
-                    <i class="fa fa-eye mt-2" aria-hidden="true"></i>
-                <%end %>
-            <%end%>
-          </span>
-      </div>
-
-      <div class="my-icon my-view">
-            <div class="my-tooltip">
+			<%end%>
+			<%if (ApplicationHelper.check_can_update(current_user,"departments"))%>
+				<div class="my-icon my-view">
+					<div class="my-tooltip">
+						Show
+					</div>
+					<span class="icon-div">
+							<%= link_to department_path(department), remote: true do %>
+							<i class="fa fa-eye mt-2" aria-hidden="true"></i>
+						<%end %>
+					</span>
+				</div>
+			<%end%>
+			<%if (ApplicationHelper.check_can_download_pdf(current_user,"departments"))%>
+      	<div class="my-icon my-view">
+					<div class="my-tooltip">
               PDF
-            </div>
-            <span class="icon-div">
-                <%= link_to departments_path('q[id_eq]':department.id,'pdf':true), title: 'Download PDF', target: '_blank' do %>
-      <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
-    <%end %>
-            </span>
-      </div>
-
+					</div>
+					<span class="icon-div">
+						<%= link_to departments_path('q[id_eq]':department.id,'pdf':true), title: 'Download PDF', target: '_blank' do %>
+     			 <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
+   				 <%end %>
+					</span>
+      	</div>
+			<%end%>
+			<%if (ApplicationHelper.check_can_download_csv(current_user,"departments"))%>
        <div class="my-icon my-view">
-            <div class="my-tooltip">
+					<div class="my-tooltip">
               CSV
-            </div>
-            <span class="icon-div">
-                 <%= link_to departments_path('q[id_eq]':department.id,'csv':true), title: 'Download CSV' do%>
-      <i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
-    <%end %>
-            </span>
-          </div>
-    <b class="ml-2 mt-1">Total changes: <%= department.versions.count%></b>
+					</div>
+					<span class="icon-div">
+						<%= link_to departments_path('q[id_eq]':department.id,'csv':true), title: 'Download CSV' do%>
+      				<i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
+   				 <%end %>
+					</span>
+				</div>
+			<%end%>
+    	<b class="ml-2 mt-1">Total changes: <%= department.versions.count%></b>
     </div>
   </td>
 </tr>

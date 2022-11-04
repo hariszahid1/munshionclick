@@ -1,6 +1,7 @@
 class ItemTypesController < ApplicationController
   include PdfCsvGeneralMethod
   include ItemTypesHelper
+	before_action :check_access
   before_action :set_item_type, only: [:show, :edit, :update, :destroy, :get_item_type_products]
 
   # GET /item_types

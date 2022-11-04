@@ -5,67 +5,71 @@
   <td><%= product_category.code %></td>
   <td><span title="<%= product_category.comment %>" class='truncate-text'><%= product_category.comment %></span></td>
   <td>
-        <div class="icon-container">
-          <div class="my-icon my-view">
-          <div class="my-tooltip">
-            Edit
-          </div>
-          <span class="icon-div">
-                <% if can?(:update, :all) %>
-              <%= link_to edit_product_category_path(product_category), remote: true do %>
-                <i class="fa fa-edit mt-2" aria-hidden="true"></i>
-              <%end %>
-            <% end %>
-          </span>
-        </div>
+    <div class="icon-container">
+			<%if (ApplicationHelper.check_can_update(current_user,"product_categories"))%>
+				<div class="my-icon my-view">
+					<div class="my-tooltip">
+						Edit
+					</div>
+					<span class="icon-div">
+					<%= link_to edit_product_category_path(product_category), remote: true do %>
+						<i class="fa fa-edit mt-2" aria-hidden="true"></i>
+					<%end %>
+					</span>
+				</div>
+			<% end %>
 
-          <div class="my-icon my-view">
-              <div class="my-tooltip">
-                Delete
-              </div>
-                <span class="icon-div">
-                  <% if can?(:delete, :all) %>
-                    <%= link_to product_category, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
-                    <i class="fa fa-trash mt-2" aria-hidden="true"></i>
-                  <%end %>
-                <% end %>
-              </span>
-          </div>
+			<%if (ApplicationHelper.check_can_delete(current_user,"product_categories"))%>
+				<div class="my-icon my-view">
+					<div class="my-tooltip">
+						Delete
+					</div>
+					<span class="icon-div">
+						<%= link_to product_category, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+							<i class="fa fa-trash mt-2" aria-hidden="true"></i>
+							<%end %>
+					</span>
+				</div>
+			<% end %>
 
-      <div class="my-icon my-view">
-                <div class="my-tooltip">
-                  Show
-                </div>
-                <span class="icon-div">
-                   <% if can?(:view, :all) %>
-                    <%= link_to product_category_path(product_category), remote: true do %>
-                    <i class="fa fa-eye mt-2" aria-hidden="true"></i>
-                <%end %>
-            <%end%>
-          </span>
-      </div>
-
-      <div class="my-icon my-view">
-            <div class="my-tooltip">
-              PDF
-            </div>
-            <span class="icon-div">
-                <%= link_to product_categories_path('q[id_eq]':product_category.id,'pdf':true), title: 'Download PDF', target: '_blank' do %>
-			<i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
-		<%end %>
-            </span>
-      </div>
-
-       <div class="my-icon my-view">
-            <div class="my-tooltip">
-              CSV
-            </div>
-            <span class="icon-div">
-                 <%= link_to product_categories_path('q[id_eq]':product_category.id,'csv':true), title: 'Download CSV' do%>
-			<i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
-		<%end %>
-            </span>
-          </div>
+			<%if (ApplicationHelper.check_can_read(current_user,"product_categories"))%>
+      	<div class="my-icon my-view">
+					<div class="my-tooltip">
+						Show
+					</div>
+					<span class="icon-div">
+						<%= link_to product_category_path(product_category), remote: true do %>
+							<i class="fa fa-eye mt-2" aria-hidden="true"></i>
+						<%end %>
+					</span>
+				</div>
+			<%end%>
+			
+			<%if (ApplicationHelper.check_can_download_pdf(current_user,"product_categories"))%>
+				<div class="my-icon my-view">
+					<div class="my-tooltip">
+						PDF
+					</div>
+					<span class="icon-div">
+						<%= link_to product_categories_path('q[id_eq]':product_category.id,'pdf':true), title: 'Download PDF', target: '_blank' do %>
+							<i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
+						<%end %>
+					</span>
+				</div>
+			<%end%>
+			
+			<%if (ApplicationHelper.check_can_download_csv(current_user,"product_categories"))%>
+				<div class="my-icon my-view">
+					<div class="my-tooltip">
+						CSV
+					</div>
+					<span class="icon-div">
+						<%= link_to product_categories_path('q[id_eq]':product_category.id,'csv':true), title: 'Download CSV' do%>
+							<i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
+						<%end %>
+					</span>
+				</div>
+			<%end%>	
     <b class="ml-2 mt-1">Total changes: <%= product_category.versions.count%></b>
     </div>
     

@@ -60,7 +60,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       if @user.update(user_params)
         save_user_ability
-        format.html { redirect_to dashboard_path, notice: "#{current_user.allowed_valid_roles.to_s.titleize} was successfully updated." }
+        format.html { redirect_to users_path, notice: "#{current_user.allowed_valid_roles.to_s.titleize} was successfully updated." }
         format.json { render :show, status: :ok, location: @user }
       else
         set_part_list
@@ -133,7 +133,7 @@ class UsersController < ApplicationController
 				can_download_csv can_send_email can_import_export is_hidden]
 		)
 	end
-	
+
   def send_email_file
     EmailJob.perform_later(@q.result.as_json, 'users/index.pdf.erb', params[:email_value],
                             params[:email_choice], params[:subject], params[:body],

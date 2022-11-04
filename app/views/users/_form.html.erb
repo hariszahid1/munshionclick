@@ -1,3 +1,8 @@
+<style>
+	table, th, td{
+		border: 1px solid lightgray;
+	}
+</style>
 <% if user.persisted?
   submit_url = user_path
   submit_url = submit_url
@@ -119,7 +124,6 @@
     <% end %>
   </div>
   <%= f.hidden_field :created_by_id %>
-	<%# user Permission %>
 	<% if !@user.user_permissions.empty?%>
 		<h1>User Permissions</h1>
 		<table>

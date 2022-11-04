@@ -1,6 +1,7 @@
 class ProductCategoriesController < ApplicationController
   include PdfCsvGeneralMethod
   include ProductCategoriesHelper
+	before_action :check_access
   before_action :set_product_category, only: [:show, :edit, :update, :destroy]
   skip_before_action :verify_authenticity_token
 
