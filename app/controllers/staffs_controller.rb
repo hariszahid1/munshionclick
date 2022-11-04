@@ -126,6 +126,10 @@ class StaffsController < ApplicationController
   def show
     @departments=Department.all
     @raw_products = RawProduct.all
+
+    respond_to do |format|
+      format.js
+    end
   end
 
   # GET /staffs/new
@@ -140,6 +144,10 @@ class StaffsController < ApplicationController
   def edit
     @departments=Department.all
     @raw_products = RawProduct.all
+
+    respond_to do |format|
+      format.js
+    end
   end
 
   # POST /staffs
@@ -180,9 +188,8 @@ class StaffsController < ApplicationController
   def destroy
     @staff.destroy
     respond_to do |format|
-      format.html { redirect_to get_request_referrer, notice: 'Staff was successfully destroyed.' }
-      format.json { head :no_content }
-      format.js   { render :layout => false }
+      format.html { redirect_to staffs_path, notice: 'Staff was successfully Deleted.' }
+      format.json { render :show, status: :ok, location: @staff }
     end
   end
 

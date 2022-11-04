@@ -1,4 +1,4 @@
-$(document).on('ready turbolinks:load', function() {
+$( document ).ready(function() {
   $('.select-all-checkbox').on("click", function () {
     var cbxs = $('input[name="object_ids[]"]');
     if($(this).is(":checked")){
@@ -42,3 +42,24 @@ $(document).on('ready turbolinks:load', function() {
   });
 
 })
+
+// Preloader JS
+$(window).on('turbolinks:load', function () {
+  $('.preloader').fadeOut();
+});
+
+$(window).on('document:load', function () {
+  $('.cover-spin, .loading').addClass('d-none')
+});
+
+$(document).on('turbolinks:click', function () {
+  $('.cover-spin, .loading').removeClass('d-none')
+});
+
+$(document).on('turbolinks:load', function () {
+  $('.cover-spin, .loading').addClass('d-none')
+});
+
+// $(document).on('turbolinks:render', function () {
+//   $('.cover-spin, .loading').addClass('d-none')
+// });
