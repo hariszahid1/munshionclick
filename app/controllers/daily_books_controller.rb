@@ -169,6 +169,12 @@ end
     @book_date_lteq = DateTime.now
     @raw_products = RawProduct.all
     @products = Product.all
+
+    if params[:q].present?
+      @book_date_gteq = params[:q][:created_at_gteq] if params[:q][:created_at_gteq].present?
+      @book_date_lteq = params[:q][:created_at_lteq] if params[:q][:created_at_lteq].present?
+    end
+
     if params[:q].present?
       @q = DailyBook.where(department_id: @departments.third.id).ransack(params[:q])
     else
