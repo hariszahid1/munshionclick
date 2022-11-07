@@ -1,0 +1,5 @@
+$('.show-data').children().remove();
+$('.show-data').append("<%= escape_javascript(render partial: 'edit', locals: { production_block_type: @production_block_type }) %>");
+$("#showdData").modal('show');
+
+

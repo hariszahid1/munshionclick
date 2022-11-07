@@ -137,7 +137,7 @@
     <% end %>
 
   <div class="list_data_table card p-3">
-    <table data-toggle="table" data-search="true">
+    <table data-toggle="table" data-search="true" class="overflow-hidden border-radius-1">
       <thead>
         <tr>
           <th><input type="checkbox" id="master" class='select-all-checkbox'>
@@ -176,7 +176,7 @@
             <td><%= user.email_to %></td>
             <td class='urdu-font'><%= user.father_name %></td>
             <td><%= user.phone %></td>
-            <td>
+            <td class="p-3">
             <div class="icon-container-1">
                 <div class="my-icon-1 my-view-1">
                   <div class="my-tooltip-1">
@@ -186,61 +186,61 @@
           <div class="my-tooltip">
             Edit
           </div>
-          <span class="icon-div mt-3">
+          
                 <% if can?(:update, :all) %>
-              <%= link_to edit_user_path(user), remote: true do %>
+              <%= link_to edit_user_path(user), remote: true, class:"icon-div" do %>
                 <i class="fa fa-edit mt-2" aria-hidden="true"></i>
               <%end %>
             <% end %>
-          </span>
+          
         </div>
 
           <div class="my-icon my-view">
               <div class="my-tooltip">
                 Delete
               </div>
-                <span class="icon-div mt-3">
+                
                   <% if can?(:delete, :all) %>
-                    <%= link_to user, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+                    <%= link_to user, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
                     <i class="fa fa-trash mt-2" aria-hidden="true"></i>
                   <%end %>
                 <% end %>
-              </span>
+              
           </div>
 
       <div class="my-icon my-view">
                 <div class="my-tooltip">
                   Show
                 </div>
-                <span class="icon-div mt-3">
+                
                    <% if can?(:view, :all) %>
-                    <%= link_to user_path(user), remote: true do %>
+                    <%= link_to user_path(user), remote: true, class:"icon-div" do %>
                     <i class="fa fa-eye mt-2" aria-hidden="true"></i>
                 <%end %>
             <%end%>
-          </span>
+          
       </div>
 
       <div class="my-icon my-view">
             <div class="my-tooltip">
               PDF
             </div>
-            <span class="icon-div mt-3">
-                <%= link_to users_path('q[id_eq]':user.id,'pdf':true), title: 'Download PDF', target: '_blank' do %>
+            
+                <%= link_to users_path('q[id_eq]':user.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
       <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
     <%end %>
-            </span>
+            
       </div>
 
        <div class="my-icon my-view">
             <div class="my-tooltip">
               CSV
             </div>
-            <span class="icon-div mt-3">
-                 <%= link_to users_path('q[id_eq]':user.id,'csv':true), title: 'Download CSV' do%>
+            
+                 <%= link_to users_path('q[id_eq]':user.id,'csv':true), title: 'Download CSV', class:"icon-div" do%>
       <i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
     <%end %>
-            </span>
+            
           </div>
           </div>
             </div>
