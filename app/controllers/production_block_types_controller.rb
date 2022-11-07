@@ -17,15 +17,24 @@ class ProductionBlockTypesController < ApplicationController
   # GET /production_block_types/1
   # GET /production_block_types/1.json
   def show
+    respond_to do |format|
+      format.js
+    end
   end
 
   # GET /production_block_types/new
   def new
     @production_block_type = ProductionBlockType.new
+        respond_to do |format|
+      format.js
+    end
   end
 
   # GET /production_block_types/1/edit
   def edit
+        respond_to do |format|
+      format.js
+    end
   end
 
   # POST /production_block_types
@@ -64,9 +73,8 @@ class ProductionBlockTypesController < ApplicationController
   def destroy
     @production_block_type.destroy
     respond_to do |format|
-      format.html { redirect_to production_block_types_url, notice: 'Production block type was successfully destroyed.' }
-      format.json { head :no_content }
-      format.js   { render :layout => false }
+      format.html { redirect_to production_block_types_url, notice: 'Production Block Type was successfully Deleted.' }
+      format.json { render :show, status: :ok, location: @production_block_type }
     end
   end
 
