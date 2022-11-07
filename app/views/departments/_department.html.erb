@@ -23,13 +23,13 @@
               <div class="my-tooltip">
                 Delete
               </div>
-                <span class="icon-div mt-3">
+                
                   <% if can?(:delete, :all) %>
-                    <%= link_to department, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+                    <%= link_to department, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
                     <i class="fa fa-trash mt-2" aria-hidden="true"></i>
                   <%end %>
                 <% end %>
-              </span>
+              
           </div>
 			<%end%>
 			<%if (ApplicationHelper.check_can_update(current_user,"departments"))%>

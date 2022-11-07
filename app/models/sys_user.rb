@@ -5,10 +5,10 @@ class SysUser < ApplicationRecord
   has_many :ledger_books
   has_many :orders
   has_many :purchase_sale_details
+  enum user_group: %i[Customer Supplier Both Salesman Own Investor Investment Worker Other LandLord MD-Investment]
   enum status: %i[Active Passive Deleted]
   accepts_nested_attributes_for :contact
   validates_uniqueness_of :code
-  belongs_to :user_group
   has_paper_trail ignore: [:updated_at, :balance]
 
   # def balance

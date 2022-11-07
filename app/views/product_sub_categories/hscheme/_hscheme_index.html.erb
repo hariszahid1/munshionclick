@@ -4,17 +4,18 @@
     <span aria-hidden="true">×</span>
   </button>
 </div>
-      <div class="main-content-header">
-            <h1 class="ml-2 mt-2">Departments</h1>
-            <ol class="breadcrumb mt-2 mb-2">
-              <li class="breadcrumb-item">
-                <a href="<%= root_path %>">Dashboard</a>
-              </li>
-              <li class="breadcrumb-item active">
-                <a href="<%= departments_path %>">Departments</a>
-              </li>
-            </ol>
-          </div>
+<div class="hidden" id="product_sub_category_list">
+    <div class="main-content-header">
+      <h1 class="ml-2 mt-2">Unit Sub Categories</h1>
+      <ol class="breadcrumb mt-2 mb-4">
+        <li class="breadcrumb-item">
+          <a href="<%= root_path %>">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">
+          <a href="<%= product_sub_categories_path %>">Unit Sub Categories</a>
+        </li>
+      </ol>
+    </div>
    <div class="float-right">
       <div class="dropdown ml-auto mr-4">
         <span class="btn btn-info" title= "About This page">Help</span>
@@ -28,46 +29,50 @@
       </div>
     </div>
 
-<ul class="nav nav-pills" role="tablist">
-        <li class="nav-item">
+		<ul class="nav nav-pills" role="tablist">
+      <li class="nav-item">
         <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
       </li>
-			<%if (ApplicationHelper.check_can_create(current_user,"departments"))%>
+			<%if (ApplicationHelper.check_can_create(current_user,"product_sub_categories"))%>
 				<li class="nav-item">
 					<a class="nav-link tab-label" data-toggle="tab" href="#create" role="tab">Create</a>
 				</li>
 			<%end%>
-			<%if (ApplicationHelper.check_can_download_pdf(current_user,"departments"))%>
+			<%if (ApplicationHelper.check_can_download_pdf(current_user,"product_sub_categories"))%>
 				<li class="nav-item">
 					<a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
 				</li>
 			<%end%>
-			<%if (ApplicationHelper.check_can_download_csv(current_user,"departments"))%>
+			<%if (ApplicationHelper.check_can_download_csv(current_user,"product_sub_categories"))%>
 				<li class="nav-item">
 					<a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
 				</li>
 			<%end%>
-			<%if (ApplicationHelper.check_can_send_email(current_user,"departments"))%>
+			<%if (ApplicationHelper.check_can_send_email(current_user,"product_sub_categories"))%>
 				<li class="nav-item">
 					<a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
 				</li>
 			<%end%>
-			<%if (ApplicationHelper.check_can_import_export(current_user,"departments"))%>
+			<%if (ApplicationHelper.check_can_import_export(current_user,"product_sub_categories"))%>
 				<li class="nav-item">
 					<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
 				</li>
 			<%end%>
 	</ul>
- <%= search_form_for @q, url: departments_path, class: "admin-controls", method: "get" do |f| %>
-<div class="tab-content mb-5">
+       <%= search_form_for @q, url: product_sub_categories_path, class: "admin-controls", method: "get" do |f| %>
+
+ <div class="tab-content mb-5">
     <div class="tab-pane active mb-3 card shadow-sm mt-2 border-radius-1" id="search" role="tabpanel">
       <p>
         <div class="col-lg-10 form-group d-flex">
-            <div class='col-lg-3'>
-            <%= f.select :id_eq, options_for_select(@options_for_select.map{ |p| [p.title.to_s + '--->' + p.code.to_s, p.id]}, f.object.id_eq),{:include_blank => "Select Title"},:class=>"form-control chosen-select" %>
+            <div class='col-lg-3 d-flex'>
+            <%= f.select :id_eq, options_for_select(@options_for_select.map{ |p| [p.title.to_s + '--->' + p.code.to_s, p.id]}, f.object.id_eq),{:include_blank => "Select SubCategory"},:class=>"form-control chosen-select" %>
+            </div>
+              <div class='col-lg-3 d-flex'>
+            <%= f.select :id_eq, options_for_select(@options_for_select_cat.map{ |p| [p.title.to_s + '--->' + p.code.to_s, p.id]}, f.object.id_eq),{:include_blank => "Select Category"},:class=>"form-control chosen-select" %>
             </div>
           <div class='col-lg-3'>
-          <%= f.search_field :title_or_comment_cont, placeholder: "title", title: "title" ,:class=>"form-control" %>
+            <%= f.search_field :title_or_code_or_comment_cont, placeholder: "Search in sub categories", title: "Enter title" ,:class=>"form-control" %>
           </div>
           <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px;"><i class="fa fa-search"></i></button>
         </div>
@@ -76,30 +81,33 @@
   <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="create" role="tabpanel">
       <p>
      <% if can?(:add, :all) %>
-      <div id="new_department">
-        <%= link_to 'New Department', new_department_path, remote:true, class: "btn btn-success ml-3" %>
-      </div>
-      <% end %>
+        <div id="new_product_sub_category" class="col-lg-12">
+            <%= link_to new_product_sub_category_path,remote: true ,class: "btn btn-success" do %>
+            <i class="fas fa-plus" aria-hidden="true"></i>
+            New Sub Category
+            <% end %>
+            </div>
+        <% end %>
       </p>
 </div>
     <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="pdf" role="tabpanel">
       <p>
         <div class="col-lg-2 d-flex">
-        <button class="btn btn-danger" title= "download departments pdf" name="pdf" type="submit" value="pdf" formtarget="_blank">Departments &nbsp;<i class="fa fa-file-pdf"></i></button>
+        <button class="btn btn-danger" title= "download subcategories pdf" name="pdf" type="submit" value="pdf" formtarget="_blank" >SubCategories &nbsp;<i class="fa fa-file-pdf"></i></button>
         </div>
       </p>
     </div>
   <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="csv" role="tabpanel">
     <p>
       <div class="col-lg-2 d-flex">
-        <button class="btn btn-success" title= "download departments csv" name="csv" type="submit" value="csv">Departments &nbsp;<i class="fa fa-file-excel"></i></button>
+        <button class="btn btn-success" title= "download sub categories csv" name="csv" type="submit" value="csv">SubCategories &nbsp;<i class="fa fa-file-excel"></i></button>
         </div>
     </p>
   </div>
 <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="emails" role="tabpanel">
   <p>
-    <div class="col-lg-2 d-flex">
-    <button class="btn btn-info" type="button" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-envelope mr-2"></i>Mail</button>
+    <div class="col-lg-2 form-group d-flex">
+    <button class="form-control btn btn-info" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-2"></i>Mail</button>
     </div>
   </p>
     <!-- Modal -->
@@ -118,17 +126,16 @@
                 <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
                 <br />
                 <label>Subject:</label>
-                <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Departments Detail report from MunshiOnClick", class: 'form-control email-fields'%>
+                <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Unit Sub Categories Detail report from MunshiOnClick", class: 'form-control email-fields'%>
                 <br />
                 <label>Body:</label><br />
                 <%= text_area_tag 'body', nil, class: 'form-control'%>
                 <br />
-              <br />
               <label>Please select one of them.</label>
               <div>
-                <label class="cursor-pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
-                <label class="cursor-pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
-                <label class="cursor-pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
+                <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
+                <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
+                <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
               </div>
            </div>
           <div class="modal-footer">
@@ -150,10 +157,9 @@
 </div>
 <% end %>
 
-
   <%= render 'map_columns/map_column_partials' %>
-  <div class='card p-3 mb-3 shadow-sm mt-2 border-radius-1'>
-  <table data-toggle="table" data-search="true" id="department_table" class="overflow-hidden border-radius-1">
+<div class='card p-3'>
+  <table data-toggle="table" data-search="true" id="product_sub_category_table" class=" overflow-hidden border-radius-1">
     <thead>
       <tr>
         <th><input type="checkbox" id="master" class='select-all-checkbox'>
@@ -161,36 +167,37 @@
             <span class="ml-2 mt-2">
             <div class="my-icon my-view">
             
-                        <button class="icon-div btn delete-selected p-2 " type='button' value='Department'>
+                        <button class="icon-div btn delete-selected p-2 " type='button' value='ProductSubCategory'>
                                   <i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i> 
                         </button>
                     </div>
                     </span>
               </div>
         </th>
-        <th>ID<div class='float-right'><%= sort_link(@q, :id, '', {}, class: 'sorting-button') %></div></th>
+         <th>ID<div class='float-right'><%= sort_link(@q, :id, '', {}, class: 'sorting-button') %></div></th>
+        <th>Category<div class='float-right'><%= sort_link(@q, :product_category, '', {}, class: 'sorting-button') %></div></th>
+        <th>Title<div class='float-right'><%= sort_link(@q, :tile, '', {}, class: 'sorting-button') %></div></th>
         <th>Code<div class='float-right'><%= sort_link(@q, :code, '', {}, class: 'sorting-button') %></div></th>
-        <th>Title<div class='float-right'><%= sort_link(@q, :title, '', {}, class: 'sorting-button') %></div></th>
         <th>Comment<div class='float-right'><%= sort_link(@q, :comment, '', {}, class: 'sorting-button') %></div></th>
-
-        <th class="border_none">Action</th>
+        <th>Action</th>
       </tr>
     </thead>
 
     <tbody>
-  <%= render partial: 'department', collection: @departments %>
+      <%= render partial: 'product_sub_category', collection: @product_sub_categories %>
     </tbody>
   </table>
 
 <div class="row">
   <div class="col-lg-4 col-sm-4">
-    <%= page_entries_info @departments %>
+    <%= page_entries_info @product_sub_categories %>
   </div>
   <div class="col-lg-8 col-sm-8 pagination-left">
-    <%= paginate @departments %>
+    <%= paginate @product_sub_categories %>
   </div>
 </div>
 </div>
+<div class="show-data"></div>
 <%= form_for :bulk_import, url: bulk_import_data_path, method: :post, html: {class: "bulk-import-form"} do |f| %>
   <div class="modal fade" id="importFile" tabindex="-1" role="dialog" aria-labelledby="importFileTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -203,7 +210,7 @@
         </div>
         <div class="modal-body">
           <%= f.file_field :file, required: true, accept: '.csv' %>
-          <%= f.hidden_field :table_name, value: 'Department' %>
+          <%= f.hidden_field :table_name, value: 'ProductSubCategory' %>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -213,7 +220,7 @@
     </div>
   </div>
 <% end %>
-<div class="show-data"></div>
+
 <script>
   $(document).ready(function() {
     var sortingButtons = $('.sorting-button')
@@ -223,15 +230,7 @@
     if ($(".bootstrap-table").length == 0){
       $("table").bootstrapTable();
     }
-    $("#development_list").removeClass('hidden');
+    $("#product_sub_category_list").removeClass('hidden');
     FontAwesome.dom.i2svg();
-  });
-  $(document).ready(function() {
-    setTimeout(function(){
-      $(".chosen-select").chosen({
-  allow_single_deselect: true,
-  width: '100%'
-});
-    }, 50);
   });
 </script>
