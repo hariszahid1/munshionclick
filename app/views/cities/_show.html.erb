@@ -13,8 +13,8 @@
             <div class="collapse show" id="collapseCardExample" style="">
               <div class="card-body">
               <div class="card">
-                  <table class='table-bordered'>
-                      <thead>
+                  <table class='table table-bordered table-shadow'>
+                      <thead class='thead-color'>
                         <th><h4>Id</h4></th>
                         <th><h4>Name</h4></th>
                         <th><h4>Comment</h4></th>
@@ -29,11 +29,10 @@
                   </table>
                 </div>
                       <div class='card mt-3'>
-                        <table>
-                            <thead>
+                        <table class='table table-bordered table-shadow'>
+                            <thead class='thead-color'>
                               <th><h4>Modifier</h4></th>
                               <th><h4>Changes</h4></th>
-                              <th>Updated at</th>
                             </thead>
                             <tbody>
                               <%@city.versions.each do |version|%>
@@ -41,20 +40,21 @@
                                   <% next if version.whodunnit.nil? %>
                                   <td><h6><%= User.find(version.whodunnit).user_name %></h6></td>
                                       <td>
-                                      <table>
-                                      <thead>
+                                      <table class='table table-bordered table-shadow'>
+                                      <thead class='thead-color'>
                                       <th>Title</th>
                                       <th>Comments</th>
+                                      <th>Updated at</th>
                                       </thead>
                                       <tbody>
                                       <tr>
                                       <td><h6><%= version.changeset.try(:[], 'title') %><h6></td>
                                       <td><h6><%= version.changeset.try(:[], 'comment') %><h6></td>
+                                      <td><%= version.created_at.strftime("%d-%b-%y at %I:%M %p")%></td>
                                       </tr>
                                       </tbody>
                                       </table>
                                     </td>
-                                  <td><%= version.created_at%></td>
                                 </tr>
                               <% end%>
                           </tbody>

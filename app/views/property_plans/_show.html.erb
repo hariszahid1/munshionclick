@@ -17,33 +17,34 @@
              <!-- Card Content - Collapse -->
               <div class="collapse show" id="collapseCardExample" style="">
                 <div class="card-body">
-                  <table>
-                    <thead>
-                      <th>Type</th>
-                      <th>Area in Marla</th>
-                      <th>Total Price</th>
-                      <th>Price Per Marla</th>
-                      <th>Payment Type</th>
-                      <th>Payment Plan</th>
-                      <th>Number of Installments</th>
-                      <th>Advance</th>
-                      <th>High Amount Installments</th>
-                      <th>Total High Amount</th>
-                   </thead>
-                    <tbody class="p-3">
-                      <tr>
-                        <td><%= @property_plan.property_type %></td>
-                        <td><%= @property_plan.area_in_marla  %></td>
-                        <td>Rs.<%= @property_plan.total_price %></td>
-                        <td><%= @property_plan.price_per_marla %></td>
-                        <td><%= @property_plan.payment_type %></td>
-                        <td><%= @property_plan.payment_plan&.titleize %></td>
-                        <td><%= @property_plan.no_of_installments %></td>
-                        <td><%= @property_plan.advance %></td>
-                        <td><%= @property_plan.high_amount_installments %></td>
-                        <td>Rs.<%= @property_plan.total_high_amount  %></td>
-                      </tr>
-                   </tbody>
+                  <div class="card">
+                    <table class="table table-bordered table-shadow">
+                      <thead>
+                        <th>Type</th>
+                        <th>Area in Marla</th>
+                        <th>Total Price</th>
+                        <th>Price Per Marla</th>
+                        <th>Payment Type</th>
+                        <th>Payment Plan</th>
+                        <th>Number of Installments</th>
+                        <th>Advance</th>
+                        <th>High Amount Installments</th>
+                        <th>Total High Amount</th>
+                      </thead>
+                      <tbody class="p-3">
+                        <tr>
+                          <td><%= @property_plan.property_type %></td>
+                          <td><%= @property_plan.area_in_marla  %></td>
+                          <td>Rs.<%= @property_plan.total_price %></td>
+                          <td><%= @property_plan.price_per_marla %></td>
+                          <td><%= @property_plan.payment_type %></td>
+                          <td><%= @property_plan.payment_plan&.titleize %></td>
+                          <td><%= @property_plan.no_of_installments %></td>
+                          <td><%= @property_plan.advance %></td>
+                          <td><%= @property_plan.high_amount_installments %></td>
+                          <td>Rs.<%= @property_plan.total_high_amount  %></td>
+                        </tr>
+                    </tbody>
                   </table>
 
                 <table class="mt-3">
@@ -67,38 +68,38 @@
                               </div>
                             <% end %><td>
                         </tbody>
-                     
                      </table>
-                     <table>
-                      <thead>
-                        <th><h4>Modifier</h4></th>
-                        <th><h4>Changes</h4></th>
-                        <th>Updated at</th>
-                    </thead>
-                      <tbody>
-                        <%@property_plan.versions.each do |version|%>
-                          <tr>
-                            <% next if version.whodunnit.nil? %>
-                            <td><h6><%= User.find(version.whodunnit).user_name %></h6></td>
-                                <td>
-                                <table>
-                                <thead>
-                                <th>Title</th>
-                                <th>Comments</th>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                <td><h6><%= version.changeset.try(:[], 'title') %><h6></td>
-                                <td><h6><%= version.changeset.try(:[], 'comment') %><h6></td>
-                                </tr>
-                                </tbody>
-                                </table>
-                              </td>
-                            <td><%= version.created_at%></td>
-                          </tr>
-                        <% end%>
-                    </tbody>
-                    </table>
+                    <div class="card mt-3">
+                      <table class="table table-bordered table-shadow">
+                          <thead class="thead-color">
+                            <th><h4>Modifier</h4></th>
+                            <th><h4>Changes</h4></th>
+                          </thead>
+                          <tbody>
+                            <%@property_plan.versions.each do |version|%>
+                              <tr>
+                                <% next if version.whodunnit.nil? %>
+                                <td><h6><%= User.find(version.whodunnit).user_name %></h6></td>
+                                    <td>
+                                    <table class="table table-bordered table-shadow">
+                                    <thead class="thead-color">
+                                    <th>Title</th>
+                                    <th>Comments</th>
+                                    <th>Updated at</th>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                    <td><h6><%= version.changeset.try(:[], 'title') %><h6></td>
+                                    <td><h6><%= version.changeset.try(:[], 'comment') %><h6></td>
+                                    <td><%= version.created_at.strftime("%d-%b-%y at %I:%M %p")%></td></tr>
+                                    </tbody>
+                                    </table>
+                                  </td>
+                              </tr>
+                            <% end%>
+                          </tbody>
+                        </table>
+                      </div> 
                 </div>
               </div>
               
