@@ -11,22 +11,56 @@
               <!-- Card Content - Collapse -->
               <div class="collapse show" id="collapseCardExample" style="">
                 <div class="card-body">
-                  <table>
-                    <thead>
-                      <th><h5>Id</h5></th>
-                      <th><h5>Code</h5></th>
-                      <th><h5>Title</h5></th>
-                      <th><h5>Comment</h5></th>
-                   </thead>
-                    <tbody>
-                      <tr>
-                        <td><%= product_category.id %></td>
-                        <td><%= product_category.code %></td>
-                        <td><%= product_category.title %> </td>
-                        <td><%= product_category.comment %></td>
-                      </tr>
-                   </tbody>
-                  </table>
+                  <div class="card">
+                    <table class="table table-bordered table-shadow">
+                        <thead class="thead-color">
+                          <th><h5>Id</h5></th>
+                          <th><h5>Code</h5></th>
+                          <th><h5>Title</h5></th>
+                          <th><h5>Comment</h5></th>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td><%= product_category.id %></td>
+                            <td><%= product_category.code %></td>
+                            <td><%= product_category.title %> </td>
+                            <td><%= product_category.comment %></td>
+                          </tr>
+                      </tbody>
+                   </table>
+                  </div>
+                  <div class="card mt-3">
+                    <table class="table table-bordered table-shadow">
+                        <thead class="thead-color">
+                          <th><h4>Modifier</h4></th>
+                          <th><h4>Changes</h4></th>
+                        </thead>
+                        <tbody>
+                          <%@product_category.versions.each do |version|%>
+                            <tr>
+                              <% next if version.whodunnit.nil? %>
+                              <td><h6><%= User.find(version.whodunnit).user_name %></h6></td>
+                                  <td>
+                                  <table class="table table-bordered table-shadow">
+                                    <thead class="thead-color">
+                                    <th>Title</th>
+                                    <th>Comments</th>
+                                    <th>Updated at</th>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                    <td><h6><%= version.changeset.try(:[], 'title') %><h6></td>
+                                    <td><h6><%= version.changeset.try(:[], 'comment') %><h6></td>
+                                    <td><%= version.created_at.strftime("%d-%b-%y at %I:%M %p")%></td>
+                                    </tr>
+                                    </tbody>
+                                  </table>
+                                </td>
+                            </tr>
+                          <% end%>
+                       </tbody>
+                      </table>
+                   </div>
             </div>
           </div>
         </div>

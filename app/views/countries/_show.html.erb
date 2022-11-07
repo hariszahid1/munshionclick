@@ -10,8 +10,9 @@
         <div class="modal-body">
           <div class="card-body">
               <div class="collapse show" id="collapseCardExample" style="">
-                  <table>
-                    <thead>
+                <div class="card">
+                  <table class="table table-bordered table-shadow">
+                    <thead class="thead-color">
                       <th>Id</th>
                       <th>Title</th>
                       <th>Comment</th>
@@ -24,6 +25,39 @@
                       </tr>
                    </tbody>
                   </table>
+                </div>
+                <div class="card mt-3">
+                    <table class="table table-bordered table-shadow">
+                      <thead class="thead-color">
+                        <th><h4>Modifier</h4></th>
+                        <th><h4>Changes</h4></th>
+                      </thead>
+                      <tbody>
+                        <%@country.versions.each do |version|%>
+                          <tr>
+                            <% next if version.whodunnit.nil? %>
+                            <td><h6><%= User.find(version.whodunnit).user_name %></h6></td>
+                                <td>
+                                <table class="table table-bordered table-shadow">
+                                <thead class="thead-color">
+                                <th>Title</th>
+                                <th>Comments</th>
+                                <th>Updated at</th>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                <td><h6><%= version.changeset.try(:[], 'title') %><h6></td>
+                                <td><h6><%= version.changeset.try(:[], 'comment') %><h6></td>
+                                <td><%= version.created_at.strftime("%d-%b-%y at %I:%M %p")%></td>
+                                </tr>
+                                </tbody>
+                                </table>
+                              </td>
+                          </tr>
+                        <% end%>
+                      </tbody>
+                    </table>
+                  </div>
               </div>
           </div>
         </div>
