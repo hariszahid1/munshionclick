@@ -7,6 +7,9 @@
   <td><%= user_type.discount_by_amount %></td>
   <td><span title="<%= user_type.comment %>" class='truncate-text'><%= user_type.comment %></span></td>
   <td>
+    <div class="icon-container-1">
+    <div class="my-icon-1 my-view-1">
+      <div class="my-tooltip-1">
     <div class="icon-container">
 			<%if (ApplicationHelper.check_can_update(current_user,"user_types"))%>
 				<div class="my-icon my-view">
@@ -52,7 +55,7 @@
             <div class="my-tooltip">
               PDF
             </div>
-            <span class="icon-div">
+            <span class="icon-div mt-3">
                 <%= link_to user_types_path('q[id_eq]':user_type.id,'pdf':true), title: 'Download PDF', target: '_blank' do %>
     			      <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
     		      <%end %>

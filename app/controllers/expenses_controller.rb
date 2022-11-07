@@ -1,4 +1,5 @@
 class ExpensesController < ApplicationController
+	before_action :check_access
   before_action :set_expense, only: [:show, :edit, :update, :destroy]
 
   # GET /expenses
@@ -64,6 +65,9 @@ class ExpensesController < ApplicationController
   # GET /expenses/1
   # GET /expenses/1.json
   def show
+    respond_to do |format|
+      format.js
+    end
   end
 
   # GET /expenses/new
@@ -127,9 +131,8 @@ class ExpensesController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { redirect_to expenses_url, notice: 'Expense was successfully destroyed.' }
-      format.json { head :no_content }
-      format.js   { render :layout => false }
+      format.html { redirect_to expenses_path, notice: 'Expense was successfully Deleted.' }
+      format.json { render :show, status: :ok, location: @expense }
     end
   end
 
