@@ -1,0 +1,5 @@
+$('.show-data').children().remove();
+$('.show-data').append("<%= escape_javascript(render partial: 'new_form', locals: { sys_user: @sys_user }) %>");
+$("#showdData").modal('show');
+
+

@@ -19,7 +19,7 @@ class SysUsersController < ApplicationController
         @cnic = params[:q][:cnic]
         @name = params[:q][:id_eq]
         @user_type = params[:q][:user_type]
-        @user_group = params[:q][:user_group_eq]
+        @user_group = params[:q][:user_group__id_eq]
         @contact = params[:q][:contact]
         @status = params[:q][:status]
         @occupation = params[:q][:occupation]
@@ -31,6 +31,7 @@ class SysUsersController < ApplicationController
       @sys_user_balance = @q.result.sum(:balance).to_f.round(2)
       @all_user =SysUser.all
       @user_types=UserType.all
+      @user_groups = UserGroup.all
       if params[:submit_pdf_staff_with].present?
         if @q.result.count > 0
           @q.sorts = 'name asc' if @q.sorts.empty?
@@ -72,6 +73,10 @@ class SysUsersController < ApplicationController
     @user_types=UserType.all
     @cities=City.all
     @countries=Country.all
+
+    respond_to do |format|
+      format.js
+    end
   end
 
   def payable
@@ -238,6 +243,7 @@ class SysUsersController < ApplicationController
     @sys_user = SysUser.new
     @cities=City.all
     @countries=Country.all
+    @user_group = UserGroup.all
     @sys_user.build_contact
   end
 
@@ -246,6 +252,11 @@ class SysUsersController < ApplicationController
     @user_types=UserType.all
     @cities=City.all
     @countries=Country.all
+    @user_group = UserGroup.all
+
+    respond_to do |format|
+      format.js
+    end
   end
 
   # POST /sys_users
@@ -286,9 +297,8 @@ class SysUsersController < ApplicationController
   def destroy
     @sys_user.destroy!
     respond_to do |format|
-      format.html { redirect_to get_request_referrer, notice: 'Sys user was successfully destroyed.' }
-      format.json { head :no_content }
-      format.js   { render :layout => false }
+      format.html { redirect_to sys_users_path, notice: 'Sys User was successfully Deleted.' }
+      format.json { render :show, status: :ok, location: @sys_user }
     end
   end
 
@@ -316,7 +326,7 @@ class SysUsersController < ApplicationController
         :cnic,
         :name,
         :user_type_id,
-        :user_group,
+        :user_group_id,
         :status,
         :occupation,
         :credit_status,
