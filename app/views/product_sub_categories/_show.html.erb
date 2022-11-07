@@ -26,6 +26,36 @@
                   </tr>
                </tbody>
               </table>
+              <table>
+                      <thead>
+                        <th><h4>Modifier</h4></th>
+                        <th><h4>Changes</h4></th>
+                        <th>Updated at</th>
+                      </thead>
+                      <tbody>
+                        <%@product_sub_category.versions.each do |version|%>
+                          <tr>
+                            <% next if version.whodunnit.nil? %>
+                            <td><h6><%= User.find(version.whodunnit).user_name %></h6></td>
+                                <td>
+                                <table>
+                                <thead>
+                                <th>Title</th>
+                                <th>Comments</th>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                <td><h6><%= version.changeset.try(:[], 'title') %><h6></td>
+                                <td><h6><%= version.changeset.try(:[], 'comment') %><h6></td>
+                                </tr>
+                                </tbody>
+                                </table>
+                              </td>
+                            <td><%= version.created_at%></td>
+                          </tr>
+                        <% end%>
+                    </tbody>
+                </table>
             </div>
           </div>
         </div>
