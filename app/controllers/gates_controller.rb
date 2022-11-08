@@ -99,8 +99,8 @@ class GatesController < ApplicationController
       @n = DailyBook.where(created_at: @nakasi_from.to_date.beginning_of_day..@nakasi_to.to_date.end_of_day,department_id: @departments.third.id).ransack()
       @daily_books = @q.result
       @khakar_daily_books = @k.result
-      @jalai_production_cycles = @j.result(distinct: true)
-      @nkasi_production_cycles = @n.result(distinct: true)
+      @jalai_production_cycles = @j.result
+      @nkasi_production_cycles = @n.result
       @expenses_with_type=ExpenseEntry.joins(:expense_type).where.not(expense_type_id:29).where(created_at: @expense_from.beginning_of_day..@expense_to.end_of_day).group('expense_types.title').sum(:amount)
       @expenses_total=ExpenseEntry.joins(:expense_type).where.not(expense_type_id:29).where(created_at: @expense_from.beginning_of_day..@expense_to.end_of_day).sum(:amount)
       @salary_amount = SalaryDetail.joins(staff: :department).where.not('staffs.department_id':[1,2,3,4]).where(created_at: @salary_from.beginning_of_day..@salary_to.end_of_day).group('departments.title').sum(:amount)
