@@ -46,7 +46,9 @@ class ProductSubCategoriesController < ApplicationController
     respond_to do |format|
       if @product_sub_category.save
         format.js
-        format.html { redirect_to product_sub_categories_path, notice: 'Product sub category was successfully created.' }
+        notice_text = 'Product Sub category was successfully created.'
+        notice_text = 'Unit Sub category was successfully created.' if pos_setting_sys_type.eql? 'HousingScheme'
+        format.html { redirect_to product_sub_categories_path, notice: notice_text }
         format.json { render :show, status: :created, location: @product_sub_category }
       else
         format.html { redirect_to product_sub_categories_path, alert: 'Title is already present!' }
@@ -59,7 +61,9 @@ class ProductSubCategoriesController < ApplicationController
   def update
     respond_to do |format|
       if @product_sub_category.update(product_sub_category_params)
-        format.html { redirect_to product_sub_categories_path, notice: 'Product sub category was successfully updated.' }
+        notice_text = 'Product Sub category was successfully updated.'
+        notice_text = 'Unit Sub category was successfully updated.' if pos_setting_sys_type.eql? 'HousingScheme'
+        format.html { redirect_to product_sub_categories_path, notice: notice_text }
         format.json { render :show, status: :ok, location: @product_sub_category }
       else
         format.html { redirect_to product_sub_categories_path, alert: 'Title is already present!' }
@@ -72,7 +76,9 @@ class ProductSubCategoriesController < ApplicationController
   def destroy
     @product_sub_category.destroy
     respond_to do |format|
-      format.html { redirect_to product_sub_categories_path, notice: 'Product Sub Category was successfully Deleted.' }
+      notice_text = 'Product Sub category was successfully Deleted.'
+      notice_text = 'Unit Sub category was successfully Deleted.' if pos_setting_sys_type.eql? 'HousingScheme'
+      format.html { redirect_to product_sub_categories_path, notice: notice_text }
       format.json { render :show, status: :ok, location: @product_sub_category }
     end
   end

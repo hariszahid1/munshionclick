@@ -1,3 +1,7 @@
 $('.show-data').children().remove();
-$('.show-data').append("<%= escape_javascript(render partial: 'edit', locals: { product_sub_category: @product_sub_category }) %>");
+<% if pos_setting_sys_type=="HousingScheme"%>
+  $('.show-data').append("<%= escape_javascript(render partial: 'product_sub_categories/hscheme/hscheme_edit', locals: { product_category: @product_category }) %>");
+<% else%>
+  $('.show-data').append("<%= escape_javascript(render partial: 'edit', locals: { product_category: @product_category }) %>");
+<% end%>
 $("#showdData").modal('show');

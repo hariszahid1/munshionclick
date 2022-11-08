@@ -3,7 +3,7 @@
   <td><%= city.id %></td>
   <td class='urdu-font'><%= city.title %></td>
   <td><span title="<%= city.comment %>" class='truncate-text'><%= city.comment %></span></td>
-  <td>
+  <td class="p-3">
 
 <div class="icon-container-1">
   <div class="my-icon-1 my-view-1">
@@ -14,68 +14,68 @@
           <div class="my-tooltip">
             Edit
           </div>
-          <span class="icon-div mt-2">
+          
                 <% if can?(:update, :all) %>
-              <%= link_to edit_city_path(city), remote: true do %>
+              <%= link_to edit_city_path(city), remote: true, class:"icon-div" do %>
                 <i class="fa fa-edit mt-2" aria-hidden="true"></i>
               <%end %>
             <% end %>
-          </span>
+          
         </div>
 
           <div class="my-icon my-view">
               <div class="my-tooltip">
                 Delete
               </div>
-                <span class="icon-div mt-2">
+                
                   <% if can?(:delete, :all) %>
-                    <%= link_to city, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+                    <%= link_to city, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
                     <i class="fa fa-trash mt-2" aria-hidden="true"></i>
                   <%end %>
                 <% end %>
-              </span>
+              
           </div>
 
          <div class="my-icon my-view">
                 <div class="my-tooltip">
                   Show
                 </div>
-                <span class="icon-div mt-2">
+                
                    <% if can?(:view, :all) %>
-                    <%= link_to city_path(city), remote: true do %>
+                    <%= link_to city_path(city), remote: true, class:"icon-div" do %>
                     <i class="fa fa-eye mt-2" aria-hidden="true"></i>
                 <%end %>
             <%end%>
-          </span>
+          
       </div>
 
       <div class="my-icon my-view">
             <div class="my-tooltip">
               PDF
             </div>
-            <span class="icon-div mt-2">
-                <%= link_to cities_path('q[id_eq]':city.id,'pdf':true), title: 'Download PDF', target: '_blank' do %>
+            
+                <%= link_to cities_path('q[id_eq]':city.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
     			      <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
     		      <%end %>
-            </span>
+            
       </div>
 
        <div class="my-icon my-view">
             <div class="my-tooltip">
               CSV
             </div>
-            <span class="icon-div mt-2">
-                  <%= link_to cities_path('q[id_eq]':city.id,'csv':true), title: 'Download CSV' do%>
+            
+                  <%= link_to cities_path('q[id_eq]':city.id,'csv':true), title: 'Download CSV', class:"icon-div" do%>
     			        <i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
     		      <%end %>
-            </span>
+            
           </div>
         </div>
         </div>
-                          <span class="icon-div-1">
-                                <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
-                          </span>
-                      </div>
+            <span class="icon-div-1">
+                  <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+            </span>
+        </div>
       </div>
       </div>
     </div>

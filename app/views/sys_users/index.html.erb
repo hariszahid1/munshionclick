@@ -70,8 +70,8 @@
                   <span class="col-lg-3 form-group float-left">
                     <%= f.select :id_eq, options_from_collection_for_select(@all_user, "id", ->(st){"#{st.name} \u{27F6} \u{27F6} #{st.code} "},@name),{:include_blank => "Select Name/Code"},:class=>"form-control chosen-select " %>
                   </span>
-                  <span class="col-lg-2 form-group float-left">
-                    <%= f.select :user_group_eq, options_for_select(SysUser.user_groups, @user_group), {:include_blank => "Select User group"},:class=>"form-control chosen-select" %>
+                  <span class='col-lg-2 form-group float-left'>
+                    <%= f.select :user_group_eq, options_for_select(SysUser.user_groups, @user_group), {:include_blank => "Select User Group"},:class=>"form-control chosen-select" %>
                   </span>
                   <span class="col=lg-2 form-group float-left">
                     <%= f.select :status_eq, SysUser.statuses.map { |key, value| [key.humanize, value] },{include_blank: "Select Status", hide_label:true, required: true },:class=>"form-control chosen-select" %>
@@ -194,7 +194,7 @@
 
 
  <div class='card p-3'>
-  <table data-toggle="table" data-search="true">
+  <table data-toggle="table" data-search="true" class="overflow-hidden border-radius-1">
     <%= render 'map_columns/map_column_partials' %>
       <button class='btn btn-outline-danger float-right delete-selected' type='button' style="width:163px"value='SysUser' >Delete Selected</button>
       <thead>
@@ -251,58 +251,83 @@
             <%end%>
           </td>
           <td>
-              <div class="icon-container">
-                  <div class="my-icon my-view">
-                  <div class="my-tooltip">
-                    Edit
-                  </div>
-                  <span class="icon-div">
-                        <% if can?(:update, :all) %>
-                      <%= link_to edit_sys_user_path(sys_user), remote: true do %>
-                        <i class="fa fa-edit mt-2" aria-hidden="true"></i>
-                      <%end %>
-                    <% end %>
-                  </span>
-                </div>
+           <div class="icon-container-1">
+      <div class="my-icon-1 my-view-1">
+        <div class="my-tooltip-1">
 
-                  <div class="my-icon my-view">
-                      <div class="my-tooltip">
-                        Delete
-                      </div>
-                        <span class="icon-div">
-                          <% if can?(:delete, :all) %>
-                            <%= link_to sys_user, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
-                            <i class="fa fa-trash mt-2" aria-hidden="true"></i>
-                          <%end %>
-                        <% end %>
-                      </span>
-                  </div>
-
+        <div class="icon-container">
               <div class="my-icon my-view">
-                        <div class="my-tooltip">
-                          Show
-                        </div>
-                        <span class="icon-div">
-                           <% if can?(:view, :all) %>
-                            <%= link_to sys_user_path(sys_user), remote: true do %>
-                            <i class="fa fa-eye mt-2" aria-hidden="true"></i>
-                        <%end %>
-                    <%end%>
-                  </span>
+              <div class="my-tooltip">
+                Edit
               </div>
 
-               <div class="my-icon my-view">
-                    <div class="my-tooltip">
-                      Ledger Book
-                    </div>
-                    <span class="icon-div">
-                          <%= link_to ledger_books_path('q[sys_user_id_eq]':sys_user.id), title: "Ledger book" do%>
-                            <i class="fa fa-address-book mt-2"></i>
-                          <%end %>
-                    </span>
-                  </div>
-            <b class="ml-2 mt-1">Total changes: <%= sys_user.versions.count%></b>
+                    <% if can?(:update, :all) %>
+                  <%= link_to edit_sys_user_path(sys_user), remote: true, class:"icon-div" do %>
+                    <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+                  <%end %>
+                <% end %>
+
             </div>
+
+              <div class="my-icon my-view">
+                  <div class="my-tooltip">
+                    Delete
+                  </div>
+
+                      <% if can?(:delete, :all) %>
+                        <%= link_to sys_user, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+                        <i class="fa fa-trash mt-2" aria-hidden="true"></i>
+                      <%end %>
+                    <% end %>
+
+              </div>
+
+             <div class="my-icon my-view">
+                    <div class="my-tooltip">
+                      Show
+                    </div>
+
+                       <% if can?(:view, :all) %>
+                        <%= link_to sys_user_path(sys_user), remote: true, class:"icon-div" do %>
+                        <i class="fa fa-eye mt-2" aria-hidden="true"></i>
+                    <%end %>
+                <%end%>
+
+          </div>
+
+          <div class="my-icon my-view">
+                <div class="my-tooltip">
+                  PDF
+                </div>
+
+                    <%= link_to sys_users_path('q[id_eq]':sys_user.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
+        			      <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
+        		      <%end %>
+
+          </div>
+
+           <div class="my-icon my-view">
+                <div class="my-tooltip">
+                  CSV
+                </div>
+
+                      <%= link_to sys_users_path('q[id_eq]':sys_user.id,'csv':true), title: 'Download CSV', class:"icon-div" do%>
+        			        <i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
+        		      <%end %>
+
+              </div>
+            </div>
+            </div>
+                <span class="icon-div-1">
+                      <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+                </span>
+            </div>
+          </div>
+          </div>
+        </div>
+  </td>
+</tr>
+
           </td>
         </tr>
         <% end %>

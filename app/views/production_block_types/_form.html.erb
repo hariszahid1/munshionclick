@@ -1,4 +1,4 @@
-<%= bootstrap_form_for(production_block_type, remote: true) do |f| %>
+<%= bootstrap_form_for(production_block_type) do |f| %>
   <% if production_block_type.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(production_block_type.errors.count, "error") %> prohibited this production_block_type from being saved:</h2>
@@ -10,7 +10,7 @@
       </ul>
     </div>
   <% end %>
-  <div class="col-lg-6 form-group float-left">
+  <div class="col-lg-12 form-group float-left">
     <%= f.label :title do %>
           <%= ProductionBlockType.human_attribute_name :title %>
           <i class="fas fa-language"></i> 
@@ -18,30 +18,22 @@
     <%= f.text_field :title,required:true,placeholder: "Enter the title", hide_label: true, class: 'urdu-font' %>
   </div>
 
-  <div class="col-lg-6 form-group float-left">
+  <div class="col-lg-12 form-group float-left">
     <%= f.number_field :quantity %>
   </div>
 
-  <div class="col-lg-6 form-group float-left">
+  <div class="col-lg-12 form-group float-left">
     <%= f.text_area :comment , placeholder:"Enter Comment"%>
   </div>
 
 <div class="clearfix">
 </div>
 
-<div class="clearfix">
-  <hr>
-  <div class="col-lg-12 row ">
-
-          <div class="col-lg-6 form-group float-left">
-            <%= link_to production_block_types_path do %>
-            <i class="fa fa-arrow-left " aria-hidden="true"></i>
-            <% end %>
-          </div>
-            <div class="col-lg-6 form-group float-left">
-              <div class="col-lg-6 form-group float-left">
-                <%=f.object.id.nil? ? (f.submit class: "btn btn-success", style: "float: left")  :  (f.submit class: "btn btn-warning", style: "float: left")%>
-              </div>
-            </div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+    <%=f.object.id.nil? ? (f.submit class: "btn btn-success mr-4", style: "float: right")  :  (f.submit class: "btn btn-warning mr-4", style: "float: right")%>
+  </div>
+          
+            
           <% end %>
 </div>
