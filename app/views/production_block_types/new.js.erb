@@ -1,1 +1,5 @@
-$('#new_production_block_type a').hide().parent().append("<%= j render 'new_form', production_block_type: @production_block_type %>");
+$('.show-data').children().remove();
+$('.show-data').append("<%= escape_javascript(render partial: 'new_form', locals: { production_block_type: @production_block_type }) %>");
+$("#showdData").modal('show');
+
+

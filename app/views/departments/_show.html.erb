@@ -6,31 +6,55 @@
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
              </button>
-        </div>
-        <div class="modal-body">
-          <div class="card-body">
-              <div class="collapse show" id="collapseCardExample" style="">
-                  <table>
-          <thead>
-            <th>Id</th>
-            <th>Code</th>
-            <th>Name</th>
-            <%# <th>Status</th> %>
-            <th>Comment</th>
-         </thead>
-          <tbody>
-            <tr>
-              <td><%= @department.id %></td>
-              <td><%= @department.code %></td>
-              <td><%= @department.title %> </td>
-              <%# <td><%= @department.status </td> %>
-              <td><%= @department.comment %></td>
-            </tr>
-         </tbody>
-        </table>
-              </div>
           </div>
-        </div>
+    <div class="modal-body">
+      <div class="card-body">
+        <div class="collapse show" id="collapseCardExample" style="">
+        <div class='card'>
+            <table class="table table-bordered table-shadow">
+                <thead class="thead-color">
+                  <th>Id</th>
+                  <th>Code</th>
+                  <th>Name</th>
+                  <%# <th>Status</th> %>
+                  <th>Comment</th>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><%= @department.id %></td>
+                    <td><%= @department.code %></td>
+                    <td><%= @department.title %> </td>
+                    <%# <td><%= @department.status </td> %>
+                    <td><%= @department.comment %></td>
+                  </tr>
+                </tbody>
+            </table>
+            <div>
+           <div class='card mt-3'>
+                  <h2 class="mb-2">Total Changes</h2>
+                  <table class='table table-bordered table-shadow'>
+                    <thead class='thead-color'>
+                    <th>Changed by</th>
+                    <th>Title</th>
+                    <th>Comments</th>
+                    <th>Updated at</th>
+                    </thead>
+                    <%@department.versions.each do |version|%>
+                      <tbody>
+                        <tr>
+                          <% next if version.whodunnit.nil? %>
+                          <td><h6><%= User.find(version.whodunnit).user_name %></h6></td>
+                          <td><h6><%= version.changeset.try(:[], 'title') %><h6></td>
+                          <td><h6><%= version.changeset.try(:[], 'comment') %><h6></td>
+                          <td><%= version.created_at.strftime("%d-%b-%y at %I:%M %p")%></td>
+                        </tr>
+                      </tbody>
+                    <% end%>
+                  </table>
+                </div>
+         </div>
+      </div>
+    </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
         </div>

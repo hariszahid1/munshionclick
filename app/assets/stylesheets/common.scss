@@ -519,9 +519,9 @@ thead.cust_prizes_list th.th_value {
 
 .icon-container{
   display: inline-flex;
-  flex-direction: column;
-  margin-right: 10px;
+  flex-direction: row;
 }
+
 .icon-container .my-icon{
   margin: 0 10px;
   text-align: center;
@@ -534,6 +534,7 @@ thead.cust_prizes_list th.th_value {
   z-index: 2;
   transition: 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
+
 .icon-container .my-icon .icon-div{
   display: block;
   height: 35px;
@@ -545,10 +546,12 @@ thead.cust_prizes_list th.th_value {
   box-shadow: 0px 10px 10px rgba(0,0,0,0.1);
   transition: 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
+
 .icon-container .my-icon .icon-div i{
   line-height: 60px;
   font-size: 25px;
 }
+
 .icon-container .my-icon .my-tooltip{
   position: absolute;
   top: 0;
@@ -564,11 +567,13 @@ thead.cust_prizes_list th.th_value {
   box-shadow: 0px 10px 10px rgba(0,0,0,0.1);
   transition: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
+
 .icon-container .my-icon:hover .my-tooltip{
-  top: -40px;
+  top: -50px;
   opacity: 1;
   pointer-events: auto;
 }
+
 .my-icon .my-tooltip:before{
   position: absolute;
   content: "";
@@ -580,17 +585,13 @@ thead.cust_prizes_list th.th_value {
   transform: translateX(-50%) rotate(45deg);
   transition: 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
-// .icon-container .my-icon:hover .icon-div{
-//   color: #fff;
-// }
+
+
 .icon-container .my-icon:hover .icon-div,
 .icon-container .my-icon:hover .my-tooltip{
   text-shadow: 0px -1px 0px rgba(0,0,0,0.4);
 }
-// .icon-container .my-view:hover .icon-div,
-// .icon-container .my-view:hover:before{
-//   background: #3B5999;
-// }
+
 .truncate-text{
   width: 200px;
   white-space: nowrap;
@@ -602,6 +603,12 @@ thead.cust_prizes_list th.th_value {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.table-shadow{
+  box-shadow: none;
+}
+.thead-color{
+  background-color: lightgrey;
 }
 
 .border-radius-1{
@@ -610,7 +617,7 @@ thead.cust_prizes_list th.th_value {
 
 .icon-container-1 {
   display: inline-flex;
-  flex-direction: column;
+  flex-direction: row;
   margin-right: 10px;
 }
 
@@ -646,7 +653,8 @@ thead.cust_prizes_list th.th_value {
 
 .icon-container-1 .my-icon-1 .my-tooltip-1 {
   position: absolute;
-  top: 0;
+  top: -12px;
+  right: 20px;
   z-index: 1;
   background: #fff;
   color: #3B5999;
@@ -661,17 +669,12 @@ thead.cust_prizes_list th.th_value {
 }
 
 .icon-container-1 .my-icon-1:hover .my-tooltip-1 {
-  top: -90px;
-  right: 30px;
+  top: -12px;
+  right: 20px;
   opacity: 1;
   pointer-events: auto;
 }
 
-
-
-// .icon-container .my-icon:hover .icon-div{
-//   color: #fff;
-// }
 .icon-container-1 .my-icon-1:hover .icon-div-1,
 .icon-container-1 .my-icon-1:hover .my-tooltip-1 {
   text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.4);
@@ -681,3 +684,12 @@ thead.cust_prizes_list th.th_value {
 // .icon-container .my-view:hover:before{
 //   background: #3B5999;
 // }
+
+.my-line{
+  width: 50%;
+  border: red 2px solid;
+}
+.modal-body{
+  max-height: 700px;
+  overflow-y: auto;
+}

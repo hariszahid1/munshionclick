@@ -17,7 +17,7 @@ class ProductCategoriesController < ApplicationController
     download_product_categories_pdf_file if params[:pdf].present?
     send_email_file if params[:email].present?
     export_file if params[:export_data].present?
-    end
+  end
 
   # GET /product_categories/1
   # GET /product_categories/1.json
@@ -47,7 +47,9 @@ class ProductCategoriesController < ApplicationController
     respond_to do |format|
       if @product_category.save
         format.js
-        format.html { redirect_to product_categories_path, notice: 'Product category was successfully created.' }
+        notice_text = 'Product category was successfully created.'
+        notice_text = 'Unit category was successfully created.' if pos_setting_sys_type.eql? 'HousingScheme'
+        format.html { redirect_to product_categories_path, notice: notice_text }
         format.json { render :show, status: :created, location: @product_category }
       else
         format.html { redirect_to product_categories_path, alert: 'Title is already present!' }
@@ -60,7 +62,9 @@ class ProductCategoriesController < ApplicationController
   def update
     respond_to do |format|
       if @product_category.update(product_category_params)
-        format.html { redirect_to product_categories_url, notice: 'Product category was successfully updated.' }
+        notice_text = 'Product category was successfully updated.'
+        notice_text = 'Unit category was successfully updated.' if pos_setting_sys_type.eql? 'HousingScheme'
+        format.html { redirect_to product_categories_url, notice: notice_text }
         format.json { render :show, status: :ok, location: @product_category }
       else
         format.html { redirect_to product_categories_path, alert: 'Title is already present!' }
@@ -73,7 +77,9 @@ class ProductCategoriesController < ApplicationController
   def destroy
     @product_category.destroy
     respond_to do |format|
-     format.html { redirect_to product_categories_path, notice: 'Product Category was successfully Deleted.' }
+      notice_text = 'Product category was successfully Deleted.'
+      notice_text = 'Unit category was successfully Deleted.' if pos_setting_sys_type.eql? 'HousingScheme'
+      format.html { redirect_to product_categories_path, notice: notice_text }
       format.json { render :show, status: :ok, location: @product_category }
     end
   end
