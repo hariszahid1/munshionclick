@@ -1,34 +1,72 @@
+<div id="custom-alert" class="alert alert-danger d-none">
+  <span class="custom-alert-text"></span>
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">×</span>
+  </button>
+</div>
 
+<div class="hidden" id="city_list">
+          <div class="main-content-header">
+            <h1 class="ml-2">Payments</h1>
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a href="<%= root_path %>">Dashboard</a>
+              </li>
+              <li class="breadcrumb-item active">
+                <a href="<%= payments_path %>">Payments</a>
+              </li>
+            </ol>
+          </div>
+          <div class="float-right">
+            <div class="dropdown ml-auto mr-4">
+             <span class="btn btn-info" title= "About This page">Help</span>
+              <div class="dropdown-content">
+                <% if @help.present? %>
+                <% @help&.help_links.each do |link| %>
+                <a type="button" class="" target="_blank" href="<%= link[1] %>" >Help in <%= link[0] %></a>
+                 <% end %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+    
+  <ul class="nav nav-pills" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link tab-label" data-toggle="tab" href="#jama" role="tab">Jama/Credit</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link tab-label" data-toggle="tab" href="#benam" role="tab">Benam/Debit</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link tab-label" data-toggle="tab" href="#transfer" role="tab">Payment Transfer</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link tab-label" data-toggle="tab" href="#account" role="tab">Account</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download PDF</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download CSV</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
+      </li>
+      <li class="nav-item">
+       <a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
+      </li>
+  </ul>
 
-<div class="hidden" id="payment_list">
-  <div class="row">
-    <div class="col-lg-12 col-sm-12">
-      <h1>Payments</h1>
-      <% if can?(:delete, :all) %>
-        <%= link_to new_payment_path, class: "btn btn-success" do %>
-         <i class="fa fa-plus" aria-hidden="true"></i>
-          Jama/Credit
-        <% end %>
-        <%= link_to new_payment_path(jama: true), class: "btn btn-success" do %>
-         <i class="fa fa-plus" aria-hidden="true"></i>
-          Benam/Debit
-        <% end %>
-      <% end %>
-      <%= link_to transfer_payments_path, class: "btn btn-success" do %>
-        <i class="fa fa-credit-card" aria-hidden="true"></i>
-        Payment Transfer
-      <% end %>
-      <%= link_to accounts_url, class: "btn btn-primary" do %>
-        <i class="fa fa-address-book" aria-hidden="true"></i>
-        Account
-        <% end %>
-    </div>
-  </div>
-  <div class="clearfix"></div>
-  <div class="row">
-    <div class="col-lg-12 col-sm-12">
-      <%= search_form_for @q, url: payments_path, class: "admin-controls", method: "get" do |f| %>
-        <div class="col-lg-2 form-group float-left">
+<%= search_form_for @q, url: payments_path, class: "admin-controls", method: "get" do |f| %>
+    
+  <div class="tab-content">
+    <div class="tab-pane active mb-3 card shadow-sm mt-2" style="border-radius: 20px" id="search" role="tabpanel">
+     <p>
+      <div class="col-lg-10 form-group d-flex">
+      <div class="col-lg-2 form-group float-left">
           <%= f.select :account_id_in, options_from_collection_for_select(@accounts, "id", ->(st){"#{st.title} \u{27F6} #{st.bank_name}"},f.object.account_id_in),{:include_blank => "Select the Account Title"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Account Title"} }%>
         </div>
         <div class="col-lg-2 form-group float-left">
@@ -43,27 +81,138 @@
         <div class="col-lg-2 form-group float-left">
           <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px;"><i class="fa fa-search"></i></button>
         </div>
-        <div class="col-4 float-right d-flex">
-          <button class="form-control badge badge-pill badge-danger" title="Download payment pdf for all user in descending order " name="submit_pdf" type="submit" value="Payment History PDF A4" formtarget="_blank">Desc <i class="fa fa-file-pdf"></i></button>
-        
-          <button class="form-control badge badge-pill badge-danger" title="Download payment pdf for all user in ascending order" name="submit_pdf_asc" type="submit" value="Payment History PDF A4" formtarget="_blank">Asc <i class="fa fa-file-pdf"></i></button>
-       
-          <button class="form-control badge badge-pill badge-danger" title= "Download payment pdf for single user in descending order" name="1_submit_pdf" type="submit" value="Payment History PDF A4" formtarget="_blank">1-Desc <i class="fa fa-file-pdf"></i></button>
-        
-          <button class="form-control badge badge-pill badge-danger" title= "Download payment pdf for single user in ascending order" name="2_submit_pdf_asc" type="submit" value="Payment History PDF A4" formtarget="_blank">1-Asc <i class="fa fa-file-pdf"></i></button>
         </div>
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn btn-info" name="asc_email" type="submit" value="Email"><i class="fas fa-envelope"></i> Asc email</button>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn btn-info" name="desc_email" type="submit" value="Email"><i class="fas fa-envelope"></i> Desc email</button>
-        </div>
-      <% end %>
+      </p>
     </div>
+    <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="jama" role="tabpanel">
+        <p>
+        <% if can?(:delete, :all) %>
+          <%= link_to new_payment_path, class: "btn btn-success ml-3 mt-3" do %>
+         <i class="fa fa-plus" aria-hidden="true"></i>
+          Jama/Credit
+        <% end %>
+        <% end %>
+        </p>
+    </div>
+    <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="benam" role="tabpanel">
+        <p>
+        <% if can?(:delete, :all) %>
+         <%= link_to new_payment_path(jama: true), class: "btn btn-success ml-3 mt-3" do %>
+         <i class="fa fa-plus" aria-hidden="true"></i>
+          Benam/Debit
+        <% end %>
+        <% end %>
+        </p>
+    </div>
+    <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="transfer" role="tabpanel">
+        <p>
+         <%= link_to transfer_payments_path, class: "btn btn-success ml-3 mt-3" do %>
+        <i class="fa fa-credit-card" aria-hidden="true"></i>
+        Payment Transfer
+      <% end %>
+        </p>
+    </div>
+     <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="account" role="tabpanel">
+        <p>
+         <%= link_to transfer_payments_path, class: "btn btn-success ml-3 mt-3" do %>
+        <i class="fa fa-credit-card" aria-hidden="true"></i>
+        Account
+      <% end %>
+        </p>
+    </div>
+    <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="pdf" role="tabpanel">
+      <p>
+         
+          <button class="btn btn-danger ml-3 mt-3" title="Download payment pdf for all user in descending order " name="submit_pdf" type="submit" value="Payment History PDF A4" formtarget="_blank">Desc <i class="fa fa-file-pdf"></i></button>
+          <button class="btn btn-danger ml-3 mt-3" title="Download payment pdf for all user in ascending order" name="submit_pdf_asc" type="submit" value="Payment History PDF A4" formtarget="_blank">Asc <i class="fa fa-file-pdf"></i></button>
+          <button class="btn btn-danger ml-3 mt-3" title= "Download payment pdf for single user in descending order" name="1_submit_pdf" type="submit" value="Payment History PDF A4" formtarget="_blank">1-Desc <i class="fa fa-file-pdf"></i></button>
+          <button class="btn btn-danger ml-3 mt-3" title= "Download payment pdf for single user in ascending order" name="2_submit_pdf_asc" type="submit" value="Payment History PDF A4" formtarget="_blank">1-Asc <i class="fa fa-file-pdf"></i></button>
+  
+      </p>
+    </div>
+    <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="csv" role="tabpanel">
+      <p>
+        <div class="col-lg-2 d-flex">
+        <button class="btn btn-success" title= "download payments csv" name="csv" type="submit" value="csv">Payments &nbsp;<i class="fa fa-file-excel"></i></button>
+        </div>
+      </p>
+    </div>
+    <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="emails" role="tabpanel">
+      <p>
+        
+        <button class="btn btn-info ml-3 mt-3" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-2"></i>&nbsp;Mail</button>
+        <button class="btn btn-info ml-3 mt-3" name="asc_email" type="submit" value="Email"><i class="fas fa-envelope"></i> Asc email</button>
+        <button class="btn btn-info ml-3 mt-3" name="desc_email" type="submit" value="Email"><i class="fas fa-envelope"></i> Desc email</button>
+
+     </p>
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+              <% @pos_setting = PosSetting.first %>
+              <label>Email:</label>
+              <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
+              <br />
+              <label>Subject:</label>
+              <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Payment Detail report from MunshiOnClick", class: 'form-control email-fields'%>
+              <br />
+              <label>Body:</label><br />
+              <%= text_area_tag 'body', nil, class: 'form-control'%>
+              <br />
+
+              <label>Please select one of them.</label>
+              <div>
+                <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
+                <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
+                <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+              <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
+            </div>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="import-export" role="tabpanel">
+      <p>
+        <div class="d-flex">
+        <button class="btn btn-success ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
+        <button class="btn btn-primary ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
+        </div>
+      </p>
+    </div>
+    </div>
+  <% end %>
   </div>
-  <table data-toggle="table" data-search="true">
+  <div>
+
+
+  <div class="card shadow-sm border-radius-1 p-2">
+  <%# <button class='btn btn-outline-danger float-right delete-selected' type='button' style="width:163px"value='City' >Delete Selected</button> %>
+    <%= render 'map_columns/map_column_partials' %>
+    
+    <table data-toggle="table" data-search="true" class=" overflow-hidden border-radius-1">
     <thead>
       <tr>
+        <th><input type="checkbox" id="master" class='select-all-checkbox' style="cursor: pointer;">
+         <div class="icon-container float-center">
+            <span class="ml-2 mt-2">
+            <div class="my-icon my-view">
+                        <button class="icon-div btn delete-selected p-2 " type='button' value='Payment'>
+                                  <i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    </span>
+              </div></th>
         <th><%= sort_link(@q, :id, 'ID') %></th>
         <th><%= sort_link(@q, :account, 'Account') %></th>
         <th><%= sort_link(@q, :debit, 'Debit/Benam') %></th>
@@ -80,6 +229,7 @@
     <tbody>
       <% @payments.each do |payment| %>
         <tr>
+          <td><%= check_box_tag 'object_ids[]', payment.id %></td>
           <td><%= payment.id %></td>
           <td class="urdu-font">
             <%= link_to accounts_path('q[id_eq]': payment.account) do %>
@@ -185,93 +335,154 @@
             <%end%>
           </td>
 
-          <td>
-            <% if can?(:update, :all) %>
+          <td class="p-3">
+
+          <div class="icon-container-1">
+  <div class="my-icon-1 my-view-1">
+    <div class="my-tooltip-1">
+    
+    <div class="icon-container">
+          <div class="my-icon my-view">
+          <div class="my-tooltip">
+            Edit
+          </div>
+                      <% if can?(:update, :all) %>
                <% if payment.paymentable.present? and payment.paymentable_type=="PurchaseSaleDetail" and payment.paymentable.transaction_type=="Sale"%>
-                  <%= link_to edit_purchase_sale_detail_path(payment.paymentable,product:true) do %>
-                    <i class="fa fa-edit " aria-hidden="true"></i> |
+                  <%= link_to edit_purchase_sale_detail_path(payment.paymentable,product:true), class:"icon-div" do %>
+                    <i class="fa fa-edit mt-2" aria-hidden="true"></i>
                   <% end %>
                 <% elsif payment.paymentable.present? and payment.paymentable_type=="PurchaseSaleDetail" and payment.paymentable.transaction_type=="Purchase"%>
-                  <%= link_to edit_purchase_sale_detail_path(payment.paymentable,product:true) do %>
-                     <i class="fa fa-edit " aria-hidden="true"></i> |
+                  <%= link_to edit_purchase_sale_detail_path(payment.paymentable,product:true), class:"icon-div" do %>
+                     <i class="fa fa-edit mt-2" aria-hidden="true"></i>
                   <% end %>
                 <% elsif payment.paymentable.present? and payment.paymentable_type=="Order" and payment.paymentable.transaction_type=="Sale"%>
-                  <%= link_to edit_order_path(payment.paymentable,product:true) do %>
-                     <i class="fa fa-edit " aria-hidden="true"></i> |
+                  <%= link_to edit_order_path(payment.paymentable,product:true), class:"icon-div" do %>
+                     <i class="fa fa-edit mt-2" aria-hidden="true"></i>
                   <% end %>
                 <% elsif payment.paymentable.present? and payment.paymentable_type=="Order" and payment.paymentable.transaction_type=="Purchase"%>
-                  <%= link_to edit_order_path(payment.paymentable,product:true) do %>
-                    <i class="fa fa-edit " aria-hidden="true"></i> |
+                  <%= link_to edit_order_path(payment.paymentable,product:true), class:"icon-div" do %>
+                    <i class="fa fa-edit mt-2" aria-hidden="true"></i>
                   <% end %>
                 <% elsif payment.paymentable.present? and payment.paymentable_type=="ExpenseEntry" and payment.paymentable.expense.present?%>
-                  <%= link_to edit_expense_path(payment.paymentable.expense.id) do %>
-                    <i class="fa fa-edit " aria-hidden="true"></i> |
+                  <%= link_to edit_expense_path(payment.paymentable.expense.id), class:"icon-div" do %>
+                    <i class="fa fa-edit mt-2" aria-hidden="true"></i>
                   <% end %>
                 <% elsif payment.paymentable.present? and payment.paymentable_type=="ExpenseEntry" and payment.paymentable.expense.blank?%>
-                  <%= link_to edit_expense_entry_path(payment.paymentable.expenseable) do %>
-                    <i class="fa fa-edit " aria-hidden="true"></i> |
+                  <%= link_to edit_expense_entry_path(payment.paymentable.expenseable), class:"icon-div" do %>
+                    <i class="fa fa-edit mt-2" aria-hidden="true"></i>
                   <% end %>
                 <% elsif payment.paymentable.present? and payment.paymentable_type=="Salary" and payment.paymentable.paid_salary.present?%>
-                  <%= link_to edit_salary_path(payment.paymentable) do %>
-                    <i class="fa fa-edit " aria-hidden="true"></i> |
+                  <%= link_to edit_salary_path(payment.paymentable), class:"icon-div" do %>
+                    <i class="fa fa-edit mt-2" aria-hidden="true"></i>
                   <% end %>
                 <% elsif payment.paymentable.present? and payment.paymentable_type=="Salary" and payment.paymentable.advance.present?%>
-                  <%= link_to edit_advance_salary_path(payment.paymentable) do %>
-                    <i class="fa fa-edit " aria-hidden="true"></i> |
+                  <%= link_to edit_advance_salary_path(payment.paymentable), class:"icon-div" do %>
+                    <i class="fa fa-edit mt-2" aria-hidden="true"></i>
                   <% end %>
                 <% elsif payment.paymentable.present? and payment.paymentable_type=="Investment"%>
-                  <%= link_to edit_investment_path(payment.paymentable) do %>
-                    <i class="fa fa-edit " aria-hidden="true"></i> |
+                  <%= link_to edit_investment_path(payment.paymentable), class:"icon-div" do %>
+                    <i class="fa fa-edit mt-2" aria-hidden="true"></i>
                   <% end %>
                 <% elsif payment.paymentable.present? and payment.paymentable_type=="LedgerBook"%>
-                  <%= link_to edit_ledger_book_path(payment.paymentable) do %>
-                    <i class="fa fa-edit " aria-hidden="true"></i> |
+                  <%= link_to edit_ledger_book_path(payment.paymentable), class:"icon-div" do %>
+                    <i class="fa fa-edit mt-2" aria-hidden="true"></i>
                   <% end %>
                 <% elsif payment.paymentable.present? and payment.paymentable_type=="SalaryDetail"%>
-                  <%= link_to edit_salary_detail_path(payment.paymentable) do %>
-                    <i class="fa fa-edit " aria-hidden="true"></i> |
+                  <%= link_to edit_salary_detail_path(payment.paymentable), class:"icon-div" do %>
+                    <i class="fa fa-edit mt-2" aria-hidden="true"></i>
                   <% end %>
                 <% else %>
-                 <%= link_to edit_payment_path(payment,edit: true) do %>
-                    <i class="fa fa-edit " aria-hidden="true"></i> |
+                 <%= link_to edit_payment_path(payment,edit: true), class:"icon-div" do %>
+                    <i class="fa fa-edit mt-2" aria-hidden="true"></i>
                   <%end %>
                 <% end %>
 
 
             <% end %>
-            <% if can?(:delete, :all) %>
+          
+          
+        </div>
+
+          <div class="my-icon my-view">
+              <div class="my-tooltip">
+                Delete
+              </div>
+                
+                  <% if can?(:delete, :all) %>
               <% if payment.paymentable.present? and payment.paymentable_type=="PurchaseSaleDetail"  %>
-                <%= link_to purchase_sale_detail_path(payment.paymentable), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
-                  <i class="fa fa-trash" aria-hidden="true"></i>
+                <%= link_to purchase_sale_detail_path(payment.paymentable), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+                  <i class="fa fa-trash mt-2" aria-hidden="true"></i>
                 <% end %>
               <%elsif payment.paymentable.present? and payment.paymentable_type=="Order"  %>
-                <%= link_to order_path(payment.paymentable), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
-                  <i class="fa fa-trash" aria-hidden="true"></i>
+                <%= link_to order_path(payment.paymentable), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+                  <i class="fa fa-trash mt-2" aria-hidden="true"></i>
                 <% end %>
               <%elsif payment.paymentable.present? and payment.paymentable_type=="ExpenseEntry"%>
-                <%= link_to expense_entry_path(payment.paymentable), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
-                  <i class="fa fa-trash" aria-hidden="true"></i>
+                <%= link_to expense_entry_path(payment.paymentable), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+                  <i class="fa fa-trash mt-2" aria-hidden="true"></i>
                 <% end %>
               <%elsif payment.paymentable.present? and payment.paymentable_type=="Salary"%>
-                <%= link_to salary_path(payment.paymentable), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
-                  <i class="fa fa-trash" aria-hidden="true"></i>
+                <%= link_to salary_path(payment.paymentable), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+                  <i class="fa fa-trash mt-2" aria-hidden="true"></i>
                 <% end %>
               <%elsif payment.paymentable.present? and payment.paymentable_type=="LedgerBook"%>
-                <%= link_to ledger_book_path(payment.paymentable), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
-                  <i class="fa fa-trash" aria-hidden="true"></i>
+                <%= link_to ledger_book_path(payment.paymentable), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+                  <i class="fa fa-trash mt-2" aria-hidden="true"></i>
                 <% end %>
               <%else%>
-                <%= link_to payment, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
-                <i class="fa fa-trash " aria-hidden="true"></i>
+                <%= link_to payment, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+                <i class="fa fa-trash mt-2" aria-hidden="true"></i>
               <%end%>
               <%end %>
 
             <% end %>
-            <% if can?(:view, :all) %>
-              <%= link_to payment do %>
-                <i class="fa fa-eye " aria-hidden="true"></i>
-              <%end %>
+              
+          </div>
+
+         <div class="my-icon my-view">
+                <div class="my-tooltip">
+                  Show
+                </div>
+                
+                   <% if can?(:view, :all) %>
+                    <%= link_to payment_path(payment), remote: true, class:"icon-div" do %>
+                    <i class="fa fa-eye mt-2" aria-hidden="true"></i>
+                <%end %>
             <%end%>
+          
+      </div>
+
+      <div class="my-icon my-view">
+            <div class="my-tooltip">
+              PDF
+            </div>
+            
+                <%= link_to payments_path('q[id_eq]':payment.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
+    			      <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
+    		      <%end %>
+            
+      </div>
+
+       <div class="my-icon my-view">
+            <div class="my-tooltip">
+              CSV
+            </div>
+            
+                  <%= link_to payments_path('q[id_eq]':payment.id,'csv':true), title: 'Download CSV', class:"icon-div" do%>
+    			        <i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
+    		      <%end %>
+            
+          </div>
+        </div>
+        </div>
+            <span class="icon-div-1">
+                  <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+            </span>
+        </div>
+      </div>
+      </div>
+    </div>
+
           </td>
         </tr>
       <% end %>
@@ -284,24 +495,53 @@
       </tr>
     </tbody>
   </table>
-</div>
 
-<div class="clearfix"></div>
-<div class="row">
-  <div class="col-lg-4 col-sm-4">
-    <%= page_entries_info @payments %>
+  <div class="row mt-2">
+    <div class="col-lg-4 col-sm-4">
+      <%= page_entries_info @payments %>
+    </div>
+    <div class="col-lg-8 col-sm-8 pagination-left">
+      <%= paginate @payments %>
+    </div>
   </div>
-  <div class="col-lg-8 col-sm-8 pagination-left">
-    <%= paginate @payments %>
   </div>
-</div>
+
+<%= form_for :bulk_import, url: bulk_import_data_path, method: :post, html: {class: "bulk-import-form"} do |f| %>
+  <div class="modal fade" id="importFile" tabindex="-1" role="dialog" aria-labelledby="importFileTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Import file</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <%= f.file_field :file, required: true, accept: '.csv' %>
+          <%= f.hidden_field :table_name, value: 'Payment' %>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <%= f.submit 'Import', class: 'btn btn-primary' %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+<div class="show-data"></div>
 
 <script>
   $(document).ready(function() {
+
+    var sortingButtons = $('.sorting-button')
+    for(var i=0; i<sortingButtons.length; i++){
+      $(sortingButtons[i]).html("<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='blue' enable-background='new 0 0 512 512' viewBox='0 0 512 512'><path d='M163.919,494.293c-2.83,0-5.496-1.33-7.196-3.593L45.97,343.348c-2.986-3.974-2.187-9.615,1.787-12.602 c3.974-2.986,9.616-2.187,12.602,1.787l103.557,137.777l103.493-137.775c2.986-3.975,8.627-4.775,12.602-1.791 c3.974,2.985,4.775,8.627,1.79,12.602L171.113,490.698C169.414,492.961,166.749,494.293,163.919,494.293z'/><path d='M163.917 494.293c-4.971 0-9-4.029-9-9V26.192c0-4.971 4.029-9 9-9s9 4.029 9 9v459.101C172.917 490.264 168.888 494.293 163.917 494.293zM459.507 182.622c-2.734 0-5.435-1.241-7.203-3.597L348.78 41.18 245.257 179.025c-2.985 3.975-8.626 4.777-12.601 1.792-3.974-2.984-4.777-8.626-1.792-12.601l110.72-147.43c1.699-2.263 4.365-3.595 7.196-3.595s5.497 1.332 7.196 3.595l110.72 147.43c2.985 3.975 2.183 9.616-1.792 12.601C463.285 182.034 461.388 182.621 459.507 182.622z'/><path d='M348.78,494.293c-4.971,0-9-4.029-9-9V26.192c0-4.971,4.029-9,9-9s9,4.029,9,9v459.101 C357.78,490.264,353.751,494.293,348.78,494.293z'/></svg>")
+    }
+
     if ($(".bootstrap-table").length == 0){
       $("table").bootstrapTable();
     }
-    $("#payment_list").removeClass('hidden');
+    $("#city_list").removeClass('hidden');
     FontAwesome.dom.i2svg();
   });
   $(document).ready(function() {
