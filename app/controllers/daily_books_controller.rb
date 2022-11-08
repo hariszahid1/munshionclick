@@ -169,6 +169,12 @@ end
     @book_date_lteq = DateTime.now
     @raw_products = RawProduct.all
     @products = Product.all
+
+    if params[:q].present?
+      @book_date_gteq = params[:q][:created_at_gteq] if params[:q][:created_at_gteq].present?
+      @book_date_lteq = params[:q][:created_at_lteq] if params[:q][:created_at_lteq].present?
+    end
+
     if params[:q].present?
       @q = DailyBook.where(department_id: @departments.third.id).ransack(params[:q])
     else
@@ -183,13 +189,13 @@ end
       @book_date_gteq = params[:q][:created_at_gteq] if params[:q][:created_at_gteq].present?
       @book_date_lteq = params[:q][:created_at_lteq] if params[:q][:created_at_lteq].present?
     end
-    @daily_books = @q.result(distinct: true).page(params[:page])
+    @daily_books = @q.result.page(params[:page])
     if params[:submit_pdf].present?
       @pos_setting=PosSetting.first
       if @q.result.count > 0
         @q.sorts = 'book_date desc' if @q.sorts.empty?
       end
-      @daily_books=@q.result(distinct: true)
+      @daily_books=@q.result
 
       request.format = 'pdf'
     elsif params[:email].present?
