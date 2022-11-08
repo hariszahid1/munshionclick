@@ -168,13 +168,11 @@ end
     @book_date_gteq = Date.today.prev_occurring(:thursday)
     @book_date_lteq = DateTime.now
     @raw_products = RawProduct.all
-    @products = Product.all
-
     if params[:q].present?
       @book_date_gteq = params[:q][:created_at_gteq] if params[:q][:created_at_gteq].present?
       @book_date_lteq = params[:q][:created_at_lteq] if params[:q][:created_at_lteq].present?
     end
-
+    @products = Product.all
     if params[:q].present?
       @q = DailyBook.where(department_id: @departments.third.id).ransack(params[:q])
     else
@@ -183,11 +181,6 @@ end
 
     if @q.result.count > 0
       @q.sorts = 'created_at desc' if @q.sorts.empty?
-    end
-    if params[:q].present?
-      @department = params[:q][:department_id]
-      @book_date_gteq = params[:q][:created_at_gteq] if params[:q][:created_at_gteq].present?
-      @book_date_lteq = params[:q][:created_at_lteq] if params[:q][:created_at_lteq].present?
     end
     @daily_books = @q.result.page(params[:page])
     if params[:submit_pdf].present?
@@ -678,6 +671,9 @@ end
             elsif stock.first.first == "chapa"
               brick.third_stock+=stock.last
               brick.save!
+            end
+            if pos_setting_sys_type=='Factory'
+              brick.increment!(:nakasi_stock,stock.last.to_i)
             end
           end
           format.html { redirect_to khakar_daily_books_path, notice: 'Khakar Daily book was successfully created.' }
