@@ -1,0 +1,162 @@
+<div class="row">
+  <div class="main-content-header">
+    <h1 class="ml-2">Customer Management System</h1>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<%= root_path %>">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active">
+        <a href="<%= customer_management_systems_path %>">CMS</a>
+      </li>
+      </ol>
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-4">
+    <div class="card mb-4">
+      <div class="card-body text-center">
+        <% if @sys_user.profile_image.attached? %>
+          <img src=<%= url_for(@sys_user.profile_image) %> alt="avatar"
+            class="rounded-circle img-fluid" style="width: 150px;">
+        <% else %>
+          <img src="https://previews.123rf.com/images/panyamail/panyamail1809/panyamail180900343/109879063-user-avatar-icon-sign-profile-symbol.jpg" alt="avatar"
+          class="rounded-circle img-fluid" style="width: 150px;">
+        <% end %>
+        <h5 class="my-3"><%= @sys_user.name%></h5>
+        <p class="text-muted mb-1"><%= @sys_user.user_group%></p>
+        <p class="text-muted mb-4"><%= @sys_user.contact.city.title + ", " + @sys_user.contact.country.title %></p>
+      </div>
+    </div>
+    <div class="card mb-4">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-3">
+            <p class="mb-0">Code</p>
+          </div>
+          <div class="col-sm-9">
+            <p class="text-muted mb-0"><%= @sys_user.code%></p>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-3">
+            <p class="mb-0">CNIC</p>
+          </div>
+          <div class="col-sm-9">
+            <p class="text-muted mb-0"><%= @sys_user.cnic %></p>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-3">
+            <p class="mb-0">Email</p>
+          </div>
+          <div class="col-sm-9">
+            <p class="text-muted mb-0"><%= @sys_user.contact.email %></p>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-3">
+            <p class="mb-0">Phone</p>
+          </div>
+          <div class="col-sm-9">
+            <p class="text-muted mb-0"><%= @sys_user.contact.home%></p>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-3">
+            <p class="mb-0">Mobile</p>
+          </div>
+          <div class="col-sm-9">
+            <p class="text-muted mb-0"><%= @sys_user.contact.mobile%></p>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-3">
+            <p class="mb-0">Address</p>
+          </div>
+          <div class="col-sm-9">
+            <p class="text-muted mb-0"><%= @sys_user.contact.address%></p>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-3">
+            <p class="mb-0">Status</p>
+          </div>
+          <div class="col-sm-9">
+            <p class="text-muted mb-0"><%= @sys_user.status%></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class= "col-lg-8">
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link tab-label" data-toggle="tab" href="#note" role="tab">Note</a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link tab-label" data-toggle="tab" href="#follow-up" role="tab">Follow Up</a>
+      </li>
+    </ul>
+    <div class="tab-content">
+      <div class="tab-pane active" id="note" role="tabpanel">
+        <% if can?(:add, :all) %>
+          <div id="new_city" class= "d-flex">
+            <%= link_to new_note_path(sys_user_id: @sys_user.id), remote: true,class: "btn btn-success mt-2 mr-2 ml-auto" do %>
+              <i class="fa fa-plus" aria-hidden="false"></i>
+              Create Note
+            <% end %>
+          </div>
+        <% end %>
+        <p>
+          <div class="col-lg-12">
+            <%  @sys_user.notes.order("id desc").each do |note|%>
+              <div class = "tab-pane p-2">
+                <p>Note by <%= note&.staff&.name %></p>
+                <div class= 'row'>
+                  <span class='col-8'><%= note.message %></span>
+                  <p class='col-4 text-right'><%= note.created_at %></p><br/>
+                </div>
+                <p class= "text-right">by <%= note&.user&.name %></p>
+
+              </div>
+            <% end %>
+          </div>
+        </p>
+      </div>
+
+      <div class="tab-pane" id="follow-up" role="tabpanel">
+        <% if can?(:add, :all) %>
+          <div id="new_city" class= "d-flex">
+            <%= link_to new_follow_up_path(sys_user_id: @sys_user.id), remote: true,class: "btn btn-success mt-2 mr-2 ml-auto" do %>
+              <i class="fa fa-plus" aria-hidden="false"></i>
+              Create Follow Up
+            <% end %>
+          </div>
+        <% end %>
+        <p>
+          <div class="col-lg-12">
+            <% @sys_user.follow_ups.order("id desc").each do |follow_up|%>
+              <div class = "tab-pane p-2">
+                <span>Reminder Type: <%= follow_up.reminder_type %></span><br/>
+                <span>Task Type: <%= follow_up.task_type %></span><br/>
+                <span>Priority: <%= follow_up.priority %></span><br/>
+                <span>Time: <%= follow_up&.date %></span><br/>
+                <span>Assigned to: <%= follow_up&.staff&.name %></span>
+                <p class= "text-right">by <%= follow_up&.user&.name %></p>
+
+              </div>
+            <% end %>
+          </div>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="show-data"></div>
