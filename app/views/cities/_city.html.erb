@@ -4,27 +4,27 @@
   <td class='urdu-font'><%= city.title %></td>
   <td><span title="<%= city.comment %>" class='truncate-text'><%= city.comment %></span></td>
   <td>
-		<%if (ApplicationHelper.check_can_update(current_user,"cities"))%>
+		<%if (check_can_update("cities"))%>
       <%= link_to edit_city_path(city), remote: true do %>
         <i class="fa fa-edit mr-2 ml-2 " aria-hidden="true"></i> |
       <%end %>
     <% end %>
-		<%if (ApplicationHelper.check_can_delete(current_user,"cities"))%>
+		<%if (check_can_delete("cities"))%>
       <%= link_to city, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
         |<i class="fa fa-trash mr-2 ml-2" aria-hidden="true"></i> 
       <%end %>
     <% end %>
-		<%if (ApplicationHelper.check_can_read(current_user,"cities"))%>
+		<%if (check_can_read("cities"))%>
       <%= link_to city_path(city), remote: true do %>
         |<i class="fa fa-eye mr-2 ml-2" aria-hidden="true"></i> 
       <%end %>
     <%end%>
-		<%if (ApplicationHelper.check_can_download_pdf(current_user,"cities"))%>
+		<%if (check_can_download_pdf("cities"))%>
 			<%= link_to cities_path('q[id_eq]':city.id,'pdf':true), title: 'Download PDF', target: '_blank' do %>
 				|<i class="fa fa-file-pdf text-danger mr-2 ml-2 " aria-hidden="true"></i>
 			<%end %>
 		<%end %>
-		<%if (ApplicationHelper.check_can_download_csv(current_user,"cities"))%>
+		<%if (check_can_download_csv("cities"))%>
 			<%= link_to cities_path('q[id_eq]':city.id,'csv':true), title: 'Download CSV' do%>
 				|<i class="fa fa-file-excel mr-2 ml-2 text-success" aria-hidden="true"></i>
 			<%end %>

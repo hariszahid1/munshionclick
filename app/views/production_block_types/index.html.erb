@@ -34,27 +34,27 @@
 						<li class="nav-item">
 							<a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
 						</li>
-						<%if (ApplicationHelper.check_can_create(current_user,"production_block_types"))%>
+						<%if (check_can_create("production_block_types"))%>
 							<li class="nav-item">
 								<a class="nav-link tab-label" data-toggle="tab" href="#create" role="tab">Create</a>
 							</li>
 						<%end%>
-						<%if (ApplicationHelper.check_can_download_pdf(current_user,"production_block_types"))%>
+						<%if (check_can_download_pdf("production_block_types"))%>
 							<li class="nav-item">
 								<a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
 							</li>
 						<%end%>
-						<%if (ApplicationHelper.check_can_download_csv(current_user,"production_block_types"))%>
+						<%if (check_can_download_csv("production_block_types"))%>
 							<li class="nav-item">
 								<a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
 							</li>
 						<%end%>
-						<%if (ApplicationHelper.check_can_send_email(current_user,"production_block_types"))%>
+						<%if (check_can_send_email("production_block_types"))%>
 							<li class="nav-item">
 								<a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
 							</li>
 						<%end%>
-						<%if (ApplicationHelper.check_can_import_export(current_user,"production_block_types"))%>
+						<%if (check_can_import_export("production_block_types"))%>
 							<li class="nav-item">
 								<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
 							</li>
@@ -168,7 +168,7 @@
    <table data-toggle="table" data-search="true" id="production_block_type_table" class=" overflow-hidden border-radius-1">
     <thead>
      <th><input type="checkbox" id="master" class='select-all-checkbox' style="cursor: pointer;">
-			<%if (ApplicationHelper.check_can_delete(current_user,"production_block_types"))%>
+			<%if (check_can_delete("production_block_types"))%>
 				<div class="icon-container float-center">
 					<span class="ml-2 mt-2">
 						<div class="my-icon my-view">

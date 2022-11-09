@@ -6,7 +6,7 @@
   <td><span title="<%= department.comment %>" class='truncate-text'><%= department.comment %></span></td>
   <td>
 		<div class="icon-container">
-			<%if (ApplicationHelper.check_can_update(current_user,"departments"))%>
+			<%if (check_can_update("departments"))%>
 				<div class="my-icon my-view">
           <div class="my-tooltip">
             Edit
@@ -18,7 +18,7 @@
 					</span>
 				</div>			
 			<% end %>
-			<%if (ApplicationHelper.check_can_delete(current_user,"departments"))%>
+			<%if (check_can_delete("departments"))%>
           <div class="my-icon my-view">
               <div class="my-tooltip">
                 Delete
@@ -32,7 +32,7 @@
               
           </div>
 			<%end%>
-			<%if (ApplicationHelper.check_can_update(current_user,"departments"))%>
+			<%if (check_can_update("departments"))%>
 				<div class="my-icon my-view">
 					<div class="my-tooltip">
 						Show
@@ -44,7 +44,7 @@
 					</span>
 				</div>
 			<%end%>
-			<%if (ApplicationHelper.check_can_download_pdf(current_user,"departments"))%>
+			<%if (check_can_download_pdf("departments"))%>
       	<div class="my-icon my-view">
 					<div class="my-tooltip">
               PDF
@@ -56,7 +56,7 @@
 					</span>
       	</div>
 			<%end%>
-			<%if (ApplicationHelper.check_can_download_csv(current_user,"departments"))%>
+			<%if (check_can_download_csv("departments"))%>
        <div class="my-icon my-view">
 					<div class="my-tooltip">
               CSV

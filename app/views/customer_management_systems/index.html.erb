@@ -37,27 +37,27 @@
 		<li class="nav-item">
 			<a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
 		</li>
-		<%if (ApplicationHelper.check_can_create(current_user,"customer_management_systems"))%>
+		<%if (check_can_create("customer_management_systems"))%>
 			<li class="nav-item">
 				<a class="nav-link tab-label" data-toggle="tab" href="#create" role="tab">Create</a>
 			</li>
 		<%end%>
-		<%if (ApplicationHelper.check_can_download_pdf(current_user,"customer_management_systems"))%>
+		<%if (check_can_download_pdf("customer_management_systems"))%>
 			<li class="nav-item">
 				<a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
 			</li>
 		<%end%>
-		<%if (ApplicationHelper.check_can_download_csv(current_user,"customer_management_systems"))%>
+		<%if (check_can_download_csv("customer_management_systems"))%>
 			<li class="nav-item">
 				<a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
 			</li>
 		<%end%>
-		<%if (ApplicationHelper.check_can_send_email(current_user,"customer_management_systems"))%>
+		<%if (check_can_send_email("customer_management_systems"))%>
 			<li class="nav-item">
 				<a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
 			</li>
 		<%end%>
-		<%if (ApplicationHelper.check_can_import_export(current_user,"customer_management_systems"))%>
+		<%if (check_can_import_export("customer_management_systems"))%>
 			<li class="nav-item">
 				<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
 			</li>
@@ -174,7 +174,7 @@
 
 <div class='card p-3'>
   <table data-toggle="table" data-search="true" id="sys_user_table">
-		<%if (ApplicationHelper.check_can_delete(current_user,"customer_management_systems"))%>
+		<%if (check_can_delete("customer_management_systems"))%>
     	<button class='btn btn-outline-danger float-right delete-selected' type='button' style="width:163px"value='SysUser' >Delete Selected</button>
 		<%end%>
     <thead>

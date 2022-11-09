@@ -32,27 +32,27 @@
         <li class="nav-item">
         <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
       </li>
-			<%if (ApplicationHelper.check_can_create(current_user,"departments"))%>
+			<%if (check_can_create("departments"))%>
 				<li class="nav-item">
 					<a class="nav-link tab-label" data-toggle="tab" href="#create" role="tab">Create</a>
 				</li>
 			<%end%>
-			<%if (ApplicationHelper.check_can_download_pdf(current_user,"departments"))%>
+			<%if (check_can_download_pdf("departments"))%>
 				<li class="nav-item">
 					<a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
 				</li>
 			<%end%>
-			<%if (ApplicationHelper.check_can_download_csv(current_user,"departments"))%>
+			<%if (check_can_download_csv("departments"))%>
 				<li class="nav-item">
 					<a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
 				</li>
 			<%end%>
-			<%if (ApplicationHelper.check_can_send_email(current_user,"departments"))%>
+			<%if (check_can_send_email("departments"))%>
 				<li class="nav-item">
 					<a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
 				</li>
 			<%end%>
-			<%if (ApplicationHelper.check_can_import_export(current_user,"departments"))%>
+			<%if (check_can_import_export("departments"))%>
 				<li class="nav-item">
 					<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
 				</li>
@@ -157,7 +157,9 @@
     <thead>
       <tr>
         <th><input type="checkbox" id="master" class='select-all-checkbox'>
-            <div class="icon-container float-center">
+					<%if (check_can_delete("departments"))%>
+  
+					<div class="icon-container float-center">
             <span class="ml-2 mt-2">
             <div class="my-icon my-view">
             
@@ -166,7 +168,8 @@
                         </button>
                     </div>
                     </span>
-              </div>
+						</div>
+					<%end%>
         </th>
         <th>ID<div class='float-right'><%= sort_link(@q, :id, '', {}, class: 'sorting-button') %></div></th>
         <th>Code<div class='float-right'><%= sort_link(@q, :code, '', {}, class: 'sorting-button') %></div></th>

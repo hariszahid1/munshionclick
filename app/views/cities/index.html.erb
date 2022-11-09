@@ -34,27 +34,27 @@
       <li class="nav-item">
         <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
       </li>
-			<%if (ApplicationHelper.check_can_create(current_user,"cities"))%>
+			<%if (check_can_create("cities"))%>
 				<li class="nav-item">
 					<a class="nav-link tab-label" data-toggle="tab" href="#create" role="tab">Create</a>
 				</li>
 			<%end%>
-			<%if (ApplicationHelper.check_can_download_pdf(current_user,"cities"))%>
+			<%if (check_can_download_pdf("cities"))%>
 				<li class="nav-item">
 					<a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
 				</li>
 			<%end%>
-			<%if (ApplicationHelper.check_can_download_csv(current_user,"cities"))%>
+			<%if (check_can_download_csv("cities"))%>
 				<li class="nav-item">
 					<a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
 				</li>
 			<%end%>
-			<%if (ApplicationHelper.check_can_send_email(current_user,"cities"))%>
+			<%if (check_can_send_email("cities"))%>
 				<li class="nav-item">
 					<a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
 				</li>
 			<%end%>
-			<%if (ApplicationHelper.check_can_import_export(current_user,"cities"))%>
+			<%if (check_can_import_export("cities"))%>
 				<li class="nav-item">
 					<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
 				</li>
@@ -168,7 +168,7 @@
         <tr>
         
          <th><input type="checkbox" id="master" class='select-all-checkbox' style="cursor: pointer;">
-				<%if (ApplicationHelper.check_can_delete(current_user,"cities"))%>
+				<%if (check_can_delete("cities"))%>
 					<div class="icon-container float-center">
 						<span class="ml-2 mt-2">
           		<div class="my-icon my-view">

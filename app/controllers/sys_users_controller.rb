@@ -372,12 +372,12 @@ class SysUsersController < ApplicationController
 		end
 		
 		def check_access_of (tempModule)
-			if (ApplicationHelper.check_is_hidden(current_user,"#{tempModule}"))
+			if (check_is_hidden("#{tempModule}"))
 				respond_to do |format|
 					format.html { redirect_to dashboard_path, alert: "Your system does not have this module" }
 				end
 			else
-				if (ApplicationHelper.check_can_accessed(current_user,"#{tempModule}")==false)
+				if (check_can_accessed("#{tempModule}")==false)
 					respond_to do |format|
 						format.html { redirect_to dashboard_path, alert: "you are not authorized." }
 					end

@@ -57,6 +57,7 @@ class UsersController < ApplicationController
     if params[:user][:password].blank?
       params[:user].delete :password
     end
+		session[:user_permissions] = false
     respond_to do |format|
       if @user.update(user_params)
         save_user_ability
