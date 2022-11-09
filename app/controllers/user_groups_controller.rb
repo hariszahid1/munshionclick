@@ -102,7 +102,7 @@ class UserGroupsController < ApplicationController
 
   def download_user_groups_pdf_file
     @user_groups = @q.result
-    generate_pdf(@user_groups.as_json, "User_groups-Total-#{@user_groups.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}", 'pdf.html', 'A4')
+    generate_pdf(@user_groups.as_json, "User_groups-Total-#{@user_groups.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}", 'pdf.html', 'A4', false)
   end
 
   def send_email_file
