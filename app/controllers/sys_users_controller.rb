@@ -1,15 +1,12 @@
 class SysUsersController < ApplicationController
   include SysUsersCsvMethods
 
-	before_action :check_access
   before_action :set_sys_user, only: [:show, :edit, :update, :destroy]
 
   # GET /sys_users
   # GET /sys_users.json
   def index
-		
-    
-		
+		check_access_of("sys_users")
 		@q = SysUser.ransack(params[:q])
       if @q.result.count > 0
         @q.sorts = 'name asc' if @q.sorts.empty?
@@ -97,6 +94,7 @@ class SysUsersController < ApplicationController
   end
 
   def receiveable
+
     @q = SysUser.where('balance < 0 ').ransack(params[:q])
     if @q.result.count > 0
       @q.sorts = 'name asc' if @q.sorts.empty?
@@ -129,6 +127,7 @@ class SysUsersController < ApplicationController
   end
 
   def customer
+		check_access_of("sys_users/customer")
     @sys_user_all = SysUser.where(:user_group=>['Customer'])
     @q = SysUser.where(:user_group=>['Customer']).ransack(params[:q])
     if @q.result.count > 0
@@ -165,6 +164,7 @@ class SysUsersController < ApplicationController
   end
 
   def supplier
+		check_access_of("sys_users/supplier")
     @sys_user_all = SysUser.where(:user_group=>['Supplier'])
     @q = SysUser.where(:user_group=>['Supplier']).ransack(params[:q])
     if @q.result.count > 0
@@ -368,5 +368,19 @@ class SysUsersController < ApplicationController
 			format.html
 			format.csv { send_data csv_data, filename: "index_staff_wise - #{Date.today}.csv" }
 			end
+		end
+		
+		def check_access_of (tempModule)
+			if (ApplicationHelper.check_is_hidden(current_user,"#{tempModule}"))
+				respond_to do |format|
+					format.html { redirect_to dashboard_path, alert: "Your system does not have this module" }
+				end
+			else
+				if (ApplicationHelper.check_can_accessed(current_user,"#{tempModule}")==false)
+					respond_to do |format|
+						format.html { redirect_to dashboard_path, alert: "you are not authorized." }
+					end
+				end
+			end	
 		end
 end

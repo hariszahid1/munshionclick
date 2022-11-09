@@ -31,26 +31,36 @@
               </div>
           </div>
         </div>
-        <ul class="nav nav-tabs" role="tablist">
-          <li class="nav-item">
-            <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link tab-label" data-toggle="tab" href="#create" role="tab">Create</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
-          </li>
-          <li class="nav-item">
-           <a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
-          </li>
-      </ul>
+				<ul class="nav nav-pills" role="tablist">
+					<li class="nav-item">
+						<a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
+					</li>
+					<%if (ApplicationHelper.check_can_create(current_user,"sys_users/customer"))%>
+						<li class="nav-item">
+							<a class="nav-link tab-label" data-toggle="tab" href="#create" role="tab">Create</a>
+						</li>
+					<%if (ApplicationHelper.check_can_download_pdf(current_user,"sys_users/customer"))%>
+					<%end%>
+						<li class="nav-item">
+							<a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
+						</li>
+					<%end%>
+					<%if (ApplicationHelper.check_can_download_csv(current_user,"sys_users/customer"))%>
+						<li class="nav-item">
+							<a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
+						</li>
+					<%end%>
+					<%if (ApplicationHelper.check_can_send_email(current_user,"sys_users/customer"))%>
+						<li class="nav-item">
+							<a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
+						</li>
+					<%end%>
+					<%if (ApplicationHelper.check_can_import_export(current_user,"sys_users/customer"))%>
+						<li class="nav-item">
+							<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
+						</li>
+					<%end%>
+			</ul>
     <%= search_form_for @q, url: customer_sys_users_path, class: "admin-controls", method: "get" do |f| %>
       <div class="tab-content mb-5">
             <div class="tab-pane active" id="search" role="tabpanel">
@@ -192,60 +202,67 @@
                 <div class="my-icon-1 my-view-1">
                   <div class="my-tooltip-1">
                     <div class="icon-container">
-                      <div class="my-icon my-view">
-                        <div class="my-tooltip">
-                            Edit
-                          </div>
-                          <% if can?(:update, :all) %>
-                            <%= link_to edit_sys_user_path(sys_user), title: "Edit customers" , class:"icon-div" do %>
-                              <i class="fa fa-edit mt-2" aria-hidden="true"></i>
-                            <%end %>
-                          <% end %>
-                        </div>
-                        <div class="my-icon my-view">
-                          <div class="my-tooltip">
-                            Delete
-                          </div>
-                            <% if can?(:delete, :all) %>
-                              <%= link_to sys_user, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, title: "Delete customer", :remote => true, :class => 'delete icon-div' do %>
-                              <i class="fa fa-trash mt-2" aria-hidden="true"></i>
-                              <%end %>
-                            <% end %>
-                        </div>
-                        <div class="my-icon my-view">
-                          <div class="my-tooltip">
-                            Show
-                          </div>
-                          <% if can?(:view, :all) %>
-                            <%= link_to sys_user, title: "View customer detail", class:"icon-div" do %>
-                              <i class="fa fa-eye mt-2" aria-hidden="true"></i>
-                              <%end %>
-                            <%end%>
-                        </div>
-                        <div class="my-icon my-view">
-                          <div class="my-tooltip">
-                            PDF
-                          </div>
-                          <%= link_to sys_users_path('q[id_eq]':sys_user.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
-                            <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
-                          <%end %>
-                        </div>
-                        <div class="my-icon my-view">
-                          <div class="my-tooltip">
-                            CSV
-                          </div>
-                            <%= link_to sys_users_path('q[id_eq]':sys_user.id,'csv':true), title: 'Download CSV', class:"icon-div" do%>
-                            <i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
-                          <%end %>
-                        </div>
-                        <div class="my-icon my-view">
-                          <div class="my-tooltip">
-                            Ledger book
-                          </div>
-                          <a href="<%=ledger_books_path('q[sys_user_id_eq]':sys_user.id) %>" title="Ledger book", class="icon-div">
-                            <i class="fa fa-address-book mt-2 text-info" aria-hidden="true"></i>
-                          </a>
-                        </div>
+											<%if (ApplicationHelper.check_can_update(current_user,"sys_users/customer"))%>
+												<div class="my-icon my-view">
+														<div class="my-tooltip">
+															Edit
+														</div>	
+														<%= link_to edit_sys_user_path(sys_user), title: "Edit customers" , class:"icon-div" do %>
+															<i class="fa fa-edit mt-2" aria-hidden="true"></i>
+														<%end %>
+												</div>
+											<% end %>
+
+											<%if (ApplicationHelper.check_can_delete(current_user,"sys_users/customer"))%>
+												<div class="my-icon my-view">
+													<div class="my-tooltip">
+														Delete
+													</div>
+													<%= link_to sys_user, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, title: "Delete customer", :remote => true, :class => 'delete icon-div' do %>
+														<i class="fa fa-trash mt-2" aria-hidden="true"></i>
+													<%end %>
+												</div>
+											<% end %>
+											<%if (ApplicationHelper.check_can_read(current_user,"sys_users/customer"))%>
+												<div class="my-icon my-view">
+													<div class="my-tooltip">
+															Show
+													</div>
+													<%= link_to sys_user, title: "View customer detail", class:"icon-div" do %>
+														<i class="fa fa-eye mt-2" aria-hidden="true"></i>
+													<%end %>
+												</div>
+											<%end%>
+											<%if (ApplicationHelper.check_can_download_pdf(current_user,"sys_users/customer"))%>
+												<div class="my-icon my-view">
+													<div class="my-tooltip">
+														PDF
+													</div>
+													<%= link_to sys_users_path('q[id_eq]':sys_user.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
+														<i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
+													<%end %>
+												</div>
+											<%end %>
+
+											<%if (ApplicationHelper.check_can_download_csv(current_user,"sys_users/customer"))%>
+												<div class="my-icon my-view">
+													<div class="my-tooltip">
+														CSV
+													</div>
+													<%= link_to sys_users_path('q[id_eq]':sys_user.id,'csv':true), title: 'Download CSV', class:"icon-div" do%>
+														<i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
+													<%end %>
+												</div>
+											<%end %>
+
+											<div class="my-icon my-view">
+												<div class="my-tooltip">
+													Ledger book
+												</div>
+												<a href="<%=ledger_books_path('q[sys_user_id_eq]':sys_user.id) %>" title="Ledger book", class="icon-div">
+													<i class="fa fa-address-book mt-2 text-info" aria-hidden="true"></i>
+												</a>
+											</div>
                     </div>
                   </div>
                     <span class="icon-div-1">
