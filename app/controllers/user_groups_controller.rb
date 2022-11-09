@@ -61,9 +61,9 @@ class UserGroupsController < ApplicationController
   # PATCH/PUT /cities/1.json
   def update
     respond_to do |format|
-      if @user_group.update(city_params)
-        format.html { redirect_to cities_path, notice: 'User Group was successfully updated.' }
-        format.json { render :show, status: :ok, location: @city }
+      if @user_group.update(user_group_params)
+        format.html { redirect_to user_groups_path, notice: 'User Group was successfully updated.' }
+        format.json { render :show, status: :ok, location: @user_group }
       else
         format.html { render :edit }
         format.json { render json: @user_group.errors, status: :unprocessable_entity }

@@ -1,0 +1,49 @@
+<%= af.hidden_field :id %>
+<div class="col-lg-6" style="float:left">
+  <%= af.select :status, Contact.statuses.map { |key, value| [key.humanize, key] },{ include_blank: "Please Select Contact Status"},{class: "form-control"} %>
+</div>
+<div class="col-lg-6" style="float:left">
+  <%= af.select :city_id, options_from_collection_for_select(@cities, 'id', 'title',af.object.city_id.present? ? af.object.city_id : @cities&.first&.id),{},{class: "form-control"} %>
+</div>
+<div class="col-lg-6" style="float:left">
+  <%= af.select :country_id, options_from_collection_for_select(@countries, 'id', 'title',af.object.country_id.present? ? af.object.country_id : @countries&.first&.id ),{},{class: "form-control"} %>
+</div>
+<div class="col-lg-6" style="float:left">
+  <%= af.text_field :home, placeholder:"Enter Home Line Number Phone", class: "form-control" %>
+</div>
+<div class="col-lg-6" style="float:left">
+  <%= af.text_field :office, placeholder:"Enter Office Phone", class: "form-control" %>
+</div>
+<div class="col-lg-6" style="float:left">
+  <%= af.text_field :fax, placeholder:"Enter Fax Number", class: "form-control" %>
+</div>
+<div class="col-lg-6" style="float:left">
+  <%= af.text_field :mobile, placeholder:"Enter Mobile Number", class: "form-control" %>
+</div>
+<div class="col-lg-6" style="float:left">
+  <%= af.text_field :email, placeholder:"Enter Email", class: "form-control" %>
+</div>
+<div class="col-lg-6" style="float:left">
+  <%= af.label :address do %>
+          <%= Contact.human_attribute_name :address
+           %>
+          <i class="fas fa-language"></i>
+        <% end %>
+  <%= af.text_area :address, hide_label: true , placeholder:"Enter Address",class: 'urdu-font form-control' %>
+</div>
+<div class="col-lg-6" style="float:left">
+  <%= af.label :address do %>
+          <%= Contact.human_attribute_name :permanent_address
+           %>
+          <i class="fas fa-language"></i>
+        <% end %>
+  <%= af.text_area :permanent_address, hide_label: true , placeholder:"Enter Permanent Address",class: 'urdu-font form-control' %>
+</div>
+<div class="col-lg-6" style="float:left">
+  <%= af.label :comment do %>
+          <%= Contact.human_attribute_name :comment
+           %>
+          <i class="fas fa-language"></i>
+        <% end %>
+  <%= af.text_area :comment, hide_label: true , placeholder:"Enter Comment",class: 'urdu-font form-control' %>
+</div>

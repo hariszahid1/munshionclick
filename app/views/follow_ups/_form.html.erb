@@ -1,0 +1,46 @@
+<%= bootstrap_form_for(follow_up) do |f| %>
+  <% if follow_up.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(follow_up.errors.count, "error") %> prohibited this follow up from being saved:</h2>
+      <ul>
+        <% follow_up.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="col-lg-12 row">
+    <div class="col-lg-12 form-group float-left">
+      <%= f.select :reminder_type, FollowUp.reminder_types.map { |key, value| [key.humanize, key] },{include_blank: "Please Select Reminder Type"},{class: "form-control", required: true} %>
+    </div>
+
+    <div class="col-lg-12 form-group float-left">
+      <%= f.select :task_type, FollowUp.task_types.map { |key, value| [key.humanize, key] },{include_blank: "Please Select Priority"},{class: "form-control", required: true} %>
+    </div>
+
+    <div class="col-lg-12 form-group float-left">
+      <%= f.select :priority, FollowUp.priorities.map { |key, value| [key.humanize, key] },{include_blank: "Please Select Task Type"},{class: "form-control", required: true} %>
+    </div>
+
+    <div class="col-lg-12" style="float:left">
+      <%= f.select :assigned_to_id, options_from_collection_for_select(@staff, 'id', 'name',f.object.assigned_to_id.present? ? f.object.assigned_to_id : nil ),{include_blank: "Please Seleect Assignee"},{class: "form-control"} %>
+    </div>
+    <div class="col-lg-12" style="float:left">
+      <%= f.date_field :date, required:true %></th>
+    </div>
+  </div>
+
+  <div class="field">
+    <%= f.hidden_field :created_by, value: current_user.id %>
+  </div>
+  <div class="field">
+    <%= f.hidden_field :followable_id, value: params[:sys_user_id].to_i %>
+  </div>
+  <div class="field">
+    <%= f.hidden_field :followable_type, value: 'SysUser' %>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+    <%=f.object.id.nil? ? (f.submit class: "btn btn-success mr-4", style: "float: right")  :  (f.submit class: "btn btn-warning mr-4", style: "float: right")%>
+  </div>
+<% end %>
