@@ -19,6 +19,7 @@ class UserGroupsController < ApplicationController
     download_user_groups_pdf_file if params[:pdf].present?
     send_email_file if params[:email].present?
     export_file if params[:export_data].present?
+    @count_sys_user = SysUser.all.group(:user_group).count
   end
 
   # GET /user_groups/1

@@ -231,7 +231,7 @@
               <i class="fa fa-address-book"></i><%= sys_user.name %>
             <%end %>
           </td>
-          <td><%= sys_user.user_group %></td>
+          <td><%= link_to sys_user.user_group, user_groups_path() %></td>
           <td><%= sys_user.status %></td>
           <td><%= sys_user.occupation %></td>
           <td><b><%= sys_user.opening_balance.to_f.round(2) %></b></td>

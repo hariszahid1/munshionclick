@@ -152,6 +152,14 @@
                         <span class="link-text">Add/List</span>
                     <% end %>
                 </li>
+                <li>
+                    <% SysUser.user_groups.each do |value, index|%>
+                        <%= link_to sys_users_path('q[user_group_eq]': index) do %>
+                            <i class="fas fa-plus"></i>
+                            <span class="link-text"><%= value%></span>
+                        <% end %>
+                    <% end %>
+                </li>
             </ul>
         </li>
         <li>
