@@ -1,23 +1,61 @@
-<div class="hidden" id="ledger_book_list">
-  <h1>Ledger Book</h1>
-  <% if can?(:add, :all) %>
-    <%= link_to new_ledger_book_path(Sjama: true), class: "btn btn-success" do %>
-       <i class="fa fa-plus" aria-hidden="true"></i>
-       Jama / credit
-    <% end %>
-    <%= link_to new_ledger_book_path(Sbenam: true), class: "btn btn-success" do %>
-       <i class="fa fa-plus" aria-hidden="true"></i>
-       Benam / debit
-    <% end %>
-  <% end %>
-  <%= link_to transfer_ledger_books_path, class: "btn btn-success" do %>
-    <i class="fa fa-credit-card" aria-hidden="true"></i>
-    Payment Transfer
- <% end %>
-
-  <div class="clearfix"></div>
-  <div class="">
-    <%= search_form_for @q, url: ledger_books_path, class: "admin-controls", method: "get" do |f| %>
+<div id="custom-alert" class="alert alert-danger d-none">
+  <span class="custom-alert-text"></span>
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">×</span>
+  </button>
+</div>
+<div class="hidden" id="item_types_list">
+        <div class="main-content-header">
+          <h1 class="ml-2">Ledger Book</h1>
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a href="<%= root_path %>">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item active">
+              <a href="<%= item_types_path %>">Ledger Book</a>
+            </li>
+          </ol>
+        </div>
+        <div class="float-right">
+          <div class="dropdown ml-auto mr-4">
+            <span class="btn btn-info" title= "About This page">Help</span>
+              <div class="dropdown-content">
+                  <% if @help.present? %>
+                  <% @help&.help_links.each do |link| %>
+                  <a type="button" class="" target="_blank" href="<%= link[1] %>" >Help in <%= link[0] %></a>
+                  <% end %>
+                  <% end %>
+                  </div>
+              </div>
+         </div>
+  </div>
+<%= search_form_for @q, url: ledger_books_path, class: "admin-controls", method: "get" do |f| %>
+<ul class="nav nav-pills" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link tab-label" data-toggle="tab" href="#jamabenam" role="tab">Jama/ Benam</a>
+      </li>
+       <li class="nav-item">
+        <a class="nav-link tab-label" data-toggle="tab" href="#payment" role="tab">Payment Transfer</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
+      </li>
+      <li class="nav-item">
+       <a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
+      </li>
+  </ul>
+<div class="tab-content mb-5">
+    <div class="tab-pane active mb-3 card shadow-sm mt-2 border-radius-1" id="search" role="tabpanel">
+     <p>
       <div class="col-12 row">
         <div class="col-lg-4 form-group">
           <%= f.select :sys_user_id_eq, options_from_collection_for_select(@ledger_searchs, "id", ->(st){"#{st.name} \u{27F6} \u{27F6} #{st.code} "},@title),{:include_blank => "Select Name/Code"},:class=>"form-control chosen-select" %>
@@ -32,78 +70,175 @@
           <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
         </div>
       </div>
-			<!-- pdf's -->
-      <div class="col-lg-12 col-sm-12">
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn  badge badge-pill badge-danger" title="Download ledger book pdf for single user in ascending order pdf" name="submit_form_without" type="submit" value="Ledger Book PDF A4" formtarget="_blank">1-Asc &nbsp;<i class="fa fa-file-pdf"></i></button>
+      </p>
+    </div>
+    <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="jamabenam" role="tabpanel">
+        <p>
+        <div class='ml-2 mt-2'>
+            <% if can?(:add, :all) %>
+              <%= link_to new_ledger_book_path(Sjama: true), class: "btn btn-success" do %>
+                <i class="fa fa-plus" aria-hidden="true"></i>
+                Jama / credit
+              <% end %>
+                <%= link_to new_ledger_book_path(Sbenam: true), class: "btn btn-success" do %>
+                  <i class="fa fa-plus" aria-hidden="true"></i>
+                    Benam / debit
+                <% end %>
+            <% end %>
+         </div>
+        </p>
+    </div>
+    <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="payment" role="tabpanel">
+        <p>
+        <div class='ml-2 mt-2'>
+           <%= link_to transfer_ledger_books_path, class: "btn btn-success" do %>
+              <i class="fa fa-credit-card" aria-hidden="true"></i>
+              Payment Transfer
+            <% end %>
         </div>
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn  badge badge-pill badge-danger" title="Download ledger book pdf for single user in descending order pdf" name="submit_pdf_without" type="submit" value="Ledger Book PDF A4" formtarget="_blank">1-Desc &nbsp;<i class="fa fa-file-pdf"></i></button>
+        </p>
+    </div>
+    <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="pdf" role="tabpanel">
+      <p>
+        <div class="d-flex">
+          <div class="ml-2">
+            <button class="btn btn-danger" title="Download ledger book pdf for single user in ascending order pdf" name="submit_form_without" type="submit" value="Ledger Book PDF A4" formtarget="_blank">1-Asc &nbsp;<i class="fa fa-file-pdf"></i></button>
+          </div>
+          <div class="ml-2">
+            <button class="btn btn-danger" title="Download ledger book pdf for single user in descending order pdf" name="submit_pdf_without" type="submit" value="Ledger Book PDF A4" formtarget="_blank">1-Desc &nbsp;<i class="fa fa-file-pdf"></i></button>
+          </div>
+          <%if pos_setting_sys_type!="CustomClear"%>
+          <div class="ml-2">
+            <button class="btn btn-danger" title="Download ledger book for all user in ascending order pdf" name="submit_form" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Asc &nbsp; <i class="fa fa-file-pdf"></i></button>
+          </div>
+          <div class="ml-2">
+            <button class="btn btn-danger" title="Download ledger book for all user in desending order pdf" name="submit_pdf" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Desc &nbsp; <i class="fa fa-file-pdf"></i></button>
+          </div>
+          <%end%>
+          <div class="ml-2">
+            <button class="btn btn-danger" title="Download ledger book with short commenting pdf" name="submit_pdf_short" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Short &nbsp;<i class="fa fa-file-pdf"></i></button>
+          </div>
+          <div class="ml-2">
+            <button class="btn btn-danger" title="Download debit pdf" name="submit_debit" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Debit List &nbsp;<i class="fa fa-file-pdf"></i></button>
+          </div>
+          <div class="ml-2">
+            <button class="btn btn-danger" title="Download credit pdf" name="submit_credit" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Credit List &nbsp;<i class="fa fa-file-pdf"></i></button>
+          </div>
         </div>
-        <%if pos_setting_sys_type!="CustomClear"%>
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn  badge badge-pill badge-danger" title="Download ledger book for all user in ascending order pdf" name="submit_form" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Asc &nbsp; <i class="fa fa-file-pdf"></i></button>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn  badge badge-pill badge-danger" title="Download ledger book for all user in desending order pdf" name="submit_pdf" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Desc &nbsp; <i class="fa fa-file-pdf"></i></button>
-        </div>
-        <%end%>
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn  badge badge-pill badge-danger" title="Download ledger book with short commenting pdf" name="submit_pdf_short" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Short &nbsp;<i class="fa fa-file-pdf"></i></button>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn  badge badge-pill badge-danger" title="Download debit pdf" name="submit_debit" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Debit List &nbsp;<i class="fa fa-file-pdf"></i></button>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn  badge badge-pill badge-danger" title="Download credit pdf" name="submit_credit" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Credit List &nbsp;<i class="fa fa-file-pdf"></i></button>
-        </div>
-				<!-- csv's -->
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn badge badge-pill btn-success" title="Download ledger book for single user in ascending order csv" name="submit_form_without_csv" type="submit" value="Ledger Book CSV" formtarget="_blank">1-Asc &nbsp; <i class="fa fa-file-excel"></i></button>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn badge badge-pill btn-success" title="Download ledger book for single user in descending order csv" name="submit_csv_without" type="submit" value="Ledger Book CSV A4" formtarget="_blank">1-Desc &nbsp;<i class="fa fa-file-excel"></i></button>
-        </div>
-        <%if pos_setting_sys_type!="CustomClear"%>
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn badge badge-pill btn-success" title="Download ledger book for all user in ascending order csv" name="submit_form_csv" type="submit" value="Ledger Book CSV A4" formtarget="_blank">Asc &nbsp;<i class="fa fa-file-excel"></i></button>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn badge badge-pill btn-success" title="Download ledger book for all user in desending order csv" name="submit_csv" type="submit" value="Ledger Book CSV A4" formtarget="_blank">Desc &nbsp;<i class="fa fa-file-excel"></i></button>
-        </div>
-        <%end%>
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn badge badge-pill btn-success" title="Download ledger book with short commenting csv" name="submit_csv_short" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Short &nbsp;<i class="fa fa-file-excel"></i></button>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn badge badge-pill btn-success" title="Download debit csv" name="submit_debit_csv" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Debit List &nbsp;<i class="fa fa-file-excel"></i></button>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn badge badge-pill btn-success" title="Download credit csv" name="submit_credit_csv" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Credit List &nbsp;<i class="fa fa-file-excel"></i></button>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn badge badge-pill btn-info" title="" name="asc_email" type="submit" value="Email"><i class="fas fa-envelope"></i> Asc email</button>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn badge badge-pill btn-info" title="" name="desc_email" type="submit" value="Email"><i class="fas fa-envelope"></i> Desc email</button>
-        </div>
-			</div>
+      </p>
+    </div>
+    <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="csv" role="tabpanel">
+      <p>
+        <div class="d-flex">
+          <div class="ml-2">
+           <button class="btn btn-success" title="Download ledger book for single user in ascending order csv" name="submit_form_without_csv" type="submit" value="Ledger Book CSV" formtarget="_blank">1-Asc &nbsp; <i class="fa fa-file-excel"></i></button>
+          </div>
+          <div class="ml-2">
+            <button class="btn btn-success" title="Download ledger book for single user in descending order csv" name="submit_csv_without" type="submit" value="Ledger Book CSV A4" formtarget="_blank">1-Desc &nbsp;<i class="fa fa-file-excel"></i></button>
+          </div>
+          <%if pos_setting_sys_type!="CustomClear"%>
+          <div class="ml-2">
+            <button class="btn btn-success" title="Download ledger book for all user in ascending order csv" name="submit_form_csv" type="submit" value="Ledger Book CSV A4" formtarget="_blank">Asc &nbsp;<i class="fa fa-file-excel"></i></button>
+          </div>
+          <div class="ml-2">
+            <button class="btn btn-success" title="Download ledger book for all user in desending order csv" name="submit_csv" type="submit" value="Ledger Book CSV A4" formtarget="_blank">Desc &nbsp;<i class="fa fa-file-excel"></i></button>
+          </div>
+          <%end%>
+          <div class="ml-2">
+            <button class="btn btn-success" title="Download ledger book with short commenting csv" name="submit_csv_short" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Short &nbsp;<i class="fa fa-file-excel"></i></button>
+          </div>
+          <div class="ml-2">
+            <button class="btn btn-success" title="Download debit csv" name="submit_debit_csv" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Debit List &nbsp;<i class="fa fa-file-excel"></i></button>
+          </div>
+          <div class="ml-2">
+            <button class="btn btn-success" title="Download credit csv" name="submit_credit_csv" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Credit List &nbsp;<i class="fa fa-file-excel"></i></button>
+          </div>
       </div>
-    <% end %>
-  </div>
+      </p>
+    </div>
+    <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="emails" role="tabpanel">
+      <p>
+      <div class='d-flex'>
+        <div class="ml-2">
+        <button class="btn btn-info" type="button" title="" name="asc_email" type="submit" value="Email" data-toggle="modal" data-target="#exampleModalCenter" ><i class="fa fa-envelope mr-2"></i>&nbsp;Asc-Mail</button>
+        </div>
+        <div class='ml-2'>
+        <button class="btn btn-info" type="button" title="" name="desc_email" type="submit" value="Email" data-toggle="modal" data-target="#exampleModalCenter" ><i class="fa fa-envelope mr-2"></i>&nbsp;Desc-Mail</button>
+        </div>
+      </div>
+     </p>
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+              <% @pos_setting = PosSetting.first %>
+              <label>Email:</label>
+              <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
+              <br />
+              <label>Subject:</label>
+              <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Ledger Book Detail report from MunshiOnClick", class: 'form-control email-fields'%>
+              <br />
+              <label>Body:</label><br />
+              <%= text_area_tag 'body', nil, class: 'form-control'%>
+              <br />
 
-  <table data-toggle="table" data-search="true">
+              <label>Please select one of them.</label>
+              <div>
+                <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
+                <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
+                <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+              <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
+            </div>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="tab-pane" id="import-export" role="tabpanel">
+      <p>
+        <div class="d-flex">
+        <button class="btn btn-success ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
+        <button class="btn btn-primary ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
+        </div>
+      </p>
+    </div>
+  </div>
+  <% end %>
+<div class='card p-3'>
+  <table data-toggle="table" data-search="true" class=" overflow-hidden border-radius-1">
     <thead>
       <tr>
-        <th><%= sort_link(@q, :sys_user_name, 'ID/P') %></th>
-        <th><%= sort_link(@q, :sys_user_name, 'Customer/Supplier') %></th>
-        <th><%= sort_link(@q, :debit, 'Debit') %></th>
-        <th><%= sort_link(@q, :credit, 'Credit') %></th>
-        <th><%= sort_link(@q, :balance, 'Balance') %></th>
+       <th>
+          <input type="checkbox" id="master" class='select-all-checkbox'>
+          <div class="icon-container float-center">
+            <span class="ml-2 mt-2">
+              <div class="my-icon my-view">
+                <button class="icon-div btn delete-selected p-2 " type='button' value='ProductCategory'>
+                  <i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i> 
+                </button>
+              </div>
+            </span>
+          </div>
+        </th>
+        <th>ID/P<div class='float-right'><%= sort_link(@q, :sys_user_name, '', {}, class: 'sorting-button') %></div></th>
+        <th>Customer/Supplier<div class='float-right'><%= sort_link(@q, :sys_user_name, '', {}, class: 'sorting-button') %></div></th>
+        <th>Debit<div class='float-right'><%= sort_link(@q, :debit, '', {}, class: 'sorting-button') %></div></th>
+        <th>Credit<div class='float-right'><%= sort_link(@q, :credit, '', {}, class: 'sorting-button') %></div></th>
+        <th>Balance<div class='float-right'><%= sort_link(@q, :balance, '', {}, class: 'sorting-button') %></div></th>
         <th>Jama/Benam</th>
-        <th><%= sort_link(@q, :purchase_sale_detail_id, 'Voucher') %></th>
-        <th><%= sort_link(@q, :comment, 'Comment') %></th>
-        <th><%= sort_link(@q, :date, 'Date') %></th>
+        <th>Voucher<div class='float-right'><%= sort_link(@q, :purchase_sale_detail_id, '', {}, class: 'sorting-button') %></div></th>
+        <th>Comment<div class='float-right'><%= sort_link(@q, :comment, '', {}, class: 'sorting-button') %></div></th>
+        <th>Date<div class='float-right'><%= sort_link(@q, :date, '', {}, class: 'sorting-button') %></div></th>
         <th class="border_none">Action</th>
       </tr>
     </thead>
@@ -111,6 +246,7 @@
     <tbody>
       <% @ledger_books.each do |ledger_book| %>
         <tr>
+        <td><%= check_box_tag 'object_ids[]', ledger_book.id %></td>
           <td>
               <% if ledger_book&.purchase_sale_detail.present?%>
                 <%= link_to payments_path('q[id_eq]': ledger_book.purchase_sale_detail.payment_ids.last), title: "print receipt detail" do %>
@@ -207,59 +343,95 @@
           </td>
           <td><%=ledger_book.created_at.strftime("%A,  %d-%b-%y")%></td>
           <td>
-            <%= link_to ledger_book, target: "_blank", title: "Print receipt" do %>
-              <i class="fa fa-print" aria-hidden="true"></i> |
-            <%end %>
-
-            <% if can?(:update, :all) %>
-              <% if ledger_book.purchase_sale_detail_id.present? %>
-                <%if ledger_book.purchase_sale_detail.purchase_sale_items.present?%>
-                  <%if ledger_book.purchase_sale_detail.purchase_sale_items.first.product.present? %>
-                    <% if can?(:update, :all) %>
-                          <%= link_to edit_purchase_sale_detail_path(ledger_book.purchase_sale_detail,product: true),title: "Edit detail" do %>
-                                    <i class="fa fa-edit" aria-hidden="true"></i> |
+            <div class="icon-container-1">
+                <div class="my-icon-1 my-view-1">
+                  <div class="my-tooltip-1">
+                    <div class="icon-container">
+                      <div class="my-icon my-view">
+                        <div class="my-tooltip">
+                            Edit
+                          </div>
+                            <% if can?(:update, :all) %>
+                              <% if ledger_book.purchase_sale_detail_id.present? %>
+                                <%if ledger_book.purchase_sale_detail.purchase_sale_items.present?%>
+                                  <%if ledger_book.purchase_sale_detail.purchase_sale_items.first.product.present? %>
+                                    <% if can?(:update, :all) %>
+                                        <%= link_to edit_purchase_sale_detail_path(ledger_book.purchase_sale_detail,product: true),title: "Edit detail" do %>
+                                            <i class="fa fa-edit mt-2" aria-hidden="true"></i> |
+                                        <% end %>
+                                  <% end %>
+                                <%else%>
+                                <% if can?(:update, :all) %>
+                                  <%= link_to edit_purchase_sale_detail_path(ledger_book.purchase_sale_detail),title: "Edit detail" do %>
+                                    <i class="fa fa-edit mt-2" aria-hidden="true"></i> |
+                                  <% end %>
+                                  <% end %>
+                                <%end%>
+                              <%end%>
+                            <% elsif ledger_book.order.present? %>
+                                <%= link_to edit_order_path(ledger_book.order_id,product: true),title: "Edit detail" do %>
+                                  <i class="fa fa-edit mt-2" aria-hidden="true"></i> |
+                                <%end %>
+                            <%else%>
+                              <%= link_to edit_ledger_book_path(ledger_book),title: "Edit detail" do %>
+                                <i class="fa fa-edit mt-2" aria-hidden="true"></i> |
+                              <%end %>
+                            <% end %>
                           <% end %>
-                    <% end %>
-                  <%else%>
-                  <% if can?(:update, :all) %>
-                    <%= link_to edit_purchase_sale_detail_path(ledger_book.purchase_sale_detail),title: "Edit detail" do %>
-                      <i class="fa fa-edit" aria-hidden="true"></i> |
-                    <% end %>
-                    <% end %>
-                  <%end%>
-                <%end%>
-              <% elsif ledger_book.order.present? %>
-                  <%= link_to edit_order_path(ledger_book.order_id,product: true),title: "Edit detail" do %>
-                    <i class="fa fa-edit " aria-hidden="true"></i> |
-                  <%end %>
-              <%else%>
-                <%= link_to edit_ledger_book_path(ledger_book),title: "Edit detail" do %>
-                  <i class="fa fa-edit " aria-hidden="true"></i> |
-                <%end %>
-              <% end %>
-
-            <% end %>
-            <% if can?(:delete, :all) %>
-            <% if ledger_book.purchase_sale_detail_id.present? %>
-                <%= link_to purchase_sale_detail_path(ledger_book.purchase_sale_detail_id), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, title: "Delete ledger book",:remote => true, :class => 'delete' do %>
-                  <i class="fa fa-trash" aria-hidden="true"></i> |
-                <% end %>
-            <%elsif ledger_book.order.present? %>
-                <%= link_to order_path(ledger_book.order_id), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, title: "Delete ledger book",:remote => true, :class => 'delete' do %>
-                  <i class="fa fa-trash" aria-hidden="true"></i> |
-                <% end %>
-            <%else%>
-              <%= link_to ledger_book, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, title: "Delete ledger book",:remote => true, :class => 'delete' do %>
-              <i class="fa fa-trash " aria-hidden="true"></i> |
-            <%end%>
-            <%end %>
-            <% end %>
-            <% if can?(:view, :all) %>
-              <%= link_to ledger_book, title: "View Detail" do %>
-                <i class="fa fa-eye " aria-hidden="true"></i>
-              <%end %>
-            <%end%>
-
+                        </div>
+                        <div class="my-icon my-view">
+                          <div class="my-tooltip">
+                            Delete
+                          </div>
+                              <% if can?(:delete, :all) %>
+                              <% if ledger_book.purchase_sale_detail_id.present? %>
+                                  <%= link_to purchase_sale_detail_path(ledger_book.purchase_sale_detail_id), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, title: "Delete ledger book",:remote => true, :class => 'delete' do %>
+                                    <i class="fa fa-trash mt-2" aria-hidden="true"></i> |
+                                  <% end %>
+                              <%elsif ledger_book.order.present? %>
+                                  <%= link_to order_path(ledger_book.order_id), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, title: "Delete ledger book",:remote => true, :class => 'delete' do %>
+                                    <i class="fa fa-trash mt-2" aria-hidden="true"></i> |
+                                  <% end %>
+                              <%else%>
+                                <%= link_to ledger_book, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, title: "Delete ledger book",:remote => true, :class => 'delete' do %>
+                                <i class="fa fa-trash mt-2" aria-hidden="true"></i> |
+                              <%end%>
+                              <%end %>
+                              <% end %>
+                        </div>
+                        <div class="my-icon my-view">
+                          <div class="my-tooltip">
+                            Show
+                          </div>
+                          <% if can?(:view, :all) %>
+                            <%= link_to ledger_book, title: "View Detail" do %>
+                              <i class="fa fa-eye mt-2" aria-hidden="true"></i>
+                            <%end %>
+                          <%end%>
+                        </div>
+                        <div class="my-icon my-view">
+                          <div class="my-tooltip">
+                            PDF
+                          </div>
+                          <%= link_to ledger_books_path('q[id_eq]':ledger_book.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
+                            <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
+                          <%end %>
+                        </div>
+                        <div class="my-icon my-view">
+                          <div class="my-tooltip">
+                            CSV
+                          </div>
+                            <%= link_to ledger_books_path('q[id_eq]':ledger_book.id,'csv':true), title: 'Download CSV', class:"icon-div" do%>
+                            <i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
+                          <%end %>
+                        </div>
+                    </div>
+                  </div>
+                    <span class="icon-div-1">
+                      <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+                    </span>
+                </div>
+              </div>
           </td>
         </tr>
       <% end %>
@@ -278,20 +450,48 @@
 
     </tbody>
   </table>
-</div>
 
-<div class="clearfix"></div>
-<div class="row">
-  <div class="col-lg-4 col-sm-4">
-    <%= page_entries_info @ledger_books %>
-  </div>
-  <div class="col-lg-8 col-sm-8 pagination-left">
-    <%= paginate @ledger_books %>
-  </div>
+  <div class="row">
+    <div class="col-lg-4 col-sm-4">
+      <%= page_entries_info @ledger_books %>
+    </div>
+    <div class="col-lg-8 col-sm-8 pagination-left">
+      <%= paginate @ledger_books %>
+    </div>
+    </div>
 </div>
+</div>
+</div>
+<%= form_for :bulk_import, url: bulk_import_data_path, method: :post, html: {class: "bulk-import-form"} do |f| %>
+  <div class="modal fade" id="importFile" tabindex="-1" role="dialog" aria-labelledby="importFileTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Import file</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <%= f.file_field :file, required: true, accept: '.csv' %>
+          <%= f.hidden_field :table_name, value: 'ItemType' %>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <%= f.submit 'Import', class: 'btn btn-primary' %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+<div class="show-data"></div>
 
 <script>
   $(document).ready(function() {
+    var sortingButtons = $('.sorting-button')
+    for(var i=0; i<sortingButtons.length; i++){
+      $(sortingButtons[i]).html("<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='blue' enable-background='new 0 0 512 512' viewBox='0 0 512 512'><path d='M163.919,494.293c-2.83,0-5.496-1.33-7.196-3.593L45.97,343.348c-2.986-3.974-2.187-9.615,1.787-12.602 c3.974-2.986,9.616-2.187,12.602,1.787l103.557,137.777l103.493-137.775c2.986-3.975,8.627-4.775,12.602-1.791 c3.974,2.985,4.775,8.627,1.79,12.602L171.113,490.698C169.414,492.961,166.749,494.293,163.919,494.293z'/><path d='M163.917 494.293c-4.971 0-9-4.029-9-9V26.192c0-4.971 4.029-9 9-9s9 4.029 9 9v459.101C172.917 490.264 168.888 494.293 163.917 494.293zM459.507 182.622c-2.734 0-5.435-1.241-7.203-3.597L348.78 41.18 245.257 179.025c-2.985 3.975-8.626 4.777-12.601 1.792-3.974-2.984-4.777-8.626-1.792-12.601l110.72-147.43c1.699-2.263 4.365-3.595 7.196-3.595s5.497 1.332 7.196 3.595l110.72 147.43c2.985 3.975 2.183 9.616-1.792 12.601C463.285 182.034 461.388 182.621 459.507 182.622z'/><path d='M348.78,494.293c-4.971,0-9-4.029-9-9V26.192c0-4.971,4.029-9,9-9s9,4.029,9,9v459.101 C357.78,490.264,353.751,494.293,348.78,494.293z'/></svg>")
+    }
     if ($(".bootstrap-table").length == 0){
       $("table").bootstrapTable();
     }
