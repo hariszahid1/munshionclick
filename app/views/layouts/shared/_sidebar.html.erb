@@ -8,6 +8,13 @@
           <% end %>
         </li>
         <li>
+          <a href="<%=customer_management_systems_path%>">
+            <i class="fas fa-user-plus"></i>
+            <span class="link-text">CMS</span>
+          </a>
+        </li>
+
+        <li>
           <a href="<%=orders_path(sale: true)%>">
             <i class="fas fa fa-barcode"></i>
             <span class="link-text">Order</span>
@@ -99,21 +106,11 @@
                 <% end %>
               </li>
               <li>
-                <%= link_to customer_sys_users_path do %>
-                  <i class="fas fa-plus"></i>
-                  <span class="link-text">Customer</span>
-                <% end %>
-              </li>
-              <li>
-                <%= link_to supplier_sys_users_path do %>
-                  <i class="fas fa-plus"></i>
-                  <span class="link-text">Supplier</span>
-                <% end %>
-              </li>
-              <li>
-                <%= link_to own_sys_users_path do %>
-                  <i class="fas fa-plus"></i>
-                  <span class="link-text">own</span>
+                <% SysUser.user_groups.each do |value, index|%>
+                  <%= link_to sys_users_path('q[user_group_eq]': index) do %>
+                    <i class="fas fa-plus"></i>
+                    <span class="link-text"><%= value%></span>
+                  <% end %>
                 <% end %>
               </li>
             </ul>

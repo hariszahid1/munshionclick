@@ -124,15 +124,15 @@
 
           <div class="tab-pane" id="pdf" role="tabpanel">
             <p>
-              <div class="col-lg-1 d-flex">
-                <button class="form-control btn  btn-danger" title="Download user pdf" name="submit_pdf_staff_with" type="submit" value="Customer/Salesman PDF A4" formtarget="_blank">Users &nbsp;<i class="fa fa-file-pdf"></i></button>
+              <div>
+                <button class="ml-3 btn btn-danger" title="Download user pdf" name="pdf" type="submit" value="pdf" formtarget="_blank"><i class="fa fa-file-pdf mr-2"></i>Users</button>
               </div>
             </p>
           </div>
           <div class="tab-pane" id="csv" role="tabpanel">
             <p>
-              <div class="col-lg-1 d-flex">
-                <button class="form-control btn btn-success" title="Download user csv" name="submit_csv_staff_with" type="submit" value="User CSV" formtarget="_blank">Users &nbsp; <i class="fa fa-file-excel" aria-hidden="true"></i></button>
+              <div>
+                <button class="ml-3 btn btn-success" title="Download user csv" name="csv" type="submit" value="csv"><i class="fa fa-file-excel mr-2" aria-hidden="true"></i>Users</button>
               </div>
             </p>
           </div>
@@ -231,7 +231,7 @@
               <i class="fa fa-address-book"></i><%= sys_user.name %>
             <%end %>
           </td>
-          <td><%= sys_user.user_group %></td>
+          <td><%= link_to sys_user.user_group, user_groups_path() %></td>
           <td><%= sys_user.status %></td>
           <td><%= sys_user.occupation %></td>
           <td><b><%= sys_user.opening_balance.to_f.round(2) %></b></td>

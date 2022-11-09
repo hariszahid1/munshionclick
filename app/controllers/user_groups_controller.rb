@@ -19,6 +19,7 @@ class UserGroupsController < ApplicationController
     download_user_groups_pdf_file if params[:pdf].present?
     send_email_file if params[:email].present?
     export_file if params[:export_data].present?
+    @count_sys_user = SysUser.all.group(:user_group).count
   end
 
   # GET /user_groups/1
@@ -61,9 +62,9 @@ class UserGroupsController < ApplicationController
   # PATCH/PUT /cities/1.json
   def update
     respond_to do |format|
-      if @user_group.update(city_params)
-        format.html { redirect_to cities_path, notice: 'User Group was successfully updated.' }
-        format.json { render :show, status: :ok, location: @city }
+      if @user_group.update(user_group_params)
+        format.html { redirect_to user_groups_path, notice: 'User Group was successfully updated.' }
+        format.json { render :show, status: :ok, location: @user_group }
       else
         format.html { render :edit }
         format.json { render json: @user_group.errors, status: :unprocessable_entity }
@@ -102,7 +103,7 @@ class UserGroupsController < ApplicationController
 
   def download_user_groups_pdf_file
     @user_groups = @q.result
-    generate_pdf(@user_groups.as_json, "User_groups-Total-#{@user_groups.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}", 'pdf.html', 'A4')
+    generate_pdf(@user_groups.as_json, "User_groups-Total-#{@user_groups.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}", 'pdf.html', 'A4', false)
   end
 
   def send_email_file

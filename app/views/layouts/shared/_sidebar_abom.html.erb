@@ -6,6 +6,13 @@
               <span class="link-text">Dashboard</span>
           <% end %>
         </li>
+        <li>
+          <a href="<%=customer_management_systems_path%>">
+            <i class="fas fa-user-plus"></i>
+            <span class="link-text">CMS</span>
+          </a>
+        </li>
+
         <!-- only Developer can start-->
         <li>
             <a href="#SaleSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
@@ -143,6 +150,14 @@
                         <i class="fas fa-plus"></i>
                         <i class="fas fa-th-list"></i>
                         <span class="link-text">Add/List</span>
+                    <% end %>
+                </li>
+                <li>
+                    <% SysUser.user_groups.each do |value, index|%>
+                        <%= link_to sys_users_path('q[user_group_eq]': index) do %>
+                            <i class="fas fa-plus"></i>
+                            <span class="link-text"><%= value%></span>
+                        <% end %>
                     <% end %>
                 </li>
             </ul>

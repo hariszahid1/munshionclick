@@ -100,7 +100,7 @@ class ItemTypesController < ApplicationController
 
   def download_item_types_pdf_file
     @item_type = @q.result
-    generate_pdf(@item_type.as_json, "ItemTypes-Total-#{@item_type.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}", 'pdf.html', 'A4')
+    generate_pdf(@item_type.as_json, "ItemTypes-Total-#{@item_type.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}", 'pdf.html', 'A4', false)
   end
 
   def send_email_file

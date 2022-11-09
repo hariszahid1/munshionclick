@@ -22,6 +22,8 @@ class User < ApplicationRecord
   roles :developer, :super_admin, :admin, :staff, :salesman, :editor, :visitor
   enum user_roles: { admin: 4, staff: 8, salesman: 16, editor: 32, visitor: 64 }
   has_paper_trail ignore: [:updated_at]
+  has_many :follow_ups, foreign_key: 'created_by', primary_key: 'id'
+  has_many :notes, foreign_key: 'created_by', primary_key: 'id'
 
   def self.mask_no(rol)
     User.mask_for rol

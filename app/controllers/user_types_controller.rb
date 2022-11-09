@@ -95,7 +95,7 @@ class UserTypesController < ApplicationController
   def download_user_types_pdf_file
     sort_data_according
     @user_types = @q.result
-    generate_pdf(@sorted_data.as_json, "user_types-Total-#{@sorted_data.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}", 'pdf.html', 'A4')
+    generate_pdf(@sorted_data.as_json, "user_types-Total-#{@sorted_data.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}", 'pdf.html', 'A4', false)
   end
 
   def send_email_file
