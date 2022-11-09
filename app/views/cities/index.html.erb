@@ -149,13 +149,12 @@
   </div>
   <div>
 
-  <div class="card shadow mt-2 p-2" style="border-radius: 15px">
-  
+
+  <div class="card shadow-sm border-radius-1 p-2">
   <%# <button class='btn btn-outline-danger float-right delete-selected' type='button' style="width:163px"value='City' >Delete Selected</button> %>
     <%= render 'map_columns/map_column_partials' %>
     
-    <table data-toggle="table" id="city_table" style="border-collapse: collapse; overflow-y: hidden;">
-    <h4 class="m-3">Cities Summary</h4>
+    <table data-toggle="table" data-search="true" id="city_table" class=" overflow-hidden border-radius-1">
       <thead>
         <tr>
         
@@ -163,9 +162,9 @@
          <div class="icon-container float-center">
             <span class="ml-2 mt-2">
             <div class="my-icon my-view">
-                        <span class="icon-div btn delete-selected p-2 " type='button' value='City'>
-                                  <i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i> 
-                        </span>
+                        <button class="icon-div btn delete-selected p-2 " type='button' value='City'>
+                                  <i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i>
+                        </button>
                     </div>
                     </span>
               </div></th>
@@ -181,7 +180,7 @@
         <%= render partial: 'city', collection: @cities %>
       </tbody>
    </table>
-   </div>
+
   <div class="row mt-2">
     <div class="col-lg-4 col-sm-4">
       <%= page_entries_info @cities %>
@@ -189,6 +188,7 @@
     <div class="col-lg-8 col-sm-8 pagination-left">
       <%= paginate @cities %>
     </div>
+  </div>
   </div>
 
 <%= form_for :bulk_import, url: bulk_import_data_path, method: :post, html: {class: "bulk-import-form"} do |f| %>

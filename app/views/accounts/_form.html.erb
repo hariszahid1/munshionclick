@@ -27,39 +27,32 @@
       <%= f.text_field :bank_name, placeholder: "Enter Bank Name", hide_label: true ,class: 'urdu-font' %>
     </div>
 
-    <div class="col-lg-6 form-group float-left">
+    <div class="col-lg-12 form-group float-left">
       <%= f.text_field :iban_number, placeholder: "Enter Iban Number" %>
     </div>
 
-    <div class="col-lg-6 form-group float-left">
+    <div class="col-lg-12 form-group float-left">
       <%= f.number_field :amount , required:true%>
     </div>
-    <div class="col-lg-6 form-group float-left">
+    <div class="col-lg-12 form-group float-left">
       <%= f.select :user_id, options_from_collection_for_select(@users, 'id', 'user_name', f.object.user_id), {hide_label:true,prompt: "Select the User"}, class:"form-control chosen-select"%>
     </div>
 
-    <div class="col-lg-6 form-group float-left">
+    <div class="col-lg-12 form-group float-left">
      <%= f.file_field :profile_image %>
     </div>
-    <div class="col-lg-6 form-group float-left">
+    <div class="col-lg-12 form-group float-left">
       <% if  account.profile_image.attached? %>
         <%= image_tag account.profile_image.service_url, width: 300 %>
       <% end %>
     </div>
   </div>
   <div class="clearfix">
-    <hr>
-    <div class="col-lg-12 row ">
+    <div class="modal-footer">
+    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+    <%=f.object.id.nil? ? (f.submit class: "btn btn-success mr-4", style: "float: right")  :  (f.submit class: "btn btn-warning mr-4", style: "float: right")%>
+  </div>
 
-            <div class="col-lg-6 form-group float-left">
-              <%= link_to accounts_path do %>
-              <i class="fa fa-arrow-left " aria-hidden="true"></i>
-              <% end %>
-            </div>
-              <div class="col-lg-6 form-group float-left">
-                <div class="col-lg-6 form-group float-left">
-                  <%=f.object.id.nil? ? (f.submit class: "btn btn-success", style: "float: left")  :  (f.submit class: "btn btn-warning", style: "float: left")%>
-                </div>
-              </div>
+        
             <% end %>
 </div>

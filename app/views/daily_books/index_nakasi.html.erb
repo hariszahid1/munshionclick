@@ -7,18 +7,27 @@
     <i class="fas fa-truck" aria-hidden="true"></i>
     <%=@departments.second.title%> Daily book
   <% end %>
-  <%= link_to production_cycles_path do %>
+  <% if pos_setting_sys_type=="batha"%>
+    <%= link_to production_cycles_path do %>
       <i class="fa fa-sign-language" aria-hidden="true"></i>
       Bhari Daily Book
     <% end %>
-  <%= link_to jalai_production_cycles_path do %>
-        <i class="fa fa-fire" aria-hidden="true"></i>
-        Jalai Daily Book
-      <% end %>
-      <%= link_to nakasi_production_cycles_path do %>
-        <i class="fa fa-align-justify" aria-hidden="true"></i>
-        <%=@departments.third.title%> Daily Book
-      <% end %>
+    <%= link_to jalai_production_cycles_path do %>
+      <i class="fa fa-fire" aria-hidden="true"></i>
+      Jalai Daily Book
+    <% end %>
+    <%= link_to nakasi_production_cycles_path do %>
+      <i class="fa fa-align-justify" aria-hidden="true"></i>
+      <%=@departments.third.title%> Daily Book
+    <% end %>
+
+  <%else%>
+    <%= link_to nakasi_daily_books_path(department_id: @departments.third.title) do %>
+      <i class="fa fa-align-justify" aria-hidden="true"></i>
+      <%=@departments.third.title%> Daily book
+    <% end %>
+  <% end%>
+
 
 </div>
 
@@ -69,8 +78,9 @@
             <div class="row no-gutters align-items-center">
               <div class="col mr-2">
                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1"><h5>Nakasi Stock</h5></div>
-                <div class="h5 mb-0 font-weight-bold text-gray-800"><%=@raw_products.first.title%> = <%=@raw_products.first.nakasi_stock%>  </div>
-                <div class="h5 mb-0 font-weight-bold text-gray-800"><%=@raw_products.second.title%> = <%=@raw_products.second.nakasi_stock%> </div>
+                <%@raw_products.each do |row_product|%>
+                <div class="h5 mb-0 font-weight-bold text-gray-800"><%=row_product.title%> = <%=row_product.nakasi_stock%>  </div>
+                <%end%>
               </div>
             </div>
           </div>

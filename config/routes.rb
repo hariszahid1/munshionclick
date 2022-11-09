@@ -161,7 +161,7 @@ Rails.application.routes.draw do
   resources :user_types
 
   resources :cities
-
+  resources :user_groups
   resources :countries
   resources :expense_types
   resources :expenses
