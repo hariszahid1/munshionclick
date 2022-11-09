@@ -12,7 +12,16 @@ class ExpensesController < ApplicationController
     @end_date = DateTime.now
     @expense_type = @expense_types
     @account=@accounts
-    @q = Expense.order('id desc').where(created_at: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day).ransack(params[:q])
+    if params[:q].present?
+      @expense_type = params[:q][:expense_entries_expense_type_id_eq] if params[:q][:expense_entries_expense_type_id_eq].present?
+      @account = params[:q][:expense_entries_account_id_eq] if params[:q][:expense_entries_account_id_eq].present?
+      @start_date = params[:q][:created_at_gteq] if params[:q][:created_at_gteq].present?
+      @end_date = params[:q][:created_at_lteq] if params[:q][:created_at_lteq].present?
+      params[:q][:created_at_lteq] = params[:q][:created_at_lteq].to_date.end_of_day if params[:q][:created_at_lteq].present?
+      @q = Expense.order('id desc').ransack(params[:q])
+    else
+      @q = Expense.order('id desc').where(created_at: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day).ransack(params[:q])
+    end
     @expenses = @q.result.page(params[:page])
     @expense_payment = Expense.joins(expense_entries: :payment).where('expenses.id':@expenses.pluck(:id)).group(:id).sum(:debit)
     @expense_payment_total = Expense.joins(expense_entries: :payment).where('expenses.id':@expenses.pluck(:id)).sum(:debit)
@@ -157,7 +166,8 @@ class ExpensesController < ApplicationController
                         paid_by: Account.where(id: d.expense_entries.distinct.pluck(:account_id)).pluck(:title).to_s,
                         expense_remark: d.comment,
                         comment: d.expense_entries.distinct.pluck(:comment),
-                        date: d.created_at.strftime('%d%b%y') != d.updated_at.strftime('%d%b%y') ? d.updated_at.strftime("%d%b%y at %H:%M%p") : d.created_at.strftime("%d%b%y at %H:%M%p")
+                        date: d.created_at.strftime('%d%b%y') != d.updated_at.strftime('%d%b%y') ? d.updated_at.strftime("%d%b%y at %H:%M%p") : d.created_at.strftime("%d%b%y at %H:%M%p"),
+                        total: @expense_payment_total
                       }
     end
   end

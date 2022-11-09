@@ -11,7 +11,7 @@ module ExpensesHelper
       seventh = d.created_at.strftime('%d%b%y') != d.updated_at.strftime('%d%b%y') ? d.updated_at.strftime("%d%b%y at %H:%M%p") : d.created_at.strftime("%d%b%y at %H:%M%p")
 			temp.push([first, second, third, forth, fifth, sixth, seventh])
 		end
-    temp.push([nil, 'Total:', @expenses.sum(:expense).to_f.round(2), nil, nil, nil, nil])
+    temp.push([nil, 'Total:', @expense_payment_total, nil, nil, nil, nil])
 
 		return temp
 	end
