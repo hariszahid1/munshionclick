@@ -96,7 +96,7 @@ class DepartmentsController < ApplicationController
 
   def download_departments_pdf_file
     @departments = @q.result
-    generate_pdf(@departments.as_json, "Departments-Total-#{@departments.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}", 'pdf.html', 'A4')
+    generate_pdf(@departments.as_json, "Departments-Total-#{@departments.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}", 'pdf.html', 'A4', false)
   end
 
   def send_email_file

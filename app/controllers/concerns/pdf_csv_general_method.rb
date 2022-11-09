@@ -6,7 +6,7 @@ module PdfCsvGeneralMethod
   require 'tempfile'
   require 'csv'
 
-  def generate_pdf(data, pdf_title, pdf_layout, page_size)
+  def generate_pdf(data, pdf_title, pdf_layout, page_size, html_type)
     @pos_setting = PosSetting.first
     request.format = 'pdf'
     @pdf_path = respond_to do |format|
@@ -27,7 +27,7 @@ module PdfCsvGeneralMethod
                footer: {
                  right: '[page] of [topage]'
                },
-               show_as_html: false
+               show_as_html: html_type
       end
     end
   end

@@ -340,7 +340,7 @@ class SysUsersController < ApplicationController
   def download_sys_users_pdf_file
     sort_data_according
     generate_pdf(@sorted_data.as_json, "Sys-users-Total-#{@sorted_data.count}-#{DateTime.now.strftime('%d-%m-%Y-%H-%M')}",
-                 'pdf.html', 'A4')
+                 'pdf.html', 'A4', false)
   end
 
   def send_email_file
