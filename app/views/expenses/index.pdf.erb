@@ -1,58 +1,67 @@
 <% @date = Date.today  %>
 <% @time = DateTime.now %>
 <% @time = Time.zone.now %>
-<p style="border-bottom: double 4px;  margin: 0;"></p>
-<h1 style="text-align: center; margin: 0;">Total Expense => <%=@expenses.sum(:expense).round(2)%> </h1>
-<p style="border-bottom: double 4px;  margin: 0;"></p>
-<p style="text-align: center;margin: 0;">Report by: <%=current_user.name%></p>
-<div >
-  <table>
-    <th></th>
-    <th></th>
-    <tr>
-      <td style="width:67vw;">DateTime: <span><%=Time.zone.now%></span> </td>
-      <td style="width:33vw;">From: <span> <%=@start_date%></span> To: <span> <%=@end_date%></span></td>
-    </tr>
-    <tr>
-      <td style="">Payment by: Cash</td>
-      <td style="">Platform: POS</td>
-    </tr>
-  </table>
-</div>
-<p style="border-bottom: dotted 3px;  margin: 0;"></p>
-<div style="width:90vw;">
-  <table>
-    <th style="width:20vw;">Date</th>
-    <th style="width:10vw;">Type Wise</th>
-    <th style="width:20vw;">Amount</th>
-    <th style="width:10vw;">Paid By</th>
-    <th style="width:40vw;">Expense Remark</th>
-    <th style="width:20vw;">Comment</th>
-    <% @expenses.each_with_index do |item,i|%>
-      <tr>
-        <td style="border-bottom: 1px solid #000; ">
-          <%if item.created_at.strftime("%d%b%y")!=item.updated_at.strftime("%d%b%y")%>
-            <%= item.created_at.present? ? item.created_at.strftime("%d%b%y at %H:%M%p") : '' %> | <%= item.updated_at.present? ? item.updated_at.strftime("%d%b%y at %H:%M%p") : '' %>
-          <%else%>
-            <%= item.created_at.present? ? item.created_at.strftime("%A,  %d-%b-%y at %H:%M%p") : '' %>
-          <%end%>
-        </td>
-        <td style="border-bottom: 1px solid #000;">
-          <%item.expense_entries.joins(:expense_type).group(:expense_type).sum(:amount).each do |expense| %>
-          <%= expense.first.title %> : <%= expense.last %>
-          <br>
-          <%end%>
-        </td>
-        <td style="border-bottom: 1px solid #000; "><%=item.expense %></td>
-        <td style="border-bottom: 1px solid #000; "><%=Account.where(id: item.expense_entries.distinct.pluck(:account_id)).pluck(:title)  %></td>
-        <td style="border-bottom: 1px solid #000; "><%=item.comment %></td>
-        <td style="border-bottom: 1px solid #000; "><%=item.expense_entries.distinct.pluck(:comment) %></td>
-      </tr>
-    <% end %>
-    <tr>
-      <td></td>
-      <td><h2>Total </h2></td>
-      <td><h2><%=@expenses.sum(:expense).round(2)%></h2></td>
-    </tr>
-  </table>
-</div>
+<html>
+  <head>
+    <style>
+      .border-bottom{
+        border-bottom: double 4px;
+      }
+      .text-center{
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <p style="border-bottom: double 4px;  margin: 0;"></p>
+    <h1 class="text-center">Total Expense => <%= data.pluck('expense').sum.to_f.round(2) %> </h1>
+    <p style="border-bottom: double 4px;  margin: 0;"></p>
+    <p class="text-center" style="margin-top: 30px;">Report by: <%=current_user.name%></p>
+    <div style="margin-bottom: 30px">
+      <table>
+        <th></th>
+        <th></th>
+        <tr>
+          <td style="width:67vw;">DateTime: <span><%=Time.zone.now%></span> </td>
+          <td style="width:33vw;">From: <span> <%=@start_date%></span> To: <span> <%=@end_date%></span></td>
+        </tr>
+        <tr>
+          <td>Payment by: Cash</td>
+          <td>Platform: POS</td>
+        </tr>
+      </table>
+    </div>
+    <div>
+      <table>
+        <thead class="lite-gray">
+          <th class="text-center">ID</th>
+          <th class="text-center">Date</th>
+          <th class="text-center">Type Wise</th>
+          <th class="text-center">Amount</th>
+          <th class="text-center">Paid By</th>
+          <th class="text-center">Expense Remark</th>
+          <th class="text-center">Comment</th>
+        </thead>
+        <tbody>
+          <% data.each_with_index do |exp, index| %>
+            <tr>
+              <th class="text-center"><%= exp['id'] %></th>
+              <td class="text-center"><%= exp['date'] %></td>
+              <td class="text-center"><%= exp['type_wise'] %></td>
+              <td class="text-center"><%= exp['expense'] %></td>
+              <td class="text-center"><%= exp['paid_by'] %></td>
+              <td class="text-center"><%= exp['expense_remark'] %></td>
+              <td class="text-center"><%= exp['comment'] %></td>
+            </tr>
+          <% end %>
+          <tr>
+            <th></th>
+            <th></th>
+            <th><h2>Total</h2></th>
+            <th><h2><%= data.first['total'] %></h2></th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

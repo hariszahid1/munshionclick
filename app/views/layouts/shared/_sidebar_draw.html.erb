@@ -46,12 +46,20 @@
                             <span class="link-text">Ledger Book</span>
                         <% end %>
                     </li>
-                      <li>
-                          <%= link_to sys_users_path do %>
+                    <li>
+                        <%= link_to sys_users_path do %>
+                            <i class="fas fa-plus"></i>
+                            <span class="link-text">All Users</span>
+                        <% end %>
+                    </li>
+                    <li>
+                      <% SysUser.user_groups.each do |value, index|%>
+                          <%= link_to sys_users_path('q[user_group_eq]': index) do %>
                               <i class="fas fa-plus"></i>
-                              <span class="link-text">All Users</span>
+                              <span class="link-text"><%= value%></span>
                           <% end %>
-                      </li>
+                      <% end %>
+                    </li>
                   </ul>
                 </li>
                 <% end %>

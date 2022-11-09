@@ -103,7 +103,7 @@ class ProductSubCategoriesController < ApplicationController
 
   def download_product_sub_categories_pdf_file
     @product_sub_categories = @q.result
-    generate_pdf(@product_sub_categories.as_json, "ProductSubCategories-Total-#{@product_sub_categories.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}", 'pdf.html', 'A4')
+    generate_pdf(@product_sub_categories.as_json, "ProductSubCategories-Total-#{@product_sub_categories.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}", 'pdf.html', 'A4', false)
   end
 
   def send_email_file

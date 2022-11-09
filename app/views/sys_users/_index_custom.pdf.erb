@@ -2,13 +2,14 @@
 <% @time = DateTime.now %>
 <% @time = Time.zone.now %>
 <p style="border-bottom: double 4px;  margin: 0;"></p>
-<h1 style="text-align: center; margin: 0;">Client/Importer</h1>
+<h1 style="text-align: center;">Client/Importer</h1>
 <p style="border-bottom: double 4px;  margin: 0;"></p>
 <p style="text-align: center;margin: 0;">Report by: <%=current_user.name%></p>
 <div>
   <table>
     <thead>
       <tr class="lite-gray">
+        <th>Id</th>
         <th>Code</th>
         <th>Name</th>
         <th>User type</th>
@@ -22,31 +23,31 @@
     </thead>
 
     <tbody>
-      <% @sys_users.each do |sys_user| %>
-        <% date = (sys_user.ledger_books.present? ? sys_user.ledger_books.last.created_at : sys_user.created_at)%>
-        <tr class=<%=((DateTime.now.to_datetime-date.to_datetime).to_i>30 && !sys_user.balance.to_i.zero?) ? 'lite-gray' : ''%> >
-          <td><%= sys_user.code %></td>
-          <td><%= sys_user.name %></td>
-          <td><%= sys_user.user_type.title %></td>
-          <td><%= sys_user.user_group %></td>
-          <td><%= sys_user.status %></td>
-          <td><%= sys_user.occupation %></td>
-          <td><%= sys_user.credit_status.to_f.round(2) %></td>
-          <td><%= sys_user.credit_limit.to_f.round(2) %></td>
-          <td><b><%= sys_user.balance.to_f.round(2) %></b></td>
+      <% data.each do |sys_user| %>
+        <tr class="<%= sys_user['balance'].to_i >= 0 ? '' : 'lite-gray' %>" >
+          <td style="text-align: center;"><%= sys_user['id'] %></td>
+          <td style="text-align: center;"><%= sys_user['code'] %></td>
+          <td style="text-align: center;"><%= sys_user['name'] %></td>
+          <td style="text-align: center;"><%= sys_user['user_type'] %></td>
+          <td style="text-align: center;"><%= sys_user['user_group'] %></td>
+          <td style="text-align: center;"><%= sys_user['status'] %></td>
+          <td style="text-align: center;"><%= sys_user['occupation'] %></td>
+          <td style="text-align: center;"><%= sys_user['credit_status'] %></td>
+          <td style="text-align: center;"><b><%= sys_user['credit_limit'] %></b></td>
+          <td style="text-align: center;"><b><%= sys_user['balance'] %></b></td>
         </tr>
-        <% end %>
-
+      <% end %>
       <tr class="lite-gray">
         <td><h4>total</h4></td>
-        <td><%= %></td>
-        <td><%= %></td>
-        <td><%= %></td>
-        <td><%= %></td>
-        <td><%= %></td>
-        <td><%= %></td>
-        <td><%=  %></td>
-        <td><h4><%=@sys_user_balance.to_f.round(2) %></h4></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><h4><%= data.pluck('balance').sum %></h4></td>
       </tr>
     </tbody>
   </table>

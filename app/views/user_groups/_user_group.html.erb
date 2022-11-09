@@ -1,7 +1,11 @@
 <tr>
   <td><%= check_box_tag 'object_ids[]', user_group.id %></td>
   <td><%= user_group.id %></td>
-  <td class= 'urdu-font'><%= user_group.title %></td>
+  <td class= 'urdu-font'><%= user_group.title %>
+    <% unless @count_sys_user[user_group.title].blank?%>
+      <%= link_to " (" + @count_sys_user[user_group.title].to_s  + ")", sys_users_path('q[user_group_eq]':user_group.id,)%>
+    <% end%>
+  </td>
   <td><span title="<%= user_group.comment %>" class='truncate-text'><%= user_group.comment %></span></td>
   <td class="p-3">
     <div class="icon-container-1">
