@@ -1,7 +1,7 @@
 class SysUsersController < ApplicationController
   include SysUsersCsvMethods
 
-
+	before_action :check_access
   before_action :set_sys_user, only: [:show, :edit, :update, :destroy]
 
   # GET /sys_users
