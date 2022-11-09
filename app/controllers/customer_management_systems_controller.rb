@@ -2,6 +2,7 @@
 
 # CMS Controller
 class CustomerManagementSystemsController < ApplicationController
+	before_action :check_access
   before_action :set_sys_user, only: %i[show edit update destroy]
   before_action :new_edit_data, only: %i[new edit]
   include PdfCsvGeneralMethod

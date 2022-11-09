@@ -162,16 +162,17 @@
   <thead>
   <tr>
     <th><input type="checkbox" id="master" class='select-all-checkbox'>
-        <div class="icon-container float-center">
-            <span class="ml-2 mt-2">
-            <div class="my-icon my-view">
-            
-                        <button class="icon-div btn delete-selected p-2 " type='button' value='ProductCategory'>
-                                  <i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i> 
-                        </button>
-                    </div>
-                    </span>
-              </div>
+			<%if (ApplicationHelper.check_can_delete(current_user,"product_categories"))%>
+				<div class="icon-container float-center">
+					<span class="ml-2 mt-2">
+						<div class="my-icon my-view">
+							<button class="icon-div btn delete-selected p-2 " type='button' value='ProductCategory'>
+								<i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i> 
+							</button>
+						</div>
+					</span>
+				</div>
+			<%end%>
     </th>
     <th>ID<div class='float-right'><%= sort_link(@q, :id, '', {}, class: 'sorting-button') %></div></th>
     <th>Title<div class='float-right'><%= sort_link(@q, :title, '', {}, class: 'sorting-button') %></div></th>

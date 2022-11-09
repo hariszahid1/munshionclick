@@ -8,30 +8,33 @@
   <td><%= sys_users.occupation %></td>
   <td><%= sys_users.balance %></td>
   <td>
-    <% if can?(:update, :all) %>
+		<%if (ApplicationHelper.check_can_update(current_user,"customer_management_systems"))%>
       <%= link_to edit_customer_management_system_path(sys_users), remote: true do %>
         <i class="fa fa-edit mr-2 ml-2 " aria-hidden="true"></i> |
       <%end %>
     <% end %>
 
-    <% if can?(:delete, :all) %>
+		<%if (ApplicationHelper.check_can_delete(current_user,"customer_management_systems"))%>
       <%= link_to sys_users, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
-        <i class="fa fa-trash mr-2 ml-2" aria-hidden="true"></i> |
+        |<i class="fa fa-trash mr-2 ml-2" aria-hidden="true"></i> 
       <%end %>
     <% end %>
 
-    <% if can?(:view, :all) %>
+		<%if (ApplicationHelper.check_can_read(current_user,"customer_management_systems"))%>
       <%= link_to customer_management_system_path(sys_users) do %>
-        <i class="fa fa-eye mr-2 ml-2" aria-hidden="true"></i>
+       | <i class="fa fa-eye mr-2 ml-2" aria-hidden="true"></i>
       <%end %>
-    <%end%>|
+    <%end%>
 
-		<%= link_to customer_management_systems_path('q[id_eq]':sys_users.id,'pdf':true), title: 'Download PDF', target: '_blank' do %>
-			<i class="fa fa-file-pdf text-danger mr-2 ml-2 " aria-hidden="true"></i>
-		<%end %>|
-
-		<%= link_to customer_management_systems_path('q[id_eq]':sys_users.id,'csv':true), title: 'Download CSV' do%>
-			<i class="fa fa-file-excel mr-2 ml-2 text-success" aria-hidden="true"></i>
+		<%if (ApplicationHelper.check_can_download_pdf(current_user,"customer_management_systems"))%>
+			<%= link_to customer_management_systems_path('q[id_eq]':sys_users.id,'pdf':true), title: 'Download PDF', target: '_blank' do %>
+			|	<i class="fa fa-file-pdf text-danger mr-2 ml-2 " aria-hidden="true"></i>
+			<%end %>
+		<%end %>
+		<%if (ApplicationHelper.check_can_download_csv(current_user,"customer_management_systems"))%>
+			<%= link_to customer_management_systems_path('q[id_eq]':sys_users.id,'csv':true), title: 'Download CSV' do%>
+			|	<i class="fa fa-file-excel mr-2 ml-2 text-success" aria-hidden="true"></i>
+			<%end %>
 		<%end %>
 
   </td>

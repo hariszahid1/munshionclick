@@ -77,7 +77,7 @@ class User < ApplicationRecord
 								"product_stock_excahanges","product_stocks","product_sub_categories","product_warranties","production_block_types",
 							"production_blocks","production_cycles","productions","products","property_plans","purchase_sale_details",
 						"purchase_sale_items","raw_products","remarks","reports","salaries","salary_details","sms","staff_deals","staff_ledger_books",
-					"staff_raw_products","staffs","sys_users","sys_users/customer","sys_users/supplier","sys_users/own","user_types","users","warranties"]
+					"staff_raw_products","staffs","sys_users","sys_users/customer","sys_users/supplier","sys_users/own","user_types","users","warranties","user_groups"]
 					
 		pos_all_modules.each do |item|
 			UserPermission.create(module: item, can_create: true,can_read: true, can_update: true, can_delete: true, user_id: id) if super_admin?
