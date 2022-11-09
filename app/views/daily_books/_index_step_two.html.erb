@@ -7,6 +7,11 @@
     <i class="fas fa-truck" aria-hidden="true"></i>
     <%=@departments.second.title%> Daily book
   <% end %>
+  <%= link_to nakasi_daily_books_path(department_id: @departments.third.title) do %>
+    <i class="fa fa-align-justify" aria-hidden="true"></i>
+    <%=@departments.third.title%> Daily book
+  <% end %>
+
 </div>
 
 
