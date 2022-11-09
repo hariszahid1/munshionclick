@@ -3,10 +3,10 @@
   <%= af.select :status, Contact.statuses.map { |key, value| [key.humanize, key] },{ include_blank: "Please Select Contact Status"},{class: "form-control"} %>
 </div>
 <div class="col-lg-6" style="float:left">
-  <%= af.select :city_id, options_from_collection_for_select(@cities, 'id', 'title',af.object.city_id.present? ? af.object.city_id : @cities.first.id),{},{class: "form-control"} %>
+  <%= af.select :city_id, options_from_collection_for_select(@cities, 'id', 'title',af.object.city_id.present? ? af.object.city_id : @cities&.first&.id),{},{class: "form-control"} %>
 </div>
 <div class="col-lg-6" style="float:left">
-  <%= af.select :country_id, options_from_collection_for_select(@countries, 'id', 'title',af.object.country_id.present? ? af.object.country_id : @countries.first.id ),{},{class: "form-control"} %>
+  <%= af.select :country_id, options_from_collection_for_select(@countries, 'id', 'title',af.object.country_id.present? ? af.object.country_id : @countries&.first&.id ),{},{class: "form-control"} %>
 </div>
 <div class="col-lg-6" style="float:left">
   <%= af.text_field :home, placeholder:"Enter Home Line Number Phone", class: "form-control" %>

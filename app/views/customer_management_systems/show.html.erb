@@ -24,7 +24,7 @@
         <% end %>
         <h5 class="my-3"><%= @sys_user.name%></h5>
         <p class="text-muted mb-1"><%= @sys_user.user_group%></p>
-        <p class="text-muted mb-4"><%= @sys_user.contact.city.title + ", " + @sys_user.contact.country.title %></p>
+        <p class="text-muted mb-4"><%= @sys_user&.contact&.city&.title.to_s+ ", " + @sys_user&.contact&.country&.title.to_s %></p>
       </div>
     </div>
     <div class="card mb-4">
