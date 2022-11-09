@@ -201,6 +201,7 @@ class SysUsersController < ApplicationController
   end
 
   def own
+		check_access_of("sys_users/own")
     @sys_user_all = SysUser.where(:user_group=>['Own'])
     @q = SysUser.where(:user_group=>['Own']).ransack(params[:q])
     if @q.result.count > 0
