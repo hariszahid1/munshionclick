@@ -1,0 +1,4 @@
+$('.show-data').children().remove();
+$('.show-data').append("<%= escape_javascript(render partial: 'edit', locals: { sys_user: @sys_user }) %>");
+$("#showdData").modal('show');
+

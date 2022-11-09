@@ -7,6 +7,10 @@
     <i class="fas fa-truck" aria-hidden="true"></i>
     <%=@departments.second.title%> Daily book
   <% end %>
+  <%= link_to nakasi_daily_books_path(department_id: @departments.third.title) do %>
+    <i class="fa fa-align-justify" aria-hidden="true"></i>
+    <%=@departments.third.title%> Daily book
+  <% end %>
 </div>
 
 <%@daily_book_salary_details_raw_quantity = 0 %>
@@ -51,7 +55,7 @@
         <div class="col-lg-2 form-group float-left">
           <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
         </div>
-       
+
         <div class="col-lg-2 form-group float-left">
           <button class="form-control btn  badge badge-pill badge-danger" title= "Download pdf" name="submit_pdf" type="submit" value="Daily Production Details PDF A4" formtarget="_blank" >Daily Details &nbsp;<i class="fa fa-file-pdf"></i></button>
         </div>
