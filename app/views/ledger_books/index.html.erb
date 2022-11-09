@@ -29,30 +29,30 @@
               </div>
          </div>
   </div>
-<%= search_form_for @q, url: ledger_books_path, class: "admin-controls", method: "get" do |f| %>
-<ul class="nav nav-pills" role="tablist">
-      <li class="nav-item">
-        <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link tab-label" data-toggle="tab" href="#jamabenam" role="tab">Jama/ Benam</a>
-      </li>
-       <li class="nav-item">
-        <a class="nav-link tab-label" data-toggle="tab" href="#payment" role="tab">Payment Transfer</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
-      </li>
-      <li class="nav-item">
-       <a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
-      </li>
-  </ul>
+  <%= search_form_for @q, url: ledger_books_path, class: "admin-controls", method: "get" do |f| %>
+  <ul class="nav nav-pills" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link tab-label" data-toggle="tab" href="#jamabenam" role="tab">Jama/ Benam</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link tab-label" data-toggle="tab" href="#payment" role="tab">Payment Transfer</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
+        </li>
+    </ul>
 <div class="tab-content mb-5">
     <div class="tab-pane active mb-3 card shadow-sm mt-2 border-radius-1" id="search" role="tabpanel">
      <p>
@@ -357,24 +357,24 @@
                                   <%if ledger_book.purchase_sale_detail.purchase_sale_items.first.product.present? %>
                                     <% if can?(:update, :all) %>
                                         <%= link_to edit_purchase_sale_detail_path(ledger_book.purchase_sale_detail,product: true),title: "Edit detail" do %>
-                                            <i class="fa fa-edit mt-2" aria-hidden="true"></i> |
+                                            <i class="fa fa-edit mt-2" aria-hidden="true"></i>
                                         <% end %>
                                   <% end %>
                                 <%else%>
                                 <% if can?(:update, :all) %>
                                   <%= link_to edit_purchase_sale_detail_path(ledger_book.purchase_sale_detail),title: "Edit detail" do %>
-                                    <i class="fa fa-edit mt-2" aria-hidden="true"></i> |
+                                    <i class="fa fa-edit mt-2" aria-hidden="true"></i>
                                   <% end %>
                                   <% end %>
                                 <%end%>
                               <%end%>
                             <% elsif ledger_book.order.present? %>
                                 <%= link_to edit_order_path(ledger_book.order_id,product: true),title: "Edit detail" do %>
-                                  <i class="fa fa-edit mt-2" aria-hidden="true"></i> |
+                                  <i class="fa fa-edit mt-2" aria-hidden="true"></i>
                                 <%end %>
                             <%else%>
                               <%= link_to edit_ledger_book_path(ledger_book),title: "Edit detail" do %>
-                                <i class="fa fa-edit mt-2" aria-hidden="true"></i> |
+                                <i class="fa fa-edit mt-2" aria-hidden="true"></i>
                               <%end %>
                             <% end %>
                           <% end %>
@@ -386,15 +386,15 @@
                               <% if can?(:delete, :all) %>
                               <% if ledger_book.purchase_sale_detail_id.present? %>
                                   <%= link_to purchase_sale_detail_path(ledger_book.purchase_sale_detail_id), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, title: "Delete ledger book",:remote => true, :class => 'delete' do %>
-                                    <i class="fa fa-trash mt-2" aria-hidden="true"></i> |
+                                    <i class="fa fa-trash mt-2" aria-hidden="true"></i>
                                   <% end %>
                               <%elsif ledger_book.order.present? %>
                                   <%= link_to order_path(ledger_book.order_id), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, title: "Delete ledger book",:remote => true, :class => 'delete' do %>
-                                    <i class="fa fa-trash mt-2" aria-hidden="true"></i> |
+                                    <i class="fa fa-trash mt-2" aria-hidden="true"></i>
                                   <% end %>
                               <%else%>
                                 <%= link_to ledger_book, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, title: "Delete ledger book",:remote => true, :class => 'delete' do %>
-                                <i class="fa fa-trash mt-2" aria-hidden="true"></i> |
+                                <i class="fa fa-trash mt-2" aria-hidden="true"></i>
                               <%end%>
                               <%end %>
                               <% end %>
@@ -458,10 +458,9 @@
     <div class="col-lg-8 col-sm-8 pagination-left">
       <%= paginate @ledger_books %>
     </div>
-    </div>
+  </div>
 </div>
-</div>
-</div>
+
 <%= form_for :bulk_import, url: bulk_import_data_path, method: :post, html: {class: "bulk-import-form"} do |f| %>
   <div class="modal fade" id="importFile" tabindex="-1" role="dialog" aria-labelledby="importFileTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
