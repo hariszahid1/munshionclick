@@ -1,4 +1,5 @@
 class CountriesController < ApplicationController
+	before_action :check_access
   before_action :set_country, only: [:show, :edit, :update, :destroy]
   include PdfCsvGeneralMethod
   include CountriesHelper

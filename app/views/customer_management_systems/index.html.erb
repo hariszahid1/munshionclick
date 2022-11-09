@@ -33,31 +33,36 @@
     </div>
   </div>
 
-  <ul class="nav nav-tabs" role="tablist">
-    <li class="nav-item">
-      <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
-    </li>
-
-    <li class="nav-item">
-      <a class="nav-link tab-label" data-toggle="tab" href="#create" role="tab">Create</a>
-    </li>
-
-    <li class="nav-item">
-      <a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
-    </li>
-
-    <li class="nav-item">
-      <a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
-    </li>
-
-    <li class="nav-item">
-      <a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
-    </li>
-
-    <li class="nav-item">
-      <a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
-    </li>
-  </ul>
+  <ul class="nav nav-pills" role="tablist">
+		<li class="nav-item">
+			<a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
+		</li>
+		<%if (check_can_create("customer_management_systems"))%>
+			<li class="nav-item">
+				<a class="nav-link tab-label" data-toggle="tab" href="#create" role="tab">Create</a>
+			</li>
+		<%end%>
+		<%if (check_can_download_pdf("customer_management_systems"))%>
+			<li class="nav-item">
+				<a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
+			</li>
+		<%end%>
+		<%if (check_can_download_csv("customer_management_systems"))%>
+			<li class="nav-item">
+				<a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
+			</li>
+		<%end%>
+		<%if (check_can_send_email("customer_management_systems"))%>
+			<li class="nav-item">
+				<a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
+			</li>
+		<%end%>
+		<%if (check_can_import_export("customer_management_systems"))%>
+			<li class="nav-item">
+				<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
+			</li>
+		<%end%>
+</ul>
 
   <%= search_form_for @q, url: customer_management_systems_path, class: "admin-controls", method: "get" do |f| %>
     <div class="tab-content mb-5">
@@ -98,7 +103,7 @@
       <div class="tab-pane" id="pdf" role="tabpanel">
         <p>
           <div class="col-lg-2 d-flex">
-            <button class="form-control btn btn-danger" title= "download cities pdf" name="pdf" type="submit" value="pdf" formtarget="_blank" style="width:160px">System Users &nbsp;<i class="fa fa-file-pdf"></i></button>
+            <button class="form-control btn btn-danger" title= "download customer_management_systems pdf" name="pdf" type="submit" value="pdf" formtarget="_blank" style="width:160px">System Users &nbsp;<i class="fa fa-file-pdf"></i></button>
           </div>
         </p>
       </div>
@@ -106,7 +111,7 @@
       <div class="tab-pane" id="csv" role="tabpanel">
         <p>
           <div class="col-lg-2 d-flex">
-            <button class="btn btn-success" title= "download cities csv" name="csv" type="submit" value="csv">System Users &nbsp;<i class="fa fa-file-excel"></i></button>
+            <button class="btn btn-success" title= "download customer_management_systems csv" name="csv" type="submit" value="csv">System Users &nbsp;<i class="fa fa-file-excel"></i></button>
           </div>
         </p>
       </div>
@@ -169,7 +174,9 @@
 
 <div class='card p-3'>
   <table data-toggle="table" data-search="true" id="sys_user_table">
-    <button class='btn btn-outline-danger float-right delete-selected' type='button' style="width:163px"value='SysUser' >Delete Selected</button>
+		<%if (check_can_delete("customer_management_systems"))%>
+    	<button class='btn btn-outline-danger float-right delete-selected' type='button' style="width:163px"value='SysUser' >Delete Selected</button>
+		<%end%>
     <thead>
       <tr>
         <th><input type="checkbox" id="master" class='select-all-checkbox'></th>

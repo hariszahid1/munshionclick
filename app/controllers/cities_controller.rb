@@ -5,6 +5,7 @@ class CitiesController < ApplicationController
   include PdfCsvGeneralMethod
   include CitiesHelper
 
+	before_action :check_access
   before_action :set_city, only: %i[show edit update destroy]
   require 'tempfile'
   require 'csv'

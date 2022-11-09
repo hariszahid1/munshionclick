@@ -4,24 +4,21 @@
   <td><%= department.code %></td>
   <td class= 'urdu-font'><%= department.title %></td>
   <td><span title="<%= department.comment %>" class='truncate-text'><%= department.comment %></span></td>
-  <td class="p-3">
-        <div class="icon-container-1">
-            <div class="my-icon-1 my-view-1">
-              <div class="my-tooltip-1">
-         <div class="icon-container">
-          <div class="my-icon my-view">
+  <td>
+		<div class="icon-container">
+			<%if (check_can_update("departments"))%>
+				<div class="my-icon my-view">
           <div class="my-tooltip">
             Edit
           </div>
-          
-                <% if can?(:update, :all) %>
-              <%= link_to edit_department_path(department), remote: true, class:"icon-div" do %>
+          <span class="icon-div">
+						<%= link_to edit_department_path(department), remote: true do %>
                 <i class="fa fa-edit mt-2" aria-hidden="true"></i>
               <%end %>
-            <% end %>
-          
-        </div>
-
+					</span>
+				</div>			
+			<% end %>
+			<%if (check_can_delete("departments"))%>
           <div class="my-icon my-view">
               <div class="my-tooltip">
                 Delete
@@ -34,47 +31,44 @@
                 <% end %>
               
           </div>
-
-      <div class="my-icon my-view">
-                <div class="my-tooltip">
-                  Show
-                </div>
-                
-                   <% if can?(:view, :all) %>
-                    <%= link_to department_path(department), remote: true, class:"icon-div" do %>
-                    <i class="fa fa-eye mt-2" aria-hidden="true"></i>
-                <%end %>
-            <%end%>
-          
-      </div>
-
-      <div class="my-icon my-view">
-            <div class="my-tooltip">
+			<%end%>
+			<%if (check_can_update("departments"))%>
+				<div class="my-icon my-view">
+					<div class="my-tooltip">
+						Show
+					</div>
+					<span class="icon-div">
+							<%= link_to department_path(department), remote: true do %>
+							<i class="fa fa-eye mt-2" aria-hidden="true"></i>
+						<%end %>
+					</span>
+				</div>
+			<%end%>
+			<%if (check_can_download_pdf("departments"))%>
+      	<div class="my-icon my-view">
+					<div class="my-tooltip">
               PDF
-            </div>
-            
-                <%= link_to departments_path('q[id_eq]':department.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
-      <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
-    <%end %>
-            
-      </div>
-
+					</div>
+					<span class="icon-div">
+						<%= link_to departments_path('q[id_eq]':department.id,'pdf':true), title: 'Download PDF', target: '_blank' do %>
+     			 <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
+   				 <%end %>
+					</span>
+      	</div>
+			<%end%>
+			<%if (check_can_download_csv("departments"))%>
        <div class="my-icon my-view">
-            <div class="my-tooltip">
+					<div class="my-tooltip">
               CSV
-            </div>
-            
-                 <%= link_to departments_path('q[id_eq]':department.id,'csv':true), title: 'Download CSV', class:"icon-div" do%>
-      <i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
-    <%end %>
-            
-          </div>
-          </div>
-            </div>
-            <span class="icon-div-1">
-                  <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
-            </span>
-        </div>
+					</div>
+					<span class="icon-div">
+						<%= link_to departments_path('q[id_eq]':department.id,'csv':true), title: 'Download CSV' do%>
+      				<i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
+   				 <%end %>
+					</span>
+				</div>
+			<%end%>
+    	<b class="ml-2 mt-1">Total changes: <%= department.versions.count%></b>
     </div>
   </td>
 </tr>

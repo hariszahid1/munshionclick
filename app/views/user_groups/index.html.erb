@@ -30,26 +30,36 @@
             </div>
           </div>
 
-  <ul class="nav nav-pills" role="tablist">
-      <li class="nav-item">
-        <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link tab-label" data-toggle="tab" href="#create" role="tab">Create</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
-      </li>
-      <li class="nav-item">
-       <a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
-      </li>
-  </ul>
+		<ul class="nav nav-pills" role="tablist">
+			<li class="nav-item">
+				<a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
+			</li>
+			<%if (check_can_create("user_groups"))%>
+				<li class="nav-item">
+					<a class="nav-link tab-label" data-toggle="tab" href="#create" role="tab">Create</a>
+				</li>
+			<%end%>
+			<%if (check_can_download_pdf("user_groups"))%>
+				<li class="nav-item">
+					<a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
+				</li>
+			<%end%>
+			<%if (check_can_download_csv("user_groups"))%>
+				<li class="nav-item">
+					<a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
+				</li>
+			<%end%>
+			<%if (check_can_send_email("user_groups"))%>
+				<li class="nav-item">
+					<a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
+				</li>
+			<%end%>
+			<%if (check_can_import_export("user_groups"))%>
+				<li class="nav-item">
+					<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
+				</li>
+			<%end%>
+	</ul>
 
 <%= search_form_for @q, url: user_groups_path, class: "admin-controls", method: "get" do |f| %>
 
@@ -149,7 +159,7 @@
 
 
   <div class="card shadow-sm border-radius-1 p-2">
-  <%# <button class='btn btn-outline-danger float-right delete-selected' type='button' style="width:163px"value='City' >Delete Selected</button> %>
+	
     <%= render 'map_columns/map_column_partials' %>
 
     <table data-toggle="table" data-search="true" id="city_table" class=" overflow-hidden border-radius-1">
@@ -157,15 +167,18 @@
         <tr>
 
          <th><input type="checkbox" id="master" class='select-all-checkbox' style="cursor: pointer;">
-         <div class="icon-container float-center">
-            <span class="ml-2 mt-2">
-            <div class="my-icon my-view">
-                        <button class="icon-div btn delete-selected p-2 " type='button' value='UserGroup'>
-                                  <i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i>
-                        </button>
-                    </div>
-                    </span>
-              </div></th>
+					<%if (check_can_delete("user_groups"))%>	
+						<div class="icon-container float-center">
+            	<span class="ml-2 mt-2">
+            		<div class="my-icon my-view">
+									<button class="icon-div btn delete-selected p-2 " type='button' value='UserGroup'>
+										<i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i>
+									</button>
+								</div>
+							</span>
+						</div>
+					<%end%>
+					</th>
 
          <th>ID<div class="float-right"><%= sort_link(@q, :id,"", {}, class: 'sorting-button') %></div></th>
           <th>Title<div class="float-right"><%= sort_link(@q, :title, "", {},  class: 'sorting-button') %></div></th>

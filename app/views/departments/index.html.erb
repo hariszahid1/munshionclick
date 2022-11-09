@@ -31,23 +31,33 @@
 <ul class="nav nav-pills" role="tablist">
         <li class="nav-item">
         <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
-        </li>
-        <li class="nav-item">
-        <a class="nav-link tab-label" data-toggle="tab" href="#create" role="tab">Create</a>
-        </li>
-        <li class="nav-item">
-        <a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
-        </li>
-        <li class="nav-item">
-        <a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
-        </li>
-        <li class="nav-item">
-        <a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
-        </li>
-        <li class="nav-item">
-        <a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
-        </li>
-  </ul>
+      </li>
+			<%if (check_can_create("departments"))%>
+				<li class="nav-item">
+					<a class="nav-link tab-label" data-toggle="tab" href="#create" role="tab">Create</a>
+				</li>
+			<%end%>
+			<%if (check_can_download_pdf("departments"))%>
+				<li class="nav-item">
+					<a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
+				</li>
+			<%end%>
+			<%if (check_can_download_csv("departments"))%>
+				<li class="nav-item">
+					<a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
+				</li>
+			<%end%>
+			<%if (check_can_send_email("departments"))%>
+				<li class="nav-item">
+					<a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
+				</li>
+			<%end%>
+			<%if (check_can_import_export("departments"))%>
+				<li class="nav-item">
+					<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
+				</li>
+			<%end%>
+	</ul>
  <%= search_form_for @q, url: departments_path, class: "admin-controls", method: "get" do |f| %>
 <div class="tab-content mb-5">
     <div class="tab-pane active mb-3 card shadow-sm mt-2 border-radius-1" id="search" role="tabpanel">
@@ -75,14 +85,14 @@
     <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="pdf" role="tabpanel">
       <p>
         <div class="col-lg-2 d-flex">
-        <button class="btn btn-danger" title= "download cities pdf" name="pdf" type="submit" value="pdf" formtarget="_blank">Departments &nbsp;<i class="fa fa-file-pdf"></i></button>
+        <button class="btn btn-danger" title= "download departments pdf" name="pdf" type="submit" value="pdf" formtarget="_blank">Departments &nbsp;<i class="fa fa-file-pdf"></i></button>
         </div>
       </p>
     </div>
   <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="csv" role="tabpanel">
     <p>
       <div class="col-lg-2 d-flex">
-        <button class="btn btn-success" title= "download cities csv" name="csv" type="submit" value="csv">Departments &nbsp;<i class="fa fa-file-excel"></i></button>
+        <button class="btn btn-success" title= "download departments csv" name="csv" type="submit" value="csv">Departments &nbsp;<i class="fa fa-file-excel"></i></button>
         </div>
     </p>
   </div>
@@ -147,7 +157,9 @@
     <thead>
       <tr>
         <th><input type="checkbox" id="master" class='select-all-checkbox'>
-            <div class="icon-container float-center">
+					<%if (check_can_delete("departments"))%>
+  
+					<div class="icon-container float-center">
             <span class="ml-2 mt-2">
             <div class="my-icon my-view">
             
@@ -156,7 +168,8 @@
                         </button>
                     </div>
                     </span>
-              </div>
+						</div>
+					<%end%>
         </th>
         <th>ID<div class='float-right'><%= sort_link(@q, :id, '', {}, class: 'sorting-button') %></div></th>
         <th>Code<div class='float-right'><%= sort_link(@q, :code, '', {}, class: 'sorting-button') %></div></th>

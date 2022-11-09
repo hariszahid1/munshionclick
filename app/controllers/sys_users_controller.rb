@@ -51,6 +51,7 @@ class SysUsersController < ApplicationController
   end
 
   def receiveable
+
     @q = SysUser.where('balance < 0 ').ransack(params[:q])
     if @q.result.count > 0
       @q.sorts = 'name asc' if @q.sorts.empty?
@@ -83,6 +84,7 @@ class SysUsersController < ApplicationController
   end
 
   def customer
+		check_access_of("sys_users/customer")
     @sys_user_all = SysUser.where(:user_group=>['Customer'])
     @q = SysUser.where(:user_group=>['Customer']).ransack(params[:q])
     if @q.result.count > 0
@@ -119,6 +121,7 @@ class SysUsersController < ApplicationController
   end
 
   def supplier
+		check_access_of("sys_users/supplier")
     @sys_user_all = SysUser.where(:user_group=>['Supplier'])
     @q = SysUser.where(:user_group=>['Supplier']).ransack(params[:q])
     if @q.result.count > 0
@@ -155,6 +158,7 @@ class SysUsersController < ApplicationController
   end
 
   def own
+		check_access_of("sys_users/own")
     @sys_user_all = SysUser.where(:user_group=>['Own'])
     @q = SysUser.where(:user_group=>['Own']).ransack(params[:q])
     if @q.result.count > 0
@@ -394,5 +398,19 @@ class SysUsersController < ApplicationController
   def export_file
     export_data('SysUser')
   end
+
+	def check_access_of (tempModule)
+		if (check_is_hidden("#{tempModule}"))
+			respond_to do |format|
+				format.html { redirect_to dashboard_path, alert: "Your system does not have this module" }
+			end
+		else
+			if (check_can_accessed("#{tempModule}")==false)
+				respond_to do |format|
+					format.html { redirect_to dashboard_path, alert: "you are not authorized." }
+				end
+			end
+		end	
+	end
 
 end
