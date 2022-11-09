@@ -6,6 +6,13 @@
               <span class="link-text">Dashboard</span>
           <% end %>
         </li>
+        <li>
+          <a href="<%=customer_management_systems_path%>">
+            <i class="fas fa-user-plus"></i>
+            <span class="link-text">CMS</span>
+          </a>
+        </li>
+
         <!-- only Developer can start-->
         <% if can?(:view, PosSetting) %>
           <li>
