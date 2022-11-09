@@ -169,7 +169,9 @@
 <div class='card p-3'>
   <table data-toggle="table" data-search="true" class="overflow-hidden border-radius-1">
     <%= render 'map_columns/map_column_partials' %>
-    <button class='btn btn-outline-danger float-right delete-selected' type='button' style="width:163px"value='SysUser' >Delete Selected</button>
+		<%if (ApplicationHelper.check_can_delete(current_user,"sys_users/own"))%>
+    	<button class='btn btn-outline-danger float-right delete-selected' type='button' style="width:163px"value='SysUser' >Delete Selected</button>
+		<%end%>
     <thead>
       <tr>
         <th><input type="checkbox" id="master" class='select-all-checkbox'></th>
@@ -244,17 +246,17 @@
                             <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
                           <%end %>
                         </div>
-											<%end>
-											<%if (ApplicationHelper.check_can_download_csv(current_user,"sys_users/own"))%>
+											<%end%>
+											<%if (ApplicationHelper.check_can_download_csv(current_user,"sys_users/own")) %>
 												<div class="my-icon my-view">
 													<div class="my-tooltip">
 														CSV
 													</div>
-														<%= link_to sys_users_path('q[id_eq]':sys_user.id,'csv':true), title: 'Download CSV', class:"icon-div" do%>
+													<%= link_to sys_users_path('q[id_eq]':sys_user.id,'csv':true), title: 'Download CSV', class:"icon-div" do %>
 														<i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
 													<%end %>
 												</div>
-											<%end>
+											<%end%>
 												<div class="my-icon my-view">
                           <div class="my-tooltip">
                             Ledger book

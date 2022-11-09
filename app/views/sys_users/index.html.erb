@@ -206,7 +206,9 @@
  <div class='card p-3'>
   <table data-toggle="table" data-search="true" class="overflow-hidden border-radius-1">
     <%= render 'map_columns/map_column_partials' %>
+		<%if (ApplicationHelper.check_can_delete(current_user,"sys_users"))%>
       <button class='btn btn-outline-danger float-right delete-selected' type='button' style="width:163px"value='SysUser' >Delete Selected</button>
+		<%end%>
       <thead>
         <tr>
           <th><input type="checkbox" id="master" class='select-all-checkbox'></th>
