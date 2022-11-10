@@ -317,44 +317,63 @@ class ApplicationController < ActionController::Base
   helper_method :check_can_send_email
 
 	def check_can_create(temp_module)
-		temp_can_create = ActiveSupport::JSON.decode(cookies[:can_create])
-		return temp_can_create[temp_module]
+		# temp_can_create = ActiveSupport::JSON.decode(cookies[:can_create])
+		# return temp_can_create[temp_module]
+		return true
 	end
 	def check_can_read(temp_module)
-		temp_can_read = ActiveSupport::JSON.decode(cookies[:can_read])
-		return temp_can_read[temp_module]
+		# temp_can_read = ActiveSupport::JSON.decode(cookies[:can_read])
+		# return temp_can_read[temp_module]
+		return true
+
 	end
 	def check_can_update(temp_module)
-		temp_can_update = ActiveSupport::JSON.decode(cookies[:can_update])
-		return temp_can_update[temp_module]
+		# temp_can_update = ActiveSupport::JSON.decode(cookies[:can_update])
+		# return temp_can_update[temp_module]
+		return true
+
 	end
 	def check_can_delete(temp_module)
-		temp_can_delete = ActiveSupport::JSON.decode(cookies[:can_delete])
-		return temp_can_delete[temp_module]
+		# temp_can_delete = ActiveSupport::JSON.decode(cookies[:can_delete])
+		# return temp_can_delete[temp_module]
+		return true
+
 	end
 	def check_can_download_csv(temp_module)
-		temp_can_download_csv = ActiveSupport::JSON.decode(cookies[:can_download_csv])
-		return temp_can_download_csv[temp_module]
+		# temp_can_download_csv = ActiveSupport::JSON.decode(cookies[:can_download_csv])
+		# return temp_can_download_csv[temp_module]
+		return true
+
 	end
 	def check_can_download_pdf(temp_module)
-		temp_can_download_pdf = ActiveSupport::JSON.decode(cookies[:can_download_pdf])
-		return temp_can_download_pdf[temp_module]
+		# temp_can_download_pdf = ActiveSupport::JSON.decode(cookies[:can_download_pdf])
+		# return temp_can_download_pdf[temp_module]
+		return true
+
 	end
 	def check_can_accessed(temp_module)
-		temp_can_accessed = ActiveSupport::JSON.decode(cookies[:can_accessed])
-		return temp_can_accessed[temp_module]
+		# temp_can_accessed = ActiveSupport::JSON.decode(cookies[:can_accessed])
+		# return temp_can_accessed[temp_module]
+		return true
+
 	end
 	def check_is_hidden(temp_module)
-		temp_is_hidden = ActiveSupport::JSON.decode(cookies[:is_hidden])
-		return temp_is_hidden[temp_module]
+		# temp_is_hidden = ActiveSupport::JSON.decode(cookies[:is_hidden])
+		# return temp_is_hidden[temp_module]
+		return false
+
 	end
 	def check_can_import_export(temp_module)
-		temp_can_import_export = ActiveSupport::JSON.decode(cookies[:can_import_export])
-		return temp_can_import_export[temp_module]
+		# temp_can_import_export = ActiveSupport::JSON.decode(cookies[:can_import_export])
+		# return temp_can_import_export[temp_module]
+		return true
+
 	end	
 	def check_can_send_email(temp_module)
-		temp_can_send_email = ActiveSupport::JSON.decode(cookies[:can_send_email])
-		return temp_can_send_email[temp_module]
+		# temp_can_send_email = ActiveSupport::JSON.decode(cookies[:can_send_email])
+		# return temp_can_send_email[temp_module]
+		return true
+
 	end	
 
   def set_company_type
