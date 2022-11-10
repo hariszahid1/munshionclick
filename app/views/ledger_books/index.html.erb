@@ -12,7 +12,7 @@
               <a href="<%= root_path %>">Dashboard</a>
             </li>
             <li class="breadcrumb-item active">
-              <a href="<%= item_types_path %>">Ledger Book</a>
+              <a href="<%= ledger_books_path %>">Ledger Book</a>
             </li>
           </ol>
         </div>
@@ -223,7 +223,7 @@
           <div class="icon-container float-center">
             <span class="ml-2 mt-2">
               <div class="my-icon my-view">
-                <button class="icon-div btn delete-selected p-2 " type='button' value='ProductCategory'>
+                <button class="icon-div btn delete-selected p-2 " type='button' value='LedgerBook'>
                   <i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i> 
                 </button>
               </div>
@@ -409,22 +409,6 @@
                             <%end %>
                           <%end%>
                         </div>
-                        <div class="my-icon my-view">
-                          <div class="my-tooltip">
-                            PDF
-                          </div>
-                          <%= link_to ledger_books_path('q[id_eq]':ledger_book.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
-                            <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
-                          <%end %>
-                        </div>
-                        <div class="my-icon my-view">
-                          <div class="my-tooltip">
-                            CSV
-                          </div>
-                            <%= link_to ledger_books_path('q[id_eq]':ledger_book.id,'csv':true), title: 'Download CSV', class:"icon-div" do%>
-                            <i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
-                          <%end %>
-                        </div>
                     </div>
                   </div>
                     <span class="icon-div-1">
@@ -473,7 +457,7 @@
         </div>
         <div class="modal-body">
           <%= f.file_field :file, required: true, accept: '.csv' %>
-          <%= f.hidden_field :table_name, value: 'ItemType' %>
+          <%= f.hidden_field :table_name, value: 'LedgerBook' %>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
