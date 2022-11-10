@@ -12,6 +12,8 @@ class SysUser < ApplicationRecord
   has_paper_trail ignore: [:updated_at, :balance]
   has_many :follow_ups, as: :followable
   has_many :notes, as: :notable
+  accepts_nested_attributes_for :notes
+  accepts_nested_attributes_for :follow_ups
 
   # def balance
     # balance=(LedgerBook.where(sys_user_id: id).present? ? LedgerBook.where(sys_user_id: id).last.balance : self.opening_balance).to_i

@@ -30,6 +30,8 @@ class CustomerManagementSystemsController < ApplicationController
     @sys_user = SysUser.new
     @raw_products = RawProduct.all
     @sys_user.build_contact
+    @sys_user.notes.build
+    @sys_user.follow_ups.build
     respond_to do |format|
       format.js
     end
@@ -79,6 +81,7 @@ class CustomerManagementSystemsController < ApplicationController
     @cities = City.all
     @countries = Country.all
     @user_groups = UserGroup.all
+    @staff = Staff.all
   end
 
   def download_cities_csv_file

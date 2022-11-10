@@ -196,11 +196,14 @@ class SysUsersController < ApplicationController
 
   # GET /sys_users/new
   def new
-    @user_types=UserType.all
-    @sys_user = SysUser.new
-    @cities=City.all
-    @countries=Country.all
+    @user_types = UserType.all
+    @sys_user  =  SysUser.new
+    @cities = City.all
+    @countries = Country.all
+    @staff = Staff.all
+    @sys_user.notes.build
     @sys_user.build_contact
+    @sys_user.follow_ups.build
   end
 
   # GET /sys_users/1/edit
@@ -208,7 +211,7 @@ class SysUsersController < ApplicationController
     @user_types=UserType.all
     @cities=City.all
     @countries=Country.all
-
+    @staff = Staff.all
     respond_to do |format|
       format.js
     end
@@ -310,7 +313,27 @@ class SysUsersController < ApplicationController
         :country_id,
         :sys_user_id,
         :permanent_address
-        ]
+      ],
+      :notes_attributes => [
+        :id,
+        :message,
+        :assigned_to_id,
+        :created_by,
+        :notable_id,
+        :notable_type
+      ],
+      :follow_ups_attributes =>[
+        :id,
+        :reminder_type,
+        :task_type,
+        :priority,
+        :assigned_to_id,
+        :created_by,
+        :date,
+        :comment,
+        :followable_id,
+        :followable_type
+      ]
       )
   end
 

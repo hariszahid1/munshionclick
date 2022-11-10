@@ -18,7 +18,7 @@ class FollowUpsController < ApplicationController
         format.json { render :show, status: :created, location: @follow_up }
       else
         format.html { render :new }
-        format.json { render json: @follow_up.errors, status: :unprocessable_entity }      \
+        format.json { render json: @follow_up.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -29,6 +29,6 @@ class FollowUpsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def follow_up_params
-    params.require(:follow_up).permit(:reminder_type, :task_type, :priority, :date, :created_by, :assigned_to_id, :followable_type, :followable_id)
+    params.require(:follow_up).permit(:reminder_type, :task_type, :priority, :date, :created_by, :comment, :assigned_to_id, :followable_type, :followable_id)
   end
 end
