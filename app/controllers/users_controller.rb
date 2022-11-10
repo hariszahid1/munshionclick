@@ -57,10 +57,9 @@ class UsersController < ApplicationController
     if params[:user][:password].blank?
       params[:user].delete :password
     end
-		session[:user_permissions] = false
     respond_to do |format|
       if @user.update(user_params)
-        save_user_ability
+				save_user_ability
         format.html { redirect_to users_path, notice: "#{current_user.allowed_valid_roles.to_s.titleize} was successfully updated." }
         format.json { render :show, status: :ok, location: @user }
       else
@@ -129,7 +128,7 @@ class UsersController < ApplicationController
 		params.require(:user).permit(
 			:name, :user_name, :email, :father_name, :city, :phone, :fax,
 			:address, :roles, :password, :confirm_password, :user_ability_roles,
-			:created_by_id, :email_to,:email_cc,:email_bcc,:roles_mask,
+			:created_by_id, :email_to,:email_cc,:email_bcc,:roles_mask,:permission_updated,
 			user_permissions_attributes: %i[id can_accessed can_create can_read can_update can_delete can_download_pdf 
 				can_download_csv can_send_email can_import_export is_hidden]
 		)
