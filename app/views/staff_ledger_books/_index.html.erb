@@ -68,23 +68,21 @@
         </div>
       </p>
     </div>
-     <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="jamabenam" role="tabpanel">
-        <p>
+    <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="jamabenam" role="tabpanel">
+      <p>
         <div class='ml-2 mt-2'>
           <% if can?(:delete, :all) %>
-            <div id="new_ledger_book">
-              <% link_to new_staff_ledger_book_path(Benam: true), class: "btn btn-success" do %>
+              <%= link_to new_staff_ledger_book_path(Sbenam: true), class: "btn btn-success" do %>
                 <i class="fa fa-plus" aria-hidden="true"></i>
                 Benam/Debit
               <% end %>
-              <% link_to new_staff_ledger_book_path, class: "btn btn-success" do %>
+              <%= link_to new_staff_ledger_book_path(Sjama: true), class: "btn btn-success" do %>
                 <i class="fa fa-plus" aria-hidden="true"></i>
                 Jama/Credit
               <% end %>
-              </div>
-            <% end %>
-         </div>
-        </p>
+          <% end %>
+        </div>
+      </p>
     </div>
     <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="payment" role="tabpanel">
         <p>
