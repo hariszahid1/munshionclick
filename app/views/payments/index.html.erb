@@ -30,36 +30,36 @@
             </div>
           </div>
     
-  <ul class="nav nav-pills" role="tablist">
-      <li class="nav-item">
-        <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link tab-label" data-toggle="tab" href="#jama" role="tab">Jama/Credit</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link tab-label" data-toggle="tab" href="#benam" role="tab">Benam/Debit</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link tab-label" data-toggle="tab" href="#transfer" role="tab">Payment Transfer</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link tab-label" data-toggle="tab" href="#account" role="tab">Account</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download PDF</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download CSV</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
-      </li>
-      <li class="nav-item">
-       <a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
-      </li>
-  </ul>
-
+	<ul class="nav nav-pills" role="tablist">
+		<li class="nav-item">
+			<a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
+		</li>
+		<%if (check_can_create("payments"))%>
+			<li class="nav-item">
+				<a class="nav-link tab-label" data-toggle="tab" href="#create" role="tab">Create</a>
+			</li>
+		<%end%>
+		<%if (check_can_download_pdf("payments"))%>
+			<li class="nav-item">
+				<a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
+			</li>
+		<%end%>
+		<%if (check_can_download_csv("payments"))%>
+			<li class="nav-item">
+				<a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
+			</li>
+		<%end%>
+		<%if (check_can_send_email("payments"))%>
+			<li class="nav-item">
+				<a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
+			</li>
+		<%end%>
+		<%if (check_can_import_export("payments"))%>
+			<li class="nav-item">
+				<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
+			</li>
+		<%end%>
+	</ul>
 <%= search_form_for @q, url: payments_path, class: "admin-controls", method: "get" do |f| %>
     
   <div class="tab-content">
@@ -197,22 +197,24 @@
 
 
   <div class="card shadow-sm border-radius-1 p-2">
-  <%# <button class='btn btn-outline-danger float-right delete-selected' type='button' style="width:163px"value='City' >Delete Selected</button> %>
     <%= render 'map_columns/map_column_partials' %>
     
     <table data-toggle="table" data-search="true" class=" overflow-hidden border-radius-1">
     <thead>
       <tr>
         <th><input type="checkbox" id="master" class='select-all-checkbox' style="cursor: pointer;">
-         <div class="icon-container float-center">
-            <span class="ml-2 mt-2">
-            <div class="my-icon my-view">
-                        <button class="icon-div btn delete-selected p-2 " type='button' value='Payment'>
-                                  <i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i>
-                        </button>
-                    </div>
-                    </span>
-              </div></th>
+					<%if (check_can_delete("payments"))%>
+						<div class="icon-container float-center">
+							<span class="ml-2 mt-2">
+								<div class="my-icon my-view">
+									<button class="icon-div btn delete-selected p-2 " type='button' value='Payment'>
+										<i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i>
+									</button>
+								</div>
+							</span>
+						</div>
+					<%end%>
+			</th>
         <th><%= sort_link(@q, :id, 'ID') %></th>
         <th><%= sort_link(@q, :account, 'Account') %></th>
         <th><%= sort_link(@q, :debit, 'Debit/Benam') %></th>
@@ -338,143 +340,134 @@
           <td class="p-3">
 
           <div class="icon-container-1">
-  <div class="my-icon-1 my-view-1">
-    <div class="my-tooltip-1">
-    
+<div class="my-icon-1 my-view-1">
+	<div class="my-tooltip-1">
     <div class="icon-container">
-          <div class="my-icon my-view">
-          <div class="my-tooltip">
-            Edit
-          </div>
-                      <% if can?(:update, :all) %>
-               <% if payment.paymentable.present? and payment.paymentable_type=="PurchaseSaleDetail" and payment.paymentable.transaction_type=="Sale"%>
-                  <%= link_to edit_purchase_sale_detail_path(payment.paymentable,product:true), class:"icon-div" do %>
-                    <i class="fa fa-edit mt-2" aria-hidden="true"></i>
-                  <% end %>
-                <% elsif payment.paymentable.present? and payment.paymentable_type=="PurchaseSaleDetail" and payment.paymentable.transaction_type=="Purchase"%>
-                  <%= link_to edit_purchase_sale_detail_path(payment.paymentable,product:true), class:"icon-div" do %>
-                     <i class="fa fa-edit mt-2" aria-hidden="true"></i>
-                  <% end %>
-                <% elsif payment.paymentable.present? and payment.paymentable_type=="Order" and payment.paymentable.transaction_type=="Sale"%>
-                  <%= link_to edit_order_path(payment.paymentable,product:true), class:"icon-div" do %>
-                     <i class="fa fa-edit mt-2" aria-hidden="true"></i>
-                  <% end %>
-                <% elsif payment.paymentable.present? and payment.paymentable_type=="Order" and payment.paymentable.transaction_type=="Purchase"%>
-                  <%= link_to edit_order_path(payment.paymentable,product:true), class:"icon-div" do %>
-                    <i class="fa fa-edit mt-2" aria-hidden="true"></i>
-                  <% end %>
-                <% elsif payment.paymentable.present? and payment.paymentable_type=="ExpenseEntry" and payment.paymentable.expense.present?%>
-                  <%= link_to edit_expense_path(payment.paymentable.expense.id), class:"icon-div" do %>
-                    <i class="fa fa-edit mt-2" aria-hidden="true"></i>
-                  <% end %>
-                <% elsif payment.paymentable.present? and payment.paymentable_type=="ExpenseEntry" and payment.paymentable.expense.blank?%>
-                  <%= link_to edit_expense_entry_path(payment.paymentable.expenseable), class:"icon-div" do %>
-                    <i class="fa fa-edit mt-2" aria-hidden="true"></i>
-                  <% end %>
-                <% elsif payment.paymentable.present? and payment.paymentable_type=="Salary" and payment.paymentable.paid_salary.present?%>
-                  <%= link_to edit_salary_path(payment.paymentable), class:"icon-div" do %>
-                    <i class="fa fa-edit mt-2" aria-hidden="true"></i>
-                  <% end %>
-                <% elsif payment.paymentable.present? and payment.paymentable_type=="Salary" and payment.paymentable.advance.present?%>
-                  <%= link_to edit_advance_salary_path(payment.paymentable), class:"icon-div" do %>
-                    <i class="fa fa-edit mt-2" aria-hidden="true"></i>
-                  <% end %>
-                <% elsif payment.paymentable.present? and payment.paymentable_type=="Investment"%>
-                  <%= link_to edit_investment_path(payment.paymentable), class:"icon-div" do %>
-                    <i class="fa fa-edit mt-2" aria-hidden="true"></i>
-                  <% end %>
-                <% elsif payment.paymentable.present? and payment.paymentable_type=="LedgerBook"%>
-                  <%= link_to edit_ledger_book_path(payment.paymentable), class:"icon-div" do %>
-                    <i class="fa fa-edit mt-2" aria-hidden="true"></i>
-                  <% end %>
-                <% elsif payment.paymentable.present? and payment.paymentable_type=="SalaryDetail"%>
-                  <%= link_to edit_salary_detail_path(payment.paymentable), class:"icon-div" do %>
-                    <i class="fa fa-edit mt-2" aria-hidden="true"></i>
-                  <% end %>
-                <% else %>
-                 <%= link_to edit_payment_path(payment,edit: true), class:"icon-div" do %>
-                    <i class="fa fa-edit mt-2" aria-hidden="true"></i>
-                  <%end %>
-                <% end %>
+			<%if (check_can_update("payments"))%>
+				<div class="my-icon my-view">
+					<div class="my-tooltip">
+						Edit
+					</div>
+					<% if payment.paymentable.present? and payment.paymentable_type=="PurchaseSaleDetail" and payment.paymentable.transaction_type=="Sale"%>
+						<%= link_to edit_purchase_sale_detail_path(payment.paymentable,product:true), class:"icon-div" do %>
+							<i class="fa fa-edit mt-2" aria-hidden="true"></i>
+						<% end %>
+					<% elsif payment.paymentable.present? and payment.paymentable_type=="PurchaseSaleDetail" and payment.paymentable.transaction_type=="Purchase"%>
+						<%= link_to edit_purchase_sale_detail_path(payment.paymentable,product:true), class:"icon-div" do %>
+								<i class="fa fa-edit mt-2" aria-hidden="true"></i>
+						<% end %>
+					<% elsif payment.paymentable.present? and payment.paymentable_type=="Order" and payment.paymentable.transaction_type=="Sale"%>
+						<%= link_to edit_order_path(payment.paymentable,product:true), class:"icon-div" do %>
+								<i class="fa fa-edit mt-2" aria-hidden="true"></i>
+						<% end %>
+					<% elsif payment.paymentable.present? and payment.paymentable_type=="Order" and payment.paymentable.transaction_type=="Purchase"%>
+						<%= link_to edit_order_path(payment.paymentable,product:true), class:"icon-div" do %>
+							<i class="fa fa-edit mt-2" aria-hidden="true"></i>
+						<% end %>
+					<% elsif payment.paymentable.present? and payment.paymentable_type=="ExpenseEntry" and payment.paymentable.expense.present?%>
+						<%= link_to edit_expense_path(payment.paymentable.expense.id), class:"icon-div" do %>
+							<i class="fa fa-edit mt-2" aria-hidden="true"></i>
+						<% end %>
+					<% elsif payment.paymentable.present? and payment.paymentable_type=="ExpenseEntry" and payment.paymentable.expense.blank?%>
+						<%= link_to edit_expense_entry_path(payment.paymentable.expenseable), class:"icon-div" do %>
+							<i class="fa fa-edit mt-2" aria-hidden="true"></i>
+						<% end %>
+					<% elsif payment.paymentable.present? and payment.paymentable_type=="Salary" and payment.paymentable.paid_salary.present?%>
+						<%= link_to edit_salary_path(payment.paymentable), class:"icon-div" do %>
+							<i class="fa fa-edit mt-2" aria-hidden="true"></i>
+						<% end %>
+					<% elsif payment.paymentable.present? and payment.paymentable_type=="Salary" and payment.paymentable.advance.present?%>
+						<%= link_to edit_advance_salary_path(payment.paymentable), class:"icon-div" do %>
+							<i class="fa fa-edit mt-2" aria-hidden="true"></i>
+						<% end %>
+					<% elsif payment.paymentable.present? and payment.paymentable_type=="Investment"%>
+						<%= link_to edit_investment_path(payment.paymentable), class:"icon-div" do %>
+							<i class="fa fa-edit mt-2" aria-hidden="true"></i>
+						<% end %>
+					<% elsif payment.paymentable.present? and payment.paymentable_type=="LedgerBook"%>
+						<%= link_to edit_ledger_book_path(payment.paymentable), class:"icon-div" do %>
+							<i class="fa fa-edit mt-2" aria-hidden="true"></i>
+						<% end %>
+					<% elsif payment.paymentable.present? and payment.paymentable_type=="SalaryDetail"%>
+						<%= link_to edit_salary_detail_path(payment.paymentable), class:"icon-div" do %>
+							<i class="fa fa-edit mt-2" aria-hidden="true"></i>
+						<% end %>
+					<% else %>
+						<%= link_to edit_payment_path(payment,edit: true), class:"icon-div" do %>
+							<i class="fa fa-edit mt-2" aria-hidden="true"></i>
+						<%end %>
+					<% end %>
+				</div>
+			<% end %>
 
+			<%if (check_can_delete("payments"))%>
+				<div class="my-icon my-view">
+					<div class="my-tooltip">
+						Delete
+					</div>
+					<% if payment.paymentable.present? and payment.paymentable_type=="PurchaseSaleDetail"  %>
+						<%= link_to purchase_sale_detail_path(payment.paymentable), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+							<i class="fa fa-trash mt-2" aria-hidden="true"></i>
+						<% end %>
+					<%elsif payment.paymentable.present? and payment.paymentable_type=="Order"  %>
+						<%= link_to order_path(payment.paymentable), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+							<i class="fa fa-trash mt-2" aria-hidden="true"></i>
+						<% end %>
+					<%elsif payment.paymentable.present? and payment.paymentable_type=="ExpenseEntry"%>
+						<%= link_to expense_entry_path(payment.paymentable), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+							<i class="fa fa-trash mt-2" aria-hidden="true"></i>
+						<% end %>
+					<%elsif payment.paymentable.present? and payment.paymentable_type=="Salary"%>
+						<%= link_to salary_path(payment.paymentable), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+							<i class="fa fa-trash mt-2" aria-hidden="true"></i>
+						<% end %>
+					<%elsif payment.paymentable.present? and payment.paymentable_type=="LedgerBook"%>
+						<%= link_to ledger_book_path(payment.paymentable), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+							<i class="fa fa-trash mt-2" aria-hidden="true"></i>
+						<% end %>
+					<%else%>
+						<%= link_to payment, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+							<i class="fa fa-trash mt-2" aria-hidden="true"></i>
+						<%end%>
+					<%end %>
+				</div>
+			<% end %>
 
-            <% end %>
-          
-          
-        </div>
+			<%if (check_can_read("payments"))%>
+				<div class="my-icon my-view">
+					<div class="my-tooltip">
+						Show
+					</div>
+					<%= link_to payment_path(payment), remote: true, class:"icon-div" do %>
+						<i class="fa fa-eye mt-2" aria-hidden="true"></i>
+					<%end %>	
+				</div>
+			<%end%>
 
-          <div class="my-icon my-view">
-              <div class="my-tooltip">
-                Delete
-              </div>
-                
-                  <% if can?(:delete, :all) %>
-              <% if payment.paymentable.present? and payment.paymentable_type=="PurchaseSaleDetail"  %>
-                <%= link_to purchase_sale_detail_path(payment.paymentable), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
-                  <i class="fa fa-trash mt-2" aria-hidden="true"></i>
-                <% end %>
-              <%elsif payment.paymentable.present? and payment.paymentable_type=="Order"  %>
-                <%= link_to order_path(payment.paymentable), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
-                  <i class="fa fa-trash mt-2" aria-hidden="true"></i>
-                <% end %>
-              <%elsif payment.paymentable.present? and payment.paymentable_type=="ExpenseEntry"%>
-                <%= link_to expense_entry_path(payment.paymentable), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
-                  <i class="fa fa-trash mt-2" aria-hidden="true"></i>
-                <% end %>
-              <%elsif payment.paymentable.present? and payment.paymentable_type=="Salary"%>
-                <%= link_to salary_path(payment.paymentable), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
-                  <i class="fa fa-trash mt-2" aria-hidden="true"></i>
-                <% end %>
-              <%elsif payment.paymentable.present? and payment.paymentable_type=="LedgerBook"%>
-                <%= link_to ledger_book_path(payment.paymentable), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
-                  <i class="fa fa-trash mt-2" aria-hidden="true"></i>
-                <% end %>
-              <%else%>
-                <%= link_to payment, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
-                <i class="fa fa-trash mt-2" aria-hidden="true"></i>
-              <%end%>
-              <%end %>
+			<%if (check_can_download_pdf("payments"))%>
+				<div class="my-icon my-view">
+					<div class="my-tooltip">
+						PDF
+					</div>
+					<%= link_to payments_path('q[id_eq]':payment.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
+						<i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
+					<%end %>	
+				</div>
+			<%end%>
 
-            <% end %>
-              
-          </div>
+			<%if (check_can_download_csv("payments"))%>
+				<div class="my-icon my-view">
+					<div class="my-tooltip">
+						CSV
+					</div>
+					<%= link_to payments_path('q[id_eq]':payment.id,'csv':true), title: 'Download CSV', class:"icon-div" do%>
+						<i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
+					<%end %>    
+				</div>
+			<%end %>    
 
-         <div class="my-icon my-view">
-                <div class="my-tooltip">
-                  Show
-                </div>
-                
-                   <% if can?(:view, :all) %>
-                    <%= link_to payment_path(payment), remote: true, class:"icon-div" do %>
-                    <i class="fa fa-eye mt-2" aria-hidden="true"></i>
-                <%end %>
-            <%end%>
-          
-      </div>
-
-      <div class="my-icon my-view">
-            <div class="my-tooltip">
-              PDF
-            </div>
-            
-                <%= link_to payments_path('q[id_eq]':payment.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
-    			      <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
-    		      <%end %>
-            
-      </div>
-
-       <div class="my-icon my-view">
-            <div class="my-tooltip">
-              CSV
-            </div>
-            
-                  <%= link_to payments_path('q[id_eq]':payment.id,'csv':true), title: 'Download CSV', class:"icon-div" do%>
-    			        <i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
-    		      <%end %>
-            
-          </div>
-        </div>
-        </div>
+		</div>
+	</div>
             <span class="icon-div-1">
                   <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
             </span>

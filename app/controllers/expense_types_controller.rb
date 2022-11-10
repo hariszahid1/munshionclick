@@ -1,6 +1,7 @@
 class ExpenseTypesController < ApplicationController
   include PdfCsvGeneralMethod
   include ExpenseTypesHelper
+	before_action :check_access
   before_action :set_expense_type, only: [:show, :edit, :update, :destroy]
 
   # GET /expense_types

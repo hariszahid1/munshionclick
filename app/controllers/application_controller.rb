@@ -305,6 +305,58 @@ class ApplicationController < ActionController::Base
   helper_method :send_sms_english
   helper_method :send_sms_urdu
 
+  helper_method :check_can_create
+  helper_method :check_can_read
+  helper_method :check_can_update
+  helper_method :check_can_delete
+  helper_method :check_can_download_csv
+  helper_method :check_can_download_pdf
+  helper_method :check_can_accessed
+  helper_method :check_is_hidden
+  helper_method :check_can_import_export
+  helper_method :check_can_send_email
+
+	def check_can_create(temp_module)
+		temp_can_create = ActiveSupport::JSON.decode(cookies[:can_create])
+		return temp_can_create[temp_module]
+	end
+	def check_can_read(temp_module)
+		temp_can_read = ActiveSupport::JSON.decode(cookies[:can_read])
+		return temp_can_read[temp_module]
+	end
+	def check_can_update(temp_module)
+		temp_can_update = ActiveSupport::JSON.decode(cookies[:can_update])
+		return temp_can_update[temp_module]
+	end
+	def check_can_delete(temp_module)
+		temp_can_delete = ActiveSupport::JSON.decode(cookies[:can_delete])
+		return temp_can_delete[temp_module]
+	end
+	def check_can_download_csv(temp_module)
+		temp_can_download_csv = ActiveSupport::JSON.decode(cookies[:can_download_csv])
+		return temp_can_download_csv[temp_module]
+	end
+	def check_can_download_pdf(temp_module)
+		temp_can_download_pdf = ActiveSupport::JSON.decode(cookies[:can_download_pdf])
+		return temp_can_download_pdf[temp_module]
+	end
+	def check_can_accessed(temp_module)
+		temp_can_accessed = ActiveSupport::JSON.decode(cookies[:can_accessed])
+		return temp_can_accessed[temp_module]
+	end
+	def check_is_hidden(temp_module)
+		temp_is_hidden = ActiveSupport::JSON.decode(cookies[:is_hidden])
+		return temp_is_hidden[temp_module]
+	end
+	def check_can_import_export(temp_module)
+		temp_can_import_export = ActiveSupport::JSON.decode(cookies[:can_import_export])
+		return temp_can_import_export[temp_module]
+	end	
+	def check_can_send_email(temp_module)
+		temp_can_send_email = ActiveSupport::JSON.decode(cookies[:can_send_email])
+		return temp_can_send_email[temp_module]
+	end	
+
   def set_company_type
     if current_user.present?
       RequestStore.store[:company_type] = current_user.superAdmin.company_type if current_user.superAdmin.present?
@@ -314,6 +366,21 @@ class ApplicationController < ActionController::Base
     ApplicationRecord.set_connection
 
     @pos_setting = PosSetting.last
+		if (current_user.present? && current_user.permission_updated.blank?)
+			user_all_permissions = current_user.user_permissions
+			cookies[:is_hidden] = ActiveSupport::JSON.encode(user_all_permissions.group(:module).sum(:is_hidden))
+			cookies[:can_accessed]= ActiveSupport::JSON.encode(user_all_permissions.group(:module).sum(:can_accessed))
+			cookies[:can_create] = ActiveSupport::JSON.encode(user_all_permissions.group(:module).sum(:can_create))
+			cookies[:can_read] = ActiveSupport::JSON.encode(user_all_permissions.group(:module).sum(:can_read))
+			cookies[:can_update] = ActiveSupport::JSON.encode(user_all_permissions.group(:module).sum(:can_update))
+			cookies[:can_delete] = ActiveSupport::JSON.encode(user_all_permissions.group(:module).sum(:can_delete))
+			cookies[:can_download_pdf] = ActiveSupport::JSON.encode(user_all_permissions.group(:module).sum(:can_download_pdf))
+			cookies[:can_download_csv] = ActiveSupport::JSON.encode(user_all_permissions.group(:module).sum(:can_download_csv))
+			cookies[:can_import_export] = ActiveSupport::JSON.encode(user_all_permissions.group(:module).sum(:can_import_export))
+			cookies[:can_send_email] = ActiveSupport::JSON.encode(user_all_permissions.group(:module).sum(:can_send_email))	
+			current_user.update(permission_updated: true)
+		end
+
 
     if @pos_setting.present?
       @account_balance = Account.group(:title).sum(:amount)
@@ -348,4 +415,18 @@ class ApplicationController < ActionController::Base
     @image.attachments.first.purge_later
     redirect_back(fallback_location: request.referer)
   end
+
+	def check_access
+		if (check_is_hidden("#{controller_name}"))
+			respond_to do |format|
+				format.html { redirect_to dashboard_path, alert: "Your system does not have this module" }
+			end
+		else
+			if (check_can_accessed("#{controller_name}")==false)
+				respond_to do |format|
+					format.html { redirect_to dashboard_path, alert: "you are not authorized." }
+				end
+			end
+		end	
+	end
 end

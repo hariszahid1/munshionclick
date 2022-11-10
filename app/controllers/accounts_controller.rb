@@ -1,45 +1,22 @@
 class AccountsController < ApplicationController
+	before_action :check_access
   before_action :set_account, only: [:show, :edit, :update, :destroy]
+  include AccountsHelper
+  include PdfCsvGeneralMethod
 
   # GET /accounts
   # GET /accounts.json
   def index
     @pos_setting=PosSetting.first
-    @q = Account.ransack(params[:q])
-    if @q.result.count > 0
-      @q.sorts = 'id asc' if @q.sorts.empty?
-    end
-    if params[:q].present?
-      @title = params[:q][:title_or_bank_name_cont]
-      @comment = params[:q][:bank_name]
-    end
+    @q = Account.order('id asc').ransack(params[:q])
     @accounts = @q.result(distinct: true).page(params[:page])
     @account = @q.result
     @account_total=@account.pluck('SUM(amount)')
 
-    if params[:submit_pdf_staff_with].present?
-      if @q.result.count > 0
-        @q.sorts = 'created_at desc' if @q.sorts.empty?
-      end
-      @accounts=@q.result(distinct: true)
-      request.format = 'pdf'
-      respond_to do |format|
-        format.html
-        format.pdf do
-          render pdf: 'index_staff_wise',
-          layout: 'pdf.html',
-          page_size: 'A4',
-          margin_top: '0',
-          margin_right: '0',
-          margin_bottom: '0',
-          margin_left: '0',
-          encoding: "UTF-8",
-          footer:  {             # optional, use 'pdf_plain' for a pdf_plain.html.pdf.erb file, defaults to main layout
-          right: '[page] of [topage]'},
-          show_as_html: false
-        end
-      end
-    end
+    download_accounts_csv_file if params[:csv].present?
+    download_accounts_pdf_file if params[:pdf].present?
+    send_email_file if params[:email].present?
+    export_file if params[:export_data].present?
   end
 
   # GET /accounts/1
@@ -116,13 +93,59 @@ class AccountsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_account
-      @account = Account.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_account
+    @account = Account.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def account_params
-      params.require(:account).permit(:title, :bank_name, :iban_number, :amount, :user_id, :profile_image)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def account_params
+    params.require(:account).permit(:title, :bank_name, :iban_number, :amount, :user_id, :profile_image)
+  end
+
+  def download_accounts_csv_file
+    @accounts = @q.result
+      header_for_csv = %w[id title bank balance jama_benam]
+      data_for_csv = get_data_for_accounts_csv
+    generate_csv(data_for_csv, header_for_csv,
+                 "Accounts-Total-#{@accounts.count}-#{DateTime.now.strftime('%d-%m-%Y-%H-%M')}")
+  end
+
+  def download_accounts_pdf_file
+    sort_data_according
+    generate_pdf(@sorted_data.as_json, "Accounts-Total-#{@sorted_data.count}-#{DateTime.now.strftime('%d-%m-%Y-%H-%M')}",
+                 'pdf.html', 'A4', false)
+  end
+
+  def send_email_file
+    sort_data_according
+    EmailJob.perform_later(@sorted_data.as_json, 'accounts/index.pdf.erb', params[:email_value],
+                           params[:email_choice], params[:subject], params[:body],
+                           current_user, "Accounts-Total-#{@sorted_data.count}-#{DateTime.now.strftime('%d-%m-%Y-%H-%M')}")
+    flash[:notice] = if params[:email_value].present?
+                       "Email has been sent to #{params[:email_value]}"
+                     else
+                       "Email has been sent to #{current_user.email}"
+                     end
+    redirect_to accounts_path
+  end
+
+  def sort_data_according
+    @sorted_data = []
+      @q.result.reorder('created_at desc').each do |d|
+        @sorted_data << {
+                          id: d.id,
+                          title: d.title,
+                          bank: d.bank_name,
+                          balance: d.amount.to_f.round(2),
+                          jama_benam: d.amount.to_i.zero? ? 'Nill' : d.amount.to_f.negative? ? 'Jama' : 'Benam',
+                          total: @account_total.first.to_f.round(2)
+                        }
+      end
+  end
+
+  def export_file
+    export_data('Account')
+  end
+
 end

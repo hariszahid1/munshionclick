@@ -4,7 +4,7 @@
 class UserGroupsController < ApplicationController
   include PdfCsvGeneralMethod
   include CitiesHelper
-
+	before_action :check_access
   before_action :set_user_group, only: %i[show edit update destroy]
   require 'tempfile'
   require 'csv'

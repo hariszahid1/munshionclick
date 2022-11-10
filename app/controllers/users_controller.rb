@@ -59,8 +59,8 @@ class UsersController < ApplicationController
     end
     respond_to do |format|
       if @user.update(user_params)
-        save_user_ability
-        format.html { redirect_to dashboard_path, notice: "#{current_user.allowed_valid_roles.to_s.titleize} was successfully updated." }
+				save_user_ability
+        format.html { redirect_to users_path, notice: "#{current_user.allowed_valid_roles.to_s.titleize} was successfully updated." }
         format.json { render :show, status: :ok, location: @user }
       else
         set_part_list
@@ -68,7 +68,7 @@ class UsersController < ApplicationController
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
-  end
+  end	
 
   # DELETE /users/1
   # DELETE /users/1.json
@@ -122,6 +122,17 @@ class UsersController < ApplicationController
     @users = @q.result
     generate_pdf(@users.as_json, "Admins-Total-#{@users.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}", 'pdf.html', 'A4', false)
   end
+
+    # Never trust parameters from the scary internet, only allow the white list through.
+	def user_params
+		params.require(:user).permit(
+			:name, :user_name, :email, :father_name, :city, :phone, :fax,
+			:address, :roles, :password, :confirm_password, :user_ability_roles,
+			:created_by_id, :email_to,:email_cc,:email_bcc,:roles_mask,:permission_updated,
+			user_permissions_attributes: %i[id can_accessed can_create can_read can_update can_delete can_download_pdf 
+				can_download_csv can_send_email can_import_export is_hidden]
+		)
+	end
 
   def send_email_file
     EmailJob.perform_later(@q.result.as_json, 'users/index.pdf.erb', params[:email_value],

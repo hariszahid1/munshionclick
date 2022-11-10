@@ -29,26 +29,36 @@
       </div>
     </div>
 
-  <ul class="nav nav-pills" role="tablist">
+		<ul class="nav nav-pills" role="tablist">
       <li class="nav-item">
-      <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
+        <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
       </li>
-      <li class="nav-item">
-      <a class="nav-link tab-label" data-toggle="tab" href="#create" role="tab">Create</a>
-      </li>
-      <li class="nav-item">
-      <a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
-      </li>
-      <li class="nav-item">
-      <a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
-      </li>
-      <li class="nav-item">
-      <a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
-      </li>
-      <li class="nav-item">
-      <a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
-      </li>
-</ul>
+			<%if (check_can_create("product_categories"))%>
+				<li class="nav-item">
+					<a class="nav-link tab-label" data-toggle="tab" href="#create" role="tab">Create</a>
+				</li>
+			<%end%>
+			<%if (check_can_download_pdf("product_categories"))%>
+				<li class="nav-item">
+					<a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
+				</li>
+			<%end%>
+			<%if (check_can_download_csv("product_categories"))%>
+				<li class="nav-item">
+					<a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
+				</li>
+			<%end%>
+			<%if (check_can_send_email("product_categories"))%>
+				<li class="nav-item">
+					<a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
+				</li>
+			<%end%>
+			<%if (check_can_import_export("product_categories"))%>
+				<li class="nav-item">
+					<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
+				</li>
+			<%end%>
+	</ul>
 <%= search_form_for @q, url: product_categories_path, class: "admin-controls", method: "get" do |f| %>
   <div class="tab-content mb-5">
     <div class="tab-pane active mb-3 card shadow-sm mt-2 border-radius-1" id="search" role="tabpanel">
@@ -153,15 +163,18 @@
       <tr>
         <th>
           <input type="checkbox" id="master" class='select-all-checkbox'>
-          <div class="icon-container float-center">
-            <span class="ml-2 mt-2">
-              <div class="my-icon my-view">
-                <button class="icon-div btn delete-selected p-2 " type='button' value='ProductCategory'>
-                  <i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i> 
-                </button>
-              </div>
-            </span>
-          </div>
+					<%if (check_can_delete("product_categories"))%>
+
+						<div class="icon-container float-center">
+							<span class="ml-2 mt-2">
+								<div class="my-icon my-view">
+									<button class="icon-div btn delete-selected p-2 " type='button' value='ProductCategory'>
+										<i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i> 
+									</button>
+								</div>
+							</span>
+						</div>
+					<%end%>
         </th>
         <th>ID<div class='float-right'><%= sort_link(@q, :id, '', {}, class: 'sorting-button') %></div></th>
         <th>Title<div class='float-right'><%= sort_link(@q, :title, '', {}, class: 'sorting-button') %></div></th>

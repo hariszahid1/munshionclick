@@ -1,4 +1,5 @@
 class ExpensesController < ApplicationController
+	before_action :check_access
   before_action :set_expense, only: [:show, :edit, :update, :destroy]
   include PdfCsvGeneralMethod
   include ExpensesHelper

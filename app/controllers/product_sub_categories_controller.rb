@@ -1,6 +1,7 @@
 class ProductSubCategoriesController < ApplicationController
   include PdfCsvGeneralMethod
   include ProductSubCategoriesHelper
+	before_action :check_access
   before_action :set_product_sub_category, only: [:show, :edit, :update, :destroy]
   skip_before_action :verify_authenticity_token
   require 'tempfile'
