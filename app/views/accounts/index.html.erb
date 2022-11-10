@@ -34,27 +34,27 @@
 						<li class="nav-item">
 							<a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
 						</li>
-						<%if (ApplicationController.check_can_create(current_user,"accounts"))%>
+						<%if (check_can_create("accounts"))%>
 							<li class="nav-item">
 								<a class="nav-link tab-label" data-toggle="tab" href="#create" role="tab">Create</a>
 							</li>
 						<%end%>
-						<%if (ApplicationController.check_can_download_pdf(current_user,"accounts"))%>
+						<%if (check_can_download_pdf("accounts"))%>
 							<li class="nav-item">
 								<a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
 							</li>
 						<%end%>
-						<%if (ApplicationController.check_can_download_csv(current_user,"accounts"))%>
+						<%if (check_can_download_csv("accounts"))%>
 							<li class="nav-item">
 								<a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
 							</li>
 						<%end%>
-						<%if (ApplicationController.check_can_send_email(current_user,"accounts"))%>
+						<%if (check_can_send_email("accounts"))%>
 							<li class="nav-item">
 								<a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
 							</li>
 						<%end%>
-						<%if (ApplicationController.check_can_import_export(current_user,"accounts"))%>
+						<%if (check_can_import_export("accounts"))%>
 							<li class="nav-item">
 								<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
 							</li>
@@ -242,7 +242,7 @@
 				<% end %>
 			</div>
 
-				<%if (ApplicationController.check_can_update(current_user,"accounts"))%>
+				<%if (check_can_update("accounts"))%>
 					<div class="my-icon my-view">
 						<div class="my-tooltip">
 							Edit
@@ -253,7 +253,7 @@
 					</div>
 				<% end %>
 
-				<%if (ApplicationController.check_can_delete(current_user,"accounts"))%>
+				<%if (check_can_delete("accounts"))%>
 					<div class="my-icon my-view">
 						<div class="my-tooltip">
 							Delete
@@ -264,7 +264,7 @@
 					</div>
 				<% end %>
 
-				<%if (ApplicationController.check_can_read(current_user,"accounts"))%>
+				<%if (check_can_read("accounts"))%>
 					<div class="my-icon my-view">
 						<div class="my-tooltip">
 							Show
@@ -274,7 +274,7 @@
 						<%end %>
 					</div>
 				<%end%>
-				<%if (ApplicationController.check_can_download_pdf(current_user,"accounts"))%>
+				<%if (check_can_download_pdf("accounts"))%>
 					<div class="my-icon my-view">
 						<div class="my-tooltip">
 							PDF
@@ -284,7 +284,7 @@
 						<%end %>
 					</div>
 				<%end %>
-				<%if (ApplicationController.check_can_download_csv(current_user,"accounts"))%>
+				<%if (check_can_download_csv("accounts"))%>
 					<div class="my-icon my-view">
 						<div class="my-tooltip">
 							CSV
