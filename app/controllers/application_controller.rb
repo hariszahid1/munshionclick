@@ -366,8 +366,7 @@ class ApplicationController < ActionController::Base
     ApplicationRecord.set_connection
 
     @pos_setting = PosSetting.last
-		if (current_user.present? && session[:user_permissions].blank?)
-	
+		if (current_user.present? && current_user.permission_updated.blank?)
 			user_all_permissions = current_user.user_permissions
 			cookies[:is_hidden] = ActiveSupport::JSON.encode(user_all_permissions.group(:module).sum(:is_hidden))
 			cookies[:can_accessed]= ActiveSupport::JSON.encode(user_all_permissions.group(:module).sum(:can_accessed))
@@ -378,8 +377,8 @@ class ApplicationController < ActionController::Base
 			cookies[:can_download_pdf] = ActiveSupport::JSON.encode(user_all_permissions.group(:module).sum(:can_download_pdf))
 			cookies[:can_download_csv] = ActiveSupport::JSON.encode(user_all_permissions.group(:module).sum(:can_download_csv))
 			cookies[:can_import_export] = ActiveSupport::JSON.encode(user_all_permissions.group(:module).sum(:can_import_export))
-			cookies[:can_send_email] = ActiveSupport::JSON.encode(user_all_permissions.group(:module).sum(:can_send_email))			
-			session[:user_permissions]=true
+			cookies[:can_send_email] = ActiveSupport::JSON.encode(user_all_permissions.group(:module).sum(:can_send_email))	
+			current_user.update(permission_updated: true)
 		end
 
 
