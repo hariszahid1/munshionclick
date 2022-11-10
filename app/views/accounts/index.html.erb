@@ -98,28 +98,24 @@
     </div>
     <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="paymentstransfer" role="tabpanel">
       <p>
-        
-          <%= link_to transfer_payments_path, class: "btn btn-success ml-3 mt-3" do %>
-             <i class="fa fa-credit-card" aria-hidden="true"></i>
-             Payment Transfer
-          <% end %>
-
-        
+        <%= link_to transfer_payments_path, class: "btn btn-success ml-3 mt-3" do %>
+            <i class="fa fa-credit-card" aria-hidden="true"></i>
+            Payment Transfer
+        <% end %>
       </p>
     </div>
     <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="pdf" role="tabpanel">
       <p>
-        <div class="col-lg-2 d-flex">
-          <button class="form-control btn btn-danger" name="submit_pdf_staff_with" type="submit" value="Accounts PDF A4" formtarget="_blank">Accounts <i class="fa fa-file-pdf"></i></button>
+        <div>
+          <button class="btn btn-danger ml-3" name="pdf" type="submit" value="Accounts PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mr-2"></i>Accounts</button>
         </div>
       </p>
     </div>
     <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="csv" role="tabpanel">
       <p>
-        <div class="col-lg-2 d-flex">
-          <button class="form-control btn btn-success" name="submit_csv_staff_with" type="submit" value="Accounts CSV" formtarget="_blank">Accounts <i class="fa fa-file-excel"></i></button>
+        <div>
+          <button class="btn btn-success ml-3" name="csv" type="submit" value="Accounts CSV"><i class="fa fa-file-excel mr-2"></i>Accounts</button>
         </div>
-        
       </p>
     </div>
     <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="emails" role="tabpanel">
