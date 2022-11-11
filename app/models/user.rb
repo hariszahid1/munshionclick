@@ -80,12 +80,12 @@ class User < ApplicationRecord
 					"staff_raw_products","staffs","sys_users","sys_users/customer","sys_users/supplier","sys_users/own","user_types","users","warranties","user_groups","customer_management_systems"]
 					
 		pos_all_modules.each do |item|
-			UserPermission.create(module: item, can_create: true,can_read: true, can_update: true, can_delete: true, can_accessed: true, is_hidden: false, can_download_pdf: true, can_download_csv: true, can_send_email: true, can_import_export: true, user_id: user.id) if user.super_admin?
-        UserPermission.create(module: item, can_create: true,can_read: true, can_update: true, can_delete: true, can_accessed: true, is_hidden: false, can_download_pdf: true, can_download_csv: true, can_send_email: true, can_import_export: true, user_id: user.id) if user.admin?
-        UserPermission.create(module: item, can_create: true,can_read: true, can_update: false, can_delete: false, can_delete: true, can_accessed: true, is_hidden: false, can_download_pdf: true, can_download_csv: true, can_send_email: true, can_import_export: true, user_id: user.id) if user.staff?
-        UserPermission.create(module: item, can_create: true,can_read: true, can_update: false, can_delete: true, can_accessed: true, is_hidden: false, can_download_pdf: true, can_download_csv: true, can_send_email: true, can_import_export: true, user_id: user.id) if user.salesman?
-        UserPermission.create(module: item, can_create: true,can_read: true, can_update: false, can_delete: false, can_delete: true, can_accessed: true, is_hidden: false, can_download_pdf: true, can_download_csv: true, can_send_email: true, can_import_export: true, user_id: user.id) if user.editor?
-        UserPermission.create(module: item, can_create: false,can_read: true, can_update: false, can_delete: false, can_delete: true, can_accessed: true, is_hidden: false, can_download_pdf: true, can_download_csv: true, can_send_email: true, can_import_export: true, user_id: user.id) if user.visitor?
+			UserPermission.create(module: item, can_create: true,can_read: true, can_update: true, can_delete: true, user_id: id) if super_admin?
+			UserPermission.create(module: item, can_create: true,can_read: true, can_update: true, can_delete: false, user_id: id) if admin?
+			UserPermission.create(module: item, can_create: true,can_read: true, can_update: false, can_delete: false, user_id: id) if staff?
+			UserPermission.create(module: item, can_create: true,can_read: true, can_update: false, can_delete: false, user_id: id) if salesman?
+			UserPermission.create(module: item, can_create: true,can_read: true, can_update: false, can_delete: false, user_id: id) if editor?
+			UserPermission.create(module: item, can_create: false,can_read: true, can_update: false, can_delete: false, user_id: id) if visitor?
 		end
   end
 
