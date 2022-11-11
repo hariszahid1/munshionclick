@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  before_action :authenticate_user!
+  # before_action :authenticate_user!
   protect_from_forgery with: :exception
   before_action :set_paper_trail_whodunnit
   before_action :set_company_type
@@ -316,66 +316,6 @@ class ApplicationController < ActionController::Base
   helper_method :check_can_import_export
   helper_method :check_can_send_email
 
-	def check_can_create(temp_module)
-		# temp_can_create = ActiveSupport::JSON.decode(cookies[:can_create])
-		# return temp_can_create[temp_module]
-		return true
-	end
-	def check_can_read(temp_module)
-		# temp_can_read = ActiveSupport::JSON.decode(cookies[:can_read])
-		# return temp_can_read[temp_module]
-		return true
-
-	end
-	def check_can_update(temp_module)
-		# temp_can_update = ActiveSupport::JSON.decode(cookies[:can_update])
-		# return temp_can_update[temp_module]
-		return true
-
-	end
-	def check_can_delete(temp_module)
-		# temp_can_delete = ActiveSupport::JSON.decode(cookies[:can_delete])
-		# return temp_can_delete[temp_module]
-		return true
-
-	end
-	def check_can_download_csv(temp_module)
-		# temp_can_download_csv = ActiveSupport::JSON.decode(cookies[:can_download_csv])
-		# return temp_can_download_csv[temp_module]
-		return true
-
-	end
-	def check_can_download_pdf(temp_module)
-		# temp_can_download_pdf = ActiveSupport::JSON.decode(cookies[:can_download_pdf])
-		# return temp_can_download_pdf[temp_module]
-		return true
-
-	end
-	def check_can_accessed(temp_module)
-		# temp_can_accessed = ActiveSupport::JSON.decode(cookies[:can_accessed])
-		# return temp_can_accessed[temp_module]
-		return true
-
-	end
-	def check_is_hidden(temp_module)
-		# temp_is_hidden = ActiveSupport::JSON.decode(cookies[:is_hidden])
-		# return temp_is_hidden[temp_module]
-		return false
-
-	end
-	def check_can_import_export(temp_module)
-		# temp_can_import_export = ActiveSupport::JSON.decode(cookies[:can_import_export])
-		# return temp_can_import_export[temp_module]
-		return true
-
-	end	
-	def check_can_send_email(temp_module)
-		# temp_can_send_email = ActiveSupport::JSON.decode(cookies[:can_send_email])
-		# return temp_can_send_email[temp_module]
-		return true
-
-	end	
-
   def set_company_type
     if current_user.present?
       RequestStore.store[:company_type] = current_user.superAdmin.company_type if current_user.superAdmin.present?
@@ -386,20 +326,30 @@ class ApplicationController < ActionController::Base
 
     @pos_setting = PosSetting.last
 		if (current_user.present? && current_user.permission_updated.blank?)
-			user_all_permissions = current_user.user_permissions
-			cookies[:is_hidden] = ActiveSupport::JSON.encode(user_all_permissions.group(:module).sum(:is_hidden))
-			cookies[:can_accessed]= ActiveSupport::JSON.encode(user_all_permissions.group(:module).sum(:can_accessed))
-			cookies[:can_create] = ActiveSupport::JSON.encode(user_all_permissions.group(:module).sum(:can_create))
-			cookies[:can_read] = ActiveSupport::JSON.encode(user_all_permissions.group(:module).sum(:can_read))
-			cookies[:can_update] = ActiveSupport::JSON.encode(user_all_permissions.group(:module).sum(:can_update))
-			cookies[:can_delete] = ActiveSupport::JSON.encode(user_all_permissions.group(:module).sum(:can_delete))
-			cookies[:can_download_pdf] = ActiveSupport::JSON.encode(user_all_permissions.group(:module).sum(:can_download_pdf))
-			cookies[:can_download_csv] = ActiveSupport::JSON.encode(user_all_permissions.group(:module).sum(:can_download_csv))
-			cookies[:can_import_export] = ActiveSupport::JSON.encode(user_all_permissions.group(:module).sum(:can_import_export))
-			cookies[:can_send_email] = ActiveSupport::JSON.encode(user_all_permissions.group(:module).sum(:can_send_email))	
+			puts"--------------------------------------------------MB cookies of current user is updated"
+			temp = User.joins(:user_permissions).includes(:user_permissions).find_by(id: current_user.id)
+			cookies[:can_create]= JSON.generate temp.user_permissions.pluck(:module,:can_create).to_h
+			cookies[:can_read]= JSON.generate temp.user_permissions.pluck(:module,:can_read).to_h
+			cookies[:can_update]= JSON.generate temp.user_permissions.pluck(:module,:can_update).to_h
+			cookies[:can_delete]= JSON.generate temp.user_permissions.pluck(:module,:can_delete).to_h
+			cookies[:can_accessed]= JSON.generate temp.user_permissions.pluck(:module,:can_accessed).to_h
+			cookies[:is_hidden]= JSON.generate temp.user_permissions.pluck(:module,:is_hidden).to_h
+			cookies[:can_download_csv]= JSON.generate temp.user_permissions.pluck(:module,:can_download_csv).to_h
+			cookies[:can_download_pdf]= JSON.generate temp.user_permissions.pluck(:module,:can_download_pdf).to_h
+			cookies[:can_import_export]= JSON.generate temp.user_permissions.pluck(:module,:can_import_export).to_h
+			cookies[:can_send_email]= JSON.generate temp.user_permissions.pluck(:module,:can_send_email).to_h
+			# session[:is_hidden]=temp.user_permissions.pluck(:module,:is_hidden).to_h
+			# session[:can_accessed]=temp.user_permissions.pluck(:module,:can_accessed).to_h
+			# session[:can_create]=temp.user_permissions.pluck(:module,:can_create).to_h
+			# session[:can_read]=temp.user_permissions.pluck(:module,:can_read).to_h
+			# session[:can_update]=temp.user_permissions.pluck(:module,:can_update).to_h
+			# session[:can_delete]=temp.user_permissions.pluck(:module,:can_delete).to_h
+			# session[:can_download_csv]=temp.user_permissions.pluck(:module,:can_download_csv).to_h
+			# session[:can_download_pdf]=temp.user_permissions.pluck(:module,:can_download_pdf).to_h
+			# session[:can_import_export]=temp.user_permissions.pluck(:module,:can_import_export).to_h
+			# session[:can_send_email]=temp.user_permissions.pluck(:module,:can_send_email).to_h
 			current_user.update(permission_updated: true)
 		end
-
 
     if @pos_setting.present?
       @account_balance = Account.group(:title).sum(:amount)
@@ -434,6 +384,88 @@ class ApplicationController < ActionController::Base
     @image.attachments.first.purge_later
     redirect_back(fallback_location: request.referer)
   end
+
+	def check_can_create(temp_module)
+		if temp_module=='cities'
+			temp=JSON.parse cookies[:can_create]
+			return temp[temp_module]
+		else
+			return true
+		end
+	end
+	def check_can_read(temp_module)
+		if temp_module=='cities'
+			temp=JSON.parse cookies[:can_read]
+			return temp[temp_module]
+		else
+			return true
+		end
+
+	end
+	def check_can_update(temp_module)
+		if temp_module=='cities'
+			temp=JSON.parse cookies[:can_update]
+			return temp[temp_module]
+		else
+			return true
+		end
+	end
+	def check_can_delete(temp_module)
+		if temp_module=='cities'
+			temp=JSON.parse cookies[:can_delete]
+			return temp[temp_module]
+		else
+			return true
+		end
+	end
+	def check_can_download_csv(temp_module)
+		if temp_module=='cities'
+			temp=JSON.parse cookies[:can_download_csv]
+			return temp[temp_module]
+		else
+			return true
+		end
+	end
+	def check_can_download_pdf(temp_module)
+		if temp_module=='cities'
+			temp=JSON.parse cookies[:can_download_pdf]
+			return temp[temp_module]
+		else
+			return true
+		end
+	end
+	def check_can_accessed(temp_module)
+		if temp_module=='cities'
+			temp=JSON.parse cookies[:can_accessed]
+			return temp[temp_module]
+		else
+			return true
+		end
+	end
+	def check_is_hidden(temp_module)
+		if temp_module=='cities'
+			temp=JSON.parse cookies[:is_hidden]
+			return temp[temp_module]
+		else
+			return false
+		end
+	end
+	def check_can_import_export(temp_module)
+		if temp_module=='cities'
+			temp=JSON.parse cookies[:can_import_export]
+			return temp[temp_module]
+		else
+			return true
+		end
+	end	
+	def check_can_send_email(temp_module)
+		if temp_module=='cities'
+			temp=JSON.parse cookies[:can_send_email]
+			return temp[temp_module]
+		else
+			return true
+		end
+	end	
 
 	def check_access
 		if (check_is_hidden("#{controller_name}"))
