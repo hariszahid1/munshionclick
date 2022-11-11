@@ -329,26 +329,17 @@ class ApplicationController < ActionController::Base
 			cookies[:test]=JSON.generate "devbox22"
 			puts"--------------------------------------------------MB cookies of current user is updated"
 			temp = User.joins(:user_permissions).includes(:user_permissions).find_by(id: current_user.id)
-			cookies[:can_create]= "{\"accounts\":true,\"cities\":true,\"compaigns\":true,\"contacts\":true,\"countries\":true,\"daily_books\":true,\"daily_sales\":true,\"dashboard\":true,\"departments\":true,\"expense_entries\":true,\"expense_types\":true,\"expenses\":true,\"gates\":true,\"helps\":true,\"home\":true,\"investments\":true,\"item_types\":true,\"items\":true,\"ledger_books\":true,\"logs\":true,\"map_columns\":true,\"materials\":true,\"order_items\":true,\"orders\":true,\"payments\":true,\"pos_settings\":true,\"product_categories\":true,\"product_stock_excahanges\":true,\"product_stocks\":true,\"product_sub_categories\":true,\"product_warranties\":true,\"production_block_types\":true,\"production_blocks\":true,\"production_cycles\":true,\"productions\":true,\"products\":true,\"property_plans\":true,\"purchase_sale_details\":true,\"purchase_sale_items\":true,\"raw_products\":true,\"remarks\":true,\"reports\":true,\"salaries\":true,\"salary_details\":true,\"sms\":true,\"staff_deals\":true,\"staff_ledger_books\":true,\"staff_raw_products\":true,\"staffs\":true,\"sys_users\":true,\"sys_users/customer\":true,\"sys_users/supplier\":true,\"sys_users/own\":true,\"user_types\":true,\"users\":true,\"warranties\":true,\"user_groups\":true,\"customer_management_systems\":true}"
-			# cookies[:can_read]= JSON.generate temp.user_permissions.pluck(:module,:can_read).to_h
-			# cookies[:can_update]= JSON.generate temp.user_permissions.pluck(:module,:can_update).to_h
-			# cookies[:can_delete]= JSON.generate temp.user_permissions.pluck(:module,:can_delete).to_h
-			# cookies[:can_accessed]= JSON.generate temp.user_permissions.pluck(:module,:can_accessed).to_h
-			# cookies[:is_hidden]= JSON.generate temp.user_permissions.pluck(:module,:is_hidden).to_h
-			# cookies[:can_download_csv]= JSON.generate temp.user_permissions.pluck(:module,:can_download_csv).to_h
-			# cookies[:can_download_pdf]= JSON.generate temp.user_permissions.pluck(:module,:can_download_pdf).to_h
-			# cookies[:can_import_export]= JSON.generate temp.user_permissions.pluck(:module,:can_import_export).to_h
-			# cookies[:can_send_email]= JSON.generate temp.user_permissions.pluck(:module,:can_send_email).to_h
-			# session[:is_hidden]=temp.user_permissions.pluck(:module,:is_hidden).to_h
-			# session[:can_accessed]=temp.user_permissions.pluck(:module,:can_accessed).to_h
-			# session[:can_create]=temp.user_permissions.pluck(:module,:can_create).to_h
-			# session[:can_read]=temp.user_permissions.pluck(:module,:can_read).to_h
-			# session[:can_update]=temp.user_permissions.pluck(:module,:can_update).to_h
-			# session[:can_delete]=temp.user_permissions.pluck(:module,:can_delete).to_h
-			# session[:can_download_csv]=temp.user_permissions.pluck(:module,:can_download_csv).to_h
-			# session[:can_download_pdf]=temp.user_permissions.pluck(:module,:can_download_pdf).to_h
-			# session[:can_import_export]=temp.user_permissions.pluck(:module,:can_import_export).to_h
-			# session[:can_send_email]=temp.user_permissions.pluck(:module,:can_send_email).to_h
+			cookies[:can_create]= JSON.generate(temp.user_permissions.pluck(:module,:can_create).to_h).to_s
+			cookies[:can_read]= JSON.generate(temp.user_permissions.pluck(:module,:can_read).to_h).to_s
+			cookies[:can_update]= JSON.generate(temp.user_permissions.pluck(:module,:can_update).to_h).to_s
+			cookies[:can_delete]= JSON.generate(temp.user_permissions.pluck(:module,:can_delete).to_h).to_s
+			cookies[:can_accessed]= JSON.generate(temp.user_permissions.pluck(:module,:can_accessed).to_h).to_s
+			cookies[:is_hidden]= JSON.generate(temp.user_permissions.pluck(:module,:is_hidden).to_h).to_s
+			cookies[:can_download_csv]= JSON.generate(temp.user_permissions.pluck(:module,:can_download_csv).to_h).to_s
+			cookies[:can_download_pdf]= JSON.generate(temp.user_permissions.pluck(:module,:can_download_pdf).to_h).to_s
+			cookies[:can_import_export]= JSON.generate(temp.user_permissions.pluck(:module,:can_import_export).to_h).to_s
+			cookies[:can_send_email]= JSON.generate(temp.user_permissions.pluck(:module,:can_send_email).to_h).to_s
+		
 			current_user.update(permission_updated: true)
 		end
 
