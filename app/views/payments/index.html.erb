@@ -36,9 +36,24 @@
 		</li>
 		<%if (check_can_create("payments"))%>
 			<li class="nav-item">
-				<a class="nav-link tab-label" data-toggle="tab" href="#create" role="tab">Create</a>
+				<a class="nav-link tab-label" data-toggle="tab" href="#jama" role="tab">Jama</a>
 			</li>
 		<%end%>
+		<%if (check_can_create("payments"))%>
+		<li class="nav-item">
+			<a class="nav-link tab-label" data-toggle="tab" href="#benam" role="tab">Benam</a>
+		</li>
+	<%end%>
+	<%if (check_can_create("payments"))%>
+	<li class="nav-item">
+		<a class="nav-link tab-label" data-toggle="tab" href="#account" role="tab">Account</a>
+	</li>
+<%end%>
+<%if (check_can_create("payments"))%>
+<li class="nav-item">
+	<a class="nav-link tab-label" data-toggle="tab" href="#transfer" role="tab">Transfer</a>
+</li>
+<%end%>
 		<%if (check_can_download_pdf("payments"))%>
 			<li class="nav-item">
 				<a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
@@ -104,7 +119,7 @@
         <% end %>
         </p>
     </div>
-    <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="transfer" role="tabpanel">
+    <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="account" role="tabpanel">
         <p>
          <%= link_to transfer_payments_path, class: "btn btn-success ml-3 mt-3" do %>
         <i class="fa fa-credit-card" aria-hidden="true"></i>
@@ -112,9 +127,9 @@
       <% end %>
         </p>
     </div>
-     <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="account" role="tabpanel">
+     <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="transfer" role="tabpanel">
         <p>
-         <%= link_to transfer_payments_path, class: "btn btn-success ml-3 mt-3" do %>
+         <%= link_to accounts_url, class: "btn btn-success ml-3 mt-3" do %>
         <i class="fa fa-credit-card" aria-hidden="true"></i>
         Account
       <% end %>
