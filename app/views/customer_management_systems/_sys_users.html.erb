@@ -1,12 +1,11 @@
 <tr>
   <td><%= check_box_tag 'object_ids[]', sys_users.id %></td>
-  <td></td>
-  </div>  <td class='urdu-font'><%= sys_users.code %></td>
-  <td><%= sys_users.name %></td>
+  </div>  <td class='urdu-font'><%= sys_users.name %></td>
+  <td><%= sys_users.code %></td>
   <td><%= sys_users&.user_group %></td>
-  <td><%= sys_users.status %></td>
   <td><%= sys_users.occupation %></td>
-  <td><%= sys_users.balance %></td>
+  <td><%= sys_users.ntn %></td>
+  <td><%= sys_users.gst %></td>
   <td>
 		<%if (check_can_update("customer_management_systems"))%>
       <%= link_to edit_customer_management_system_path(sys_users), remote: true do %>

@@ -45,8 +45,8 @@
         <%= f.text_field :occupation, placeholder: "Plot Size", hide_label: true %>
       </div>
 
-      <div class="col-lg-6 form-group">
-        <%= f.file_field :profile_image %>
+      <div class="col-lg-6 form-group float-left">
+        <%= f.select :user_type_id, options_from_collection_for_select(@user_types, 'id', 'title', f.object.user_type_id.present? ? f.object.user_type_id : @user_types.first.id ),{include_blank: "Please Select User Type"}, required: true %>
       </div>
     </div>
 
@@ -64,8 +64,9 @@
     </div>
 
     <div class="col-lg-12 row">
-      <div class="col-lg-6 form-group float-left">
-        <%= f.select :user_type_id, options_from_collection_for_select(@user_types, 'id', 'title', f.object.user_type_id.present? ? f.object.user_type_id : @user_types.first.id ),{include_blank: "Please Select User Type"}, required: true, class: 'urdu-font form-control'%>
+      <div class="col-lg-6 form-group">
+        <%= f.label 'Budget' %>
+        <%= f.number_field :credit_limit, placeholder: "Budget", hide_label: true %>
       </div>
     </div>
 
