@@ -326,10 +326,10 @@ class ApplicationController < ActionController::Base
 
     @pos_setting = PosSetting.last
 		if (current_user.present? && current_user.permission_updated.blank?)
-			cookies[:test]="devbox"
+			cookies[:test]=JSON.generate "devbox22"
 			puts"--------------------------------------------------MB cookies of current user is updated"
-			# temp = User.joins(:user_permissions).includes(:user_permissions).find_by(id: current_user.id)
-			# cookies[:can_create]= JSON.generate temp.user_permissions.pluck(:module,:can_create).to_h
+			temp = User.joins(:user_permissions).includes(:user_permissions).find_by(id: current_user.id)
+			cookies[:can_create]= "{\"accounts\":true,\"cities\":true,\"compaigns\":true,\"contacts\":true,\"countries\":true,\"daily_books\":true,\"daily_sales\":true,\"dashboard\":true,\"departments\":true,\"expense_entries\":true,\"expense_types\":true,\"expenses\":true,\"gates\":true,\"helps\":true,\"home\":true,\"investments\":true,\"item_types\":true,\"items\":true,\"ledger_books\":true,\"logs\":true,\"map_columns\":true,\"materials\":true,\"order_items\":true,\"orders\":true,\"payments\":true,\"pos_settings\":true,\"product_categories\":true,\"product_stock_excahanges\":true,\"product_stocks\":true,\"product_sub_categories\":true,\"product_warranties\":true,\"production_block_types\":true,\"production_blocks\":true,\"production_cycles\":true,\"productions\":true,\"products\":true,\"property_plans\":true,\"purchase_sale_details\":true,\"purchase_sale_items\":true,\"raw_products\":true,\"remarks\":true,\"reports\":true,\"salaries\":true,\"salary_details\":true,\"sms\":true,\"staff_deals\":true,\"staff_ledger_books\":true,\"staff_raw_products\":true,\"staffs\":true,\"sys_users\":true,\"sys_users/customer\":true,\"sys_users/supplier\":true,\"sys_users/own\":true,\"user_types\":true,\"users\":true,\"warranties\":true,\"user_groups\":true,\"customer_management_systems\":true}"
 			# cookies[:can_read]= JSON.generate temp.user_permissions.pluck(:module,:can_read).to_h
 			# cookies[:can_update]= JSON.generate temp.user_permissions.pluck(:module,:can_update).to_h
 			# cookies[:can_delete]= JSON.generate temp.user_permissions.pluck(:module,:can_delete).to_h
