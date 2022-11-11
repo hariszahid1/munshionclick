@@ -78,10 +78,10 @@
               <%= search_form_for @q, url: sys_users_path, class: "admin-controls", method: "get" do |f| %>
               <span class="mt-5 col-lg-12">
                   <span class="col-lg-3 form-group float-left">
-                    <%= f.select :id_eq, options_from_collection_for_select(@all_user, "id", ->(st){"#{st.name} \u{27F6} \u{27F6} #{st.code} "},@name),{:include_blank => "Select Name/Code"},:class=>"form-control chosen-select " %>
+                    <%= f.select :id_eq, options_from_collection_for_select(@all_user, "id", ->(st){"#{st.name} \u{27F6} \u{27F6} #{st.code} "},f.object.id_eq),{:include_blank => "Select Name/Code"},:class=>"form-control chosen-select " %>
                   </span>
                   <span class='col-lg-2 form-group float-left'>
-                    <%= f.select :user_group_eq, options_for_select(SysUser.user_groups, @user_group), {:include_blank => "Select User Group"},:class=>"form-control chosen-select" %>
+                    <%= f.select :user_group_eq, options_for_select(SysUser.user_groups, f.object.user_group_eq), {:include_blank => "Select User Group"},:class=>"form-control chosen-select" %>
                   </span>
                   <span class="col=lg-2 form-group float-left">
                     <%= f.select :status_eq, SysUser.statuses.map { |key, value| [key.humanize, value] },{include_blank: "Select Status", hide_label:true, required: true },:class=>"form-control chosen-select" %>

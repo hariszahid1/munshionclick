@@ -21,8 +21,8 @@ class CustomerManagementSystemsController < ApplicationController
     @user_groups = UserGroup.all
     @sys_users = @q.result.page(params[:page])
     export_file if params[:export_data].present?
-    download_cities_csv_file if params[:csv].present?
-    download_cities_pdf_file if params[:pdf].present?
+    download_cms_csv_file if params[:csv].present?
+    download_cms_pdf_file if params[:pdf].present?
     send_email_file if params[:email].present?
   end
 
@@ -84,30 +84,30 @@ class CustomerManagementSystemsController < ApplicationController
     @staff = Staff.all
   end
 
-  def download_cities_csv_file
+  def download_cms_csv_file
     @sys_user = @q.result.as_json
-    header1 = SysUser.column_names.excluding('id', 'created_at', 'updated_at')
-    header2 = Contact.column_names.excluding('id', 'created_at', 'updated_at', 'sys_user_id')
-    header_for_csv = header1 + header2
+    header_for_csv = %w[Number Cnic Name User_type User_group status Plot_size
+                        Budget Source_of_query Query City Country
+                        ]
     data_for_csv = get_data_for_cms_csv
-    generate_csv(data_for_csv, header_for_csv, 'sys_user')
+    generate_csv(data_for_csv, header_for_csv, 'CMS')
   end
 
-  def download_cities_pdf_file
+  def download_cms_pdf_file
     @sys_users = @q.result
-    generate_pdf(@sys_users.as_json, 'SysUsers', 'pdf.html', 'A4')
+    generate_pdf(@sys_users.as_json, 'CMS', 'pdf.html', 'A4', 'false')
   end
 
   def send_email_file
-    EmailJob.perform_later(@q.result.as_json, 'cities/index.pdf.erb', params[:email_value],
+    EmailJob.perform_later(@q.result.as_json, 'customer_management_systems/index.pdf.erb', params[:email_value],
                            params[:email_choice], params[:subject], params[:body],
-                           current_user, 'cities')
+                           current_user, 'customer_management_systems')
     if params[:email_value].present?
       flash[:notice] = "Email has been sent to #{params[:email_value]}"
     else
       flash[:notice] = "Email has been sent to #{current_user.email}"
     end
-    redirect_to cities_path
+    redirect_to customer_management_systems_path
   end
 
   def export_file
