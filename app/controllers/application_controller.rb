@@ -326,18 +326,19 @@ class ApplicationController < ActionController::Base
 
     @pos_setting = PosSetting.last
 		if (current_user.present? && current_user.permission_updated.blank?)
+			cookies[:test]="devbox"
 			puts"--------------------------------------------------MB cookies of current user is updated"
-			temp = User.joins(:user_permissions).includes(:user_permissions).find_by(id: current_user.id)
-			cookies[:can_create]= JSON.generate temp.user_permissions.pluck(:module,:can_create).to_h
-			cookies[:can_read]= JSON.generate temp.user_permissions.pluck(:module,:can_read).to_h
-			cookies[:can_update]= JSON.generate temp.user_permissions.pluck(:module,:can_update).to_h
-			cookies[:can_delete]= JSON.generate temp.user_permissions.pluck(:module,:can_delete).to_h
-			cookies[:can_accessed]= JSON.generate temp.user_permissions.pluck(:module,:can_accessed).to_h
-			cookies[:is_hidden]= JSON.generate temp.user_permissions.pluck(:module,:is_hidden).to_h
-			cookies[:can_download_csv]= JSON.generate temp.user_permissions.pluck(:module,:can_download_csv).to_h
-			cookies[:can_download_pdf]= JSON.generate temp.user_permissions.pluck(:module,:can_download_pdf).to_h
-			cookies[:can_import_export]= JSON.generate temp.user_permissions.pluck(:module,:can_import_export).to_h
-			cookies[:can_send_email]= JSON.generate temp.user_permissions.pluck(:module,:can_send_email).to_h
+			# temp = User.joins(:user_permissions).includes(:user_permissions).find_by(id: current_user.id)
+			# cookies[:can_create]= JSON.generate temp.user_permissions.pluck(:module,:can_create).to_h
+			# cookies[:can_read]= JSON.generate temp.user_permissions.pluck(:module,:can_read).to_h
+			# cookies[:can_update]= JSON.generate temp.user_permissions.pluck(:module,:can_update).to_h
+			# cookies[:can_delete]= JSON.generate temp.user_permissions.pluck(:module,:can_delete).to_h
+			# cookies[:can_accessed]= JSON.generate temp.user_permissions.pluck(:module,:can_accessed).to_h
+			# cookies[:is_hidden]= JSON.generate temp.user_permissions.pluck(:module,:is_hidden).to_h
+			# cookies[:can_download_csv]= JSON.generate temp.user_permissions.pluck(:module,:can_download_csv).to_h
+			# cookies[:can_download_pdf]= JSON.generate temp.user_permissions.pluck(:module,:can_download_pdf).to_h
+			# cookies[:can_import_export]= JSON.generate temp.user_permissions.pluck(:module,:can_import_export).to_h
+			# cookies[:can_send_email]= JSON.generate temp.user_permissions.pluck(:module,:can_send_email).to_h
 			# session[:is_hidden]=temp.user_permissions.pluck(:module,:is_hidden).to_h
 			# session[:can_accessed]=temp.user_permissions.pluck(:module,:can_accessed).to_h
 			# session[:can_create]=temp.user_permissions.pluck(:module,:can_create).to_h
@@ -386,85 +387,106 @@ class ApplicationController < ActionController::Base
   end
 
 	def check_can_create(temp_module)
-		if temp_module=='cities'
-			temp=JSON.parse cookies[:can_create]
-			return temp[temp_module]
-		else
-			return true
-		end
+		# if temp_module=='cities'
+		# 	temp=JSON.parse cookies[:can_create]
+		# 	return temp[temp_module]
+		# else
+		# 	return true
+		# end
+		return true
+
 	end
 	def check_can_read(temp_module)
-		if temp_module=='cities'
-			temp=JSON.parse cookies[:can_read]
-			return temp[temp_module]
-		else
-			return true
-		end
+		# if temp_module=='cities'
+		# 	temp=JSON.parse cookies[:can_read]
+		# 	return temp[temp_module]
+		# else
+		# 	return true
+		# end
+		return true
+
 
 	end
 	def check_can_update(temp_module)
-		if temp_module=='cities'
-			temp=JSON.parse cookies[:can_update]
-			return temp[temp_module]
-		else
-			return true
-		end
+		# if temp_module=='cities'
+		# 	temp=JSON.parse cookies[:can_update]
+		# 	return temp[temp_module]
+		# else
+		# 	return true
+		# end
+		return true
+
 	end
 	def check_can_delete(temp_module)
-		if temp_module=='cities'
-			temp=JSON.parse cookies[:can_delete]
-			return temp[temp_module]
-		else
-			return true
-		end
+		# if temp_module=='cities'
+		# 	temp=JSON.parse cookies[:can_delete]
+		# 	return temp[temp_module]
+		# else
+		# 	return true
+		# end
+		return true
+
 	end
 	def check_can_download_csv(temp_module)
-		if temp_module=='cities'
-			temp=JSON.parse cookies[:can_download_csv]
-			return temp[temp_module]
-		else
-			return true
-		end
+		# if temp_module=='cities'
+		# 	temp=JSON.parse cookies[:can_download_csv]
+		# 	return temp[temp_module]
+		# else
+		# 	return true
+		# end
+		return true
+
 	end
 	def check_can_download_pdf(temp_module)
-		if temp_module=='cities'
-			temp=JSON.parse cookies[:can_download_pdf]
-			return temp[temp_module]
-		else
-			return true
-		end
+		# if temp_module=='cities'
+		# 	temp=JSON.parse cookies[:can_download_pdf]
+		# 	return temp[temp_module]
+		# else
+		# 	return true
+		# end
+		return true
+
 	end
 	def check_can_accessed(temp_module)
-		if temp_module=='cities'
-			temp=JSON.parse cookies[:can_accessed]
-			return temp[temp_module]
-		else
-			return true
-		end
+		# if temp_module=='cities'
+		# 	temp=JSON.parse cookies[:can_accessed]
+		# 	return temp[temp_module]
+		# else
+		# 	return true
+		# end
+		return true
+
 	end
 	def check_is_hidden(temp_module)
-		if temp_module=='cities'
-			temp=JSON.parse cookies[:is_hidden]
-			return temp[temp_module]
-		else
-			return false
-		end
+		# if temp_module=='cities'
+		# 	temp=JSON.parse cookies[:is_hidden]
+		# 	return temp[temp_module]
+		# else
+		# 	return false
+		# end
+		return false
+
 	end
 	def check_can_import_export(temp_module)
-		if temp_module=='cities'
-			temp=JSON.parse cookies[:can_import_export]
-			return temp[temp_module]
-		else
-			return true
-		end
+		# if temp_module=='cities'
+		# 	temp=JSON.parse cookies[:can_import_export]
+		# 	return temp[temp_module]
+		# else
+		# 	return true
+		# end
+
+		return true
+
 	end	
 	def check_can_send_email(temp_module)
-		if temp_module=='cities'
-			temp=JSON.parse cookies[:can_send_email]
-			return temp[temp_module]
-		else
-			return true
-		end
+		# if temp_module=='cities'
+		# 	temp=JSON.parse cookies[:can_send_email]
+		# 	return temp[temp_module]
+		# else
+		# 	return true
+		# end
+		return true
+
 	end	
 
 	def check_access
