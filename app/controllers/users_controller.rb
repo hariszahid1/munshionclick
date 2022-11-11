@@ -57,6 +57,7 @@ class UsersController < ApplicationController
     if params[:user][:password].blank?
       params[:user].delete :password
     end
+		# User.find(params[:id]).update(permission_updated:false)
     respond_to do |format|
       if @user.update(user_params)
 				save_user_ability
