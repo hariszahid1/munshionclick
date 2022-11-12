@@ -7,30 +7,30 @@
   <td><%= sys_users.ntn %></td>
   <td><%= sys_users.gst %></td>
   <td>
-		<%if (check_can_update("customer_management_systems"))%>
+		<%if (check_can_update(@module_permission))%>
       <%= link_to edit_customer_management_system_path(sys_users), remote: true do %>
         <i class="fa fa-edit mr-2 ml-2 " aria-hidden="true"></i> |
       <%end %>
     <% end %>
 
-		<%if (check_can_delete("customer_management_systems"))%>
+		<%if (check_can_delete(@module_permission))%>
       <%= link_to sys_users, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
         <i class="fa fa-trash mr-2 ml-2" aria-hidden="true"></i> |
       <%end %>
     <% end %>
 
-		<%if (check_can_read("customer_management_systems"))%>
+		<%if (check_can_read(@module_permission))%>
       <%= link_to customer_management_system_path(sys_users) do %>
        <i class="fa fa-eye mr-2 ml-2" aria-hidden="true"></i>|
       <%end %>
     <%end%>
 
-		<%if (check_can_download_pdf("customer_management_systems"))%>
+		<%if (check_can_download_pdf(@module_permission))%>
 			<%= link_to customer_management_systems_path('q[id_eq]':sys_users.id,'pdf':true), title: 'Download PDF', target: '_blank' do %>
 				<i class="fa fa-file-pdf text-danger mr-2 ml-2 " aria-hidden="true"></i>|
 			<%end %>
 		<%end %>
-		<%if (check_can_download_csv("customer_management_systems"))%>
+		<%if (check_can_download_csv(@module_permission))%>
 			<%= link_to customer_management_systems_path('q[id_eq]':sys_users.id,'csv':true), title: 'Download CSV' do%>
 				<i class="fa fa-file-excel mr-2 ml-2 text-success" aria-hidden="true"></i>
 			<%end %>

@@ -3,6 +3,7 @@ class SysUsersController < ApplicationController
   include PdfCsvGeneralMethod
   include SysUsersHelper
 
+  before_action :check_access, only: [:index, :show, :edit, :update, :destroy]
   before_action :set_sys_user, only: [:show, :edit, :update, :destroy]
 
   # GET /sys_users
@@ -70,7 +71,7 @@ class SysUsersController < ApplicationController
       @opening_balance = params[:q][:opening_balance]
     end
     @sys_users = @q.result(distinct: true)
-	
+
     @all_user =SysUser.all
     @user_types=UserType.all
     if params[:submit_pdf_staff_with].present?
@@ -342,7 +343,7 @@ class SysUsersController < ApplicationController
       csv_data = payable_csv
     elsif params[:submit_csv_sys_user_receivable].present?
       puts "-------------------------"
-      csv_data = receiveable_csv 
+      csv_data = receiveable_csv
     end
     request.format = 'csv'
     respond_to do |format|
@@ -433,7 +434,7 @@ class SysUsersController < ApplicationController
 					format.html { redirect_to dashboard_path, alert: "you are not authorized." }
 				end
 			end
-		end	
+		end
 	end
 
 end
