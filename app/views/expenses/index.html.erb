@@ -33,27 +33,27 @@
 		<li class="nav-item">
 			<a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
 		</li>
-		<%if (check_can_create("expenses"))%>
+		<%if (check_can_create(@module_permission))%>
 			<li class="nav-item">
 				<a class="nav-link tab-label" data-toggle="tab" href="#create" role="tab">Create</a>
 			</li>
 		<%end%>
-		<%if (check_can_download_pdf("expenses"))%>
+		<%if (check_can_download_pdf(@module_permission))%>
 			<li class="nav-item">
 				<a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
 			</li>
 		<%end%>
-		<%if (check_can_download_csv("expenses"))%>
+		<%if (check_can_download_csv(@module_permission))%>
 			<li class="nav-item">
 				<a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
 			</li>
 		<%end%>
-		<%if (check_can_send_email("expenses"))%>
+		<%if (check_can_send_email(@module_permission))%>
 			<li class="nav-item">
 				<a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
 			</li>
 		<%end%>
-		<%if (check_can_import_export("expenses"))%>
+		<%if (check_can_import_export(@module_permission))%>
 			<li class="nav-item">
 				<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
 			</li>
@@ -112,7 +112,7 @@
       <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="csv" role="tabpanel">
         <p>
           <div class="col-lg-2 d-flex">
-            <button class="btn btn-success" title= "download expenses csv" name="csv" type="submit" value="csv"><i class="fa fa-file-excel mr-2"></i>Expenses</button>          
+            <button class="btn btn-success" title= "download expenses csv" name="csv" type="submit" value="csv"><i class="fa fa-file-excel mr-2"></i>Expenses</button>
           </div>
         </p>
       </div>
@@ -178,7 +178,7 @@
       <thead>
         <tr>
           <th><input type="checkbox" id="master" class='select-all-checkbox'>
-						<%if (check_can_delete("expenses"))%>	
+						<%if (check_can_delete(@module_permission))%>	
 							<div class="icon-container float-center">
 								<span class="ml-2 mt-2">
 									<div class="my-icon my-view">
@@ -229,7 +229,7 @@
                 <div class="my-icon-1 my-view-1">
                   <div class="my-tooltip-1">
                     <div class="icon-container">
-											<%if (check_can_update("expenses"))%>
+											<%if (check_can_update(@module_permission))%>
 												<div class="my-icon my-view">
 													<div class="my-tooltip">
 														Edit
@@ -242,7 +242,7 @@
 												</div>
 											<% end %>
 
-										<%if (check_can_delete("expenses"))%>
+										<%if (check_can_delete(@module_permission))%>
 											<div class="my-icon my-view">
                         <div class="my-tooltip">
                           Delete
@@ -254,8 +254,8 @@
 												</span>
 											</div>
 										<% end %>
-												
-										<%if (check_can_read("expenses"))%>
+
+										<%if (check_can_read(@module_permission))%>
 											<div class="my-icon my-view">
                         <div class="my-tooltip">
                           Show
@@ -268,7 +268,7 @@
 											</div>
 										<%end%>
 
-										<%if (check_can_download_pdf("expenses"))%>
+										<%if (check_can_download_pdf(@module_permission))%>
                       <div class="my-icon my-view">
                         <div class="my-tooltip">
                           PDF
@@ -281,7 +281,7 @@
                       </div>
 										<%end%>
 
-										<%if (check_can_download_csv("expenses"))%>
+										<%if (check_can_download_csv(@module_permission))%>
                       <div class="my-icon my-view">
                         <div class="my-tooltip">
                           CSV

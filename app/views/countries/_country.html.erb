@@ -4,30 +4,30 @@
   <td class= 'urdu-font'><%= country.title %></td>
   <td><span title="<%= country.comment %>" class='truncate-text'><%= country.comment %></span></td>
   <td>
-		<%if (check_can_update("countries"))%>
+		<%if (check_can_update(@module_permission.can_update))%>
         <%= link_to edit_country_path(country), remote: true do %>
           <i class="fa fa-edit ml-2 mr-2" aria-hidden="true"></i>|
         <%end %>
 		<% end %>
 
-		<%if (check_can_delete("countries"))%>
+		<%if (check_can_delete(@module_permission.can_delete))%>
 			<%= link_to country, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
-				|<i class="fa fa-trash ml-2 mr-2" aria-hidden="true"></i> 
+				|<i class="fa fa-trash ml-2 mr-2" aria-hidden="true"></i>
 			<%end %>
 		<% end %>
 
-		<%if (check_can_read("countries"))%>
+		<%if (check_can_read(@module_permission.can_read))%>
 			<%= link_to country_path(country), remote: true do %>
 				|<i class="fa fa-eye ml-2 mr-2" aria-hidden="true"></i>
 			<%end %>
 		<%end%>
 
-		<%if (check_can_download_pdf("countries"))%>
+		<%if (check_can_download_pdf(@module_permission.can_download_pdf))%>
       <%= link_to countries_path('q[id_eq]':country.id,'pdf':true), title: 'Download PDF', target: '_blank' do %>
 			  |<i class="fa fa-file-pdf text-danger mr-2 ml-2 " aria-hidden="true"></i>
       <%end %>
 		<%end %>
-		<%if (check_can_download_csv("countries"))%>
+		<%if (check_can_download_csv(@module_permission.can_download_csv))%>
       <%= link_to countries_path('q[id_eq]':country.id,'csv':true), title: 'Download CSV' do%>
         |<i class="fa fa-file-excel mr-2 ml-2 text-success" aria-hidden="true"></i>
       <%end %>

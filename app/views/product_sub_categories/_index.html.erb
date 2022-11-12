@@ -33,27 +33,27 @@
       <li class="nav-item">
         <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
       </li>
-			<%if (check_can_create("product_sub_categories"))%>
+			<%if (check_can_create(@module_permission))%>
 				<li class="nav-item">
 					<a class="nav-link tab-label" data-toggle="tab" href="#create" role="tab">Create</a>
 				</li>
 			<%end%>
-			<%if (check_can_download_pdf("product_sub_categories"))%>
+			<%if (check_can_download_pdf(@module_permission))%>
 				<li class="nav-item">
 					<a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
 				</li>
 			<%end%>
-			<%if (check_can_download_csv("product_sub_categories"))%>
+			<%if (check_can_download_csv(@module_permission))%>
 				<li class="nav-item">
 					<a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
 				</li>
 			<%end%>
-			<%if (check_can_send_email("product_sub_categories"))%>
+			<%if (check_can_send_email(@module_permission))%>
 				<li class="nav-item">
 					<a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
 				</li>
 			<%end%>
-			<%if (check_can_import_export("product_sub_categories"))%>
+			<%if (check_can_import_export(@module_permission))%>
 				<li class="nav-item">
 					<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
 				</li>
@@ -163,12 +163,12 @@
     <thead>
       <tr>
         <th><input type="checkbox" id="master" class='select-all-checkbox'>
-					<%if (check_can_delete("product_sub_categories"))%>
+					<%if (check_can_delete(@module_permission))%>
             <div class="icon-container float-center">
 							<span class="ml-2 mt-2">
 								<div class="my-icon my-view">
 									<button class="icon-div btn delete-selected p-2 " type='button' value='ProductSubCategory'>
-											<i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i> 
+											<i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i>
 								</button>
 							</div>
 						</span>

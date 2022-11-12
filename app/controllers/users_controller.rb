@@ -33,8 +33,8 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
-      respond_to do |format|
-    format.js
+    respond_to do |format|
+      format.js
     end
   end
 
@@ -69,7 +69,7 @@ class UsersController < ApplicationController
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
-  end	
+  end
 
   # DELETE /users/1
   # DELETE /users/1.json
@@ -130,7 +130,7 @@ class UsersController < ApplicationController
 			:name, :user_name, :email, :father_name, :city, :phone, :fax,
 			:address, :roles, :password, :confirm_password, :user_ability_roles,
 			:created_by_id, :email_to,:email_cc,:email_bcc,:roles_mask,:permission_updated,
-			user_permissions_attributes: %i[id can_accessed can_create can_read can_update can_delete can_download_pdf 
+			user_permissions_attributes: %i[id can_accessed can_create can_read can_update can_delete can_download_pdf
 				can_download_csv can_send_email can_import_export is_hidden]
 		)
 	end

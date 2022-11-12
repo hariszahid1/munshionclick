@@ -23,6 +23,7 @@ class ApplicationController < ActionController::Base
     session[:second_referrer]=session[:referrer]
     session[:referrer]=request.referrer
   end
+
   def get_request_referrer
     return session[:referrer].to_s        if !((request.referrer.to_s.include? "edit")||(request.referrer.to_s.include? "new"))
     return session[:second_referrer].to_s if !((session[:second_referrer].to_s.include? "edit")||(session[:second_referrer].to_s.include? "new"))
@@ -209,43 +210,43 @@ class ApplicationController < ActionController::Base
     end
   end
 
-    def send_sms(to,msg,redirect_url,type)
-      if(type=="urdu")
-        send_sms_urdu(to,msg,redirect_url)
-      else
-        send_sms_english(to,msg,redirect_url)
-      end
+  def send_sms(to,msg,redirect_url,type)
+    if(type=="urdu")
+      send_sms_urdu(to,msg,redirect_url)
+    else
+      send_sms_english(to,msg,redirect_url)
     end
+  end
 
-    def send_sms_english(to,msg,redirect_url)
-      @pos_setting = PosSetting.last
-      msg = @pos_setting&.sms_templates["sms_header"].to_s + msg.to_s + @pos_setting&.sms_templates["sms_footer"].to_s
-      if @pos_setting.is_sms.present? && to.present?
-        sms_user = @pos_setting.sms_user
-        sms_pass = @pos_setting.sms_pass
-        sms_mask = @pos_setting.sms_mask
-        msg = ERB::Util.url_encode(msg)
-        sms_mask_erb = ERB::Util.url_encode(sms_mask)
-        # request='http://my.ezeee.pk/sendsms_url.html?Username='+sms_user+'&Password='+sms_pass+'&From='+ERB::Util.url_encode(sms_mask)+'&To='+to+'&Message='+msg.to_s
-        # response = HTTParty.get(request)
-        SmsJob.perform_later(sms_user,sms_pass,sms_mask_erb,to,msg)
-        SmsLog.create(sms_from: sms_mask,sms_to: to, msg: msg,sms_by: current_user.user_name,response: response.body)
-      end
+  def send_sms_english(to,msg,redirect_url)
+    @pos_setting = PosSetting.last
+    msg = @pos_setting&.sms_templates["sms_header"].to_s + msg.to_s + @pos_setting&.sms_templates["sms_footer"].to_s
+    if @pos_setting.is_sms.present? && to.present?
+      sms_user = @pos_setting.sms_user
+      sms_pass = @pos_setting.sms_pass
+      sms_mask = @pos_setting.sms_mask
+      msg = ERB::Util.url_encode(msg)
+      sms_mask_erb = ERB::Util.url_encode(sms_mask)
+      # request='http://my.ezeee.pk/sendsms_url.html?Username='+sms_user+'&Password='+sms_pass+'&From='+ERB::Util.url_encode(sms_mask)+'&To='+to+'&Message='+msg.to_s
+      # response = HTTParty.get(request)
+      SmsJob.perform_later(sms_user,sms_pass,sms_mask_erb,to,msg)
+      SmsLog.create(sms_from: sms_mask,sms_to: to, msg: msg,sms_by: current_user.user_name,response: response.body)
     end
+  end
 
-    def send_sms_urdu(to,msg,redirect_url)
-      @pos_setting = PosSetting.last
-      msg = @pos_setting&.sms_templates["sms_header"].to_s + msg.to_s + @pos_setting&.sms_templates["sms_footer"].to_s
-      if @pos_setting.is_sms.present? && to.present?
-        sms_user = @pos_setting.sms_user
-        sms_pass = @pos_setting.sms_pass
-        sms_mask = @pos_setting.sms_mask
-        msg = ERB::Util.url_encode(msg)
-        sms_mask_erb = ERB::Util.url_encode(sms_mask)
-        SmsJob.perform_later(sms_user,sms_pass,sms_mask_erb,to,msg)
-        SmsLog.create(sms_from: sms_mask,sms_to: to, msg: msg,sms_by: current_user.user_name,response: response.body)
-      end
+  def send_sms_urdu(to,msg,redirect_url)
+    @pos_setting = PosSetting.last
+    msg = @pos_setting&.sms_templates["sms_header"].to_s + msg.to_s + @pos_setting&.sms_templates["sms_footer"].to_s
+    if @pos_setting.is_sms.present? && to.present?
+      sms_user = @pos_setting.sms_user
+      sms_pass = @pos_setting.sms_pass
+      sms_mask = @pos_setting.sms_mask
+      msg = ERB::Util.url_encode(msg)
+      sms_mask_erb = ERB::Util.url_encode(sms_mask)
+      SmsJob.perform_later(sms_user,sms_pass,sms_mask_erb,to,msg)
+      SmsLog.create(sms_from: sms_mask,sms_to: to, msg: msg,sms_by: current_user.user_name,response: response.body)
     end
+  end
 
   def print_pdf(pdf_title, pdf_layout,page_size,html=false,orientation='Portrait')
     @pos_setting = PosSetting.first
@@ -271,7 +272,7 @@ class ApplicationController < ActionController::Base
           },
           show_as_html: html
         end
-      end		
+      end
   end
 
 
@@ -325,23 +326,6 @@ class ApplicationController < ActionController::Base
     ApplicationRecord.set_connection
 
     @pos_setting = PosSetting.last
-		if (current_user.present? && current_user.permission_updated.blank?)
-			cookies[:test]=JSON.generate "devbox22"
-			puts"--------------------------------------------------MB cookies of current user is updated"
-			temp = User.joins(:user_permissions).includes(:user_permissions).find_by(id: current_user.id)
-			cookies[:can_create]= JSON.generate(temp.user_permissions.pluck(:module,:can_create).to_h).to_s
-			cookies[:can_read]= JSON.generate(temp.user_permissions.pluck(:module,:can_read).to_h).to_s
-			cookies[:can_update]= JSON.generate(temp.user_permissions.pluck(:module,:can_update).to_h).to_s
-			cookies[:can_delete]= JSON.generate(temp.user_permissions.pluck(:module,:can_delete).to_h).to_s
-			cookies[:can_accessed]= JSON.generate(temp.user_permissions.pluck(:module,:can_accessed).to_h).to_s
-			cookies[:is_hidden]= JSON.generate(temp.user_permissions.pluck(:module,:is_hidden).to_h).to_s
-			cookies[:can_download_csv]= JSON.generate(temp.user_permissions.pluck(:module,:can_download_csv).to_h).to_s
-			cookies[:can_download_pdf]= JSON.generate(temp.user_permissions.pluck(:module,:can_download_pdf).to_h).to_s
-			cookies[:can_import_export]= JSON.generate(temp.user_permissions.pluck(:module,:can_import_export).to_h).to_s
-			cookies[:can_send_email]= JSON.generate(temp.user_permissions.pluck(:module,:can_send_email).to_h).to_s
-		
-			current_user.update(permission_updated: true)
-		end
 
     if @pos_setting.present?
       @account_balance = Account.group(:title).sum(:amount)
@@ -377,120 +361,66 @@ class ApplicationController < ActionController::Base
     redirect_back(fallback_location: request.referer)
   end
 
-	def check_can_create(temp_module)
-		# if temp_module=='cities'
-		# 	temp=JSON.parse cookies[:can_create]
-		# 	return temp[temp_module]
-		# else
-		# 	return true
-		# end
-		return true
+  def check_can_create(temp_module)
+    return true if temp_module.can_create==true
+    return false
+  end
 
-	end
-	def check_can_read(temp_module)
-		# if temp_module=='cities'
-		# 	temp=JSON.parse cookies[:can_read]
-		# 	return temp[temp_module]
-		# else
-		# 	return true
-		# end
-		return true
+  def check_can_read(temp_module)
+    return true if temp_module.can_read==true
+    return false
+  end
 
+  def check_can_update(temp_module)
+    return true if temp_module.can_update==true
+    return false
+  end
 
-	end
-	def check_can_update(temp_module)
-		# if temp_module=='cities'
-		# 	temp=JSON.parse cookies[:can_update]
-		# 	return temp[temp_module]
-		# else
-		# 	return true
-		# end
-		return true
+  def check_can_delete(temp_module)
+    return true if temp_module.can_delete==true
+    return false
+  end
 
-	end
-	def check_can_delete(temp_module)
-		# if temp_module=='cities'
-		# 	temp=JSON.parse cookies[:can_delete]
-		# 	return temp[temp_module]
-		# else
-		# 	return true
-		# end
-		return true
+  def check_can_download_csv(temp_module)
+    return true if temp_module.can_download_csv==true
+    return false
+  end
 
-	end
-	def check_can_download_csv(temp_module)
-		# if temp_module=='cities'
-		# 	temp=JSON.parse cookies[:can_download_csv]
-		# 	return temp[temp_module]
-		# else
-		# 	return true
-		# end
-		return true
+  def check_can_download_pdf(temp_module)
+    return true if temp_module.can_download_pdf==true
+    return false
+  end
 
-	end
-	def check_can_download_pdf(temp_module)
-		# if temp_module=='cities'
-		# 	temp=JSON.parse cookies[:can_download_pdf]
-		# 	return temp[temp_module]
-		# else
-		# 	return true
-		# end
-		return true
+  def check_can_accessed(temp_module)
+    return false if temp_module.can_accessed==true
+    return true
+  end
 
-	end
-	def check_can_accessed(temp_module)
-		# if temp_module=='cities'
-		# 	temp=JSON.parse cookies[:can_accessed]
-		# 	return temp[temp_module]
-		# else
-		# 	return true
-		# end
-		return true
+  def check_is_hidden(temp_module)
+    return false if temp_module.is_hidden==false
+    return true
+  end
 
-	end
-	def check_is_hidden(temp_module)
-		# if temp_module=='cities'
-		# 	temp=JSON.parse cookies[:is_hidden]
-		# 	return temp[temp_module]
-		# else
-		# 	return false
-		# end
-		return false
+  def check_can_import_export(temp_module)
+    return true if temp_module.can_import_export==true
+    return false
+  end
 
-	end
-	def check_can_import_export(temp_module)
-		# if temp_module=='cities'
-		# 	temp=JSON.parse cookies[:can_import_export]
-		# 	return temp[temp_module]
-		# else
-		# 	return true
-		# end
+  def check_can_send_email(temp_module)
+    return true if temp_module.can_send_email==true
+    return false
+  end
 
-		return true
+  def check_access
+    #All Permission of Current User
+    @all_permissions = User.eager_load(:user_permissions).find(current_user.id).user_permissions
+    #Current User Current Module Permission
+    @module_permission = @all_permissions.select(:id,:can_create,:can_update,:can_read,:can_delete,:can_accessed,:is_hidden,:can_download_pdf,:can_download_csv,:can_send_email,:can_import_export).find_by(module: controller_name)
 
-	end	
-	def check_can_send_email(temp_module)
-		# if temp_module=='cities'
-		# 	temp=JSON.parse cookies[:can_send_email]
-		# 	return temp[temp_module]
-		# else
-		# 	return true
-		# end
-		return true
-
-	end	
-
-	def check_access
-		if (check_is_hidden("#{controller_name}"))
-			respond_to do |format|
-				format.html { redirect_to dashboard_path, alert: "Your system does not have this module" }
-			end
-		else
-			if (check_can_accessed("#{controller_name}")==false)
-				respond_to do |format|
-					format.html { redirect_to dashboard_path, alert: "you are not authorized." }
-				end
-			end
-		end	
-	end
+    if (check_is_hidden(@module_permission))  #False
+      respond_to do |format| format.html { redirect_to dashboard_path, alert: "Your system does not have this module" } end
+    elsif (check_can_accessed(@module_permission)) #True
+      respond_to do |format| format.html { redirect_to dashboard_path, alert: "you are not authorized." } end
+    end
+  end
 end

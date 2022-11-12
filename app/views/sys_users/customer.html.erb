@@ -35,27 +35,27 @@
 					<li class="nav-item">
 						<a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
 					</li>
-					<%if (check_can_create("sys_users/customer"))%>
+					<%if (check_can_create(@module_permission))%>
 						<li class="nav-item">
 							<a class="nav-link tab-label" data-toggle="tab" href="#create" role="tab">Create</a>
 						</li>
-					<%if (check_can_download_pdf("sys_users/customer"))%>
+					<%if (check_can_download_pdf(@module_permission))%>
 					<%end%>
 						<li class="nav-item">
 							<a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
 						</li>
 					<%end%>
-					<%if (check_can_download_csv("sys_users/customer"))%>
+					<%if (check_can_download_csv(@module_permission))%>
 						<li class="nav-item">
 							<a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
 						</li>
 					<%end%>
-					<%if (check_can_send_email("sys_users/customer"))%>
+					<%if (check_can_send_email(@module_permission))%>
 						<li class="nav-item">
 							<a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
 						</li>
 					<%end%>
-					<%if (check_can_import_export("sys_users/customer"))%>
+					<%if (check_can_import_export(@module_permission))%>
 						<li class="nav-item">
 							<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
 						</li>
@@ -97,7 +97,7 @@
             <div class="tab-pane" id="pdf" role="tabpanel">
               <p>
                 <div class="col-lg-2 d-flex">
-                
+
                   <button class="form-control btn  btn-danger" title="Download customer pdf" name="submit_pdf_staff_with" type="submit" value="Accounts PDF A4" formtarget="_blank">Customer &nbsp;<i class="fa fa-file-pdf"></i></button>
                 </div>
               </p>
@@ -163,11 +163,11 @@
                 </p>
               </div>
             </div>
-        <% end %>  
+        <% end %>
 
 <div class='card p-3'>
   <table data-toggle="table" data-search="true">
-		<%if (check_can_delete("sys_users/customer")) %>
+		<%if (check_can_delete(@module_permission)) %>
 			<button class='btn btn-outline-danger float-right delete-selected' type='button' style="width:163px"value='SysUser' >Delete Selected</button>
 		<%end%>
       <thead>
@@ -204,18 +204,18 @@
                 <div class="my-icon-1 my-view-1">
                   <div class="my-tooltip-1">
                     <div class="icon-container">
-											<%if (check_can_update("sys_users/customer"))%>
+											<%if (check_can_update(@module_permission))%>
 												<div class="my-icon my-view">
 														<div class="my-tooltip">
 															Edit
-														</div>	
+														</div>
 														<%= link_to edit_sys_user_path(sys_user), title: "Edit customers" , class:"icon-div" do %>
 															<i class="fa fa-edit mt-2" aria-hidden="true"></i>
 														<%end %>
 												</div>
 											<% end %>
 
-											<%if (check_can_delete("sys_users/customer"))%>
+											<%if (check_can_delete(@module_permission))%>
 												<div class="my-icon my-view">
 													<div class="my-tooltip">
 														Delete
@@ -225,7 +225,7 @@
 													<%end %>
 												</div>
 											<% end %>
-											<%if (check_can_read("sys_users/customer"))%>
+											<%if (check_can_read(@module_permission))%>
 												<div class="my-icon my-view">
 													<div class="my-tooltip">
 															Show
@@ -235,7 +235,7 @@
 													<%end %>
 												</div>
 											<%end%>
-											<%if (check_can_download_pdf("sys_users/customer"))%>
+											<%if (check_can_download_pdf(@module_permission))%>
 												<div class="my-icon my-view">
 													<div class="my-tooltip">
 														PDF
@@ -246,7 +246,7 @@
 												</div>
 											<%end %>
 
-											<%if (check_can_download_csv("sys_users/customer"))%>
+											<%if (check_can_download_csv(@module_permission))%>
 												<div class="my-icon my-view">
 													<div class="my-tooltip">
 														CSV
