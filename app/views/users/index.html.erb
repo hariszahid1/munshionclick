@@ -36,18 +36,11 @@
         <li class="nav-item">
           <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
         </li>
+        
         <li class="nav-item">
-          <a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
-        </li>
-        <!--li class="nav-item">
          <a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
-        </li-->
+        </li>
+
       </ul>
 
       <%= search_form_for @q, url: users_path, class: "admin-controls", method: "get" do |f| %>
@@ -56,75 +49,62 @@
             <p>
              <div class="row search_form ml-2">
                <div class="col-lg-12 col-sm-12">
-                  <%= search_form_for @q, url: users_path, class: "admin-controls", method: "get" do |f| %>
+                  
                   <div class="col-lg-2 col-sm-2 form-group float-left padding_left_zero">
                     <%= f.search_field :name_or_user_name_or_email_or_father_name_cont, placeholder: "Search in Admins", title: "Name" ,class: "form-control" %>
                   </div>
-                  <div class="col-lg-2 float-left">
+      
                     <button class="btn btn-primary" name="search_submit" type="submit"><i class="fa fa-search"></i></button>
-                  </div>
-            <% end %>
+                   
+                    <button class="btn btn-danger" title= "download users pdf" name="pdf" type="submit" value="pdf" formtarget="_blank">Admins &nbsp;<i class="fa fa-file-pdf"></i></button>
+                   
+
+                    
+                    <button class="btn btn-success" title= "download users csv" name="csv" type="submit" value="csv">Admins &nbsp;<i class="fa fa-file-excel"></i></button>
+                    
+
+                     
+                     <button class="form-control btn btn-info" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope"></i>&nbsp;Mail</button>
+                      <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                            </div>
+                            <div class="modal-body">
+                              <% @pos_setting = PosSetting.first %>
+                              <label>Email:</label>
+                              <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
+                              <br />
+                              <label>Subject:</label>
+                              <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Admins Detail report from MunshiOnClick", class: 'form-control email-fields'%>
+                              <br />
+                              <label>Body:</label><br />
+                              <%= text_area_tag 'body', nil, class: 'form-control'%>
+                              <br />
+                              <label>Please select one of them.</label>
+                              <div>
+                                <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
+                                <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
+                                <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
+                              </div>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                              <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
+                            </div>
+                            </div>
+                        </div>
+                      </div>
               </div>
             </div>
           </p>
         </div>
-           <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="pdf" role="tabpanel">
-            <p>
-              <div class="col-lg-2 d-flex">
-              <button class="btn btn-danger" title= "download users pdf" name="pdf" type="submit" value="pdf" formtarget="_blank">Admins &nbsp;<i class="fa fa-file-pdf"></i></button>
-              </div>
-            </p>
-          </div>
-          <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="csv" role="tabpanel">
-            <p>
-              <div class="col-lg-2 d-flex">
-              <button class="btn btn-success" title= "download users csv" name="csv" type="submit" value="csv">Admins &nbsp;<i class="fa fa-file-excel"></i></button>
-              </div>
-            </p>
-          </div>
-          <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="emails" role="tabpanel">
-            <p>
-              <div class="col-lg-2 d-flex">
-              <button class="form-control btn btn-info" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope"></i>&nbsp;Mail</button>
-              </div>
-           </p>
-            <!-- Modal -->
-            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                  </div>
-                  <div class="modal-body">
-                    <% @pos_setting = PosSetting.first %>
-                    <label>Email:</label>
-                    <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
-                    <br />
-                    <label>Subject:</label>
-                    <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Admins Detail report from MunshiOnClick", class: 'form-control email-fields'%>
-                    <br />
-                    <label>Body:</label><br />
-                    <%= text_area_tag 'body', nil, class: 'form-control'%>
-                    <br />
+           
 
-                    <label>Please select one of them.</label>
-                    <div>
-                      <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
-                      <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
-                      <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
-                    </div>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
-                  </div>
-                  </div>
-              </div>
-            </div>
-          </div>
            <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="import-export" role="tabpanel">
             <p>
               <div class="d-flex">
@@ -141,6 +121,8 @@
       <thead>
         <tr>
           <th><input type="checkbox" id="master" class='select-all-checkbox'>
+          
+
               <div class="icon-container float-center">
             <span class="ml-2 mt-2">
             <div class="my-icon my-view">
@@ -150,6 +132,7 @@
                     </div>
                     </span>
               </div>
+
           
           </th>
           <th>ID<div class='float-right'><%= sort_link(@q, :id, "", {}, class: 'sorting-button') %></div></th>
@@ -177,79 +160,68 @@
             <td class='urdu-font'><%= user.father_name %></td>
             <td><%= user.phone %></td>
             <td class="p-3">
-            <div class="icon-container-1">
+              <div class="icon-container-1">
                 <div class="my-icon-1 my-view-1">
                   <div class="my-tooltip-1">
-            
-            <div class="icon-container">
-                  <div class="my-icon my-view">
-          <div class="my-tooltip">
-            Edit
-          </div>
-          
-                <% if can?(:update, :all) %>
-              <%= link_to edit_user_path(user), remote: true, class:"icon-div" do %>
-                <i class="fa fa-edit mt-2" aria-hidden="true"></i>
-              <%end %>
-            <% end %>
-          
-        </div>
-
-          <div class="my-icon my-view">
-              <div class="my-tooltip">
-                Delete
-              </div>
-                
-                  <% if can?(:delete, :all) %>
-                    <%= link_to user, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
-                    <i class="fa fa-trash mt-2" aria-hidden="true"></i>
-                  <%end %>
-                <% end %>
-              
-          </div>
-
-      <div class="my-icon my-view">
-                <div class="my-tooltip">
-                  Show
+                    <div class="icon-container">
+		          				
+                      	<div class="my-icon my-view">
+                      	  <div class="my-tooltip">
+                      	    Edit
+                      	  </div>
+                      	    <%= link_to edit_user_path(user), remote: true, class:"icon-div" do %>
+                      	      <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+                      	    <%end %>
+                      	</div>
+		          			
+		          				
+                      	<div class="my-icon my-view">
+                      	  <div class="my-tooltip">
+                      	    Delete
+                      	  </div>
+                      	    <%= link_to user, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+                      	      <i class="fa fa-trash mt-2" aria-hidden="true"></i>
+                      	    <%end %>
+                      	</div>
+		          				
+		          				
+                      	<div class="my-icon my-view">
+                      	  <div class="my-tooltip">
+                      	    Show
+                      	  </div>
+                      	    <%= link_to user_path(user), remote: true, class:"icon-div" do %>
+                      	      <i class="fa fa-eye mt-2" aria-hidden="true"></i>
+                      	    <%end %>
+                      	</div>
+		          				
+		          				
+                      	<div class="my-icon my-view">
+                      	  <div class="my-tooltip">
+                      	    PDF
+                      	  </div>
+                      	   <%= link_to users_path('q[id_eq]':user.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
+                      	      <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
+                      	    <%end %>  
+                      	</div>
+		          				 
+		          				
+                      	<div class="my-icon my-view">
+                      	  <div class="my-tooltip">
+                      	    CSV
+                      	  </div>
+                      	   <%= link_to users_path('q[id_eq]':user.id,'csv':true), title: 'Download CSV', class:"icon-div" do%>
+                      	      <i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
+                      	    <%end %>
+                      	</div>
+		          				
+                    </div>
+                  </div>
+                  <span class="icon-div-1">
+                        <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+                  </span>
                 </div>
-                
-                   <% if can?(:view, :all) %>
-                    <%= link_to user_path(user), remote: true, class:"icon-div" do %>
-                    <i class="fa fa-eye mt-2" aria-hidden="true"></i>
-                <%end %>
-            <%end%>
-          
-      </div>
+              </div>
 
-      <div class="my-icon my-view">
-            <div class="my-tooltip">
-              PDF
-            </div>
-            
-                <%= link_to users_path('q[id_eq]':user.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
-      <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
-    <%end %>
-            
-      </div>
-
-       <div class="my-icon my-view">
-            <div class="my-tooltip">
-              CSV
-            </div>
-            
-                 <%= link_to users_path('q[id_eq]':user.id,'csv':true), title: 'Download CSV', class:"icon-div" do%>
-      <i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
-    <%end %>
-            
-          </div>
-          </div>
-            </div>
-            <span class="icon-div-1">
-                  <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
-            </span>
-        </div>
-    </div>
-</div>
             </td>
           </tr>
         <% end %>

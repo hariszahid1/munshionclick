@@ -30,30 +30,21 @@
          </div>
   </div>
   <%= search_form_for @q, url: item_types_path, class: "admin-controls", method: "get" do |f| %>
-	<ul class="nav nav-tabs" role="tablist">
+	<ul class="nav nav-pills" role="tablist">
+  <%if (check_can_create(@module_permission))%>
+        <% if can?(:add, :all) %>
+          <div id="new_item_type">
+            <%= link_to new_item_type_path, remote: true,class: "btn btn-success mr-2" do %>
+              <i class="fa fa-plus" aria-hidden="false"></i>
+                  Create
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
 		<li class="nav-item">
 			<a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
 		</li>
-		<%if (check_can_create(@module_permission))%>
-			<li class="nav-item">
-				<a class="nav-link tab-label" data-toggle="tab" href="#create" role="tab">Create</a>
-			</li>
-		<%end%>
-		<%if (check_can_download_pdf(@module_permission))%>
-			<li class="nav-item">
-				<a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
-			</li>
-		<%end%>
-		<%if (check_can_download_csv(@module_permission))%>
-			<li class="nav-item">
-				<a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
-			</li>
-		<%end%>
-		<%if (check_can_send_email(@module_permission))%>
-			<li class="nav-item">
-				<a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
-			</li>
-		<%end%>
+		
 		<%if (check_can_import_export(@module_permission))%>
 			<li class="nav-item">
 				<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
@@ -63,7 +54,7 @@
   <div class="tab-content mb-5">
     <div class="tab-pane active mb-3 card shadow-sm mt-2 border-radius-1" id="search" role="tabpanel">
      <p>
-      <div class="col-lg-10 form-group d-flex">
+      <div class="col-lg-12 form-group d-flex">
       <div class='col-lg-3'>
       <%= f.select :id_eq, options_for_select(@options_for_select.map{ |p| [p.title , p.id]}, f.object.id_eq),{:include_blank => "Select Title"},:class=>"form-control chosen-select" %>
       </div>
@@ -71,43 +62,17 @@
       <%= f.search_field :title_or_comment_or_code_cont, placeholder: "Search in Item types", title: "Enter city name" ,:class=>"form-control" %>
       </div>
       <button class="form-control btn btn-primary" title="search item types" name="search_submit"type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
-      </div>
-      </p>
-    </div>
-    <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="create" role="tabpanel">
-        <p>
-           <% if can?(:add, :all) %>
-              <div id="new_item_type">
-                <%= link_to new_item_type_path, remote: true,class: "btn btn-success ml-3" do %>
-                  <i class="fa fa-plus" aria-hidden="true"></i>
-                  New Item Type
-                  <% end %>
-              </div>
-            <% end %>
-        </p>
-    </div>
-    <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="pdf" role="tabpanel">
-      <p>
-        <div class="col-lg-2 d-flex">
-        <button class="btn btn-danger" title= "download pdf" name="pdf" type="submit" value="pdf" formtarget="_blank" >Item Types &nbsp;<i class="fa fa-file-pdf"></i></button>
-        </div>
-      </p>
-    </div>
-    <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="csv" role="tabpanel">
-      <p>
-        <div class="col-lg-2 d-flex">
-        <button class="btn btn-success" title= "download csv" name="csv" type="submit" value="csv">Item Types &nbsp;<i class="fa fa-file-excel"></i></button>
-        </div>
-      </p>
-    </div>
-    <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="emails" role="tabpanel">
-      <p>
-        <div class="col-lg-2 d-flex">
-        <button class="btn btn-info" type="button" data-toggle="modal" data-target="#exampleModalCenter" ><i class="fa fa-envelope mr-2"></i>&nbsp;Mail</button>
-        </div>
-     </p>
-      <!-- Modal -->
-      <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <%if (check_can_download_pdf(@module_permission))%>
+        <button class="form-control d-flex ml-2 btn btn-danger" style="width:140px" title= "download pdf" name="pdf" type="submit" value="pdf" formtarget="_blank" >ItemTypes &nbsp;<i class="fa fa-file-pdf mt-1"></i></button>
+      <% end %>
+
+      <%if (check_can_download_csv(@module_permission))%>
+        <button class="form-control d-flex ml-2 btn btn-success" style="width:140px" title= "download csv" name="csv" type="submit" value="csv">ItemTypes &nbsp;<i class="fa fa-file-excel mt-1"></i></button>
+      <% end %>
+
+      <%if (check_can_send_email(@module_permission))%>
+        <button class="form-control d-flex ml-2 btn btn-info" style="width:100px" type="button" data-toggle="modal" data-target="#exampleModalCenter" ><i class="fa fa-envelope mr-2"></i>&nbsp;Mail</button>
+         <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -141,8 +106,13 @@
             </div>
             </div>
         </div>
+        </div>
+      <% end %>
+
       </div>
+      </p>
     </div>
+     
     <div class="tab-pane" id="import-export" role="tabpanel">
       <p>
         <div class="d-flex">
