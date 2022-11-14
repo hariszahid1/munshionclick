@@ -33,27 +33,45 @@
           <input class="form-control" type="number" name="salary_details_wage_rate" id="salary_details_wage_rate" value="0.0", onchange="creditRate()", onkeyup="creditRate()", readonly="true">
         </td>
         <td>
+          <%if pos_setting_sys_type=='batha'%>
           <p><%=@raw_products.first.title%> = <span id='brick_quantity'><%=@raw_products.first.nakasi_stock%></span>/<span id='bricks'><%=@raw_products.first.nakasi_stock%></span></p>
+          <%end%>
         </td>
       </tr>
-      <tr>
-        <td>
-          <%= f.number_field :brick_rohra, onchange:"rohraQuantity()", onkeyup:"rohraQuantity()"%>
-        </td>
-        <td>
-          <%= f.number_field :tile_rohra, onchange:"rohraQuantity()", onkeyup:"rohraQuantity()"%>
-        </td>
-        <td>
-          <p><%=@raw_products.second.title%> = <span id='tile_quantity'><%=@raw_products.second.nakasi_stock%></span>/<span id='tile'><%=@raw_products.second.nakasi_stock%></span></p>
-        </td>
-      </tr>
+      <%if pos_setting_sys_type=='batha'%>
+        <tr>
+          <td>
+            <%= f.number_field :brick_rohra, onchange:"rohraQuantity()", onkeyup:"rohraQuantity()"%>
+          </td>
+          <td>
+            <%= f.number_field :tile_rohra, onchange:"rohraQuantity()", onkeyup:"rohraQuantity()"%>
+          </td>
+          <td>
+            <p><%=@raw_products.second.title%> = <span id='tile_quantity'><%=@raw_products.second.nakasi_stock%></span>/<span id='tile'><%=@raw_products.second.nakasi_stock%></span></p>
+          </td>
+        </tr>
+      <%else%>
+        <tr>
+            <td colspan="3">
+              <%@raw_products.each do |row_product|%>
+              <p><%=row_product.title%> = <b><%=row_product.nakasi_stock%></b> </p>
+              <%end%>
+            </td>
+        </tr>
+      <%end%>
     </tbody>
   </table>
   <table id="nakasi">
     <thead>
       <th>Name</th>
+      <%if pos_setting_sys_type=='batha'%>
+        <%@products.each do |product|%>
+          <th><%=product.title%></th>
+        <%end%>
+      <%else%>
       <%@products.each do |product|%>
-        <th><%=product.title%></th>
+        <th><%=product.title%> <%=product.product_category.title%></th>
+      <%end%>
       <%end%>
       <th class="hidden">Debit</th>
       <th class="hidden">Credit</th>

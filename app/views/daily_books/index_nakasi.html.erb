@@ -91,8 +91,14 @@
     <thead>
       <tr>
         <th><%= sort_link(@q, :created_at, 'Date') %></th>
+        <%if pos_setting_sys_type=='batha'%>
+          <%@products.each do |product|%>
+            <th><%=product.title%></th>
+          <%end%>
+        <%else%>
         <%@products.each do |product|%>
-          <th><%=product.title%></th>
+          <th><%=product.title%> <%=product.product_category.title%></th>
+        <%end%>
         <%end%>
         <th>Bricks Rohra</th>
         <th>Tile Rohra</th>
