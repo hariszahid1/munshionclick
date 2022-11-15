@@ -10,11 +10,15 @@
       </ul>
     </div>
   <% end %>
-
-
-  <div class="col-lg-6 form-group float-left">
-    <%= f.text_field :invest, {placeholder: "Enter the amount", required: true} %>
-  </div>
+<%if params[:credit].present?%>
+<div class="col-lg-6 form-group float-left">
+	<%= f.text_field :credit, {placeholder: "Enter the amount", required: true} %>
+</div>
+<%else%>
+<div class="col-lg-6 form-group float-left">
+	<%= f.text_field :debit, {placeholder: "Enter the amount", required: true} %>
+</div>
+<%end%>
   <div class="col-lg-6 form-group float-left">
     <%= f.select :account_id , options_from_collection_for_select(@accounts, 'id', 'title', f.object.account_id), {prompt: "Select the Account"}, required: true%>
   </div>

@@ -336,7 +336,7 @@ class ApplicationController < ActionController::Base
       @staff_reciveable_group_total=Staff.where('balance<0').where(deleted: false).sum(:balance)
       @sale_product_total = PurchaseSaleItem.joins(:product).where(transaction_type:'Sale').sum(:total_sale_price)
       @expense_total = ExpenseEntry.sum(:amount)
-      @investments = Investment.sum(:invest)
+      @investments = Investment.sum(:debit)
       @purchase_sale_detail_discount_list = PurchaseSaleDetail.where(transaction_type:'Sale').where.not(discount_price:[nil,0]).sum(:discount_price)
       @credit_salary =     SalaryDetail.joins(:staff).where('amount>0').where(purchase_sale_detail_id:nil,daily_book_id:nil).where.not(id: Payment.where(paymentable_type:"SalaryDetail").pluck(:paymentable_id)).sum(:amount).to_f
       if @pos_setting.sys_type=='batha'
