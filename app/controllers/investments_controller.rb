@@ -10,7 +10,7 @@
     end
     @investments = @q.result(distinct: true).page(params[:page])
     @investment = @q.result(distinct: true)
-    @total_investment=@investment.pluck('Sum(debit)')
+    @total_investment=@investment.pluck('Sum(debit)','Sum(credit)')
     @accounts=Account.all
     if params[:submit_pdf_staff_with].present?
       if @q.result.count > 0
