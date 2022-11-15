@@ -90,7 +90,8 @@ class ReportsController < ApplicationController
       @salary_detail_total = SalaryDetail.joins(staff: :department).where(comment:["Payment Credit",nil]).where.not('departments.id=4').sum(:amount)+SalaryDetail.joins(staff: :department).where(comment:["Payment Credit",nil]).where('khakar_credit>0').where.not('departments.id=4').sum(:khakar_credit)
       @khakar_salary_detail_list = SalaryDetail.joins(staff: :department).where(comment:["Payment Credit",nil]).where('khakar_credit>0').where.not('departments.id=4').group('departments.title').sum(:khakar_credit)
     end
-    @investments = Investment.sum(:invest)
+    @investments_debit = Investment.sum(:debit)
+    @investments_credit = Investment.sum(:credit)
     @accounts = Account.all
     @root=root_url
     if params[:email].present?
@@ -254,7 +255,8 @@ class ReportsController < ApplicationController
       @salary_detail_total = SalaryDetail.joins(staff: :department).where(comment:["Payment Credit",nil]).where.not('departments.id=4').sum(:amount)+SalaryDetail.joins(staff: :department).where(comment:["Payment Credit",nil]).where('khakar_credit>0').where.not('departments.id=4').sum(:khakar_credit)
       @khakar_salary_detail_list = SalaryDetail.joins(staff: :department).where(comment:["Payment Credit",nil]).where('khakar_credit>0').where.not('departments.id=4').group('departments.title').sum(:khakar_credit)
     end
-    @investments = Investment.sum(:invest)
+    @investments_debit = Investment.sum(:debit)
+    @investments_credit = Investment.sum(:credit)
     @accounts = Account.all
     @root=root_url
     if params[:email].present?
@@ -691,7 +693,7 @@ class ReportsController < ApplicationController
       @accounts[[Date::ABBR_MONTHNAMES[@paid_to_month],@paid_to_year]] =
       Expense.where("extract(month from created_at)=? AND extract(year from created_at) = ?", @paid_to_month, @paid_to_year).group(:account_id).sum(:expense),
       ExpenseEntry.where("extract(month from expense_entries.created_at)=? AND extract(year from expense_entries.created_at) = ?", @paid_to_month, @paid_to_year).group(:account_id).sum(:amount),
-      Investment.where("extract(month from created_at)=? AND extract(year from created_at) = ?", @paid_to_month, @paid_to_year).group(:account_id).sum(:invest),
+      Investment.where("extract(month from created_at)=? AND extract(year from created_at) = ?", @paid_to_month, @paid_to_year).group(:account_id).sum(:debit),
       PurchaseSaleDetail.where("extract(month from created_at)=? AND extract(year from created_at) = ?", @paid_to_month, @paid_to_year).where(transaction_type: "Purchase").where(sys_user_id: @suppliers).group(:account_id).sum(:total_bill),
       Salary.where("extract(month from created_at)=? AND extract(year from created_at) = ?", @paid_to_month, @paid_to_year).group(:account_id).sum(:paid_salary),
       Salary.where("extract(month from created_at)=? AND extract(year from created_at) = ?", @paid_to_month, @paid_to_year).group(:account_id).sum(:advance)
@@ -750,7 +752,7 @@ class ReportsController < ApplicationController
     @investment=Hash.new
     (1..months).each do |i|
       @paid_to_month == 0 ? @paid_to_month = 12 : @paid_to_month
-      @investment[[Date::ABBR_MONTHNAMES[@paid_to_month],@paid_to_year]] = Investment.where("extract(month from created_at)=? AND extract(year from created_at) = ?", @paid_to_month, @paid_to_year).sum(:invest)
+      @investment[[Date::ABBR_MONTHNAMES[@paid_to_month],@paid_to_year]] = Investment.where("extract(month from created_at)=? AND extract(year from created_at) = ?", @paid_to_month, @paid_to_year).sum(:debit)
       @paid_to_month = @paid_to_month - 1
       @paid_to_month == 0 ? @paid_to_year = @paid_to_year-1 : @paid_to_year
     end
@@ -772,7 +774,7 @@ class ReportsController < ApplicationController
       @paid_to_month == 0 ? @paid_to_month = 12 : @paid_to_month
       total_salary = Salary.where("extract(month from created_at)=? AND extract(year from created_at) = ?", @paid_to_month, @paid_to_year).sum(:paid_salary)+Salary.where("extract(month from created_at)=? AND extract(year from created_at) = ?", @paid_to_month, @paid_to_year).sum(:advance)
       purchase_sale_detail = PurchaseSaleDetail.where("extract(month from created_at)=? AND extract(year from created_at) = ?", @paid_to_month, @paid_to_year).where(transaction_type: "Purchase").where(sys_user_id: @suppliers).sum(:total_bill)
-      investment=Investment.where("extract(month from created_at)=? AND extract(year from created_at) = ?", @paid_to_month, @paid_to_year).sum(:invest)
+      investment=Investment.where("extract(month from created_at)=? AND extract(year from created_at) = ?", @paid_to_month, @paid_to_year).sum(:debit)
       @total_salary=@total_salary+total_salary
       @investment_month=@investment_month+investment
       @purchase_sale_detail=@purchase_sale_detail+purchase_sale_detail
@@ -803,7 +805,7 @@ class ReportsController < ApplicationController
     (1..@lastday).each do |i|
       total_salary=Salary.where("extract(day from created_at)=? AND extract(month from created_at)=? AND extract(year from created_at) = ?",i, @paid_to_month, @paid_to_year).sum(:paid_salary)+Salary.where("extract(day from created_at)=? AND extract(month from created_at)=? AND extract(year from created_at) = ?",i, @paid_to_month, @paid_to_year).sum(:advance)
       purchase_sale_detail=PurchaseSaleDetail.where("extract(day from created_at)=? AND extract(month from created_at)=? AND extract(year from created_at) = ?",i, @paid_to_month, @paid_to_year).where(transaction_type: "Purchase").where(sys_user_id: @suppliers).sum(:total_bill)
-      investment=Investment.where("extract(day from created_at)=? AND extract(month from created_at)=? AND extract(year from created_at) = ?",i, @paid_to_month, @paid_to_year).sum(:invest)
+      investment=Investment.where("extract(day from created_at)=? AND extract(month from created_at)=? AND extract(year from created_at) = ?",i, @paid_to_month, @paid_to_year).sum(:debit)
       @expense_day=Expense.joins(:expense_type).where("extract(day from expenses.created_at)=? AND extract(month from expenses.created_at)=? AND extract(year from expenses.created_at) = ?",i, @paid_to_month, @paid_to_year).sum(:expense)+ExpenseEntry.joins(:expense_type).where("extract(day from expense_entries.created_at)=? AND extract(month from expense_entries.created_at)=? AND extract(year from expense_entries.created_at) = ?",i, @paid_to_month, @paid_to_year).sum(:amount)
       @total_salary_day=@total_salary_day+total_salary
       @purchase_sale_detail_day=@purchase_sale_detail_day+purchase_sale_detail
@@ -896,7 +898,7 @@ class ReportsController < ApplicationController
     @salary   = Salary.where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).sum(:paid_salary)
     @advance = Salary.where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).sum(:advance)
     @expense  = ExpenseEntry.where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).sum(:amount)
-    @investment  = Investment.where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).sum(:invest)
+    @investment  = Investment.where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).sum(:debit)
 
     if params[:submit_pdf_staff_with].present?
       if @q.result.count > 0
@@ -954,7 +956,7 @@ class ReportsController < ApplicationController
     @salary   = Salary.where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).group("DATE(created_at)").sum(:paid_salary)
     @advance = Salary.where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).group("DATE(created_at)").sum(:advance)
     @expense  = ExpenseEntry.where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).group("DATE(created_at)").sum(:amount)
-    @investment  = Investment.where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).group("DATE(created_at)").sum(:invest)
+    @investment  = Investment.where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).group("DATE(created_at)").sum(:debit)
 
     @sale_total     = PurchaseSaleDetail.where(transaction_type: "Sale",created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day ).sum(:total_bill)
     @sale_discount_total     = PurchaseSaleDetail.where(transaction_type: "Sale",created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day ).sum(:discount_price)
@@ -963,7 +965,7 @@ class ReportsController < ApplicationController
     @salary_total   = Salary.where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).sum(:paid_salary)
     @advance_total = Salary.where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).sum(:advance)
     @expense_total  = ExpenseEntry.where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).sum(:amount)
-    @investment_total  = Investment.where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).sum(:invest)
+    @investment_total  = Investment.where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).sum(:debit)
     if params[:submit_pdf].present?
       if @q.result.count > 0
         @q.sorts = 'created_at desc' if @q.sorts.empty?
