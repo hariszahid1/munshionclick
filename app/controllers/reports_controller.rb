@@ -90,7 +90,8 @@ class ReportsController < ApplicationController
       @salary_detail_total = SalaryDetail.joins(staff: :department).where(comment:["Payment Credit",nil]).where.not('departments.id=4').sum(:amount)+SalaryDetail.joins(staff: :department).where(comment:["Payment Credit",nil]).where('khakar_credit>0').where.not('departments.id=4').sum(:khakar_credit)
       @khakar_salary_detail_list = SalaryDetail.joins(staff: :department).where(comment:["Payment Credit",nil]).where('khakar_credit>0').where.not('departments.id=4').group('departments.title').sum(:khakar_credit)
     end
-    @investments = Investment.sum(:debit)
+    @investments_debit = Investment.sum(:debit)
+    @investments_credit = Investment.sum(:credit)
     @accounts = Account.all
     @root=root_url
     if params[:email].present?
@@ -254,7 +255,8 @@ class ReportsController < ApplicationController
       @salary_detail_total = SalaryDetail.joins(staff: :department).where(comment:["Payment Credit",nil]).where.not('departments.id=4').sum(:amount)+SalaryDetail.joins(staff: :department).where(comment:["Payment Credit",nil]).where('khakar_credit>0').where.not('departments.id=4').sum(:khakar_credit)
       @khakar_salary_detail_list = SalaryDetail.joins(staff: :department).where(comment:["Payment Credit",nil]).where('khakar_credit>0').where.not('departments.id=4').group('departments.title').sum(:khakar_credit)
     end
-    @investments = Investment.sum(:debit)
+    @investments_debit = Investment.sum(:debit)
+    @investments_credit = Investment.sum(:credit)
     @accounts = Account.all
     @root=root_url
     if params[:email].present?

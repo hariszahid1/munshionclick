@@ -55,7 +55,8 @@
       <%= render partial: 'investment', collection: @investments %>
       <tr>
         <td><h5>Total</h5></td>
-        <td><h5><%=@total_investment.first%></h5></td>
+        <td><h5><%=@total_investment&.first&.first%></h5></td>
+        <td><h5><%=@total_investment&.first&.last%></h5></td>
       </tr>
     </tbody>
   </table>
