@@ -3,74 +3,67 @@
   <td><%= expense_type.id %></td>
   <td class='urdu-font'><%= expense_type.title %></td>
   <td><span title="<%= expense_type.comment %>" class='truncate-text'><%= expense_type.comment %></span></td>
-  <td>
-		<div class="icon-container">
-			<%if (check_can_update(@module_permission))%>
-				<div class="my-icon my-view">
-          <div class="my-tooltip">
-            Edit
+  <td class="p-3">
+		<div class="icon-container-1">
+      <div class="my-icon-1 my-view-1">
+        <div class="my-tooltip-1">
+          <div class="icon-container">
+						<%if (check_can_update(@module_permission))%>
+            	<div class="my-icon my-view">
+            	  <div class="my-tooltip">
+            	    Edit
+            	  </div>
+            	    <%= link_to edit_expense_type_path(expense_type), remote: true, class:"icon-div" do %>
+            	      <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+            	    <%end %>
+            	</div>
+						<% end %>
+						<%if (check_can_delete(@module_permission))%>
+            	<div class="my-icon my-view">
+            	  <div class="my-tooltip">
+            	    Delete
+            	  </div>
+            	    <%= link_to expense_type, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+            	      <i class="fa fa-trash mt-2" aria-hidden="true"></i>
+            	    <%end %>
+            	</div>
+						<% end %> 
+						<%if (check_can_read(@module_permission))%>
+            	<div class="my-icon my-view">
+            	  <div class="my-tooltip">
+            	    Show
+            	  </div>
+            	    <%= link_to expense_type_path(expense_type), remote: true, class:"icon-div" do %>
+            	      <i class="fa fa-eye mt-2" aria-hidden="true"></i>
+            	    <%end %>
+            	</div>
+						<%end%>
+						<%if (check_can_download_pdf(@module_permission))%>
+            	<div class="my-icon my-view">
+            	  <div class="my-tooltip">
+            	    PDF
+            	  </div>
+            	    <%= link_to expense_types_path('q[id_eq]':expense_type.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
+            	      <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
+            	    <%end %>  
+            	</div>
+						<% end %>  
+						<%if (check_can_download_csv(@module_permission))%>
+            	<div class="my-icon my-view">
+            	  <div class="my-tooltip">
+            	    CSV
+            	  </div>
+            	   <%= link_to expense_types_path('q[id_eq]':expense_type.id,'csv':true), title: 'Download CSV', class:"icon-div" do%>
+            	      <i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
+            	    <%end %>
+            	</div>
+						<% end %>
           </div>
-          <span class="icon-div">
-						<%= link_to edit_expense_type_path(expense_type), remote: true do %>
-							<i class="fa fa-edit mt-2" aria-hidden="true"></i>
-						<%end %>
-          </span>
         </div>
-			<% end %>
-
-		<%if (check_can_delete(@module_permission))%>
-			<div class="my-icon my-view">
-				<div class="my-tooltip">
-					Delete
-				</div>
-				<span class="icon-div">
-					<%= link_to expense_type, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
-						<i class="fa fa-trash mt-2" aria-hidden="true"></i>
-					<%end %>
-				</span>
-				</div>
-		<% end %>
-
-		<%if (check_can_read(@module_permission))%>
-      <div class="my-icon my-view">
-				<div class="my-tooltip">
-					Show
-				</div>
-				<span class="icon-div">
-					<%= link_to expense_type_path(expense_type), remote: true do %>
-						<i class="fa fa-eye mt-2" aria-hidden="true"></i>
-					<%end %>
-				</span>
-			</div>
-		<%end%>
-		
-		<%if (check_can_download_pdf(@module_permission))%>
-      <div class="my-icon my-view">
-				<div class="my-tooltip">
-						PDF
-				</div>
-				<span class="icon-div">
-					<%= link_to expense_types_path('q[id_eq]':expense_type.id,'pdf':true), title: 'Download PDF', target: '_blank' do %>
-						<i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
-					<%end %>
-				</span>
+        <span class="icon-div-1">
+              <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+        </span>
       </div>
-		<%end %>
-
-		<%if (check_can_download_csv(@module_permission))%>
-			<div class="my-icon my-view">
-				<div class="my-tooltip">
-					CSV
-				</div>
-				<span class="icon-div">
-					<%= link_to expense_types_path('q[id_eq]':expense_type.id,'csv':true), title: 'Download CSV' do%>
-						<i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
-					<%end %>
-				</span>
-			</div>
-		<%end%>
-			<b class="ml-2 mt-1">Total changes: <%= expense_type.versions.count%></b>
     </div>
-
   </td>
 </tr>

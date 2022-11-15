@@ -1,4 +1,5 @@
 class PropertyPlansController < ApplicationController
+  before_action :check_access
   before_action :set_property_plan, only: %i[show edit update destroy]
   before_action :set_property_installment, only: [:show]
   before_action :set_property_installment_edit, only: %i[edit_property_installment update_installment]
