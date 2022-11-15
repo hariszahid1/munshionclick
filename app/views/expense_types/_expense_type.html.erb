@@ -5,7 +5,7 @@
   <td><span title="<%= expense_type.comment %>" class='truncate-text'><%= expense_type.comment %></span></td>
   <td>
 		<div class="icon-container">
-			<%if (check_can_update("expense_types"))%>
+			<%if (check_can_update(@module_permission))%>
 				<div class="my-icon my-view">
           <div class="my-tooltip">
             Edit
@@ -18,7 +18,7 @@
         </div>
 			<% end %>
 
-		<%if (check_can_delete("expense_types"))%>
+		<%if (check_can_delete(@module_permission))%>
 			<div class="my-icon my-view">
 				<div class="my-tooltip">
 					Delete
@@ -31,7 +31,7 @@
 				</div>
 		<% end %>
 
-		<%if (check_can_read("expense_types"))%>
+		<%if (check_can_read(@module_permission))%>
       <div class="my-icon my-view">
 				<div class="my-tooltip">
 					Show
@@ -44,7 +44,7 @@
 			</div>
 		<%end%>
 		
-		<%if (check_can_download_pdf("expense_types"))%>
+		<%if (check_can_download_pdf(@module_permission))%>
       <div class="my-icon my-view">
 				<div class="my-tooltip">
 						PDF
@@ -57,7 +57,7 @@
       </div>
 		<%end %>
 
-		<%if (check_can_download_csv("expense_types"))%>
+		<%if (check_can_download_csv(@module_permission))%>
 			<div class="my-icon my-view">
 				<div class="my-tooltip">
 					CSV

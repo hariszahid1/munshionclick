@@ -1,6 +1,7 @@
 <tr>
   <td><%= investment.id %></td>
-  <td><%= investment.invest.to_f.round(2) %></td>
+  <td><%= investment.debit.to_f.round(2) %></td>
+  <td><%= investment.credit.to_f.round(2) %></td>
   <td><%= investment.account_id.present? ? investment.account.title : ''%></td>
   <td><span title="<%= investment.comment %>" class='truncate-text'><%= investment.comment %></span></td>
   <td>

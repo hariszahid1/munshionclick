@@ -34,27 +34,27 @@
 			<li class="nav-item">
 				<a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
 			</li>
-			<%if (check_can_create("user_groups"))%>
+			<%if (check_can_create(@module_permission))%>
 				<li class="nav-item">
 					<a class="nav-link tab-label" data-toggle="tab" href="#create" role="tab">Create</a>
 				</li>
 			<%end%>
-			<%if (check_can_download_pdf("user_groups"))%>
+			<%if (check_can_download_pdf(@module_permission))%>
 				<li class="nav-item">
 					<a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
 				</li>
 			<%end%>
-			<%if (check_can_download_csv("user_groups"))%>
+			<%if (check_can_download_csv(@module_permission))%>
 				<li class="nav-item">
 					<a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
 				</li>
 			<%end%>
-			<%if (check_can_send_email("user_groups"))%>
+			<%if (check_can_send_email(@module_permission))%>
 				<li class="nav-item">
 					<a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
 				</li>
 			<%end%>
-			<%if (check_can_import_export("user_groups"))%>
+			<%if (check_can_import_export(@module_permission))%>
 				<li class="nav-item">
 					<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
 				</li>
@@ -159,7 +159,7 @@
 
 
   <div class="card shadow-sm border-radius-1 p-2">
-	
+
     <%= render 'map_columns/map_column_partials' %>
 
     <table data-toggle="table" data-search="true" id="city_table" class=" overflow-hidden border-radius-1">
@@ -167,7 +167,7 @@
         <tr>
 
          <th><input type="checkbox" id="master" class='select-all-checkbox' style="cursor: pointer;">
-					<%if (check_can_delete("user_groups"))%>	
+					<%if (check_can_delete(@module_permission))%>	
 						<div class="icon-container float-center">
             	<span class="ml-2 mt-2">
             		<div class="my-icon my-view">

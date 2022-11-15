@@ -9,7 +9,7 @@
                 <div class="my-icon-1 my-view-1">
                   <div class="my-tooltip-1">
       <div class="icon-container">
-				<%if (check_can_update("item_types"))%>
+				<%if (check_can_update(@module_permission))%>
           <div class="my-icon my-view">
           <div class="my-tooltip">
             Edit
@@ -19,7 +19,7 @@
               <%end %>
 						</div>
             <% end %>
-						<%if (check_can_delete("item_types"))%>
+						<%if (check_can_delete(@module_permission))%>
 
           <div class="my-icon my-view">
               <div class="my-tooltip">
@@ -30,7 +30,7 @@
                   <%end %>
 								</div>
                 <% end %>
-								<%if (check_can_read("item_types"))%>
+								<%if (check_can_read(@module_permission))%>
 
       <div class="my-icon my-view">
                 <div class="my-tooltip">
@@ -41,7 +41,7 @@
                 <%end %>
 							</div>
 							<%end%>
-							<%if (check_can_download_pdf("item_types"))%>
+							<%if (check_can_download_pdf(@module_permission))%>
 
       <div class="my-icon my-view">
             <div class="my-tooltip">
@@ -53,7 +53,7 @@
       </div>
 			<%end %>
 
-			<%if (check_can_download_csv("item_types"))%>
+			<%if (check_can_download_csv(@module_permission))%>
 
        <div class="my-icon my-view">
             <div class="my-tooltip">

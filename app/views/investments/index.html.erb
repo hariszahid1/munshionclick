@@ -3,11 +3,17 @@
   <h1>Investment</h1>
   <div id="new_investment">
     <% if can?(:add, :all) %>
-    <%= link_to new_investment_path,remote: true, class: "btn btn-success" do %>
-             <i class="fa fa-plus" aria-hidden="true"></i>
-             New Investment
+			<%= link_to new_investment_path, class: "btn btn-success" do %>
+							<i class="fa fa-plus" aria-hidden="true"></i>
+							Debit
+			<% end %>
     <% end %>
-    <% end %>
+		<% if can?(:add, :all) %>
+		<%= link_to new_investment_path(credit:true), class: "btn btn-success" do %>
+						<i class="fa fa-plus" aria-hidden="true"></i>
+						Credit
+		<% end %>
+	<% end %>
   </div>
 
   <div class="clearfix"></div>
@@ -36,7 +42,8 @@
     <thead>
       <tr>
         <th><%= sort_link(@q, :id, 'ID') %></th>
-        <th><%= sort_link(@q, :invest, 'Investment') %></th>
+        <th><%= sort_link(@q, :debit, 'debit') %></th>
+        <th><%= sort_link(@q, :credit, 'credit') %></th>
         <th><%= sort_link(@q, :account_id, 'Paid By') %></th>
         <th class="urdu-font">Comment</th>
         <th><%= sort_link(@q, :created_at, 'Date') %></th>

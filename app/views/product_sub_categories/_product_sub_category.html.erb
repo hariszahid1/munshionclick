@@ -7,7 +7,7 @@
   <td><%= product_sub_category.comment %></td>
   <td>
 	<div class="icon-container">
-		<%if (check_can_update("product_sub_categories"))%>
+		<%if (check_can_update(@module_permission))%>
 			<div class="my-icon my-view">
 				<div class="my-tooltip">
 					Edit
@@ -20,7 +20,7 @@
 			</div>
 		<% end %>
 
-		<%if (check_can_delete("product_sub_categories"))%>
+		<%if (check_can_delete(@module_permission))%>
 			<div class="my-icon my-view">
 				<div class="my-tooltip">
 					Delete
@@ -32,8 +32,8 @@
 				</span>
 			</div>
 		<% end %>
-		
-		<%if (check_can_read("product_sub_categories"))%>
+
+		<%if (check_can_read(@module_permission))%>
 			<div class="my-icon my-view">
 				<div class="my-tooltip">
 					Show
@@ -45,7 +45,7 @@
 				</span>
 			</div>
 		<%end%>
-		<%if (check_can_download_pdf("product_sub_categories"))%>
+		<%if (check_can_download_pdf(@module_permission))%>
 			<div class="my-icon my-view">
 				<div class="my-tooltip">
 					PDF
@@ -58,7 +58,7 @@
 			</div>
 		<%end%>
 
-		<%if (check_can_download_csv("product_sub_categories"))%>
+		<%if (check_can_download_csv(@module_permission))%>
 			<div class="my-icon my-view">
 				<div class="my-tooltip">
 					CSV
