@@ -29,21 +29,13 @@
               </div>
             </div>
           </div>
-      <ul class="nav nav-pills" role="tablist">
+
+      <ul class="nav nav-pills mt-3" role="tablist">
             <li class="nav-item">
               <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
             </li>
             <li class="nav-item">
               <a class="nav-link tab-label" data-toggle="tab" href="#payment" role="tab">Payment Transfer</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
             </li>
             <li class="nav-item">
             <a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
@@ -53,7 +45,7 @@
   <div class="tab-content">
     <div class="tab-pane active mb-3 card shadow-sm mt-2" style="border-radius: 20px" id="search" role="tabpanel">
      <p>
-     <div class="col-lg-10 form-group d-flex">
+     <div class="row mb-3 ml-3">
          <div class="col-lg-3 form-group ">
           <%= f.select :staff_id_eq, options_from_collection_for_select(@staff, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code} "},@staff_id),{:include_blank => "Select Name"},:class=>"form-control chosen-select" %>
         </div>
@@ -67,7 +59,75 @@
         <div class="col-lg-2 form-group">
           <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
         </div>
-        </div>
+      </div> 
+      <div class="row d-flex ml-4">
+        <%if (check_can_download_csv(@module_permission))%>
+          <button class="form-control d-flex justify-content-center ml-2 btn btn-success" style="width:200px" title= "download staff ledger book csv" name="csv" type="submit" value="csv">Staff Ledger Book &nbsp;<i class="fa fa-file-excel mt-1"></i></button>
+        <% end %>
+        <%if (check_can_download_pdf(@module_permission))%>
+          <div class="icon-container-3 ml-4">
+            <div class="my-icon-3 my-view-3">
+              <div class="my-tooltip-3 d-flex">
+                  <button class="form-control d-flex justify-content-center ml-2 btn btn-danger" style="width:120px" name="submit_pdf_staff_with_asc" type="submit" value="Accounts PDF A4" formtarget="_blank">ASC<i class="fa fa-file-pdf ml-1 mt-1"></i></button>
+                  <button class="form-control d-flex justify-content-center ml-2 btn btn-danger" style="width:120px" name="submit_pdf_staff_with_desc" type="submit" value="Accounts PDF A4" formtarget="_blank">Desc<i class="fa fa-file-pdf ml-1 mt-1"></i></button>
+                  <button class="form-control d-flex justify-content-center ml-2 btn btn-danger" style="width:150px" name="bulk" type="submit" value="Accounts PDF A4" formtarget="_blank">Bulk Record<i class="fa fa-file-pdf ml-1 mt-1"></i></button>
+              </div>
+                <span class="h5 btn btn-danger">PDF Types</span>
+            </div>
+          </div>
+        <% end %>
+        <%if (check_can_send_email(@module_permission))%>
+          <div class="icon-container-3 ml-4">
+            <div class="my-icon-3 my-view-3">
+              <div class="my-tooltip-3 d-flex">
+                <button class="form-control d-flex justify-content-center ml-2 form-control btn btn-info" style="width:120px" type="button" name="asc_email" type="submit" value="Email" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-1"></i>&nbsp;AscMail</button>
+                <button class="form-control d-flex justify-content-center ml-2 form-control btn btn-info" style="width:120px" type="button" name="desc_email" type="submit" value="Email" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-1"></i>&nbsp;DescMail</button> 
+              </div>
+                <span class="h5 btn btn-info">Mail Types</span>
+            </div>
+          </div>
+          <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                  <% @pos_setting = PosSetting.first %>
+                  <label>Email:</label>
+                  <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
+                  <br />
+                  <label>Subject:</label>
+                  <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Staff Ledger Book Detail report from MunshiOnClick", class: 'form-control email-fields'%>
+                  <br />
+                  <label>Body:</label><br />
+                  <%= text_area_tag 'body', nil, class: 'form-control'%>
+                  <br />
+                  <label>Please select one of them.</label>
+                  <div>
+                    <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
+                    <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
+                    <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                  <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
+                </div>
+                </div>
+            </div>
+          </div>
+
+
+
+
+        <% end %>
+       
+      </div>
+        
       </p>
     </div>
     <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="payment" role="tabpanel">
@@ -85,33 +145,25 @@
     <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="pdf" role="tabpanel">
       <p>
         <div class="col-lg-10 d-flex">
-          <div class="col-lg-2">
-          <button class="btn btn-danger" name="submit_pdf_staff_with_asc" type="submit" value="Accounts PDF A4" formtarget="_blank">ASC<i class="fa fa-file-pdf"></i></button>
-          </div>
-          <div class="col-lg-2">
-          <button class="btn btn-danger" name="submit_pdf_staff_with_desc" type="submit" value="Accounts PDF A4" formtarget="_blank">Desc<i class="fa fa-file-pdf"></i></button>
-          </div>
-          <div class="col-lg-2">
-          <button class="btn btn-danger" name="bulk" type="submit" value="Accounts PDF A4" formtarget="_blank">Bulk Record<i class="fa fa-file-pdf"></i></button>
-          </div>
+         
+          <button class="form-control d-flex justify-content-center ml-2 btn btn-danger" style="width:120px" name="submit_pdf_staff_with_asc" type="submit" value="Accounts PDF A4" formtarget="_blank">ASC<i class="fa fa-file-pdf"></i></button>
+          <button class="form-control d-flex justify-content-center ml-2 btn btn-danger" style="width:120px" name="submit_pdf_staff_with_desc" type="submit" value="Accounts PDF A4" formtarget="_blank">Desc<i class="fa fa-file-pdf"></i></button>
+          <button class="form-control d-flex justify-content-center ml-2 btn btn-danger" style="width:120px" name="bulk" type="submit" value="Accounts PDF A4" formtarget="_blank">Bulk Record<i class="fa fa-file-pdf"></i></button>
+          
       </div>
       </p>
     </div>
     <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="csv" role="tabpanel">
       <p>
         <div class="col-lg-2 d-flex">
-        <button class="btn btn-success" title= "download staff ledger book csv" name="csv" type="submit" value="csv">Staff Ledger Book &nbsp;<i class="fa fa-file-excel"></i></button>
+        <button class="form-control d-flex justify-content-center ml-2 btn btn-success" style="width:120px" title= "download staff ledger book csv" name="csv" type="submit" value="csv">Staff Ledger Book &nbsp;<i class="fa fa-file-excel"></i></button>
         </div>
       </p>
     </div>
     <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="emails" role="tabpanel">
-      <p>
-        <div class="ml-2">
-        <button class="form-control btn btn-info" type="button" name="asc_email" type="submit" value="Email" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-2"></i>&nbsp;ASC-Mail</button>
-        </div>
-        <div class="ml-2">
-          <button class="form-control btn btn-info" type="button" name="desc_email" type="submit" value="Email" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-2"></i>&nbsp;DESC-Mail</button>
-        </div>
+      <p> 
+        <button class="form-control d-flex justify-content-center ml-2 form-control btn btn-info" style="width:120px" type="button" name="asc_email" type="submit" value="Email" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-2"></i>&nbsp;ASC-Mail</button>
+        <button class="form-control d-flex justify-content-center ml-2 form-control btn btn-info" style="width:120px" type="button" name="desc_email" type="submit" value="Email" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-2"></i>&nbsp;DESC-Mail</button> 
      </p>
       <!-- Modal -->
       <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">

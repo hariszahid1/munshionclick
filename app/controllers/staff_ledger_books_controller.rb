@@ -1,4 +1,5 @@
 class StaffLedgerBooksController < ApplicationController
+  before_action :check_access
   before_action :set_staff_ledger_book, only: [:show, :edit, :update, :destroy]
   skip_before_action :authenticate_user!, only: [:index]
   # GET /staff_ledger_books
