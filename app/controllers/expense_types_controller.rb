@@ -89,7 +89,8 @@ class ExpenseTypesController < ApplicationController
 
   def download_expense_types_pdf_file
     @expense_type = @q.result
-    generate_pdf(@expense_type.as_json, "ExpenseTypes-Total-#{@expense_type.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}", 'pdf.html', 'A4', false)
+    generate_pdf(@expense_type.as_json, "ExpenseTypes-Total-#{@expense_type.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}",
+                 'pdf.html', 'A4', false, 'expense_types/index.pdf.erb')
   end
 
   def send_email_file

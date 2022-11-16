@@ -1,6 +1,8 @@
 class StaffsController < ApplicationController
 	include StaffCsvMethods
   before_action :set_staff, only: [:show, :edit, :update, :destroy, :salary_info, :salary_wage_rate_info]
+  include PdfCsvGeneralMethod
+  include StaffsHelper
 
   # GET /staffs
   # GET /staffs.json
@@ -24,22 +26,11 @@ class StaffsController < ApplicationController
     @total = @staffs_total.pluck('SUM(advance_amount)','SUM(balance)','SUM(wage_debit)')
     @staffs_pays = Salary.where("extract(month from created_at) = ? AND extract(year from created_at) = ? AND staff_id IN (?)", Date.today.month, Date.today.year,Staff.pluck(:id)).where(:payment_type=>0)
 		@staffs_pdf = @q.result(distinct: true)
-    if params[:submit_pdf]
-			print_pdf('staff_details','pdf.html','A4')  #pdf's
-    elsif params[:salary_submit_pdf]
-			print_pdf('salary_staff_details','salary_staff.pdf','A4',true)
-    elsif params[:wage_submit_pdf]
-			print_pdf('wage_staff_details','wage_staff.pdf','A4')
-		elsif params[:submit_csv]  #csv's
-			csv_data=staff_details_csv
-			createCSV("staff_details",csv_data)
-		elsif params[:salary_submit_csv]
-			csv_data=salary_staff_details_csv
-			createCSV("salary_staff_details",csv_data)
-		elsif params[:wage_submit_csv]
-			csv_data=wage_staff_details_csv
-			createCSV("wage_staff_details",csv_data)
-    end
+
+    download_staffs_csv_file if params[:submit_csv].present? || params[:salary_submit_csv].present? || params[:wage_submit_csv].present?
+    download_staffs_pdf_file if params[:submit_pdf].present? || params[:salary_submit_pdf].present? || params[:wage_submit_pdf].present?
+    send_email_file if params[:email].present?
+    export_file if params[:export_data].present?
   end
 
   def payable
@@ -210,24 +201,136 @@ class StaffsController < ApplicationController
     end
   end
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_staff
-      @staff = Staff.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_staff
+    @staff = Staff.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def staff_params
-      params.require(:staff).permit(:code, :name, :father, :education, :gender, :phone, :address, :cnic, :date_of_joining, :date_of_leaving, :yearly_increment,
-                                    :monthly_salary, :school_branch_id, :wage_rate, :balance, :staff_department, :department_id, :staff_type, :wage_debit,
-                                     :raw_product_quantity, :profile_image, :staff_raw_products_attributes => [:id, :staff_id, :raw_product_id, :_destroy])
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def staff_params
+    params.require(:staff).permit(:code, :name, :father, :education, :gender, :phone, :address, :cnic, :date_of_joining, :date_of_leaving, :yearly_increment,
+                                  :monthly_salary, :school_branch_id, :wage_rate, :balance, :staff_department, :department_id, :staff_type, :wage_debit,
+                                    :raw_product_quantity, :profile_image, :staff_raw_products_attributes => [:id, :staff_id, :raw_product_id, :_destroy])
+  end
 
-		def createCSV(csv_name,csv_data)
-			request.format = 'csv'
-			respond_to do |format|
-			format.html
-			format.csv { send_data csv_data, filename: "#{csv_name} - #{Date.today}.csv" }
-			end
-		end
+  def createCSV(csv_name,csv_data)
+    request.format = 'csv'
+    respond_to do |format|
+    format.html
+    format.csv { send_data csv_data, filename: "#{csv_name} - #{Date.today}.csv" }
+    end
+  end
+
+  def download_staffs_csv_file
+    @time = Time.zone.now
+    set_top_data_for_csv
+    @staffs = @q.result
+    if params[:salary_submit_csv].present?
+      file_name = 'Salary-staffs'
+      header_for_csv = %w[Department/Raw Code Name Monthly/Wage Advance Short-pay Balance]
+      data_for_csv = get_data_for_staffs_salary_details_csv
+    elsif params[:wage_submit_csv].present?
+      file_name = 'Wage-staffs'
+      header_for_csv = %w[Department/Raw Code Name Monthly/Wage Down_Payment Short-pay Balance]
+      data_for_csv = get_data_for_staffs_wage_details_csv
+    else
+      file_name = 'Staffs'
+      header_for_csv = %w[Department/Raw Code Name Monthly/Wage Advance Short-pay Balance]
+      data_for_csv = get_data_for_staffs_details_csv
+    end
+    generate_csv_extra_rows_top(@top_data, data_for_csv, header_for_csv,
+                                "#{file_name}-Total-#{@staffs.count}-#{DateTime.now.strftime('%d-%m-%Y-%H-%M')}")
+  end
+
+  def download_staffs_pdf_file
+    @file_name = ''
+    @pdf_html = false
+    @pdf_file_path = ''
+    sort_data_according
+    generate_pdf(@sorted_data.as_json, "#{@file_name}-Total-#{@sorted_data.count}-#{DateTime.now.strftime('%d-%m-%Y-%H-%M')}",
+                 'pdf.html', 'A4', @pdf_html, @pdf_file_path)
+  end
+
+  def send_email_file
+    sort_data_according
+    EmailMultiFilesJob.perform_later(@sorted_data.as_json, 'staffs/index.pdf.erb', params[:email_value],
+                           params[:email_choice], params[:subject], params[:body],
+                           current_user, "staffs-Total-#{@sorted_data.count}-#{DateTime.now.strftime('%d-%m-%Y-%H-%M')}")
+    flash[:notice] = if params[:email_value].present?
+                       "Email has been sent to #{params[:email_value]}"
+                     else
+                       "Email has been sent to #{current_user.email}"
+                     end
+    redirect_to staffs_path
+  end
+
+  def sort_data_according
+    @sorted_data = []
+    @monthly_wage = 0
+    @advance_total = 0
+    @short_pay_total = 0
+    @balance_total = 0
+    if params[:submit_pdf]
+      @file_name = 'Staffs'
+      @pdf_file_path = 'staffs/index.pdf.erb'
+      @q.result.each do |d|
+        data_for_pdf(d)
+      end
+    elsif params[:salary_submit_pdf]
+      @pdf_html = true
+      @file_name = 'Salary-Staffs'
+      @q.result.each do |d|
+        @pdf_file_path = 'staffs/salary_staff_detail.pdf.erb'
+        if d.monthly_salary.to_i > 0
+          data_for_pdf(d)
+        end
+      end
+    elsif params[:wage_submit_pdf]
+      @file_name = 'Wage-Staffs'
+      @pdf_file_path = 'staffs/wage_staff_detail.pdf.erb'
+      @q.result.each do |d|
+        if d.wage_rate.to_i.positive?
+          data_for_pdf(d)
+        end
+      end
+    end
+  end
+
+  def data_for_pdf(d)
+    @monthly_wage += d.staff_salary_or_wage.to_f.round(2)
+    @advance_total += d.advance_amount.to_f.round(2)
+    @short_pay_total += d.wage_debit.to_f.round(2)
+    @balance_total += d.balance.to_f.round(2)
+    @sorted_data << {
+                      department: "#{d.department.present? ? d.department.title : ""}: #{d.staff_raw_products.present? ? d.staff_raw_products_titles : ""}",
+                      code: d.code,
+                      name: "#{d.name} #{d.father}",
+                      monthly_wage: "#{d.staff_salary_or_wage.to_f.round(2)}",
+                      advance: d.advance_amount.to_f.round(2),
+                      short_pay: d.wage_debit.to_f.round(2),
+                      balance: d.balance.to_f.round(2),
+                      monthly_wage_total: @monthly_wage,
+                      advance_total: @advance_total,
+                      short_pay_total: @short_pay_total,
+                      balance_total: @balance_total
+                    }
+  end
+
+  def export_file
+    export_data('Staff')
+  end
+
+  def set_top_data_for_csv
+    heading_of = 'Staff Details'
+    heading_of = 'Salary Staff Details' if params[:salary_submit_csv].present?
+    heading_of = 'Wage Staff Details' if params[:wage_submit_csv].present?
+    @top_data = [
+      ['--------------------------------------'],
+      [heading_of],
+      ['--------------------------------------'],
+      ["Printing Date Time #{@time.strftime('%d')} / #{@time.strftime('%b')} / #{@time.strftime('%y')} / #{@time.strftime('at %I:%M%p')}"],
+      ["Current User #{@current_user.name}"]
+    ]
+  end
 
 end
