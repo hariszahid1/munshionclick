@@ -9,66 +9,19 @@
       </ul>
     </div>
   <% end %>
-  <div class="bg-white nested-fields">
-    <div class="col-lg-12 row">
-      <div class="col-lg-3 form-group">
-        <%= f.label 'Number' %>
-        <%= f.text_field :code, placeholder: "Client Number", hide_label: true %>
-      </div>
+  <div>
+    <%= f.fields :cms_data do |cd| %>
+        <%= render 'cms_data', {cd: cd, f: f} %>
+    <% end %>
+  </div>
 
-      <div class="col-lg-4 form-group">
-        <%= f.text_field :cnic , placeholder:"Client CNIC"%>
-      </div>
-
-      <div class="col-lg-5 form-group">
-        <%= f.label :name do %>
-              <%= SysUser.human_attribute_name :name %>
-              <i class="fas fa-language"></i>
-            <% end %>
-        <%= f.text_field :name,required:true, placeholder:"Client Name", hide_label: true ,class: 'urdu-font' %>
-      </div>
+  <div class="col-lg-12 row">
+    <div class="col-lg-6 form-group float-left">
+      <%= f.datetime_select :created_at, class: "form-control" %>
     </div>
-
-    <div class="col-lg-12 row">
-      <div class="col-lg-6 form-group">
-        <%= f.select :status, SysUser.statuses.map { |key, value| [key.humanize, key] },{include_blank: "Please Select Status"},{class: "form-control"} %>
-      </div>
-
-      <div class="col-lg-6 form-group">
-        <%= f.select :user_group, SysUser.user_groups.map { |key, value| [key.humanize, key] },{include_blank: "Please Select User Group"},{class: "form-control", required: true} %>
-      </div>
-    </div>
-
-    <div class="col-lg-12 row">
-      <div class="col-lg-6 form-group">
-        <%= f.label 'Plot Size' %>
-        <%= f.text_field :occupation, placeholder: "Plot Size", hide_label: true %>
-      </div>
-
-      <div class="col-lg-6 form-group float-left">
-        <%= f.select :user_type_id, options_from_collection_for_select(@user_types, 'id', 'title', f.object.user_type_id.present? ? f.object.user_type_id : @user_types.first.id ),{include_blank: "Please Select User Type"}, required: true %>
-      </div>
-    </div>
-
-
-    <div class="col-lg-12 row">
-      <div class="col-lg-6 form-group">
-        <%= f.label 'Source of Query' %>
-        <%= f.text_area :ntn, placeholder: "Source of Query", hide_label: true %>
-      </div>
-
-      <div class="col-lg-6 form-group">
-        <%= f.label 'Query' %>
-        <%= f.text_area :gst, placeholder: "Query/ Requirements", hide_label: true %>
-      </div>
-    </div>
-
-    <div class="col-lg-12 row">
-      <div class="col-lg-6 form-group">
-        <%= f.label 'Budget' %>
-        <%= f.number_field :credit_limit, placeholder: "Budget", hide_label: true %>
-      </div>
-    </div>
+    <%= f.hidden_field :user_type_id, value: UserType.first.id %>
+    <%= f.hidden_field :code, {placeholder: "Enter the code", required: true , value: (f.object.code.nil? ? ("AGC-"+"%.4i" % (SysUser.maximum(:id).present? ? SysUser.maximum(:id).next : 1)) : (f.object.code ))} %>
+  </div>
 
   <div>
     <h4 class="card-header mb-4">
