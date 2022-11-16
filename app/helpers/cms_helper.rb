@@ -16,8 +16,8 @@ module CmsHelper
 			data9 = sys_user['cms_data'].try(:[], 'plot_size')
 			data10 = sys_user['cms_data'].try(:[], 'short_details')
 			data11 = sys_user['created_at']
-			data12 = sys_user[:contact]['city_id']
-			data13 = sys_user[:contact]['country_id']
+			data12 = sys_user[:contact].try(:[], 'city_id')
+			data13 = sys_user[:contact].try(:[], 'country_id')
 			temp.push([data1, data2, data3, data4, data5, data6, data7,
 				data8, data9, data10, data11, data12, data13
 				])
