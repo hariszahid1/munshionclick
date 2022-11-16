@@ -29,46 +29,38 @@
               </div>
             </div>
           </div>
-
-	<ul class="nav nav-pills" role="tablist">
+          <%if (check_can_create(@module_permission))%>
+            <% if can?(:delete, :all) %>
+                <%= link_to new_payment_path, class: "btn btn-success" do %>
+               <i class="fa fa-plus" aria-hidden="true"></i>
+                Jama/Credit
+              <% end %>
+            <% end %>
+          <% end %>
+          <%if (check_can_create(@module_permission))%>
+            <% if can?(:delete, :all) %>
+                <%= link_to new_payment_path(jama: true), class: "btn btn-success ml-2" do %>
+               <i class="fa fa-plus" aria-hidden="true"></i>
+                Benam/Debit
+              <% end %>
+            <% end %>
+          <% end %>
+	<ul class="nav nav-pills mt-4" role="tablist">
 		<li class="nav-item">
 			<a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
 		</li>
-		<%if (check_can_create(@module_permission))%>
-			<li class="nav-item">
-				<a class="nav-link tab-label" data-toggle="tab" href="#jama" role="tab">Jama</a>
-			</li>
-		<%end%>
-		<%if (check_can_create(@module_permission))%>
-		<li class="nav-item">
-			<a class="nav-link tab-label" data-toggle="tab" href="#benam" role="tab">Benam</a>
-		</li>
-	<%end%>
-	<%if (check_can_create(@module_permission))%>
-	<li class="nav-item">
-		<a class="nav-link tab-label" data-toggle="tab" href="#account" role="tab">Account</a>
-	</li>
-<%end%>
-<%if (check_can_create(@module_permission))%>
-<li class="nav-item">
-	<a class="nav-link tab-label" data-toggle="tab" href="#transfer" role="tab">Transfer</a>
-</li>
-<%end%>
-		<%if (check_can_download_pdf(@module_permission))%>
-			<li class="nav-item">
-				<a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
-			</li>
-		<%end%>
-		<%if (check_can_download_csv(@module_permission))%>
-			<li class="nav-item">
-				<a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
-			</li>
-		<%end%>
-		<%if (check_can_send_email(@module_permission))%>
-			<li class="nav-item">
-				<a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
-			</li>
-		<%end%>
+		
+	  <%if (check_can_create(@module_permission))%>
+	    <li class="nav-item">
+	    	<a class="nav-link tab-label" data-toggle="tab" href="#account" role="tab">Account</a>
+	    </li>
+    <%end%>
+    <%if (check_can_create(@module_permission))%>
+      <li class="nav-item">
+      	<a class="nav-link tab-label" data-toggle="tab" href="#transfer" role="tab">Transfer</a>
+      </li>
+    <%end%>
+		
 		<%if (check_can_import_export(@module_permission))%>
 			<li class="nav-item">
 				<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
@@ -78,48 +70,98 @@
 <%= search_form_for @q, url: payments_path, class: "admin-controls", method: "get" do |f| %>
 
   <div class="tab-content">
-    <div class="tab-pane active mb-3 card shadow-sm mt-2" style="border-radius: 20px" id="search" role="tabpanel">
-     <p>
-      <div class="col-lg-10 form-group d-flex">
-      <div class="col-lg-2 form-group float-left">
+    <div class="tab-pane active mb-3 card shadow-sm mt-2 p-3" style="border-radius: 20px" id="search" role="tabpanel">
+      <div class="row mb-3">
+        <div class="col-lg-2">
           <%= f.select :account_id_in, options_from_collection_for_select(@accounts, "id", ->(st){"#{st.title} \u{27F6} #{st.bank_name}"},f.object.account_id_in),{:include_blank => "Select the Account Title"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Account Title"} }%>
         </div>
-        <div class="col-lg-2 form-group float-left">
+        <div class="col-lg-2">
           <%= f.search_field :id_eq, class: 'form-control input-sm ', placeholder: "Enter Id" %>
         </div>
-        <div class="col-lg-2 form-group float-left">
+        <div class="col-lg-2">
           <%= f.search_field :created_at_gteq,value: @start_date, class: 'form-control input-sm datepicker', 'datepicker' => true,placeholder: "YYYY-MM-DD" %>
         </div>
-        <div class="col-lg-2 form-group float-left">
+        <div class="col-lg-2">
           <%= f.search_field :created_at_lteq,value: @end_date, class: 'form-control input-sm datepicker', 'datepicker' => true ,placeholder: "YYYY-MM-DD"%>
         </div>
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px;"><i class="fa fa-search"></i></button>
+        <div class="col-1">
+          <button class="btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px;"><i class="fa fa-search"></i></button>
         </div>
-        </div>
-      </p>
+      </div>
+      <div class="row d-flex">
+        <%if (check_can_download_csv(@module_permission))%>
+          <div>
+            <button class="btn btn-success ml-3" title= "download payments csv" name="csv" type="submit" value="csv">Payments &nbsp;<i class="fa fa-file-excel"></i></button>
+          </div>
+        <% end %>
+
+        <%if (check_can_download_pdf(@module_permission))%>
+           <div class="icon-container-3 mb-2 ml-3">
+              <div class="my-icon-3 my-view-3">
+                <div class="my-tooltip-3 d-flex">
+                  <button class="btn btn-danger d-flex justify-content-center ml-2" style="width: 100px" title="Download payment pdf for all user in descending order " name="submit_pdf" type="submit" value="Payment History PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mt-1 ml-1"></i>Desc </button>
+                  <button class="btn btn-danger d-flex justify-content-center ml-2" style="width: 100px" title="Download payment pdf for all user in ascending order" name="submit_pdf_asc" type="submit" value="Payment History PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mt-1 ml-1"></i>Asc</button>
+                  <button class="btn btn-danger d-flex justify-content-center ml-2" style="width: 100px" title= "Download payment pdf for single user in descending order" name="1_submit_pdf" type="submit" value="Payment History PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mt-1 ml-1"></i>1-Desc</button>
+                  <button class="btn btn-danger d-flex justify-content-center ml-2" style="width: 100px" title= "Download payment pdf for single user in ascending order" name="2_submit_pdf_asc" type="submit" value="Payment History PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mt-1 ml-1"></i>1-Asc</button>
+                </div>
+                  <span class="h5 btn btn-danger">PDF Types</span>
+              </div>
+          </div>
+        <% end %>
+        
+        
+        
+        <%if (check_can_send_email(@module_permission))%>
+          <div class="icon-container-3 mb-2 ml-3">
+              <div class="my-icon-3 my-view-3">
+                <div class="my-tooltip-3 d-flex">
+                    <button class="btn btn-info d-flex justify-content-center ml-2" type="button" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-envelope mt-1 ml-1"></i>&nbsp;Mail</button>
+                    <button class="btn btn-info d-flex justify-content-center ml-2" name="asc_email" type="submit" value="Email"><i class="fas fa-envelope mt-1 ml-1"></i> AscEmail</button>
+                    <button class="btn btn-info d-flex justify-content-center ml-2" name="desc_email" type="submit" value="Email"><i class="fas fa-envelope mt-1 ml-1"></i> DescEmail</button>
+                </div>
+                  <span class="h5 btn btn-info">Mail Types</span>
+              </div>
+          </div>
+          <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                  <% @pos_setting = PosSetting.first %>
+                  <label>Email:</label>
+                  <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
+                  <br />
+                  <label>Subject:</label>
+                  <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Payment Detail report from MunshiOnClick", class: 'form-control email-fields'%>
+                  <br />
+                  <label>Body:</label><br />
+                  <%= text_area_tag 'body', nil, class: 'form-control'%>
+                  <br />
+
+                  <label>Please select one of them.</label>
+                  <div>
+                    <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
+                    <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
+                    <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                  <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
+                </div>
+                </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
     </div>
-    <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="jama" role="tabpanel">
-        <p>
-        <% if can?(:delete, :all) %>
-          <%= link_to new_payment_path, class: "btn btn-success ml-3 mt-3" do %>
-         <i class="fa fa-plus" aria-hidden="true"></i>
-          Jama/Credit
-        <% end %>
-        <% end %>
-        </p>
-    </div>
-    <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="benam" role="tabpanel">
-        <p>
-        <% if can?(:delete, :all) %>
-         <%= link_to new_payment_path(jama: true), class: "btn btn-success ml-3 mt-3" do %>
-         <i class="fa fa-plus" aria-hidden="true"></i>
-          Benam/Debit
-        <% end %>
-        <% end %>
-        </p>
-    </div>
-    <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="account" role="tabpanel">
+    
+    <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="transfer" role="tabpanel">
         <p>
          <%= link_to transfer_payments_path, class: "btn btn-success ml-3 mt-3" do %>
         <i class="fa fa-credit-card" aria-hidden="true"></i>
@@ -127,7 +169,7 @@
       <% end %>
         </p>
     </div>
-     <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="transfer" role="tabpanel">
+     <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="account" role="tabpanel">
         <p>
          <%= link_to accounts_url, class: "btn btn-success ml-3 mt-3" do %>
         <i class="fa fa-credit-card" aria-hidden="true"></i>
@@ -135,68 +177,7 @@
       <% end %>
         </p>
     </div>
-    <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="pdf" role="tabpanel">
-      <p>
-
-          <button class="btn btn-danger ml-3 mt-3" title="Download payment pdf for all user in descending order " name="submit_pdf" type="submit" value="Payment History PDF A4" formtarget="_blank">Desc <i class="fa fa-file-pdf"></i></button>
-          <button class="btn btn-danger ml-3 mt-3" title="Download payment pdf for all user in ascending order" name="submit_pdf_asc" type="submit" value="Payment History PDF A4" formtarget="_blank">Asc <i class="fa fa-file-pdf"></i></button>
-          <button class="btn btn-danger ml-3 mt-3" title= "Download payment pdf for single user in descending order" name="1_submit_pdf" type="submit" value="Payment History PDF A4" formtarget="_blank">1-Desc <i class="fa fa-file-pdf"></i></button>
-          <button class="btn btn-danger ml-3 mt-3" title= "Download payment pdf for single user in ascending order" name="2_submit_pdf_asc" type="submit" value="Payment History PDF A4" formtarget="_blank">1-Asc <i class="fa fa-file-pdf"></i></button>
-
-      </p>
-    </div>
-    <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="csv" role="tabpanel">
-      <p>
-        <div class="col-lg-2 d-flex">
-        <button class="btn btn-success" title= "download payments csv" name="csv" type="submit" value="csv">Payments &nbsp;<i class="fa fa-file-excel"></i></button>
-        </div>
-      </p>
-    </div>
-    <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="emails" role="tabpanel">
-      <p>
-
-        <button class="btn btn-info ml-3 mt-3" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-2"></i>&nbsp;Mail</button>
-        <button class="btn btn-info ml-3 mt-3" name="asc_email" type="submit" value="Email"><i class="fas fa-envelope"></i> Asc email</button>
-        <button class="btn btn-info ml-3 mt-3" name="desc_email" type="submit" value="Email"><i class="fas fa-envelope"></i> Desc email</button>
-
-     </p>
-      <!-- Modal -->
-      <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-            </div>
-            <div class="modal-body">
-              <% @pos_setting = PosSetting.first %>
-              <label>Email:</label>
-              <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
-              <br />
-              <label>Subject:</label>
-              <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Payment Detail report from MunshiOnClick", class: 'form-control email-fields'%>
-              <br />
-              <label>Body:</label><br />
-              <%= text_area_tag 'body', nil, class: 'form-control'%>
-              <br />
-
-              <label>Please select one of them.</label>
-              <div>
-                <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
-                <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
-                <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-              <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
-            </div>
-            </div>
-        </div>
-      </div>
-    </div>
+    
     <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="import-export" role="tabpanel">
       <p>
         <div class="d-flex">
@@ -354,7 +335,7 @@
 
           <td class="p-3">
 
-          <div class="icon-container-1">
+<div class="icon-container-1">
 <div class="my-icon-1 my-view-1">
 	<div class="my-tooltip-1">
     <div class="icon-container">

@@ -1,4 +1,5 @@
 class LedgerBooksController < ApplicationController
+  before_action :check_access
 	include LedgerBooksCsvMethods
   before_action :set_ledger_book, only: [:show, :edit, :update, :destroy]
 
