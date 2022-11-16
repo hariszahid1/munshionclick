@@ -25,17 +25,17 @@
 
     <% @payments.each do |payment| %>
       <tr>
-        <td><%= payment.account.title %></td>
+        <td><%= payment.account&.title %></td>
         <td><%= number_with_delimiter(payment.debit) %></td>
         <td><%= number_with_delimiter(payment.credit) %></td>
         <td><%= number_with_delimiter(payment.amount) %></td>
         <td>
           <%= payment.comment %>
           <% if payment.paymentable.present? and payment.paymentable_type=="Order" %>
-            <%=payment.paymentable.comment%>
+            <%=payment.paymentable&.comment%>
             <br>
-            <%if payment.paymentable.order_items_names_and_quantity!=0%>
-              <%payment.paymentable.order_items_names_and_quantity.each do |name_quantity|%>
+            <%if payment.paymentable&.order_items_names_and_quantity!=0%>
+              <%payment.paymentable&.order_items_names_and_quantity.each do |name_quantity|%>
               <p>
                 <span><%=name_quantity.first%></span>
                 Qty: <span><%=name_quantity.second%></span>
@@ -44,14 +44,14 @@
               </p>
               <%end%>
               <p>
-                Total: <span><%=payment.paymentable.total_bill%></span>
+                Total: <span><%=payment.paymentable&.total_bill%></span>
               </p>
             <%end%>
           <%elsif payment.paymentable.present? and payment.paymentable_type=="PurchaseSaleDetail"%>
             <%=payment.paymentable.comment%>
             <br>
-            <%if payment.paymentable.purchase_sale_items_names_and_quantity!=0%>
-              <% payment.paymentable.purchase_sale_items_names_and_quantity.each do |name_quantity|%>
+            <%if payment.paymentable&.purchase_sale_items_names_and_quantity!=0%>
+              <% payment.paymentable&.purchase_sale_items_names_and_quantity.each do |name_quantity|%>
                 <p>
                   <span><%=name_quantity.first%></span>
                   Qty:  <span><%=name_quantity.second%></span>
@@ -63,7 +63,7 @@
             </p>
           <%elsif payment.paymentable.present? and payment.paymentable_type=="ExpenseEntry"%>
             <%=payment.paymentable.comment%>
-            <%=payment.paymentable.expense.comment if payment.paymentable.expense.present?%>
+            <%=payment.paymentable&.expense&.comment%>
             <br>
             <p>
               <span>
@@ -78,17 +78,17 @@
             <p>
               <span>
                 <%if payment.paymentable.staff.present?%>
-                  <%=payment.paymentable.staff.full_name%>
+                  <%=payment.paymentable&.staff&.full_name%>
                 <%end%>
               </span>
             </p>
           <%elsif payment.paymentable.present? and payment.paymentable_type=="LedgerBook"%>
-            <%=payment.paymentable.comment%>
+            <%=payment.paymentable&.comment%>
             <br>
             <p>
               <span>
                 <%if payment.paymentable.sys_user.present?%>
-                  <%=payment.paymentable.sys_user.name%>
+                  <%=payment.paymentable&.sys_user&.name%>
                 <%end%>
               </span>
             </p>
