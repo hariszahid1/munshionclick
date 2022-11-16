@@ -101,7 +101,8 @@ class CountriesController < ApplicationController
 
   def download_countries_pdf_file
     @countries = @q.result
-    generate_pdf(@countries.as_json, "Countries-Total-#{@countries.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}", 'pdf.html', 'A4', false)
+    generate_pdf(@countries.as_json, "Countries-Total-#{@countries.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}",
+                 'pdf.html', 'A4', false, 'countries/index.pdf.erb')
   end
 
   def send_email_file
