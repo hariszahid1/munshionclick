@@ -1,3 +1,39 @@
+<style>
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 140px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd;}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {display: block;}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {background-color: #3e8e41;}
+
+</style>
+
 <div id="custom-alert" class="alert alert-danger d-none">
   <span class="custom-alert-text"></span>
   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -6,86 +42,89 @@
 </div>
 
 <div class="hidden" id="salary_detail_list">
-          <div class="main-content-header">
-            <h1 class="ml-2">Staff/Dealer ledger Book</h1>
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item">
-                <a href="<%= root_path %>">Dashboard</a>
-              </li>
-              <li class="breadcrumb-item active">
-                <a href="<%= staff_ledger_books_path %>">Staff/Dealer ledger Book</a>
-              </li>
-            </ol>
-          </div>
-          <div class="float-right">
-            <div class="dropdown ml-auto mr-4">
-             <span class="btn btn-info" title= "About This page">Help</span>
-              <div class="dropdown-content">
-                <% if @help.present? %>
-                <% @help&.help_links.each do |link| %>
-                <a type="button" class="" target="_blank" href="<%= link[1] %>" >Help in <%= link[0] %></a>
-                 <% end %>
-                <% end %>
-              </div>
-            </div>
-          </div>
+  <div class="main-content-header">
+    <h1>Staff/Dealer Ledger Book</h1>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<%= root_path %>">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active">
+        <a href="<%= staff_ledger_books_path %>">Staff/Dealer ledger Book</a>
+      </li>
+    </ol>
+  </div>
+  <div class="row d-flex mb-4">
+    <%if (check_can_delete(@module_permission))%>
+      <div class='ml-2 mt-2'>
+            <%= link_to transfer_staff_ledger_books_path, class: "btn btn-warning" do %>
+              <i class="fa fa-credit-card" aria-hidden="true"></i>
+              Payment Transfer
+            <% end %>
+         </div>
+    <% end %>
+  </div>
+  <div class="float-right">
+    <div class="dropdown ml-auto mr-4">
+     <span class="btn btn-info" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
+      <div class="dropdown-content">
+        <% if @help.present? %>
+        <% @help&.help_links.each do |link| %>
+        <a type="button" class="" target="_blank" href="<%= link[1] %>" >Help in <%= link[0] %></a>
+         <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
 
-      <ul class="nav nav-pills mt-3" role="tablist">
-            <li class="nav-item">
-              <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link tab-label" data-toggle="tab" href="#payment" role="tab">Payment Transfer</a>
-            </li>
-            <li class="nav-item">
-            <a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
-            </li>
-        </ul>
-    <%= search_form_for @q, url: staff_ledger_books_path, class: "admin-controls", method: "get" do |f| %>
+  <ul class="nav nav-pills mt-3" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
+        </li>
+    </ul>
+<%= search_form_for @q, url: staff_ledger_books_path, class: "admin-controls", method: "get" do |f| %>
   <div class="tab-content">
-    <div class="tab-pane active mb-3 card shadow-sm mt-2" style="border-radius: 20px" id="search" role="tabpanel">
-     <p>
-     <div class="row mb-3 ml-3">
-         <div class="col-lg-3 form-group ">
+    <div class="tab-pane active mb-3 card shadow-sm mt-2 border-radius-1" id="search" role="tabpanel">
+     <div class="row d-flex mt-3">
+     <div class="col">
+         <div class="col-lg-4 form-group float-left ">
           <%= f.select :staff_id_eq, options_from_collection_for_select(@staff, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code} "},@staff_id),{:include_blank => "Select Name"},:class=>"form-control chosen-select" %>
         </div>
-        <div class="col-lg-2 form-group">
+        <div class="col-lg-3 form-group float-left">
           <%= f.search_field :created_at_gteq, value:@created_at_gteq, class: 'form-control input-sm datepicker',placeholder: "YYYY-MM-DD" %>
         </div>
-        <div class="col-lg-2 form-group">
+        <div class="col-lg-3 form-group float-left">
           <%= f.search_field :created_at_lteq, value:@created_at_lteq, class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
         </div>
 
-        <div class="col-lg-2 form-group">
+        <div class="col-lg-2 form-group float-left">
           <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
         </div>
       </div> 
-      <div class="row d-flex ml-4">
+      <div class="col float-left">
         <%if (check_can_download_csv(@module_permission))%>
-          <button class="form-control d-flex justify-content-center ml-2 btn btn-success" style="width:200px" title= "download staff ledger book csv" name="csv" type="submit" value="csv">Staff Ledger Book &nbsp;<i class="fa fa-file-excel mt-1"></i></button>
+          <button class="form-control d-flex justify-content-center ml-2 btn btn-warning float-left" style="width:100px" title= "download staff ledger book csv" name="csv" type="submit" value="csv">CSV &nbsp;<i class="fa fa-file-excel mt-1"></i></button>
         <% end %>
-        <%if (check_can_download_pdf(@module_permission))%>
-          <div class="icon-container-3 ml-4">
-            <div class="my-icon-3 my-view-3">
-              <div class="my-tooltip-3 d-flex">
-                  <button class="form-control d-flex justify-content-center ml-2 btn btn-danger" style="width:120px" name="submit_pdf_staff_with_asc" type="submit" value="Accounts PDF A4" formtarget="_blank">ASC<i class="fa fa-file-pdf ml-1 mt-1"></i></button>
-                  <button class="form-control d-flex justify-content-center ml-2 btn btn-danger" style="width:120px" name="submit_pdf_staff_with_desc" type="submit" value="Accounts PDF A4" formtarget="_blank">Desc<i class="fa fa-file-pdf ml-1 mt-1"></i></button>
-                  <button class="form-control d-flex justify-content-center ml-2 btn btn-danger" style="width:150px" name="bulk" type="submit" value="Accounts PDF A4" formtarget="_blank">Bulk Record<i class="fa fa-file-pdf ml-1 mt-1"></i></button>
-              </div>
-                <span class="h5 btn btn-danger">PDF Types</span>
-            </div>
+      <%if (check_can_download_pdf(@module_permission))%>
+        <div class="dropdown float-left mr-3 ml-3">
+          <button type="button" class="form-control bg-danger text-light">PDF List</button>
+          <div class="dropdown-content p-2">
+            <button class="form-control d-flex justify-content-center ml-2 mt-2 btn btn-danger" style="width:150px" name="submit_pdf_staff_with_asc" type="submit" value="Accounts PDF A4" formtarget="_blank">ASC<i class="fa fa-file-pdf ml-1 mt-1"></i></button>
+            <button class="form-control d-flex justify-content-center ml-2 mt-2 btn btn-danger" style="width:150px" name="submit_pdf_staff_with_desc" type="submit" value="Accounts PDF A4" formtarget="_blank">Desc<i class="fa fa-file-pdf ml-1 mt-1"></i></button>
+            <button class="form-control d-flex justify-content-center ml-2 mt-2 btn btn-danger" style="width:150px" name="bulk" type="submit" value="Accounts PDF A4" formtarget="_blank">BulkRecord<i class="fa fa-file-pdf ml-1 mt-1"></i></button>
           </div>
-        <% end %>
+        </div>
+      <% end %>
         <%if (check_can_send_email(@module_permission))%>
-          <div class="icon-container-3 ml-4">
-            <div class="my-icon-3 my-view-3">
-              <div class="my-tooltip-3 d-flex">
-                <button class="form-control d-flex justify-content-center ml-2 form-control btn btn-info" style="width:120px" type="button" name="asc_email" type="submit" value="Email" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-1"></i>&nbsp;AscMail</button>
-                <button class="form-control d-flex justify-content-center ml-2 form-control btn btn-info" style="width:120px" type="button" name="desc_email" type="submit" value="Email" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-1"></i>&nbsp;DescMail</button> 
-              </div>
-                <span class="h5 btn btn-info">Mail Types</span>
-            </div>
+        <div class="dropdown float-left mr-2">
+          <button type="button" class="form-control bg-info text-light">Mail List</button>
+          <div class="dropdown-content p-2">
+            <button class="form-control d-flex justify-content-center ml-2 mt-2 form-control btn btn-info" style="width:120px" type="button" name="asc_email" type="submit" value="Email" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-1"></i>&nbsp;AscMail</button>
+            <button class="form-control d-flex justify-content-center ml-2 mt-2 form-control btn btn-info" style="width:120px" type="button" name="desc_email" type="submit" value="Email" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-1"></i>&nbsp;DescMail</button> 
           </div>
+        </div>
           <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -120,93 +159,16 @@
                 </div>
             </div>
           </div>
-
-
-
-
         <% end %>
-       
       </div>
-        
-      </p>
-    </div>
-    <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="payment" role="tabpanel">
-        <p>
-         <div class='ml-2 mt-2'>
-          <% if can?(:delete, :all) %>
-            <%= link_to transfer_staff_ledger_books_path, class: "btn btn-success" do %>
-              <i class="fa fa-credit-card" aria-hidden="true"></i>
-              Payment Transfer
-            <% end %>
-          <% end %>
-         </div>
-        </p>
-    </div>
-    <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="pdf" role="tabpanel">
-      <p>
-        <div class="col-lg-10 d-flex">
-         
-          <button class="form-control d-flex justify-content-center ml-2 btn btn-danger" style="width:120px" name="submit_pdf_staff_with_asc" type="submit" value="Accounts PDF A4" formtarget="_blank">ASC<i class="fa fa-file-pdf"></i></button>
-          <button class="form-control d-flex justify-content-center ml-2 btn btn-danger" style="width:120px" name="submit_pdf_staff_with_desc" type="submit" value="Accounts PDF A4" formtarget="_blank">Desc<i class="fa fa-file-pdf"></i></button>
-          <button class="form-control d-flex justify-content-center ml-2 btn btn-danger" style="width:120px" name="bulk" type="submit" value="Accounts PDF A4" formtarget="_blank">Bulk Record<i class="fa fa-file-pdf"></i></button>
-          
-      </div>
-      </p>
-    </div>
-    <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="csv" role="tabpanel">
-      <p>
-        <div class="col-lg-2 d-flex">
-        <button class="form-control d-flex justify-content-center ml-2 btn btn-success" style="width:120px" title= "download staff ledger book csv" name="csv" type="submit" value="csv">Staff Ledger Book &nbsp;<i class="fa fa-file-excel"></i></button>
-        </div>
-      </p>
-    </div>
-    <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="emails" role="tabpanel">
-      <p> 
-        <button class="form-control d-flex justify-content-center ml-2 form-control btn btn-info" style="width:120px" type="button" name="asc_email" type="submit" value="Email" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-2"></i>&nbsp;ASC-Mail</button>
-        <button class="form-control d-flex justify-content-center ml-2 form-control btn btn-info" style="width:120px" type="button" name="desc_email" type="submit" value="Email" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-2"></i>&nbsp;DESC-Mail</button> 
-     </p>
-      <!-- Modal -->
-      <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-            </div>
-            <div class="modal-body">
-              <% @pos_setting = PosSetting.first %>
-              <label>Email:</label>
-              <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
-              <br />
-              <label>Subject:</label>
-              <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Staff Ledger Book Detail report from MunshiOnClick", class: 'form-control email-fields'%>
-              <br />
-              <label>Body:</label><br />
-              <%= text_area_tag 'body', nil, class: 'form-control'%>
-              <br />
-
-              <label>Please select one of them.</label>
-              <div>
-                <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
-                <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
-                <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-              <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
-            </div>
-            </div>
-        </div>
       </div>
     </div>
+    
     <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="import-export" role="tabpanel">
       <p>
-        <div class="d-flex">
-        <button class="btn btn-success ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
-        <button class="btn btn-primary ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
+        <div class="d-flex ml-2">
+        <button class="btn btn-danger ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
+        <button class="btn btn-info ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
         </div>
       </p>
     </div>
@@ -218,7 +180,9 @@
   <table data-toggle="table" data-search="true" id="ledger_book_table" class=" overflow-hidden border-radius-1">
     <thead>
       <tr >
-      <th><input type="checkbox" id="master" class='select-all-checkbox' style="cursor: pointer;">
+      <th>
+        <% if check_can_delete(@module_permission) %>
+         <input type="checkbox" id="master" class='select-all-checkbox' style="cursor: pointer;">
          <div class="icon-container float-center">
             <span class="ml-2 mt-2">
               <div class="my-icon my-view">
@@ -228,6 +192,7 @@
                 </div>
             </span>
           </div>
+        <% end %>  
         </th>
         <th>ID<div class="float-right"><%= sort_link(@q, :id, "", {}, class: 'sorting-button') %></div></th>
         <th>Staff<div class="float-right"><%= sort_link(@q, :staff,  "", {}, class: 'sorting-button') %></div></th>
@@ -301,7 +266,7 @@
                         <div class="my-tooltip">
                             Edit
                           </div>
-                        <% if can?(:update, :all) %>
+                        <% if check_can_update(@module_permission) %>
                           <%if staff_ledger_book.salary_detail.present? %>
                             <%if staff_ledger_book.salary_detail.purchase_sale_detail.present?%>
                               <% if staff_ledger_book.salary_detail.purchase_sale_detail.present? and staff_ledger_book.salary_detail.purchase_sale_detail.transaction_type=="Sale"%>
@@ -359,7 +324,7 @@
                           <div class="my-tooltip">
                             Delete
                           </div>
-                          <% if can?(:delete, :all) %>
+                          <% if check_can_delete(@module_permission) %>
                             <%if staff_ledger_book.salary_detail.present? %>
                               <%if staff_ledger_book.salary_detail.purchase_sale_detail.present?%>
                                 <%= link_to purchase_sale_detail_path(staff_ledger_book.salary_detail.purchase_sale_detail), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
@@ -385,7 +350,7 @@
                           <div class="my-tooltip">
                             Show
                           </div>
-                           <% if can?(:view, :all) %>
+                           <% if check_can_read(@module_permission) %>
                             <%= link_to staff_ledger_book do %>
                               <i class="fa fa-eye mt-2" aria-hidden="true"></i>
                             <%end %>
@@ -402,6 +367,7 @@
         </tr>
       <% end %>
       <tr>
+        <td></td>
         <td><b>Total<b></td>
         <td><b><%=@debit.to_i%></b></td>
         <td><b><%=@credit.to_i%></b></td>

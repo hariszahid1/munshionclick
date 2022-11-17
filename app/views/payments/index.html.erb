@@ -6,61 +6,65 @@
 </div>
 
 <div class="hidden" id="city_list">
-          <div class="main-content-header">
-            <h1 class="ml-2">Payments</h1>
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item">
-                <a href="<%= root_path %>">Dashboard</a>
-              </li>
-              <li class="breadcrumb-item active">
-                <a href="<%= payments_path %>">Payments</a>
-              </li>
-            </ol>
-          </div>
-          <div class="float-right">
-            <div class="dropdown ml-auto mr-4">
-             <span class="btn btn-info" title= "About This page">Help</span>
-              <div class="dropdown-content">
-                <% if @help.present? %>
-                <% @help&.help_links.each do |link| %>
-                <a type="button" class="" target="_blank" href="<%= link[1] %>" >Help in <%= link[0] %></a>
-                 <% end %>
-                <% end %>
-              </div>
-            </div>
-          </div>
-          <%if (check_can_create(@module_permission))%>
-            <% if can?(:delete, :all) %>
-                <%= link_to new_payment_path, class: "btn btn-success" do %>
-               <i class="fa fa-plus" aria-hidden="true"></i>
-                Jama/Credit
-              <% end %>
-            <% end %>
-          <% end %>
-          <%if (check_can_create(@module_permission))%>
-            <% if can?(:delete, :all) %>
-                <%= link_to new_payment_path(jama: true), class: "btn btn-success ml-2" do %>
-               <i class="fa fa-plus" aria-hidden="true"></i>
-                Benam/Debit
-              <% end %>
-            <% end %>
-          <% end %>
-	<ul class="nav nav-pills mt-4" role="tablist">
+  <div class="main-content-header">
+    <h1 class="ml-2">Payments</h1>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<%= root_path %>">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active">
+        <a href="<%= payments_path %>">Payments</a>
+      </li>
+    </ol>
+  </div>
+ 
+  <div class="row d-flex mb-4 ml-1"> 
+    <%if (check_can_create(@module_permission))%>
+      <% if can?(:delete, :all) %>
+          <%= link_to new_payment_path, class: "btn btn-success mr-3" do %>
+         <i class="fa fa-plus" aria-hidden="true"></i>
+          Jama/Credit
+        <% end %>
+      <% end %>
+    <% end %>
+    <%if (check_can_create(@module_permission))%>
+      <% if can?(:delete, :all) %>
+          <%= link_to new_payment_path(jama: true), class: "btn btn-success mr-3" do %>
+         <i class="fa fa-plus" aria-hidden="true"></i>
+          Benam/Debit
+        <% end %>
+      <% end %>
+    <% end %>
+    <%if (check_can_create(@module_permission))%>
+      <%= link_to transfer_payments_path, class: "btn btn-danger mr-3" do %>
+        <i class="fa fa-credit-card" aria-hidden="true"></i>
+        Payment Transfer
+      <% end %>
+    <% end %>
+    <%if (check_can_create(@module_permission))%>
+      <%= link_to accounts_url, class: "btn btn-warning" do %>
+        <i class="fa fa-credit-card" aria-hidden="true"></i>
+        Accounts
+      <% end %>
+    <% end %>
+  </div>  
+   <div class="float-right">
+    <div class="dropdown ml-auto mr-4">
+     <span class="btn btn-info" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
+      <div class="dropdown-content">
+        <% if @help.present? %>
+        <% @help&.help_links.each do |link| %>
+        <a type="button" class="" target="_blank" href="<%= link[1] %>" >Help in <%= link[0] %></a>
+         <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+	<ul class="nav nav-pills ml-1" role="tablist">
 		<li class="nav-item">
 			<a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
 		</li>
-		
-	  <%if (check_can_create(@module_permission))%>
-	    <li class="nav-item">
-	    	<a class="nav-link tab-label" data-toggle="tab" href="#account" role="tab">Account</a>
-	    </li>
-    <%end%>
-    <%if (check_can_create(@module_permission))%>
-      <li class="nav-item">
-      	<a class="nav-link tab-label" data-toggle="tab" href="#transfer" role="tab">Transfer</a>
-      </li>
-    <%end%>
-		
+			
 		<%if (check_can_import_export(@module_permission))%>
 			<li class="nav-item">
 				<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
@@ -70,31 +74,36 @@
 <%= search_form_for @q, url: payments_path, class: "admin-controls", method: "get" do |f| %>
 
   <div class="tab-content">
-    <div class="tab-pane active mb-3 card shadow-sm mt-2 p-3" style="border-radius: 20px" id="search" role="tabpanel">
-      <div class="row mb-3">
-        <div class="col-lg-2">
+    <div class="tab-pane active mb-3 card shadow-sm mt-2 border-radius-1 mr-4" id="search" role="tabpanel">
+      <div class="row d-flex ml-1 mr-1 mt-4">
+        <div class="col-lg-2 form-group float-left">
           <%= f.select :account_id_in, options_from_collection_for_select(@accounts, "id", ->(st){"#{st.title} \u{27F6} #{st.bank_name}"},f.object.account_id_in),{:include_blank => "Select the Account Title"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Account Title"} }%>
         </div>
-        <div class="col-lg-2">
+        <div class="col-lg-2 form-group float-left">
           <%= f.search_field :id_eq, class: 'form-control input-sm ', placeholder: "Enter Id" %>
         </div>
-        <div class="col-lg-2">
+         <div class="ml-1">
+          <p>From:</p>
+        </div>
+        <div class="col-lg-2 form-group float-left">
           <%= f.search_field :created_at_gteq,value: @start_date, class: 'form-control input-sm datepicker', 'datepicker' => true,placeholder: "YYYY-MM-DD" %>
         </div>
-        <div class="col-lg-2">
+        <div class="ml-1">
+          <p >To:</p>
+        </div>
+        <div class="col-lg-2 form-group float-left">
           <%= f.search_field :created_at_lteq,value: @end_date, class: 'form-control input-sm datepicker', 'datepicker' => true ,placeholder: "YYYY-MM-DD"%>
         </div>
-        <div class="col-1">
+        <div class="col-1 form-group float-left">
           <button class="btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px;"><i class="fa fa-search"></i></button>
         </div>
       </div>
-      <div class="row d-flex">
+      <div class="row d-flex ml-1 mr-1 mb-4 mt-3">
         <%if (check_can_download_csv(@module_permission))%>
           <div>
-            <button class="btn btn-success ml-3" title= "download payments csv" name="csv" type="submit" value="csv">Payments &nbsp;<i class="fa fa-file-excel"></i></button>
+            <button class="btn btn-warning ml-3 form-control float-left d-flex justify-content-center" style="width:100px;" title= "download payments csv" name="csv" type="submit" value="csv">CSV &nbsp;<i class="fa fa-file-excel"></i></button>
           </div>
         <% end %>
-
         <%if (check_can_download_pdf(@module_permission))%>
            <div class="icon-container-3 mb-2 ml-3">
               <div class="my-icon-3 my-view-3">
@@ -104,13 +113,10 @@
                   <button class="btn btn-danger d-flex justify-content-center ml-2" style="width: 100px" title= "Download payment pdf for single user in descending order" name="1_submit_pdf" type="submit" value="Payment History PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mt-1 ml-1"></i>1-Desc</button>
                   <button class="btn btn-danger d-flex justify-content-center ml-2" style="width: 100px" title= "Download payment pdf for single user in ascending order" name="2_submit_pdf_asc" type="submit" value="Payment History PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mt-1 ml-1"></i>1-Asc</button>
                 </div>
-                  <span class="h5 btn btn-danger">PDF Types</span>
+                  <span class="btn btn-danger float-left d-flex justify-content-center form-control" style="width:150px;">PDF Types</span>
               </div>
           </div>
         <% end %>
-        
-        
-        
         <%if (check_can_send_email(@module_permission))%>
           <div class="icon-container-3 mb-2 ml-3">
               <div class="my-icon-3 my-view-3">
@@ -119,7 +125,7 @@
                     <button class="btn btn-info d-flex justify-content-center ml-2" name="asc_email" type="submit" value="Email"><i class="fas fa-envelope mt-1 ml-1"></i> AscEmail</button>
                     <button class="btn btn-info d-flex justify-content-center ml-2" name="desc_email" type="submit" value="Email"><i class="fas fa-envelope mt-1 ml-1"></i> DescEmail</button>
                 </div>
-                  <span class="h5 btn btn-info">Mail Types</span>
+                  <span class="btn btn-info float-left d-flex justify-content-center form-control" style="width:150px;">Mail Types</span>
               </div>
           </div>
           <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -160,29 +166,12 @@
         <% end %>
       </div>
     </div>
-    
-    <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="transfer" role="tabpanel">
-        <p>
-         <%= link_to transfer_payments_path, class: "btn btn-success ml-3 mt-3" do %>
-        <i class="fa fa-credit-card" aria-hidden="true"></i>
-        Payment Transfer
-      <% end %>
-        </p>
-    </div>
-     <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="account" role="tabpanel">
-        <p>
-         <%= link_to accounts_url, class: "btn btn-success ml-3 mt-3" do %>
-        <i class="fa fa-credit-card" aria-hidden="true"></i>
-        Account
-      <% end %>
-        </p>
-    </div>
-    
+        
     <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="import-export" role="tabpanel">
       <p>
-        <div class="d-flex">
-        <button class="btn btn-success ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
-        <button class="btn btn-primary ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
+        <div class="d-flex ml-2">
+        <button class="btn btn-danger ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
+        <button class="btn btn-info ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
         </div>
       </p>
     </div>
@@ -192,7 +181,7 @@
   <div>
 
 
-  <div class="card shadow-sm border-radius-1 p-2">
+  <div class="card shadow-sm border-radius-1 p-2 mr-4">
     <%= render 'map_columns/map_column_partials' %>
 
     <table data-toggle="table" data-search="true" class=" overflow-hidden border-radius-1">
