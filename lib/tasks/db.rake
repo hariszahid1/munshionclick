@@ -88,4 +88,17 @@ namespace :db do
       end #if end
     end# databases end
   end #function End
+
+  desc "Load filesend"
+  task :filesend => :environment do
+    all_db_configs = Rails.configuration.database_configuration.select{|dbs| dbs.include?(Rails.env + '_')}
+    date = Date.yesterday.to_s.gsub('-', '')
+    file_path = []
+    all_db_configs.each do |db_block, db_config|
+      file_path << [ db_block.split(Rails.env + '_')[1] ,Dir[Rails.root.join("shared/db_backup/#{date}/#{db_block.split(Rails.env + '_')[1]}/*").to_s][0]]
+    end
+    file_path.each do |path|
+      ReportMailer.db_backup_file_email('abbasanwar158@gmail.com', path).deliver
+    end
+  end
 end
