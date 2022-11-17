@@ -70,6 +70,14 @@ class CustomerManagementSystemsController < ApplicationController
       end
     end
   end
+
+  def destroy
+    @sys_user.destroy!
+    respond_to do |format|
+      format.html { redirect_to customer_management_systems_path, notice: 'CMS user was successfully Deleted.' }
+      format.json { render :show, status: :ok, location: @sys_user }
+    end
+  end
   private
 
   def set_sys_user
@@ -82,11 +90,18 @@ class CustomerManagementSystemsController < ApplicationController
     @countries = Country.all
     @user_groups = UserGroup.all
     @staff = Staff.all
+    @pos_setting = PosSetting.last
+    @project_name = @pos_setting.extra_settings.present? ? PosSetting.last.extra_settings['project_name'] : []
+    @client_type = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['client_type'] : []
+    @client_status = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['client_status'] : []
+    @category = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['category'] : []
+    @deal_status = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['deal_status'] : []
+    @source = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['source'] : []
   end
 
   def download_cms_csv_file
-    @sys_user = @q.result.as_json
-    header_for_csv = %w[ID Number Name Project_Name Client_Type Client_status Category Deal_Status
+    @sys_user = @q.result
+    header_for_csv = %w[Number Name Project_Name Client_Type Client_status Category Deal_Status
                         Source Plot_size Short_Details Created_at City Country
                         ]
     data_for_csv = get_data_for_cms_csv
