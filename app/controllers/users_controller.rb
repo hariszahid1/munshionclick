@@ -121,7 +121,8 @@ class UsersController < ApplicationController
 
   def download_users_pdf_file
     @users = @q.result
-    generate_pdf(@users.as_json, "Admins-Total-#{@users.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}", 'pdf.html', 'A4', false)
+    generate_pdf(@users.as_json, "Admins-Total-#{@users.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}",
+                 'pdf.html', 'A4', false, 'users/index.pdf.erb')
   end
 
     # Never trust parameters from the scary internet, only allow the white list through.

@@ -18,7 +18,7 @@ class Staff < ApplicationRecord
   has_paper_trail ignore: [:updated_at]
 
   def full_name
-    self.name+' '+self.father
+    self.name.to_s+' '+self.father.to_s
   end
 
   def coded_full_name
