@@ -1,4 +1,5 @@
  class InvestmentsController < ApplicationController
+  before_action :check_access
   before_action :set_investment, only: [:show, :edit, :update, :destroy]
 
   # GET /investments
@@ -40,6 +41,7 @@
   # GET /investments/1
   # GET /investments/1.json
   def show
+
   end
 
   # GET /investments/new

@@ -17,9 +17,19 @@
               </li>
             </ol>
           </div>
+          <div class="row d-flex mb-4 ml-1">
+            <%if (check_can_create(@module_permission))%>
+                <div id="new_production_block_type">
+                  <%= link_to new_production_block_type_path, remote: true ,class: "btn btn-success"  do %>
+                     <i class="fa fa-plus" aria-hidden="true"></i>
+                     Create
+                  <% end %>
+                </div>
+            <% end %>
+          </div>
           <div class="float-right">
             <div class="dropdown ml-auto mr-4">
-             <span class="btn btn-info" title= "About This page">Help</span>
+             <span class="btn btn-info" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
               <div class="dropdown-content">
                 <% if @help.present? %>
                 <% @help&.help_links.each do |link| %>
@@ -31,16 +41,7 @@
           </div>
 
 					<ul class="nav nav-pills" role="tablist">
-            <%if (check_can_create(@module_permission))%>
-              <% if can?(:add, :all) %>
-                <div id="new_production_block_type">
-                  <%= link_to new_production_block_type_path, remote: true ,class: "btn btn-success ml-3 mr-3"  do %>
-                     <i class="fa fa-plus" aria-hidden="true"></i>
-                     Create
-                  <% end %>
-                </div>
-              <% end %>
-            <% end %>
+            
 						<li class="nav-item">
 							<a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
 						</li>
@@ -55,25 +56,27 @@
 <%= search_form_for @q, url: production_block_types_path, class: "admin-controls", method: "get" do |f| %>
 
   <div class="tab-content">
-    <div class="tab-pane active mb-3 card shadow-sm mt-2" style="border-radius: 20px" id="search" role="tabpanel">
-     <p>
-     <div class="col-lg-10 form-group d-flex">
-        <div class="col-lg-2 form-group float-left">
+    <div class="tab-pane active mb-3 card shadow-sm mt-2 border-radius-1" id="search" role="tabpanel">
+     <div class="row d-flex mt-3">
+     <div class="col">
+        <div class="col-lg-3 form-group float-left">
           <%= f.search_field :title_cont, value: @title, placeholder: "Title", title: "Title" ,:class=>"form-control" %>
         </div>
-        <div>
+        <div class="col-lg-2 form-group float-left">
           <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
         </div>
+      </div>
+      <div class="col mr-3"> 
         <%if (check_can_download_pdf(@module_permission))%>
-          <button class="d-flex justify-content-center form-control btn btn-danger ml-2" style="width:180px" title= "download production block type pdf" name="pdf" type="submit" value="pdf" formtarget="_blank">Download PDF &nbsp;<i class="fa fa-file-pdf"></i></button>
+          <button class="d-flex justify-content-center form-control btn btn-danger ml-2 float-right" style="width:100px" title= "download production block type pdf" name="pdf" type="submit" value="pdf" formtarget="_blank">PDF &nbsp;<i class="fa fa-file-pdf"></i></button>
         <% end %>
 
         <%if (check_can_download_csv(@module_permission))%>
-          <button class="d-flex justify-content-center form-control btn btn-success ml-2" style="width:180px" title= "download production block type csv" name="csv" type="submit" value="csv">Download CSV &nbsp;<i class="fa fa-file-excel"></i></button>
+          <button class="d-flex justify-content-center form-control btn btn-warning ml-2 float-right" style="width:100px" title= "download production block type csv" name="csv" type="submit" value="csv">CSV &nbsp;<i class="fa fa-file-excel"></i></button>
         <% end %>
 
         <%if (check_can_send_email(@module_permission))%>
-          <button class="d-flex justify-content-center form-control btn btn-info ml-2" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-2"></i>&nbsp;Mail</button>
+          <button class="d-flex justify-content-center form-control btn btn-info ml-2 float-right" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-2"></i>&nbsp;Mail</button>
             <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
               <div class="modal-dialog modal-dialog-centered" role="document">
               <div class="modal-content">
@@ -111,15 +114,15 @@
         <% end %>
       </div>
 
-      </p>
+      </div>
     </div>
     
     
-    <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="import-export" role="tabpanel">
+    <div class="tab-pane card shadow-sm mt-2 border-radius-1 mb-3" id="import-export" role="tabpanel">
       <p>
-        <div class="d-flex">
-        <button class="btn btn-success ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
-        <button class="btn btn-primary ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
+        <div class="d-flex ml-2">
+        <button class="btn btn-danger ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
+        <button class="btn btn-info ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
         </div>
       </p>
     </div>
