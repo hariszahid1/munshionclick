@@ -14,7 +14,7 @@
     <% end %>
 
 		<%if (check_can_delete(@module_permission))%>
-      <%= link_to sys_users, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+      <%= link_to customer_management_system_path(sys_users), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
         <i class="fa fa-trash mr-2 ml-2" aria-hidden="true"></i> |
       <%end %>
     <% end %>

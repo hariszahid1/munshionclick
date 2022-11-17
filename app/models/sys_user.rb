@@ -25,7 +25,4 @@ class SysUser < ApplicationRecord
     self.update(balance: self.opening_balance)
   end
 
-  def as_json
-    super.merge(contact: contact)
-  end
 end
