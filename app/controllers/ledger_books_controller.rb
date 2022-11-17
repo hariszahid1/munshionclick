@@ -1,4 +1,5 @@
 class LedgerBooksController < ApplicationController
+  before_action :check_access
 	include LedgerBooksCsvMethods
   before_action :set_ledger_book, only: [:show, :edit, :update, :destroy]
 
@@ -72,7 +73,7 @@ class LedgerBooksController < ApplicationController
 				print_pdf("#{tempName}-LedgerBook -"+@created_at_gteq.to_s+" to "+@created_at_lteq.to_s,"pdf.html","A4")
 				
 			end
-# 2nd if
+	# 2nd if
     elsif params[:submit_form].present? or params[:submit_form_without].present? or params[:asc_email].present? or params[:submit_form_without_csv].present? or params[:submit_form_csv].present?
       @sys_users = SysUser.all
       sys_user_id = params[:q][:sys_user_id_eq].present? ? params[:q][:sys_user_id_eq] : @sys_users

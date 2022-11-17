@@ -1,4 +1,5 @@
  class InvestmentsController < ApplicationController
+  before_action :check_access
   before_action :set_investment, only: [:show, :edit, :update, :destroy]
 
   # GET /investments
@@ -10,7 +11,7 @@
     end
     @investments = @q.result(distinct: true).page(params[:page])
     @investment = @q.result(distinct: true)
-    @total_investment=@investment.pluck('Sum(invest)')
+    @total_investment=@investment.pluck('Sum(debit)','Sum(credit)')
     @accounts=Account.all
     if params[:submit_pdf_staff_with].present?
       if @q.result.count > 0
@@ -40,6 +41,7 @@
   # GET /investments/1
   # GET /investments/1.json
   def show
+
   end
 
   # GET /investments/new
@@ -57,10 +59,8 @@
   # POST /investments.json
   def create
     @investment = Investment.new(investment_params)
-
     respond_to do |format|
       if @investment.save
-        format.js
         format.html { redirect_to investments_path, notice: 'Investment was successfully created.' }
         format.json { render :show, status: :created, location: @investment }
       else
@@ -107,6 +107,6 @@
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def investment_params
-      params.require(:investment).permit(:invest,  :account_id, :comment, :created_at)
+      params.require(:investment).permit(:debit,  :account_id, :comment, :created_at, :credit)
     end
 end

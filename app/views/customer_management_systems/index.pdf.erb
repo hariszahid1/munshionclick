@@ -15,7 +15,7 @@
     <% @time = Time.zone.now %>
     <div>
       <p class="border-bottom"></p>
-      <h1 class="text-center">System Users</h1>
+      <h1 class="text-center">CMS Users</h1>
       <h1 class="text-center">
         Date: <b><span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%></span>
         Time: <span><%=@time.strftime("at %I:%M%p")%></span></b>
@@ -27,69 +27,37 @@
       <table>
         <thead class="lite-gray">
           <th class="text-center">ID</th>
-          <th class="text-center">Code</th>
-          <th class="text-center">Cnic</th>
-          <th class="text-center">Name</th>
-          <th class="text-center">User Type Id</th>
-          <th class="text-center">User Group</th>
-          <th class="text-center">Status</th>
-          <th class="text-center">Occupation</th>
-          <th class="text-center">Credit Status</th>
-          <th class="text-center">Credit Limit</th>
-          <th class="text-center">Opening Balance</th>
-          <th class="text-center">Balance</th>
-          <th class="text-center">GST</th>
-          <th class="text-center">NTN</th>
-          <th class="text-center">father</th>
-          <th class="text-center">Nominee Name</th>
-          <th class="text-center">Nominee Father Name</th>
-          <th class="text-center">Nominee CNIC</th>
-          <th class="text-center">Nominee Relation</th>
-          <th class="text-center">Address</th>
-          <th class="text-center">Home</th>
-          <th class="text-center">Office</th>
-          <th class="text-center">Mobile</th>
-          <th class="text-center">Fax</th>
-          <th class="text-center">Email</th>
-          <th class="text-center">Comment</th>
-          <th class="text-center">Status</th>
+          <th class="text-center">Client Number</th>
+          <th class="text-center">Client Name</th>
+          <th class="text-center">Project Name</th>
+          <th class="text-center">Client Type</th>
+          <th class="text-center">Client Status</th>
+          <th class="text-center">Category</th>
+          <th class="text-center">Deal Status</th>
+          <th class="text-center">Source</th>
+          <th class="text-center">Plot Size</th>
+          <th class="text-center">Short Details</th>
+          <th class="text-center">Created at</th>
           <th class="text-center">City Id</th>
           <th class="text-center">Country Id</th>
-          <th class="text-center">Permanent Address</th>
         </thead>
         <tbody>
           <% data.each_with_index do |sys_user, index| %>
             <tr>
               <th class="text-center"><%= sys_user['id'] %></th>
-              <td class="text-center"><%= sys_user['code'] %></td>
-              <td class="text-center"><%= sys_user['cnic'] %></td>
-              <th class="text-center"><%= sys_user['name'] %></th>
-              <td class="text-center"><%= sys_user['user_type_id'] %></td>
-              <td class="text-center"><%= sys_user['user_group'] %></td>
-              <th class="text-center"><%= sys_user['status'] %></th>
-              <td class="text-center"><%= sys_user['occupation'] %></td>
-              <td class="text-center"><%= sys_user['credit_status'] %></td>
-              <th class="text-center"><%= sys_user['credit_limit'] %></th>
-              <td class="text-center"><%= sys_user['opening_balance'] %></td>
-              <td class="text-center"><%= sys_user['balance'] %></td>
-              <th class="text-center"><%= sys_user['gst'] %></th>
-              <td class="text-center"><%= sys_user['ntn'] %></td>
-              <td class="text-center"><%= sys_user['father'] %></td>
-              <td class="text-center"><%= sys_user['nom_name'] %></td>
-              <th class="text-center"><%= sys_user['nom_father'] %></th>
-              <td class="text-center"><%= sys_user['nom_cnic'] %></td>
-              <td class="text-center"><%= sys_user['nom_relation'] %></td>
-              <td class="text-center"><%= sys_user[:contact]['address'] %></td>
-              <td class="text-center"><%= sys_user[:contact]['home'] %></td>
-              <td class="text-center"><%= sys_user[:contact]['office'] %></td>
-              <td class="text-center"><%= sys_user[:contact]['mobile'] %></td>
-              <td class="text-center"><%= sys_user[:contact]['fax'] %></td>
-              <td class="text-center"><%= sys_user[:contact]['email'] %></td>
-              <td class="text-center"><%= sys_user[:contact]['comment'] %></td>
-              <td class="text-center"><%= sys_user[:contact]['status'] %></td>
-              <td class="text-center"><%= sys_user[:contact]['city_id'] %></td>
-              <td class="text-center"><%= sys_user[:contact]['country_id'] %></td>
-              <td class="text-center"><%= sys_user[:contact]['permanent_address'] %></td>
+              <td class="text-center"><%= sys_user['cms_data'].try(:[], 'client_number') %></td>
+              <td class="text-center"><%= sys_user['cms_data'].try(:[], 'client_name') %></td>
+              <th class="text-center"><%= sys_user['cms_data'].try(:[], 'project_name') %></th>
+              <td class="text-center"><%= sys_user['cms_data'].try(:[], 'client_type') %></td>
+              <td class="text-center"><%= sys_user['cms_data'].try(:[], 'client_status') %></td>
+              <td class="text-center"><%= sys_user['cms_data'].try(:[], 'category') %></td>
+              <td class="text-center"><%= sys_user['cms_data'].try(:[], 'deal_status') %></td>
+              <th class="text-center"><%= sys_user['cms_data'].try(:[], 'source') %></th>
+              <th class="text-center"><%= sys_user['cms_data'].try(:[], 'plot_size') %></th>
+              <td class="text-center"><%= sys_user['cms_data'].try(:[], 'short_details') %></td>
+              <td class="text-center"><%= sys_user['created_at'] %></td>
+              <td class="text-center"><%= sys_user[:contact].try(:[], 'city_id') %></td>
+              <td class="text-center"><%= sys_user[:contact].try(:[], 'country_id') %></td>
             </tr>
           <% end %>
         </tbody>

@@ -8,11 +8,15 @@ namespace :db do
   task migrate: :environment do
     # Invoking rake db:migrate executes against the usual/default db
     # first, then this gets executed.
-    all_db_configs   = Rails.configuration.database_configuration.select{|dbs| dbs.include?(Rails.env + '_')}
+    all_db_configs   = Rails.configuration.database_configuration.select{|dbs| dbs.include?(Rails.env)}
     all_db_configs.each do |db_block, db_config|
-      company_name = db_block.split(Rails.env + '_')[1]
-      puts company_name+' DB migration'
-      ActiveRecord::Base.establish_connection "#{Rails.env}_#{company_name}".to_sym
+      company_name = db_block.split(Rails.env)[1]
+      puts company_name.to_s+' DB migration'
+			if company_name.blank?
+	      ActiveRecord::Base.establish_connection "#{Rails.env}".to_sym
+			else
+				ActiveRecord::Base.establish_connection "#{Rails.env}#{company_name}".to_sym
+			end
       migrations = if ActiveRecord.version.version >= '5.2'
         ActiveRecord::Migration.new.migration_context.migrations
       else

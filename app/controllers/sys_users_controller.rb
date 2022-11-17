@@ -3,6 +3,7 @@ class SysUsersController < ApplicationController
   include PdfCsvGeneralMethod
   include SysUsersHelper
 
+  before_action :check_access, only: [:index, :show, :edit, :update, :destroy]
   before_action :set_sys_user, only: [:show, :edit, :update, :destroy]
 
   # GET /sys_users
@@ -51,6 +52,7 @@ class SysUsersController < ApplicationController
   end
 
   def receiveable
+
     @q = SysUser.where('balance < 0 ').ransack(params[:q])
     if @q.result.count > 0
       @q.sorts = 'name asc' if @q.sorts.empty?
@@ -69,7 +71,7 @@ class SysUsersController < ApplicationController
       @opening_balance = params[:q][:opening_balance]
     end
     @sys_users = @q.result(distinct: true)
-	
+
     @all_user =SysUser.all
     @user_types=UserType.all
     if params[:submit_pdf_staff_with].present?
@@ -83,6 +85,7 @@ class SysUsersController < ApplicationController
   end
 
   def customer
+		check_access_of("sys_users/customer")
     @sys_user_all = SysUser.where(:user_group=>['Customer'])
     @q = SysUser.where(:user_group=>['Customer']).ransack(params[:q])
     if @q.result.count > 0
@@ -119,6 +122,7 @@ class SysUsersController < ApplicationController
   end
 
   def supplier
+		check_access_of("sys_users/supplier")
     @sys_user_all = SysUser.where(:user_group=>['Supplier'])
     @q = SysUser.where(:user_group=>['Supplier']).ransack(params[:q])
     if @q.result.count > 0
@@ -155,6 +159,7 @@ class SysUsersController < ApplicationController
   end
 
   def own
+		check_access_of("sys_users/own")
     @sys_user_all = SysUser.where(:user_group=>['Own'])
     @q = SysUser.where(:user_group=>['Own']).ransack(params[:q])
     if @q.result.count > 0
@@ -192,11 +197,14 @@ class SysUsersController < ApplicationController
 
   # GET /sys_users/new
   def new
-    @user_types=UserType.all
-    @sys_user = SysUser.new
-    @cities=City.all
-    @countries=Country.all
+    @user_types = UserType.all
+    @sys_user  =  SysUser.new
+    @cities = City.all
+    @countries = Country.all
+    @staff = Staff.all
+    @sys_user.notes.build
     @sys_user.build_contact
+    @sys_user.follow_ups.build
   end
 
   # GET /sys_users/1/edit
@@ -204,7 +212,7 @@ class SysUsersController < ApplicationController
     @user_types=UserType.all
     @cities=City.all
     @countries=Country.all
-
+    @staff = Staff.all
     respond_to do |format|
       format.js
     end
@@ -306,7 +314,28 @@ class SysUsersController < ApplicationController
         :country_id,
         :sys_user_id,
         :permanent_address
-        ]
+      ],
+      :notes_attributes => [
+        :id,
+        :message,
+        :assigned_to_id,
+        :created_by,
+        :notable_id,
+        :notable_type
+      ],
+      :follow_ups_attributes =>[
+        :id,
+        :reminder_type,
+        :task_type,
+        :priority,
+        :assigned_to_id,
+        :created_by,
+        :date,
+        :comment,
+        :followable_id,
+        :followable_type
+      ],
+      cms_data: {}
       )
   end
 
@@ -315,7 +344,7 @@ class SysUsersController < ApplicationController
       csv_data = payable_csv
     elsif params[:submit_csv_sys_user_receivable].present?
       puts "-------------------------"
-      csv_data = receiveable_csv 
+      csv_data = receiveable_csv
     end
     request.format = 'csv'
     respond_to do |format|
@@ -340,7 +369,7 @@ class SysUsersController < ApplicationController
   def download_sys_users_pdf_file
     sort_data_according
     generate_pdf(@sorted_data.as_json, "Sys-users-Total-#{@sorted_data.count}-#{DateTime.now.strftime('%d-%m-%Y-%H-%M')}",
-                 'pdf.html', 'A4', false)
+                 'pdf.html', 'A4', false, 'sys_users/index.pdf.erb')
   end
 
   def send_email_file
@@ -394,5 +423,19 @@ class SysUsersController < ApplicationController
   def export_file
     export_data('SysUser')
   end
+
+	def check_access_of (tempModule)
+		if (check_is_hidden("#{tempModule}"))
+			respond_to do |format|
+				format.html { redirect_to dashboard_path, alert: "Your system does not have this module" }
+			end
+		else
+			if (check_can_accessed("#{tempModule}")==false)
+				respond_to do |format|
+					format.html { redirect_to dashboard_path, alert: "you are not authorized." }
+				end
+			end
+		end
+	end
 
 end

@@ -28,30 +28,41 @@
       </div>
     </div>
   </div>
+  <%= link_to expense_entries_path, class: "btn btn-primary mb-3" do %>
+    <i class="fa fa-tasks" aria-hidden="true"></i>
+    Expense Details
+  <% end %>
 
-  <ul class="nav nav-pills" role="tablist">
-    <li class="nav-item">
-      <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link tab-label" data-toggle="tab" href="#create" role="tab">Create</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link tab-label" data-toggle="tab" href="#details" role="tab">Expense Details</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download PDF</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download CSV</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
-    </li>
-  </ul>
+	<ul class="nav nav-pills" role="tablist">
+		<li class="nav-item">
+			<a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
+		</li>
+		<%if (check_can_create(@module_permission))%>
+			<li class="nav-item">
+				<a class="nav-link tab-label" data-toggle="tab" href="#create" role="tab">Create</a>
+			</li>
+		<%end%>
+		<%if (check_can_download_pdf(@module_permission))%>
+			<li class="nav-item">
+				<a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
+			</li>
+		<%end%>
+		<%if (check_can_download_csv(@module_permission))%>
+			<li class="nav-item">
+				<a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
+			</li>
+		<%end%>
+		<%if (check_can_send_email(@module_permission))%>
+			<li class="nav-item">
+				<a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
+			</li>
+		<%end%>
+		<%if (check_can_import_export(@module_permission))%>
+			<li class="nav-item">
+				<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
+			</li>
+		<%end%>
+	</ul>
 
   <%= search_form_for @q, url: expenses_path, class: "admin-controls", method: "get" do |f| %>
     <div class="tab-content">
@@ -105,7 +116,7 @@
       <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="csv" role="tabpanel">
         <p>
           <div class="col-lg-2 d-flex">
-            <button class="btn btn-success" title= "download expenses csv" name="csv" type="submit" value="csv"><i class="fa fa-file-excel mr-2"></i>Expenses</button>          
+            <button class="btn btn-success" title= "download expenses csv" name="csv" type="submit" value="csv"><i class="fa fa-file-excel mr-2"></i>Expenses</button>
           </div>
         </p>
       </div>
@@ -171,15 +182,17 @@
       <thead>
         <tr>
           <th><input type="checkbox" id="master" class='select-all-checkbox'>
-            <div class="icon-container float-center">
-              <span class="ml-2 mt-2">
-                <div class="my-icon my-view">
-                  <button class="icon-div btn delete-selected p-2 " type='button' value='Expense'>
-                    <i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i>
-                  </button>
-                </div>
-              </span>
-            </div>
+						<%if (check_can_delete(@module_permission))%>	
+							<div class="icon-container float-center">
+								<span class="ml-2 mt-2">
+									<div class="my-icon my-view">
+										<button class="icon-div btn delete-selected p-2 " type='button' value='Expense'>
+											<i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i>
+										</button>
+									</div>
+								</span>
+							</div>
+						<%end%>
           </th>
           <th>ID<div class='float-right'><%= sort_link(@q, :id,"", {}, class: 'sorting-button') %></div></th>
           <th>Type Wise<div class='float-right'><%= sort_link(@q, :expense, "", {}, class: 'sorting-button') %></div></th>
@@ -215,84 +228,83 @@
                 <%= expense.created_at.present? ? expense.created_at.strftime("%A,  %d-%b-%y at %H:%M%p") : '' %>
               <%end%>
             </td>
-            <td class="p-3">
-             <div class="icon-container-1">
-  <div class="my-icon-1 my-view-1">
-    <div class="my-tooltip-1">
-    
-    <div class="icon-container">
-          <div class="my-icon my-view">
-          <div class="my-tooltip">
-            Edit
-          </div>
-          
-                <% if can?(:update, :all) %>
-              <%= link_to edit_expense_path(expense), remote: true, class:"icon-div" do %>
-                <i class="fa fa-edit mt-2" aria-hidden="true"></i>
-              <%end %>
-            <% end %>
-          
-        </div>
+            <td>
+              <div class="icon-container-1">
+                <div class="my-icon-1 my-view-1">
+                  <div class="my-tooltip-1">
+                    <div class="icon-container">
+											<%if (check_can_update(@module_permission))%>
+												<div class="my-icon my-view">
+													<div class="my-tooltip">
+														Edit
+													</div>
+													<span class="icon-div">
+														<%= link_to edit_expense_path(expense), remote: true do %>
+																<i class="fa fa-edit mt-2" aria-hidden="true"></i>
+															<%end %>
+													</span>
+												</div>
+											<% end %>
 
-          <div class="my-icon my-view">
-              <div class="my-tooltip">
-                Delete
-              </div>
-                
-                  <% if can?(:delete, :all) %>
-                    <%= link_to expense, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
-                    <i class="fa fa-trash mt-2" aria-hidden="true"></i>
-                  <%end %>
-                <% end %>
-              
-          </div>
+										<%if (check_can_delete(@module_permission))%>
+											<div class="my-icon my-view">
+                        <div class="my-tooltip">
+                          Delete
+                        </div>
+                        <span class="icon-div mt-3">
+													<%= link_to expense, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+														<i class="fa fa-trash mt-2" aria-hidden="true"></i>
+													<%end %>
+												</span>
+											</div>
+										<% end %>
 
-         <div class="my-icon my-view">
-                <div class="my-tooltip">
-                  Show
+										<%if (check_can_read(@module_permission))%>
+											<div class="my-icon my-view">
+                        <div class="my-tooltip">
+                          Show
+                        </div>
+                        <span class="icon-div mt-3">
+                            <%= link_to expense_path(expense), remote: true do %>
+                              <i class="fa fa-eye mt-2" aria-hidden="true"></i>
+                            <% end %>
+													</span>
+											</div>
+										<%end%>
+
+										<%if (check_can_download_pdf(@module_permission))%>
+                      <div class="my-icon my-view">
+                        <div class="my-tooltip">
+                          PDF
+                        </div>
+                        <span class="icon-div mt-3">
+                          <%= link_to expenses_path('q[id_eq]':expense.id,'submit_pdf_a4':true), title: 'Download PDF', target: '_blank' do %>
+                            <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
+                          <%end %>
+                        </span>
+                      </div>
+										<%end%>
+
+										<%if (check_can_download_csv(@module_permission))%>
+                      <div class="my-icon my-view">
+                        <div class="my-tooltip">
+                          CSV
+                        </div>
+                        <span class="icon-div mt-3">
+                          <%= link_to expenses_path('q[id_eq]':expense.id,'csv':true), title: 'Download CSV' do%>
+                            <i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
+                          <%end %>
+                        </span>
+                      </div>
+										<%end%>
+
+									</div>
+                  </div>
+                  <span class="icon-div-1">
+                    <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+                  </span>
                 </div>
-                
-                   <% if can?(:view, :all) %>
-                    <%= link_to expense_path(expense), remote: true, class:"icon-div" do %>
-                    <i class="fa fa-eye mt-2" aria-hidden="true"></i>
-                <%end %>
-            <%end%>
-          
-      </div>
-
-      <div class="my-icon my-view">
-            <div class="my-tooltip">
-              PDF
-            </div>
-            
-                <%= link_to expenses_path('q[id_eq]':expense.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
-    			      <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
-    		      <%end %>
-            
-      </div>
-
-       <div class="my-icon my-view">
-            <div class="my-tooltip">
-              CSV
-            </div>
-            
-                  <%= link_to expenses_path('q[id_eq]':expense.id,'csv':true), title: 'Download CSV', class:"icon-div" do%>
-    			        <i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
-    		      <%end %>
-            
-          </div>
-        </div>
-        </div>
-            <span class="icon-div-1">
-                  <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
-            </span>
-        </div>
-      </div>
-      </div>
-    </div>
-  </td>
-</tr>
-
+              </div>
             </td>
           </tr>
         <% end %>

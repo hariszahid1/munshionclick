@@ -4,7 +4,7 @@
 class UserGroupsController < ApplicationController
   include PdfCsvGeneralMethod
   include CitiesHelper
-
+	before_action :check_access
   before_action :set_user_group, only: %i[show edit update destroy]
   require 'tempfile'
   require 'csv'
@@ -103,7 +103,8 @@ class UserGroupsController < ApplicationController
 
   def download_user_groups_pdf_file
     @user_groups = @q.result
-    generate_pdf(@user_groups.as_json, "User_groups-Total-#{@user_groups.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}", 'pdf.html', 'A4', false)
+    generate_pdf(@user_groups.as_json, "User_groups-Total-#{@user_groups.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}",
+                 'pdf.html', 'A4', false, 'user_groups/index.pdf.erb')
   end
 
   def send_email_file

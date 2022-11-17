@@ -5,6 +5,7 @@ class CitiesController < ApplicationController
   include PdfCsvGeneralMethod
   include CitiesHelper
 
+	before_action :check_access
   before_action :set_city, only: %i[show edit update destroy]
   require 'tempfile'
   require 'csv'
@@ -100,7 +101,8 @@ class CitiesController < ApplicationController
 
   def download_cities_pdf_file
     @cities = @q.result
-    generate_pdf(@cities.as_json, "Cities-Total-#{@cities.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}", 'pdf.html', 'A4', false)
+    generate_pdf(@cities.as_json, "Cities-Total-#{@cities.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}",
+                 'pdf.html', 'A4', false, 'cities/index.pdf.erb')
   end
 
   def send_email_file

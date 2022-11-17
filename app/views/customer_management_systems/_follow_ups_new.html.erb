@@ -1,0 +1,37 @@
+<div class="nested-fields font-weight-bold mt-2 col-12">
+  <div class="row font-weight-bold">
+    <div class="col-lg-2 form-group float-left font-weight-bold">
+      <%= f.hidden_field :created_by, value: current_user.id %>
+    </div>
+    <div class="col-lg-12 row">
+      <div class="col-lg-6 form-group float-left text-black">
+        <%= f.select :assigned_to_id, options_from_collection_for_select(@staff, 'id', 'name',f.object&.assigned_to_id.present? ? f.object&.assigned_to_id : nil ),{include_blank: "Please Select Assignee"},{class: "form-control"} %>
+      </div>
+      <div class="col-lg-6 form-group float-left text-black">
+        <%= f.select :task_type, FollowUp.task_types.map { |key, value| [key.humanize, key] },{include_blank: "Please Select Priority"},{class: "form-control"} %>
+      </div>
+      <div class="col-lg-6 form-group float-left text-black">
+        <%= f.select :priority, FollowUp.priorities.map { |key, value| [key.humanize, key] },{include_blank: "Please Select Task Type"},{class: "form-control"} %>
+      </div>
+      <div class="col-lg-6 form-group float-left text-black">
+        <%= f.date_field :date%></th>
+      </div>
+      <div class="col-lg-6 form-group float-left text-black">
+        <%= f.text_area :comment, placeholder: "Enter your message", hide_label: true ,class: 'urdu-font' %>
+      </div>
+      <div class="col-lg-12 form-group float-right links"><%= link_to_remove_association "Remove", f , class: "btn btn-danger float-left" %></div>
+    </div>
+
+  </div>
+</div>
+<script>
+  $(document).ready(function() {
+    setTimeout(function(){
+      $(".chosen-select").chosen({
+  allow_single_deselect: true,
+  width: '100%'
+});
+    }, 50);
+    expenseUpdate();
+  });
+</script>

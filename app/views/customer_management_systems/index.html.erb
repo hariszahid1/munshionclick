@@ -33,45 +33,45 @@
     </div>
   </div>
 
-  <ul class="nav nav-tabs" role="tablist">
-    <li class="nav-item">
-      <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
-    </li>
-
-    <li class="nav-item">
-      <a class="nav-link tab-label" data-toggle="tab" href="#create" role="tab">Create</a>
-    </li>
-
-    <li class="nav-item">
-      <a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
-    </li>
-
-    <li class="nav-item">
-      <a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
-    </li>
-
-    <li class="nav-item">
-      <a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
-    </li>
-
-    <li class="nav-item">
-      <a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
-    </li>
-  </ul>
+  <ul class="nav nav-pills" role="tablist">
+		<!--li class="nav-item">
+			<a class="nav-link tab-label" data-toggle="tab" href="#search" role="tab">Search</a>
+		</li-->
+		<%if (check_can_create(@module_permission))%>
+			<li class="nav-item">
+				<a class="nav-link tab-label active" data-toggle="tab" href="#create" role="tab">Create</a>
+			</li>
+		<%end%>
+		<%if (check_can_download_pdf(@module_permission))%>
+			<li class="nav-item">
+				<a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
+			</li>
+		<%end%>
+		<%if (check_can_download_csv(@module_permission))%>
+			<li class="nav-item">
+				<a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
+			</li>
+		<%end%>
+		<%if (check_can_send_email(@module_permission))%>
+			<li class="nav-item">
+				<a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
+			</li>
+		<%end%>
+		<%if (check_can_import_export(@module_permission))%>
+			<!--li class="nav-item">
+				<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
+			</li-->
+		<%end%>
+</ul>
 
   <%= search_form_for @q, url: customer_management_systems_path, class: "admin-controls", method: "get" do |f| %>
     <div class="tab-content mb-5">
-      <div class="tab-pane active" id="search" role="tabpanel">
+      <div class="tab-pane" id="search" role="tabpanel">
         <p>
           <div class="col-lg-10 form-group d-flex">
             <div class='col-lg-3'>
-              <%= f.select :id_eq, options_for_select(@options_for_select.map{ |p| [p.name , p.id]}, f.object.id_eq),{:include_blank => "Select Name"},:class=>"form-control chosen-select" %>
+              <%= f.search_field :cms_data_cont,  placeholder: "title", title: "title" ,:class=>"form-control" %>
             </div>
-
-            <div class='col-lg-3 form-group float-left'>
-              <%= f.select :user_group_eq, options_for_select(SysUser.user_groups, @user_group), {:include_blank => "Select User Group"},:class=>"form-control chosen-select" %>
-            </div>
-
             <div class="col=lg-2 form-group float-left">
               <%= f.select :status_eq, SysUser.statuses.map { |key, value| [key.humanize, value] },{include_blank: "Select Status", hide_label:true, required: true },:class=>"form-control chosen-select" %>
             </div>
@@ -82,13 +82,13 @@
           </div>
         </p>
       </div>
-      <div class="tab-pane" id="create" role="tabpanel">
+      <div class="tab-pane active" id="create" role="tabpanel">
         <p>
           <% if can?(:add, :all) %>
             <div id="new_city">
               <%= link_to new_customer_management_system_path, remote: true,class: "btn btn-success ml-3" do %>
                 <i class="fa fa-plus" aria-hidden="false"></i>
-                Create System User
+                Create CMS User
               <% end %>
             </div>
           <% end %>
@@ -98,7 +98,7 @@
       <div class="tab-pane" id="pdf" role="tabpanel">
         <p>
           <div class="col-lg-2 d-flex">
-            <button class="form-control btn btn-danger" title= "download cities pdf" name="pdf" type="submit" value="pdf" formtarget="_blank" style="width:160px">System Users &nbsp;<i class="fa fa-file-pdf"></i></button>
+            <button class="form-control btn btn-danger" title= "download customer_management_systems pdf" name="pdf" type="submit" value="pdf" formtarget="_blank" style="width:160px">CMS Users &nbsp;<i class="fa fa-file-pdf"></i></button>
           </div>
         </p>
       </div>
@@ -106,7 +106,7 @@
       <div class="tab-pane" id="csv" role="tabpanel">
         <p>
           <div class="col-lg-2 d-flex">
-            <button class="btn btn-success" title= "download cities csv" name="csv" type="submit" value="csv">System Users &nbsp;<i class="fa fa-file-excel"></i></button>
+            <button class="btn btn-success" title= "download customer_management_systems csv" name="csv" type="submit" value="csv">CMS Users &nbsp;<i class="fa fa-file-excel"></i></button>
           </div>
         </p>
       </div>
@@ -169,18 +169,19 @@
 
 <div class='card p-3'>
   <table data-toggle="table" data-search="true" id="sys_user_table">
-    <button class='btn btn-outline-danger float-right delete-selected' type='button' style="width:163px"value='SysUser' >Delete Selected</button>
+		<%if (check_can_delete(@module_permission))%>
+    	<button class='btn btn-outline-danger float-right delete-selected' type='button' style="width:163px"value='SysUser' >Delete Selected</button>
+		<%end%>
     <thead>
       <tr>
         <th><input type="checkbox" id="master" class='select-all-checkbox'></th>
-        <th>Profile Image</th>
-        <th><%= sort_link(@q, :code, 'Code') %></th>
-        <th><%= sort_link(@q, :cnic, 'Name') %></th>
-        <th><%= sort_link(@q, :user_group, 'User group') %></th>
-        <th>Status</th>
-        <th>Occupation</th>
-        <th><%= sort_link(@q, :balance, 'balance') %></th>
-        <th class="border_none">Action</th>
+        <th>Client Name</th>
+        <th>Client Number</th>
+         <th>Client Type</th>
+        <th>Category</th>
+        <th>Source</th>
+        <th>Plot Size</th>
+        <th class="border_none text-center">Action</th>
       </tr>
     </thead>
 

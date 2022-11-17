@@ -1,4 +1,5 @@
 class ExpensesController < ApplicationController
+	before_action :check_access
   before_action :set_expense, only: [:show, :edit, :update, :destroy]
   include PdfCsvGeneralMethod
   include ExpensesHelper
@@ -140,7 +141,7 @@ class ExpensesController < ApplicationController
   def download_expenses_pdf_file
     sort_data_according
     generate_pdf(@sorted_data.as_json, "Expenses-Total-#{@sorted_data.count}-#{DateTime.now.strftime('%d-%m-%Y-%H-%M')}",
-                 'pdf.html', @pdf_page_size, @html_pdf)
+                 'pdf.html', @pdf_page_size, @html_pdf, 'expenses/index.pdf.erb')
   end
 
   def send_email_file

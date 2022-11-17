@@ -35,30 +35,40 @@
           <li class="nav-item">
             <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link tab-label" data-toggle="tab" href="#create" role="tab">Create</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link tab-label" data-toggle="tab" href="#payable" role="tab">Payable</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link tab-label" data-toggle="tab" href="#receivable" role="tab">Receiveable</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link tab-label" data-toggle="tab" href="#payment" role="tab">Payment Transfer</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
-          </li>
-          <li class="nav-item">
-           <a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
-          </li>
+					<%if (check_can_create(@module_permission))%>
+						<li class="nav-item">
+							<a class="nav-link tab-label" data-toggle="tab" href="#create" role="tab">Create</a>
+						</li>
+					<%end%>
+						<li class="nav-item">
+							<a class="nav-link tab-label" data-toggle="tab" href="#payable" role="tab">Payable</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link tab-label" data-toggle="tab" href="#receivable" role="tab">Receiveable</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link tab-label" data-toggle="tab" href="#payment" role="tab">Payment Transfer</a>
+						</li>
+					<%if (check_can_download_pdf(@module_permission))%>
+						<li class="nav-item">
+							<a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
+						</li>
+					<%end%>
+					<%if (check_can_download_csv(@module_permission))%>
+						<li class="nav-item">
+							<a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
+						</li>
+					<%end%>
+					<%if (check_can_send_email(@module_permission))%>
+						<li class="nav-item">
+							<a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
+						</li>
+					<%end%>
+					<%if (check_can_import_export(@module_permission))%>
+						<li class="nav-item">
+						<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
+						</li>
+					<%end%>
       </ul>
 
     <%= search_form_for @q, url: sys_users_path, class: "admin-controls", method: "get" do |f| %>
@@ -68,10 +78,10 @@
               <%= search_form_for @q, url: sys_users_path, class: "admin-controls", method: "get" do |f| %>
               <span class="mt-5 col-lg-12">
                   <span class="col-lg-3 form-group float-left">
-                    <%= f.select :id_eq, options_from_collection_for_select(@all_user, "id", ->(st){"#{st.name} \u{27F6} \u{27F6} #{st.code} "},@name),{:include_blank => "Select Name/Code"},:class=>"form-control chosen-select " %>
+                    <%= f.select :id_eq, options_from_collection_for_select(@all_user, "id", ->(st){"#{st.name} \u{27F6} \u{27F6} #{st.code} "},f.object.id_eq),{:include_blank => "Select Name/Code"},:class=>"form-control chosen-select " %>
                   </span>
                   <span class='col-lg-2 form-group float-left'>
-                    <%= f.select :user_group_eq, options_for_select(SysUser.user_groups, @user_group), {:include_blank => "Select User Group"},:class=>"form-control chosen-select" %>
+                    <%= f.select :user_group_eq, options_for_select(SysUser.user_groups, f.object.user_group_eq), {:include_blank => "Select User Group"},:class=>"form-control chosen-select" %>
                   </span>
                   <span class="col=lg-2 form-group float-left">
                     <%= f.select :status_eq, SysUser.statuses.map { |key, value| [key.humanize, value] },{include_blank: "Select Status", hide_label:true, required: true },:class=>"form-control chosen-select" %>
@@ -190,13 +200,15 @@
               </p>
             </div>
           </div>
-      <% end %>  
+      <% end %>
 
 
  <div class='card p-3'>
   <table data-toggle="table" data-search="true" class="overflow-hidden border-radius-1">
     <%= render 'map_columns/map_column_partials' %>
+		<%if (check_can_delete(@module_permission))%>
       <button class='btn btn-outline-danger float-right delete-selected' type='button' style="width:163px"value='SysUser' >Delete Selected</button>
+		<%end%>
       <thead>
         <tr>
           <th><input type="checkbox" id="master" class='select-all-checkbox'></th>
@@ -251,71 +263,60 @@
             <%end%>
           </td>
           <td>
-           <div class="icon-container-1">
+    <div class="icon-container-1">
       <div class="my-icon-1 my-view-1">
         <div class="my-tooltip-1">
-
-        <div class="icon-container">
-              <div class="my-icon my-view">
-              <div class="my-tooltip">
-                Edit
-              </div>
-
-                    <% if can?(:update, :all) %>
-                  <%= link_to edit_sys_user_path(sys_user), remote: true, class:"icon-div" do %>
-                    <i class="fa fa-edit mt-2" aria-hidden="true"></i>
-                  <%end %>
-                <% end %>
-
-            </div>
-
-              <div class="my-icon my-view">
+            <div class="icon-container">
+							<%if (check_can_update(@module_permission))%>
+								<div class="my-icon my-view">
+									<div class="my-tooltip">
+										Edit
+										</div>
+											<%= link_to edit_sys_user_path(sys_user), remote: true, class:"icon-div" do %>
+												<i class="fa fa-edit mt-2" aria-hidden="true"></i>
+											<%end %>
+								</div>
+							<% end %>
+							<%if (check_can_delete(@module_permission))%>
+								<div class="my-icon my-view">
+									<div class="my-tooltip">
+										Delete
+									</div>
+									<%= link_to sys_user, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+									<i class="fa fa-trash mt-2" aria-hidden="true"></i>
+									<%end %>
+								</div>
+							<%end%>
+							<%if (check_can_read(@module_permission))%>
+								<div class="my-icon my-view">
+									<div class="my-tooltip">
+										Show
+									</div>
+									<%= link_to sys_user_path(sys_user), remote: true, class:"icon-div" do %>
+										<i class="fa fa-eye mt-2" aria-hidden="true"></i>
+									<%end %>
+								</div>
+							<%end%>
+							<%if (check_can_download_pdf(@module_permission))%>
+                <div class="my-icon my-view">
                   <div class="my-tooltip">
-                    Delete
+                    PDF
                   </div>
-
-                      <% if can?(:delete, :all) %>
-                        <%= link_to sys_user, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
-                        <i class="fa fa-trash mt-2" aria-hidden="true"></i>
+                      <%= link_to sys_users_path('q[id_eq]':sys_user.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
+                        <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
                       <%end %>
-                    <% end %>
-
-              </div>
-
-             <div class="my-icon my-view">
-                    <div class="my-tooltip">
-                      Show
-                    </div>
-
-                       <% if can?(:view, :all) %>
-                        <%= link_to sys_user_path(sys_user), remote: true, class:"icon-div" do %>
-                        <i class="fa fa-eye mt-2" aria-hidden="true"></i>
-                    <%end %>
-                <%end%>
-
-          </div>
-
-          <div class="my-icon my-view">
-                <div class="my-tooltip">
-                  PDF
                 </div>
-
-                    <%= link_to sys_users_path('q[id_eq]':sys_user.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
-        			      <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
-        		      <%end %>
-
-          </div>
-
-           <div class="my-icon my-view">
-                <div class="my-tooltip">
-                  CSV
-                </div>
-
-                      <%= link_to sys_users_path('q[id_eq]':sys_user.id,'csv':true), title: 'Download CSV', class:"icon-div" do%>
-        			        <i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
-        		      <%end %>
-
-              </div>
+							<%end%>
+							<%if (check_can_download_csv(@module_permission))%>
+                <div class="my-icon my-view">
+									<div class="my-tooltip">
+										CSV
+									</div>
+										<%= link_to sys_users_path('q[id_eq]':sys_user.id,'csv':true), title: 'Download CSV', class:"icon-div" do%>
+										<i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
+									<%end %>
+                 </div>
+							<%end%>
             </div>
             </div>
                 <span class="icon-div-1">

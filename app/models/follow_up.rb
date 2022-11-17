@@ -8,7 +8,8 @@ class FollowUp < ApplicationRecord
     to_do: 'to do',
     Call: 'Call',
     Email: 'Email',
-    Visit: 'Visit'
+    Visit: 'Visit',
+    Meet_up: 'Meet Up'
   }, _prefix: true
 
   enum priority: {

@@ -2,6 +2,7 @@
 
 # CMS Controller
 class CustomerManagementSystemsController < ApplicationController
+	before_action :check_access
   before_action :set_sys_user, only: %i[show edit update destroy]
   before_action :new_edit_data, only: %i[new edit]
   include PdfCsvGeneralMethod
@@ -20,8 +21,8 @@ class CustomerManagementSystemsController < ApplicationController
     @user_groups = UserGroup.all
     @sys_users = @q.result.page(params[:page])
     export_file if params[:export_data].present?
-    download_cities_csv_file if params[:csv].present?
-    download_cities_pdf_file if params[:pdf].present?
+    download_cms_csv_file if params[:csv].present?
+    download_cms_pdf_file if params[:pdf].present?
     send_email_file if params[:email].present?
   end
 
@@ -29,6 +30,8 @@ class CustomerManagementSystemsController < ApplicationController
     @sys_user = SysUser.new
     @raw_products = RawProduct.all
     @sys_user.build_contact
+    @sys_user.notes.build
+    @sys_user.follow_ups.build
     respond_to do |format|
       format.js
     end
@@ -67,6 +70,14 @@ class CustomerManagementSystemsController < ApplicationController
       end
     end
   end
+
+  def destroy
+    @sys_user.destroy!
+    respond_to do |format|
+      format.html { redirect_to customer_management_systems_path, notice: 'CMS user was successfully Deleted.' }
+      format.json { render :show, status: :ok, location: @sys_user }
+    end
+  end
   private
 
   def set_sys_user
@@ -78,32 +89,40 @@ class CustomerManagementSystemsController < ApplicationController
     @cities = City.all
     @countries = Country.all
     @user_groups = UserGroup.all
+    @staff = Staff.all
+    @pos_setting = PosSetting.last
+    @project_name = @pos_setting.extra_settings.present? ? PosSetting.last.extra_settings['project_name'] : []
+    @client_type = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['client_type'] : []
+    @client_status = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['client_status'] : []
+    @category = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['category'] : []
+    @deal_status = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['deal_status'] : []
+    @source = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['source'] : []
   end
 
-  def download_cities_csv_file
-    @sys_user = @q.result.as_json
-    header1 = SysUser.column_names.excluding('id', 'created_at', 'updated_at')
-    header2 = Contact.column_names.excluding('id', 'created_at', 'updated_at', 'sys_user_id')
-    header_for_csv = header1 + header2
+  def download_cms_csv_file
+    @sys_user = @q.result
+    header_for_csv = %w[Number Name Project_Name Client_Type Client_status Category Deal_Status
+                        Source Plot_size Short_Details Created_at City Country
+                        ]
     data_for_csv = get_data_for_cms_csv
-    generate_csv(data_for_csv, header_for_csv, 'sys_user')
+    generate_csv(data_for_csv, header_for_csv, 'CMS')
   end
 
-  def download_cities_pdf_file
+  def download_cms_pdf_file
     @sys_users = @q.result
-    generate_pdf(@sys_users.as_json, 'SysUsers', 'pdf.html', 'A4')
+    generate_pdf(@sys_users.as_json, 'CMS', 'pdf.html', 'A4', false, 'customer_management_systems/index.pdf.erb')
   end
 
   def send_email_file
-    EmailJob.perform_later(@q.result.as_json, 'cities/index.pdf.erb', params[:email_value],
+    EmailJob.perform_later(@q.result.as_json, 'customer_management_systems/index.pdf.erb', params[:email_value],
                            params[:email_choice], params[:subject], params[:body],
-                           current_user, 'cities')
+                           current_user, 'customer_management_systems')
     if params[:email_value].present?
       flash[:notice] = "Email has been sent to #{params[:email_value]}"
     else
       flash[:notice] = "Email has been sent to #{current_user.email}"
     end
-    redirect_to cities_path
+    redirect_to customer_management_systems_path
   end
 
   def export_file

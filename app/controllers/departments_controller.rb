@@ -1,6 +1,7 @@
 class DepartmentsController < ApplicationController
   include PdfCsvGeneralMethod
   include DepartmentsHelper
+	before_action :check_access
   before_action :set_department, only: [:show, :edit, :update, :destroy]
   # GET /departments
   # GET /departments.json
@@ -96,7 +97,8 @@ class DepartmentsController < ApplicationController
 
   def download_departments_pdf_file
     @departments = @q.result
-    generate_pdf(@departments.as_json, "Departments-Total-#{@departments.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}", 'pdf.html', 'A4', false)
+    generate_pdf(@departments.as_json, "Departments-Total-#{@departments.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}",
+                 'pdf.html', 'A4', false, 'departments/index.pdf.erb')
   end
 
   def send_email_file

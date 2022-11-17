@@ -1,6 +1,7 @@
 class ItemTypesController < ApplicationController
   include PdfCsvGeneralMethod
   include ItemTypesHelper
+	before_action :check_access
   before_action :set_item_type, only: [:show, :edit, :update, :destroy, :get_item_type_products]
 
   # GET /item_types
@@ -100,7 +101,8 @@ class ItemTypesController < ApplicationController
 
   def download_item_types_pdf_file
     @item_type = @q.result
-    generate_pdf(@item_type.as_json, "ItemTypes-Total-#{@item_type.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}", 'pdf.html', 'A4', false)
+    generate_pdf(@item_type.as_json, "ItemTypes-Total-#{@item_type.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}",
+                 'pdf.html', 'A4', false, 'item_types/index.pdf.erb')
   end
 
   def send_email_file

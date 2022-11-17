@@ -6,7 +6,7 @@ class StaffDealsController < ApplicationController
   def index
     @created_at_gteq = DateTime.now-10000
     @created_at_lteq = DateTime.now
-    @staffs = Department.find_by(title:'Dealer').staffs
+    @staffs = Department.find_by(title:'Dealer')&.staffs || Staff.all
     @products = Product.all
     @product_categories = ProductCategory.all
     @product_sub_categories = ProductSubCategory.all

@@ -1,3 +1,4 @@
+
 class ProductCategory < ApplicationRecord
   validates_uniqueness_of :code
 

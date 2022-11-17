@@ -5,78 +5,67 @@
   <td class= 'urdu-font'><%= product_sub_category.title %></td>
   <td><%= product_sub_category.code %></td>
   <td><%= product_sub_category.comment %></td>
-  <td>
-      <div class="icon-container-1">
-                <div class="my-icon-1 my-view-1">
-                  <div class="my-tooltip-1">
+  <td class="p-3">
+		  <div class="icon-container-1">
+      <div class="my-icon-1 my-view-1">
+        <div class="my-tooltip-1">
           <div class="icon-container">
-          <div class="my-icon my-view">
-          <div class="my-tooltip">
-            Edit
+						<%if (check_can_update(@module_permission))%>
+            	<div class="my-icon my-view">
+            	  <div class="my-tooltip">
+            	    Edit
+            	  </div>
+            	    <%= link_to edit_product_sub_category_path(product_sub_category), remote: true, class:"icon-div" do %>
+            	      <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+            	    <%end %>
+            	</div>
+						<% end %>
+						<%if (check_can_delete(@module_permission))%>
+            	<div class="my-icon my-view">
+            	  <div class="my-tooltip">
+            	    Delete
+            	  </div>
+            	    <%= link_to product_sub_category, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+            	      <i class="fa fa-trash mt-2" aria-hidden="true"></i>
+            	    <%end %>
+            	</div>
+						<% end %> 
+						<%if (check_can_read(@module_permission))%>
+            	<div class="my-icon my-view">
+            	  <div class="my-tooltip">
+            	    Show
+            	  </div>
+            	    <%= link_to product_sub_category_path(product_sub_category), remote: true, class:"icon-div" do %>
+            	      <i class="fa fa-eye mt-2" aria-hidden="true"></i>
+            	    <%end %>
+            	</div>
+						<%end%>
+						<%if (check_can_download_pdf(@module_permission))%>
+            	<div class="my-icon my-view">
+            	  <div class="my-tooltip">
+            	    PDF
+            	  </div>
+            	    <%= link_to product_sub_categories_path('q[id_eq]':product_sub_category.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div"  do %>
+            	      <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
+            	    <%end %>  
+            	</div>
+						<% end %>  
+						<%if (check_can_download_csv(@module_permission))%>
+            	<div class="my-icon my-view">
+            	  <div class="my-tooltip">
+            	    CSV
+            	  </div>
+            	    <%= link_to product_sub_categories_path('q[id_eq]':product_sub_category.id,'csv':true), title: 'Download CSV', class:"icon-div" do%>
+            	      <i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
+            	    <%end %>
+            	</div>
+						<% end %>
           </div>
-          
-                <% if can?(:update, :all) %>
-              <%= link_to edit_product_sub_category_path(product_sub_category), remote: true, class:"icon-div" do %>
-                <i class="fa fa-edit mt-2" aria-hidden="true"></i>
-              <%end %>
-            <% end %>
-          
         </div>
-
-          <div class="my-icon my-view">
-              <div class="my-tooltip">
-                Delete
-              </div>
-               
-                  <% if can?(:delete, :all) %>
-                    <%= link_to product_sub_category, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
-                    <i class="fa fa-trash mt-2" aria-hidden="true"></i>
-                  <%end %>
-                <% end %>
-              
-          </div>
-
-      <div class="my-icon my-view">
-                <div class="my-tooltip">
-                  Show
-                </div>
-                
-                   <% if can?(:view, :all) %>
-                    <%= link_to product_sub_category_path(product_sub_category), remote: true, class:"icon-div" do %>
-                    <i class="fa fa-eye mt-2" aria-hidden="true"></i>
-                <%end %>
-            <%end%>
-        
-      </div>
-
-      <div class="my-icon my-view">
-            <div class="my-tooltip">
-              PDF
-            </div>
-            
-                <%= link_to product_sub_categories_path('q[id_eq]':product_sub_category.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
-			<i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
-		<%end %>
-           
-      </div>
-
-       <div class="my-icon my-view">
-            <div class="my-tooltip">
-              CSV
-            </div>
-            
-                 <%= link_to product_sub_categories_path('q[id_eq]':product_sub_category.id,'csv':true), title: 'Download CSV', class:"icon-div" do%>
-			<i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
-		<%end %>
-          
-          </div>
-    </div>
-          </div>
-          <span class="icon-div-1">
-                <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
-          </span>
+        <span class="icon-div-1">
+              <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+        </span>
       </div>
     </div>
-
-  </td>
+</td>
 </tr>

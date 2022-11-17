@@ -8,68 +8,63 @@
   <div class="icon-container-1">
                 <div class="my-icon-1 my-view-1">
                   <div class="my-tooltip-1">
-
       <div class="icon-container">
+				<%if (check_can_update(@module_permission))%>
           <div class="my-icon my-view">
           <div class="my-tooltip">
             Edit
           </div>
-          
-                <% if can?(:update, :all) %>
               <%= link_to edit_item_type_path(item_type), remote: true, class:"icon-div" do %>
                 <i class="fa fa-edit mt-2" aria-hidden="true"></i>
               <%end %>
+						</div>
             <% end %>
-          
-        </div>
+						<%if (check_can_delete(@module_permission))%>
 
           <div class="my-icon my-view">
               <div class="my-tooltip">
                 Delete
               </div>
-                
-                  <% if can?(:delete, :all) %>
                     <%= link_to item_type, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
                     <i class="fa fa-trash mt-2" aria-hidden="true"></i>
                   <%end %>
+								</div>
                 <% end %>
-              
-          </div>
+								<%if (check_can_read(@module_permission))%>
 
       <div class="my-icon my-view">
                 <div class="my-tooltip">
                   Show
                 </div>
-                
-                   <% if can?(:view, :all) %>
                     <%= link_to item_type_path(item_type), remote: true, class:"icon-div" do %>
                     <i class="fa fa-eye mt-2" aria-hidden="true"></i>
                 <%end %>
-            <%end%>
-          
-      </div>
+							</div>
+							<%end%>
+							<%if (check_can_download_pdf(@module_permission))%>
 
       <div class="my-icon my-view">
             <div class="my-tooltip">
               PDF
             </div>
-            
                <%= link_to item_types_path('q[id_eq]':item_type.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
       <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
     <%end %>
-            
       </div>
+			<%end %>
+
+			<%if (check_can_download_csv(@module_permission))%>
 
        <div class="my-icon my-view">
             <div class="my-tooltip">
               CSV
             </div>
-            
                  <%= link_to item_types_path('q[id_eq]':item_type.id,'csv':true), title: 'Download CSV', class:"icon-div" do%>
       <i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
     <%end %>
-            
           </div>
+    <%end %>
+
     </div>
           </div>
           <span class="icon-div-1">
@@ -77,6 +72,5 @@
           </span>
       </div>
     </div>
-
   </td>
 </tr>

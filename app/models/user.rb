@@ -5,16 +5,18 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
-
+	has_many :user_permissions
   has_one :user_ability, dependent: :destroy
   has_many :admins, -> (object) {
     where("roles_mask = ?", mask_no("admin"))
   }, class_name: :User, foreign_key: :created_by_id
 
+	accepts_nested_attributes_for :user_permissions
+
   after_create :create_user_ability
-  # after_create :create_user_permission
+  after_create :create_user_permission
   # has_many_attached :backup_files
-  validates :name, presence: true, uniqueness: { case_sensitive: false }
+  # validates :name, presence: true, uniqueness: { case_sensitive: false }
   has_many :accounts
   include RoleModel
   # Declare the valid roles. Do not change the order if you add more roles later, always append them
@@ -68,24 +70,29 @@ class User < ApplicationRecord
     end
   end
 
-	# def create_user_permission
-	# 	pos_all_modules=["accounts","cities","compaigns","contacts","countries","daily_books","daily_sales","dashboard","departments","expense_entries",
-	# 									"expense_types","expenses","gates","helps","home","investments","item_types","items","ledger_books",
-	# 								"logs","map_columns","materials","order_items","orders","payments","pos_settings","product_categories",
-	# 							"product_stock_excahanges","product_stocks","product_sub_categories","product_warranties","production_block_types",
-	# 						"production_blocks","production_cycles","productions","products","property_plans","purchase_sale_details",
-	# 					"purchase_sale_items","raw_products","remarks","reports","salaries","salary_details","sms","staff_deals","staff_ledger_books",
-	# 				"staff_raw_products","staffs","sys_users","user_types","users","warranties"]
-					
-	# 	pos_all_modules.each do |item|
-	# 		UserPermission.create(module: item, can_create: true,can_read: true, can_update: true, can_delete: true, user_id: id) if super_admin?
-	# 		UserPermission.create(module: item, can_create: true,can_read: true, can_update: true, can_delete: false, user_id: id) if admin?
-	# 		UserPermission.create(module: item, can_create: true,can_read: true, can_update: false, can_delete: false, user_id: id) if staff?
-	# 		UserPermission.create(module: item, can_create: true,can_read: true, can_update: false, can_delete: false, user_id: id) if salesman?
-	# 		UserPermission.create(module: item, can_create: true,can_read: true, can_update: false, can_delete: false, user_id: id) if editor?
-	# 		UserPermission.create(module: item, can_create: false,can_read: true, can_update: false, can_delete: false, user_id: id) if visitor?
-	# 	end
-  # end
+	def create_user_permission
+		pos_all_modules=["accounts","cities","compaigns","contacts","countries","daily_books","daily_sales","dashboard","departments","expense_entries",
+										 "expense_types","expenses","gates","helps","home","investments","item_types","items","ledger_books",
+									   "logs","map_columns","materials","order_items","orders","payments","pos_settings","product_categories",
+								"product_stock_excahanges","product_stocks","product_sub_categories","product_warranties","production_block_types",
+							"production_blocks","production_cycles","productions","products","property_plans","purchase_sale_details",
+						"purchase_sale_items","raw_products","remarks","reports","salaries","salary_details","sms","staff_deals","staff_ledger_books",
+					"staff_raw_products","staffs","sys_users","sys_users/customer","sys_users/supplier","sys_users/own","user_types","users","warranties","user_groups","customer_management_systems"]
+
+                    # "accounts","cities","compaigns","contacts","countries","daily_books","daily_sales","dashboard","departments","expense_entries",
+                    # "expense_types","expenses","gates","helps","home","investments","item_types","items","ledger_books",
+                    # "logs","map_columns","materials","order_items","orders","payments","pos_settings","product_categories",
+                    # "product_stock_excahanges","product_stocks","product_sub_categories","product_warranties","production_block_types","production_blocks","production_cycles","productions","products","property_plans","purchase_sale_details","purchase_sale_items","raw_products","remarks","reports","salaries","salary_details","sms","staff_deals","staff_ledger_books","staff_raw_products","staffs","sys_users","user_types","users","warranties", "user_groups", "customer_management_systems"]
+
+		pos_all_modules.each do |item|
+			UserPermission.create(module: item, can_create: true,can_read: true, can_update: true, can_delete: true, user_id: id) if super_admin?
+			UserPermission.create(module: item, can_create: true,can_read: true, can_update: true, can_delete: false, user_id: id) if admin?
+			UserPermission.create(module: item, can_create: true,can_read: true, can_update: false, can_delete: false, user_id: id) if staff?
+			UserPermission.create(module: item, can_create: true,can_read: true, can_update: false, can_delete: false, user_id: id) if salesman?
+			UserPermission.create(module: item, can_create: true,can_read: true, can_update: false, can_delete: false, user_id: id) if editor?
+			UserPermission.create(module: item, can_create: false,can_read: true, can_update: false, can_delete: false, user_id: id) if visitor?
+		end
+  end
 
   def allowed_valid_roles
     if super_admin?

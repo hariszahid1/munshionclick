@@ -12,92 +12,10 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-lg-4">
-    <div class="card mb-4">
-      <div class="card-body text-center">
-        <% if @sys_user.profile_image.attached? %>
-          <img src=<%= url_for(@sys_user.profile_image) %> alt="avatar"
-            class="rounded-circle img-fluid" style="width: 150px;">
-        <% else %>
-          <img src="https://previews.123rf.com/images/panyamail/panyamail1809/panyamail180900343/109879063-user-avatar-icon-sign-profile-symbol.jpg" alt="avatar"
-          class="rounded-circle img-fluid" style="width: 150px;">
-        <% end %>
-        <h5 class="my-3"><%= @sys_user.name%></h5>
-        <p class="text-muted mb-1"><%= @sys_user.user_group%></p>
-        <p class="text-muted mb-4"><%= @sys_user&.contact&.city&.title.to_s+ ", " + @sys_user&.contact&.country&.title.to_s %></p>
-      </div>
-    </div>
-    <div class="card mb-4">
-      <div class="card-body">
-        <div class="row">
-          <div class="col-sm-3">
-            <p class="mb-0">Code</p>
-          </div>
-          <div class="col-sm-9">
-            <p class="text-muted mb-0"><%= @sys_user.code%></p>
-          </div>
-        </div>
-        <hr>
-        <div class="row">
-          <div class="col-sm-3">
-            <p class="mb-0">CNIC</p>
-          </div>
-          <div class="col-sm-9">
-            <p class="text-muted mb-0"><%= @sys_user.cnic %></p>
-          </div>
-        </div>
-        <hr>
-        <div class="row">
-          <div class="col-sm-3">
-            <p class="mb-0">Email</p>
-          </div>
-          <div class="col-sm-9">
-            <p class="text-muted mb-0"><%= @sys_user.contact.email %></p>
-          </div>
-        </div>
-        <hr>
-        <div class="row">
-          <div class="col-sm-3">
-            <p class="mb-0">Phone</p>
-          </div>
-          <div class="col-sm-9">
-            <p class="text-muted mb-0"><%= @sys_user.contact.home%></p>
-          </div>
-        </div>
-        <hr>
-        <div class="row">
-          <div class="col-sm-3">
-            <p class="mb-0">Mobile</p>
-          </div>
-          <div class="col-sm-9">
-            <p class="text-muted mb-0"><%= @sys_user.contact.mobile%></p>
-          </div>
-        </div>
-        <hr>
-        <div class="row">
-          <div class="col-sm-3">
-            <p class="mb-0">Address</p>
-          </div>
-          <div class="col-sm-9">
-            <p class="text-muted mb-0"><%= @sys_user.contact.address%></p>
-          </div>
-        </div>
-        <hr>
-        <div class="row">
-          <div class="col-sm-3">
-            <p class="mb-0">Status</p>
-          </div>
-          <div class="col-sm-9">
-            <p class="text-muted mb-0"><%= @sys_user.status%></p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class= "col-lg-8">
-    <ul class="nav nav-tabs" role="tablist">
+  <div class= "col-lg-6">
+    <ul class="nav nav-pills mb-3" role="tablist">
       <li class="nav-item">
-        <a class="nav-link tab-label" data-toggle="tab" href="#note" role="tab">Note</a>
+        <a class="nav-link tab-label active" data-toggle="tab" href="#note" role="tab">Note</a>
       </li>
 
       <li class="nav-item">
@@ -105,10 +23,10 @@
       </li>
     </ul>
     <div class="tab-content">
-      <div class="tab-pane active" id="note" role="tabpanel">
+      <div class="tab-pane active card shadow border-radius-1" id="note" role="tabpanel">
         <% if can?(:add, :all) %>
           <div id="new_city" class= "d-flex">
-            <%= link_to new_note_path(sys_user_id: @sys_user.id), remote: true,class: "btn btn-success mt-2 mr-2 ml-auto" do %>
+            <%= link_to new_note_path(sys_user_id: @sys_user.id), remote: true,class: "btn btn-success mt-3 mr-3 ml-auto" do %>
               <i class="fa fa-plus" aria-hidden="false"></i>
               Create Note
             <% end %>
@@ -117,13 +35,13 @@
         <p>
           <div class="col-lg-12">
             <%  @sys_user.notes.order("id desc").each do |note|%>
-              <div class = "tab-pane p-2">
-                <p>Note by <%= note&.staff&.name %></p>
+              <div class = "tab-pane card border-radius-1 mb-3 p-2">
+                <p class="font-weight-bold text-dark">Note by <%= note&.staff&.name %></p>
                 <div class= 'row'>
-                  <span class='col-8'><%= note.message %></span>
-                  <p class='col-4 text-right'><%= note.created_at %></p><br/>
+                  <span class='col-8 text-dark'><%= note.message %></span>
+                  <p class='col-4 text-right text-dark'><%= note.created_at %></p><br/>
                 </div>
-                <p class= "text-right">by <%= note&.user&.name %></p>
+                <p class= "text-right text-dark">by <%= note&.user&.name %></p>
 
               </div>
             <% end %>
@@ -131,10 +49,10 @@
         </p>
       </div>
 
-      <div class="tab-pane" id="follow-up" role="tabpanel">
+      <div class="tab-pane card shadow border-radius-1" id="follow-up" role="tabpanel">
         <% if can?(:add, :all) %>
           <div id="new_city" class= "d-flex">
-            <%= link_to new_follow_up_path(sys_user_id: @sys_user.id), remote: true,class: "btn btn-success mt-2 mr-2 ml-auto" do %>
+            <%= link_to new_follow_up_path(sys_user_id: @sys_user.id), remote: true,class: "btn btn-success mt-3 mr-3 ml-auto" do %>
               <i class="fa fa-plus" aria-hidden="false"></i>
               Create Follow Up
             <% end %>
@@ -143,20 +61,129 @@
         <p>
           <div class="col-lg-12">
             <% @sys_user.follow_ups.order("id desc").each do |follow_up|%>
-              <div class = "tab-pane p-2">
-                <span>Reminder Type: <%= follow_up.reminder_type %></span><br/>
-                <span>Task Type: <%= follow_up.task_type %></span><br/>
-                <span>Priority: <%= follow_up.priority %></span><br/>
-                <span>Time: <%= follow_up&.date %></span><br/>
-                <span>Assigned to: <%= follow_up&.staff&.name %></span>
-                <p class= "text-right">by <%= follow_up&.user&.name %></p>
-
+              <div class = "tab-pane card p-1 mb-3">
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item"><span><b class="mr-2">Reminder Type:</b> <%= follow_up.reminder_type %></span><br/></li>
+                  <li class="list-group-item"><span><b class="mr-2">Task Type:</b> <%= follow_up.task_type %></span><br/></li>
+                  <li class="list-group-item"><span><b class="mr-2"> Time:</b> <%= follow_up&.date %></span><br/></li>
+                  <li class="list-group-item"> <span><b class="mr-2">Priority:</b> <%= follow_up.priority %></span><br/></li>
+                  <li class="list-group-item"> <span><b class="mr-2">Comment:</b> <%= follow_up.comment %></span><br/></li>
+                  <li class="list-group-item"> <span><b class="mr-2">Assigned to:</b> <%= follow_up&.staff&.name %></span><br/></li>
+                  <li class="list-group-item"> <p class= "text-right mb-0">by <%= follow_up&.user&.name %></p></li>
+                </ul>
               </div>
             <% end %>
+
           </div>
         </p>
       </div>
     </div>
   </div>
+
+  <div class="col-lg-5 ml-3 mt-5">
+    <div class="card mb-4 shadow border-0">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-4">
+            <p class="mb-0 text-dark font-weight-bold">Client Name</p>
+          </div>
+          <div class="col-sm-8">
+            <p class="text-dark mb-0"><%= @sys_user.cms_data.try(:[], 'client_name')%></p>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-4">
+            <p class="mb-0 text-dark font-weight-bold">Client Number</p>
+          </div>
+          <div class="col-sm-8">
+            <p class="text-dark mb-0"><%= @sys_user.cms_data.try(:[], 'client_number')%></p>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-4">
+            <p class="mb-0 text-dark font-weight-bold">Client Status</p>
+          </div>
+          <div class="col-sm-8">
+            <p class="text-dark mb-0"><%= @sys_user.cms_data.try(:[], 'custom_status')%></p>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-4">
+            <p class="mb-0 text-dark font-weight-bold">Client Type</p>
+          </div>
+          <div class="col-sm-8">
+            <p class="text-dark mb-0"><%=@sys_user.cms_data.try(:[], 'client_type')%></p>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-4">
+            <p class="mb-0 text-dark font-weight-bold">City</p>
+          </div>
+          <div class="col-sm-8">
+            <p class="text-dark mb-0"><%= @sys_user&.contact&.city&.title %></p>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-4">
+            <p class="mb-0 text-dark font-weight-bold">Country</p>
+          </div>
+          <div class="col-sm-8">
+            <p class="text-dark mb-0"><%= @sys_user&.contact&.country&.title %></p>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-4">
+            <p class="mb-0 text-dark font-weight-bold">Plot Size</p>
+          </div>
+          <div class="col-sm-8">
+            <p class="text-dark mb-0"><%= @sys_user.cms_data.try(:[], 'plot_size')%></p>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-4">
+            <p class="mb-0 text-dark font-weight-bold">Category</p>
+          </div>
+          <div class="col-sm-8">
+            <p class="text-dark mb-0"><%= @sys_user.cms_data.try(:[], 'category')%></p>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-4">
+            <p class="mb-0 text-dark font-weight-bold">Source</p>
+          </div>
+          <div class="col-sm-8">
+            <p class="text-dark mb-0"><%= @sys_user.cms_data.try(:[], 'source')%></p>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-4">
+            <p class="mb-0 text-dark font-weight-bold">Short Details</p>
+          </div>
+          <div class="col-sm-8">
+            <p class="text-dark mb-0"><%= @sys_user.cms_data.try(:[], 'short_details')%></p>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-4">
+            <p class="mb-0 text-dark font-weight-bold">Deal Status</p>
+          </div>
+          <div class="col-sm-8">
+            <p class="text-dark mb-0"><%= @sys_user.cms_data.try(:[], 'deal_status')%></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
 <div class="show-data"></div>

@@ -1,4 +1,5 @@
 class PaymentsController < ApplicationController
+	before_action :check_access
   before_action :set_payment, only: [:show, :edit, :update, :destroy, :confirmable_change]
 
   # GET /payments

@@ -1,6 +1,7 @@
 class ProductCategoriesController < ApplicationController
   include PdfCsvGeneralMethod
   include ProductCategoriesHelper
+	before_action :check_access
   before_action :set_product_category, only: [:show, :edit, :update, :destroy]
   skip_before_action :verify_authenticity_token
 
@@ -104,7 +105,8 @@ class ProductCategoriesController < ApplicationController
 
   def download_product_categories_pdf_file
     @product_categories = @q.result
-    generate_pdf(@product_categories.as_json, "ProductCategories-Total-#{@product_categories.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}", 'pdf.html', 'A4', false)
+    generate_pdf(@product_categories.as_json, "ProductCategories-Total-#{@product_categories.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}",
+                 'pdf.html', 'A4', false, 'product_categories/index.pdf.erb')
   end
 
   def send_email_file

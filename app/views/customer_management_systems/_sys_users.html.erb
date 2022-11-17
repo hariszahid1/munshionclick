@@ -1,37 +1,39 @@
 <tr>
   <td><%= check_box_tag 'object_ids[]', sys_users.id %></td>
-  <td></td>
-  </div>  <td class='urdu-font'><%= sys_users.code %></td>
-  <td><%= sys_users.name %></td>
-  <td><%= sys_users&.user_group %></td>
-  <td><%= sys_users.status %></td>
-  <td><%= sys_users.occupation %></td>
-  <td><%= sys_users.balance %></td>
+  <td class='urdu-font'><%= sys_users.cms_data.try(:[], 'client_name') %></td>
+  <td><%=  sys_users.cms_data.try(:[], 'client_number') %></td>
+  <td><%= sys_users.cms_data.try(:[], 'client_type') %></td>
+  <td><%= sys_users.cms_data.try(:[], 'category') %></td>
+  <td><%= sys_users.cms_data.try(:[], 'source') %></td>
+  <td><%= sys_users.cms_data.try(:[], 'plot_size') %></td>
   <td>
-    <% if can?(:update, :all) %>
+		<%if (check_can_update(@module_permission))%>
       <%= link_to edit_customer_management_system_path(sys_users), remote: true do %>
         <i class="fa fa-edit mr-2 ml-2 " aria-hidden="true"></i> |
       <%end %>
     <% end %>
 
-    <% if can?(:delete, :all) %>
-      <%= link_to sys_users, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+		<%if (check_can_delete(@module_permission))%>
+      <%= link_to customer_management_system_path(sys_users), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
         <i class="fa fa-trash mr-2 ml-2" aria-hidden="true"></i> |
       <%end %>
     <% end %>
 
-    <% if can?(:view, :all) %>
+		<%if (check_can_read(@module_permission))%>
       <%= link_to customer_management_system_path(sys_users) do %>
-        <i class="fa fa-eye mr-2 ml-2" aria-hidden="true"></i>
+       <i class="fa fa-eye mr-2 ml-2" aria-hidden="true"></i>|
       <%end %>
-    <%end%>|
+    <%end%>
 
-		<%= link_to customer_management_systems_path('q[id_eq]':sys_users.id,'pdf':true), title: 'Download PDF', target: '_blank' do %>
-			<i class="fa fa-file-pdf text-danger mr-2 ml-2 " aria-hidden="true"></i>
-		<%end %>|
-
-		<%= link_to customer_management_systems_path('q[id_eq]':sys_users.id,'csv':true), title: 'Download CSV' do%>
-			<i class="fa fa-file-excel mr-2 ml-2 text-success" aria-hidden="true"></i>
+		<%if (check_can_download_pdf(@module_permission))%>
+			<%= link_to customer_management_systems_path('q[id_eq]':sys_users.id,'pdf':true), title: 'Download PDF', target: '_blank' do %>
+				<i class="fa fa-file-pdf text-danger mr-2 ml-2 " aria-hidden="true"></i>|
+			<%end %>
+		<%end %>
+		<%if (check_can_download_csv(@module_permission))%>
+			<%= link_to customer_management_systems_path('q[id_eq]':sys_users.id,'csv':true), title: 'Download CSV' do%>
+				<i class="fa fa-file-excel mr-2 ml-2 text-success" aria-hidden="true"></i>
+			<%end %>
 		<%end %>
 
   </td>

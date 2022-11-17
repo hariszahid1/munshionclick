@@ -1,12 +1,15 @@
-<nav id="sidebar" class="col-2 p-0">
+
+<nav id="sidebar" class="col-lg-2 col-4 p-0 bg-dark">
     <% if can?(:view, :sys_user) %>
-    <ul class="list-unstyled components">
+    <input type="text" id="search-bar" class="form-control mt-2 bg-dark border-radius-1 text-light" placeholder="Search">
+    <ul class="list-unstyled components" id="mylist">
         <li class="active">
           <%= link_to dashboard_path do %>
               <i class="fas fa-tasks" aria-hidden="true"></i>
               <span class="link-text">Dashboard</span>
           <% end %>
         </li>
+        
         <li>
           <a href="<%=customer_management_systems_path%>">
             <i class="fas fa-user-plus"></i>
@@ -419,3 +422,19 @@
       </ul>
     <% end %>
 </nav>
+
+
+<script>
+    $('#search-bar').keyup(function(){
+        var value = $(this).val().toLowerCase();
+        $('#mylist li').each(function(){
+            var search = $(this).text().toLowerCase();
+            if(search.indexOf(value)>-1){
+                $(this).show();
+            }
+            else{
+                $(this).hide();
+            }
+        });
+    });
+</script>

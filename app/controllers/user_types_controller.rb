@@ -1,4 +1,5 @@
 class UserTypesController < ApplicationController
+	before_action :check_access
   before_action :set_user_type, only: [:show, :edit, :update, :destroy]
   include PdfCsvGeneralMethod
   include UserTypesHelper
@@ -95,7 +96,8 @@ class UserTypesController < ApplicationController
   def download_user_types_pdf_file
     sort_data_according
     @user_types = @q.result
-    generate_pdf(@sorted_data.as_json, "user_types-Total-#{@sorted_data.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}", 'pdf.html', 'A4', false)
+    generate_pdf(@sorted_data.as_json, "user_types-Total-#{@sorted_data.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}",
+                 'pdf.html', 'A4', false, 'user_types/index.pdf.erb')
   end
 
   def send_email_file

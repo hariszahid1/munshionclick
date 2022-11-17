@@ -1,55 +1,66 @@
-<%@monthly_wage=0%>
-
-
-<% @time = Time.zone.now %>
-<p style="border-bottom: double 4px;  margin: 0;"></p>
-<h1 style="text-align: center; margin: 0;">Staff Detail</h1>
-<p style="border-bottom: double 4px;  margin: 0;"></p>
-<div>
-  <table>
-    <th></th>
-    <th></th>
-    <tr>
-      <td>Printing Date Time: <span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%> <%=@time.strftime("at %I:%M%p")%></span> </td>
-      <td>Current User: <span><%=@current_user.name%> </span></td>
-    </tr>
-  </table>
-</div>
-<div>
-  <table data-toggle="table" data-search="true">
-    <thead>
-      <tr>
-        <th>Department/Raw</th>
-        <th>Code</th>
-        <th>Name</th>
-        <th>Monthly/Wage</th>
-        <th>Advance</th>
-        <th>Short-Pay</th>
-        <th>Balance</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <% @staffs_pdf.each do |staff| %>
+<html>
+  <head>
+    <style>
+      .border-bottom{
+        border-bottom: double 4px;
+      }
+      .text-center{
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <% @time = Time.zone.now %>
+    <p style="border-bottom: double 4px;  margin: 0;"></p>
+    <h1 class='text-center'>Staff Detail</h1>
+    <p style="border-bottom: double 4px;  margin: 0;"></p>
+    <div>
+      <table>
+        <th></th>
+        <th></th>
         <tr>
-          <td><%= staff.department.present? ? staff.department.title : ""%>:<%= staff.staff_raw_products.present? ? staff.staff_raw_products_titles : ""%></td>
-          <td><%= staff.code %></td>
-          <td><%= staff.name %>     <%= staff.father %></td>
-          <td><%= staff.staff_salary_or_wage.to_f.round(2)%><% @monthly_wage += staff.staff_salary_or_wage.to_f.round(2) %></td>
-          <td><%= staff.advance_amount.to_f.round(2) %></td>
-          <td><%= staff.wage_debit.to_f.round(2) %></td>
-          <td><b><%= staff.balance.to_f.round(2) %></b></td>
+          <td>Printing Date Time: <span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%> <%=@time.strftime("at %I:%M%p")%></span> </td>
+          <td>Current User: <span><%=@current_user.name%> </span></td>
         </tr>
-      <% end %>
-      <tr>
-        <td><h4>Total<h4></td>
-        <td></td>
-        <td></td>
-        <td><h4><%= @monthly_wage.round(2) %><h4></td>
-          <td><h4><%= @total.first.first.round(2) %><h4></td>
-          <td><h4><%= @total.first.last.round(2) %><h4></td>
-          <td><h4><%= @total.first.second.round(2) %><h4></td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+      </table>
+    </div>
+    <div>
+      <table data-toggle="table" data-search="true">
+        <thead>
+          <tr>
+            <th>Department/Raw</th>
+            <th>Code</th>
+            <th>Name</th>
+            <th>Monthly/Wage</th>
+            <th>Advance</th>
+            <th>Short-Pay</th>
+            <th>Balance</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% data.each do |staff| %>
+            <tr>
+              <td class="text-center"><%= staff['department'] %></td>
+              <td class="text-center"><%= staff['code'] %></td>
+              <td class="text-center"><%= staff['name'] %></td>
+              <td class="text-center"><%= staff['monthly_wage'] %></td>
+              <td class="text-center"><%= staff['advance'] %></td>
+              <td class="text-center"><%= staff['short_pay'] %></td>
+              <td class="text-center"><b><%= staff['balance'] %></b></td>
+            </tr>
+          <% end %>
+          <tr>
+            <td class="text-center"><h4>Total<h4></td>
+            <td></td>
+            <td></td>
+            <td class='text-center'><h4><%= data.last.try(:[], 'monthly_wage_total') %><h4></td>
+            <td class='text-center'><h4><%= data.last.try(:[], 'advance_total') %><h4></td>
+            <td class='text-center'><h4><%= data.last.try(:[], 'short_pay_total') %><h4></td>
+            <td class='text-center'><h4><%= data.last.try(:[], 'balance_total') %><h4></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

@@ -23,6 +23,7 @@ class ApplicationController < ActionController::Base
     session[:second_referrer]=session[:referrer]
     session[:referrer]=request.referrer
   end
+
   def get_request_referrer
     return session[:referrer].to_s        if !((request.referrer.to_s.include? "edit")||(request.referrer.to_s.include? "new"))
     return session[:second_referrer].to_s if !((session[:second_referrer].to_s.include? "edit")||(session[:second_referrer].to_s.include? "new"))
@@ -209,43 +210,43 @@ class ApplicationController < ActionController::Base
     end
   end
 
-    def send_sms(to,msg,redirect_url,type)
-      if(type=="urdu")
-        send_sms_urdu(to,msg,redirect_url)
-      else
-        send_sms_english(to,msg,redirect_url)
-      end
+  def send_sms(to,msg,redirect_url,type)
+    if(type=="urdu")
+      send_sms_urdu(to,msg,redirect_url)
+    else
+      send_sms_english(to,msg,redirect_url)
     end
+  end
 
-    def send_sms_english(to,msg,redirect_url)
-      @pos_setting = PosSetting.last
-      msg = @pos_setting&.sms_templates["sms_header"].to_s + msg.to_s + @pos_setting&.sms_templates["sms_footer"].to_s
-      if @pos_setting.is_sms.present? && to.present?
-        sms_user = @pos_setting.sms_user
-        sms_pass = @pos_setting.sms_pass
-        sms_mask = @pos_setting.sms_mask
-        msg = ERB::Util.url_encode(msg)
-        sms_mask_erb = ERB::Util.url_encode(sms_mask)
-        # request='http://my.ezeee.pk/sendsms_url.html?Username='+sms_user+'&Password='+sms_pass+'&From='+ERB::Util.url_encode(sms_mask)+'&To='+to+'&Message='+msg.to_s
-        # response = HTTParty.get(request)
-        SmsJob.perform_later(sms_user,sms_pass,sms_mask_erb,to,msg)
-        SmsLog.create(sms_from: sms_mask,sms_to: to, msg: msg,sms_by: current_user.user_name,response: response.body)
-      end
+  def send_sms_english(to,msg,redirect_url)
+    @pos_setting = PosSetting.last
+    msg = @pos_setting&.sms_templates["sms_header"].to_s + msg.to_s + @pos_setting&.sms_templates["sms_footer"].to_s
+    if @pos_setting.is_sms.present? && to.present?
+      sms_user = @pos_setting.sms_user
+      sms_pass = @pos_setting.sms_pass
+      sms_mask = @pos_setting.sms_mask
+      msg = ERB::Util.url_encode(msg)
+      sms_mask_erb = ERB::Util.url_encode(sms_mask)
+      # request='http://my.ezeee.pk/sendsms_url.html?Username='+sms_user+'&Password='+sms_pass+'&From='+ERB::Util.url_encode(sms_mask)+'&To='+to+'&Message='+msg.to_s
+      # response = HTTParty.get(request)
+      SmsJob.perform_later(sms_user,sms_pass,sms_mask_erb,to,msg)
+      SmsLog.create(sms_from: sms_mask,sms_to: to, msg: msg,sms_by: current_user.user_name,response: response.body)
     end
+  end
 
-    def send_sms_urdu(to,msg,redirect_url)
-      @pos_setting = PosSetting.last
-      msg = @pos_setting&.sms_templates["sms_header"].to_s + msg.to_s + @pos_setting&.sms_templates["sms_footer"].to_s
-      if @pos_setting.is_sms.present? && to.present?
-        sms_user = @pos_setting.sms_user
-        sms_pass = @pos_setting.sms_pass
-        sms_mask = @pos_setting.sms_mask
-        msg = ERB::Util.url_encode(msg)
-        sms_mask_erb = ERB::Util.url_encode(sms_mask)
-        SmsJob.perform_later(sms_user,sms_pass,sms_mask_erb,to,msg)
-        SmsLog.create(sms_from: sms_mask,sms_to: to, msg: msg,sms_by: current_user.user_name,response: response.body)
-      end
+  def send_sms_urdu(to,msg,redirect_url)
+    @pos_setting = PosSetting.last
+    msg = @pos_setting&.sms_templates["sms_header"].to_s + msg.to_s + @pos_setting&.sms_templates["sms_footer"].to_s
+    if @pos_setting.is_sms.present? && to.present?
+      sms_user = @pos_setting.sms_user
+      sms_pass = @pos_setting.sms_pass
+      sms_mask = @pos_setting.sms_mask
+      msg = ERB::Util.url_encode(msg)
+      sms_mask_erb = ERB::Util.url_encode(sms_mask)
+      SmsJob.perform_later(sms_user,sms_pass,sms_mask_erb,to,msg)
+      SmsLog.create(sms_from: sms_mask,sms_to: to, msg: msg,sms_by: current_user.user_name,response: response.body)
     end
+  end
 
   def print_pdf(pdf_title, pdf_layout,page_size,html=false,orientation='Portrait')
     @pos_setting = PosSetting.first
@@ -271,7 +272,7 @@ class ApplicationController < ActionController::Base
           },
           show_as_html: html
         end
-      end		
+      end
   end
 
 
@@ -305,6 +306,17 @@ class ApplicationController < ActionController::Base
   helper_method :send_sms_english
   helper_method :send_sms_urdu
 
+  helper_method :check_can_create
+  helper_method :check_can_read
+  helper_method :check_can_update
+  helper_method :check_can_delete
+  helper_method :check_can_download_csv
+  helper_method :check_can_download_pdf
+  helper_method :check_can_accessed
+  helper_method :check_is_hidden
+  helper_method :check_can_import_export
+  helper_method :check_can_send_email
+
   def set_company_type
     if current_user.present?
       RequestStore.store[:company_type] = current_user.superAdmin.company_type if current_user.superAdmin.present?
@@ -324,7 +336,8 @@ class ApplicationController < ActionController::Base
       @staff_reciveable_group_total=Staff.where('balance<0').where(deleted: false).sum(:balance)
       @sale_product_total = PurchaseSaleItem.joins(:product).where(transaction_type:'Sale').sum(:total_sale_price)
       @expense_total = ExpenseEntry.sum(:amount)
-      @investments = Investment.sum(:invest)
+      @investments_debit = Investment.sum(:debit)
+      @investments_credit = Investment.sum(:credit)
       @purchase_sale_detail_discount_list = PurchaseSaleDetail.where(transaction_type:'Sale').where.not(discount_price:[nil,0]).sum(:discount_price)
       @credit_salary =     SalaryDetail.joins(:staff).where('amount>0').where(purchase_sale_detail_id:nil,daily_book_id:nil).where.not(id: Payment.where(paymentable_type:"SalaryDetail").pluck(:paymentable_id)).sum(:amount).to_f
       if @pos_setting.sys_type=='batha'
@@ -337,8 +350,8 @@ class ApplicationController < ActionController::Base
       @purchase_item_total = PurchaseSaleItem.joins(:item).where(transaction_type:'Purchase').sum(:total_cost_price)
       @purchase_product_total = PurchaseSaleItem.joins(:product).where(transaction_type:'Purchase').sum(:total_cost_price)
 
-      @total_payable=@sys_user_payable_group_total+@staff_payable_group_total+@sale_product_total
-      @total_reciveable=@sys_user_receiveable_group_total.abs+@staff_reciveable_group_total.abs+@expense_total+@investments+@salary_detail_total+@credit_salary+@purchase_sale_detail_discount_list+@purchase_item_total+@purchase_product_total
+      @total_payable=@sys_user_payable_group_total+@staff_payable_group_total+@sale_product_total+@investments_credit
+      @total_reciveable=@sys_user_receiveable_group_total.abs+@staff_reciveable_group_total.abs+@expense_total+@investments_debit+@salary_detail_total+@credit_salary+@purchase_sale_detail_discount_list+@purchase_item_total+@purchase_product_total
     end
   end
 
@@ -347,5 +360,68 @@ class ApplicationController < ActionController::Base
     @image = ActiveStorage::Blob.find_signed(params[:id])
     @image.attachments.first.purge_later
     redirect_back(fallback_location: request.referer)
+  end
+
+  def check_can_create(temp_module)
+    return true if temp_module.can_create==true
+    return false
+  end
+
+  def check_can_read(temp_module)
+    return true if temp_module.can_read==true
+    return false
+  end
+
+  def check_can_update(temp_module)
+    return true if temp_module.can_update==true
+    return false
+  end
+
+  def check_can_delete(temp_module)
+    return true if temp_module.can_delete==true
+    return false
+  end
+
+  def check_can_download_csv(temp_module)
+    return true if temp_module.can_download_csv==true
+    return false
+  end
+
+  def check_can_download_pdf(temp_module)
+    return true if temp_module.can_download_pdf==true
+    return false
+  end
+
+  def check_can_accessed(temp_module)
+    return false if temp_module.can_accessed==true
+    return true
+  end
+
+  def check_is_hidden(temp_module)
+    return false if temp_module.is_hidden==false
+    return true
+  end
+
+  def check_can_import_export(temp_module)
+    return true if temp_module.can_import_export==true
+    return false
+  end
+
+  def check_can_send_email(temp_module)
+    return true if temp_module.can_send_email==true
+    return false
+  end
+
+  def check_access
+    #All Permission of Current User
+    @all_permissions = User.eager_load(:user_permissions).find(current_user.id).user_permissions
+    #Current User Current Module Permission
+    @module_permission = @all_permissions.select(:id,:can_create,:can_update,:can_read,:can_delete,:can_accessed,:is_hidden,:can_download_pdf,:can_download_csv,:can_send_email,:can_import_export).find_by(module: controller_name)
+
+    if (check_is_hidden(@module_permission))  #False
+      respond_to do |format| format.html { redirect_to dashboard_path, alert: "Your system does not have this module" } end
+    elsif (check_can_accessed(@module_permission)) #True
+      respond_to do |format| format.html { redirect_to dashboard_path, alert: "you are not authorized." } end
+    end
   end
 end
