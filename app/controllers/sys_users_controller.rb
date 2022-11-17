@@ -334,7 +334,8 @@ class SysUsersController < ApplicationController
         :comment,
         :followable_id,
         :followable_type
-      ]
+      ],
+      cms_data: {}
       )
   end
 

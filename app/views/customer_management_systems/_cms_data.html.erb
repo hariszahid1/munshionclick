@@ -1,0 +1,51 @@
+<div class="col-lg-12 row">
+  <div class="col-lg-6 form-group">
+    <%= cd.text_field :client_number, value: f.object.cms_data.try(:[], 'client_number'),  placeholder: "Client Number" %>
+  </div>
+
+  <div class="col-lg-6 form-group">
+    <%= cd.label :client_name do %>
+          <%= SysUser.human_attribute_name :name %>
+          <i class="cdas fa-language"></i>
+        <% end %>
+    <%= cd.text_field :client_name, value: f.object.cms_data.try(:[], 'client_name'), placeholder: "Client Name", hide_label: true  %>
+  </div>
+</div>
+
+<div class="col-lg-12 row">
+  <div class="col-lg-6 form-group">
+    <%= cd.select :project_name, options_for_select(PosSetting.last.extra_settings['project_name'], f.object.cms_data.try(:[], 'project_name')), {:include_blank => "Select Project Name"}, class: "form-control chosen-select" %>
+  </div>
+
+  <div class="col-lg-6 form-group">
+    <%= cd.select :client_type, options_for_select(PosSetting.last.extra_settings['client_type'], f.object.cms_data.try(:[], 'client_type')), {:include_blank => "Select Client Type"}, class: "form-control chosen-select" %>
+  </div>
+</div>
+
+<div class="col-lg-12 row">
+  <div class="col-lg-6 form-group">
+    <%= cd.select :client_status, options_for_select(PosSetting.last.extra_settings['client_status'], f.object.cms_data.try(:[], 'client_status')), {:include_blank => "Select client Status"}, class: "form-control chosen-select" %>
+  </div>
+
+  <div class="col-lg-6 form-group">
+    <%= cd.select :category, options_for_select(PosSetting.last.extra_settings['category'], f.object.cms_data.try(:[], 'category')), {:include_blank => "Select Category"}, class: "form-control chosen-select" %>
+  </div>
+</div>
+
+<div class="col-lg-12 row">
+  <div class="col-lg-6 form-group">
+    <%= cd.select :deal_status, options_for_select(PosSetting.last.extra_settings['deal_status'], f.object.cms_data.try(:[], 'deal_status')), {:include_blank => "Select Deal Status"}, class: "form-control chosen-select" %>
+  </div>
+  <div class="col-lg-6 form-group">
+    <%= cd.select :source, options_for_select(PosSetting.last.extra_settings['source'], f.object.cms_data.try(:[], 'source')), {:include_blank => "Select Source"}, class: "form-control chosen-select" %>
+  </div>
+</div>
+
+<div class="col-lg-12 row">
+  <div class="col-lg-6 form-group">
+    <%= cd.text_field :plot_size, value: f.object.cms_data.try(:[], 'plot_size'), placeholder: "Plot Size" %>
+  </div>
+  <div class="col-lg-6 form-group">
+    <%= cd.text_area :short_details, value: f.object.cms_data.try(:[], 'short_details'), placeholder: "Short Details" %>
+  </div>
+</div>

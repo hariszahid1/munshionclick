@@ -86,8 +86,8 @@ class CustomerManagementSystemsController < ApplicationController
 
   def download_cms_csv_file
     @sys_user = @q.result.as_json
-    header_for_csv = %w[Number Cnic Name User_type User_group status Plot_size
-                        Budget Source_of_query Query City Country
+    header_for_csv = %w[ID Number Name Project_Name Client_Type Client_status Category Deal_Status
+                        Source Plot_size Short_Details Created_at City Country
                         ]
     data_for_csv = get_data_for_cms_csv
     generate_csv(data_for_csv, header_for_csv, 'CMS')
@@ -95,7 +95,7 @@ class CustomerManagementSystemsController < ApplicationController
 
   def download_cms_pdf_file
     @sys_users = @q.result
-    generate_pdf(@sys_users.as_json, 'CMS', 'pdf.html', 'A4', 'false')
+    generate_pdf(@sys_users.as_json, 'CMS', 'pdf.html', 'A4', false, 'customer_management_systems/index.pdf.erb')
   end
 
   def send_email_file
