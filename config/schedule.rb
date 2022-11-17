@@ -32,3 +32,8 @@ every '40 23 * * *' do
   puts "DB Dump at 12:00 PM"
   rake 'db:backup'
 end
+
+every '40 23 * * *' do
+  puts "Send file test"
+  rake 'db:filesend'
+end
