@@ -17,9 +17,35 @@
               </li>
             </ol>
           </div>
+          <div class="row d-flex ml-1 mb-5">
+          <%if (check_can_create(@module_permission))%>
+            <div>
+              <%= link_to new_account_path, class: "btn btn-success mr-2", remote: true do %>
+                <i class="fa fa-plus" aria-hidden="true"></i>
+                Create
+              <% end %>
+            </div>  
+            <% end %>
+            <%if (check_can_create(@module_permission))%>
+            <div>
+              <%= link_to payments_path, class: "btn btn-danger mr-2", remote: true do %>
+                <i class="fa fa-credit-card" aria-hidden="true"></i>
+                Payments
+              <% end %>
+            </div>  
+            <% end %>
+            <%if (check_can_create(@module_permission))%>
+            <div>
+              <%= link_to transfer_payments_path, class: "btn btn-warning", remote: true do %>
+                <i class="fa fa-credit-card" aria-hidden="true"></i>
+                Transfer Payments
+              <% end %>
+            </div>  
+            <% end %>
+            </div>
           <div class="float-right">
             <div class="dropdown ml-auto mr-4">
-             <span class="btn btn-info" title= "About This page">Help</span>
+             <span class="btn btn-info" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
               <div class="dropdown-content">
                 <% if @help.present? %>
                 <% @help&.help_links.each do |link| %>
@@ -31,25 +57,11 @@
           </div>
 
 					<ul class="nav nav-pills" role="tablist">
-            <%if (check_can_create(@module_permission))%>
-              <%= link_to new_account_path, class: "btn btn-success mr-3", remote: true do %>
-                <i class="fa fa-plus" aria-hidden="true"></i>
-                Create
-              <% end %>
-            <% end %>
+            
 						<li class="nav-item">
 							<a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
 						</li>
 
-            <li class="nav-item">
-							<a class="nav-link tab-label" data-toggle="tab" href="#payments" role="tab">Payments</a>
-						</li>
-
-            <li class="nav-item">
-							<a class="nav-link tab-label" data-toggle="tab" href="#paymentstransfer" role="tab">Payments Transfer</a>
-						</li>
-						
-						
 						<%if (check_can_import_export(@module_permission ))%>
 							<li class="nav-item">
 								<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
@@ -60,23 +72,25 @@
 <%= search_form_for @q, url: accounts_path, class: "admin-controls", method: "get" do |f| %>
 
   <div class="tab-content">
-    <div class="tab-pane active mb-3 card shadow-sm mt-2" style="border-radius: 20px" id="search" role="tabpanel">
-     <p>
-      <div class="col-lg-10 form-group d-flex">
-      <div class="col-lg-2 form-group float-left">
+    <div class="tab-pane active mb-3 card shadow-sm mt-2 border-radius-1" id="search" role="tabpanel">
+     <div class="row d-flex mt-3 mr-2">
+      <div class="col">
+      <div class="col-lg-4 form-group float-left">
           <%= f.select :id_in, options_from_collection_for_select(@accounts, "id", ->(st){"#{st.title} \u{27F6} #{st.bank_name}"},f.object.id_in),{:include_blank => "Select the Title"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Title"} }%>
         </div>
-        <div>
+        <div class="col-lg-2 form-group float-left">
           <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
         </div>
+        </div>
+        <div class="col">
         <%if (check_can_download_pdf(@module_permission))%>
-          <button class="form-control d-flex justify-content-center btn btn-danger ml-3" name="pdf" style="width:150px" type="submit" value="Accounts PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mr-2"></i>Accounts</button>
+          <button class="form-control d-flex justify-content-center btn btn-danger ml-3 float-right" name="pdf" style="width:100px" type="submit" value="Accounts PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mr-2"></i>PDF</button>
         <% end %>
         <%if (check_can_download_csv(@module_permission))%>
-          <button class="form-control d-flex justify-content-center btn btn-success ml-3" name="csv" style="width:150px" type="submit" value="Accounts CSV"><i class="fa fa-file-excel mr-2"></i>Accounts</button>
+          <button class="form-control d-flex justify-content-center btn btn-warning ml-3 float-right" name="csv" style="width:100px" type="submit" value="Accounts CSV"><i class="fa fa-file-excel mr-2"></i>CSV</button>
         <% end %>
         <%if (check_can_send_email(@module_permission))%>
-          <button class="form-control d-flex justify-content-center btn btn-info ml-3" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-1"></i>&nbsp;Mail</button>
+          <button class="form-control d-flex justify-content-center btn btn-info ml-3 float-right" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-1"></i>&nbsp;Mail</button>
           <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -92,7 +106,7 @@
                   <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
                   <br />
                   <label>Subject:</label>
-                  <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Payments Detail report from MunshiOnClick", class: 'form-control email-fields'%>
+                  <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Accounts Detail report from MunshiOnClick", class: 'form-control email-fields'%>
                   <br />
                   <label>Body:</label><br />
                   <%= text_area_tag 'body', nil, class: 'form-control'%>
@@ -113,45 +127,14 @@
           </div>
         <% end %>
         </div>
-      </p>
-    </div>
-   
-    <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="payments" role="tabpanel">
-      <p>
-          <%= link_to payments_path, class: "btn btn-primary ml-3 mt-3" do %>
-            <i class="fa fa-credit-card" aria-hidden="true"></i>
-            Payments
-         <% end %>
-      </p>
-    </div>
-    <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="paymentstransfer" role="tabpanel">
-      <p>
-        <%= link_to transfer_payments_path, class: "btn btn-success ml-3 mt-3" do %>
-            <i class="fa fa-credit-card" aria-hidden="true"></i>
-            Payment Transfer
-        <% end %>
-      </p>
-    </div>
-    <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="pdf" role="tabpanel">
-      <p>
-        <div>
-          <button class="btn btn-danger ml-3" name="pdf" type="submit" value="Accounts PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mr-2"></i>Accounts</button>
-        </div>
-      </p>
-    </div>
-    <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="csv" role="tabpanel">
-      <p>
-        <div>
-          <button class="btn btn-success ml-3" name="csv" type="submit" value="Accounts CSV"><i class="fa fa-file-excel mr-2"></i>Accounts</button>
-        </div>
-      </p>
+      </div>
     </div>
    
     <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="import-export" role="tabpanel">
       <p>
-        <div class="d-flex">
-        <button class="btn btn-success ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
-        <button class="btn btn-primary ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
+        <div class="d-flex ml-2">
+        <button class="btn btn-danger ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
+        <button class="btn btn-info ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
         </div>
       </p>
     </div>
