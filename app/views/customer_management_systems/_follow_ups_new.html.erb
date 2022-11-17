@@ -8,10 +8,10 @@
         <%= f.select :assigned_to_id, options_from_collection_for_select(@staff, 'id', 'name',f.object&.assigned_to_id.present? ? f.object&.assigned_to_id : nil ),{include_blank: "Please Select Assignee"},{class: "form-control"} %>
       </div>
       <div class="col-lg-6 form-group float-left text-black">
-        <%= f.select :task_type, FollowUp.task_types.map { |key, value| [key.humanize, key] },{include_blank: "Please Select Priority"},{class: "form-control", required: true} %>
+        <%= f.select :task_type, FollowUp.task_types.map { |key, value| [key.humanize, key] },{include_blank: "Please Select Priority"},{class: "form-control"} %>
       </div>
       <div class="col-lg-6 form-group float-left text-black">
-        <%= f.select :priority, FollowUp.priorities.map { |key, value| [key.humanize, key] },{include_blank: "Please Select Task Type"},{class: "form-control", required: true} %>
+        <%= f.select :priority, FollowUp.priorities.map { |key, value| [key.humanize, key] },{include_blank: "Please Select Task Type"},{class: "form-control"} %>
       </div>
       <div class="col-lg-6 form-group float-left text-black">
         <%= f.date_field :date%></th>
