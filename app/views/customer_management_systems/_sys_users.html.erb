@@ -7,34 +7,67 @@
   <td><%= sys_users.cms_data.try(:[], 'source') %></td>
   <td><%= sys_users.cms_data.try(:[], 'plot_size') %></td>
   <td>
-		<%if (check_can_update(@module_permission))%>
-      <%= link_to edit_customer_management_system_path(sys_users), remote: true do %>
-        <i class="fa fa-edit mr-2 ml-2 " aria-hidden="true"></i> |
-      <%end %>
-    <% end %>
-
-		<%if (check_can_delete(@module_permission))%>
-      <%= link_to customer_management_system_path(sys_users), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
-        <i class="fa fa-trash mr-2 ml-2" aria-hidden="true"></i> |
-      <%end %>
-    <% end %>
-
-		<%if (check_can_read(@module_permission))%>
-      <%= link_to customer_management_system_path(sys_users) do %>
-       <i class="fa fa-eye mr-2 ml-2" aria-hidden="true"></i>|
-      <%end %>
-    <%end%>
-
-		<%if (check_can_download_pdf(@module_permission))%>
-			<%= link_to customer_management_systems_path('q[id_eq]':sys_users.id,'pdf':true), title: 'Download PDF', target: '_blank' do %>
-				<i class="fa fa-file-pdf text-danger mr-2 ml-2 " aria-hidden="true"></i>|
-			<%end %>
-		<%end %>
-		<%if (check_can_download_csv(@module_permission))%>
-			<%= link_to customer_management_systems_path('q[id_eq]':sys_users.id,'csv':true), title: 'Download CSV' do%>
-				<i class="fa fa-file-excel mr-2 ml-2 text-success" aria-hidden="true"></i>
-			<%end %>
-		<%end %>
+  <div class="icon-container-1">
+      <div class="my-icon-1 my-view-1">
+        <div class="my-tooltip-1">
+          <div class="icon-container">
+						<%if (check_can_update(@module_permission))%>
+            	<div class="my-icon my-view">
+            	  <div class="my-tooltip">
+            	    Edit
+            	  </div>
+            	    <%= link_to edit_customer_management_system_path(sys_users), remote: true, class: "icon-div" do %>
+            	      <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+            	    <%end %>
+            	</div>
+						<% end %>
+						<%if (check_can_delete(@module_permission))%>
+            	<div class="my-icon my-view">
+            	  <div class="my-tooltip">
+            	    Delete
+            	  </div>
+            	    <%= link_to customer_management_system_path(sys_users), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+            	      <i class="fa fa-trash mt-2" aria-hidden="true"></i>
+            	    <%end %>
+            	</div>
+						<% end %> 
+						<%if (check_can_read(@module_permission))%>
+            	<div class="my-icon my-view">
+            	  <div class="my-tooltip">
+            	    Show
+            	  </div>
+            	    <%= link_to customer_management_system_path(sys_users), class:"icon-div" do %>
+            	      <i class="fa fa-eye mt-2" aria-hidden="true"></i>
+            	    <%end %>
+            	</div>
+						<%end%>
+						<%if (check_can_download_pdf(@module_permission))%>
+            	<div class="my-icon my-view">
+            	  <div class="my-tooltip">
+            	    PDF
+            	  </div>
+            	    <%= link_to customer_management_systems_path('q[id_eq]':sys_users.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
+            	      <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
+            	    <%end %>  
+            	</div>
+						<% end %>  
+						<%if (check_can_download_csv(@module_permission))%>
+            	<div class="my-icon my-view">
+            	  <div class="my-tooltip">
+            	    CSV
+            	  </div>
+            	    <%= link_to customer_management_systems_path('q[id_eq]':sys_users.id,'csv':true), title: 'Download CSV', class:"icon-div" do%>
+            	      <i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
+            	    <%end %>
+            	</div>
+						<% end %>
+          </div>
+        </div>
+        <span class="icon-div-1">
+              <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+        </span>
+      </div>
+    </div>
 
   </td>
 </tr>
