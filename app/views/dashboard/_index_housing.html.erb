@@ -4,9 +4,9 @@
     <div class="col">
       <div class="main-content-header mt-4 mb-4">
         <div class="row-lg-12">
-          <div class="col-lg-6 float-left">
+          <div class="col-lg-3 float-left">
             <div class="row d-flex">
-              <h2 class="ml-2">Dashboard</h2>
+              <h2 class="ml-2 head-color">Dashboard</h2>
             </div>
             <div class="row d-flex">
               <ol class="breadcrumb">
@@ -23,7 +23,7 @@
             <div class="container-fluid">
               <div class="row d-flex">
 
-                <div class="col-4 float-left">
+                <div class="col-3 float-left">
                   <%= link_to confirm_index_path do %>
                     <div class="row d-flex">
                       <p class="mr-2">Remaining Transaction</p>
@@ -43,10 +43,7 @@
                       </div>
                 </div>
 
-
-
-
-                <div class="col-4 float-left">
+                <div class="col-3 float-left">
                   <%= link_to purchase_sale_details_path(sale:true,'q[created_at_gteq]': (DateTime.now).strftime('%Y-%m-%d'),'q[created_at_lteq]': (DateTime.now).strftime('%Y-%m-%d')) do %>
                     <div class="row d-flex">
                       <p class="mr-2">Installment:</p>
@@ -77,11 +74,11 @@
                   </div>
                 </div>
 
-                <div class="col-4 float-left">
+                <div class="col-3 float-left">
                   <%= link_to purchase_sale_details_path('q[created_at_gteq]': (DateTime.now-1).strftime('%Y-%m-%d'),'q[created_at_lteq]': (DateTime.now-1).strftime('%Y-%m-%d') ) do %>
                     <div class="row d-flex">
                       <p class="mr-2">Purchase:</p>
-                      <i class="fas fa-signal text-danger ml-2"></i>
+                      <i class="fas fa-signal text-info ml-2"></i>
                     </div>
                   <% end %>
                   <div class="row d-flex">
@@ -111,6 +108,40 @@
                     <% end %>
                   </div>
                 </div>
+                 <div class="col-3 float-left">
+                  <%= link_to expenses_path('q[created_at_gteq]': (DateTime.now-1).strftime('%Y-%m-%d'),'q[created_at_lteq]': (DateTime.now-1).strftime('%Y-%m-%d') ) do %>
+                    <div class="row d-flex">
+                      <p class="mr-2">Expense:</p>
+                      <i class="fas fa-signal text-danger ml-2"></i>
+                    </div>
+                  <% end %>
+                  <div class="row d-flex">
+                    <%= link_to expenses_path('q[created_at_gteq]': (DateTime.now-1).strftime('%Y-%m-%d'),'q[created_at_lteq]': (DateTime.now-1).strftime('%Y-%m-%d') ) do %>
+                      <i class="h6 mb-0 font-weight-bold text-gray-800 mr-2" style="float: right; color: #6c757d;">
+                        <%=@total_expense.to_f.round(2) rescue 0%>
+                      </i>
+                      <i class="fas fa-dollar-sign" aria-hidden="true" style="float: right; color: #6c757d;"></i>
+                    <% end %>
+                    <%= link_to expenses_path('q[created_at_gteq]': (DateTime.now-1).strftime('%Y-%m-%d'),'q[created_at_lteq]': (DateTime.now-1).strftime('%Y-%m-%d') ) do %>
+                      <i class="h6 mb-0 font-weight-bold text-gray-800" style="color: #6c757d;">Today :
+                        <%=@total_expense_slips%>
+                      </i>
+                    <% end %>
+                  </div>
+                  <div class="row d-flex">
+                    <%= link_to expenses_path('q[created_at_gteq]': (DateTime.now-1).strftime('%Y-%m-%d'),'q[created_at_lteq]': (DateTime.now-1).strftime('%Y-%m-%d') ) do %>
+                      <i class="h6 mb-0 font-weight-bold text-gray-800 mr-2" style="float: right; color: #6c757d;">
+                        <%=@total_expense.to_f.round(2) rescue 0%>
+                      </i>
+                      <i class="fas fa-dollar-sign" aria-hidden="true" style="float: right; color: #6c757d;"></i>
+                    <% end %>
+                    <%= link_to expenses_path('q[created_at_gteq]': (DateTime.now-1).strftime('%Y-%m-%d'),'q[created_at_lteq]': (DateTime.now-1).strftime('%Y-%m-%d') ) do %>
+                      <i class="h6 mb-0 font-weight-bold text-gray-800" style="color: #6c757d;">Yesterday :
+                        <%=@total_expense_slips%>
+                      </i>
+                    <% end %>
+                  </div>
+                </div>
               </div>
             </div>
         </div>
@@ -125,7 +156,7 @@
     <%= link_to ledger_books_path(submit_credit:true,'q[created_at_gteq]':(DateTime.now).strftime('%Y-%m-%d'),'q[created_at_lteq]':(DateTime.now).strftime('%Y-%m-%d')),target: :_blank   do %>
       <h6 class="ml-5">Today Paid(Credit)</h6>
         <div class="ml-5 d-flex">
-          <i class="fas fa-dollar-sign mt-1" aria-hidden="true"></i>
+          <i class="mr-1" aria-hidden="true">PKR</i>
           <i class="h4 mb-0 font-weight-bold text-gray-800 "><%= @t_debit.to_f.round(2) %></i>
         </div>
       <% end %>
@@ -134,7 +165,7 @@
     <%= link_to ledger_books_path(submit_debit:true,'q[created_at_gteq]':(DateTime.now).strftime('%Y-%m-%d'),'q[created_at_lteq]':(DateTime.now).strftime('%Y-%m-%d')),target: :_blank   do %>
       <h6 class="ml-5">Today Received(Debit)</h6>
         <div class="ml-5 d-flex">
-        <i class="fas fa-dollar-sign mt-1" aria-hidden="true"></i>
+        <i class="mr-1" aria-hidden="true">PKR</i>
         <i class="h4 mb-0 font-weight-bold text-gray-800"><%= @t_credit.to_f.round(2) %></i>
       </div>
     <% end %>
@@ -143,7 +174,7 @@
     <%= link_to payable_sys_users_sys_users_path do %>
       <h6 class="ml-5">Net Payable</h6>
       <div class="ml-5 d-flex">
-        <i class="fas fa-dollar-sign mt-1" aria-hidden="true"></i>
+        <i class="mr-1" aria-hidden="true">PKR</i>
         <i class="h4 mb-0 font-weight-bold text-gray-800"><%=@payable%></i>
       </div>
     <% end %>
@@ -152,7 +183,7 @@
     <%= link_to receiveable_sys_users_path do %>
       <h6 class="ml-5">Net Receivable</h6>
       <div class="ml-5 d-flex">
-          <i class="fas fa-dollar-sign mt-1" aria-hidden="true"></i>
+          <i class="mr-1" aria-hidden="true">PKR</i>
   				<i class="h4 mb-0 font-weight-bold text-gray-800"><%=@receivable%></i>
       </div>
     <% end %>
@@ -163,7 +194,7 @@
 <div div class="hidden" id="products_list">
   <div class="float-right">
     <div class="dropdown ml-auto mr-4">
-     <span class="btn btn-info" title= "About This page">Help</span>
+     <span class="btn btn-info" title= "About This page"><i class="fa fa-question-circle mr-2"></i>Help</span>
       <div class="dropdown-content">
         <% if @help.present? %>
           <% @help&.help_links.each do |link| %>
@@ -941,3 +972,5 @@
     }, 50);
   });
 </script>
+
+
