@@ -26,12 +26,3 @@
     <%= cd.select :source, options_for_select(@source, f.object.cms_data.try(:[], 'source')), {:include_blank => "Select Source"}, class: "form-control chosen-select" %>
   </div>
 </div>
-
-<div class="col-lg-12 row">
-  <div class="col-lg-6 form-group">
-    <%= cd.text_field :plot_size, value: f.object.cms_data.try(:[], 'plot_size'), placeholder: "Plot Size" %>
-  </div>
-  <div class="col-lg-6 form-group">
-    <%= cd.text_area :short_details, value: f.object.cms_data.try(:[], 'short_details'), placeholder: "Short Details" %>
-  </div>
-</div>

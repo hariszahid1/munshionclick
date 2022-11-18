@@ -59,16 +59,19 @@
         <div class="row d-flex mt-3 mr-2">
           <div class="col">
             <div class='col-lg-2 form-group float-left'>
-              <%= f.select :id_eq, options_for_select(@all_user.map{ |p| [p.name , p.id]}, f.object.id_eq),{:include_blank => "Select Name"},:class=>"form-control chosen-select" %>
+              <%= f.select :id_eq, options_for_select(@all_user, f.object.id_eq),{:include_blank => "Select Name"},:class=>"form-control chosen-select" %>
             </div>
             <div class='col-lg-2 form-group float-left'>
-              <%= f.select :code_eq, options_for_select(@all_user.map{ |p| [p.code]}, f.object.id_eq),{:include_blank => "Select Client Number"},:class=>"form-control chosen-select" %>
+              <%= f.select :occupation_eq, options_for_select(@all_agents, f.object.occupation_eq),{:include_blank => "Select Agent Name"},:class=>"form-control chosen-select" %>
+            </div>
+            <div class='col-lg-2 form-group float-left'>
+              <%= f.select :ntn_eq, options_for_select(@all_plot_sizes, f.object.ntn_eq),{:include_blank => "Select Plot Size"},:class=>"form-control chosen-select" %>
             </div>
             <div class="col-lg-2 form-group float-left">
-              <%= f.select :cms_data_cont, options_for_select(@project_name, f.object.cms_data_cont),  {:include_blank => "Select Project Name"}, class: "form-control chosen-select" %>
+              <%= f.select :cms_data_cont, options_for_select(@client_type, f.object.cms_data_cont),  {:include_blank => "Select client type"}, class: "form-control chosen-select" %>
             </div>
             <div class="col-lg-2 form-group float-left">
-              <%= f.select :cms_data_cont_any, options_for_select(@source, f.object.cms_data_cont_any), {:include_blank => "Select Source"}, class: "form-control chosen-select" %>
+              <%= f.select :cms_data_cont_any, options_for_select(@category, f.object.cms_data_cont_any), {:include_blank => "Select Category"}, class: "form-control chosen-select" %>
             </div>
             <div class="col-lg-1 form-group float-left">
               <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search"><i class="fa fa-search"></i></button>
@@ -77,7 +80,7 @@
             <%if (check_can_download_pdf(@module_permission))%>
               <button class="form-control btn btn-danger float-left mr-2 ml-3" style="width:100px" title= "download customer_management_systems pdf" name="pdf" type="submit" value="pdf" formtarget="_blank" style="width:160px">PDF &nbsp;<i class="fa fa-file-pdf"></i></button>
             <% end %>
-            <%if (check_can_download_csv(@module_permission))%>  
+            <%if (check_can_download_csv(@module_permission))%>
               <button class="btn btn-warning float-left mr-2" style="width:100px" title= "download customer_management_systems csv" name="csv" type="submit" value="csv">CSV &nbsp;<i class="fa fa-file-excel"></i></button>
             <% end %>
             <%if (check_can_send_email(@module_permission))%>
@@ -153,11 +156,13 @@
 					</div>
 				<%end%>
         </th>
-        <th>Name<div class='float-right'><%= sort_link(@q, :name, "", {}, class: 'sorting-button') %></div></th>
-        <th>Number<div class='float-right'><%= sort_link(@q, :code, "", {}, class: 'sorting-button') %></div></th>
-         <th>Client Type</th>
+        <th>Client Name<div class='float-right'><%= sort_link(@q, :name, "", {}, class: 'sorting-button') %></div></th>
+        <th><div class="d-flex">Agent Name<div><%= sort_link(@q, :father, "", {}, class: 'sorting-button ml-auto') %></div></div></th>
+        <th>Client Type</th>
         <th>Category</th>
+        <th>Project  Name</th>
         <th>Source</th>
+        <th>Deal Status</th>
         <th>Plot Size</th>
         <th class="border_none text-center">Action</th>
       </tr>
