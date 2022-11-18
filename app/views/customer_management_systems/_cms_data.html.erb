@@ -1,19 +1,5 @@
 <div class="col-lg-12 row">
   <div class="col-lg-6 form-group">
-    <%= cd.text_field :client_number, value: f.object.cms_data.try(:[], 'client_number'),  placeholder: "Client Number" %>
-  </div>
-
-  <div class="col-lg-6 form-group">
-    <%= cd.label :client_name do %>
-          <%= SysUser.human_attribute_name :name %>
-          <i class="cdas fa-language"></i>
-        <% end %>
-    <%= cd.text_field :client_name, value: f.object.cms_data.try(:[], 'client_name'), placeholder: "Client Name", hide_label: true  %>
-  </div>
-</div>
-
-<div class="col-lg-12 row">
-  <div class="col-lg-6 form-group">
     <%= cd.select :project_name, options_for_select(@project_name, f.object.cms_data.try(:[], 'project_name')), {:include_blank => "Select Project Name"}, class: "form-control chosen-select" %>
   </div>
 

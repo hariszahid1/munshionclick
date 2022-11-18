@@ -34,12 +34,12 @@
   </div>
 
   <ul class="nav nav-pills" role="tablist">
-		<!--li class="nav-item">
-			<a class="nav-link tab-label" data-toggle="tab" href="#search" role="tab">Search</a>
-		</li-->
+		<li class="nav-item">
+			<a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
+		</li>
 		<%if (check_can_create(@module_permission))%>
 			<li class="nav-item">
-				<a class="nav-link tab-label active" data-toggle="tab" href="#create" role="tab">Create</a>
+				<a class="nav-link tab-label" data-toggle="tab" href="#create" role="tab">Create</a>
 			</li>
 		<%end%>
 		<%if (check_can_download_pdf(@module_permission))%>
@@ -66,23 +66,28 @@
 
   <%= search_form_for @q, url: customer_management_systems_path, class: "admin-controls", method: "get" do |f| %>
     <div class="tab-content mb-5">
-      <div class="tab-pane" id="search" role="tabpanel">
+      <div class="tab-pane active" id="search" role="tabpanel">
         <p>
           <div class="col-lg-10 form-group d-flex">
             <div class='col-lg-3'>
-              <%= f.search_field :cms_data_cont,  placeholder: "title", title: "title" ,:class=>"form-control" %>
+              <%= f.select :id_eq, options_for_select(@all_user.map{ |p| [p.name , p.id]}, f.object.id_eq),{:include_blank => "Select Name"},:class=>"form-control chosen-select" %>
+            </div>
+            <div class='col-lg-3'>
+              <%= f.select :code_eq, options_for_select(@all_user.map{ |p| [p.code]}, f.object.id_eq),{:include_blank => "Select Client Number"},:class=>"form-control chosen-select" %>
             </div>
             <div class="col=lg-2 form-group float-left">
-              <%= f.select :status_eq, SysUser.statuses.map { |key, value| [key.humanize, value] },{include_blank: "Select Status", hide_label:true, required: true },:class=>"form-control chosen-select" %>
+              <%= f.select :cms_data_cont, options_for_select(@project_name, f.object.cms_data_cont),  {:include_blank => "Select Project Name"}, class: "form-control chosen-select" %>
             </div>
-
+          <div class="col=lg-2 ml-3 form-group float-left">
+              <%= f.select :cms_data_cont_any, options_for_select(@source, f.object.cms_data_cont_any), {:include_blank => "Select Source"}, class: "form-control chosen-select" %>
+            </div>
             <div class="col-lg-2 form-group float-left">
               <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
             </div>
           </div>
         </p>
       </div>
-      <div class="tab-pane active" id="create" role="tabpanel">
+      <div class="tab-pane" id="create" role="tabpanel">
         <p>
           <% if can?(:add, :all) %>
             <div id="new_city">
@@ -175,8 +180,8 @@
     <thead>
       <tr>
         <th><input type="checkbox" id="master" class='select-all-checkbox'></th>
-        <th>Client Name</th>
-        <th>Client Number</th>
+        <th>Name<div class='float-right'><%= sort_link(@q, :name, "", {}, class: 'sorting-button') %></div></th>
+        <th>Number<div class='float-right'><%= sort_link(@q, :code, "", {}, class: 'sorting-button') %></div></th>
          <th>Client Type</th>
         <th>Category</th>
         <th>Source</th>
