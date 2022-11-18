@@ -4,7 +4,7 @@
 class CustomerManagementSystemsController < ApplicationController
 	before_action :check_access
   before_action :set_sys_user, only: %i[show edit update destroy]
-  before_action :new_edit_data, only: %i[new edit]
+  before_action :new_edit_data, only: %i[new edit index]
   include PdfCsvGeneralMethod
   include CmsHelper
 
@@ -110,7 +110,8 @@ class CustomerManagementSystemsController < ApplicationController
 
   def download_cms_pdf_file
     @sys_users = @q.result
-    generate_pdf(@sys_users.as_json, 'CMS', 'pdf.html', 'A4', false, 'customer_management_systems/index.pdf.erb')
+    sorted_data
+    generate_pdf(@sorted_data.as_json, 'CMS', 'pdf.html', 'A4', false, 'customer_management_systems/index.pdf.erb')
   end
 
   def send_email_file

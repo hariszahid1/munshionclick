@@ -1,7 +1,7 @@
 <tr>
   <td><%= check_box_tag 'object_ids[]', sys_users.id %></td>
-  <td class='urdu-font'><%= sys_users.cms_data.try(:[], 'client_name') %></td>
-  <td><%=  sys_users.cms_data.try(:[], 'client_number') %></td>
+  <td class='urdu-font'><%= sys_users.name %></td>
+  <td><%=  sys_users.code %></td>
   <td><%= sys_users.cms_data.try(:[], 'client_type') %></td>
   <td><%= sys_users.cms_data.try(:[], 'category') %></td>
   <td><%= sys_users.cms_data.try(:[], 'source') %></td>

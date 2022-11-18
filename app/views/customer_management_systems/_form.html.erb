@@ -9,6 +9,19 @@
       </ul>
     </div>
   <% end %>
+  <div class="col-lg-12 row">
+    <div class="col-lg-6 form-group">
+      <%= f.text_field :code , placeholder:"Enter Client Number", label: "Client Number" %>
+    </div>
+
+    <div class="col-lg-6 form-group">
+      <%= f.label :name do %>
+            <%= SysUser.human_attribute_name :name %>
+            <i class="cdas fa-language"></i>
+          <% end %>
+      <%= f.text_field :name, placeholder: "Client Name", hide_label: true  %>
+    </div>
+  </div>
   <div>
     <%= f.fields :cms_data do |cd| %>
         <%= render 'cms_data', {cd: cd, f: f} %>
@@ -20,7 +33,6 @@
       <%= f.datetime_select :created_at, {label: 'Date of Query'}, class: "form-control" %>
     </div>
     <%= f.hidden_field :user_type_id, value: UserType.first.id %>
-    <%= f.hidden_field :code, {placeholder: "Enter the code", required: true , value: (f.object.code.nil? ? ("AGC-"+"%.4i" % (SysUser.maximum(:id).present? ? SysUser.maximum(:id).next : 1)) : (f.object.code ))} %>
   </div>
 
   <div>

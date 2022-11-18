@@ -88,7 +88,7 @@
             <p class="mb-0 text-dark font-weight-bold">Client Name</p>
           </div>
           <div class="col-sm-8">
-            <p class="text-dark mb-0"><%= @sys_user.cms_data.try(:[], 'client_name')%></p>
+            <p class="text-dark mb-0"><%= @sys_user.name %></p>
           </div>
         </div>
         <hr>
@@ -97,7 +97,7 @@
             <p class="mb-0 text-dark font-weight-bold">Client Number</p>
           </div>
           <div class="col-sm-8">
-            <p class="text-dark mb-0"><%= @sys_user.cms_data.try(:[], 'client_number')%></p>
+            <p class="text-dark mb-0"><%= @sys_user.code %></p>
           </div>
         </div>
         <hr>

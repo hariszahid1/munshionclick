@@ -38,15 +38,15 @@
           <th class="text-center">Plot Size</th>
           <th class="text-center">Short Details</th>
           <th class="text-center">Created at</th>
-          <th class="text-center">City Id</th>
-          <th class="text-center">Country Id</th>
+          <th class="text-center">City</th>
+          <th class="text-center">Country</th>
         </thead>
         <tbody>
           <% data.each_with_index do |sys_user, index| %>
             <tr>
               <th class="text-center"><%= sys_user['id'] %></th>
-              <td class="text-center"><%= sys_user['cms_data'].try(:[], 'client_number') %></td>
-              <td class="text-center"><%= sys_user['cms_data'].try(:[], 'client_name') %></td>
+              <td class="text-center"><%= sys_user['number'] %></td>
+              <td class="text-center"><%= sys_user['name'] %></td>
               <th class="text-center"><%= sys_user['cms_data'].try(:[], 'project_name') %></th>
               <td class="text-center"><%= sys_user['cms_data'].try(:[], 'client_type') %></td>
               <td class="text-center"><%= sys_user['cms_data'].try(:[], 'client_status') %></td>
@@ -56,8 +56,8 @@
               <th class="text-center"><%= sys_user['cms_data'].try(:[], 'plot_size') %></th>
               <td class="text-center"><%= sys_user['cms_data'].try(:[], 'short_details') %></td>
               <td class="text-center"><%= sys_user['created_at'] %></td>
-              <td class="text-center"><%= sys_user[:contact].try(:[], 'city_id') %></td>
-              <td class="text-center"><%= sys_user[:contact].try(:[], 'country_id') %></td>
+              <td class="text-center"><%= sys_user['city'] %></td>
+              <td class="text-center"><%= sys_user['country'] %></td>
             </tr>
           <% end %>
         </tbody>
