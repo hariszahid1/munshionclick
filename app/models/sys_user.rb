@@ -25,4 +25,8 @@ class SysUser < ApplicationRecord
     self.update(balance: self.opening_balance)
   end
 
+  ransacker :cms_data do
+    Arel.sql("sys_users.cms_data")
+ end
+
 end

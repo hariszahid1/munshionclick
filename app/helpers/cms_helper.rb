@@ -6,8 +6,8 @@ module CmsHelper
 		temp=[]
 		@sys_user.each do |sys_user|
 			if sys_user.cms_data.present?
-				data1 = sys_user.cms_data.try(:[], 'client_number')
-				data2 = sys_user.cms_data.try(:[], 'client_name')
+				data1 = sys_user.name
+				data2 = sys_user.code
 				data3 = sys_user.cms_data.try(:[], 'project_name')
 				data4 = sys_user.cms_data.try(:[], 'client_type')
 				data5 = sys_user.cms_data.try(:[], 'client_status')
@@ -26,4 +26,18 @@ module CmsHelper
 		end
 		return temp
 	end
+
+	def sorted_data
+    @sorted_data = []
+    @q.result.each do |d|
+      @sorted_data << {
+                        id: d.id,
+                        name: d.name,
+                        number: d.code,
+                        cms_data: d.cms_data,
+                        city: d.contact&.city&.title,
+                        country: d.contact&.country&.title
+                       }
+    end
+  end
 end
