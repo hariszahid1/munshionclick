@@ -6,8 +6,8 @@ module CmsHelper
 		temp=[]
 		@sys_user.each do |sys_user|
 			if sys_user.cms_data.present?
-				data1 = sys_user.name
 				data2 = sys_user.code
+				data1 = sys_user.name
 				data3 = sys_user.cms_data.try(:[], 'project_name')
 				data4 = sys_user.cms_data.try(:[], 'client_type')
 				data5 = sys_user.cms_data.try(:[], 'client_status')
