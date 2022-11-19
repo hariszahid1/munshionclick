@@ -63,7 +63,6 @@
             <% @sys_user.follow_ups.order("id desc").each do |follow_up|%>
               <div class = "tab-pane card p-1 mb-3">
                 <ul class="list-group list-group-flush">
-                  <li class="list-group-item"><span><b class="mr-2">Reminder Type:</b> <%= follow_up.reminder_type %></span><br/></li>
                   <li class="list-group-item"><span><b class="mr-2">Task Type:</b> <%= follow_up.task_type %></span><br/></li>
                   <li class="list-group-item"><span><b class="mr-2"> Time:</b> <%= follow_up&.date %></span><br/></li>
                   <li class="list-group-item"> <span><b class="mr-2">Priority:</b> <%= follow_up.priority %></span><br/></li>
@@ -101,14 +100,15 @@
           </div>
         </div>
         <hr>
-        <div class="row">
+         <div class="row">
           <div class="col-sm-4">
-            <p class="mb-0 text-dark font-weight-bold">Client Status</p>
+            <p class="mb-0 text-dark font-weight-bold">Agent Name</p>
           </div>
           <div class="col-sm-8">
-            <p class="text-dark mb-0"><%= @sys_user.cms_data.try(:[], 'custom_status')%></p>
+            <p class="text-dark mb-0"><%= @sys_user.occupation %></p>
           </div>
         </div>
+        <hr>
         <hr>
         <div class="row">
           <div class="col-sm-4">
@@ -142,7 +142,7 @@
             <p class="mb-0 text-dark font-weight-bold">Plot Size</p>
           </div>
           <div class="col-sm-8">
-            <p class="text-dark mb-0"><%= @sys_user.cms_data.try(:[], 'plot_size')%></p>
+            <p class="text-dark mb-0"><%= @sys_user.ntn%></p>
           </div>
         </div>
         <hr>
@@ -169,7 +169,7 @@
             <p class="mb-0 text-dark font-weight-bold">Short Details</p>
           </div>
           <div class="col-sm-8">
-            <p class="text-dark mb-0"><%= @sys_user.cms_data.try(:[], 'short_details')%></p>
+            <p class="text-dark mb-0"><%= @sys_user.gst%></p>
           </div>
         </div>
         <hr>

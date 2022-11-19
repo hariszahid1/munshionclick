@@ -16,7 +16,9 @@ class CustomerManagementSystemsController < ApplicationController
     @q = SysUser.ransack(params[:q])
     @q.sorts = 'id asc' if @q.sorts.empty? && @q.result.count.positive?
     @options_for_select = SysUser.all
-    @all_user = SysUser.all
+    @all_user = SysUser.pluck(:name).uniq
+    @all_agents = SysUser.pluck(:occupation).uniq
+    @all_plot_sizes = SysUser.pluck(:ntn).uniq
     @user_types = UserType.all
     @user_groups = UserGroup.all
     @sys_users = @q.result.page(params[:page])
@@ -101,7 +103,7 @@ class CustomerManagementSystemsController < ApplicationController
 
   def download_cms_csv_file
     @sys_user = @q.result
-    header_for_csv = %w[Number Name Project_Name Client_Type Client_status Category Deal_Status
+    header_for_csv = %w[Number Name Agent_Name Project_Name Client_Type Client_status Category Deal_Status
                         Source Plot_size Short_Details Created_at City Country
                         ]
     data_for_csv = get_data_for_cms_csv
