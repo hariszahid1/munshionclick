@@ -1,11 +1,13 @@
 <tr>
   <td><%= check_box_tag 'object_ids[]', sys_users.id %></td>
   <td class='urdu-font'><%= sys_users.name %></td>
-  <td><%=  sys_users.code %></td>
+	<td><%=  sys_users.occupation %></td>
   <td><%= sys_users.cms_data.try(:[], 'client_type') %></td>
   <td><%= sys_users.cms_data.try(:[], 'category') %></td>
+	<td><%= sys_users.cms_data.try(:[], 'project_name') %></td>
   <td><%= sys_users.cms_data.try(:[], 'source') %></td>
-  <td><%= sys_users.cms_data.try(:[], 'plot_size') %></td>
+  <td><%= sys_users.cms_data.try(:[], 'deal_status') %></td>
+  <td><%= sys_users.ntn%></td>
   <td>
   <div class="icon-container-1">
       <div class="my-icon-1 my-view-1">
@@ -48,9 +50,9 @@
             	  </div>
             	    <%= link_to customer_management_systems_path('q[id_eq]':sys_users.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
             	      <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
-            	    <%end %>  
+            	    <%end %>
             	</div>
-						<% end %>  
+						<% end %>
 						<%if (check_can_download_csv(@module_permission))%>
             	<div class="my-icon my-view">
             	  <div class="my-tooltip">
