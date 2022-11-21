@@ -1,6 +1,6 @@
 <nav id="sidebar" class="col-lg-2 col-4 p-0">
     <% if can?(:view, :sys_user) %>
-    <input type="text" id="search-bar" class="form-control mt-2 bg-dark border-radius-1 text-light" placeholder="Search">
+    <input type="text" id="search-bar" class="form-control mt-2 bg-dark text-light" style="border-radius: 20px" placeholder="Search">
     <ul class="list-unstyled components" id="mylist">
         <li class="active">
           <%= link_to dashboard_path, class:"activ-link" do%>
@@ -21,7 +21,7 @@
                 <i class="fas fa fa-barcode"></i>
                 <span class="link-text">Sale Deals</span>
             </a>
-            <ul class="collapse list-unstyled activ-link my-option" id="SaleSubmenu">
+            <ul class="collapse list-unstyled activ-link my-option border-radius-1" id="SaleSubmenu">
               <li class="activ-link my-option">
                 <a href="<%=orders_path(sale: true)%>" class="activ-link my-option">
                   <i class="fa fa-shopping-cart"></i>
