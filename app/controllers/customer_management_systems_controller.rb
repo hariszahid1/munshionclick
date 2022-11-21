@@ -136,6 +136,8 @@ class CustomerManagementSystemsController < ApplicationController
       params[:q][:created_at_lteq] = params[:q][:created_at_lteq].to_date.end_of_day if params[:q][:created_at_lteq].present?
     end
     @options_for_select = SysUser.all
+    created_by_ids = current_user.created_by_ids_list_to_view
+		@all_agents = User.where('company_type=? or created_by_id=?',current_user.company_type,created_by_ids).pluck(:name)
     @all_user = SysUser.pluck(:name).uniq
     @all_agents = User.all.pluck(:name)
     @all_plot_sizes = SysUser.pluck(:ntn).uniq
