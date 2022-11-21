@@ -32,6 +32,7 @@ class SysUser < ApplicationRecord
   end
 
   def sys_user_cms_data
+    return unless cms_data.present?
     data = {}
     cms_data.each do |k, v|
       next data[k] = v if k.eql? 'client_status'
