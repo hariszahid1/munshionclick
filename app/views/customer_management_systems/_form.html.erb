@@ -41,7 +41,7 @@
     <div class="col-lg-12 form-group float-left">
       <%= f.datetime_select :created_at, {label: 'Date of Query'}, class: "form-control" %>
     </div>
-    <%= f.hidden_field :occupation, value: current_user.name %>
+    <%= f.hidden_field :credit_status, value: current_user.id %>
     <%= f.hidden_field :user_type_id, value: UserType.first.id %>
   </div>
 

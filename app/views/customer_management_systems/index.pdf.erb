@@ -29,7 +29,7 @@
           <th class="text-center">ID</th>
           <th class="text-center">Client Number</th>
           <th class="text-center">Client Name</th>
-          <th class="text-center">Agent Name</th>
+          <th class="text-center">Agent Id</th>
           <th class="text-center">Project Name</th>
           <th class="text-center">Client Type</th>
           <th class="text-center">Client Status</th>
@@ -48,7 +48,7 @@
               <th class="text-center"><%= sys_user['id'] %></th>
               <td class="text-center"><%= sys_user['number'] %></td>
               <td class="text-center"><%= sys_user['name'] %></td>
-              <td class="text-center"><%= sys_user['agent_name'] %></td>
+              <td class="text-center"><%= sys_user['agent_id'] %></td>
               <th class="text-center"><%= sys_user['cms_data'].try(:[], 'project_name') %></th>
               <td class="text-center"><%= sys_user['cms_data'].try(:[], 'client_type') %></td>
               <td class="text-center"><%= sys_user['cms_data'].try(:[], 'client_status') %></td>
