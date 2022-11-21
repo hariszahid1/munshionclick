@@ -3,6 +3,7 @@
 # CMS Controller
 class CustomerManagementSystemsController < ApplicationController
 	before_action :check_access
+  before_action :index_search_data
   before_action :set_sys_user, only: %i[show edit update destroy]
   before_action :new_edit_data, only: %i[new edit index]
   include PdfCsvGeneralMethod
@@ -15,12 +16,6 @@ class CustomerManagementSystemsController < ApplicationController
   def index
     @q = SysUser.ransack(params[:q])
     @q.sorts = 'id asc' if @q.sorts.empty? && @q.result.count.positive?
-    @options_for_select = SysUser.all
-    @all_user = SysUser.pluck(:name).uniq
-    @all_agents = SysUser.pluck(:occupation).uniq
-    @all_plot_sizes = SysUser.pluck(:ntn).uniq
-    @user_types = UserType.all
-    @user_groups = UserGroup.all
     @sys_users = @q.result.page(params[:page])
     export_file if params[:export_data].present?
     download_cms_csv_file if params[:csv].present?
@@ -93,17 +88,17 @@ class CustomerManagementSystemsController < ApplicationController
     @user_groups = UserGroup.all
     @staff = Staff.all
     @pos_setting = PosSetting.last
-    @project_name = @pos_setting.extra_settings.present? ? PosSetting.last.extra_settings['project_name'] : []
-    @client_type = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['client_type'] : []
+    @project_name = @pos_setting.extra_settings.present? ? PosSetting.last.extra_settings['project_name']&.map(&:downcase) : []
+    @client_type = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['client_type']&.map(&:downcase) : []
     @client_status = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['client_status'] : []
-    @category = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['category'] : []
-    @deal_status = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['deal_status'] : []
-    @source = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['source'] : []
+    @category = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['category']&.map(&:downcase) : []
+    @deal_status = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['deal_status']&.map(&:downcase) : []
+    @source = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['source']&.map(&:downcase) : []
   end
 
   def download_cms_csv_file
     @sys_user = @q.result
-    header_for_csv = %w[Number Name Agent_Name Project_Name Client_Type Client_status Category Deal_Status
+    header_for_csv = %w[Number Name Agent_Id Project_Name Client_Type Client_status Category Deal_Status
                         Source Plot_size Short_Details Created_at City Country
                         ]
     data_for_csv = get_data_for_cms_csv
@@ -130,5 +125,21 @@ class CustomerManagementSystemsController < ApplicationController
 
   def export_file
     export_data('SysUser')
+  end
+
+  def index_search_data
+    @start_date = DateTime.current.beginning_of_month
+    @end_date =  DateTime.now.end_of_day
+    if params[:q].present?
+      @start_date = params[:q][:created_at_gteq] if params[:q][:created_at_gteq].present?
+      @end_date = params[:q][:created_at_lteq] if params[:q][:created_at_lteq].present?
+      params[:q][:created_at_lteq] = params[:q][:created_at_lteq].to_date.end_of_day if params[:q][:created_at_lteq].present?
+    end
+    @options_for_select = SysUser.all
+    @all_user = SysUser.pluck(:name).uniq
+    @all_agents = SysUser.pluck(:occupation).uniq
+    @all_plot_sizes = SysUser.pluck(:ntn).uniq
+    @user_types = UserType.all
+    @user_groups = UserGroup.all
   end
 end

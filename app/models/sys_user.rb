@@ -19,7 +19,11 @@ class SysUser < ApplicationRecord
     # balance=(LedgerBook.where(sys_user_id: id).present? ? LedgerBook.where(sys_user_id: id).last.balance : self.opening_balance).to_i
   # end
 
-  after_create :balance_change
+  after_create :balance_change, :sys_user_cms_data
+  after_update :sys_user_cms_data
+  before_save { ntn.downcase! }
+
+  scope :csm_project_name_eq, ->(date) { where("cms_data->'$.project_name' = :project_name", project_name: data)}
 
   def balance_change
     self.update(balance: self.opening_balance)
@@ -27,6 +31,16 @@ class SysUser < ApplicationRecord
 
   ransacker :cms_data do
     Arel.sql("sys_users.cms_data")
- end
+  end
+
+  def sys_user_cms_data
+    data = {}
+    cms_data.each do |k, v|
+      next data[k] = v if k.eql? 'client_status'
+
+      data[k] = v.downcase
+    end
+    update_columns(cms_data: data)
+  end
 
 end

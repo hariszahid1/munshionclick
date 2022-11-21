@@ -105,10 +105,9 @@
             <p class="mb-0 text-dark font-weight-bold">Agent Name</p>
           </div>
           <div class="col-sm-8">
-            <p class="text-dark mb-0"><%= @sys_user.occupation %></p>
+            <p class="text-dark mb-0"><%= User.find_by(id: @sys_user&.credit_status)&.name unless @sys_user.credit_status.blank? %></p>
           </div>
         </div>
-        <hr>
         <hr>
         <div class="row">
           <div class="col-sm-4">

@@ -14,7 +14,7 @@
   </div>
 
   <div class="col-lg-6 form-group">
-    <%= cd.select :category, options_for_select(@category , f.object.cms_data.try(:[], 'category')), {:include_blank => "Select Category"}, class: "form-control chosen-select" %>
+    <%= cd.select :category, options_for_select(@category, f.object.cms_data.try(:[], 'category')), {:include_blank => "Select Category"}, class: "form-control chosen-select" %>
   </div>
 </div>
 
