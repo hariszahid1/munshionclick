@@ -8,7 +8,7 @@ module CmsHelper
 			if sys_user.cms_data.present?
 				data1 = sys_user.code
 				data2 = sys_user.name
-				data3 = sys_user.occupation
+				data3 = sys_user.credit_status
 				data4 = sys_user.cms_data.try(:[], 'project_name')
 				data5 = sys_user.cms_data.try(:[], 'client_type')
 				data6 = sys_user.cms_data.try(:[], 'client_status')
@@ -35,7 +35,7 @@ module CmsHelper
                         id: d.id,
                         name: d.name,
                         number: d.code,
-												agent_name: d.occupation,
+												agent_id: d.credit_status,
 												short_details: d.gst,
 												plot_size: d.ntn,
                         cms_data: d.cms_data,
