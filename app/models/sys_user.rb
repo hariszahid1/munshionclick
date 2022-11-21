@@ -21,7 +21,7 @@ class SysUser < ApplicationRecord
 
   after_create :balance_change, :sys_user_cms_data
   after_update :sys_user_cms_data
-  before_save { ntn.downcase! }
+  before_save { ntn.downcase! if ntn.present? }
 
   def balance_change
     self.update(balance: self.opening_balance)
