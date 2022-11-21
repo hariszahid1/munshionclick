@@ -137,7 +137,7 @@ class CustomerManagementSystemsController < ApplicationController
     end
     @options_for_select = SysUser.all
     @all_user = SysUser.pluck(:name).uniq
-    @all_agents = SysUser.pluck(:occupation).uniq
+    @all_agents = User.all.pluck(:name)
     @all_plot_sizes = SysUser.pluck(:ntn).uniq
     @user_types = UserType.all
     @user_groups = UserGroup.all

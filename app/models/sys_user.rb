@@ -23,8 +23,6 @@ class SysUser < ApplicationRecord
   after_update :sys_user_cms_data
   before_save { ntn.downcase! }
 
-  scope :csm_project_name_eq, ->(date) { where("cms_data->'$.project_name' = :project_name", project_name: data)}
-
   def balance_change
     self.update(balance: self.opening_balance)
   end
