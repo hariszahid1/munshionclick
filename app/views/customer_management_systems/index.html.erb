@@ -20,10 +20,11 @@
       </div>
       <% if check_can_create(@module_permission) %>
         <div id="new_city">
-          <%= link_to new_customer_management_system_path, remote: true,class: "btn btn-success mb-4" do %>
+          <%= link_to new_customer_management_system_path, remote: true,class: "btn btn-success" do %>
             <i class="fa fa-plus" aria-hidden="false"></i>
             Create
           <% end %>
+        <%= link_to "#{@follow_up_count.positive? ? '(' + @follow_up_count.to_s + ')' + ' ' + 'Follow Up': 'Follow Up'}" , follow_ups_path, class:"ml-3 #{@follow_up_count.positive? ? 'text-danger' : 'text-success'}", style: 'text-decoration: underline;'%>
         </div>
       <% end %>
     </div>
@@ -31,7 +32,7 @@
 
   <div class="float-right">
     <div class="dropdown ml-auto mr-4">
-      <span class="btn btn-info" title= "About This page"><i class="fa fa-question-circle"></i>Help</span>
+      <span class="btn btn-info mt-4" title= "About This page"><i class="fa fa-question-circle"></i>Help</span>
       <div class="dropdown-content">
         <% if @help.present? %>
           <% @help&.help_links.each do |link| %>
@@ -43,7 +44,7 @@
   </div>
 
   <ul class="nav nav-pills" role="tablist">
-		<li class="nav-item">
+		<li class="nav-item mt-4">
 			<a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
 		</li>
 		<%if (check_can_import_export(@module_permission))%>

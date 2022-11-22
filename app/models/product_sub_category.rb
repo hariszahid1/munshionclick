@@ -1,5 +1,6 @@
 class ProductSubCategory < ApplicationRecord
   belongs_to :product_category
+  has_many :products
   validates_uniqueness_of :code
 
   has_paper_trail ignore: [:updated_at]
