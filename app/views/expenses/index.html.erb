@@ -18,7 +18,7 @@
   </div>
   <div class="float-right">
     <div class="dropdown ml-auto mr-4">
-      <span class="btn btn-info" title= "About This page">Help</span>
+      <span class="btn btn-info" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
       <div class="dropdown-content">
         <% if @help.present? %>
           <% @help&.help_links.each do |link| %>
@@ -28,35 +28,22 @@
       </div>
     </div>
   </div>
-  <%= link_to expense_entries_path, class: "btn btn-primary mb-3" do %>
-    <i class="fa fa-tasks" aria-hidden="true"></i>
-    Expense Details
-  <% end %>
-
+  <div class="row d-flex mb-4">
+      <% if check_can_create(@module_permission) %>
+        <%= link_to new_expense_path, remote: true,class: "btn btn-success" do %>
+          <i class="fa fa-plus" aria-hidden="false"></i>
+          Create
+        <% end %>
+      <% end %>
+      <%= link_to expense_entries_path, class: "btn btn-primary ml-2" do %>
+        <i class="fa fa-tasks" aria-hidden="true"></i>
+        Expense Details
+      <% end %>
+  </div>
 	<ul class="nav nav-pills" role="tablist">
 		<li class="nav-item">
 			<a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
 		</li>
-		<%if (check_can_create(@module_permission))%>
-			<li class="nav-item">
-				<a class="nav-link tab-label" data-toggle="tab" href="#create" role="tab">Create</a>
-			</li>
-		<%end%>
-		<%if (check_can_download_pdf(@module_permission))%>
-			<li class="nav-item">
-				<a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
-			</li>
-		<%end%>
-		<%if (check_can_download_csv(@module_permission))%>
-			<li class="nav-item">
-				<a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
-			</li>
-		<%end%>
-		<%if (check_can_send_email(@module_permission))%>
-			<li class="nav-item">
-				<a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
-			</li>
-		<%end%>
 		<%if (check_can_import_export(@module_permission))%>
 			<li class="nav-item">
 				<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
@@ -85,89 +72,67 @@
               <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
             </span>
           </span>
-        </p>
-      </div>
-      <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="create" role="tabpanel">
-        <p>
-          <% if can?(:add, :all) %>
-            <%= link_to new_expense_path, remote: true,class: "btn btn-success ml-3 mt-3" do %>
-              <i class="fa fa-plus" aria-hidden="false"></i>
-              Create Expense
-            <% end %>
-          <% end %>
-        </p>
-      </div>
-      <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="details" role="tabpanel">
-        <p>
-          <%= link_to expense_entries_path,class: "btn btn-success ml-3 mt-3" do %>
-            <i class="fa fa-tasks" aria-hidden="false"></i>
-            Expense Details
-          <% end %>
-        </p>
-      </div>
-      <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="pdf" role="tabpanel">
-        <p>
-          <div class="col-lg-2 d-flex">
-            <button class="btn btn-danger" name="submit_pdf_a4" title="Download pdf A4 size" type="submit" value="Total Expense PDF A4" formtarget="_blank"><i class="fa fa-file-pdf"></i> PDF A4</button>
-            <button class="btn btn-danger ml-2" name="submit_pdf_a8" type="submit" title="Download pdf A8 size" value="Total Expense PDF A8" formtarget="_blank"><i class="fa fa-file-pdf"></i> PDF A8</button>
-          </div>
-        </p>
-      </div>
-      <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="csv" role="tabpanel">
-        <p>
-          <div class="col-lg-2 d-flex">
-            <button class="btn btn-success" title= "download expenses csv" name="csv" type="submit" value="csv"><i class="fa fa-file-excel mr-2"></i>Expenses</button>
-          </div>
-        </p>
-      </div>
-      <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="emails" role="tabpanel">
-      <p>
-        <div class="col-lg-2 d-flex">
-        <button class="form-control btn btn-info" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-2"></i>&nbsp;Mail</button>
-        </div>
-      </p>
-      <!-- Modal -->
-      <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <% @pos_setting = PosSetting.first %>
-              <label>Email:</label>
-              <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
-              <br />
-              <label>Subject:</label>
-              <%= text_field_tag 'subject', "#{@pos_setting.display_name} - General Expense Details Report from MunshiOnClick", class: 'form-control email-fields'%>
-              <br />
-              <label>Body:</label><br />
-              <%= text_area_tag 'body', nil, class: 'form-control'%>
-              <br />
 
-              <label>Please select one of them.</label>
-              <div>
-                <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
-                <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
-                <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
+          <div class="row ml-4">
+            <% if check_can_download_pdf(@module_permission)%>
+              <div class="dropdown my-dropdown float-left mr-2">
+                <button type="button" class="form-control bg-danger text-light">PDF List</button>
+                <div class="dropdown-content my-dropdown-content p-2">
+                  <button class="btn btn-danger mt-2" name="submit_pdf_a4" title="Download pdf A4 size" type="submit" value="Total Expense PDF A4" formtarget="_blank"><i class="fa fa-file-pdf"></i> PDF A4</button>
+                  <button class="btn btn-danger mt-3" name="submit_pdf_a8" type="submit" title="Download pdf A8 size" value="Total Expense PDF A8" formtarget="_blank"><i class="fa fa-file-pdf"></i> PDF A8</button>
+                </div>
               </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-              <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
-            </div>
+            <% end %>
+
+            <% if check_can_download_csv(@module_permission)%>
+              <button class="btn btn-warning" title= "download expenses csv" name="csv" type="submit" value="csv"><i class="fa fa-file-excel mr-2"></i>CSV</button>
+            <% end %>
+
+            <% if check_can_send_email(@module_permission)%>
+              <button class="form-control btn btn-info ml-2" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-1"></i>&nbsp;Mail</button>
+              <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <% @pos_setting = PosSetting.first %>
+                      <label>Email:</label>
+                      <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
+                      <br />
+                      <label>Subject:</label>
+                      <%= text_field_tag 'subject', "#{@pos_setting.display_name} - General Expense Details Report from MunshiOnClick", class: 'form-control email-fields'%>
+                      <br />
+                      <label>Body:</label><br />
+                      <%= text_area_tag 'body', nil, class: 'form-control'%>
+                      <br />
+                      <label>Please select one of them.</label>
+                      <div>
+                        <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
+                        <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
+                        <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                      <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% end %>
           </div>
-        </div>
+        </p>
       </div>
-    </div>
       <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="import-export" role="tabpanel">
         <p>
           <div class="d-flex">
-            <button class="btn btn-success ml-3" name="export_data" type="submit" value="export_data">Export Data</button>
-            <button class="btn btn-primary ml-3" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
+            <button class="btn btn-danger ml-3" name="export_data" type="submit" value="export_data">Export Data</button>
+            <button class="btn btn-info ml-3" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
           </div>
         </p>
       </div>

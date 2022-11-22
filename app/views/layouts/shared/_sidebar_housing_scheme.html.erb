@@ -4,40 +4,40 @@
     <ul class="list-unstyled components" id="mylist">
         <li class="active">
           <%= link_to dashboard_path, class:"activ-link" do%>
-              <i class="fas fa-tasks" aria-hidden="true"></i>
+              <i class="fa fa-desktop" aria-hidden="true"></i>
               <span class="link-text">Dashboard</span>
           <% end %>
         </li>
         
         <li>
           <a href="<%=customer_management_systems_path%>" class="activ-link">
-            <i class="fas fa-user-plus"></i>
+            <i class="fas fa-users"></i>
             <span class="link-text">CMS</span>
           </a>
         </li>
 
         <li class="my-select">
             <a href="#SaleSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle activ-link my-select">
-                <i class="fas fa fa-barcode"></i>
+                <i class="fas fa fa-percent"></i>
                 <span class="link-text">Sale Deals</span>
             </a>
             <ul class="collapse list-unstyled activ-link my-option border-radius-1" id="SaleSubmenu">
               <li class="activ-link my-option">
                 <a href="<%=orders_path(sale: true)%>" class="activ-link my-option">
-                  <i class="fa fa-shopping-cart"></i>
+                  <i class="fa fa-cart-arrow-down"></i>
                   <span class="link-text">Booking</span>
                 </a>
               </li>
                 <li class="activ-link">
                     <%= link_to purchase_sale_details_path(sale: true), class:"activ-link" do %>
-                        <i class="fas fa-th-list"></i>
+                        <i class="fas fa-clipboard-list"></i>
                         <span class="link-text">Depost List</span>
                     <% end %>
                 </li>
                 <li class="activ-link">
                     <%= link_to daily_sales_path, class:"activ-link" do %>
                         <i class="fas fa-plus"></i>
-                        <i class="fas fa-th-list"></i>
+                        <i class="fas fa-clipboard-check"></i>
                         <span class="link-text">Daily Day Out</span>
                     <% end %>
                 </li>
@@ -45,13 +45,13 @@
         </li>
         <li class="activ-link">
             <%= link_to expenses_path, class:"activ-link" do %>
-                <i class="fas fa-tasks"></i>
+                <i class="fas fa-money-bill"></i>
                 <span class="link-text">Expense</span>
             <% end %>
         </li>
         <li class="activ-link">
             <%= link_to payments_path, class:"activ-link" do %>
-                <i class="fas fa-th-list"></i>
+                <i class="fas fa-address-book"></i>
                 <span class="link-text">Cash Book</span>
             <% end %>
         </li>
@@ -104,43 +104,43 @@
                 </li>
                 <li>
                     <%= link_to reports_chart_path do %>
-                        <i class="fas fa-th-list"></i>
+                        <i class="fa fa-signal"></i>
                         <span class="link-text">Chart/Graph</span>
                     <% end %>
                 </li>
                 <li>
                     <%= link_to reports_trial_balance_path do %>
-                        <i class="fas fa-th-list"></i>
+                        <i class="fas fa-credit-card"></i>
                         <span class="link-text">Trial Balance</span>
                     <% end %>
                 </li>
                 <li>
                     <%= link_to reports_chart_of_account_path do %>
-                        <i class="fas fa-th-list"></i>
+                        <i class="fa fa-th-list"></i>
                         <span class="link-text">Chart of Account</span>
                     <% end %>
                 </li>
                 <li>
                     <%= link_to reports_sale_report_path do %>
-                        <i class="fas fa-th-list"></i>
+                        <i class="fas fa-file-alt"></i>
                         <span class="link-text">Sale Report</span>
                     <% end %>
                 </li>
                 <li>
                     <%= link_to reports_product_report_path do %>
-                        <i class="fas fa-th-list"></i>
+                        <i class="fas fa-file-powerpoint"></i>
                         <span class="link-text">Profit Report</span>
                     <% end %>
                 </li>
                 <li>
                     <%= link_to reports_stock_report_path do %>
-                        <i class="fas fa-th-list"></i>
+                        <i class="fas fa-box"></i>
                         <span class="link-text">Sale/Purchase/Stock</span>
                     <% end %>
                 </li>
                 <li>
                     <%= link_to dashboard_path do %>
-                        <i class="fas fa-th-list"></i>
+                        <i class="fas fa-clipboard-list"></i>
                         <span class="link-text">Stock Statment</span>
                     <% end %>
                 </li>
@@ -150,7 +150,7 @@
         <% if can?(:view, :product) %>
           <li class="activ-link">
               <%= link_to products_path, class:"activ-link" do %>
-                  <i class="fas fa-th-list"></i>
+                  <i class="fas fa-stream"></i>
                   <span class="link-text">Unit</span>
               <% end %>
           </li>
@@ -158,7 +158,7 @@
 
         <li class="activ-link">
             <a href="#labourSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                <i class="fas fa fa-user-circle"></i>
+                <i class="fas fa fa-user-tag"></i>
                 <span class="link-text">Staff/Dealer</span>
             </a>
             <ul class="collapse list-unstyled" id="labourSubmenu">
@@ -170,19 +170,19 @@
               </li>
               <li>
                 <a href="<%=staffs_path%>">
-                  <i class="fa fa-address-book"></i>
+                  <i class="fa fa-clipboard-list"></i>
                   <span class="link-text">List</span>
                 </a>
               </li>
               <li>
                   <a href="<%=salaries_path%>">
-                    <i class="fa fa-envelope-open"></i>
+                    <i class="fa fa-money-bill-alt"></i>
                       <span class="link-text">Salary Debit detail</span>
                   </a>
               </li>
               <li>
                   <a href="<%=salary_details_path%>">
-                    <i class="fa fa-envelope-open"></i>
+                    <i class="fa fa-coins"></i>
                       <span class="link-text">Salary Credit detail</span>
                   </a>
               </li>
@@ -190,13 +190,13 @@
         </li>
         <li class="activ-link">
             <a href="<%=staff_deals_path%>" class="activ-link" >
-                <i class="fas fa fa-user-circle"></i>
+                <i class="fas fa fa-handshake"></i>
                 <span class="link-text">Dealer Deals</span>
             </a>
         </li>
         <li class="activ-link">
           <%= link_to investments_path, class:"activ-link" do %>
-              <i class="fas fa-tasks"></i>
+              <i class="fas fa-coins"></i>
               <span class="link-text">Investment</span>
           <%end%>
         </li>
@@ -210,13 +210,13 @@
                 <li>
                     <%= link_to purchase_sale_details_path do %>
                         <i class="fas fa-plus"></i>
-                        <i class="fas fa-th-list"></i>
+                        <i class="fas fa-dolly-flatbed"></i>
                           <span class="link-text">Purchase</span>
                     <% end %>
                 </li>
                 <li>
                     <%= link_to items_path do %>
-                        <i class="fas fa-th-list"></i>
+                        <i class="fas fa-boxes"></i>
                         <span class="link-text">Purchase Items/Land</span>
                     <% end %>
                 </li>
@@ -228,14 +228,14 @@
         <li class="activ-link">
 
             <a href="#SystemSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                <i class="fas fa-tasks"></i>
+                <i class="fas fa-cog"></i>
                 <span class="link-text">System Settings</span>
             </a>
             <ul class="collapse list-unstyled" id="SystemSubmenu">
               <% if can?(:delete, :all) %>
                 <li>
                   <%= link_to pos_settings_path do %>
-                    <i class="fas fa-tasks" aria-hidden="true"></i>
+                    <i class="fas fa-cogs" aria-hidden="true"></i>
                       <span class="link-text">General Setting</span>
                   <% end %>
                 </li>
@@ -244,21 +244,21 @@
                 <li>
                     <%= link_to product_categories_path do %>
                         <i class="fas fa-plus"></i>
-                        <i class="fas fa-th-list"></i>
+                        <i class="fas fa-file"></i>
                         <span class="link-text">Unit Category</span>
                     <% end %>
                 </li>
                 <li>
                     <%= link_to product_sub_categories_path do %>
                         <i class="fas fa-plus"></i>
-                        <i class="fas fa-th-list"></i>
+                        <i class="fas fa-clone"></i>
                         <span class="link-text">Unit Sub Category</span>
                     <% end %>
                 </li>
                 <li>
                     <%= link_to departments_path do %>
                       <i class="fas fa-plus"></i>
-                      <i class="fas fa-th-list"></i>
+                      <i class="fas fa-industry"></i>
                         <span class="link-text">Department</span>
                     <% end %>
                 </li>
@@ -266,14 +266,14 @@
                 <li>
                     <%= link_to countries_path do %>
                       <i class="fas fa-plus"></i>
-                      <i class="fas fa-th-list"></i>
+                      <i class="fas fa-globe"></i>
                         <span class="link-text">Country</span>
                     <% end %>
                 </li>
                 <li>
                     <%= link_to cities_path do %>
                       <i class="fas fa-plus"></i>
-                      <i class="fas fa-th-list"></i>
+                      <i class="fas fa-university"></i>
                         <span class="link-text">City</span>
                     <% end %>
                 </li>
@@ -287,21 +287,21 @@
                 <li class="activ-link">
                     <%= link_to user_types_path, class:"activ-link" do %>
                         <i class="fas fa-plus"></i>
-                        <i class="fas fa-th-list"></i>
+                        <i class="fas fa-user-friends"></i>
                         <span class="link-text">User Types</span>
                     <% end %>
                 </li>
                 <li class="activ-link">
                     <%= link_to expense_types_path, class:"activ-link" do %>
                         <i class="fas fa-plus"></i>
-                        <i class="fas fa-th-list"></i>
+                        <i class="fas fa-receipt"></i>
                         <span class="link-text">Expense Type</span>
                     <% end %>
                 </li>
                 <li class="activ-link">
                     <%= link_to property_plans_path, class:"activ-link" do %>
                         <i class="fas fa-plus"></i>
-                        <i class="fas fa-th-list"></i>
+                        <i class="fas fa-map"></i>
                         <span class="link-text">Property Plan</span>
                     <% end %>
                 </li>
@@ -309,15 +309,15 @@
                   <li class="activ-link">
                     <%= link_to users_path, class:"activ-link" do %>
                       <i class="fas fa-plus"></i>
-                      <i class="fas fa-th-list"></i>
-                        <span class="link-text">Users</span>
+                      <i class="fas fa-user"></i>
+                        <span class="link-text">System Opeartors</span>
                     <% end %>
                   </li>
                 <%else%>
                   <li>
                     <%= link_to edit_user_path(current_user), class:"activ-link" do %>
                       <i class="fas fa-plus"></i>
-                      <i class="fas fa-th-list"></i>
+                      <i class="fas fa-user-circle"></i>
                         <span class="link-text">Profile</span>
                     <% end %>
                   </li>
@@ -325,7 +325,7 @@
                 <li class="activ-link">
                     <%= link_to user_groups_path, class:"activ-link" do %>
                         <i class="fas fa-plus"></i>
-                        <i class="fas fa-th-list"></i>
+                        <i class="fas fa-users"></i>
                         <span class="link-text">User Groups</span>
                     <% end %>
                 </li>
@@ -341,7 +341,7 @@
         <% if can?(:delete, :all) %>
         <li class="activ-link">
           <%= link_to bd_backups_path, class:"activ-link" do %>
-              <i class="fas fa-question"></i>
+              <i class="fas fa-paste"></i>
               <span class="link-text">Import/Export</span>
           <% end %>
         </li>
