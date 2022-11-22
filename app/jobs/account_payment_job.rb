@@ -7,7 +7,7 @@ class AccountPaymentJob < ActiveJob::Base
     if account.present?
       payments = Payment.where(account_id: account_id)
       balance = payments.select('SUM(debit) as sum_debit','SUM(credit) as sum_credit','SUM(credit)-SUM(debit) as mean_sum').first.mean_sum
-      payments.order('id desc' , 'created_at desc').first(1500).each do |lb|
+      payments.order('id desc' , 'created_at desc').first(100).each do |lb|
         if lb.amount != balance
           lb.amount = balance
           lb.save!
