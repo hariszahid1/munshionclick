@@ -35,7 +35,7 @@
     <%= f.hidden_field :created_by, value: current_user.id %>
   </div>
   <div class="field">
-    <%= f.hidden_field :followable_id, value: params[:sys_user_id].to_i %>
+    <%= f.hidden_field :followable_id, value: f.object.id.present? ? f.object.followable_id : params[:sys_user_id].to_i %>
   </div>
   <div class="field">
     <%= f.hidden_field :followable_type, value: 'SysUser' %>

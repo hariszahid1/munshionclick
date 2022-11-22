@@ -1,0 +1,48 @@
+<div class="modal fade" id="showdData" tabindex="-1" role="dialog" aria-labelledby="showdDataLabel">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+            <!-- Card Header - Accordion -->
+            <div class="modal-header">
+              <h2 class="modal-title" id="myModalLabel">Follow Up Details</h2>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+             <!-- Card Content - Collapse -->
+            <div class="collapse show" id="collapseCardExample" style="">
+              <div class="card-body">
+              <div class="card">
+                  <table class='table table-bordered table-shadow'>
+                    <thead class='thead-color'>
+                      <th><h4>Id</h4></th>
+                      <th><h4>CMS User</h4></th>
+                      <th><h4>Task Type</h4></th>
+                      <th><h4>Priority</h4></th>
+                      <th><h4>Assignee</h4></th>
+                      <th><h4>Comment</h4></th>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><h6><%= follow_up.id %></h6></td>
+                        <td><h6><%= follow_up&.followable&.name %></h6></td>
+                        <td><h6><%= follow_up.task_type %></h6></td>
+                        <td><h6><%= follow_up.priority %></h6></td>
+                        <td><h6><%= follow_up&.staff&.name %></h6></td>
+                        <td><h6><%= follow_up.comment %><h6></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger float-right" data-dismiss="modal" aria-label="Close">
+              <span class="text-light p-2">Close</span>
+            </button>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+

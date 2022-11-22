@@ -164,7 +164,7 @@ Rails.application.routes.draw do
   resources :user_groups
   resources :customer_management_systems
   resources :notes, only: %i[create new]
-  resources :follow_ups, only: %i[create new]
+  resources :follow_ups
   resources :countries
   resources :expense_types
   resources :expenses

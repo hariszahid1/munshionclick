@@ -142,5 +142,6 @@ class CustomerManagementSystemsController < ApplicationController
     @all_plot_sizes = SysUser.pluck(:ntn).uniq
     @user_types = UserType.all
     @user_groups = UserGroup.all
+    @follow_up_count = FollowUp.where(created_at: Time.current.all_day).count
   end
 end
