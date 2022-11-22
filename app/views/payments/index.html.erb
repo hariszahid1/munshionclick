@@ -316,9 +316,9 @@
 
           <td>
             <%if payment.created_at.strftime("%d%b%y")!=payment.updated_at.strftime("%d%b%y")%>
-              <%= payment.created_at.present? ? payment.created_at.strftime("%d%b%y at %H:%M%p") : '' %> | <%= payment.updated_at.present? ? payment.updated_at.strftime("%d%b%y at %H:%M%p") : '' %>
+              <%= payment.created_at.present? ? payment.created_at.strftime("%d %b %y at %H:%M %p") : '' %> | <%= payment.updated_at.present? ? payment.updated_at.strftime("%d %b %y at %H:%M %p") : '' %>
             <%else%>
-              <%= payment.created_at.present? ? payment.created_at.strftime("%d%b%y at %H:%M%p") : '' %>
+              <%= payment.created_at.present? ? payment.created_at.strftime("%d %b %y at %H:%M %p") : '' %>
             <%end%>
           </td>
 

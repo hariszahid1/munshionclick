@@ -387,8 +387,9 @@ class SysUsersController < ApplicationController
 
   def sort_data_according
     @sorted_data = []
+    data = params[:pdf] == "without_jama_benam_pdf" ? @q.result.where.not(balance: 0) : @q.result
     if pos_setting_sys_type.eql? 'CustomClear'
-      @q.result.each do |d|
+      data.each do |d|
         @sorted_data << {
                           id: d.id,
                           code: d.code,
@@ -403,7 +404,7 @@ class SysUsersController < ApplicationController
                         }
       end
     else
-      @q.result.each do |d|
+      data.each do |d|
         @sorted_data << {
                           id: d.id,
                           code: d.code,
@@ -413,7 +414,7 @@ class SysUsersController < ApplicationController
                           occupation: d.occupation,
                           opening_balance: d.opening_balance.to_f.round(2),
                           balance: d.balance.to_f.round(2),
-                          jama_benam: d.balance.to_i.zero? ? 'Nill' : d.balance.to_f.positive? ? 'Jama' : 'Benam',
+                          jama_benam: d.balance.to_f.zero? ? 'Nill' : d.balance.to_f.positive? ? 'Jama' : 'Benam',
                           address: d.contact&.city&.title
                         }
       end
