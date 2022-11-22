@@ -1,0 +1,46 @@
+<tr class= <%= (DateTime.now.strftime('%a, %b %Y') == follow_up&.date&.strftime('%a, %b %Y')) ? "cms-table-row2" : "follow_up_color"%>>
+  <td><%= check_box_tag 'object_ids[]', follow_up.id %></td>
+  <td><%= follow_up&.followable&.name %></td>
+  <td><%= follow_up.task_type %></td>
+  <td><%= follow_up.priority%></td>
+  <td><%= follow_up.comment%></td>
+  <td><%= follow_up&.staff&.name%></td>
+  <td><%= follow_up.date%></td>
+  <td class="p-3">
+    <div class="icon-container-1">
+      <div class="my-icon-1 my-view-1">
+        <div class="my-tooltip-1">
+          <div class="icon-container">
+            <div class="my-icon my-view">
+              <div class="my-tooltip">
+                Edit
+              </div>
+              <%= link_to edit_follow_up_path(follow_up), remote: true, class:"icon-div" do %>
+                <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+              <%end %>
+            </div>
+            <div class="my-icon my-view">
+              <div class="my-tooltip">
+                Show
+              </div>
+              <%= link_to follow_up_path(follow_up), remote: true, class:"icon-div" do %>
+                <i class="fa fa-eye mt-2" aria-hidden="true"></i>
+              <%end %>
+            </div>
+            <div class="my-icon my-view">
+              <div class="my-tooltip">
+                Delete
+              </div>
+              <%= link_to follow_up, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+                <i class="fa fa-trash mt-2" aria-hidden="true"></i>
+              <%end %>
+            </div>
+          </div>
+        </div>
+        <span class="icon-div-1">
+              <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+        </span>
+      </div>
+    </div>
+  </td>
+</tr>

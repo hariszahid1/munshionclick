@@ -10,8 +10,8 @@ class SysUser < ApplicationRecord
   accepts_nested_attributes_for :contact
   validates_uniqueness_of :code
   has_paper_trail ignore: [:updated_at, :balance]
-  has_many :follow_ups, as: :followable
-  has_many :notes, as: :notable
+  has_many :follow_ups, as: :followable, dependent: :destroy
+  has_many :notes, as: :notable, dependent: :destroy
   accepts_nested_attributes_for :notes
   accepts_nested_attributes_for :follow_ups
 
