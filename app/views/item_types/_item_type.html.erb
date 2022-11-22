@@ -1,7 +1,9 @@
 <tr>
   <td><%= check_box_tag 'object_ids[]', item_type.id %></td>
   <td><%=item_type.id%></td>
-  <td class='urdu-font'><%= item_type.title %></td>
+  <td class='urdu-font'><%= item_type.title %>
+   <%= link_to "(" + item_type.products.count.to_s + ")", products_path('q[item_type_id_eq]':item_type.id) %>
+  </td>
   <td><%= item_type.code %></td>
   <td><span title="<%= item_type.comment %>" class='truncate-text'><%= item_type.comment %></span></td>
   <td class="p-3">
