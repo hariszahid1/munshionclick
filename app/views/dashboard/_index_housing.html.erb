@@ -808,6 +808,22 @@
             </div>
           </div>
         </div>
+        <div class="row d-flex">
+          <div class="col-lg-6">
+            <div class="my-chart-Container">
+              <div class="mychartBox card border-radius-1">
+                <canvas id="myChart"></canvas>
+              </div> 
+            </div>
+          </div>  
+          <div class="col-lg-6">
+            <div class="my-chart-Container">
+              <div class="mychartBox card border-radius-1">
+                <canvas id="myChart1"></canvas>
+              </div> 
+            </div>
+          </div>  
+        </div>  
       </p>
     </div>
 
@@ -973,4 +989,85 @@
   });
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+<script>
+$( document ).ready(function() {
+  setTimeout(function(){
+
+  const ctx = document.getElementById('myChart');
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Units/Inventories', 'Users', 'Staffs', 'Bookings', 'Installments', 'Expenses', 'Transfers'],
+      datasets: [{
+        label: 'Total ',
+        data: ['<%= @product_count %>', '<%= @sys_user_count %>', '<%= @staff_count %>', '<%= @total_booked.count.to_f.round(2) rescue 0 %>', '<%= @total_sale_slips %>', '<%= @total_expense_slips%>','<%= @total_transfer.count %>'],
+        borderWidth: 1,
+        backgroundColor: '#FF5C5C'
+      }],
+    },
+    options: {
+      
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Bar Chart',
+                font: {
+                  size: 16
+                }
+            }
+          
+
+        }
+      
+    }
+  });
+
+   },500);
+  
+});
+  
+</script>
+
+<script>
+$( document ).ready(function() {
+  setTimeout(function(){
+
+  const ctx = document.getElementById('myChart1');
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: ['Units/Inventories', 'Users', 'Staffs', 'Bookings', 'Installments', 'Expenses', 'Transfers'],
+      datasets: [{
+        label: 'Total ',
+        data: ['<%= @product_count %>', '<%= @sys_user_count %>', '<%= @staff_count %>', '<%= @total_booked.count.to_f.round(2) rescue 0 %>', '<%= @total_sale_slips %>', '<%= @total_expense_slips%>','<%= @total_transfer.count %>'],
+        borderWidth: 1,
+      }],
+    },
+    options: {
+      
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Pie Chart',
+                font: {
+                  size: 16
+                }
+            }
+          
+
+        }
+      
+    }
+  });
+
+   },500);
+  
+});
+  
+</script>

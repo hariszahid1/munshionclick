@@ -42,6 +42,10 @@
       <li class="nav-item">
         <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
       </li>
+
+      <li class="nav-item">
+        <a class="nav-link tab-label" data-toggle="tab" href="#analytics" role="tab">Analytics</a>
+      </li>
 			
 			<%if (check_can_import_export(@module_permission))%>
 				<li class="nav-item">
@@ -113,6 +117,28 @@
             <% end %>
           </div>
         </div>
+    </div>
+    <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1 p-1" id="analytics" role="tabpanel">
+      <div class="row d-flex">
+        <div class="col-lg-6">
+          <%= hidden_field_tag "subTitle", @sub_title, { :id => "subTitle" } %>
+          <%= hidden_field_tag "subUnit", @sub_unit, { :id => "subUnit" } %>
+          <div class="my-chart-Container">
+            <div class="mychartBox">
+              <canvas id="myChart"></canvas>
+            </div> 
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <%= hidden_field_tag "subTitle1", @sub_title, { :id => "subTitle1" } %>
+          <%= hidden_field_tag "subUnit1", @sub_unit, { :id => "subUnit1" } %>
+          <div class="my-chart-Container">
+            <div class="mychartBox">
+              <canvas id="myChart1"></canvas>
+            </div> 
+          </div>
+        </div>
+      </div>
     </div>
     <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="import-export" role="tabpanel">
       <p>
@@ -202,4 +228,92 @@
     $("#product_sub_category_list").removeClass('hidden');
     FontAwesome.dom.i2svg();
   });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+$( document ).ready(function() {
+  setTimeout(function(){
+
+  const ctx = document.getElementById('myChart');
+  var subTitle=$('#subTitle').val().split(' ')
+  var subUnit=$('#subUnit').val().split(' ')
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: subTitle,
+      datasets: [{
+        label: 'Units ',
+        data: subUnit,
+        borderWidth: 1,
+        backgroundColor: '#FF5C5C'
+      }],
+    },
+    options: {
+      
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Bar Chart',
+                font: {
+                  size: 16
+                }
+            }
+          
+
+        }
+      
+    }
+  });
+
+   },500);
+  
+});
+  
+</script>
+
+<script>
+
+$( document ).ready(function() {
+  setTimeout(function(){
+
+  const ctx = document.getElementById('myChart1');
+  var subTitle1=$('#subTitle1').val().split(' ')
+  var subUnit1=$('#subUnit1').val().split(' ')
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: subTitle1,
+      datasets: [{
+        label: 'Units ',
+        data: subUnit1,
+        borderWidth: 1,
+      }],
+    },
+    options: {
+      
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Pie Chart',
+                font: {
+                  size: 16
+                }
+            }
+          
+
+        }
+      
+    }
+  });
+
+   },500);
+  
+});
+  
 </script>

@@ -43,6 +43,9 @@
 			<li class="nav-item">
 				<a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
 			</li>
+      <li class="nav-item">
+				<a class="nav-link tab-label" data-toggle="tab" href="#analytics" role="tab">Analytics</a>
+			</li>
 			
 			<%if (check_can_import_export(@module_permission))%>
 				<li class="nav-item">
@@ -114,7 +117,28 @@
         </div>
       </div>
     </div>
-    
+    <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1 p-1" id="analytics" role="tabpanel">
+        <div class="row d-flex">
+          <div class="col-lg-6">
+            <%= hidden_field_tag "userGroupTitle", @user_group_title, { :id => "userGroupTitle" } %>
+            <%= hidden_field_tag "userGroupCount", @user_group_count, { :id => "userGroupCount" } %>
+            <div class="my-chart-Container">
+              <div class="mychartBox">
+                <canvas id="myChart"></canvas>
+              </div> 
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <%= hidden_field_tag "userGroupTitle1", @user_group_title, { :id => "userGroupTitle1" } %>
+            <%= hidden_field_tag "userGroupCount1", @user_group_count, { :id => "userGroupCount1" } %>
+            <div class="my-chart-Container">
+              <div class="mychartBox">
+                <canvas id="myChart1"></canvas>
+              </div> 
+            </div>
+          </div>  
+        </div>  
+      </div>
     <div class="tab-pane card shadow-sm mt-2 border-radius-1 mb-3" id="import-export" role="tabpanel">
       <p>
         <div class="d-flex ml-2">
@@ -219,4 +243,88 @@
 });
     }, 50);
   });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+$( document ).ready(function() {
+  setTimeout(function(){
+
+  const ctx = document.getElementById('myChart');
+  var userGroupTitle=$('#userGroupTitle').val().split(' ')
+  var userGroupCount=$('#userGroupCount').val().split(' ')
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: userGroupTitle,
+      datasets: [{
+        label: 'Total Users ',
+        data: userGroupCount,
+        borderWidth: 1,
+        backgroundColor: '#FF5C5C'
+      }],
+    },
+    options: {
+      
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Bar Chart',
+                font: {
+                  size: 16
+                }
+            }
+          
+
+        }
+      
+    }
+  });
+
+   },500);
+  
+});
+  
+</script>
+
+<script>
+$( document ).ready(function() {
+  setTimeout(function(){
+
+  const ctx = document.getElementById('myChart1');
+  var userGroupTitle1=$('#userGroupTitle1').val().split(' ')
+  var userGroupCount1=$('#userGroupCount1').val().split(' ')
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: userGroupTitle1,
+      datasets: [{
+        label: 'User ',
+        data: userGroupCount1,
+        borderWidth: 1,
+      }]
+    },
+    options: {
+      
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Pie Chart',
+                font: {
+                  size: 16
+                }
+            }
+        }
+      
+    }
+  });
+
+   },500);
+  
+});
+
 </script>
