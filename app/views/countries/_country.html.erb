@@ -2,7 +2,9 @@
   <td><%= check_box_tag 'object_ids[]', country.id %></td>
   <td><%= country.id %></td>
   <td class= 'urdu-font'><%= country.title %>
-    <%= link_to "(" + country.contacts.count.to_s + ")", sys_users_path('q[contact_country_id_eq]':country.id) %>
+    <% unless @total_countries_count[country.title].blank?%>
+      <%= link_to " (" + @total_countries_count[country.title].to_s  + ")", sys_users_path('q[contact_country_id_eq]':country.id,)%>
+    <% end%> 
   </td>
   <td><span title="<%= country.comment %>" class='truncate-text'><%= country.comment %></span></td>
   <td class="p-3">

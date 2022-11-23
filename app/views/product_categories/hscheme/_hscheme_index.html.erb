@@ -41,7 +41,9 @@
       <li class="nav-item">
         <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
       </li>
-			
+      <li class="nav-item">
+        <a class="nav-link tab-label" data-toggle="tab" href="#analytics" role="tab">Analytics</a>
+      </li>
 			<%if (check_can_import_export(@module_permission))%>
 				<li class="nav-item">
 					<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
@@ -111,7 +113,48 @@
         </div>
       </div>
   </div>
-  
+    <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1 p-1" id="analytics" role="tabpanel">
+      <div class="row d-flex">
+        <div class="col-lg-6">
+          <%= hidden_field_tag "categoryTitle", @category_title, { :id => "categoryTitle" } %>
+          <%= hidden_field_tag "categoryUnit", @category_unit, { :id => "categoryUnit" } %>
+          <div class="my-chart-Container">
+            <div class="mychartBox">
+              <canvas id="myChart"></canvas>
+            </div> 
+          </div> 
+        </div> 
+        <div class="col-lg-6">
+          <%= hidden_field_tag "categoryTitle1", @category_title, { :id => "categoryTitle1" } %>
+          <%= hidden_field_tag "categoryUnit1", @category_sub_unit, { :id => "categoryUnit1" } %>
+          <div class="my-chart-Container">
+            <div class="mychartBox">
+              <canvas id="myChart1"></canvas>
+            </div> 
+          </div> 
+        </div>
+      </div>
+      <div class="row d-flex mt-4">
+        <div class="col-lg-6">
+          <%= hidden_field_tag "categoryTitle2", @category_title, { :id => "categoryTitle2" } %>
+          <%= hidden_field_tag "categoryUnit2", @category_unit, { :id => "categoryUnit2" } %>
+          <div class="my-chart-Container">
+            <div class="mychartBox">
+              <canvas id="myChart2"></canvas>
+            </div> 
+          </div> 
+        </div> 
+        <div class="col-lg-6">
+          <%= hidden_field_tag "categoryTitle3", @category_title, { :id => "categoryTitle3" } %>
+          <%= hidden_field_tag "categoryUnit3", @category_sub_unit, { :id => "categoryUnit3" } %>
+          <div class="my-chart-Container">
+            <div class="mychartBox">
+              <canvas id="myChart3"></canvas>
+            </div> 
+          </div> 
+        </div>
+      </div>
+    </div>
   <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="import-export" role="tabpanel">
     <p>
       <div class="d-flex ml-2">
@@ -145,8 +188,8 @@
     </th>
     <th>ID<div class='float-right'><%= sort_link(@q, :id, '', {}, class: 'sorting-button') %></div></th>
     <th>Title<div class='float-right'><%= sort_link(@q, :title, '', {}, class: 'sorting-button') %></div></th>
-    <th>Unit</th>
-    <th>Unit SubCategory</th>
+    <th>Unit Category</th>
+    <th>Unit Sub Category</th>
     <th>Code<div class='float-right'><%= sort_link(@q, :code, '', {}, class: 'sorting-button') %></div></th>
     <th>Comment<div class='float-right'><%= sort_link(@q, :comment, '', {}, class: 'sorting-button') %></div></th>
     <th class="border_none">Action</th>
@@ -202,4 +245,156 @@
       $("#product_category_list").removeClass('hidden');
       FontAwesome.dom.i2svg();
       });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+$( document ).ready(function() {
+  setTimeout(function(){
+
+  const ctx = document.getElementById('myChart');
+  var categoryTitle=$('#categoryTitle').val().split(' ')
+  var categoryUnit=$('#categoryUnit').val().split(' ')
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: categoryTitle,
+      datasets: [{
+        label: 'Unit Categories',
+        data: categoryUnit,
+        borderWidth: 1,
+        backgroundColor: '#0070C0'
+      }]
+    },
+    options: {
+      
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Units Bar Chart'
+            }
+        }
+      
+    }
+  });
+
+   },500);
+  
+});
+  
+</script>
+
+<script>
+$( document ).ready(function() {
+  setTimeout(function(){
+
+  const ctx = document.getElementById('myChart1');
+  var categoryTitle1=$('#categoryTitle1').val().split(' ')
+  var categoryUnit1=$('#categoryUnit1').val().split(' ')
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: categoryTitle1,
+      datasets: [{
+        label: 'Unit Sub Categories',
+        data: categoryUnit1,
+        borderWidth: 1,
+        backgroundColor: '#FF2E2E'
+      }]
+    },
+    options: {
+      
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Unit Sub Categories Bar Chart'
+            }
+        }
+      
+    }
+  });
+
+   },500);
+  
+});
+  
+</script>
+
+<script>
+$( document ).ready(function() {
+  setTimeout(function(){
+
+  const ctx = document.getElementById('myChart2');
+  var categoryTitle2=$('#categoryTitle2').val().split(' ')
+  var categoryUnit2=$('#categoryUnit2').val().split(' ')
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: categoryTitle2,
+      datasets: [{
+        label: 'Unit Categories',
+        data: categoryUnit2,
+        borderWidth: 1,
+      }]
+    },
+    options: {
+      
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Unit Categories Pie Chart'
+            }
+        }
+      
+    }
+  });
+
+   },500);
+  
+});
+  
+</script>
+
+<script>
+$( document ).ready(function() {
+  setTimeout(function(){
+
+  const ctx = document.getElementById('myChart3');
+  var categoryTitle3=$('#categoryTitle3').val().split(' ')
+  var categoryUnit3=$('#categoryUnit3').val().split(' ')
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: categoryTitle3,
+      datasets: [{
+        label: 'Unit Sub Categories',
+        data: categoryUnit3,
+        borderWidth: 1,
+      }]
+    },
+    options: {
+      
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Unit Sub Categories Pie Chart'
+            }
+        }
+      
+    }
+  });
+
+   },500);
+  
+});
+  
 </script>
