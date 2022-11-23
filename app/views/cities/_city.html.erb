@@ -2,9 +2,10 @@
   <td><%= check_box_tag 'object_ids[]', city.id %></td>
   <td><%= city.id %></td>
   <td class='urdu-font'><%= city.title %> 
-  <%= link_to "(" + city.contacts.count.to_s + ")", sys_users_path('q[contact_city_id_eq]':city.id) %>
+    <% unless @total_cities_count[city.title].blank?%>
+      <%= link_to " (" + @total_cities_count[city.title].to_s  + ")", sys_users_path('q[contact_city_id_eq]':city.id,)%>
+    <% end%>  
   </td>
-
   <td><span title="<%= city.comment %>" class='truncate-text'><%= city.comment %></span></td>
   <td class="p-3">
     <div class="icon-container-1">

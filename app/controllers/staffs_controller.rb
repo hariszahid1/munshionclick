@@ -1,4 +1,5 @@
 class StaffsController < ApplicationController
+  before_action :check_access
 	include StaffCsvMethods
   before_action :set_staff, only: [:show, :edit, :update, :destroy, :salary_info, :salary_wage_rate_info]
   include PdfCsvGeneralMethod

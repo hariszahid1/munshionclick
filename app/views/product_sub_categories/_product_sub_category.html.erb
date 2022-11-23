@@ -3,7 +3,11 @@
   <td><%= product_sub_category.id %></td>
   <td><%= product_sub_category.product_category.title %></td>
   <td class= 'urdu-font'><%= product_sub_category.title %></td>
-  <td><%= link_to  product_sub_category.products.count.to_s, products_path('q[product_sub_category_id_eq]':product_sub_category.id) %></td>
+	<td>
+		<% unless @total_sub_count[product_sub_category.title].blank?%>
+    	<%= link_to " (" + @total_sub_count[product_sub_category.title].to_s  + ")", products_path('q[product_sub_category_id_eq]':product_sub_category.id)%>
+    <% end%>
+		</td>
   <td><%= product_sub_category.code %></td>
   <td><%= product_sub_category.comment %></td>
   <td class="p-3">

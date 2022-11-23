@@ -18,6 +18,16 @@ class ProductCategoriesController < ApplicationController
     download_product_categories_pdf_file if params[:pdf].present?
     send_email_file if params[:email].present?
     export_file if params[:export_data].present?
+
+
+    @total_categories_count = Product.joins(:product_category).group("product_categories.title").count
+    @total_sub_categories_count = ProductSubCategory.joins(:product_category).group('product_categories.title').count
+    
+
+    @category_title = @total_categories_count.keys.map { |a| a.gsub(' ', '-') }
+    @category_unit = @total_categories_count.values
+    @category_sub_unit = @total_sub_categories_count.values
+    
   end
 
   # GET /product_categories/1
