@@ -26,7 +26,7 @@
       <div class="d-flex ml-auto ml-4">   
           <div class="d-none d-lg-block col mx-auto mb-2 mt-2">
             <span class="d-flex card p-3 shadow" style="width: 300px; background-color: #f2f2f7; color: black;">
-              <span class="d-flex mx-auto"><i class="fas fa-credit-card fa-1x mr-1" aria-hidden="true"></i>Account Balance: <b><%=@total_payable.to_i-@total_reciveable.to_i%></b></span>
+              <span class="d-flex mx-auto"><i class="fas fa-credit-card fa-1x mr-1" aria-hidden="true"></i>Account Balance: <b><%= @total_cash %></b></span>
             </span>
           </div>
       </div>
@@ -43,7 +43,7 @@
               <div class="dropdown my-nav-dropdown">
                 <button type="button" class="p-3 card d-flex shadow" style="width: 350px; background-color: #f2f2f7; color: black;"><span class="d-flex mx-auto"><span class="mr-2"><i class="fas fa-hand-holding-usd fa-1x mr-2" aria-hidden="true"></i>Cash in Hand:</span><b><%=@account_amount_total.to_i%></b></span></button>
                 <div class="dropdown-content my-nav-dropdown-content p-3 border-radius-1">
-                    <span>Account Balance:<%=@total_payable.to_i-@total_reciveable.to_i%></span><br>
+                    <span>Account Balance:<%= @total_cash %></span><br>
                     <%@account_balance.each do |account|%>
                         <i class="fas fa-check" aria-hidden="true"></i>
                           <%=account&.first%> <%=account&.last%><br>
