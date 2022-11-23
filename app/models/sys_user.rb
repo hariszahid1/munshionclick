@@ -1,4 +1,6 @@
 class SysUser < ApplicationRecord
+  include CashInHandMethod
+
   has_one_attached :profile_image
   belongs_to :user_type
   has_one :contact
@@ -22,6 +24,7 @@ class SysUser < ApplicationRecord
   after_create :balance_change, :sys_user_cms_data
   after_update :sys_user_cms_data
   before_save { ntn.downcase! if ntn.present? }
+  after_commit :cash_in_hand
 
   def balance_change
     self.update(balance: self.opening_balance)
