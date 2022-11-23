@@ -118,26 +118,26 @@
                   <div class="row d-flex">
                     <%= link_to expenses_path('q[created_at_gteq]': (DateTime.now-1).strftime('%Y-%m-%d'),'q[created_at_lteq]': (DateTime.now-1).strftime('%Y-%m-%d') ) do %>
                       <i class="h6 mb-0 font-weight-bold text-gray-800 mr-2 mt-1 ml-1" style="float: right; color: #6c757d;">
-                        <%=@total_expense.to_f.round(2) rescue 0%>
+                        <%=@total_exp_today.to_f.round(2) rescue 0%>
                       </i>
                       <i aria-hidden="true" style="float: right; color: #6c757d;">Rs.</i>
                     <% end %>
                     <%= link_to expenses_path('q[created_at_gteq]': (DateTime.now-1).strftime('%Y-%m-%d'),'q[created_at_lteq]': (DateTime.now-1).strftime('%Y-%m-%d') ) do %>
                       <i class="h6 mb-0 font-weight-bold text-gray-800" style="color: #6c757d;">Today :
-                        <%=@total_expense_slips%>
+                        <%=@total_expense_today%>
                       </i>
                     <% end %>
                   </div>
                   <div class="row d-flex">
                     <%= link_to expenses_path('q[created_at_gteq]': (DateTime.now-1).strftime('%Y-%m-%d'),'q[created_at_lteq]': (DateTime.now-1).strftime('%Y-%m-%d') ) do %>
                       <i class="h6 mb-0 font-weight-bold text-gray-800 mr-2 mt-1 ml-1" style="float: right; color: #6c757d;">
-                        <%=@total_expense.to_f.round(2) rescue 0%>
+                        <%=@total_exp_yesterday.to_f.round(2) rescue 0%>
                       </i>
                       <i aria-hidden="true" style="float: right; color: #6c757d;">Rs.</i>
                     <% end %>
                     <%= link_to expenses_path('q[created_at_gteq]': (DateTime.now-1).strftime('%Y-%m-%d'),'q[created_at_lteq]': (DateTime.now-1).strftime('%Y-%m-%d') ) do %>
                       <i class="h6 mb-0 font-weight-bold text-gray-800" style="color: #6c757d;">Yesterday :
-                        <%=@total_expense_slips%>
+                        <%=@total_expense_yesterday%>
                       </i>
                     <% end %>
                   </div>

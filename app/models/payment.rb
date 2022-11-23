@@ -1,4 +1,6 @@
 class Payment < ApplicationRecord
+  include CashInHandMethod
+
   belongs_to :paymentable, polymorphic: true, optional:true
   belongs_to :account
   after_create :modify_account_balance
@@ -6,6 +8,8 @@ class Payment < ApplicationRecord
   enum confirmable: %i[unconfirm confirmed]
 
   has_paper_trail ignore: [:updated_at]
+  after_commit :cash_in_hand
+
 
   def modify_account_balance
     if self.account_id?
