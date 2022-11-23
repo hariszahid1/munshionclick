@@ -34,7 +34,6 @@ module CashInHandMethod
       @total_reciveable = @sys_user_receiveable_group_total.abs + @staff_reciveable_group_total.abs + @expense_total +
                           @investments_debit + @salary_detail_total + @credit_salary +
                           @purchase_sale_detail_discount_list + @purchase_item_total + @purchase_product_total
-      byebug
       PosSetting.last.update(cash_in_hand: (@total_payable.to_i - @total_reciveable.to_i))
     end
   end
