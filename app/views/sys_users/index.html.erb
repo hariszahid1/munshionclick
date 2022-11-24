@@ -181,9 +181,11 @@
           <td><%= check_box_tag 'object_ids[]', sys_user.id %></td>
           <td><%= sys_user.id %></td>
           <td>
-          <% if  sys_user.profile_image.attached? %>
-            <%= image_tag sys_user.profile_image.service_url, width: 100 %>
-          <% end %>
+          <div class="shadow border-radius-1">
+            <% if  sys_user.profile_image.attached? %>
+              <%= image_tag sys_user.profile_image.service_url, style:"width: 120px; height: 120px; border: 1px solid gray", class:"shadow border-radius-1" %>
+            <% end %>
+          </div>
           </td>
           <td><%= sys_user.code %></td>
           <td class="urdu-font">

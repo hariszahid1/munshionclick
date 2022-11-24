@@ -69,7 +69,7 @@
       </ul>
 
       <%= search_form_for @q, url: staffs_path, class: "admin-controls", method: "get" do |f| %>
-       <div class="tab-content mb-5">
+       <div class="tab-content mb-2">
           <div class="tab-pane active card border-radius-1" id="search" role="tabpanel">
            <div class="row d-flex mt-3">
               <div class="col">
@@ -188,9 +188,11 @@
         <% @staffs.each do |staff| %>
           <tr>
             <td>
-              <% if  staff.profile_image.attached? %>
-                <%= image_tag staff.profile_image.service_url, width: 100 %>
-              <% end %>
+              <div>
+                <% if  staff.profile_image.attached? %>
+                  <%= image_tag staff.profile_image.service_url, style:"width: 120px; height: 120px; border: 1px solid gray", class:"shadow border-radius-1" %>
+                <% end %>
+              </div>  
             </td>
             <td><%= staff.staff_type %></td>
             <td><%= staff.code %></td>

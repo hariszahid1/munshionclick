@@ -26,6 +26,11 @@ class AccountsController < ApplicationController
       @account_title.push(account.title.split(' ').join(''))
       @account_amount.push(account.amount.to_f.round(2))
     end 
+
+    respond_to do |format|
+      format.js
+      format.html
+    end
   end
 
   # GET /accounts/1
