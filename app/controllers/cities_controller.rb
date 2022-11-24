@@ -24,7 +24,10 @@ class CitiesController < ApplicationController
     @total_cities_count = Contact.joins(:city).group('cities.title').count
     @city_title = @total_cities_count.keys.map { |a| a.gsub(' ', '-') }
     @city_user = @total_cities_count.values
-    
+    respond_to do |format|
+      format.js
+      format.html
+    end
   end
 
   # GET /cities/1

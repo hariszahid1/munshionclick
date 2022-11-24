@@ -7,85 +7,103 @@
             <span class="link-text">Dashboard</span>
           <% end %>
         </li>
-        <li>
-          <a href="<%=customer_management_systems_path%>">
-            <i class="fas fa-user-plus"></i>
-            <span class="link-text">CMS</span>
-          </a>
-        </li>
-
-        <li>
-          <a href="<%=orders_path(sale: true)%>">
-            <i class="fas fa fa-barcode"></i>
-            <span class="link-text">Order</span>
-          </a>
-        </li>
+        <% if check_is_hidden_by_module('customer_management_systems') %>
+          <li>
+            <a href="<%=customer_management_systems_path%>">
+              <i class="fas fa-user-plus"></i>
+              <span class="link-text">CMS</span>
+            </a>
+          </li>
+        <% end %>  
+        <% if check_is_hidden_by_module('orders') %>
+          <li>
+            <a href="<%=orders_path(sale: true)%>">
+              <i class="fas fa fa-barcode"></i>
+              <span class="link-text">Order</span>
+            </a>
+          </li>
+        <% end %>  
         <li>
           <a href="#SaleSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
             <i class="fas fa fa-barcode"></i>
             <span class="link-text">Sale</span>
           </a>
           <ul class="collapse list-unstyled" id="SaleSubmenu">
-            <li>
-              <%= link_to new_purchase_sale_detail_path(transaction_type: :sale,product: true) do %>
-                <i class="fas fa-plus"></i>
-                <span class="link-text">Add Invoice</span>
-              <% end %>
-            </li>
-            <li>
-              <%= link_to purchase_sale_details_path(sale: true) do %>
-                <i class="fas fa-th-list"></i>
-                <span class="link-text">List of Sale</span>
-              <% end %>
-            </li>
-            <li>
-              <%= link_to daily_sales_path do %>
-                <i class="fas fa-plus"></i>
-                <i class="fas fa-th-list"></i>
-                <span class="link-text">Daily Day Out</span>
-              <% end %>
-            </li>
-            <li>
-              <%= link_to purchase_sale_details_return_purchase_sale_details_path(return: true) do %>
-                <i class="fas fa-plus"></i>
-                <i class="fas fa-th-list"></i>
-                <span class="link-text">SaleReturn</span>
-              <% end %>
-            </li>
+            <% if check_is_hidden_by_module('purchase_sale_details') %>
+              <li>
+                <%= link_to new_purchase_sale_detail_path(transaction_type: :sale,product: true) do %>
+                  <i class="fas fa-plus"></i>
+                  <span class="link-text">Add Invoice</span>
+                <% end %>
+              </li>
+              <li>
+                <%= link_to purchase_sale_details_path(sale: true) do %>
+                  <i class="fas fa-th-list"></i>
+                  <span class="link-text">List of Sale</span>
+                <% end %>
+              </li>
+            <% end %>
+            <% if check_is_hidden_by_module('purchase_sale_details') %>
+              <li>
+                <%= link_to daily_sales_path do %>
+                  <i class="fas fa-plus"></i>
+                  <i class="fas fa-th-list"></i>
+                  <span class="link-text">Daily Day Out</span>
+                <% end %>
+              </li>
+            <% end %>  
+            <% if check_is_hidden_by_module('purchase_sale_details') %>
+              <li>
+                <%= link_to purchase_sale_details_return_purchase_sale_details_path(return: true) do %>
+                  <i class="fas fa-plus"></i>
+                  <i class="fas fa-th-list"></i>
+                  <span class="link-text">SaleReturn</span>
+                <% end %>
+              </li>
+            <% end %>  
           </ul>
         </li>
-        <li>
-          <%= link_to purchase_sale_details_path do %>
-            <i class="fas fa-plus"></i>
-            <i class="fas fa-th-list"></i>
-            <span class="link-text">Purchase</span>
-          <% end %>
-        </li>
-        <li>
-          <%= link_to expenses_path do %>
-            <i class="fas fa-th-list"></i>
-            <span class="link-text">Expense</span>
-          <% end %>
-        </li>
-        <li>
-          <%= link_to ledger_books_path do %>
-            <i class="fas fa-book"></i>
-            <span class="link-text">Ledger Book</span>
-          <% end %>
-        </li>
-        <li>
-          <%= link_to payments_path do %>
-            <i class="fas fa-th-list"></i>
-            <span class="link-text">Day Book</span>
-          <% end %>
-        </li>
-        <li>
-          <%= link_to accounts_path do %>
-            <i class="fas fa-book"></i>
-            <span class="link-text">Account</span>
-          <% end %>
-        </li>
-
+        <% if check_is_hidden_by_module('purchase_sale_details') %>
+          <li>
+            <%= link_to purchase_sale_details_path do %>
+              <i class="fas fa-plus"></i>
+              <i class="fas fa-th-list"></i>
+              <span class="link-text">Purchase</span>
+            <% end %>
+          </li>
+        <% end %> 
+        <% if check_is_hidden_by_module('expenses') %>
+          <li>
+            <%= link_to expenses_path do %>
+              <i class="fas fa-th-list"></i>
+              <span class="link-text">Expense</span>
+            <% end %>
+          </li>
+        <% end %>  
+        <% if check_is_hidden_by_module('ledger_books') %>
+          <li>
+            <%= link_to ledger_books_path do %>
+              <i class="fas fa-book"></i>
+              <span class="link-text">Ledger Book</span>
+            <% end %>
+          </li>
+        <% end %>
+        <% if check_is_hidden_by_module('payments') %>  
+          <li>
+            <%= link_to payments_path do %>
+              <i class="fas fa-th-list"></i>
+              <span class="link-text">Day Book</span>
+            <% end %>
+          </li>
+        <% end %>
+        <% if check_is_hidden_by_module('accounts') %>  
+          <li>
+            <%= link_to accounts_path do %>
+              <i class="fas fa-book"></i>
+              <span class="link-text">Account</span>
+            <% end %>
+          </li>
+        <% end %>  
         <% if can?(:view, :sys_user) %>
           <li>
             <a  href="#UserSubMenu"  data-toggle="collapse", aria-expanded="false" class="dropdown-toggle">
@@ -93,26 +111,30 @@
               <span class="link-text">User</span>
             </a>
             <ul class="collapse list-unstyled" id="UserSubMenu">
-              <li>
-                <%= link_to ledger_books_path do %>
-                  <i class="fas fa-book"></i>
-                  <span class="link-text">Ledger Book</span>
-                <% end %>
-              </li>
-              <li>
-                <%= link_to sys_users_path do %>
-                  <i class="fas fa-plus"></i>
-                  <span class="link-text">All Users</span>
-                <% end %>
-              </li>
-              <li>
-                <% SysUser.user_groups.each do |value, index|%>
-                  <%= link_to sys_users_path('q[user_group_eq]': index) do %>
-                    <i class="fas fa-plus"></i>
-                    <span class="link-text"><%= value%></span>
+              <% if check_is_hidden_by_module('ledger_books') %>
+                <li>
+                  <%= link_to ledger_books_path do %>
+                    <i class="fas fa-book"></i>
+                    <span class="link-text">Ledger Book</span>
                   <% end %>
-                <% end %>
-              </li>
+                </li>
+              <% end %>
+              <% if check_is_hidden_by_module('sys_users') %>  
+                <li>
+                  <%= link_to sys_users_path do %>
+                    <i class="fas fa-plus"></i>
+                    <span class="link-text">All Users</span>
+                  <% end %>
+                </li>
+                <li>
+                  <% SysUser.user_groups.each do |value, index|%>
+                    <%= link_to sys_users_path('q[user_group_eq]': index) do %>
+                      <i class="fas fa-plus"></i>
+                      <span class="link-text"><%= value%></span>
+                    <% end %>
+                  <% end %>
+                </li>
+              <% end %>
             </ul>
           </li>
         <% end %>
@@ -122,148 +144,167 @@
             <span class="link-text">Staff</span>
           </a>
           <ul class="collapse list-unstyled" id="labourSubmenu">
-            <li>
-              <a href="<%=staff_ledger_books_path%>">
-                <i class="fa fa-address-book"></i>
-                <span class="link-text">Staff Ledger Book</span>
-              </a>
-            </li>
-            <li>
-              <a href="<%=staffs_path%>">
-                <i class="fa fa-address-book"></i>
-                <span class="link-text">Labour list</span>
-              </a>
-            </li>
-            <li>
-              <a href="<%=salaries_path%>">
-                <i class="fa fa-envelope-open"></i>
-                <span class="link-text">Salary Debit detail</span>
-              </a>
-            </li>
-            <li>
-              <a href="<%=salary_details_path%>">
-                <i class="fa fa-envelope-open"></i>
-                <span class="link-text">Salary Credit detail</span>
-              </a>
-            </li>
+            <% if check_is_hidden_by_module('staff_ledger_books') %>
+              <li>
+                <a href="<%=staff_ledger_books_path%>">
+                  <i class="fa fa-address-book"></i>
+                  <span class="link-text">Staff Ledger Book</span>
+                </a>
+              </li>
+            <% end %>
+            <% if check_is_hidden_by_module('staffs') %>  
+              <li>
+                <a href="<%=staffs_path%>">
+                  <i class="fa fa-address-book"></i>
+                  <span class="link-text">Labour list</span>
+                </a>
+              </li>
+            <% end %>
+            <% if check_is_hidden_by_module('salaries') %>  
+              <li>
+                <a href="<%=salaries_path%>">
+                  <i class="fa fa-envelope-open"></i>
+                  <span class="link-text">Salary Debit detail</span>
+                </a>
+              </li>
+            <% end %>
+            <% if check_is_hidden_by_module('salary_details') %>  
+              <li>
+                <a href="<%=salary_details_path%>">
+                  <i class="fa fa-envelope-open"></i>
+                  <span class="link-text">Salary Credit detail</span>
+                </a>
+              </li>
+            <% end %>  
           </ul>
         </li>
-
-        <li>
-          <a href="#ReportsSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-            <i class="fas fa fa-print"></i>
-            <span class="link-text">Reports</span>
-          </a>
-          <ul class="collapse list-unstyled" id="ReportsSubmenu">
-            <li>
-              <%= link_to reports_path do %>
-                <i class="fas fa-plus"></i>
-                <span class="link-text">Total Staff/Customer/Supplier</span>
-              <% end %>
-            </li>
-            <li>
-              <%= link_to reports_chart_path do %>
-                <i class="fas fa-th-list"></i>
-                <span class="link-text">Chart/Graph</span>
-              <% end %>
-            </li>
-            <li>
-              <%= link_to reports_trial_balance_path do %>
-                <i class="fas fa-th-list"></i>
-                <span class="link-text">Trial Balance</span>
-              <% end %>
-            </li>
-            <li>
-              <%= link_to reports_chart_of_account_path do %>
-                <i class="fas fa-th-list"></i>
-                <span class="link-text">Chart of Account</span>
-              <% end %>
-            </li>
-            <li>
-              <%= link_to reports_sale_report_path do %>
-                <i class="fas fa-th-list"></i>
-                <span class="link-text">Sale Report</span>
-              <% end %>
-            </li>
-            <li>
-              <%= link_to reports_product_report_path do %>
-                <i class="fas fa-th-list"></i>
-                <span class="link-text">Profit Report</span>
-              <% end %>
-            </li>
-            <li>
-              <%= link_to reports_stock_report_path do %>
-                <i class="fas fa-th-list"></i>
-                <span class="link-text">Sale/Purchase/Stock</span>
-              <% end %>
-            </li>
-            <li>
-              <%= link_to dashboard_path do %>
-                <i class="fas fa-th-list"></i>
-                <span class="link-text">Stock Statment</span>
-              <% end %>
-            </li>
-          </ul>
-        </li>
-
-        <% if can?(:view, :product) %>
+        <% if check_is_hidden_by_module('reports') %>
           <li>
-            <%= link_to products_path do %>
-              <i class="fa fa-cart-arrow-down"></i>
-              <span class="link-text">Products</span>
-            <% end %>
+            <a href="#ReportsSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+              <i class="fas fa fa-print"></i>
+              <span class="link-text">Reports</span>
+            </a>
+            <ul class="collapse list-unstyled" id="ReportsSubmenu">
+              <li>
+                <%= link_to reports_path do %>
+                  <i class="fas fa-plus"></i>
+                  <span class="link-text">Total Staff/Customer/Supplier</span>
+                <% end %>
+              </li>
+              <li>
+                <%= link_to reports_chart_path do %>
+                  <i class="fas fa-th-list"></i>
+                  <span class="link-text">Chart/Graph</span>
+                <% end %>
+              </li>
+              <li>
+                <%= link_to reports_trial_balance_path do %>
+                  <i class="fas fa-th-list"></i>
+                  <span class="link-text">Trial Balance</span>
+                <% end %>
+              </li>
+              <li>
+                <%= link_to reports_chart_of_account_path do %>
+                  <i class="fas fa-th-list"></i>
+                  <span class="link-text">Chart of Account</span>
+                <% end %>
+              </li>
+              <li>
+                <%= link_to reports_sale_report_path do %>
+                  <i class="fas fa-th-list"></i>
+                  <span class="link-text">Sale Report</span>
+                <% end %>
+              </li>
+              <li>
+                <%= link_to reports_product_report_path do %>
+                  <i class="fas fa-th-list"></i>
+                  <span class="link-text">Profit Report</span>
+                <% end %>
+              </li>
+              <li>
+                <%= link_to reports_stock_report_path do %>
+                  <i class="fas fa-th-list"></i>
+                  <span class="link-text">Sale/Purchase/Stock</span>
+                <% end %>
+              </li>
+              <li>
+                <%= link_to dashboard_path do %>
+                  <i class="fas fa-th-list"></i>
+                  <span class="link-text">Stock Statment</span>
+                <% end %>
+              </li>
+            </ul>
+          </li>
+        <% end %>  
+        <% if check_is_hidden_by_module('products') %>
+          <% if can?(:view, :product) %>
+            <li>
+              <%= link_to products_path do %>
+                <i class="fa fa-cart-arrow-down"></i>
+                <span class="link-text">Products</span>
+              <% end %>
+            </li>
+          <% end %>
+        <% end %>  
+        <% if check_is_hidden_by_module('product_warranties') %>
+          <% if can?(:view, :warranty) %>
+            <li>
+              <%= link_to product_warranties_path do %>
+                <i class="fa fa-cart-arrow-down"></i>
+                <span class="link-text">warranties</span>
+              <% end %>
+            </li>
+          <% end %>
+        <% end %>  
+        <% if check_is_hidden_by_module('product_stocks') %>
+          <li>
+            <a href="<%=product_stocks_path%>">
+              <i class="fa fa-shopping-cart"></i>
+              <span class="link-text">Stock Detail</span>
+            </a>
           </li>
         <% end %>
-
-        <% if can?(:view, :warranty) %>
+        <% if check_is_hidden_by_module('investments') %>  
           <li>
-            <%= link_to product_warranties_path do %>
-              <i class="fa fa-cart-arrow-down"></i>
-              <span class="link-text">warranties</span>
+            <%= link_to investments_path do %>
+              <i class="fas fa-tasks"></i>
+              <span class="link-text">Investment</span>
             <% end %>
           </li>
-        <% end %>
-
-        <li>
-          <a href="<%=product_stocks_path%>">
-            <i class="fa fa-shopping-cart"></i>
-            <span class="link-text">Stock Detail</span>
-          </a>
-        </li>
-        <li>
-          <%= link_to investments_path do %>
-            <i class="fas fa-tasks"></i>
-            <span class="link-text">Investment</span>
-          <% end %>
-        </li>
-
-        <li>
-          <%= link_to items_path do %>
-            <i class="fa fa-cart-arrow-down"></i>
-            <span class="link-text">  Raw Material</span>
-          <% end %>
-        </li>
-        <li>
-          <%= link_to productions_path do %>
-            <i class="fa fa-cart-arrow-down"></i>
-            <span class="link-text">  Production</span>
-          <% end %>
-        </li>
+        <% end %>  
+        <% if check_is_hidden_by_module('items') %>  
+          <li>
+            <%= link_to items_path do %>
+              <i class="fa fa-cart-arrow-down"></i>
+              <span class="link-text">  Raw Material</span>
+            <% end %>
+          </li>
+        <% end %>  
+        <% if check_is_hidden_by_module('productions') %>  
+          <li>
+            <%= link_to productions_path do %>
+              <i class="fa fa-cart-arrow-down"></i>
+              <span class="link-text">  Production</span>
+            <% end %>
+          </li>
+        <% end %>  
 
         <% if can?(:view, :all) %>
           <li>
-
               <a href="#SystemSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                   <i class="fas fa-tasks"></i>
                   <span class="link-text">System Settings</span>
               </a>
               <ul class="collapse list-unstyled" id="SystemSubmenu">
+                <% if check_is_hidden_by_module('pos_settings') %>
                   <li>
                     <%= link_to pos_settings_path do %>
                       <i class="fas fa-tasks" aria-hidden="true"></i>
                       <span class="link-text">  General Setting</span>
                     <% end %>
                   </li>
+                <% end %> 
+                <% if check_is_hidden_by_module('product_categories') %> 
                   <li>
                       <%= link_to product_categories_path do %>
                           <i class="fas fa-plus"></i>
@@ -271,6 +312,8 @@
                           <span class="link-text">Product Category</span>
                       <% end %>
                   </li>
+                <% end %>
+                <% if check_is_hidden_by_module('product_sub_categories') %>   
                   <li>
                       <%= link_to product_sub_categories_path do %>
                           <i class="fas fa-plus"></i>
@@ -278,6 +321,8 @@
                           <span class="link-text">Product Sub Category</span>
                       <% end %>
                   </li>
+                <% end %>  
+                <% if check_is_hidden_by_module('countries') %> 
                   <li>
                       <%= link_to countries_path do %>
                         <i class="fas fa-plus"></i>
@@ -285,6 +330,8 @@
                         <span class="link-text">  Country</span>
                       <% end %>
                   </li>
+                <% end %>
+                <% if check_is_hidden_by_module('departments') %>   
                   <li>
                       <%= link_to departments_path do %>
                         <i class="fas fa-plus"></i>
@@ -292,6 +339,8 @@
                         <span class="link-text">  Department</span>
                       <% end %>
                   </li>
+                <% end %>  
+                <% if check_is_hidden_by_module('cities') %> 
                   <li>
                       <%= link_to cities_path do %>
                         <i class="fas fa-plus"></i>
@@ -299,6 +348,8 @@
                         <span class="link-text">  City</span>
                       <% end %>
                   </li>
+                <% end %>  
+                <% if check_is_hidden_by_module('item_types') %> 
                   <li>
                     <%= link_to item_types_path do %>
                         <i class="fas fa-plus"></i>
@@ -306,6 +357,8 @@
                         <span class="link-text">Line Item Type</span>
                     <% end %>
                   </li>
+                <% end %>  
+                <% if check_is_hidden_by_module('user_types') %> 
                   <li>
                       <%= link_to user_types_path do %>
                           <i class="fas fa-plus"></i>
@@ -313,6 +366,8 @@
                           <span class="link-text">User Types</span>
                       <% end %>
                   </li>
+                <% end %>  
+                <% if check_is_hidden_by_module('expense_types') %> 
                   <li>
                       <%= link_to expense_types_path do %>
                           <i class="fas fa-plus"></i>
@@ -320,6 +375,8 @@
                           <span class="link-text">Expense Type</span>
                       <% end %>
                   </li>
+                <% end %> 
+                <% if check_is_hidden_by_module('production_block_types') %>  
                   <li>
                       <%= link_to production_block_types_path do %>
                           <i class="fas fa-plus"></i>
@@ -327,6 +384,8 @@
                           <span class="link-text">Production Block Types</span>
                       <% end %>
                   </li>
+                <% end %>
+                <% if check_is_hidden_by_module('users') %>  
                   <% if can?(:delete, :all) %>
                     <li>
                       <%= link_to users_path do %>
@@ -344,13 +403,16 @@
                       <% end %>
                     </li>
                   <% end %>
+                <% end %>  
+                <% if check_is_hidden_by_module('user_groups') %>
                   <li>
                     <%= link_to user_groups_path do %>
                         <i class="fas fa-plus"></i>
                         <i class="fas fa-th-list"></i>
                         <span class="link-text">User Groups</span>
                     <% end %>
-                </li>
+                  </li>
+                <% end %>  
               </ul>
           </li>
         <%end%>
@@ -362,18 +424,22 @@
             <% end %>
           </li>
         <%end%>
-        <li>
-          <%= link_to helps_path do %>
-            <i class="fas fa-question"></i>
-            <span class="link-text">Help</span>
-          <% end %>
-        </li>
-        <li>
-          <a href="#">
-            <i class="fas fa-paper-plane"></i>
-            <span class="link-text">Contact</span>
-          </a>
-        </li>
+        <% if check_is_hidden_by_module('helps') %>  
+          <li>
+            <%= link_to helps_path do %>
+              <i class="fas fa-question"></i>
+              <span class="link-text">Help</span>
+            <% end %>
+          </li>
+        <% end %>
+        <% if check_is_hidden_by_module('contacts') %>    
+          <li>
+            <a href="#">
+              <i class="fas fa-paper-plane"></i>
+              <span class="link-text">Contact</span>
+            </a>
+          </li>
+        <% end %>  
     </ul>
   <%else%>
     <ul class="list-unstyled components">
@@ -389,21 +455,25 @@
           <span class="link-text">User</span>
         </a>
         <ul class="collapse list-unstyled" id="UserSubMenu">
+        <% if check_is_hidden_by_module('sys_users/customer') %>
           <li>
             <%= link_to customer_sys_users_path do %>
               <i class="fas fa-plus"></i>
               <span class="link-text">Customer</span>
             <% end %>
           </li>
+        <% end %>  
         </ul>
       </li>
-      <li>
-        <%= link_to edit_user_path(current_user) do %>
-          <i class="fas fa-plus"></i>
-          <i class="fas fa-th-list"></i>
-          <span class="link-text">  Profile</span>
-        <% end %>
-      </li>
+      <% if check_is_hidden_by_module('users') %>
+        <li>
+          <%= link_to edit_user_path(current_user) do %>
+            <i class="fas fa-plus"></i>
+            <i class="fas fa-th-list"></i>
+            <span class="link-text">  Profile</span>
+          <% end %>
+        </li>
+      <% end %>  
     </ul>
   <%end%>
 </nav>

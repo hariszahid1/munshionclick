@@ -10,87 +10,127 @@
               </button>
             </div>
              <!-- Card Content - Collapse -->
-              <div class="collapse show" id="collapseCardExample" style="">
-                <div class="card-body">
-                    <div class="card shadow mb-4">
-                               <div class="row">
-                                  <div class="col-lg-12 col-sm-12">
-                                    <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-                                      <h3>Id:<h5> <%= @staff.id %></h5></h3>
-                                    </div>
-                                    <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-                                      <h3>Code:<h5><%= @staff.code %></h5></h3>
-                                    </div>
-                                    <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-                                      <h3>Name:<h5 class="urdu-font"><%= @staff.name %></h5> </h3>
-                                    </div>
-                                    <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-                                      <h3>Father:<h5 class="urdu-font"><%= @staff.father %></h5></h3>
-                                    </div>
-                                  </div>
-                                </div>
-
-                                <div class="row">
-                                  <div class="col-lg-12 col-sm-12">
-                                    <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-                                      <h3>Staff type: <h5><%= @staff.staff_type %></h5></h3>
-                                    </div>
-                                    <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-                                      <h3>Education:<h5><%= @staff.education %></h5></h3>
-                                    </div>
-                                    <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-                                      <h3>Phone:<h5><%= @staff.phone %></h5> </h3>
-                                    </div>
-                                    <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-                                      <h3>RawProduct making:<h5><%= @staff.staff_raw_products.present? ? @staff.staff_raw_products_titles : ""%></h5></h3>
-                                    </div>
-                                  </div>
-                                </div>
-
-                                <div class="row">
-                                  <div class="col-lg-12 col-sm-12">
-                                    <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-                                      <h3>Yearly increment:<h5><%= @staff.yearly_increment %></h5></h3>
-                                    </div>
-                                    <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-                                      <h3>Cnic:<h5><%= @staff.cnic %></h5></h3>
-                                    </div>
-                                    <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-                                      <h3>Monthly salary:<h5><%= @staff.monthly_salary %></h5></h3>
-                                    </div>
-                                    <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-                                      <h3>Department:<h5><%= @staff.department.title %></h5></h3>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="row">
-                                  <div class="col-lg-12 col-sm-12">
-                                    <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-                                      <h3>Date of joining:<h5><%= @staff.date_of_joining%></h5></h3>
-                                    </div>
-                                    <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-                                      <h3>Wage rate:<h5><%= @staff.wage_rate rescue nil%></h5></h3>
-                                    </div>
-                                    <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-                                      <h3>Debit Balance:<h5><%= @staff.wage_debit rescue nil%></h5></h3>
-                                    </div>
-                                    <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-                                      <h3>Credit blance:<h5><%= @staff.balance rescue nil%></h5></h3>
-                                    </div>
-                                  </div>
-                                </div>
-
-                                <div class="row">
-                                  <div class="col-lg-12 col-sm-12">
-                                    <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-                                      <h3>Address:<h5 class="urdu-font"><%= @staff.address rescue nil%></h5></h3>
-                                    </div>
-                                  </div>
-                                </div>
-                            <br>
+            <div class="container py-5">
+              <div class="row">
+                <div class="col-lg-4">
+                  <div class="card mb-4">
+                    <div class="card-body text-center">
+                      <% if  staff.profile_image.attached? %>
+                        <%= image_tag staff.profile_image, class:"rounded-circle", style:"width: 180px; height: 180px;" %>
+                      <% end %>
+                      <h5 class="urdu-font my-3"><%= @staff.name %></h5>
+                      <p class="mb-1">ID: <%= @staff.id rescue nil %></p>
+                      <p class="mb-2">Code: <%= @staff.code rescue nil %></p>
+                      <p class="mb-4">Staff Type: <%= @staff.staff_type rescue nil %> </p>
+                      <%if staff.balance.to_f > 0  %>
+                        <b style="font-size:20px;color:blue;">Jama</b>
+                      <%elsif  staff.balance.to_f < 0  %>
+                        <b style="font-size:20px;color:red;">Benam</b>
+                      <%else%>
+                        <b style="font-size:20px;color: #6cec53 ;">Nill</b>
+                      <%end%>
+                    </div>
+                  </div>
+                  <div class="card mb-4 mb-lg-0">
+                    <div class="card-body p-0">
+                    
+                      <ul class="list-group list-group-flush rounded-3">
+                        <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                          <p class="mb-0 font-weight-bold mr-3">Department: </p><span class="mr-auto text-muted"><%= @staff.department.title rescue nil %></span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                          <p class="mb-0 font-weight-bold mr-3">Date of Joining: </p><span class="mr-auto text-muted"><%= @staff.date_of_joining rescue nil %></span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                          <p class="mb-0 font-weight-bold mr-3">Wage Rate: </p><span class="mr-auto text-muted"><%= @staff.wage_rate rescue nil %></span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                          <p class="mb-0 font-weight-bold mr-3">Debit Balance: </p><span class="mr-auto text-muted"><%= @staff.wage_debit rescue nil %></span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                          <p class="mb-0 font-weight-bold mr-3">Credit Balance: </p><span class="mr-auto text-muted"><%= @staff.balance rescue nil %></span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-8">
+                  <div class="card mb-4">
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <p class="mb-0 font-weight-bold">Full Name</p>
+                        </div>
+                        <div class="col-sm-9">
+                          <p class="mb-0"><%= @staff.name %></p>
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <p class="mb-0 font-weight-bold">Father Name</p>
+                        </div>
+                        <div class="col-sm-9">
+                          <p class="mb-0"><%= @staff.father %></p>
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <p class="mb-0 font-weight-bold">CNIC</p>
+                        </div>
+                        <div class="col-sm-9">
+                          <p class="mb-0"><%= @staff.cnic rescue nil %></p>
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <p class="mb-0 font-weight-bold">Education</p>
+                        </div>
+                        <div class="col-sm-9">
+                          <p class="mb-0"><%= @staff.education rescue nil %></p>
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <p class="mb-0 font-weight-bold">Phone</p>
+                        </div>
+                        <div class="col-sm-9">
+                          <p class="mb-0"><%= @staff.phone rescue nil %></p>
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="row ">
+                        <div class="col-sm-3">
+                          <p class="mb-0 font-weight-bold">Address</p>
+                        </div>
+                        <div class="col-sm-9">
+                          <p class="mb-0"><%= @staff.address rescue nil %></p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="card mb-4 mb-md-0">
+                        <div class="card-body">
+                          <p class="mb-4">
+                            <span class="font-weight-bold mr-3">Monthly Salary:</span><%= @staff.monthly_salary rescue nil %>
+                          </p>
+                          <hr>
+                          <p class="mb-4">
+                            <span class="font-weight-bold mr-3">Raw Product Making:</span> 
+                          </p><%= @staff.staff_raw_products.present? ? @staff.staff_raw_products_titles : "" rescue nil %>
+                                                    
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
+            </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-danger float-right" data-dismiss="modal" aria-label="Close">

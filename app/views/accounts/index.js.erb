@@ -1,0 +1,29 @@
+$( document ).ready(function() {
+
+  const ctx = document.getElementById('myChart');
+  var accountTitle=$('#accountTitle').val().split(' ')
+  var accountAmount=$('#accountAmount').val().split(' ')
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: accountTitle,
+      datasets: [{
+        label: 'Amount: ',
+        data: accountAmount,
+        borderWidth: 1
+      }]
+    },
+    options: {
+      
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Accounts Pie Chart'
+            }
+        }
+      
+    }
+  });
+  
+});
