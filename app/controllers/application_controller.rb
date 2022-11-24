@@ -328,7 +328,7 @@ class ApplicationController < ActionController::Base
     @pos_setting = PosSetting.last
     @account_balance = Account.group(:title).sum(:amount)
     @account_amount_total = Account.sum(:amount)
-    @total_cash = PosSetting.last.cash_in_hand
+    @total_cash = @pos_setting&.cash_in_hand
   end
 
 

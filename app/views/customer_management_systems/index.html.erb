@@ -60,10 +60,10 @@
         <div class="row d-flex mt-3 mr-2">
           <div class="col">
             <div class='col-lg-2 form-group float-left'>
-              <%= f.select :id_eq, options_for_select(@all_user, f.object.id_eq),{:include_blank => "Select Name"},:class=>"form-control chosen-select" %>
+              <%= f.select :id_eq, options_for_select(@all_user.map{ |p| [p.name , p.id]}, f.object.id_eq),{:include_blank => "Select Name"},:class=>"form-control chosen-select" %>
             </div>
-            <div class='col-lg-2 form-group float-left'>
-              <%= f.select :credit_status_eq, options_for_select(@all_agents, f.object.credit_status_eq),{:include_blank => "Select Agent Name"},:class=>"form-control chosen-select" %>
+             <div class='col-lg-2 form-group float-left'>
+              <%= f.select :credit_status_eq, options_for_select(@all_agents.map{ |key, value| [key , value]}, f.object.credit_status_eq),{:include_blank => "Select Agent Name"},:class=>"form-control chosen-select" %>
             </div>
             <div class='col-lg-2 form-group float-left'>
               <%= f.select :ntn_eq, options_for_select(@all_plot_sizes, f.object.ntn_eq),{:include_blank => "Select Plot Size"},:class=>"form-control chosen-select" %>
