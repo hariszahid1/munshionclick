@@ -23,8 +23,9 @@ class ReportMailer < ApplicationMailer
     mail(to: email, subject: subject, body: body)
   end
 
-  def db_backup_file_email(email, file)
-    attachments[File.basename(file[1])] = File.read(file[1], mode: 'rb')
-    mail(to: email, subject: "Database Backup File for #{file[0]}", body: '')
+  def db_backup_file_email(email, company_type, link, date)
+    @link = link
+    @date = date
+    mail(to: email, subject: "Database Backup File for #{company_type}")
   end
 end

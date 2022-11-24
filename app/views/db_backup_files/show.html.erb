@@ -1,0 +1,31 @@
+<div class="main-content-header">
+  <h1>Download Database Backup File</h1>
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="<%= root_path %>">Home</a>
+    </li>
+    <li class="breadcrumb-item active">
+      <a href="#">Download Database Backup File</a>
+    </li>
+  </ol>
+</div>
+
+<div class="card shadow-sm border-radius-1 p-2">
+  <table data-toggle="table"class=" overflow-hidden border-radius-1">
+    <thead>
+      <tr>
+        <th>Company Type</th>
+        <th>Date</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr>
+        <td><%= @db_backup_file.company_type %></td>
+        <td><%= @db_backup_file.folder_date %></td>
+        <td><%= link_to 'Download', @db_backup_file.back_up_file.service_url %></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
