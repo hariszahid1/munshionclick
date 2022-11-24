@@ -20,6 +20,11 @@ class CountriesController < ApplicationController
     @country_title = @total_countries_count.keys.map { |a| a.gsub(' ', '-') } 
     @country_user = @total_countries_count.values 
 
+    respond_to do |format|
+       format.js
+       format.html 
+    end
+
   end
 
   # GET /countries/1

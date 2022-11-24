@@ -44,7 +44,7 @@
       </li>
 
        <li class="nav-item">
-        <a class="nav-link tab-label " data-toggle="tab" href="#analytics" role="tab">Analytics</a>
+        <a class="nav-link tab-label " data-toggle="tab" href="#analytics" data-remote="true" role="tab">Analytics</a>
       </li>
 			
 			<%if (check_can_import_export(@module_permission))%>
@@ -242,89 +242,3 @@
     }, 50);
   });
 </script>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<script>
-$( document ).ready(function() {
-  setTimeout(function(){
-
-  const ctx = document.getElementById('myChart');
-  var cityTitle=$('#cityTitle').val().split(' ')
-  var cityUser=$('#cityUser').val().split(' ')
-  Chart.defaults.font.size = 16;
-  new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: cityTitle,
-      datasets: [{
-        label: 'Users ',
-        data: cityUser,
-        borderWidth: 1,
-        backgroundColor: '#FF5C5C'
-      }],
-    },
-    options: {
-      
-      maintainAspectRatio: false,
-      plugins: {
-            title: {
-                display: true,
-                text: 'Bar Chart',
-                font: {
-                  size: 16
-                }
-            }
-          
-
-        }
-      
-    }
-  });
-
-   },500);
-  
-});
-  
-</script>
-
-<script>
-$( document ).ready(function() {
-  setTimeout(function(){
-
-  const ctx = document.getElementById('myChart1');
-  var cityTitle1=$('#cityTitle1').val().split(' ')
-  var cityUser1=$('#cityUser1').val().split(' ')
-  new Chart(ctx, {
-    type: 'pie',
-    data: {
-      labels: cityTitle1,
-      datasets: [{
-        label: 'User ',
-        data: cityUser1,
-        borderWidth: 1,
-      }]
-    },
-    options: {
-      
-      maintainAspectRatio: false,
-      plugins: {
-            title: {
-                display: true,
-                text: 'Pie Chart',
-                font: {
-                  size: 16
-                }
-            }
-        }
-      
-    }
-  });
-
-   },500);
-  
-});
-
-</script>
-
-
