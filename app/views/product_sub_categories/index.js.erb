@@ -1,0 +1,74 @@
+$( document ).ready(function() {
+
+  const ctx = document.getElementById('myChart');
+  var subTitle=$('#subTitle').val().split(' ')
+  var subUnit=$('#subUnit').val().split(' ')
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: subTitle,
+      datasets: [{
+        label: 'Units ',
+        data: subUnit,
+        borderWidth: 1,
+        backgroundColor: '#FF5C5C'
+      }],
+    },
+    options: {
+      
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Bar Chart',
+                font: {
+                  size: 16
+                }
+            }
+          
+
+        }
+      
+    }
+  });
+  
+});
+  
+
+$( document ).ready(function() {
+
+  const ctx = document.getElementById('myChart1');
+  var subTitle1=$('#subTitle1').val().split(' ')
+  var subUnit1=$('#subUnit1').val().split(' ')
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: subTitle1,
+      datasets: [{
+        label: 'Units ',
+        data: subUnit1,
+        borderWidth: 1,
+      }],
+    },
+    options: {
+      
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Pie Chart',
+                font: {
+                  size: 16
+                }
+            }
+          
+
+        }
+      
+    }
+  });
+  
+});
+  

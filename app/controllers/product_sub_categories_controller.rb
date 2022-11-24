@@ -24,6 +24,10 @@ class ProductSubCategoriesController < ApplicationController
     @sub_title = @total_sub_count.keys.map { |a| a.gsub(' ', '-') }
     @sub_unit =  @total_sub_count.values
 
+    respond_to do |format|
+      format.js
+      format.html
+    end
   end
 
 

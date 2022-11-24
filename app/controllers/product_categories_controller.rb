@@ -28,6 +28,10 @@ class ProductCategoriesController < ApplicationController
     @category_unit = @total_categories_count.values
     @category_sub_unit = @total_sub_categories_count.values
     
+    respond_to do |format|
+      format.js
+      format.html
+    end
   end
 
   # GET /product_categories/1
