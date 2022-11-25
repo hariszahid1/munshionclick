@@ -168,6 +168,7 @@ Rails.application.routes.draw do
   resources :countries
   resources :expense_types
   resources :expenses
+  resources :db_backup_files
   get 'home/index'
   get :dashboard, to: 'dashboard#index', as: :dashboard
   get :export, to: 'dashboard#export', as: :export
