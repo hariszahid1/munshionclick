@@ -1,4 +1,5 @@
 class ProductsController < ApplicationController
+  before_action :check_access
   before_action :set_product, only: [:show, :edit, :update, :destroy]
   skip_before_action :authenticate_user!, only: [:index]
   include CsvMethods
