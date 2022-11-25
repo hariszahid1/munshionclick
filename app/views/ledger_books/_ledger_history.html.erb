@@ -1,0 +1,79 @@
+<div>
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <h1>Logs</h1>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <%= search_form_for @q, url:view_history_ledger_books_path, class: "admin-controls", remote: true, method: "get" do |f| %>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.search_field :item_id_eq, value: @item_id, placeholder: "search by id", title: "search by id" ,:class=>"form-control" %>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.date_field :created_at_gteq, value:@start_date, class: 'form-control input-sm',title: "Select date from",  placeholder: "YYYY-MM-DD" %>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.date_field :created_at_lteq, value:@end_date,class: 'form-control input-sm' ,title: "Select date to", placeholder: "YYYY-MM-DD"%>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.select :event_eq, options_for_select(@event, f.object.event_eq), {:include_blank => "Select Event"},:class=>"form-control chosen-select" %>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px">Search</button>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+        </div>
+        <div class="col-lg-2 form-group float-left">
+        </div>
+        <div class="col-lg-1.5 form-group float-right">
+          <button class="form-control btn  badge badge-pill badge-danger" name="submit_pdf" type="submit" value="Logs PDF A4" formtarget="_blank">Logs &nbsp;<i class="fa fa-file-pdf"></i></button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <table class= "mt-4" data-toggle="table" data-search="true">
+    <thead>
+      <tr>
+        <th>Event</th>
+        <th>Who Done it</th>
+        <th>Date</th>
+        <th>ID/P</th>
+        <th>Customer/Supplier</th>
+        <th colspan="2">Debit</th>
+        <th colspan="2">Credit</th>
+        <th colspan="2">Comment</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @ledger_book_logs.each do |log| %>
+        <tr class=<%= (log.event == 'destroy') ? 'follow_up_color' :  (log.event == 'update') ? 'cms-table-row1' : 'bg-light' %>>
+          <td class="urdu-font"><%=log&.event %></td>
+          <td class="urdu-font"><%=User.find_by(id:log&.whodunnit)&.name %></td>
+          <td class="urdu-font"><%= log&.created_at.present? ? log&.created_at.strftime("%d%b%y at %I:%M %p") : '' %></td>
+          <td class="urdu-font"><%=log&.item_id %></td>
+          <td class="urdu-font"><%=LedgerBook.find_by(id:log&.item_id)&.sys_user&.name %></td>
+          <td class="urdu-font"><%=log&.changeset&.try(:[], 'debit')&.first.to_i %></td>
+          <td class="urdu-font"><%=log&.changeset&.try(:[], 'debit')&.last.to_i %></td>
+          <td class="urdu-font"><%=log&.changeset&.try(:[], 'credit')&.first.to_i %></td>
+          <td class="urdu-font"><%=log&.changeset&.try(:[], 'credit')&.last.to_i  %></td>
+          <td class="urdu-font"><%=log&.changeset&.try(:[], 'comment')&.first %></td>
+          <td class="urdu-font"><%=log&.changeset&.try(:[], 'comment')&.last %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <div class="row">
+    <div class="col-lg-4 col-sm-4">
+      <%= page_entries_info @ledger_book_logs %>
+    </div>
+    <div class="col-lg-8 col-sm-8 pagination-left">
+      <%= paginate @ledger_book_logs, remote: true %>
+    </div>
+  </div>
+
+</div>
