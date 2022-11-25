@@ -100,7 +100,7 @@ namespace :db do
       file = File.open(path_to_file)
       db_backup_data = DbBackupFile.create(company_type: db_block, folder_date: Date.yesterday)
       db_backup_data.back_up_file.attach(io: file, filename: path_to_file.split('/').last)
-      file_serice_url = "http://localhost:3000/db_backup_files/#{db_backup_data.id}"
+      file_serice_url = "https://munshionclick.com/db_backup_files/#{db_backup_data.id}"
       ReportMailer.db_backup_file_email('abbasanwar158@gmail.com', db_block, file_serice_url, Date.yesterday).deliver
     end
   end
