@@ -11,18 +11,23 @@ class CountriesController < ApplicationController
     @q.sorts = 'id asc' if @q.result.count > 0 && @q.sorts.empty?
     @options_for_select = Country.all
     @countries = @q.result(distinct: true).page(params[:page])
-    download_countries_csv_file if params[:csv].present?
+    if params[:csv].present?
+      request.format = 'csv'
+      download_countries_csv_file
+    end
     download_countries_pdf_file if params[:pdf].present?
     send_email_file if params[:email].present?
     export_file if params[:export_data].present?
 
     @total_countries_count = Contact.joins(:country).group("countries.title").count
-    @country_title = @total_countries_count.keys.map { |a| a.gsub(' ', '-') } 
-    @country_user = @total_countries_count.values 
+    @country_title = @total_countries_count.keys.map { |a| a.gsub(' ', '-') }
+    @country_user = @total_countries_count.values
 
     respond_to do |format|
-       format.js
-       format.html 
+      format.pdf
+      format.csv
+      format.js
+      format.html
     end
 
   end

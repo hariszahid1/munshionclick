@@ -16,7 +16,11 @@ class CitiesController < ApplicationController
     @q.sorts = 'id asc' if @q.sorts.empty? && @q.result.count.positive?
     @options_for_select = City.all
     @cities = @q.result.page(params[:page])
-    download_cities_csv_file if params[:csv].present?
+
+    if params[:csv].present?
+      request.format = 'csv'
+      download_cities_csv_file
+    end
     download_cities_pdf_file if params[:pdf].present?
     send_email_file if params[:email].present?
     export_file if params[:export_data].present?
@@ -25,6 +29,8 @@ class CitiesController < ApplicationController
     @city_title = @total_cities_count.keys.map { |a| a.gsub(' ', '-') }
     @city_user = @total_cities_count.values
     respond_to do |format|
+      format.pdf
+      format.csv
       format.js
       format.html
     end

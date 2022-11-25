@@ -14,7 +14,10 @@ class ProductSubCategoriesController < ApplicationController
     @options_for_select = ProductSubCategory.all
     @options_for_select_cat = ProductCategory.all
     @product_sub_categories = @q.result(distinct: true).page(params[:page])
-    download_product_sub_categories_csv_file if params[:csv].present?
+    if params[:csv].present?
+      request.format = 'csv'
+      download_product_sub_categories_csv_file
+    end
     download_product_sub_categories_pdf_file if params[:pdf].present?
     send_email_file if params[:email].present?
     export_file if params[:export_data].present?
@@ -25,6 +28,8 @@ class ProductSubCategoriesController < ApplicationController
     @sub_unit =  @total_sub_count.values
 
     respond_to do |format|
+      format.csv
+      format.pdf
       format.js
       format.html
     end
