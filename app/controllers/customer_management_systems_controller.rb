@@ -128,13 +128,6 @@ class CustomerManagementSystemsController < ApplicationController
   end
 
   def index_search_data
-    @start_date = DateTime.current.beginning_of_month
-    @end_date =  DateTime.now.end_of_day
-    if params[:q].present?
-      @start_date = params[:q][:created_at_gteq] if params[:q][:created_at_gteq].present?
-      @end_date = params[:q][:created_at_lteq] if params[:q][:created_at_lteq].present?
-      params[:q][:created_at_lteq] = params[:q][:created_at_lteq].to_date.end_of_day if params[:q][:created_at_lteq].present?
-    end
     @options_for_select = SysUser.all
     created_by_ids = current_user.created_by_ids_list_to_view
 		@all_agents = User.where('company_type=? or created_by_id=?',current_user.company_type,created_by_ids).pluck(:name, :id)
