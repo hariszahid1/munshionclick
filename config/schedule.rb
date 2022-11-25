@@ -33,7 +33,7 @@ every '40 23 * * *' do
   rake 'db:backup'
 end
 
-every '40 23 * * *' do
-  puts "Send file test"
+every :day, at: '12:00am' do
+  puts 'Send file test'
   rake 'db:filesend'
 end

@@ -1,0 +1,35 @@
+<div class="main-content-header">
+  <h1>Download Database Backup Files</h1>
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="<%= root_path %>">Home</a>
+    </li>
+    <li class="breadcrumb-item active">
+      <a href="#">Download Database Backup Files</a>
+    </li>
+  </ol>
+</div>
+
+<div class="card shadow-sm border-radius-1 p-2">
+  <table data-toggle="table"class=" overflow-hidden border-radius-1">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Company Type</th>
+        <th>Date</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+    <% @db_backup_files.each do |f| %>
+      <tr>
+        <td><%= f.id %></td>
+        <td><%= f.company_type %></td>
+        <td><%= f.folder_date %></td>
+        <td><%= link_to 'Download', f.back_up_file.service_url %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
