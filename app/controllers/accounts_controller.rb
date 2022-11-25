@@ -13,21 +13,24 @@ class AccountsController < ApplicationController
     @account = @q.result
     @account_total=@account.pluck('SUM(amount)')
 
-    download_accounts_csv_file if params[:csv].present?
+    if params[:csv].present?
+      request.format = 'csv'
+      download_accounts_csv_file
+    end
     download_accounts_pdf_file if params[:pdf].present?
     send_email_file if params[:email].present?
     export_file if params[:export_data].present?
 
-
-    #
-    @account_title = [] 
-    @account_amount = [] 
-    @accounts.each do |account| 
+    @account_title = []
+    @account_amount = []
+    @accounts.each do |account|
       @account_title.push(account.title.split(' ').join(''))
       @account_amount.push(account.amount.to_f.round(2))
-    end 
+    end
 
     respond_to do |format|
+      format.pdf
+      format.csv
       format.js
       format.html
     end

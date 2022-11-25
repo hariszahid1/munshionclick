@@ -14,21 +14,25 @@ class ProductCategoriesController < ApplicationController
     @q.sorts = 'id asc' if @q.sorts.empty? && @q.result.count.positive?
     @options_for_select = ProductCategory.all
     @product_categories = @q.result.page(params[:page])
-    download_product_categories_csv_file if params[:csv].present?
+
+    if params[:csv].present?
+      request.format = 'csv'
+      download_product_categories_csv_file
+    end
     download_product_categories_pdf_file if params[:pdf].present?
     send_email_file if params[:email].present?
     export_file if params[:export_data].present?
 
-
     @total_categories_count = Product.joins(:product_category).group("product_categories.title").count
     @total_sub_categories_count = ProductSubCategory.joins(:product_category).group('product_categories.title').count
-    
 
     @category_title = @total_categories_count.keys.map { |a| a.gsub(' ', '-') }
     @category_unit = @total_categories_count.values
     @category_sub_unit = @total_sub_categories_count.values
-    
+
     respond_to do |format|
+      format.pdf
+      format.csv
       format.js
       format.html
     end
