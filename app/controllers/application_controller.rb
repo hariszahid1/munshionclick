@@ -412,7 +412,10 @@ class ApplicationController < ActionController::Base
 
   def default_accees
     # All Permission of Current User
-    @all_permissions = User.eager_load(:user_permissions).find(current_user.id).user_permissions if current_user.present?
+
+    if current_user.present?
+      @all_permissions = User.eager_load(:user_permissions).find(current_user.id).user_permissions
+    end
   end
 
   def check_access
