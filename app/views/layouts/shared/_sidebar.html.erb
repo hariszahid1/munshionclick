@@ -1,31 +1,32 @@
 <nav id="sidebar" class="col-2 p-0">
   <% if can?(:view, :sys_user) %>
-    <ul class="list-unstyled components">
-        <li class="active">
+  <input type="text" id="search-bar" class="form-control mt-2 bg-dark text-light" style="border-radius: 20px" placeholder="Search">
+    <ul class="list-unstyled components" id="mylist">
+        <li class="active activ-link">
           <%= link_to dashboard_path do %>
-            <i class="fas fa-tasks" aria-hidden="true"></i>
+            <i class="fa fa-desktop" aria-hidden="true"></i>
             <span class="link-text">Dashboard</span>
           <% end %>
         </li>
         <% if check_is_hidden_by_module('customer_management_systems') %>
-          <li>
-            <a href="<%=customer_management_systems_path%>">
+          <li class="activ-link">
+            <a href="<%=customer_management_systems_path%>", class="activ-link">
               <i class="fas fa-user-plus"></i>
               <span class="link-text">CMS</span>
             </a>
           </li>
         <% end %>  
         <% if check_is_hidden_by_module('orders') %>
-          <li>
-            <a href="<%=orders_path(sale: true)%>">
-              <i class="fas fa fa-barcode"></i>
+          <li class="activ-link">
+            <a href="<%=orders_path(sale: true)%>", class="activ-link">
+              <i class="fas fa fa-cart-arrow-down"></i>
               <span class="link-text">Order</span>
             </a>
           </li>
         <% end %>  
         <li>
           <a href="#SaleSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-            <i class="fas fa fa-barcode"></i>
+            <i class="fas fa fa-percent"></i>
             <span class="link-text">Sale</span>
           </a>
           <ul class="collapse list-unstyled" id="SaleSubmenu">
@@ -64,41 +65,41 @@
           </ul>
         </li>
         <% if check_is_hidden_by_module('purchase_sale_details') %>
-          <li>
-            <%= link_to purchase_sale_details_path do %>
+          <li class="activ-link">
+            <%= link_to purchase_sale_details_path, class:"activ-link" do %>
               <i class="fas fa-plus"></i>
-              <i class="fas fa-th-list"></i>
+              <i class="fas fa-shopping-cart"></i>
               <span class="link-text">Purchase</span>
             <% end %>
           </li>
         <% end %> 
         <% if check_is_hidden_by_module('expenses') %>
-          <li>
-            <%= link_to expenses_path do %>
-              <i class="fas fa-th-list"></i>
+          <li class="activ-link">
+            <%= link_to expenses_path, class:"activ-link" do %>
+              <i class="fas fa-money-bill"></i>
               <span class="link-text">Expense</span>
             <% end %>
           </li>
         <% end %>  
         <% if check_is_hidden_by_module('ledger_books') %>
-          <li>
-            <%= link_to ledger_books_path do %>
+          <li class="activ-link">
+            <%= link_to ledger_books_path, class:"activ-link" do %>
               <i class="fas fa-book"></i>
               <span class="link-text">Ledger Book</span>
             <% end %>
           </li>
         <% end %>
         <% if check_is_hidden_by_module('payments') %>  
-          <li>
-            <%= link_to payments_path do %>
+          <li class="activ-link">
+            <%= link_to payments_path, class:"activ-link" do %>
               <i class="fas fa-th-list"></i>
               <span class="link-text">Day Book</span>
             <% end %>
           </li>
         <% end %>
         <% if check_is_hidden_by_module('accounts') %>  
-          <li>
-            <%= link_to accounts_path do %>
+          <li class="activ-link">
+            <%= link_to accounts_path, class:"activ-link" do %>
               <i class="fas fa-book"></i>
               <span class="link-text">Account</span>
             <% end %>
@@ -238,8 +239,8 @@
         <% end %>  
         <% if check_is_hidden_by_module('products') %>
           <% if can?(:view, :product) %>
-            <li>
-              <%= link_to products_path do %>
+            <li class="activ-link">
+              <%= link_to products_path, class:"activ-link" do %>
                 <i class="fa fa-cart-arrow-down"></i>
                 <span class="link-text">Products</span>
               <% end %>
@@ -248,8 +249,8 @@
         <% end %>  
         <% if check_is_hidden_by_module('product_warranties') %>
           <% if can?(:view, :warranty) %>
-            <li>
-              <%= link_to product_warranties_path do %>
+            <li class="activ-link">
+              <%= link_to product_warranties_path, class:"activ-link" do %>
                 <i class="fa fa-cart-arrow-down"></i>
                 <span class="link-text">warranties</span>
               <% end %>
@@ -257,32 +258,32 @@
           <% end %>
         <% end %>  
         <% if check_is_hidden_by_module('product_stocks') %>
-          <li>
-            <a href="<%=product_stocks_path%>">
+          <li class="activ-link">
+            <a href="<%=product_stocks_path%>", class="activ-link">
               <i class="fa fa-shopping-cart"></i>
               <span class="link-text">Stock Detail</span>
             </a>
           </li>
         <% end %>
         <% if check_is_hidden_by_module('investments') %>  
-          <li>
-            <%= link_to investments_path do %>
+          <li class="activ-link">
+            <%= link_to investments_path, class:"activ-link" do %>
               <i class="fas fa-tasks"></i>
               <span class="link-text">Investment</span>
             <% end %>
           </li>
         <% end %>  
         <% if check_is_hidden_by_module('items') %>  
-          <li>
-            <%= link_to items_path do %>
+          <li class="activ-link">
+            <%= link_to items_path, class:"activ-link" do %>
               <i class="fa fa-cart-arrow-down"></i>
               <span class="link-text">  Raw Material</span>
             <% end %>
           </li>
         <% end %>  
         <% if check_is_hidden_by_module('productions') %>  
-          <li>
-            <%= link_to productions_path do %>
+          <li class="activ-link">
+            <%= link_to productions_path, class:"activ-link" do %>
               <i class="fa fa-cart-arrow-down"></i>
               <span class="link-text">  Production</span>
             <% end %>
@@ -417,23 +418,23 @@
           </li>
         <%end%>
         <% if can?(:delete, :all) %>
-          <li>
-            <%= link_to bd_backups_path do %>
+          <li class="activ-link">
+            <%= link_to bd_backups_path, class:"activ-link" do %>
                 <i class="fas fa-question"></i>
                 <span class="link-text">Import/Export</span>
             <% end %>
           </li>
         <%end%>
         <% if check_is_hidden_by_module('helps') %>  
-          <li>
-            <%= link_to helps_path do %>
+          <li class="activ-link">
+            <%= link_to helps_path, class:"activ-link" do %>
               <i class="fas fa-question"></i>
               <span class="link-text">Help</span>
             <% end %>
           </li>
         <% end %>
         <% if check_is_hidden_by_module('contacts') %>    
-          <li>
+          <li class="activ-link">
             <a href="#">
               <i class="fas fa-paper-plane"></i>
               <span class="link-text">Contact</span>
@@ -443,7 +444,7 @@
     </ul>
   <%else%>
     <ul class="list-unstyled components">
-      <li class="active">
+      <li class="active activ-link">
         <%= link_to dashboard_path do %>
           <i class="fas fa-tasks" aria-hidden="true"></i>
           <span class="link-text">Dashboard</span>
@@ -477,3 +478,25 @@
     </ul>
   <%end%>
 </nav>
+<script>
+    $('#search-bar').keyup(function(){
+        var value = $(this).val().toLowerCase();
+        $('#mylist li').each(function(){
+            var search = $(this).text().toLowerCase();
+            if(search.indexOf(value)>-1){
+                $(this).show();
+            }
+            else{
+                $(this).hide();
+            }
+        });
+    });
+</script>
+<script>
+    $(document).ready(function(){
+        $('#mylist .activ-link ').filter(function(){return this.href==location.href}).parent().addClass('active').siblings().removeClass('active')
+        $('#mylist .activ-link ').click(function(){
+            $(this).parent().addClass('active').siblings().removeClass('active')    
+        })
+    });
+</script>
