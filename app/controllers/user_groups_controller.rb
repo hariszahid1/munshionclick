@@ -15,7 +15,11 @@ class UserGroupsController < ApplicationController
     @q.sorts = 'id asc' if @q.sorts.empty? && @q.result.count.positive?
     @options_for_select = UserGroup.all
     @user_groups = @q.result.page(params[:page])
-    download_user_groups_csv_file if params[:csv].present?
+
+    if params[:csv].present?
+      request.format = 'csv'
+      download_user_groups_csv_file
+    end
     download_user_groups_pdf_file if params[:pdf].present?
     send_email_file if params[:email].present?
     export_file if params[:export_data].present?
@@ -25,6 +29,8 @@ class UserGroupsController < ApplicationController
     @user_group_count = @count_sys_user.values
     
     respond_to do |format|
+      format.pdf
+      format.csv
       format.js
       format.html
     end
