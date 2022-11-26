@@ -117,6 +117,7 @@ Rails.application.routes.draw do
   resources :ledger_books do
     collection do
       get :transfer, to: 'ledger_books#transfer'
+      get :view_history, to: 'ledger_books#view_history'
     end
   end
   resources :materials
