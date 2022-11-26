@@ -51,19 +51,21 @@
  </div>
 <div class="hidden" id="item_types_list">
         
-  </div>
-  <%= search_form_for @q, url: ledger_books_path, class: "admin-controls", method: "get" do |f| %>
-    
+</div>
   <ul class="nav nav-pills mt-3" role="tablist">
         <li class="nav-item">
-          <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
+          <a class="nav-link tab-label ledger-search-exp-tab active" data-toggle="tab" href="#search" role="tab">Search</a>
         </li>
         <li class="nav-item">
-        <a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
+        <a class="nav-link tab-label ledger-search-exp-tab" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link tab-label ledger-logs-tab" data-toggle="tab" href="#logs" role="tab">Logs</a>
         </li>
     </ul>
 <div class="tab-content mb-5">
-    <div class="tab-pane active mb-3 card shadow-sm mt-2 border-radius-1" id="search" role="tabpanel">
+  <div class="tab-pane active mb-3 card shadow-sm mt-2 border-radius-1" id="search" role="tabpanel">
+    <%= search_form_for @q, url: ledger_books_path, class: "admin-controls", method: "get" do |f| %>
      <div class="row mt-3">
       <div class="col">
         <div class="col-lg-4 form-group float-left">
@@ -159,18 +161,27 @@
       </div>
       </div>
     </div>
-    
-    <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="import-export" role="tabpanel">
-      <p>
-        <div class="d-flex ml-2">
-        <button class="btn btn-danger ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
-        <button class="btn btn-info ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
-        </div>
-      </p>
+      <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="import-export" role="tabpanel">
+        <p>
+          <div class="d-flex ml-2">
+          <button class="btn btn-danger ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
+          <button class="btn btn-info ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
+          </div>
+        </p>
+      </div>
+    <% end %>
+  
+
+    <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="logs" role="tabpanel">
+      <div class='ml-2 mt-2 mb-2'>
+        <%= link_to view_history_ledger_books_path, class: "btn btn-success d-none", id: "ledger-logs", remote:true do %>
+          show logs
+        <% end %>
+        <div id = "show-logs"></div>
+      </div> 
     </div>
   </div>
-  <% end %>
-<div class='card p-3'>
+<div class='card p-3 ledger-book-index-card'>
   <table data-toggle="table" data-search="true" class=" overflow-hidden border-radius-1">
     <thead>
       <tr>
@@ -441,13 +452,20 @@
     }
     $("#ledger_book_list").removeClass('hidden');
     FontAwesome.dom.i2svg();
-  });
-  $(document).ready(function() {
+
+    $('.ledger-logs-tab').on('click', function(){
+    $('#ledger-logs').click();
+    $('.ledger-book-index-card').addClass('d-none')
+    })
+
+    $('.ledger-search-exp-tab').on('click', function(){
+      $('.ledger-book-index-card').removeClass('d-none')
+    })
     setTimeout(function(){
       $(".chosen-select").chosen({
-  allow_single_deselect: true,
-  width: '100%'
-});
+        allow_single_deselect: true,
+        width: '100%'
+      });
     }, 50);
   });
 </script>
