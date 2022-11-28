@@ -206,9 +206,9 @@
           <td><%= check_box_tag 'object_ids[]', staff_ledger_book.id %></td>
           <td><%= staff_ledger_book.id %></td>
           <td><%= link_to staff_ledger_book.staff.code+' '+staff_ledger_book.staff.full_name , staffs_path('q[id_eq]': staff_ledger_book.staff.id) %></td>
-          <td><%= staff_ledger_book.debit %></td>
-          <td><%= staff_ledger_book.credit %></td>
-          <td><%= staff_ledger_book.balance %></td>
+          <td><%=  number_with_delimiter(staff_ledger_book.debit )%></td>
+          <td><%=  number_with_delimiter(staff_ledger_book.credit) %></td>
+          <td><%=  number_with_delimiter(staff_ledger_book.balance) %></td>
           <td>
             <%if staff_ledger_book.balance.to_f > 0  %>
                      <b style="font-size:20px;color:blue;">Credit/Jama</b>
