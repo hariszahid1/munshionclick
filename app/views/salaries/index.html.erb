@@ -87,9 +87,9 @@
       <tr>
         <td><%= salary.id %></td>
         <td><%= salary.staff.full_name %></td>
-        <td><%= salary.paid_salary.present? ? salary.paid_salary : "" %><%= salary.advance.present? ? salary.advance : "" %> </td>
-        <td><%= salary.staff.wage_debit.to_f.round(2) %></td>
-        <td><%= salary.total_balance.to_f.round(2) %></td>
+        <td><%= salary.paid_salary.present? ? number_with_delimiter(salary.paid_salary) : "" %><%= salary.advance.present? ? number_with_delimiter(salary.advance) : "" %> </td>
+        <td><%= number_with_delimiter(salary.staff.wage_debit.to_f.round(2)) %></td>
+        <td><%= number_with_delimiter(salary.total_balance.to_f.round(2)) %></td>
         <td><%= salary.leaves_in_month %></td>
         <td><%= salary.account_id.present? ? salary.account.title : '' %></td>
         <td>
@@ -125,7 +125,7 @@
       <td></td>
       <td></td>
       <td></td>
-      <td><h5><%=@salaries.sum(:paid_salary)+@salaries.sum(:advance)%></h5></td>
+      <td><h5><%= number_with_delimiter(@salaries.sum(:paid_salary)+@salaries.sum(:advance))%></h5></td>
       <td></td>
     </tr>
   </tbody>

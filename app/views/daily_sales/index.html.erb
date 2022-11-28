@@ -51,8 +51,8 @@
     <tbody>
       <% @daily_sales.each do |daily_sale| %>
         <tr>
-          <td><%= daily_sale.sale.to_f.round(2) %><% @total_sale+=daily_sale.sale.to_f.round(2)%></td>
-          <td><%= daily_sale.cash_out.to_f.round(2) %><% @total_cash+=daily_sale.cash_out.to_f.round(2)%></td>
+          <td><%= number_with_delimiter(daily_sale.sale.to_f.round(2)) %><% @total_sale+=daily_sale.sale.to_f.round(2)%></td>
+          <td><%= number_with_delimiter(daily_sale.cash_out.to_f.round(2)) %><% @total_cash+=daily_sale.cash_out.to_f.round(2)%></td>
           <td><%= daily_sale.shift %></td>
           <td><%= daily_sale.created_at.strftime("%d %B %Y") %> || <%= daily_sale.comment %></td>
           <td></td>
@@ -76,8 +76,8 @@
         </tr>
       <% end %>
       <tr>
-        <td><h5><%=@total_sale%></h5></td>
-        <td><h5><%=@total_cash%></h5></td>
+        <td><h5><%=number_with_delimiter(@total_sale)%></h5></td>
+        <td><h5><%=number_with_delimiter(@total_cash)%></h5></td>
       </tr>
     </tbody>
   </table>

@@ -154,8 +154,8 @@
       <tr>
         <td></td>
         <td><h5>Total</h5></td>
-        <td><h5><%=@total_investment&.first&.first%></h5></td>
-        <td><h5><%=@total_investment&.first&.last%></h5></td>
+        <td><h5><%=number_with_delimiter(@total_investment&.first&.first) %></h5></td>
+        <td><h5><%= number_with_delimiter(@total_investment&.first&.last) %></h5></td>
       </tr>
     </tbody>
   </table>

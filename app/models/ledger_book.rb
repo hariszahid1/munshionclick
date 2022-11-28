@@ -8,7 +8,7 @@ class LedgerBook < ApplicationRecord
   after_update :sys_user_balance_change
   after_destroy :sys_user_balance_change
 
-  has_paper_trail ignore: [:updated_at]
+  has_paper_trail ignore: [:updated_at,:balance]
 
   def modify_account_balance
     if self.account_id? && self.sys_user_id? && self.purchase_sale_detail_id.blank?

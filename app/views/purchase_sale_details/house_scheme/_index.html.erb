@@ -119,8 +119,8 @@
             </b>
           </td>
           <td><b><%= purchase_sale_detail.purchase_sale_items.count rescue 0 %></b></td>
-          <td><b><%= purchase_sale_detail.total_bill.to_f.round(2) rescue 0 %></b></td>
-          <td><b><%= purchase_sale_detail.amount.to_f.round(2) rescue 0%></b></td>
+          <td><b><%= number_with_delimiter(purchase_sale_detail.total_bill.to_f.round(2)) rescue 0 %></b></td>
+          <td><b><%= number_with_delimiter(purchase_sale_detail.amount.to_f.round(2)) rescue 0%></b></td>
           <td>
             <b>
               <% if (purchase_sale_detail.total_bill.to_i - (purchase_sale_detail.amount.to_f+purchase_sale_detail.discount_price.to_f)) > 0 %>
@@ -128,7 +128,7 @@
                 Pending
                 <br>
                 </p>
-                <h5 style="color:#FF0000"><%= (purchase_sale_detail.total_bill.to_i - (purchase_sale_detail.amount.to_f+purchase_sale_detail.discount_price.to_f))%></h5>
+                <h5 style="color:#FF0000"><%= number_with_delimiter((purchase_sale_detail.total_bill.to_i - (purchase_sale_detail.amount.to_f+purchase_sale_detail.discount_price.to_f))) %></h5>
               <% else %>
                 <p class="text-success">
                   <b><%= purchase_sale_detail.status  %></b>
@@ -194,9 +194,9 @@
                 <td></td>
                 <td></td>
                 <td><%=name_quantity.first%> <%=name_quantity[8]%></td>
-                <td><%=name_quantity.second%><% @total_pro += name_quantity.second %></td>
-                <td><%=name_quantity.third%></td>
-                <td><%=name_quantity.fourth%><% @total_discont += name_quantity.fourth if name_quantity.fourth.present? %></td>
+                <td><%= name_quantity.second%><% @total_pro += name_quantity.second %></td>
+                <td><%= number_with_delimiter(name_quantity.third)%></td>
+                <td><%= number_with_delimiter(name_quantity.fourth) %><% @total_discont += name_quantity.fourth if name_quantity.fourth.present? %></td>
                 <td></td>
                 <td><%=name_quantity.fifth.strftime("%d%b%y") if name_quantity.fifth.present?%></td>
                 <td></td>
@@ -209,8 +209,8 @@
                 <td></td>
                 <td><%=name_quantity.first%></td>
                 <td><%=name_quantity.second%><% @total_pro += name_quantity.second %></td>
-                <td><%=name_quantity[5]%></td>
-                <td><%=name_quantity[6]%><% @total_discont += name_quantity[6] if name_quantity.fourth.present? %></td>
+                <td><%=number_with_delimiter(name_quantity[5])%></td>
+                <td><%=number_with_delimiter(name_quantity[6])%><% @total_discont += name_quantity[6] if name_quantity.fourth.present? %></td>
                 <td></td>
                 <td><%=name_quantity.fifth.strftime("%d%b%y") if name_quantity.fifth.present?%></td>
                 <td></td>
@@ -233,10 +233,10 @@
       <tr>
         <td class="table-active"><h5>Total</h5><td>
         <td></td>
-        <td><h5><%=@total_bil.to_f.round(2)%></h5></td>
-        <td><h5><%=@total_am.to_f.round(2)%></h5></td>
-        <td><h5><%=@total_dis.to_f.round(2)%></h5></td>
-        <td><h5><%=(@total_bil.to_f-(@total_am+@total_dis)).to_f.round(2)%></h5></td>
+        <td><h5><%=number_with_delimiter(@total_bil.to_f.round(2))%></h5></td>
+        <td><h5><%=number_with_delimiter(@total_am.to_f.round(2))%></h5></td>
+        <td><h5><%=number_with_delimiter(@total_dis.to_f.round(2))%></h5></td>
+        <td><h5><%=number_with_delimiter((@total_bil.to_f-(@total_am+@total_dis)).to_f.round(2))%></h5></td>
         <td></td>
         <td></td>
       </tr>
@@ -253,7 +253,7 @@
       <tr>
         <td class="table-active"><h5>Product Sold</h5><td>
         <td></td>
-        <td><h5><%=@total_pro%></h5></td>
+        <td><h5><%=number_with_delimiter(@total_pro)%></h5></td>
         <td></td>
         <td><h4></h4></td>
         <td></td>

@@ -190,6 +190,7 @@ class PaymentsController < ApplicationController
     @accounts = Account.all
     respond_to do |format|
       if @payment.save
+				AccountPaymentJob.perform_later(current_user.superAdmin.company_type,@payment.account_id)
         format.html { redirect_to payments_path, notice: 'Payment was successfully Transfer.' }
         format.json { render :show, status: :created, location: @payment }
       else
@@ -224,6 +225,7 @@ class PaymentsController < ApplicationController
     #   @payment.account.amount = (@payment.account.amount.to_f - credit)
     #   @payment.account.save!
     # end
+		AccountPaymentJob.perform_later(current_user.superAdmin.company_type,@payment.account_id)
     respond_to do |format|
       format.html { redirect_to payments_url, notice: 'Payment was successfully destroyed.' }
       format.json { head :no_content }

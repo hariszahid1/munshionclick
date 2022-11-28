@@ -176,11 +176,11 @@
             <td><%= expense.id %></td>
             <td>
               <%expense.expense_entries.joins(:expense_type).group(:expense_type).sum(:amount).each do |expense| %>
-                <%= expense.first.title %> : <%= expense.last %>
+                <%= expense.first.title %> : <%= number_with_delimiter(expense.last) %>
                 <br>
               <%end%>
             </td>
-            <td><%= expense.expense.to_f.round(2) %></td>
+            <td><%= number_with_delimiter(expense.expense.to_f.round(2)) %></td>
             <td>
               <%=Account.where(id: expense.expense_entries.distinct.pluck(:account_id)).pluck(:title)  %>
               <%=@expense_payment[expense.id]%>
@@ -276,8 +276,8 @@
         <tr>
           <td><h5>Total</h5></td>
           <td></td>
-          <td><h5><%=@expense_total.to_f.round(2)%></h5></td>
-          <td><h5><%=@expense_payment_total%></h5></td>
+          <td><h5><%=number_with_delimiter(@expense_total.to_f.round(2))%></h5></td>
+          <td><h5><%=number_with_delimiter(@expense_payment_total)%></h5></td>
         </tr>
       </tbody>
     </table>

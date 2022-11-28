@@ -38,7 +38,7 @@
               <td class="text-center"><%= account['id'] %></td>
               <td class="text-center"><%= account['title'] %></td>
               <td class="text-center"><%= account['bank'] %></td>
-              <td class="text-center"><%= account['balance'] %></td>
+              <td class="text-center"><%= number_with_delimiter(account['balance']) %></td>
               <td class="text-center">
                 <%if account['jama_benam'] == 'Jama'  %>
                   <b style="font-size:20px;color:blue;">Jama</b>
@@ -53,7 +53,7 @@
             <td></td>
             <td></td>
             <td class="text-center"><h4>Total</h4></td>
-            <td class="text-center"><h4><%=data.first['total']%></h4></td>
+            <td class="text-center"><h4><%= number_with_delimiter(data.first['total']) %></h4></td>
             <td></td>
           </tr>
         </tbody>

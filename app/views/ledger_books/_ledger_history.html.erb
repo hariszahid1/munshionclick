@@ -53,12 +53,12 @@
         <tr class=<%= (log.event == 'destroy') ? 'follow_up_color' :  (log.event == 'update') ? 'cms-table-row1' : 'bg-light' %>>
           <td class="urdu-font"><%=log&.event %></td>
           <td class="urdu-font"><%=User.find_by(id:log&.whodunnit)&.name %></td>
-          <td class="urdu-font"><%= log&.created_at.present? ? log&.created_at.strftime("%d%b%y at %I:%M %p") : '' %></td>
+          <td class="urdu-font"><%=log&.created_at.strftime("%d%b%y at %I:%M %p")%></td>
           <td class="urdu-font"><%=log&.item_id %></td>
           <td class="urdu-font"><%=LedgerBook.find_by(id:log&.item_id)&.sys_user&.name %></td>
-          <td class="urdu-font"><%=log&.changeset&.try(:[], 'debit')&.first.to_i %></td>
+          <td class="urdu-font"><%=log&.changeset&.try(:[], 'debit')&.first.to_i %> =></td>
           <td class="urdu-font"><%=log&.changeset&.try(:[], 'debit')&.last.to_i %></td>
-          <td class="urdu-font"><%=log&.changeset&.try(:[], 'credit')&.first.to_i %></td>
+          <td class="urdu-font"><%=log&.changeset&.try(:[], 'credit')&.first.to_i %>=></td>
           <td class="urdu-font"><%=log&.changeset&.try(:[], 'credit')&.last.to_i  %></td>
           <td class="urdu-font"><%=log&.changeset&.try(:[], 'comment')&.first %></td>
           <td class="urdu-font"><%=log&.changeset&.try(:[], 'comment')&.last %></td>
