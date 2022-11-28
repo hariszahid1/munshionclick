@@ -14,7 +14,7 @@
         <%= f.select :priority, FollowUp.priorities.map { |key, value| [key.humanize, key] },{include_blank: "Please Select Task Type"},{class: "form-control"} %>
       </div>
       <div class="col-lg-6 form-group float-left text-black">
-        <%= f.date_field :date%></th>
+        <%= f.datetime_select :date, class: "form-control" %>
       </div>
       <div class="col-lg-6 form-group float-left text-black">
         <%= f.text_area :comment, placeholder: "Enter your message", hide_label: true ,class: 'urdu-font' %>
