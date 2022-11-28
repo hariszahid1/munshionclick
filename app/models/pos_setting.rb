@@ -3,7 +3,7 @@ class PosSetting < ApplicationRecord
   has_many_attached :logo_images
   has_many_attached :images
   validates :name, presence: true, uniqueness: { case_sensitive: false }
-  enum sys_type: %i[POS batamega batha industry MobileShop HousingScheme FastFood Draw CustomClear Factory ColdStorage]
+  enum sys_type: %i[POS batamega batha industry MobileShop HousingScheme FastFood Draw CustomClear Factory]
   has_paper_trail ignore: [:updated_at]
 
   PLACEMENT_OPTIONS = {
