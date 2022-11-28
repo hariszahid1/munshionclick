@@ -203,10 +203,10 @@
             </td>
             <td><%= staff.phone%></td>
             <td><%= staff.department.present? ? staff.department.title : ""%>:<%= staff.staff_raw_products.present? ? staff.staff_raw_products_titles : ""%></td>
-            <td><%= staff.staff_salary_or_wage.to_f %><% @monthly_wage += staff.staff_salary_or_wage.to_f.round(2) %></td>
-            <td><%= staff.advance_amount.to_f.round(2) %><%#@advance += staff.advance_amount.to_f.round(2) %></td>
-            <td><%= staff.wage_debit.to_f.round(2) %><% @short_pay += staff.wage_debit.to_f.round(2) %></td>
-            <td><%= staff.balance.to_f.round(2) %><% @balance += staff.balance.to_f.round(2) %></td>
+            <td><%= number_with_delimiter(staff.staff_salary_or_wage.to_f) %><% @monthly_wage += staff.staff_salary_or_wage.to_f.round(2) %></td>
+            <td><%= number_with_delimiter(staff.advance_amount.to_f.round(2)) %><%#@advance += staff.advance_amount.to_f.round(2) %></td>
+            <td><%= number_with_delimiter(staff.wage_debit.to_f.round(2)) %><% @short_pay += staff.wage_debit.to_f.round(2) %></td>
+            <td><%= number_with_delimiter(staff.balance.to_f.round(2)) %><% @balance += staff.balance.to_f.round(2) %></td>
             <td>      <%if staff.balance.to_f > 0  %>
                        <b style="font-size:20px;color:blue;">Jama</b>
                   <%elsif  staff.balance.to_f < 0  %>
@@ -295,11 +295,11 @@
           <td></td>
           <td></td>
           <td></td>
-          <td><h4><%= @monthly_wage.to_i.round(2) if @monthly_wage.present?%><h4></td>
-          <td><h4><%= @total.first.first.to_i.round(2) if @total.first.present?%><h4></td>
+          <td><h4><%= number_with_delimiter(@monthly_wage.to_i.round(2)) if @monthly_wage.present?%><h4></td>
+          <td><h4><%= number_with_delimiter(@total.first.first.to_i.round(2)) if @total.first.present?%><h4></td>
           <td></td>
-          <td><h4><%= @total.first.last.to_i.round(2) %><h4></td>
-          <td><h4><%= @total.first.second.to_i.round(2) %><h4></td>
+          <td><h4><%= number_with_delimiter(@total.first.last.to_i.round(2)) %><h4></td>
+          <td><h4><%= number_with_delimiter(@total.first.second.to_i.round(2)) %><h4></td>
             <td></td>
         </tr>
       </tbody>

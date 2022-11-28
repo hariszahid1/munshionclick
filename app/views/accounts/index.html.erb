@@ -188,7 +188,7 @@
             <%end %>
           </td>
           <td class="urdu-font"><%= account.bank_name %></td>
-          <td><%= account.amount.to_f.round(2) %></td>
+          <td><%= number_with_delimiter(account.amount.to_f.round(2)) %></td>
           <td>
             <%if account.amount.to_f < 0  %>
              <b style="font-size:20px;color:blue;">Jama</b>
@@ -284,7 +284,7 @@
         <td></td>
         <td></td>
         <td></td>
-        <td><h5><%=@account_total.first.to_f.round(2)%></h5></td>
+        <td><h5><%=number_with_delimiter(@account_total.first.to_f.round(2))%></h5></td>
         <td></td>
 
       </tr>
