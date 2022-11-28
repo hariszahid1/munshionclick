@@ -1,8 +1,8 @@
 <tr>
   <td><%= check_box_tag 'object_ids[]', investment.id %></td>
   <td><%= investment.id %></td>
-  <td><%= investment.debit.to_f.round(2) %></td>
-  <td><%= investment.credit.to_f.round(2) %></td>
+  <td><%= number_with_delimiter(investment.debit.to_f.round(2)) %></td>
+  <td><%= number_with_delimiter(investment.credit.to_f.round(2)) %></td>
   <td><%= investment.account_id.present? ? investment.account.title : ''%></td>
   <td><span title="<%= investment.comment %>" class='truncate-text'><%= investment.comment %></span></td>
   <td>

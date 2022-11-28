@@ -40,39 +40,39 @@
     <tbody>
       <%@purchase_item.each do |purchase|%>
       <tr>
-        <td><%=purchase.first%></td>
+        <td><%= purchase.first %></td>
         <td>
-          <%=(purchase.second).round(2) if purchase.second%>
+          <%= number_with_delimiter((purchase.second).round(2)) if purchase.second%>
         </td>
         <td>
-          <%=(purchase.third).round(2) if purchase.third%>
+          <%= number_with_delimiter((purchase.third).round(2)) if purchase.third%>
         </td>
         <td>
-          <%=(purchase.fourth).round(2)  if purchase.fourth%>
+          <%= number_with_delimiter((purchase.fourth).round(2))  if purchase.fourth%>
         </td>
         <td>
-          <%=(purchase.fifth).round(2)  if purchase.fifth%>
+          <%= number_with_delimiter((purchase.fifth).round(2))  if purchase.fifth%>
         </td>
         <td>
-          <%=net_sale=(purchase.fourth.to_f-purchase.fifth.to_f).round(2)%>
+          <%= number_with_delimiter(net_sale=(purchase.fourth.to_f-purchase.fifth.to_f).round(2)) %>
         </td>
         <td>
-          <%=(net_sale-purchase.third.to_f).round(2)%>
+          <%= number_with_delimiter((net_sale-purchase.third.to_f).round(2))%>
         </td>
         <td>
-          <%=(purchase[5].to_f).round(2)%>
+          <%= number_with_delimiter((purchase[5].to_f).round(2))%>
         </td>
       </tr>
       <%end%>
       <tr class="thead-light">
         <td><h5>Total</h5></td>
-        <td><h5><%=(@total_all.first.first.to_f).round(2)%></h5></td>
-        <td><h5><%=(@total_all.first.second.to_f).round(2)%></h5></td>
-        <td><h5><%=(@total_all.first.third.to_f).round(2)%></h5></td>
-        <td><h5><%=(@total_all.first.fourth.to_f+@purchase_discount).round(2)%></h5></td>
-        <td><h5><%=total_net_sale=(@total_all.first.third.to_f-@total_all.first.fourth.to_f-@purchase_discount).round(2)%></h5></td>
-        <td><h5><%=@total_profit=(total_net_sale-@total_all.first.second.to_f).round(2)%></h5></td>
-        <td><h5><%=@total_all.first.fifth.to_f%></h5></td>
+        <td><h5><%= number_with_delimiter((@total_all.first.first.to_f).round(2)) %></h5></td>
+        <td><h5><%=number_with_delimiter((@total_all.first.second.to_f).round(2)) %></h5></td>
+        <td><h5><%= number_with_delimiter((@total_all.first.third.to_f).round(2)) %></h5></td>
+        <td><h5><%= number_with_delimiter((@total_all.first.fourth.to_f+@purchase_discount).round(2)) %></h5></td>
+        <td><h5><%= number_with_delimiter(total_net_sale=(@total_all.first.third.to_f-@total_all.first.fourth.to_f-@purchase_discount).round(2)) %></h5></td>
+        <td><h5><%= number_with_delimiter(@total_profit=(total_net_sale-@total_all.first.second.to_f).round(2)) %></h5></td>
+        <td><h5><%= number_with_delimiter(@total_all.first.fifth.to_f) %></h5></td>
       </tr>
       <tr>
         <td><h6>Investment</h6></td>
@@ -81,7 +81,7 @@
         <td></td>
         <td></td>
         <td></td>
-        <td><%=(@investment).round(2)%></td>
+        <td><%=number_with_delimiter((@investment).round(2))%></td>
       </tr>
       <tr>
         <td><h6>Expense</h6></td>
@@ -90,7 +90,7 @@
         <td></td>
         <td></td>
         <td></td>
-        <td><%=(@expense).round(2)%></td>
+        <td><%= number_with_delimiter((@expense).round(2)) %></td>
       </tr>
       <tr>
         <td><h6>Salary</h6></td>
@@ -99,7 +99,7 @@
         <td></td>
         <td></td>
         <td></td>
-        <td><%=(@salary+@advance).round(2)%></td>
+        <td><%= number_with_delimiter((@salary+@advance).round(2))%></td>
       </tr>
       <tr class="thead-light">
         <td><h5>Total</h5></td>
@@ -109,12 +109,12 @@
         <td></td>
         <td></td>
         <td><h5>
-          <%=total_profit=(@total_profit-(@salary.to_f+@advance.to_f+@expense.to_f+@investment.to_f)).round(2)%>
+          <%= number_with_delimiter(total_profit=(@total_profit-(@salary.to_f+@advance.to_f+@expense.to_f+@investment.to_f)).round(2))%>
           <%if current_user.superAdmin.company_type=="as_traders"%>
-          | <%=(total_profit*0.6).round(2)%> | <%=(total_profit*0.3).round(2)%> | <%=(total_profit*0.1).round(2)%>
+          | <%= number_with_delimiter((total_profit*0.6).round(2)%> | <%=(total_profit*0.3).round(2)%> | <%=(total_profit*0.1).round(2)) %>
           <%end%>
         </h5></td>
-        <td><h5><%=total_profit+@total_all.first.fifth.to_f%></h5></td>
+        <td><h5><%= number_with_delimiter(total_profit+@total_all.first.fifth.to_f) %></h5></td>
       </tr>
     </tbody>
   </table>

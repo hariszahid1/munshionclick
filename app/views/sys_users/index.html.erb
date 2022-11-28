@@ -196,8 +196,8 @@
           <td><%= link_to sys_user.user_group, user_groups_path() %></td>
           <td><%= sys_user.status %></td>
           <td><%= sys_user.occupation %></td>
-          <td><b><%= sys_user.opening_balance.to_f.round(2) %></b></td>
-          <td><b><%= sys_user.balance.to_f.round(2) %></b> </td>
+          <td><b><%= number_with_delimiter(sys_user.opening_balance.to_f.round(2)) %></b></td>
+          <td><b><%= number_with_delimiter(sys_user.balance.to_f.round(2)) %></b> </td>
            <td>
             <%if (sys_user.balance.to_f > 0 ) %>
               <b style="font-size:20px;color:blue;">Jama</b>
@@ -291,7 +291,7 @@
           <td></td>
           <td><%= %></td>
           <td><%= %></td>
-          <td><b><%=@sys_user_balance.to_f.round(2) %></b></td>
+          <td><b><%=number_with_delimiter(@sys_user_balance.to_f.round(2)) %></b></td>
 
         </tr>
       </tbody>

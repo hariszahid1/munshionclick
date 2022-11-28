@@ -48,7 +48,7 @@
               <th class="text-center"><%= exp['id'] %></th>
               <td class="text-center"><%= exp['date'] %></td>
               <td class="text-center"><%= exp['type_wise'] %></td>
-              <td class="text-center"><%= exp['expense'] %></td>
+              <td class="text-center"><%= number_with_delimiter(exp['expense']) %></td>
               <td class="text-center"><%= exp['paid_by'] %></td>
               <td class="text-center"><%= exp['expense_remark'] %></td>
               <td class="text-center"><%= exp['comment'] %></td>
