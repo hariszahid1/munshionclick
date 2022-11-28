@@ -160,9 +160,9 @@
               <td><%= product.stock %></td>
             <%end%>
             <td><%= product.cost.to_f.round(20) %></td>
-            <td><%= product.sale.to_f.round(20) %></td>
+            <td><%= number_with_delimiter(product.sale.to_f.round(20)) %></td>
             <td><%=(product.cost.to_f*product.stock.to_f).round(2)%></td>
-            <td><%=(product.sale.to_f*product.stock.to_f).round(2)%></td>
+            <td><%= number_with_delimiter((product.sale.to_f*product.stock.to_f).round(2))%></td>
             <%if pos_setting_sys_type=="batha"%>
               <td><%= product.raw_product.present? ? product.raw_product.title : ""%></td>
             <%end%>
@@ -230,7 +230,7 @@
           <td><h5></h5></td>
           <td><h5></h5></td>
           <td><h5></h5></td>
-          <td><h5><%=@total.to_f.round(2)%></h5></td>
+          <td><h5><%= number_with_delimiter(@total.to_f.round(2)) %></h5></td>
 
         </tr>
         </tbody>
