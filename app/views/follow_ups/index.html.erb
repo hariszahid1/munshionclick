@@ -57,6 +57,16 @@
   <table data-toggle="table" data-search="true" id="follow_up_table">
     <thead>
       <tr>
+        <th><input type="checkbox" id="master" class='select-all-checkbox'>
+					<div class="icon-container float-center">
+						<span class="ml-2 mt-2">
+          		<div class="my-icon my-view">
+								<button class="icon-div btn delete-selected p-2 " type='button' value='SysUser'>
+									<i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i>
+								</button>
+							</div>
+						</span>
+					</div>
         <th><input type="checkbox" id="master" class='select-all-checkbox'></th>
         <th>CMS User</th>
         <th>Task Type<div class='float-right'><%= sort_link(@q, :task_type, "", {}, class: 'sorting-button') %></div></th>
