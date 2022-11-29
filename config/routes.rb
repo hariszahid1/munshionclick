@@ -29,6 +29,7 @@ Rails.application.routes.draw do
   resources :staff_ledger_books  do
     collection do
       get :transfer, to: 'staff_ledger_books#transfer'
+      get :view_history, to: 'staff_ledger_books#view_history'
     end
   end
   resources :product_stock_exchanges
