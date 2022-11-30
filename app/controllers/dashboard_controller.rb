@@ -274,6 +274,7 @@ class DashboardController < ApplicationController
 
     respond_to do |format|
       format.js
+      format.pdf
       format.html
     end
 
