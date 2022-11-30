@@ -53,7 +53,9 @@
 			</li>
 		<%end%>
 	</ul>
-
+        <%= hidden_field_tag "ExpenseDate", @exp_date, { :id => "ExpenseDate" } %>
+        <%= hidden_field_tag "ExpenseType", @exp_type, { :id => "ExpenseType" } %>
+        <%= hidden_field_tag "theType", @the_type, { :id => "theType" } %>
   <%= search_form_for @q, url: expenses_path, class: "admin-controls", method: "get" do |f| %>
     <div class="tab-content">
       <div class="tab-pane active mb-3 card shadow-sm mt-2 border-radius-1" id="search" role="tabpanel">
@@ -132,9 +134,7 @@
         </p>
       </div>
       <div class="tab-pane mb-3 shadow-sm mt-2 border-radius-1 p-5" id="analytics" role="tabpanel">
-        <%= hidden_field_tag "ExpenseDate", @exp_date, { :id => "ExpenseDate" } %>
-        <%= hidden_field_tag "ExpenseType", @exp_type, { :id => "ExpenseType" } %>
-        <%= hidden_field_tag "theType", @the_type, { :id => "theType" } %>
+
       <div class="row mb-4">
         <div class="col-lg-10 mx-auto">
          <div class="my-chart-Container1">
