@@ -53,6 +53,10 @@
 				</li>
 			<%end%>
 	</ul>
+  <%= hidden_field_tag "subTitle", @sub_title, { :id => "subTitle" } %>
+  <%= hidden_field_tag "subUnit", @sub_unit, { :id => "subUnit" } %>
+  <%= hidden_field_tag "subTitle1", @sub_title, { :id => "subTitle1" } %>
+  <%= hidden_field_tag "subUnit1", @sub_unit, { :id => "subUnit1" } %>
 <%= search_form_for @q, url: product_sub_categories_path, class: "admin-controls", method: "get" do |f| %>
   <div class="tab-content">
       <div class="tab-pane active mb-3 card shadow-sm mt-2 border-radius-1" id="search" role="tabpanel">
@@ -121,8 +125,6 @@
     <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1 p-1" id="analytics" role="tabpanel">
       <div class="row d-flex">
         <div class="col-lg-6">
-          <%= hidden_field_tag "subTitle", @sub_title, { :id => "subTitle" } %>
-          <%= hidden_field_tag "subUnit", @sub_unit, { :id => "subUnit" } %>
           <div class="my-chart-Container">
             <div class="mychartBox">
               <canvas id="myChart"></canvas>
@@ -130,8 +132,6 @@
           </div>
         </div>
         <div class="col-lg-6">
-          <%= hidden_field_tag "subTitle1", @sub_title, { :id => "subTitle1" } %>
-          <%= hidden_field_tag "subUnit1", @sub_unit, { :id => "subUnit1" } %>
           <div class="my-chart-Container">
             <div class="mychartBox">
               <canvas id="myChart1"></canvas>

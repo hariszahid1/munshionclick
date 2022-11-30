@@ -53,7 +53,10 @@
 				</li>
 			<%end%>
 	</ul>
-
+<%= hidden_field_tag "userGroupTitle", @user_group_title, { :id => "userGroupTitle" } %>
+<%= hidden_field_tag "userGroupCount", @user_group_count, { :id => "userGroupCount" } %>
+<%= hidden_field_tag "userGroupTitle1", @user_group_title, { :id => "userGroupTitle1" } %>
+<%= hidden_field_tag "userGroupCount1", @user_group_count, { :id => "userGroupCount1" } %>
 <%= search_form_for @q, url: user_groups_path, class: "admin-controls", method: "get" do |f| %>
 
   <div class="tab-content">
@@ -120,8 +123,6 @@
     <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1 p-1" id="analytics" role="tabpanel">
         <div class="row d-flex">
           <div class="col-lg-6">
-            <%= hidden_field_tag "userGroupTitle", @user_group_title, { :id => "userGroupTitle" } %>
-            <%= hidden_field_tag "userGroupCount", @user_group_count, { :id => "userGroupCount" } %>
             <div class="my-chart-Container">
               <div class="mychartBox">
                 <canvas id="myChart"></canvas>
@@ -129,8 +130,6 @@
             </div>
           </div>
           <div class="col-lg-6">
-            <%= hidden_field_tag "userGroupTitle1", @user_group_title, { :id => "userGroupTitle1" } %>
-            <%= hidden_field_tag "userGroupCount1", @user_group_count, { :id => "userGroupCount1" } %>
             <div class="my-chart-Container">
               <div class="mychartBox">
                 <canvas id="myChart1"></canvas>
