@@ -41,25 +41,35 @@
   </div>
   <ul class="nav nav-pills ml-1" role="tablist">
       <li class="nav-item">
-        <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
+        <a class="nav-link tab-label active investment-search-exp-tab" data-toggle="tab" href="#search" role="tab">Search</a>
       </li>
 			
 			<%if (check_can_import_export(@module_permission))%>
 				<li class="nav-item">
-					<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
+					<a class="nav-link tab-label investment-search-exp-tab" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
 				</li>
 			<%end%>
+      <li class="nav-item">
+        <a class="nav-link tab-label investment-logs-tab" data-toggle="tab" href="#logs" role="tab">Logs</a>
+      </li>
 	</ul>
-  <%= search_form_for @q, url: investments_path, class: "admin-controls", method: "get" do |f| %>
-    <div class="tab-content">
-      <div class="tab-pane active mb-3 card shadow-sm mt-2 p-3" style="border-radius: 20px" id="search" role="tabpanel">
+
+  <div class="tab-content">
+    <div class="tab-pane active mb-3 card shadow-sm mt-2 p-3" style="border-radius: 20px" id="search" role="tabpanel">
+      <%= search_form_for @q, url: investments_path, class: "admin-controls", method: "get" do |f| %>
         <div class="row d-flex">
           <div class="col">
+            <div class="col-lg-4 form-group float-left">
+              <%= f.select :account_id_in, options_from_collection_for_select(@accounts, "id", ->(st){"#{st.title} \u{27F6} #{st.bank_name}"},f.object.account_id_in),{:include_blank => "Select the Account Title"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Account Title"} }%>
+            </div>
             <div class="col-lg-4 form-group float-left">
               <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker',placeholder: "YYYY-MM-DD" %>
             </div>
             <div class="col-lg-4 form-group float-left">
               <%= f.search_field :created_at_lteq,class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
+            </div>
+            <div class="col-lg-4 form-group float-left">
+              <%= f.search_field :comment_cont, placeholder: "search by comment", title: "search by comment" ,:class=>"form-control" %>
             </div>
             <div class="col-lg-3 form-group float-left">
               <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
@@ -111,89 +121,102 @@
             <% end %>
           </div>
         </div>
-      </div>
-      <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="import-export" role="tabpanel">
-        <p>
+      <% end %>
+    </div>
+    <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="import-export" role="tabpanel">
+      <p>
+        <%= search_form_for @q, url: investments_path, class: "admin-controls", method: "get" do |f| %>
           <div class="d-flex">
-          <button class="btn btn-info ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
-          <button class="btn btn-danger ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
+            <button class="btn btn-info ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
+            <button class="btn btn-danger ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
           </div>
-        </p>
-      </div>
+        <% end %>
+      </p>
     </div>
-  <% end %>  
-  <%= render 'map_columns/map_column_partials' %>
-  <table data-toggle="table" data-search="true" id="investment_table">
-    <thead>
-      <tr>
-        <th><input type="checkbox" id="master" class='select-all-checkbox' style="cursor: pointer;">
-			  	<%if (check_can_delete(@module_permission))%>
-			  		<div class="icon-container float-center">
-			  			<span class="ml-2 mt-2">
-            		<div class="my-icon my-view">
-			  					<button class="icon-div btn delete-selected p-2 " type='button' value='Investment'>
-			  						<i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i>
-			  					</button>
-			  				</div>
-			  			</span>
-			  		</div>
-			  	<%end%>
-			  </th>
-        <th><%= sort_link(@q, :id, 'ID') %></th>
-        <th><%= sort_link(@q, :debit, 'Debit') %></th>
-        <th><%= sort_link(@q, :credit, 'Credit') %></th>
-        <th><%= sort_link(@q, :account_id, 'Paid By') %></th>
-        <th class="urdu-font">Comment</th>
-        <th><%= sort_link(@q, :created_at, 'Date') %></th>
-        <th class="border_none">Action</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <%= render partial: 'investment', collection: @investments %>
-      <tr>
-        <td></td>
-        <td><h5>Total</h5></td>
-        <td><h5><%=number_with_delimiter(@total_investment&.first&.first) %></h5></td>
-        <td><h5><%= number_with_delimiter(@total_investment&.first&.last) %></h5></td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-<div class="clearfix"></div>
-<div class="row">
-  <div class="col-lg-4 col-sm-4">
-    <%= page_entries_info @investments %>
-  </div>
-  <div class="col-lg-8 col-sm-8 pagination-left">
-    <%= paginate @investments %>
-  </div>
-</div>
-
-<%= form_for :bulk_import, url: bulk_import_data_path, method: :post, html: {class: "bulk-import-form"} do |f| %>
-  <div class="modal fade" id="importFile" tabindex="-1" role="dialog" aria-labelledby="importFileTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLongTitle">Import file</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+    <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="logs" role="tabpanel">
+      <p>
+        <div class="d-flex">
+          <%= link_to view_history_investments_path, class: "btn btn-success d-none", id: "investment-logs", remote:true do %>
+            show logs
+          <% end %>
+          <div id = "show-logs"></div>
         </div>
-        <div class="modal-body">
-          <%= f.file_field :file, required: true, accept: '.csv' %>
-          <%= f.hidden_field :table_name, value: 'Investment' %>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <%= f.submit 'Import', class: 'btn btn-primary' %>
-        </div>
-      </div>
+      </p>
     </div>
   </div>
-<% end %>
-<div class="show-data"></div>
+  <div class="investment-book-index-card">
+    <%= render 'map_columns/map_column_partials' %>
+    <table data-toggle="table" data-search="true" id="investment_table">
+      <thead>
+        <tr>
+          <th><input type="checkbox" id="master" class='select-all-checkbox' style="cursor: pointer;">
+            <%if (check_can_delete(@module_permission))%>
+              <div class="icon-container float-center">
+                <span class="ml-2 mt-2">
+                  <div class="my-icon my-view">
+                    <button class="icon-div btn delete-selected p-2 " type='button' value='Investment'>
+                      <i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i>
+                    </button>
+                  </div>
+                </span>
+              </div>
+            <%end%>
+          </th>
+          <th><%= sort_link(@q, :id, 'ID') %></th>
+          <th><%= sort_link(@q, :debit, 'Debit') %></th>
+          <th><%= sort_link(@q, :credit, 'Credit') %></th>
+          <th><%= sort_link(@q, :account_id, 'Paid By') %></th>
+          <th class="urdu-font">Comment</th>
+          <th><%= sort_link(@q, :created_at, 'Date') %></th>
+          <th class="border_none">Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <%= render partial: 'investment', collection: @investments %>
+        <tr>
+          <td></td>
+          <td><h5>Total</h5></td>
+          <td><h5><%=number_with_delimiter(@total_investment&.first&.first) %></h5></td>
+          <td><h5><%= number_with_delimiter(@total_investment&.first&.last) %></h5></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>  
+</div>
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-lg-4 col-sm-4 investment-book-index-card">
+      <%= page_entries_info @investments %>
+    </div>
+    <div class="col-lg-8 col-sm-8 pagination-left investment-book-index-card">
+      <%= paginate @investments %>
+    </div>
+  </div>
+
+  <%= form_for :bulk_import, url: bulk_import_data_path, method: :post, html: {class: "bulk-import-form"} do |f| %>
+    <div class="modal fade" id="importFile" tabindex="-1" role="dialog" aria-labelledby="importFileTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Import file</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <%= f.file_field :file, required: true, accept: '.csv' %>
+            <%= f.hidden_field :table_name, value: 'Investment' %>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <%= f.submit 'Import', class: 'btn btn-primary' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+  <div class="show-data"></div>
 <script>
   $(document).ready(function() {
     if ($(".bootstrap-table").length == 0){
@@ -201,6 +224,16 @@
     }
     $("#investment_list").removeClass('hidden');
     FontAwesome.dom.i2svg();
+
+    $('.investment-logs-tab').on('click', function(){
+      $('#investment-logs').click();
+      $('.investment-book-index-card').addClass('d-none')
+    })
+
+
+    $('.investment-search-exp-tab').on('click', function(){
+      $('.investment-book-index-card').removeClass('d-none')
+    })
   });
   $(document).ready(function() {
     setTimeout(function(){
