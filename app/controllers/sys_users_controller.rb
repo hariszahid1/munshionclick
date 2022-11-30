@@ -19,6 +19,27 @@ class SysUsersController < ApplicationController
     download_sys_users_pdf_file if params[:pdf].present?
     send_email_file if params[:email].present?
     export_file if params[:export_data].present?
+    @count_sys_user = SysUser.all.group(:user_group).count
+    @count_status = SysUser.all.group(:status).count  
+
+    @user_count = []
+    @user_count.push(SysUser.where('balance > 0').count)
+    @user_count.push(SysUser.where('balance < 0').count)
+    @user_count.push(SysUser.where('balance = 0').count)
+
+    @user_group_title = @count_sys_user.keys.map { |a| a.gsub(' ', '-') }
+    @user_group_count = @count_sys_user.values
+    @status_title = @count_status.keys
+    @status_count = @count_status.values
+    
+    @total_cities_count = Contact.joins(:city).group('cities.title').count
+    @city_title = @total_cities_count.keys.map { |a| a.gsub(' ', '-') }
+    @city_user = @total_cities_count.values
+
+    respond_to do |format|
+      format.js
+      format.html
+    end
   end
 
   # GET /sys_users/1

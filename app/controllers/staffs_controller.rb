@@ -32,6 +32,21 @@ class StaffsController < ApplicationController
     download_staffs_pdf_file if params[:submit_pdf].present? || params[:salary_submit_pdf].present? || params[:wage_submit_pdf].present?
     send_email_file if params[:email].present?
     export_file if params[:export_data].present?
+
+    @staff_count = []
+    @staff_count.push(Staff.where('balance > 0').count)
+    @staff_count.push(Staff.where('balance < 0').count)
+    @staff_count.push(Staff.where('balance = 0').count)
+
+    @total_dep_count = Staff.joins(:department).group('departments.title').count
+    @dep_title = @total_dep_count.keys.map { |a| a.gsub(' ', '-') }
+    @dep_user = @total_dep_count.values
+
+    respond_to do |format|
+      format.js
+      format.html
+    end
+
   end
 
   def payable

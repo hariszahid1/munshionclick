@@ -61,13 +61,18 @@
           <li class="nav-item">
             <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
           </li> 
+          <li class="nav-item">
+            <a class="nav-link tab-label" data-toggle="tab" href="#analytics" data-remote="true" role="tab">Analytics</a>
+          </li>
           <%if (check_can_import_export(@module_permission))%>
             <li class="nav-item">
              <a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
             </li>
           <% end %>
       </ul>
-
+      <%= hidden_field_tag "staffCount", @staff_count, { :id => "staffCount" } %>
+      <%= hidden_field_tag "depTitle", @dep_title, { :id => "depTitle" } %>
+      <%= hidden_field_tag "depCount", @dep_user, { :id => "depCount" } %>
       <%= search_form_for @q, url: staffs_path, class: "admin-controls", method: "get" do |f| %>
        <div class="tab-content mb-2">
           <div class="tab-pane active card border-radius-1" id="search" role="tabpanel">
@@ -151,7 +156,24 @@
               </div>
             </div>
           </div>
-
+          <div class="tab-pane card border-radius-1 p-5" id="analytics" role="tabpanel">
+            <div class="row d-flex">
+              <div class="col-lg-6">
+                <div class="my-chart-Container">
+                  <div class="mychartBox card border-radius-1 shadow mt-2">
+                    <canvas id="myChart"></canvas>
+                  </div> 
+                </div>
+              </div>
+              <div class="col-lg-6">  
+                <div class="my-chart-Container">
+                  <div class="mychartBox card border-radius-1 shadow mt-2">
+                    <canvas id="myChart1"></canvas>
+                  </div> 
+                </div>
+              </div>  
+            </div>
+          </div>
           <div class="tab-pane card border-radius-1" id="import-export" role="tabpanel">
               <p>
                 <div class="d-flex ml-2">
@@ -162,6 +184,8 @@
             </div>
           </div>
       <% end %>  
+
+                    
 
   <div class="clearfix"></div>
   <div class="card border-radius-1 p-2">
