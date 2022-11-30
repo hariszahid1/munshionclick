@@ -53,6 +53,10 @@
 			<%end%>
      
 	</ul>
+  <%= hidden_field_tag "countryTitle", @country_title, { :id => "countryTitle" } %>
+  <%= hidden_field_tag "countryUser", @country_user, { :id => "countryUser" } %>
+  <%= hidden_field_tag "countryTitle1", @country_title, { :id => "countryTitle1" } %>
+  <%= hidden_field_tag "countryUser1", @country_user, { :id => "countryUser1" } %>
   <%= search_form_for @q, url: countries_path, class: "admin-controls", method: "get" do |f| %>
     <div class="tab-content">
       <div class="tab-pane active mb-3 card shadow-sm mt-2 border-radius-1"" id="search" role="tabpanel">
@@ -120,8 +124,6 @@
       <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1 p-1" id="analytics" role="tabpanel">
         <div class="row d-flex border-radius-1">
           <div class="col-lg-6">
-            <%= hidden_field_tag "countryTitle", @country_title, { :id => "countryTitle" } %>
-            <%= hidden_field_tag "countryUser", @country_user, { :id => "countryUser" } %>
             <div class="my-chart-Container">
               <div class="mychartBox">
                 <canvas id="myChart"></canvas>
@@ -129,8 +131,6 @@
             </div>
           </div>
           <div class="col-lg-6">
-            <%= hidden_field_tag "countryTitle1", @country_title, { :id => "countryTitle1" } %>
-            <%= hidden_field_tag "countryUser1", @country_user, { :id => "countryUser1" } %>
             <div class="my-chart-Container">
               <div class="mychartBox">
                 <canvas id="myChart1"></canvas>
