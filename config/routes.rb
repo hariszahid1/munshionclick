@@ -86,7 +86,11 @@ Rails.application.routes.draw do
   resources :staff_raw_products
   resources :raw_products
   resources :departments
-  resources :expense_entries
+  resources :expense_entries do
+    collection do
+      get :view_history, to: 'expense_entries#view_history'
+    end
+  end
   resources :salary_details do
     collection do
       get :vehicle, to: 'salary_details#index_vehicle'
@@ -105,6 +109,7 @@ Rails.application.routes.draw do
   resources :payments do
     collection do
       get :transfer, to: 'payments#transfer'
+      get :view_history, to: 'payments#view_history'
     end
   end
   resources :accounts do
@@ -113,7 +118,11 @@ Rails.application.routes.draw do
     end
   end
   resources :logs
-  resources :investments
+  resources :investments do
+    collection do
+      get :view_history, to: 'investments#view_history'
+    end
+  end
   resources :pos_settings
   resources :ledger_books do
     collection do
