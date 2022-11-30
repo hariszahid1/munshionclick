@@ -111,7 +111,7 @@
         <td><h5>
           <%= number_with_delimiter(total_profit=(@total_profit-(@salary.to_f+@advance.to_f+@expense.to_f+@investment.to_f)).round(2))%>
           <%if current_user.superAdmin.company_type=="as_traders"%>
-          | <%= number_with_delimiter((total_profit*0.6).round(2)%> | <%=(total_profit*0.3).round(2)%> | <%=(total_profit*0.1).round(2)) %>
+          | <%= number_with_delimiter((total_profit*0.6).round(2))%> | <%= number_with_delimiter((total_profit*0.3).round(2))%> | <%= number_with_delimiter((total_profit*0.1).round(2)) %>
           <%end%>
         </h5></td>
         <td><h5><%= number_with_delimiter(total_profit+@total_all.first.fifth.to_f) %></h5></td>
