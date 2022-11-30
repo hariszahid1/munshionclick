@@ -19,17 +19,17 @@
               </li>
             </ol>
           </div>
-          <div class="row mb-4">
+          <div class="row mb-5">
             <% if check_can_create(@module_permission) %>
               <%= link_to new_sys_user_path, remote: true, class: "btn btn-success mt-3 ml-3" do %>
                 <i class="fa fa-plus" aria-hidden="true"></i>
                   Create
               <% end %>
-              <%= link_to payable_sys_users_sys_users_path, class: "btn btn-danger mt-3 ml-3" do %>
+              <%= link_to payable_sys_users_sys_users_path, class: "btn btn-primary mt-3 ml-3" do %>
                   <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                     Payable
               <% end %>
-               <%= link_to receiveable_sys_users_path, class: "btn btn-warning mt-3 ml-3" do %>
+               <%= link_to receiveable_sys_users_path, class: "btn btn-danger mt-3 ml-3" do %>
                   <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                     Reciveable
                 <% end %>
@@ -55,12 +55,23 @@
           <li class="nav-item">
             <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link tab-label" data-toggle="tab" href="#analytics" data-remote="true" role="tab">Analytics</a>
+          </li>
 					<%if (check_can_import_export(@module_permission))%>
 						<li class="nav-item">
 						<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
 						</li>
 					<%end%>
       </ul>
+
+    <%= hidden_field_tag "userCount", @user_count, { :id => "userCount" } %>
+    <%= hidden_field_tag "userGroupTitle", @user_group_title, { :id => "userGroupTitle" } %>
+    <%= hidden_field_tag "userGroupCount", @user_group_count, { :id => "userGroupCount" } %>
+    <%= hidden_field_tag "statusTitle", @status_title, { :id => "statusTitle" } %>
+    <%= hidden_field_tag "statusCount", @status_count, { :id => "statusCount" } %>
+    <%= hidden_field_tag "cityTitle", @city_title, { :id => "cityTitle" } %>
+    <%= hidden_field_tag "cityUser", @city_user, { :id => "cityUser" } %>
 
     <%= search_form_for @q, url: sys_users_path, class: "admin-controls", method: "get" do |f| %>
        <div class="tab-content mb-3">
@@ -129,18 +140,50 @@
               <% end %>
             </div>
           </div>
-
-          <div class="tab-pane card border-radius-1" id="import-export" role="tabpanel">
-              <p>
-                <div class="d-flex ml-2">
-                  <button class="btn btn-danger ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
-                  <button class="btn btn-info ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
+          <div class="tab-pane card border-radius-1 p-5" id="analytics" role="tabpanel">
+            <div class="row d-flex">
+              <div class="col-lg-6">
+                <div class="my-chart-Container">
+                  <div class="mychartBox card border-radius-1 shadow mt-2">
+                    <canvas id="myChart"></canvas>
+                  </div> 
                 </div>
-              </p>
+              </div>
+              <div class="col-lg-6">  
+                <div class="my-chart-Container">
+                  <div class="mychartBox card border-radius-1 shadow mt-2">
+                    <canvas id="myChart1"></canvas>
+                  </div> 
+                </div>
+              </div>  
+            </div>
+            <div class="row d-flex mt-3">
+              <div class="col-lg-6">
+                <div class="my-chart-Container">
+                  <div class="mychartBox card border-radius-1 shadow mt-2">
+                    <canvas id="myChart2"></canvas>
+                  </div> 
+                </div>
+              </div>
+              <div class="col-lg-6">  
+                <div class="my-chart-Container">
+                  <div class="mychartBox card border-radius-1 shadow mt-2">
+                    <canvas id="myChart3"></canvas>
+                  </div> 
+                </div>
+              </div>  
             </div>
           </div>
+          <div class="tab-pane card border-radius-1" id="import-export" role="tabpanel">
+            <p>
+              <div class="d-flex ml-2">
+                <button class="btn btn-danger ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
+                <button class="btn btn-info ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
+              </div>
+            </p>
+          </div>
+          </div>
       <% end %>
-
 
  <div class='card border-radius-1 p-3'>
   <table data-toggle="table" data-search="true" class="overflow-hidden border-radius-1">
@@ -200,9 +243,9 @@
           <td><b><%= number_with_delimiter(sys_user.balance.to_f.round(2)) %></b> </td>
            <td>
             <%if (sys_user.balance.to_f > 0 ) %>
-              <b style="font-size:20px;color:blue;">Jama</b>
+              <b style="font-size:20px;color:blue;">Jama/Payable</b>
             <%elsif (sys_user.balance.to_f < 0 ) %>
-              <b style="font-size:20px;color:red;">Benam</b>
+              <b style="font-size:20px;color:red;">Benam/Receivable</b>
             <%else%>
               <b style="font-size:20px;color: #6cec53 ;">Nill</b>
             <%end%>
@@ -345,3 +388,5 @@
     FontAwesome.dom.i2svg();
   });
 </script>
+
+

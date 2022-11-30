@@ -55,6 +55,8 @@
 	</ul>
   <%= hidden_field_tag "cityTitle", @city_title, { :id => "cityTitle" } %>
   <%= hidden_field_tag "cityUser", @city_user, { :id => "cityUser" } %>
+  <%= hidden_field_tag "cityTitle1", @city_title, { :id => "cityTitle1" } %>
+  <%= hidden_field_tag "cityUser1", @city_user, { :id => "cityUser1" } %>
   <%= search_form_for @q, url: cities_path, class: "admin-controls", method: "get" do |f| %>
     <div class="tab-content">
       <div class="tab-pane active mb-3 card shadow-sm mt-2 p-3 border-radius-1" id="search" role="tabpanel">
@@ -127,8 +129,6 @@
             </div>
           </div>
           <div class="col-lg-6">
-            <%= hidden_field_tag "cityTitle1", @city_title, { :id => "cityTitle1" } %>
-            <%= hidden_field_tag "cityUser1", @city_user, { :id => "cityUser1" } %>
             <div class="my-chart-Container">
               <div class="mychartBox">
                 <canvas id="myChart1"></canvas>
