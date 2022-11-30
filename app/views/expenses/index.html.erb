@@ -44,6 +44,9 @@
 		<li class="nav-item">
 			<a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
 		</li>
+    <li class="nav-item">
+			<a class="nav-link tab-label" data-toggle="tab" data-remote="true" href="#analytics" role="tab">Analytics</a>
+		</li>
 		<%if (check_can_import_export(@module_permission))%>
 			<li class="nav-item">
 				<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
@@ -127,6 +130,52 @@
             <% end %>
           </div>
         </p>
+      </div>
+      <div class="tab-pane mb-3 shadow-sm mt-2 border-radius-1 p-5" id="analytics" role="tabpanel">
+        <%= hidden_field_tag "ExpenseDate", @exp_date, { :id => "ExpenseDate" } %>
+        <%= hidden_field_tag "ExpenseType", @exp_type, { :id => "ExpenseType" } %>
+        <%= hidden_field_tag "theType", @the_type, { :id => "theType" } %>
+      <div class="row mb-4">
+        <div class="col-lg-10 mx-auto">
+         <div class="my-chart-Container1">
+            <div class="mychartBox1 card border-radius-1 shadow">
+              <canvas id="myChart5"></canvas>
+            </div>
+          </div>
+        </div>  
+      </div>
+        <div class="row d-flex mb-3">
+          <div class="col-lg-6">
+            <div class="my-chart-Container">
+              <div class="mychartBox card border-radius-1 shadow mt-3">
+                <canvas id="myChart" class="ml-5"></canvas>
+              </div> 
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="my-chart-Container">
+              <div class="mychartBox card border-radius-1 shadow mt-3">
+                <canvas id="myChart1" ></canvas>
+              </div> 
+            </div>
+          </div>  
+        </div>  
+        <div class="row d-flex">
+          <div class="col-lg-6">
+            <div class="my-chart-Container">
+              <div class="mychartBox card border-radius-1 shadow mt-3">
+                <canvas id="myChart2"></canvas>
+              </div> 
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="my-chart-Container">
+              <div class="mychartBox card border-radius-1 shadow mt-3">
+                <canvas id="myChart3"></canvas>
+              </div> 
+            </div>
+          </div>  
+        </div> 
       </div>
       <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="import-export" role="tabpanel">
         <p>
