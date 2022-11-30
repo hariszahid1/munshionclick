@@ -6,7 +6,7 @@ class Payment < ApplicationRecord
   before_destroy :remove_account_balance
   enum confirmable: %i[unconfirm confirmed]
 
-  has_paper_trail ignore: [:updated_at]
+  has_paper_trail ignore: [:updated_at,:amount]
 
 
   def modify_account_balance
