@@ -6,24 +6,49 @@
   <td><%= pos_setting.logo %></td>
   <td class= 'urdu-font'><%= pos_setting.address %></td>
   <td>
-    <% if can?(:update, :all) %>
-      <%= link_to edit_pos_setting_path(pos_setting) do %>
-        <i class="fa fa-edit " aria-hidden="true"></i> |
-      <%end %>
-    <% end %>
-    <% if can?(:delete, :all) %>
-      <%= link_to pos_setting, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
-        <i class="fa fa-trash " aria-hidden="true"></i> |
-      <%end %>
-    <% end %>
-    <% if can?(:view, :all) %>
-      <%= link_to pos_setting do %>
-        <i class="fa fa-eye " aria-hidden="true"></i>
-      <%end %>
-    <%end%>
+  <div class="icon-container-1">
+      <div class="my-icon-1 my-view-1">
+        <div class="my-tooltip-1">
+          <div class="icon-container">
+						<% if can?(:update, :all) %>
+            	<div class="my-icon my-view">
+            	  <div class="my-tooltip">
+            	    Edit
+            	  </div>
+            	    <%= link_to edit_pos_setting_path(pos_setting), class:"icon-div" do %>
+            	      <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+            	    <%end %>
+            	</div>
+						<% end %>
+						<% if can?(:delete, :all) %>
+            	<div class="my-icon my-view">
+            	  <div class="my-tooltip">
+            	    Delete
+            	  </div>
+            	    <%= link_to pos_setting, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+            	      <i class="fa fa-trash mt-2" aria-hidden="true"></i>
+            	    <%end %>
+            	</div>
+						<% end %> 
+						<% if can?(:view, :all) %>
+            	<div class="my-icon my-view">
+            	  <div class="my-tooltip">
+            	    Show
+            	  </div>
+            	    <%= link_to pos_setting, class:"icon-div" do %>
+            	      <i class="fa fa-eye mt-2" aria-hidden="true"></i>
+            	    <%end %>
+            	</div>
+						<%end%>
+          </div>
+        </div>
+        <span class="icon-div-1">
+              <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+        </span>
+      </div>
+    </div>
   </td>
 </tr>
-
 
 <script>
   FontAwesome.dom.i2svg();

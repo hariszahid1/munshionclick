@@ -27,7 +27,7 @@ class SysUsersController < ApplicationController
     @user_count.push(SysUser.where('balance < 0').count)
     @user_count.push(SysUser.where('balance = 0').count)
 
-    @user_group_title = @count_sys_user.keys.map { |a| a.gsub(' ', '-') }
+    @user_group_title = @count_sys_user.keys
     @user_group_count = @count_sys_user.values
     @status_title = @count_status.keys
     @status_count = @count_status.values
@@ -36,10 +36,7 @@ class SysUsersController < ApplicationController
     @city_title = @total_cities_count.keys.map { |a| a.gsub(' ', '-') }
     @city_user = @total_cities_count.values
 
-    respond_to do |format|
-      format.js
-      format.html
-    end
+
   end
 
   # GET /sys_users/1
