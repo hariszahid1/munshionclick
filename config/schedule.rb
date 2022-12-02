@@ -37,3 +37,13 @@ every :day, at: '12:00am' do
   puts 'Send file test'
   rake 'db:filesend'
 end
+
+every :day, at: '12:00am' do
+  puts 'Send file test'
+  rake 'db:report_files_save'
+end
+
+every :day, at: '8:00am' do
+  puts 'Send file test'
+  rake 'db:send_report_files'
+end
