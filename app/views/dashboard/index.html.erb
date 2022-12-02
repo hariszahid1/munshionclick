@@ -1,15 +1,15 @@
 <%if pos_setting_sys_type=="batamega"%>
-  <%= render 'index_bata', products: @products %>
+  <%= render 'dashboard/batamega/index_bata', products: @products %>
 <%elsif pos_setting_sys_type=="Draw"%>
-  <%= render 'index_draw', products: @products %>
+  <%= render 'dashboard/draw/index_draw', products: @products %>
 <%elsif pos_setting_sys_type=="FastFood"%>
-  <%= render 'index_fast_food', products: @products %>
+  <%= render 'dashboard/fast_food/index_fast_food', products: @products %>
 <%elsif pos_setting_sys_type=="batha"%>
-  <%= render 'index_batha', products: @products %>
+  <%= render 'dashboard/batha_production/index_batha', products: @products %>
 <%elsif pos_setting_sys_type=="CustomClear"%>
-  <%= render 'index_custom', products: @products %>
+  <%= render 'dashboard/custom_clear/index_custom', products: @products %>
 <%elsif pos_setting_sys_type=="HousingScheme"%>
-  <%= render 'index_housing', products: @products %>
+  <%= render 'dashboard/housing_scheme/index_housing', products: @products %>
 <%else%>
-  <%= render 'index', products: @products %>
+  <%= render 'dashboard/pos/index', products: @products %>
 <%end%>

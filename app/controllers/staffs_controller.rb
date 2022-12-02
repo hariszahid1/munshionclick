@@ -32,6 +32,21 @@ class StaffsController < ApplicationController
     download_staffs_pdf_file if params[:submit_pdf].present? || params[:salary_submit_pdf].present? || params[:wage_submit_pdf].present?
     send_email_file if params[:email].present?
     export_file if params[:export_data].present?
+
+    @staff_count = []
+    @staff_count.push(Staff.where('balance > 0').count)
+    @staff_count.push(Staff.where('balance < 0').count)
+    @staff_count.push(Staff.where('balance = 0').count)
+
+    @total_dep_count = Staff.joins(:department).group('departments.title').count
+    @dep_title = @total_dep_count.keys.map { |a| a.gsub(' ', '-') }
+    @dep_user = @total_dep_count.values
+
+    respond_to do |format|
+      format.js
+      format.html
+    end
+
   end
 
   def payable
@@ -199,6 +214,23 @@ class StaffsController < ApplicationController
         @staffs=Staff.where(id:@staff)
       end
       format.json { render json: {status: 'success', balance: @staff.balance, advance_amount: @staff.balance, wage_rate: @staff.wage_rate ,staffs: @staffs.pluck(:name),staff_ids: @staffs.pluck(:id),staff_count: @staffs.count}, status: :ok}
+    end
+  end
+
+  def view_history
+    @start_date = Date.today.beginning_of_month
+    @end_date =  Date.today.end_of_month
+    if params[:q].present?
+      @start_date = params[:q][:created_at_gteq] if params[:q][:created_at_gteq].present?
+      @end_date = params[:q][:created_at_lteq] if params[:q][:created_at_lteq].present?
+      @item_id = params[:q][:item_id_eq] if params[:q][:item_id_eq].present?
+      params[:q][:created_at_lteq] = params[:q][:created_at_lteq].to_date.end_of_day if params[:q][:created_at_lteq].present?
+    end
+    @event = %w[create update destroy]
+    @q = PaperTrail::Version.where(item_type:"Staff").order('created_at desc').ransack(params[:q])
+    @staff_logs = @q.result.page(params[:page])
+    respond_to do |format|
+      format.js
     end
   end
   private

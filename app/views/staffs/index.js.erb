@@ -1,0 +1,64 @@
+$( document ).ready(function() {
+  var staffCount=$('#staffCount').val().split(' ')
+  const ctx = document.getElementById('myChart');
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Jama / Payable','Benam / Receivable', 'Nil'],
+      datasets: [{
+        label: 'Total Staff',
+        data: staffCount,
+        borderWidth: 1,
+        backgroundColor: ["blue", "red", "green"],
+      }],
+    },
+    options: {
+      
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Total Staff by Balance Bar Chart',
+            }
+          
+
+        }
+      
+    }
+  });
+  
+});
+
+$( document ).ready(function() {
+  
+  const ctx = document.getElementById('myChart1');
+  var depTitle=$('#depTitle').val().split(' ')
+  var depCount=$('#depCount').val().split(' ')
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: depTitle,
+      datasets: [{
+        label: 'Total',
+        data: depCount,
+        borderWidth: 1,
+
+      }],
+    },
+    options: {
+      
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Total Staff by Department Pie Chart',
+            }
+          
+
+        }
+      
+    }
+  });
+  
+});

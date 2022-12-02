@@ -41,106 +41,120 @@
   </div>
 
   <ul class="nav nav-pills mt-3" role="tablist">
-        <li class="nav-item">
-          <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
-        </li>
-        <li class="nav-item">
-        <a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
-        </li>
-    </ul>
-<%= search_form_for @q, url: staff_ledger_books_path, class: "admin-controls", method: "get" do |f| %>
+    <li class="nav-item">
+      <a class="nav-link tab-label ledger-search-exp-tab active" data-toggle="tab" href="#search" role="tab">Search</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link tab-label ledger-search-exp-tab" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link tab-label ledger-logs-tab" data-toggle="tab" href="#logs" role="tab">Logs</a>
+    </li>
+  </ul>
   <div class="tab-content">
     <div class="tab-pane active mb-3 card shadow-sm mt-2 border-radius-1" id="search" role="tabpanel">
-     <div class="row d-flex mt-3">
-     <div class="col">
-         <div class="col-lg-4 form-group float-left ">
-          <%= f.select :staff_id_eq, options_from_collection_for_select(@staff, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code} "},@staff_id),{:include_blank => "Select Name"},:class=>"form-control chosen-select" %>
-        </div>
-        <div class="col-lg-3 form-group float-left">
-          <%= f.search_field :created_at_gteq, value:@created_at_gteq, class: 'form-control input-sm datepicker',placeholder: "YYYY-MM-DD" %>
-        </div>
-        <div class="col-lg-3 form-group float-left">
-          <%= f.search_field :created_at_lteq, value:@created_at_lteq, class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
-        </div>
+      <%= search_form_for @q, url: staff_ledger_books_path, class: "admin-controls", method: "get" do |f| %>
+      <div class="row d-flex mt-3">
+        <div class="col">
+          <div class="col-lg-4 form-group float-left ">
+            <%= f.select :staff_id_eq, options_from_collection_for_select(@staff, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code} "},@staff_id),{:include_blank => "Select Name"},:class=>"form-control chosen-select" %>
+          </div>
+          <div class="col-lg-3 form-group float-left">
+            <%= f.search_field :created_at_gteq, value:@created_at_gteq, class: 'form-control input-sm datepicker',placeholder: "YYYY-MM-DD" %>
+          </div>
+          <div class="col-lg-3 form-group float-left">
+            <%= f.search_field :created_at_lteq, value:@created_at_lteq, class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
+          </div>
 
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
-        </div>
-      </div> 
-      <div class="col float-left">
-        <%if (check_can_download_csv(@module_permission))%>
-          <button class="form-control d-flex justify-content-center ml-2 btn btn-warning float-left" style="width:100px" title= "download staff ledger book csv" name="csv" type="submit" value="csv">CSV &nbsp;<i class="fa fa-file-excel mt-1"></i></button>
-        <% end %>
-      <%if (check_can_download_pdf(@module_permission))%>
-        <div class="dropdown my-dropdown float-left mr-3 ml-3">
-          <button type="button" class="form-control bg-danger text-light">PDF List</button>
-          <div class="dropdown-content my-dropdown-content p-2">
-            <button class="form-control d-flex justify-content-center ml-2 mt-2 btn btn-danger" style="width:150px" name="submit_pdf_staff_with_asc" type="submit" value="Accounts PDF A4" formtarget="_blank">ASC<i class="fa fa-file-pdf ml-1 mt-1"></i></button>
-            <button class="form-control d-flex justify-content-center ml-2 mt-2 btn btn-danger" style="width:150px" name="submit_pdf_staff_with_desc" type="submit" value="Accounts PDF A4" formtarget="_blank">Desc<i class="fa fa-file-pdf ml-1 mt-1"></i></button>
-            <button class="form-control d-flex justify-content-center ml-2 mt-2 btn btn-danger" style="width:150px" name="bulk" type="submit" value="Accounts PDF A4" formtarget="_blank">BulkRecord<i class="fa fa-file-pdf ml-1 mt-1"></i></button>
+          <div class="col-lg-2 form-group float-left">
+            <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
           </div>
-        </div>
-      <% end %>
-        <%if (check_can_send_email(@module_permission))%>
-        <div class="dropdown my-dropdown float-left mr-2">
-          <button type="button" class="form-control bg-info text-light">Mail List</button>
-          <div class="dropdown-content my-dropdown-content p-2">
-            <button class="form-control d-flex justify-content-center ml-2 mt-2 form-control btn btn-info" style="width:120px" type="button" name="asc_email" type="submit" value="Email" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-1"></i>&nbsp;AscMail</button>
-            <button class="form-control d-flex justify-content-center ml-2 mt-2 form-control btn btn-info" style="width:120px" type="button" name="desc_email" type="submit" value="Email" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-1"></i>&nbsp;DescMail</button> 
-          </div>
-        </div>
-          <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-                </div>
-                <div class="modal-body">
-                  <% @pos_setting = PosSetting.first %>
-                  <label>Email:</label>
-                  <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
-                  <br />
-                  <label>Subject:</label>
-                  <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Staff Ledger Book Detail report from MunshiOnClick", class: 'form-control email-fields'%>
-                  <br />
-                  <label>Body:</label><br />
-                  <%= text_area_tag 'body', nil, class: 'form-control'%>
-                  <br />
-                  <label>Please select one of them.</label>
-                  <div>
-                    <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
-                    <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
-                    <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                  <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
-                </div>
-                </div>
+        </div> 
+        <div class="col float-left">
+          <%if (check_can_download_csv(@module_permission))%>
+            <button class="form-control d-flex justify-content-center ml-2 btn btn-warning float-left" style="width:100px" title= "download staff ledger book csv" name="csv" type="submit" value="csv">CSV &nbsp;<i class="fa fa-file-excel mt-1"></i></button>
+          <% end %>
+          <%if (check_can_download_pdf(@module_permission))%>
+            <div class="dropdown my-dropdown float-left mr-3 ml-3">
+              <button type="button" class="form-control bg-danger text-light">PDF List</button>
+              <div class="dropdown-content my-dropdown-content p-2">
+                <button class="form-control d-flex justify-content-center ml-2 mt-2 btn btn-danger" style="width:150px" name="submit_pdf_staff_with_asc" type="submit" value="Accounts PDF A4" formtarget="_blank">ASC<i class="fa fa-file-pdf ml-1 mt-1"></i></button>
+                <button class="form-control d-flex justify-content-center ml-2 mt-2 btn btn-danger" style="width:150px" name="submit_pdf_staff_with_desc" type="submit" value="Accounts PDF A4" formtarget="_blank">Desc<i class="fa fa-file-pdf ml-1 mt-1"></i></button>
+                <button class="form-control d-flex justify-content-center ml-2 mt-2 btn btn-danger" style="width:150px" name="bulk" type="submit" value="Accounts PDF A4" formtarget="_blank">BulkRecord<i class="fa fa-file-pdf ml-1 mt-1"></i></button>
+              </div>
+            </div>
+          <% end %>
+          <%if (check_can_send_email(@module_permission))%>
+          <div class="dropdown my-dropdown float-left mr-2">
+            <button type="button" class="form-control bg-info text-light">Mail List</button>
+            <div class="dropdown-content my-dropdown-content p-2">
+              <button class="form-control d-flex justify-content-center ml-2 mt-2 form-control btn btn-info" style="width:120px" type="button" name="asc_email" type="submit" value="Email" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-1"></i>&nbsp;AscMail</button>
+              <button class="form-control d-flex justify-content-center ml-2 mt-2 form-control btn btn-info" style="width:120px" type="button" name="desc_email" type="submit" value="Email" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-1"></i>&nbsp;DescMail</button> 
             </div>
           </div>
-        <% end %>
+            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  </div>
+                  <div class="modal-body">
+                    <% @pos_setting = PosSetting.first %>
+                    <label>Email:</label>
+                    <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
+                    <br />
+                    <label>Subject:</label>
+                    <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Staff Ledger Book Detail report from MunshiOnClick", class: 'form-control email-fields'%>
+                    <br />
+                    <label>Body:</label><br />
+                    <%= text_area_tag 'body', nil, class: 'form-control'%>
+                    <br />
+                    <label>Please select one of them.</label>
+                    <div>
+                      <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
+                      <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
+                      <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
+                  </div>
+                  </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
       </div>
-      </div>
+      <% end %>
     </div>
-    
     <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="import-export" role="tabpanel">
       <p>
-        <div class="d-flex ml-2">
-        <button class="btn btn-danger ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
-        <button class="btn btn-info ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
+        <%= search_form_for @q, url: staff_ledger_books_path, class: "admin-controls", method: "get" do |f| %>
+          <div class="d-flex ml-2">
+          <button class="btn btn-danger ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
+          <button class="btn btn-info ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
+          </div>
+        <% end %>
+      </p>
+    </div>
+    <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="logs" role="tabpanel">
+      <p>
+        <div class="d-flex">
+          <%= link_to view_history_staff_ledger_books_path, class: "btn btn-success d-none", id: "ledger-logs", remote:true do %>
+            show logs
+          <% end %>
+          <div id = "show-logs"></div>
         </div>
       </p>
     </div>
-    </div>
-  <% end %>
   </div>
+</div>
   <div>
-<div class="card shadow-sm border-radius-1 p-2">
+<div class="card shadow-sm border-radius-1 p-2 ledger-book-index-card">
   <table data-toggle="table" data-search="true" id="ledger_book_table" class=" overflow-hidden border-radius-1">
     <thead>
       <tr >
@@ -387,5 +401,15 @@
     }
     $("#salary_detail_list").removeClass('hidden');
     FontAwesome.dom.i2svg();
+
+    $('.ledger-logs-tab').on('click', function(){
+      $('#ledger-logs').click();
+      $('.ledger-book-index-card').addClass('d-none')
+    })
+
+
+    $('.ledger-search-exp-tab').on('click', function(){
+      $('.ledger-book-index-card').removeClass('d-none')
+    })
   });
 </script>

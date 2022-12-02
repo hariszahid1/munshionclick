@@ -46,56 +46,56 @@
         <td><%=investment=@investment[date.to_date]%></td>
         <td>
           <%purchase=@purchase[date.to_date].to_f-@purchase_discount[date.to_date].to_f.to_f%>
-          <%=purchase if purchase>0%>
+          <%= number_with_delimiter(purchase) if purchase>0%>
         </td>
         <td>
           <%salary = @salary[date.to_date].to_f+@advance[date.to_date].to_f%>
-          <%=salary if salary> 0%>
+          <%= number_with_delimiter(salary) if salary> 0%>
         </td>
-        <td><%=expense=@expense[date.to_date]%></td>
+        <td><%= number_with_delimiter(expense=@expense[date.to_date])%></td>
         <td>
           <%sale=@sale[date.to_date].to_f-@sale_discount[date.to_date].to_f%>
-          <%=sale if sale>0%>
+          <%= number_with_delimiter(sale) if sale>0%>
         </td>
         <td>
-          <%=purchase.to_i-sale%>
+          <%= number_with_delimiter(purchase.to_i-sale) %>
         </td>
         <td>
-          <%=(purchase.to_i-sale)+(@sale[date.to_date].to_f-@sale_discount[date.to_date].to_f)%>
+          <%=number_with_delimiter((purchase.to_i-sale)+(@sale[date.to_date].to_f-@sale_discount[date.to_date].to_f))%>
         </td>
         <td>
-          <%=(sale-(expense.to_i+salary.to_i+purchase.to_i+investment.to_i)).round(2)%>
+          <%= number_with_delimiter((sale-(expense.to_i+salary.to_i+purchase.to_i+investment.to_i)).round(2))%>
         </td>
         <td>
-          <%=sale-(expense.to_i+salary.to_i+purchase.to_i)%>
+          <%=number_with_delimiter(sale-(expense.to_i+salary.to_i+purchase.to_i))%>
         </td>
 
       </tr>
       <%end%>
       <tr>
         <td><h5>Total</h5></td>
-        <td><h5><%=(@investment_total).round(2)%></h5></td>
-        <td><h5><%=(@purchase_total-@purchase_discount_total).round(2)%></h5></td>
-        <td><h5><%=(@salary_total+@advance_total).round(2)%></h5></td>
-        <td><h5><%=(@expense_total).round(2)%></h5></td>
-        <td><h5><%=(@sale_total-@sale_discount_total).round(2)%></h5></td>
-        <td><h5><%=((@purchase_total-@purchase_discount_total)-(@sale_total-@sale_discount_total)).round(2)%></h5></td>
-        <td><h5><%=@total_profit_s=((((@purchase_total-@purchase_discount_total)-(@sale_total-@sale_discount_total)).round(2))+((@sale_total-@sale_discount_total).round(2)))%>
+        <td><h5><%=number_with_delimiter((@investment_total).round(2))%></h5></td>
+        <td><h5><%=number_with_delimiter((@purchase_total-@purchase_discount_total).round(2))%></h5></td>
+        <td><h5><%=number_with_delimiter((@salary_total+@advance_total).round(2))%></h5></td>
+        <td><h5><%=number_with_delimiter((@expense_total).round(2))%></h5></td>
+        <td><h5><%= number_with_delimiter((@sale_total-@sale_discount_total).round(2)) %></h5></td>
+        <td><h5><%=number_with_delimiter(((@purchase_total-@purchase_discount_total)-(@sale_total-@sale_discount_total)).round(2))%></h5></td>
+        <td><h5><%= number_with_delimiter(@total_profit_s=((((@purchase_total-@purchase_discount_total)-(@sale_total-@sale_discount_total)).round(2))+((@sale_total-@sale_discount_total).round(2))))%>
           <%if current_user.superAdmin.company_type=="as_traders"%>
-          | <%=(@total_profit_s*0.6).round(2)%> | <%=(@total_profit_s*0.3).round(2)%> | <%=(@total_profit_s*0.1).round(2)%>
+          | <%=number_with_delimiter((@total_profit_s*0.6).round(2))%> | <%=number_with_delimiter((@total_profit_s*0.3).round(2))%> | <%= number_with_delimiter((@total_profit_s*0.1).round(2)) %>
           <%end%>
         </h5></td>
         <td><h5>
-          <%=(@total_profit=(@sale_total-@sale_discount_total)-(@investment_total+(@purchase_total-@purchase_discount_total)+(@salary_total+@advance_total)+@expense_total)).round(2)%>
+          <%= number_with_delimiter((@total_profit=(@sale_total-@sale_discount_total)-(@investment_total+(@purchase_total-@purchase_discount_total)+(@salary_total+@advance_total)+@expense_total)).round(2))%>
           <%if current_user.superAdmin.company_type=="as_traders"%>
-          | <%=(@total_profit*0.6).round(2)%> | <%=(@total_profit*0.3).round(2)%> | <%=(@total_profit*0.1).round(2)%>
+          | <%= number_with_delimiter((@total_profit*0.6).round(2))%> | <%= number_with_delimiter((@total_profit*0.3).round(2))%> | <%= number_with_delimiter((@total_profit*0.1).round(2))%>
           <%end%>
 
         </h5></td>
         <td><h5>
-          <%=@total_profit_without_invesment=(@sale_total-@sale_discount_total)-((@purchase_total-@purchase_discount_total)+(@salary_total+@advance_total)+@expense_total)%>
+          <%= number_with_delimiter(@total_profit_without_invesment=(@sale_total-@sale_discount_total)-((@purchase_total-@purchase_discount_total)+(@salary_total+@advance_total)+@expense_total))%>
           <%if current_user.superAdmin.company_type=="as_traders"%>
-          | <%=(@total_profit_without_invesment*0.6).round(2)%> | <%=(@total_profit_without_invesment*0.3).round(2)%> | <%=(@total_profit_without_invesment*0.1).round(2)%>
+          | <%= number_with_delimiter((@total_profit_without_invesment*0.6).round(2))%> | <%= number_with_delimiter((@total_profit_without_invesment*0.3).round(2))%> | <%= number_with_delimiter((@total_profit_without_invesment*0.1).round(2))%>
           <%end%>
 
         </h5></td>

@@ -5,6 +5,7 @@ module CashInHandMethod
   extend ActiveSupport::Concern
 
   def cash_in_hand
+    puts "----------------------------CashInHand----------------------------------"
     @pos_setting = PosSetting.last
     if @pos_setting.present?
       @account_balance = Account.group(:title).sum(:amount)
@@ -35,6 +36,7 @@ module CashInHandMethod
                           @investments_debit + @salary_detail_total + @credit_salary +
                           @purchase_sale_detail_discount_list + @purchase_item_total + @purchase_product_total
       PosSetting.last.update(cash_in_hand: (@total_payable.to_i - @total_reciveable.to_i))
+      puts "----------------------------CashInHand----------------------------------"
     end
   end
 end

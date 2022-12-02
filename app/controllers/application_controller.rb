@@ -412,7 +412,10 @@ class ApplicationController < ActionController::Base
 
   def default_accees
     # All Permission of Current User
-    @all_permissions = User.eager_load(:user_permissions).find(current_user.id).user_permissions
+
+    if current_user.present?
+      @all_permissions = User.eager_load(:user_permissions).find(current_user.id).user_permissions
+    end
   end
 
   def check_access
@@ -435,10 +438,6 @@ class ApplicationController < ActionController::Base
     # All Permission of Current User
     # @all_permissions = User.eager_load(:user_permissions).find(current_user.id).user_permissions
     # Current User Current Module Permission
-    @module_permission = @all_permissions.select(:id, :can_create, :can_update, :can_read, :can_delete, :can_accessed,
-                                                 :is_hidden, :can_download_pdf, :can_download_csv, :can_send_email, :can_import_export).find_by(module: temp_module)
-
-    return false if check_is_hidden(@module_permission) || check_can_accessed(@module_permission) # True
-    return true if !check_is_hidden(@module_permission) || !check_can_accessed(@module_permission)
+    (@all_permissions.pluck(:module,:is_hidden).include? [temp_module,false])
   end
 end

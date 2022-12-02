@@ -50,7 +50,16 @@
 				</li>
 			<%end%>
 	</ul>
-<%= search_form_for @q, url: product_categories_path, class: "admin-controls", method: "get" do |f| %>
+  
+  <%= hidden_field_tag "categoryTitle", @category_title, { :id => "categoryTitle" } %>
+  <%= hidden_field_tag "categoryUnit", @category_unit, { :id => "categoryUnit" } %>
+  <%= hidden_field_tag "categoryTitle1", @category_title, { :id => "categoryTitle1" } %>
+  <%= hidden_field_tag "categoryUnit1", @category_sub_unit, { :id => "categoryUnit1" } %>
+  <%= hidden_field_tag "categoryTitle2", @category_title, { :id => "categoryTitle2" } %>
+  <%= hidden_field_tag "categoryUnit2", @category_unit, { :id => "categoryUnit2" } %>
+  <%= hidden_field_tag "categoryTitle3", @category_title, { :id => "categoryTitle3" } %>
+  <%= hidden_field_tag "categoryUnit3", @category_sub_unit, { :id => "categoryUnit3" } %>
+  <%= search_form_for @q, url: product_categories_path, class: "admin-controls", method: "get" do |f| %>
   <div class="tab-content">
     <div class="tab-pane active mb-3 card shadow-sm mt-2 border-radius-1" id="search" role="tabpanel">
       <div class="row d-flex mt-3 mr-2">
@@ -116,8 +125,6 @@
     <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1 p-1" id="analytics" role="tabpanel">
       <div class="row d-flex">
         <div class="col-lg-6">
-          <%= hidden_field_tag "categoryTitle", @category_title, { :id => "categoryTitle" } %>
-          <%= hidden_field_tag "categoryUnit", @category_unit, { :id => "categoryUnit" } %>
           <div class="my-chart-Container">
             <div class="mychartBox">
               <canvas id="myChart"></canvas>
@@ -125,8 +132,6 @@
           </div> 
         </div> 
         <div class="col-lg-6">
-          <%= hidden_field_tag "categoryTitle1", @category_title, { :id => "categoryTitle1" } %>
-          <%= hidden_field_tag "categoryUnit1", @category_sub_unit, { :id => "categoryUnit1" } %>
           <div class="my-chart-Container">
             <div class="mychartBox">
               <canvas id="myChart1"></canvas>
@@ -136,8 +141,6 @@
       </div>
       <div class="row d-flex mt-4">
         <div class="col-lg-6">
-          <%= hidden_field_tag "categoryTitle2", @category_title, { :id => "categoryTitle2" } %>
-          <%= hidden_field_tag "categoryUnit2", @category_unit, { :id => "categoryUnit2" } %>
           <div class="my-chart-Container">
             <div class="mychartBox">
               <canvas id="myChart2"></canvas>
@@ -145,8 +148,6 @@
           </div> 
         </div> 
         <div class="col-lg-6">
-          <%= hidden_field_tag "categoryTitle3", @category_title, { :id => "categoryTitle3" } %>
-          <%= hidden_field_tag "categoryUnit3", @category_sub_unit, { :id => "categoryUnit3" } %>
           <div class="my-chart-Container">
             <div class="mychartBox">
               <canvas id="myChart3"></canvas>

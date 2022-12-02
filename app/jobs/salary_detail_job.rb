@@ -11,7 +11,7 @@ class SalaryDetailJob < ActiveJob::Base
       debit = debit_credit_balance.sum_debit
       balance = debit_credit_balance.sum_credit.to_f-debit_credit_balance.sum_debit.to_f
       staff.update_column(:balance, balance)
-      staff_ledger_books = staff_ledger_books.first(500)
+      staff_ledger_books = staff_ledger_books.first(100)
       staff_ledger_books.each do |lb|
         if lb.balance!=balance
           lb.balance=balance

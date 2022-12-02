@@ -92,13 +92,16 @@ namespace :db do
   desc "Load filesend"
   task :filesend => :environment do
     all_db_configs = Rails.configuration.database_configuration.select{|dbs| dbs.include?(Rails.env + '_')}
-    date = Date.yesterday.to_s.gsub('-', '')
+    date_for_folder = Date.yesterday.to_s.gsub('-', '')
     file_path = []
     all_db_configs.each do |db_block, db_config|
-      file_path << [ db_block.split(Rails.env + '_')[1] ,Dir[Rails.root.join("shared/db_backup/#{date}/#{db_block.split(Rails.env + '_')[1]}/*").to_s][0]]
-    end
-    file_path.each do |path|
-      ReportMailer.db_backup_file_email('abbasanwar158@gmail.com', path).deliver
+      path_to_file = Dir[Rails.root.join("../../shared/db_backup/#{date_for_folder}/#{db_block.split(Rails.env + '_')[1]}/*").to_s][0]
+      file_path << [db_block.split(Rails.env + '_')[1], path_to_file]
+      file = File.open(path_to_file)
+      db_backup_data = DbBackupFile.create(company_type: db_block, folder_date: Date.yesterday)
+      db_backup_data.back_up_file.attach(io: file, filename: path_to_file.split('/').last)
+      file_serice_url = "https://munshionclick.com/db_backup_files/#{db_backup_data.id}"
+      ReportMailer.db_backup_file_email('abbasanwar158@gmail.com', db_block, file_serice_url, Date.yesterday).deliver
     end
   end
 end

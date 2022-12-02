@@ -29,6 +29,7 @@ Rails.application.routes.draw do
   resources :staff_ledger_books  do
     collection do
       get :transfer, to: 'staff_ledger_books#transfer'
+      get :view_history, to: 'staff_ledger_books#view_history'
     end
   end
   resources :product_stock_exchanges
@@ -85,7 +86,11 @@ Rails.application.routes.draw do
   resources :staff_raw_products
   resources :raw_products
   resources :departments
-  resources :expense_entries
+  resources :expense_entries do
+    collection do
+      get :view_history, to: 'expense_entries#view_history'
+    end
+  end
   resources :salary_details do
     collection do
       get :vehicle, to: 'salary_details#index_vehicle'
@@ -104,6 +109,7 @@ Rails.application.routes.draw do
   resources :payments do
     collection do
       get :transfer, to: 'payments#transfer'
+      get :view_history, to: 'payments#view_history'
     end
   end
   resources :accounts do
@@ -112,11 +118,16 @@ Rails.application.routes.draw do
     end
   end
   resources :logs
-  resources :investments
+  resources :investments do
+    collection do
+      get :view_history, to: 'investments#view_history'
+    end
+  end
   resources :pos_settings
   resources :ledger_books do
     collection do
       get :transfer, to: 'ledger_books#transfer'
+      get :view_history, to: 'ledger_books#view_history'
     end
   end
   resources :materials
@@ -155,6 +166,7 @@ Rails.application.routes.draw do
       get :own, to: 'sys_users#own', as: :own
 
       get :sys_user_balance, to: 'sys_users#sys_user_balance', as: :sys_user_balance
+      get :view_history, to: 'sys_users#view_history'
     end
   end
 
@@ -168,6 +180,7 @@ Rails.application.routes.draw do
   resources :countries
   resources :expense_types
   resources :expenses
+  resources :db_backup_files
   get 'home/index'
   get :dashboard, to: 'dashboard#index', as: :dashboard
   get :export, to: 'dashboard#export', as: :export
@@ -217,6 +230,7 @@ Rails.application.routes.draw do
       get :payable, to: 'staffs#payable', as: :payable
       get :receiveable, to: 'staffs#receiveable', as: :receiveable
       get :dasti, to: 'staffs#dasti', as: :dasti
+      get :view_history, to: 'staffs#view_history'
     end
     member do
       get :salary_info

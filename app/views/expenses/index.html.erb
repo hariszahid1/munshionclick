@@ -44,13 +44,18 @@
 		<li class="nav-item">
 			<a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
 		</li>
+    <li class="nav-item">
+			<a class="nav-link tab-label" data-toggle="tab" data-remote="true" href="#analytics" role="tab">Analytics</a>
+		</li>
 		<%if (check_can_import_export(@module_permission))%>
 			<li class="nav-item">
 				<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
 			</li>
 		<%end%>
 	</ul>
-
+        <%= hidden_field_tag "ExpenseDate", @exp_date, { :id => "ExpenseDate" } %>
+        <%= hidden_field_tag "ExpenseType", @exp_type, { :id => "ExpenseType" } %>
+        <%= hidden_field_tag "theType", @the_type, { :id => "theType" } %>
   <%= search_form_for @q, url: expenses_path, class: "admin-controls", method: "get" do |f| %>
     <div class="tab-content">
       <div class="tab-pane active mb-3 card shadow-sm mt-2 border-radius-1" id="search" role="tabpanel">
@@ -128,6 +133,50 @@
           </div>
         </p>
       </div>
+      <div class="tab-pane mb-3 shadow-sm mt-2 border-radius-1 p-5" id="analytics" role="tabpanel">
+
+      <div class="row mb-4">
+        <div class="col-lg-10 mx-auto">
+         <div class="my-chart-Container1">
+            <div class="mychartBox1 card border-radius-1 shadow">
+              <canvas id="myChart5"></canvas>
+            </div>
+          </div>
+        </div>  
+      </div>
+        <div class="row d-flex mb-3">
+          <div class="col-lg-6">
+            <div class="my-chart-Container">
+              <div class="mychartBox card border-radius-1 shadow mt-3">
+                <canvas id="myChart" class="ml-5"></canvas>
+              </div> 
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="my-chart-Container">
+              <div class="mychartBox card border-radius-1 shadow mt-3">
+                <canvas id="myChart1" ></canvas>
+              </div> 
+            </div>
+          </div>  
+        </div>  
+        <div class="row d-flex">
+          <div class="col-lg-6">
+            <div class="my-chart-Container">
+              <div class="mychartBox card border-radius-1 shadow mt-3">
+                <canvas id="myChart2"></canvas>
+              </div> 
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="my-chart-Container">
+              <div class="mychartBox card border-radius-1 shadow mt-3">
+                <canvas id="myChart3"></canvas>
+              </div> 
+            </div>
+          </div>  
+        </div> 
+      </div>
       <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="import-export" role="tabpanel">
         <p>
           <div class="d-flex">
@@ -176,11 +225,11 @@
             <td><%= expense.id %></td>
             <td>
               <%expense.expense_entries.joins(:expense_type).group(:expense_type).sum(:amount).each do |expense| %>
-                <%= expense.first.title %> : <%= expense.last %>
+                <%= expense.first.title %> : <%= number_with_delimiter(expense.last) %>
                 <br>
               <%end%>
             </td>
-            <td><%= expense.expense.to_f.round(2) %></td>
+            <td><%= number_with_delimiter(expense.expense.to_f.round(2)) %></td>
             <td>
               <%=Account.where(id: expense.expense_entries.distinct.pluck(:account_id)).pluck(:title)  %>
               <%=@expense_payment[expense.id]%>
@@ -276,8 +325,8 @@
         <tr>
           <td><h5>Total</h5></td>
           <td></td>
-          <td><h5><%=@expense_total.to_f.round(2)%></h5></td>
-          <td><h5><%=@expense_payment_total%></h5></td>
+          <td><h5><%=number_with_delimiter(@expense_total.to_f.round(2))%></h5></td>
+          <td><h5><%=number_with_delimiter(@expense_payment_total)%></h5></td>
         </tr>
       </tbody>
     </table>

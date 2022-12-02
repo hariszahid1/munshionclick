@@ -21,11 +21,14 @@
     </div>
   </div>
 
-  <ul class="nav nav-pills" role="tablist">
-		<li class="nav-item">
-			<a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
-		</li>
-  </ul>
+    <ul class="nav nav-pills" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link tab-label active ml-3  " href="<%= customer_management_systems_path %>">CMS</a>
+      </li>
+    </ul>
   <%= search_form_for @q, url: follow_ups_path, class: "admin-controls", method: "get" do |f| %>
     <div class="tab-content mb-3">
       <div class="tab-pane active card border-radius-1 mt-2" id="search" role="tabpanel">
@@ -57,7 +60,16 @@
   <table data-toggle="table" data-search="true" id="follow_up_table">
     <thead>
       <tr>
-        <th><input type="checkbox" id="master" class='select-all-checkbox'></th>
+        <th><input type="checkbox" id="master" class='select-all-checkbox'>
+					<div class="icon-container float-center">
+						<span class="ml-2 mt-2">
+          		<div class="my-icon my-view">
+								<button class="icon-div btn delete-selected p-2 " type='button' value='SysUser'>
+									<i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i>
+								</button>
+							</div>
+						</span>
+					</div>
         <th>CMS User</th>
         <th>Task Type<div class='float-right'><%= sort_link(@q, :task_type, "", {}, class: 'sorting-button') %></div></th>
         <th>Priority<div class='float-right'><%= sort_link(@q, :priority, "", {}, class: 'sorting-button') %></div></th>

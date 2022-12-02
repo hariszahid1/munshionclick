@@ -70,7 +70,8 @@
 			<a class="nav-link tab-label" data-toggle="tab" href="#analytics" data-remote="true" role="tab">Analytics</a>
 		</li>
 	</ul>
-
+<%= hidden_field_tag "accountTitle", @account_title, { :id => "accountTitle" } %>
+<%= hidden_field_tag "accountAmount", @account_amount, { :id => "accountAmount" } %>
 <%= search_form_for @q, url: accounts_path, class: "admin-controls", method: "get" do |f| %>
 
   <div class="tab-content">
@@ -132,8 +133,6 @@
       </div>
     </div>
     <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="analytics" role="tabpanel">
-        <%= hidden_field_tag "accountTitle", @account_title, { :id => "accountTitle" } %>
-        <%= hidden_field_tag "accountAmount", @account_amount, { :id => "accountAmount" } %>
         <div class="my-chart-Container">
           <div class="mychartBox">
             <canvas id="myChart"></canvas>
@@ -188,7 +187,7 @@
             <%end %>
           </td>
           <td class="urdu-font"><%= account.bank_name %></td>
-          <td><%= account.amount.to_f.round(2) %></td>
+          <td><%= number_with_delimiter(account.amount.to_f.round(2)) %></td>
           <td>
             <%if account.amount.to_f < 0  %>
              <b style="font-size:20px;color:blue;">Jama</b>
@@ -284,7 +283,7 @@
         <td></td>
         <td></td>
         <td></td>
-        <td><h5><%=@account_total.first.to_f.round(2)%></h5></td>
+        <td><h5><%=number_with_delimiter(@account_total.first.to_f.round(2))%></h5></td>
         <td></td>
 
       </tr>

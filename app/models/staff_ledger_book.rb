@@ -9,7 +9,7 @@ class StaffLedgerBook < ApplicationRecord
 
   after_create :sms_on_create
 
-  has_paper_trail ignore: [:updated_at]
+  has_paper_trail ignore: [:updated_at,:balance]
 
   def sys_user_balance_change
     balance = (self&.staff&.staff_ledger_books.sum(:credit).to_f-self&.staff&.staff_ledger_books.sum(:debit).to_f)
