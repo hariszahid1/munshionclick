@@ -42,11 +42,6 @@ class StaffsController < ApplicationController
     @dep_title = @total_dep_count.keys.map { |a| a.gsub(' ', '-') }
     @dep_user = @total_dep_count.values
 
-    respond_to do |format|
-      format.js
-      format.html
-    end
-
   end
 
   def payable

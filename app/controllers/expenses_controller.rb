@@ -80,10 +80,6 @@ class ExpensesController < ApplicationController
 		@the_type_join = @the_type.join('&').to_s
 
 
-    respond_to do |format|
-      format.js
-      format.html
-    end
   end
 
   # GET /expenses/1

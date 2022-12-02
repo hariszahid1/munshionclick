@@ -20,7 +20,7 @@ class SysUsersController < ApplicationController
     send_email_file if params[:email].present?
     export_file if params[:export_data].present?
     @count_sys_user = SysUser.all.group(:user_group).count
-    @count_status = SysUser.all.group(:status).count  
+    @count_status = SysUser.all.group(:status).count
 
     @user_count = []
     @user_count.push(SysUser.where('balance > 0').count)
@@ -31,12 +31,10 @@ class SysUsersController < ApplicationController
     @user_group_count = @count_sys_user.values
     @status_title = @count_status.keys
     @status_count = @count_status.values
-    
+
     @total_cities_count = Contact.joins(:city).group('cities.title').count
     @city_title = @total_cities_count.keys.map { |a| a.gsub(' ', '-') }
     @city_user = @total_cities_count.values
-
-
   end
 
   # GET /sys_users/1
