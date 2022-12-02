@@ -166,6 +166,7 @@ Rails.application.routes.draw do
       get :own, to: 'sys_users#own', as: :own
 
       get :sys_user_balance, to: 'sys_users#sys_user_balance', as: :sys_user_balance
+      get :view_history, to: 'sys_users#view_history'
     end
   end
 
@@ -229,6 +230,7 @@ Rails.application.routes.draw do
       get :payable, to: 'staffs#payable', as: :payable
       get :receiveable, to: 'staffs#receiveable', as: :receiveable
       get :dasti, to: 'staffs#dasti', as: :dasti
+      get :view_history, to: 'staffs#view_history'
     end
     member do
       get :salary_info
