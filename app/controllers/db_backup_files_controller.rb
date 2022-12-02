@@ -7,6 +7,9 @@ class DbBackupFilesController < ApplicationController
   end
 
   def show
+    RequestStore.store[:company_type] = nil
+    ApplicationRecord.set_connection
+
     @db_backup_file = DbBackupFile.find(params[:id])
   end
 end

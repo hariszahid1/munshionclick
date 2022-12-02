@@ -104,4 +104,32 @@ namespace :db do
       ReportMailer.db_backup_file_email('abbasanwar158@gmail.com', db_block, file_serice_url, Date.yesterday).deliver
     end
   end
+
+  desc "Load report_files_save"
+  task report_files_save: :environment do
+    all_db_configs = Rails.configuration.database_configuration.select{ |dbs| dbs.include?(Rails.env + '_') }
+    all_db_configs.each do |db_block, db_config|
+      database = db_block.split(Rails.env + '_')[1]
+      ActiveRecord::Base.establish_connection "#{Rails.env}_#{database}".to_sym
+      reports = %w[chart-of-account sysuser-ledger-book staff-ledger-book sale purchase payment expense investment]
+      reports.each do |a|
+        ApplicationRecord.chart_of_account_pdf(database, a)
+      end
+    end
+  end
+
+  desc 'Load send_report_files'
+  task send_report_files: :environment do
+    all_db_configs = Rails.configuration.database_configuration.select{ |dbs| dbs.include?(Rails.env + '_') }
+    all_db_configs.each do |db_block, db_config|
+      database = db_block.split(Rails.env + '_')[1]
+      date_for_folder = Date.yesterday.to_s.gsub('-', '')
+      path_to_file = Dir[Rails.root.join("shared/reports/daily/#{date_for_folder}/#{database}/*").to_s]
+      path_to_file.each do |path|
+        file_name = path.split('/').last if path.present?
+        ReportMailer.send_report_files_email('abbasanwar158@gmail.com', path, file_name).deliver
+      end
+    end
+  end
+
 end

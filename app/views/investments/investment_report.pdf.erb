@@ -1,0 +1,48 @@
+<% @date = Date.today  %>
+<% @time = DateTime.now %>
+<% @time = Time.zone.now %>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Investment details</h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<p style="text-align: center;margin: 0;">Report by: Server</p>
+<div >
+  <table>
+    <thead>
+      <tr class="lite-gray" >
+        <th>ID</th>
+        <th>Debit</th>
+        <th>Credit</th>
+        <th>Paid By</th>
+        <th>Comment</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% investments.each do |investment| %>
+        <tr>
+          <td><%= investment.id %></td>
+          <td><%= investment.debit.to_f.round(2) %></td>
+          <td><%= investment.credit.to_f.round(2) %></td>
+          <td><%= investment.account_id.present? ? investment.account.title : ''%></td>
+          <td><%= investment.comment %></td>
+          <td>
+            <%if investment.created_at.strftime("%d%b%y")!=investment.updated_at.strftime("%d%b%y")%>
+              <%= investment.created_at.present? ? investment.created_at.strftime("%d%b%y at %H:%M%p") : '' %> | <%= investment.updated_at.present? ? investment.updated_at.strftime("%d%b%y at %H:%M%p") : '' %>
+            <%else%>
+              <%= investment.created_at.present? ? investment.created_at.strftime("%d%b%y at %H:%M%p") : '' %>
+            <%end%>
+          </td>
+          </td>
+        </tr>
+      <% end %>
+      <tr class="lite-gray">
+        <td><h4>Total</h4></td>
+        <td><h4><%= investments.pluck(:debit).compact.sum %></h4></td>
+        <td><h4><%= investments.pluck(:credit).compact.sum %></h4></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
