@@ -2,807 +2,827 @@
   <h1>Trial Balance => Credit - Debit = Balance</h1>
   <div class="clearfix"></div>
 
-
-  <div class="card shadow mb-4">
-		<!-- Card Header - Accordion -->
-		<a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
-			<h6 class="m-0 font-weight-bold text-primary"><h1 style= "text-align : center">Users Payable</h1></h6>
-		</a>
-		<!-- Card Content - Collapse -->
-    <div class="collapse show" id="collapseCardExample" style="">
-		<div class="col-xl-12 col-md-12 mb-4">
-			<div class="row no-gutters align-items-center">
-				<div class="col mr-2">
-          <br>
-          <div class="row">
-            <div class="col-lg-12 col-sm-12">
-              <%= search_form_for @q, url: reports_trial_balance_path, class: "admin-controls", method: "get" do |f| %>
-                <div class="col-lg-2 form-group float-left">
-                  <%= f.select :user_group_eq, options_for_select(SysUser.user_groups, @user_group), {:include_blank => "Select User group"},:class=>"form-control chosen-select" %>
-                </div>
-                <div class="col=lg-2 form-group float-left">
-                  <%= f.select :status_eq, SysUser.statuses.map { |key, value| [key.humanize, value] },{hide_label:true,class: "form-control", required: true,:include_blank => "Select Status"},:class=>"form-control chosen-select" %>
-                </div>
-                <div class="col-lg-2 account_totalform-group float-left">
-                  <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
-                </div>
-                <div class="col-lg-2 form-group float-right">
-                  <button class="form-control btn  badge badge-pill badge-danger" name="submit_pdf_staff_with" type="submit" value="Accounts PDF A4" formtarget="_blank"> <i class="fa fa-file-pdf"></i></button>
-                </div>
-                <div class="col-lg-2 form-group float-right">
-                  <button class="form-control btn  badge badge-pill badge-danger" name="submit_csv" type="submit" value="Trail Balance CSV" formtarget="_blank"> <i class="fa fa-file-excel" aria-hidden="true"></i></button>
-                </div>
-                <div class="col-lg-2 form-group float-right">
-                  <button class="form-control btn btn-info" name="email" type="submit" value="Email"><i class="fas fa-envelope"></i> Email</button>
-                </div>
-              <% end %>
-            </div>
-          </div>
-          <%@sys_user_balance = 0 %>
-          <table data-toggle="table" data-search="true">
-            <thead>
-              <tr>
-                <th><%= sort_link(@q, :code, 'Code') %></th>
-                <th><%= sort_link(@q, :name, 'Name') %></th>
-                <th><%= sort_link(@q, :user_group, 'User group') %></th>
-                <th>Status</th>
-                <th>Debit</th>
-                <th>Credit</th>
-                <th><%= sort_link(@q, :balance, 'balance') %></th>
-                <th>Check</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              <% @sys_user_payable.each do |sys_user| %>
-                <tr>
-                  <td><%= sys_user.code %></td>
-                  <td>
-                    <%= link_to ledger_books_path('q[sys_user_id_eq]':sys_user.id) do%>
-                      <i class="fa fa-address-book"></i><%= sys_user.name %>
-                    <%end %>
-                  </td>
-                  <td><%= sys_user.user_group %></td>
-                  <td><%= sys_user.status %></td>
-                  <td><%= number_with_delimiter(debit_sum  = @sys_user_payable_ledger_book_debit[sys_user.id].to_d)%></td>
-                  <td><%= number_with_delimiter(credit_sum = @sys_user_payable_ledger_book_credit[sys_user.id].to_d)%></td>
-                  <td><%= number_with_delimiter(balance = sys_user.balance) %> <%credit_debit = credit_sum-debit_sum%></td>
-                  <td>
-                    <% if balance == credit_debit%>
-                      <i class="fa fa-check"></i>
-                    <%else%>
-                      <i class="fa fa-trash"></i><%=balance-credit_debit%>
-                    <%end%>
-                  </td>
-                </tr>
-              <% end %>
-              <tr>
-                <td><h5>Total</h5></td>
-                <td><%= %></td>
-                <td><%= %></td>
-                <td><%= %></td>
-                <td><%= number_with_delimiter(@sys_user_payable_ledger_book_debit_total)%></td>
-                <td><%= number_with_delimiter(@sys_user_payable_ledger_book_credit_total)%></td>
-                <td><%= number_with_delimiter(@sys_user_payable.pluck('balance').map(&:abs).sum) %></td>
-              </tr>
-            </tbody>
-          </table>
-				</div>
-			</div>
-		</div>
+  <div class="main-content-header">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<%= root_path %>">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active">
+        <a href="<%= reports_trial_balance_path %>">Trial Balance</a>
+      </li>
+    </ol>
+  </div>
+  <div class="float-right">
+    <div class="dropdown ml-auto mr-4">
+     <span class="btn btn-info" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
+      <div class="dropdown-content">
+        <% if @help.present? %>
+        <% @help&.help_links.each do |link| %>
+        <a type="button" class="" target="_blank" href="<%= link[1] %>" >Help in <%= link[0] %></a>
+         <% end %>
+        <% end %>
+      </div>
     </div>
-	</div>
-  <%@sys_user_balance = 0 %>
-  <div class="card shadow mb-4">
-		<!-- Card Header - Accordion -->
-		<a href="#collapseCardExample1" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample1">
-			<h6 class="m-0 font-weight-bold text-primary"><h1 style= "text-align : center">Users Reciveable</h1></h6>
-		</a>
-		<!-- Card Content - Collapse -->
-    <div class="collapse show" id="collapseCardExample1" style="">
-  		<div class="col-xl-12 col-md-12 mb-4">
-  			<div class="row no-gutters align-items-center">
-  				<div class="col mr-2">
-            <br>
-            <div class="row">
-              <div class="col-lg-12 col-sm-12">
-                <%= search_form_for @p, url: reports_trial_balance_path, class: "admin-controls", method: "get" do |f| %>
-                  <div class="col-lg-2 form-group float-left">
-                    <%= f.select :user_group_eq, options_for_select(SysUser.user_groups, @user_group), {:include_blank => "Select User group"},:class=>"form-control chosen-select" %>
+  </div>
+  <ul class="nav nav-pills" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link tab-label active " data-toggle="tab" href="#users" role="tab">Users</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link tab-label " data-toggle="tab" href="#staffs" role="tab">Staffs</a>
+      </li>
+       <li class="nav-item">
+        <a class="nav-link tab-label " data-toggle="tab" href="#accounts" role="tab">Accounts</a>
+      </li>
+       <li class="nav-item">
+        <a class="nav-link tab-label " data-toggle="tab" href="#e-reciveable" role="tab">Expense Reciveable</a>
+      </li>
+       <li class="nav-item">
+        <a class="nav-link tab-label " data-toggle="tab" href="#p-reciveable" role="tab">Purchase Reciveable</a>
+      </li>
+       <li class="nav-item">
+        <a class="nav-link tab-label " data-toggle="tab" href="#sale-payable" role="tab">Sale Payable</a>
+      </li>
+       <li class="nav-item">
+        <a class="nav-link tab-label " data-toggle="tab" href="#salary" role="tab">Salary</a>
+      </li>	
+	</ul>
+
+  <div class="tab-content">
+    <div class="tab-pane active mb-3 card shadow-sm mt-2 p-4 border-radius-1" id="users" role="tabpanel">
+      <div class="card shadow mb-4">
+	    	<!-- Card Header - Accordion -->
+	    	<a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+	    		<h6 class="m-0 font-weight-bold text-primary"><h1 style= "text-align : center">Users Payable</h1></h6>
+	    	</a>
+	    	<!-- Card Content - Collapse -->
+        <div class="collapse show" id="collapseCardExample" style="">
+	    	<div class="col-xl-12 col-md-12 mb-4">
+	    		<div class="row no-gutters align-items-center">
+	    			<div class="col mr-2">
+              <br>
+              <div class="row">
+                <div class="col-lg-12 col-sm-12">
+                  <%= search_form_for @q, url: reports_trial_balance_path, class: "admin-controls", method: "get" do |f| %>
+                    <div class="col-lg-2 form-group float-left">
+                      <%= f.select :user_group_eq, options_for_select(SysUser.user_groups, @user_group), {:include_blank => "Select User group"},:class=>"form-control chosen-select" %>
+                    </div>
+                    <div class="col-lg-2 form-group float-left">
+                      <%= f.select :status_eq, SysUser.statuses.map { |key, value| [key.humanize, value] },{hide_label:true,class: "form-control", required: true,:include_blank => "Select Status"},:class=>"form-control chosen-select" %>
+                    </div>
+                    <div class="col-lg-2 account_totalform-group float-left">
+                      <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+                    </div>
+                    <button class="form-control btn btn-info float-right mr-2" style="width: 100px;" name="email" type="submit" value="Email"><i class="fas fa-envelope"></i> Email</button>
+                    <button class="form-control btn btn-warning float-right mr-2" style="width: 100px;" name="submit_csv" type="submit" value="Trail Balance CSV" formtarget="_blank"> <i class="fa fa-file-excel mr-2" aria-hidden="true"></i>CSV</button>
+                    <button class="form-control btn btn-danger float-right mr-2" style="width: 100px;" name="submit_pdf_staff_with" type="submit" value="Accounts PDF A4" formtarget="_blank"> <i class="fa fa-file-pdf mr-2"></i>PDF</button>
+                  <% end %>
+                </div>
+              </div>
+              <%@sys_user_balance = 0 %>
+              <table data-toggle="table" data-search="true">
+                <thead>
+                  <tr>
+                    <th><%= sort_link(@q, :code, 'Code') %></th>
+                    <th><%= sort_link(@q, :name, 'Name') %></th>
+                    <th><%= sort_link(@q, :user_group, 'User group') %></th>
+                    <th>Status</th>
+                    <th>Debit</th>
+                    <th>Credit</th>
+                    <th><%= sort_link(@q, :balance, 'balance') %></th>
+                    <th>Check</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @sys_user_payable.each do |sys_user| %>
+                    <tr>
+                      <td><%= sys_user.code %></td>
+                      <td>
+                        <%= link_to ledger_books_path('q[sys_user_id_eq]':sys_user.id) do%>
+                          <i class="fa fa-address-book"></i><%= sys_user.name %>
+                        <%end %>
+                      </td>
+                      <td><%= sys_user.user_group %></td>
+                      <td><%= sys_user.status %></td>
+                      <td><%= number_with_delimiter(debit_sum  = @sys_user_payable_ledger_book_debit[sys_user.id].to_d)%></td>
+                      <td><%= number_with_delimiter(credit_sum = @sys_user_payable_ledger_book_credit[sys_user.id].to_d)%></td>
+                      <td><%= number_with_delimiter(balance = sys_user.balance) %> <%credit_debit = credit_sum-debit_sum%></td>
+                      <td>
+                        <% if balance == credit_debit%>
+                          <i class="fa fa-check"></i>
+                        <%else%>
+                          <i class="fa fa-trash"></i><%=balance-credit_debit%>
+                        <%end%>
+                      </td>
+                    </tr>
+                  <% end %>
+                  <tr>
+                    <td><h5>Total</h5></td>
+                    <td><%= %></td>
+                    <td><%= %></td>
+                    <td><%= %></td>
+                    <td><%= number_with_delimiter(@sys_user_payable_ledger_book_debit_total)%></td>
+                    <td><%= number_with_delimiter(@sys_user_payable_ledger_book_credit_total)%></td>
+                    <td><%= number_with_delimiter(@sys_user_payable.pluck('balance').map(&:abs).sum) %></td>
+                  </tr>
+                </tbody>
+              </table>
+	    			</div>
+	    		</div>
+	    	</div>
+        </div>
+	    </div>
+      <%@sys_user_balance = 0 %>
+      <div class="card shadow mb-4">
+	    	<!-- Card Header - Accordion -->
+	    	<a href="#collapseCardExample1" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample1">
+	    		<h6 class="m-0 font-weight-bold text-primary"><h1 style= "text-align : center">Users Reciveable</h1></h6>
+	    	</a>
+	    	<!-- Card Content - Collapse -->
+        <div class="collapse show" id="collapseCardExample1" style="">
+      		<div class="col-xl-12 col-md-12 mb-4">
+      			<div class="row no-gutters align-items-center">
+      				<div class="col mr-2">
+                <br>
+                <div class="row">
+                  <div class="col-lg-12 col-sm-12">
+                    <%= search_form_for @p, url: reports_trial_balance_path, class: "admin-controls", method: "get" do |f| %>
+                      <div class="col-lg-2 form-group float-left">
+                        <%= f.select :user_group_eq, options_for_select(SysUser.user_groups, @user_group), {:include_blank => "Select User group"},:class=>"form-control chosen-select" %>
+                      </div>
+                      <div class="col-lg-2 form-group float-left">
+                        <%= f.select :status_eq, SysUser.statuses.map { |key, value| [key.humanize, value] },{hide_label:true,class: "form-control", required: true ,:include_blank => "Select Status"},:class=>"form-control chosen-select" %>
+                      </div>
+                      <div class="col-lg-2 form-group float-left">
+                        <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+                      </div>
+                      <button class="form-control btn btn-danger float-right" style="width: 100px;" name="submit_pdf_staff_with" type="submit" value="Accounts PDF A4" formtarget="_blank"> <i class="fa fa-file-pdf mr-2"></i>PDF</button>
+                    <% end %>
                   </div>
-                  <div class="col=lg-2 form-group float-left">
-                    <%= f.select :status_eq, SysUser.statuses.map { |key, value| [key.humanize, value] },{hide_label:true,class: "form-control", required: true ,:include_blank => "Select Status"},:class=>"form-control chosen-select" %>
+                </div>
+                <table data-toggle="table" data-search="true">
+                  <thead>
+                    <tr>
+                      <th><%= sort_link(@q, :code, 'Code') %></th>
+                      <th><%= sort_link(@q, :name, 'Name') %></th>
+                      <th><%= sort_link(@q, :user_group, 'User group') %></th>
+                      <th>Status</th>
+                      <th>Debit</th>
+                      <th>Credit</th>
+                      <th><%= sort_link(@q, :balance, 'balance') %></th>
+                      <th>Check</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% @sys_user_receiveable.each do |sys_user| %>
+                      <tr>
+                        <td><%= sys_user.code %></td>
+                        <td>
+                          <%= link_to ledger_books_path('q[sys_user_id_eq]':sys_user.id) do%>
+                            <i class="fa fa-address-book"></i><%= sys_user.name %>
+                          <%end %>
+                        </td>
+                        <td><%= sys_user.user_group %></td>
+                        <td><%= sys_user.status %></td>
+                        <td><%= number_with_delimiter(debit_sum  = @sys_user_receiveable_ledger_book_debit[sys_user.id].to_d)%></td>
+                        <td><%= number_with_delimiter(credit_sum = @sys_user_receiveable_ledger_book_credit[sys_user.id].to_d)%></td>
+                        <td><%= number_with_delimiter(balance = sys_user.balance) %><%credit_debit = credit_sum-debit_sum%></td>
+                        <td>
+                          <% if balance == credit_debit%>
+                            <i class="fa fa-check"></i>
+                          <%else%>
+                            <i class="fa fa-trash"></i><%=balance-credit_debit%>
+                          <%end%>
+                        </td>
+                      </tr>
+                    <% end %>
+                    <tr>
+                      <td><h5>Total</h5></td>
+                      <td><%= %></td>
+                      <td><%= %></td>
+                      <td><%= %></td>
+                      <td><%= number_with_delimiter(@sys_user_receiveable_ledger_book_debit_total)%></td>
+                      <td><%= number_with_delimiter(@sys_user_receiveable_ledger_book_credit_total)%></td>
+                      <td><%=number_with_delimiter(@sys_user_receiveable.pluck('balance').map(&:abs).sum) %></td>
+                    </tr>
+                  </tbody>
+                </table>
+      				</div>
+      			</div>
+      		</div>
+        </div>
+	    </div>
+      <%@sys_user_balance = 0 %>
+      <div class="card shadow">
+	    	<!-- Card Header - Accordion -->
+	    	<a href="#collapseCardExample2" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample1">
+	    		<h6 class="m-0 font-weight-bold text-primary"><h1 style= "text-align : center">Users Nill</h1></h6>
+	    	</a>
+	    	<!-- Card Content - Collapse -->
+        <div class="collapse show" id="collapseCardExample2" style="">
+      		<div class="col-xl-12 col-md-12 mb-4">
+      			<div class="row no-gutters align-items-center">
+      				<div class="col mr-2">
+                <br>
+                <div class="row">
+                  <div class="col-lg-12 col-sm-12">
+                    <%= search_form_for @n, url: reports_trial_balance_path, class: "admin-controls", method: "get" do |f| %>
+                      <div class="col-lg-2 form-group float-left">
+                        <%= f.select :user_group_eq, options_for_select(SysUser.user_groups, @user_group), {:include_blank => "Select User group"},:class=>"form-control chosen-select" %>
+                      </div>
+                      <div class="col-lg-2 form-group float-left">
+                        <%= f.select :status_eq, SysUser.statuses.map { |key, value| [key.humanize, value] },{hide_label:true,class: "form-control", required: true ,:include_blank => "Select Status"},:class=>"form-control chosen-select" %>
+                      </div>
+                      <div class="col-lg-2 account_totalform-group float-left">
+                        <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+                      </div>
+                      <button class="form-control btn btn-danger float-right" style="width: 100px;" name="submit_pdf_staff_with" type="submit" value="Accounts PDF A4" formtarget="_blank"> <i class="fa fa-file-pdf mr-2"></i>PDF</button>
+                    <% end %>
                   </div>
-                  <div class="col-lg-2 account_totalform-group float-left">
-                    <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+                </div>
+                <table data-toggle="table" data-search="true">
+                  <thead>
+                    <tr>
+                      <th><%= sort_link(@n, :code, 'Code') %></th>
+                      <th><%= sort_link(@n, :name, 'Name') %></th>
+                      <th><%= sort_link(@n, :user_group, 'User group') %></th>
+                      <th>Status</th>
+                      <th>Debit</th>
+                      <th>Credit</th>
+                      <th><%= sort_link(@n, :balance, 'balance') %></th>
+                      <th>Check</th>
+                    </tr>
+                  </thead>
+    
+                  <tbody>
+                    <% @sys_user_nill.each do |sys_user| %>
+                      <tr>
+                        <td><%= sys_user.code %></td>
+                        <td>
+                          <%= link_to ledger_books_path('q[sys_user_id_eq]':sys_user.id) do%>
+                            <i class="fa fa-address-book"></i><%= sys_user.name %>
+                          <%end %>
+                        </td>
+                        <td><%= sys_user.user_group %></td>
+                        <td><%= sys_user.status %></td>
+                        <td><%= number_with_delimiter(debit_sum  = @sys_user_nill_ledger_book_debit[sys_user.id].to_d)%></td>
+                        <td><%= number_with_delimiter(credit_sum = @sys_user_nill_ledger_book_credit[sys_user.id].to_d)%></td>
+                        <td><%= number_with_delimiter(balance = sys_user.balance) %><%credit_debit = credit_sum-debit_sum%></td>
+                        <td>
+                          <% if balance == credit_debit%>
+                            <i class="fa fa-check"></i>
+                          <%else%>
+                            <i class="fa fa-trash"></i><%=balance-credit_debit%>
+                          <%end%>
+                        </td>
+                      </tr>
+                    <% end %>
+                    <tr>
+                      <td><h5>Total</h5></td>
+                      <td><%= %></td>
+                      <td><%= %></td>
+                      <td><%= %></td>
+                      <td><%= number_with_delimiter(@sys_user_nill_ledger_book_debit_total) %></td>
+                      <td><%= number_with_delimiter(@sys_user_nill_ledger_book_credit_total) %></td>
+                      <td><%= number_with_delimiter(@sys_user_nill.pluck('balance').map(&:abs).sum) %></td>
+                    </tr>
+    
+                  </tbody>
+                </table>
+      				</div>
+      			</div>
+      		</div>
+        </div>
+	    </div>
+    </div>
+    <div class="tab-pane active mb-3 card shadow-sm mt-2 p-4 border-radius-1" id="staffs" role="tabpanel">
+      <%@monthly_wage=0%>
+      <%@advance=0%>
+      <%@short_pay=0%>
+      <%@balance=0%>
+      <div class="card shadow mb-4">
+	    	<!-- Card Header - Accordion -->
+	    	<a href="#collapseCardExample3" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample2">
+	    		<h6 class="m-0 font-weight-bold text-primary"><h1 style= "text-align : center">Staff Payable</h1></h6>
+	    	</a>
+	    	<!-- Card Content - Collapse -->
+        <div class="collapse show" id="collapseCardExample3" style="">
+      		<div class="col-xl-12 col-md-12 mb-4">
+      			<div class="row no-gutters align-items-center">
+      				<div class="col mr-2">
+                <br>
+                <div class="row">
+                  <div class="col-lg-12 col-sm-12">
+                    <%= search_form_for @s, url: reports_trial_balance_path, class: "admin-controls", method: "get" do |f| %>
+                      <div class="col-lg-3 form-group float-left">
+                        <%= f.select :id_eq, options_from_collection_for_select(@staff_names, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code}"},@name),{:include_blank => "Select Staff"},:class=>"form-control chosen-select" %>
+                      </div>
+                      <div class="col-lg-2 form-group float-left">
+                        <%= f.select :department_id_eq, options_from_collection_for_select(@departments, 'id', 'title', @department), {hide_label:true,title: "Select the Department" ,prompt: "Select the Department"},:class=>"form-control chosen-select"%>
+                      </div>
+                      <div class="col-lg-2 form-group float-left">
+                        <%= f.select :staff_type_eq, Staff.staff_types.map { |key, value| [key.humanize, value] },{hide_label:true,class: "form-control", required: true,:include_blank => "Select Status"},:class=>"form-control" %>
+                      </div>
+                      <div class="col-lg-2 form-group float-left">
+                        <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+                      </div>
+                      <button class="form-control btn btn-danger float-right" style="width: 100px;" name="submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mr-2"></i>PDF</button>
+                    <% end %>
                   </div>
-                  <div class="col-lg-1.5 form-group float-right">
-                    <button class="form-control btn  badge badge-pill badge-danger" name="submit_pdf_staff_with" type="submit" value="Accounts PDF A4" formtarget="_blank"> <i class="fa fa-file-pdf"></i></button>
-                  </div>
-                <% end %>
+                </div>
+                <table data-toggle="table" data-search="true">
+                  <thead>
+                    <tr>
+                      <th><%= sort_link(@k, :staff_type, 'Status') %></th>
+                      <th><%= sort_link(@k, :code, 'Code') %></th>
+                      <th><%= sort_link(@k, :name, 'Name') %></th>
+                      <th><%= sort_link(@k, :monthly_salary, 'Monthly/Wage') %></th>
+                      <th><%= sort_link(@k, :department_id, 'Department/Raw') %></th>
+                      <th>Debit</th>
+                      <th>Credit</th>
+                      <th><%= sort_link(@k, :balance, 'Balance') %></th>
+                      <th>Check</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% @staff_payable.each do |staff| %>
+                      <tr>
+                        <td><%= staff.staff_type %></td>
+                        <td>
+                          <%= link_to staff_ledger_books_path('q[staff_id_eq]':staff.id) do%>
+                            <i class="fa fa-address-book"></i><%= staff.code %>
+                          <%end %>
+                        </td>
+                        <td><%= staff.full_name %></td>
+                        <td><%= number_with_delimiter(staff.staff_salary_or_wage.to_f.round(2))%></td>
+                        <td><%= staff.department.present? ? staff.department.title : ""%>:<%= staff.staff_raw_products.present? ? staff.staff_raw_products_titles : ""%></td>
+                        <td><%= number_with_delimiter(debit_sum  = @staff_payable_ledger_book_debit[staff.id].to_d)%></td>
+                        <td><%= number_with_delimiter(credit_sum = @staff_payable_ledger_book_credit[staff.id].to_d)%></td>
+                        <td><%= number_with_delimiter(balance = staff.balance.to_f.round(2))%><%credit_debit = credit_sum-debit_sum%></td>
+                        <td>
+                          <% if balance == credit_debit%>
+                            <i class="fa fa-check"></i>
+                          <%else%>
+                            <i class="fa fa-trash"></i> <%=balance-credit_debit%>
+                          <%end%>
+                        </td>
+                      </tr>
+                    <% end %>
+                    <tr>
+                      <td><h4>Total<h4></td>
+                      <td><h4><%=@staff_payable.count%></h4></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td><h4><%=number_with_delimiter(@staff_payable.sum(:balance))%><h4></td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
-            <table data-toggle="table" data-search="true">
-              <thead>
-                <tr>
-                  <th><%= sort_link(@q, :code, 'Code') %></th>
-                  <th><%= sort_link(@q, :name, 'Name') %></th>
-                  <th><%= sort_link(@q, :user_group, 'User group') %></th>
-                  <th>Status</th>
-                  <th>Debit</th>
-                  <th>Credit</th>
-                  <th><%= sort_link(@q, :balance, 'balance') %></th>
-                  <th>Check</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                <% @sys_user_receiveable.each do |sys_user| %>
-                  <tr>
-                    <td><%= sys_user.code %></td>
-                    <td>
-                      <%= link_to ledger_books_path('q[sys_user_id_eq]':sys_user.id) do%>
-                        <i class="fa fa-address-book"></i><%= sys_user.name %>
-                      <%end %>
-                    </td>
-                    <td><%= sys_user.user_group %></td>
-                    <td><%= sys_user.status %></td>
-                    <td><%= number_with_delimiter(debit_sum  = @sys_user_receiveable_ledger_book_debit[sys_user.id].to_d)%></td>
-                    <td><%= number_with_delimiter(credit_sum = @sys_user_receiveable_ledger_book_credit[sys_user.id].to_d)%></td>
-                    <td><%= number_with_delimiter(balance = sys_user.balance) %><%credit_debit = credit_sum-debit_sum%></td>
-                    <td>
-                      <% if balance == credit_debit%>
-                        <i class="fa fa-check"></i>
-                      <%else%>
-                        <i class="fa fa-trash"></i><%=balance-credit_debit%>
-                      <%end%>
-                    </td>
-                  </tr>
-                <% end %>
-                <tr>
-                  <td><h5>Total</h5></td>
-                  <td><%= %></td>
-                  <td><%= %></td>
-                  <td><%= %></td>
-                  <td><%= number_with_delimiter(@sys_user_receiveable_ledger_book_debit_total)%></td>
-                  <td><%= number_with_delimiter(@sys_user_receiveable_ledger_book_credit_total)%></td>
-                  <td><%=number_with_delimiter(@sys_user_receiveable.pluck('balance').map(&:abs).sum) %></td>
-                </tr>
-
-              </tbody>
-            </table>
-  				</div>
-  			</div>
-  		</div>
-    </div>
-	</div>
-
-  <%@sys_user_balance = 0 %>
-  <div class="card shadow mb-4">
-		<!-- Card Header - Accordion -->
-		<a href="#collapseCardExample2" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample1">
-			<h6 class="m-0 font-weight-bold text-primary"><h1 style= "text-align : center">Users Nill</h1></h6>
-		</a>
-		<!-- Card Content - Collapse -->
-    <div class="collapse show" id="collapseCardExample2" style="">
-  		<div class="col-xl-12 col-md-12 mb-4">
-  			<div class="row no-gutters align-items-center">
-  				<div class="col mr-2">
-            <br>
-            <div class="row">
-              <div class="col-lg-12 col-sm-12">
-                <%= search_form_for @n, url: reports_trial_balance_path, class: "admin-controls", method: "get" do |f| %>
-                  <div class="col-lg-2 form-group float-left">
-                    <%= f.select :user_group_eq, options_for_select(SysUser.user_groups, @user_group), {:include_blank => "Select User group"},:class=>"form-control chosen-select" %>
+          </div>
+        </div>
+      </div>
+      <div class="card shadow mb-4">
+	    	<!-- Card Header - Accordion -->
+	    	<a href="#collapseCardExample4" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample4">
+	    		<h6 class="m-0 font-weight-bold text-primary"><h1 style= "text-align : center">Staff Reciveable</h1></h6>
+	    	</a>
+	    	<!-- Card Content - Collapse -->
+        <div class="collapse show" id="collapseCardExample4" style="">
+      		<div class="col-xl-12 col-md-12 mb-4">
+      			<div class="row no-gutters align-items-center">
+      				<div class="col mr-2">
+                <br>
+                <div class="row">
+                  <div class="col-lg-12 col-sm-12">
+                    <%= search_form_for @k, url: reports_trial_balance_path, class: "admin-controls", method: "get" do |f| %>
+                      <div class="col-lg-3 form-group float-left">
+                        <%= f.select :id_eq, options_from_collection_for_select(@staff_names, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code}"},@name),{:include_blank => "Select Staff"},:class=>"form-control chosen-select" %>
+                      </div>
+                      <div class="col-lg-2 form-group float-left">
+                        <%= f.select :department_id_eq, options_from_collection_for_select(@departments, 'id', 'title', @department), {hide_label:true,title: "Select the Department" ,prompt: "Select the Department"},:class=>"form-control chosen-select"%>
+                      </div>
+                      <div class="col-lg-2 form-group float-left">
+                        <%= f.select :staff_type_eq, Staff.staff_types.map { |key, value| [key.humanize, value] },{hide_label:true,class: "form-control", required: true},:class=>"form-control" %>
+                      </div>
+                      <div class="col-lg-2 form-group float-left">
+                        <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+                      </div>
+                      <button class="form-control btn btn-danger float-right" style="width: 100px;" name="submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mr-2"></i>PDF</button>
+                    <% end %>
                   </div>
-                  <div class="col=lg-2 form-group float-left">
-                    <%= f.select :status_eq, SysUser.statuses.map { |key, value| [key.humanize, value] },{hide_label:true,class: "form-control", required: true ,:include_blank => "Select Status"},:class=>"form-control chosen-select" %>
-                  </div>
-                  <div class="col-lg-2 account_totalform-group float-left">
-                    <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
-                  </div>
-                  <div class="col-lg-1.5 form-group float-right">
-                    <button class="form-control btn  badge badge-pill badge-danger" name="submit_pdf_staff_with" type="submit" value="Accounts PDF A4" formtarget="_blank"> <i class="fa fa-file-pdf"></i></button>
-                  </div>
-                <% end %>
+                </div>
+                <table data-toggle="table" data-search="true">
+                  <thead>
+                    <tr>
+                      <th><%= sort_link(@k, :staff_type, 'Status') %></th>
+                      <th><%= sort_link(@k, :code, 'Code') %></th>
+                      <th><%= sort_link(@k, :name, 'Name') %></th>
+                      <th><%= sort_link(@k, :monthly_salary, 'Monthly/Wage') %></th>
+                      <th><%= sort_link(@k, :department_id, 'Department/Raw') %></th>
+                      <th>Debit</th>
+                      <th>Credit</th>
+                      <th><%= sort_link(@k, :balance, 'Balance') %></th>
+                      <th>Check</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% @staff_reciveable.each do |staff| %>
+                      <tr>
+                        <td><%= staff.staff_type %></td>
+                        <td>
+                          <%= link_to staff_ledger_books_path('q[staff_id_eq]':staff.id) do%>
+                            <i class="fa fa-address-book"></i><%= staff.code %>
+                          <%end %>
+                        </td>
+                        <td><%= staff.full_name %></td>
+                        <td><%= number_with_delimiter(staff.staff_salary_or_wage.to_f.round(2))%></td>
+                        <td><%= staff.department.present? ? staff.department.title : ""%>:<%= staff.staff_raw_products.present? ? staff.staff_raw_products_titles : ""%></td>
+                        <td><%= number_with_delimiter(debit_sum  = @staff_reciveable_ledger_book_debit[staff.id].to_d) %></td>
+                        <td><%= number_with_delimiter(credit_sum = @staff_reciveable_ledger_book_credit[staff.id].to_d) %></td>
+                        <td><%= number_with_delimiter(balance = staff.balance.to_f.round(2))%> <%credit_debit = credit_sum-debit_sum%></td>
+                        <td>
+                          <% if balance == credit_debit%>
+                            <i class="fa fa-check"></i>
+                          <%else%>
+                            <i class="fa fa-trash"></i><%=balance-credit_debit%>
+                          <%end%>
+                        </td>
+                      </tr>
+                    <% end %>
+                    <tr>
+                      <td><h4>Total<h4></td>
+                      <td><h4><%=@staff_reciveable.count%></h4></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td><h4><%=number_with_delimiter(@staff_reciveable.sum(:balance).abs)%><h4></td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
-            <table data-toggle="table" data-search="true">
-              <thead>
-                <tr>
-                  <th><%= sort_link(@n, :code, 'Code') %></th>
-                  <th><%= sort_link(@n, :name, 'Name') %></th>
-                  <th><%= sort_link(@n, :user_group, 'User group') %></th>
-                  <th>Status</th>
-                  <th>Debit</th>
-                  <th>Credit</th>
-                  <th><%= sort_link(@n, :balance, 'balance') %></th>
-                  <th>Check</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                <% @sys_user_nill.each do |sys_user| %>
-                  <tr>
-                    <td><%= sys_user.code %></td>
-                    <td>
-                      <%= link_to ledger_books_path('q[sys_user_id_eq]':sys_user.id) do%>
-                        <i class="fa fa-address-book"></i><%= sys_user.name %>
-                      <%end %>
-                    </td>
-                    <td><%= sys_user.user_group %></td>
-                    <td><%= sys_user.status %></td>
-                    <td><%= number_with_delimiter(debit_sum  = @sys_user_nill_ledger_book_debit[sys_user.id].to_d)%></td>
-                    <td><%= number_with_delimiter(credit_sum = @sys_user_nill_ledger_book_credit[sys_user.id].to_d)%></td>
-                    <td><%= number_with_delimiter(balance = sys_user.balance) %><%credit_debit = credit_sum-debit_sum%></td>
-                    <td>
-                      <% if balance == credit_debit%>
-                        <i class="fa fa-check"></i>
-                      <%else%>
-                        <i class="fa fa-trash"></i><%=balance-credit_debit%>
-                      <%end%>
-                    </td>
-                  </tr>
-                <% end %>
-                <tr>
-                  <td><h5>Total</h5></td>
-                  <td><%= %></td>
-                  <td><%= %></td>
-                  <td><%= %></td>
-                  <td><%= number_with_delimiter(@sys_user_nill_ledger_book_debit_total) %></td>
-                  <td><%= number_with_delimiter(@sys_user_nill_ledger_book_credit_total) %></td>
-                  <td><%= number_with_delimiter(@sys_user_nill.pluck('balance').map(&:abs).sum) %></td>
-                </tr>
-
-              </tbody>
-            </table>
-  				</div>
-  			</div>
-  		</div>
-    </div>
-	</div>
-
-  <%@monthly_wage=0%>
-  <%@advance=0%>
-  <%@short_pay=0%>
-  <%@balance=0%>
-  <div class="card shadow mb-4">
-		<!-- Card Header - Accordion -->
-		<a href="#collapseCardExample3" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample2">
-			<h6 class="m-0 font-weight-bold text-primary"><h1 style= "text-align : center">Staff Payable</h1></h6>
-		</a>
-		<!-- Card Content - Collapse -->
-    <div class="collapse show" id="collapseCardExample3" style="">
-  		<div class="col-xl-12 col-md-12 mb-4">
-  			<div class="row no-gutters align-items-center">
-  				<div class="col mr-2">
-            <br>
-            <div class="row">
-              <div class="col-lg-12 col-sm-12">
-                <%= search_form_for @s, url: reports_trial_balance_path, class: "admin-controls", method: "get" do |f| %>
-                  <div class="col-lg-3 form-group float-left">
-                    <%= f.select :id_eq, options_from_collection_for_select(@staff_names, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code}"},@name),{:include_blank => "Select Staff"},:class=>"form-control chosen-select" %>
+          </div>
+        </div>
+      </div>
+      <div class="card shadow mb-4">
+	    	<!-- Card Header - Accordion -->
+	    	<a href="#collapseCardExample5" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample4">
+	    		<h6 class="m-0 font-weight-bold text-primary"><h1 style= "text-align : center">Staff Nill</h1></h6>
+	    	</a>
+	    	<!-- Card Content - Collapse -->
+        <div class="collapse show" id="collapseCardExample5" style="">
+      		<div class="col-xl-12 col-md-12 mb-4">
+      			<div class="row no-gutters align-items-center">
+      				<div class="col mr-2">
+                <br>
+                <div class="row">
+                  <div class="col-lg-12 col-sm-12">
+                    <%= search_form_for @sn, url: reports_trial_balance_path, class: "admin-controls", method: "get" do |f| %>
+                      <div class="col-lg-3 form-group float-left">
+                        <%= f.select :id_eq, options_from_collection_for_select(@staff_names, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code}"},@name),{:include_blank => "Select Staff"},:class=>"form-control chosen-select" %>
+                      </div>
+                      <div class="col-lg-2 form-group float-left">
+                        <%= f.select :department_id_eq, options_from_collection_for_select(@departments, 'id', 'title', @department), {hide_label:true,title: "Select the Department" ,prompt: "Select the Department"},:class=>"form-control chosen-select"%>
+                      </div>
+                      <div class="col-lg-2 form-group float-left">
+                        <%= f.select :staff_type_eq, Staff.staff_types.map { |key, value| [key.humanize, value] },{hide_label:true,class: "form-control", required: true},:class=>"form-control" %>
+                      </div>
+                      <div class="col-lg-2 form-group float-left">
+                        <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+                      </div>
+                      <button class="form-control btn btn-danger float-right" style="width: 100px;" name="submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mr-2"></i>PDF</button>
+                    <% end %>
                   </div>
-                  <div class="col-lg-2 form-group float-left">
-                    <%= f.select :department_id_eq, options_from_collection_for_select(@departments, 'id', 'title', @department), {hide_label:true,title: "Select the Department" ,prompt: "Select the Department"},:class=>"form-control chosen-select"%>
-                  </div>
-                  <div class="col=lg-2 form-group float-left">
-                    <%= f.select :staff_type_eq, Staff.staff_types.map { |key, value| [key.humanize, value] },{hide_label:true,class: "form-control", required: true,:include_blank => "Select Status"},:class=>"form-control" %>
-                  </div>
-                  <div class="col-lg-2 form-group float-left">
-                    <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
-                  </div>
-                  <div class="col-lg-1 form-group float-left">
-                  </div>
-                  <div class="col-lg-1 form-group float-left">
-                    <button class="form-control btn  badge badge-pill badge-danger" name="submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank"><i class="fa fa-file-pdf"></i></button>
-                  </div>
-                <% end %>
+                </div>
+                <table data-toggle="table" data-search="true">
+                  <thead>
+                    <tr>
+                      <th><%= sort_link(@sn, :staff_type, 'Status') %></th>
+                      <th><%= sort_link(@sn, :code, 'Code') %></th>
+                      <th><%= sort_link(@sn, :name, 'Name') %></th>
+                      <th><%= sort_link(@sn, :monthly_salary, 'Monthly/Wage') %></th>
+                      <th><%= sort_link(@sn, :department_id, 'Department/Raw') %></th>
+                      <th>Debit</th>
+                      <th>Credit</th>
+                      <th><%= sort_link(@sn, :balance, 'Balance') %></th>
+                      <th>Check</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% @staff_nill.each do |staff| %>
+                      <tr>
+                        <td><%= staff.staff_type %></td>
+                        <td>
+                          <%= link_to staff_ledger_books_path('q[staff_id_eq]':staff.id) do%>
+                            <i class="fa fa-address-book"></i><%= staff.code %>
+                          <%end %>
+                        </td>
+                        <td><%= staff.full_name %></td>
+                        <td><%= number_with_delimiter(staff.staff_salary_or_wage.to_f.round(2))%></td>
+                        <td><%= staff.department.present? ? staff.department.title : ""%>:<%= staff.staff_raw_products.present? ? staff.staff_raw_products_titles : ""%></td>
+                        <td><%= number_with_delimiter(debit_sum  = @staff_nill_ledger_book_debit[staff.id].to_d) %></td>
+                        <td><%= number_with_delimiter(credit_sum = @staff_nill_ledger_book_credit[staff.id].to_d) %></td>
+                        <td><%= number_with_delimiter(balance = staff.balance.to_f.round(2))%><%credit_debit = credit_sum-debit_sum%></td>
+                        <td>
+                          <% if balance == credit_debit%>
+                            <i class="fa fa-check"></i>
+                          <%else%>
+                            <i class="fa fa-trash"></i> <%=balance-credit_debit%>
+                          <%end%>
+                        </td>
+                      </tr>
+                    <% end %>
+                    <tr>
+                      <td><h4>Total<h4></td>
+                      <td><h4><%=@staff_nill.count%></h4></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td><h4><%= number_with_delimiter(@staff_nill.sum(:balance).abs)%><h4></td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
-            <table data-toggle="table" data-search="true">
-              <thead>
-                <tr>
-                  <th><%= sort_link(@k, :staff_type, 'Status') %></th>
-                  <th><%= sort_link(@k, :code, 'Code') %></th>
-                  <th><%= sort_link(@k, :name, 'Name') %></th>
-                  <th><%= sort_link(@k, :monthly_salary, 'Monthly/Wage') %></th>
-                  <th><%= sort_link(@k, :department_id, 'Department/Raw') %></th>
-                  <th>Debit</th>
-                  <th>Credit</th>
-                  <th><%= sort_link(@k, :balance, 'Balance') %></th>
-                  <th>Check</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                <% @staff_payable.each do |staff| %>
-                  <tr>
-                    <td><%= staff.staff_type %></td>
-                    <td>
-                      <%= link_to staff_ledger_books_path('q[staff_id_eq]':staff.id) do%>
-                        <i class="fa fa-address-book"></i><%= staff.code %>
-                      <%end %>
-                    </td>
-                    <td><%= staff.full_name %></td>
-                    <td><%= number_with_delimiter(staff.staff_salary_or_wage.to_f.round(2))%></td>
-                    <td><%= staff.department.present? ? staff.department.title : ""%>:<%= staff.staff_raw_products.present? ? staff.staff_raw_products_titles : ""%></td>
-                    <td><%= number_with_delimiter(debit_sum  = @staff_payable_ledger_book_debit[staff.id].to_d)%></td>
-                    <td><%= number_with_delimiter(credit_sum = @staff_payable_ledger_book_credit[staff.id].to_d)%></td>
-                    <td><%= number_with_delimiter(balance = staff.balance.to_f.round(2))%><%credit_debit = credit_sum-debit_sum%></td>
-                    <td>
-                      <% if balance == credit_debit%>
-                        <i class="fa fa-check"></i>
-                      <%else%>
-                        <i class="fa fa-trash"></i> <%=balance-credit_debit%>
-                      <%end%>
-                    </td>
-                  </tr>
-                <% end %>
-                <tr>
-                  <td><h4>Total<h4></td>
-                  <td><h4><%=@staff_payable.count%></h4></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td><h4><%=number_with_delimiter(@staff_payable.sum(:balance))%><h4></td>
-                </tr>
-              </tbody>
-            </table>
-
           </div>
         </div>
-      </div>
+      </div>  
     </div>
-  </div>
+    <div class="tab-pane active mb-3 card shadow-sm mt-2 p-4 border-radius-1" id="accounts" role="tabpanel">
+      <div class="card shadow mb-4">
+	    	<!-- Card Header - Accordion -->
+	    	<a href="#collapseCardExample6" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample4">
+	    		<h6 class="m-0 font-weight-bold text-primary"><h1 style= "text-align : center">Accounts</h1></h6>
+	    	</a>
+	    	<!-- Card Content - Collapse -->
+        <div class="collapse show" id="collapseCardExample6" style="">
+      		<div class="col-xl-12 col-md-12 mb-4">
+      			<div class="row no-gutters align-items-center">
+      				<div class="col mr-2">
+                <br>
+                <div class="row">
+                  <div class="col-lg-12 col-sm-12">
+                    <%= search_form_for @sn, url: reports_trial_balance_path, class: "admin-controls", method: "get" do |f| %>
+                      <div class="col-lg-3 form-group float-left">
+                        <%= f.select :id_eq, options_from_collection_for_select(@staff_names, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code}"},@name),{:include_blank => "Select Staff"},:class=>"form-control chosen-select" %>
+                      </div>
+                      <div class="col-lg-2 form-group float-left">
+                        <%= f.select :department_id_eq, options_from_collection_for_select(@departments, 'id', 'title', @department), {hide_label:true,title: "Select the Department" ,prompt: "Select the Department"},:class=>"form-control chosen-select"%>
+                      </div>
+                      <div class="col-lg-2 form-group float-left">
+                        <%= f.select :staff_type_eq, Staff.staff_types.map { |key, value| [key.humanize, value] },{hide_label:true,class: "form-control", required: true},:class=>"form-control" %>
+                      </div>
+                      <div class="col-lg-2 form-group float-left">
+                        <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+                      </div>
+                      <button class="form-control btn btn-danger float-right" style="width: 100px;" name="submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mr-2"></i>PDF</button>
+                    <% end %>
+                  </div>
+                </div>
+                <table data-toggle="table" data-search="true">
+                  <thead>
+                    <tr>
+                      <th><%= sort_link(@sn, :code, 'Title') %></th>
+                      <th><%= sort_link(@sn, :name, 'Bank Name') %></th>
+                      <th>Debit</th>
+                      <th>Credit</th>
+                      <th><%= sort_link(@sn, :balance, 'Balance') %></th>
+                      <th>Check</th>
+                    </tr>
+                  </thead>
 
-  <div class="card shadow mb-4">
-		<!-- Card Header - Accordion -->
-		<a href="#collapseCardExample4" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample4">
-			<h6 class="m-0 font-weight-bold text-primary"><h1 style= "text-align : center">Staff Reciveable</h1></h6>
-		</a>
-		<!-- Card Content - Collapse -->
-    <div class="collapse show" id="collapseCardExample4" style="">
-  		<div class="col-xl-12 col-md-12 mb-4">
-  			<div class="row no-gutters align-items-center">
-  				<div class="col mr-2">
-            <br>
-            <div class="row">
-              <div class="col-lg-12 col-sm-12">
-                <%= search_form_for @k, url: reports_trial_balance_path, class: "admin-controls", method: "get" do |f| %>
-                  <div class="col-lg-3 form-group float-left">
-                    <%= f.select :id_eq, options_from_collection_for_select(@staff_names, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code}"},@name),{:include_blank => "Select Staff"},:class=>"form-control chosen-select" %>
-                  </div>
-                  <div class="col-lg-2 form-group float-left">
-                    <%= f.select :department_id_eq, options_from_collection_for_select(@departments, 'id', 'title', @department), {hide_label:true,title: "Select the Department" ,prompt: "Select the Department"},:class=>"form-control chosen-select"%>
-                  </div>
-                  <div class="col=lg-2 form-group float-left">
-                    <%= f.select :staff_type_eq, Staff.staff_types.map { |key, value| [key.humanize, value] },{hide_label:true,class: "form-control", required: true},:class=>"form-control" %>
-                  </div>
-                  <div class="col-lg-2 form-group float-left">
-                    <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
-                  </div>
-                  <div class="col-lg-1 form-group float-left">
-                  </div>
-                  <div class="col-lg-1 form-group float-left">
-                    <button class="form-control btn  badge badge-pill badge-danger" name="submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank"><i class="fa fa-file-pdf"></i></button>
-                  </div>
-                <% end %>
+                  <tbody>
+                    <% @accounts.each do |account| %>
+                      <tr>
+                        <td>
+                          <%= link_to payments_path('q[account_id_eq]':account.id) do%>
+                            <i class="fa fa-address-book"></i><%= account.title %>
+                          <%end %>
+                        </td>
+                        <td><%= account.bank_name %></td>
+                        <td><%= number_with_delimiter(debit_sum  = @account_debit[account.title].to_d) %></td>
+                        <td><%= number_with_delimiter(credit_sum = @account_credit[account.title].to_d) %></td>
+                        <td><%= number_with_delimiter(balance = account.amount.to_f.round(2)) %> <%credit_debit = credit_sum-debit_sum%></td>
+                        <td>
+                          <% if balance == credit_debit%>
+                            <i class="fa fa-check"></i>
+                          <%else%>
+                            <i class="fa fa-trash"></i><%= balance-credit_debit%>
+                          <%end%>
+                        </td>
+                      </tr>
+                    <% end %>
+                    <tr>
+                      <td><h4>Total<h4></td>
+                      <td><h4><%=@accounts.count%></h4></td>
+                      <td><h4><%= number_with_delimiter(@account_debit_total.to_f.round(2)) %></h4></td>
+                      <td><h4><%= number_with_delimiter(@account_credit_total.to_f.round(2)) %></h4></td>
+                      <td><h4><%= number_with_delimiter(@accounts.sum(:amount).abs.to_f.round(2)) %><h4></td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
-            <table data-toggle="table" data-search="true">
-              <thead>
-                <tr>
-                  <th><%= sort_link(@k, :staff_type, 'Status') %></th>
-                  <th><%= sort_link(@k, :code, 'Code') %></th>
-                  <th><%= sort_link(@k, :name, 'Name') %></th>
-                  <th><%= sort_link(@k, :monthly_salary, 'Monthly/Wage') %></th>
-                  <th><%= sort_link(@k, :department_id, 'Department/Raw') %></th>
-                  <th>Debit</th>
-                  <th>Credit</th>
-                  <th><%= sort_link(@k, :balance, 'Balance') %></th>
-                  <th>Check</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                <% @staff_reciveable.each do |staff| %>
-                  <tr>
-                    <td><%= staff.staff_type %></td>
-                    <td>
-                      <%= link_to staff_ledger_books_path('q[staff_id_eq]':staff.id) do%>
-                        <i class="fa fa-address-book"></i><%= staff.code %>
-                      <%end %>
-                    </td>
-                    <td><%= staff.full_name %></td>
-                    <td><%= number_with_delimiter(staff.staff_salary_or_wage.to_f.round(2))%></td>
-                    <td><%= staff.department.present? ? staff.department.title : ""%>:<%= staff.staff_raw_products.present? ? staff.staff_raw_products_titles : ""%></td>
-                    <td><%= number_with_delimiter(debit_sum  = @staff_reciveable_ledger_book_debit[staff.id].to_d) %></td>
-                    <td><%= number_with_delimiter(credit_sum = @staff_reciveable_ledger_book_credit[staff.id].to_d) %></td>
-                    <td><%= number_with_delimiter(balance = staff.balance.to_f.round(2))%> <%credit_debit = credit_sum-debit_sum%></td>
-                    <td>
-                      <% if balance == credit_debit%>
-                        <i class="fa fa-check"></i>
-                      <%else%>
-                        <i class="fa fa-trash"></i><%=balance-credit_debit%>
-                      <%end%>
-                    </td>
-                  </tr>
-                <% end %>
-                <tr>
-                  <td><h4>Total<h4></td>
-                  <td><h4><%=@staff_reciveable.count%></h4></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td><h4><%=number_with_delimiter(@staff_reciveable.sum(:balance).abs)%><h4></td>
-                </tr>
-              </tbody>
-            </table>
           </div>
         </div>
       </div>
     </div>
-  </div>
+    <div class="tab-pane active mb-3 card shadow-sm mt-2 p-4 border-radius-1" id="e-reciveable" role="tabpanel">
+      <div class="card shadow mb-4">
+        <!-- Card Header - Accordion -->
+        <a href="#expense-col" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample5">
+          <h6 class="m-0 font-weight-bold text-primary"><h1 style= "text-align : center">Expense Reciveable</h1></h6>
+        </a>
+        <!-- Card Content - Collapse -->
+        <div class="collapse show" id="expense-col" style="">
+          <div class="col-xl-12 col-md-12 mb-4">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <br>
+                <table data-toggle="table" data-search="true">
+                  <thead>
+                    <tr>
+                      <th><%= sort_link(@k, :staff_type, 'Title') %></th>
+                      <th>Debit</th>
+                      <th>Credit</th>
+                      <th>Check</th>
+                    </tr>
+                  </thead>
 
-  <div class="card shadow mb-4">
-		<!-- Card Header - Accordion -->
-		<a href="#collapseCardExample5" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample4">
-			<h6 class="m-0 font-weight-bold text-primary"><h1 style= "text-align : center">Staff Nill</h1></h6>
-		</a>
-		<!-- Card Content - Collapse -->
-    <div class="collapse show" id="collapseCardExample5" style="">
-  		<div class="col-xl-12 col-md-12 mb-4">
-  			<div class="row no-gutters align-items-center">
-  				<div class="col mr-2">
-            <br>
-            <div class="row">
-              <div class="col-lg-12 col-sm-12">
-                <%= search_form_for @sn, url: reports_trial_balance_path, class: "admin-controls", method: "get" do |f| %>
-                  <div class="col-lg-3 form-group float-left">
-                    <%= f.select :id_eq, options_from_collection_for_select(@staff_names, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code}"},@name),{:include_blank => "Select Staff"},:class=>"form-control chosen-select" %>
-                  </div>
-                  <div class="col-lg-2 form-group float-left">
-                    <%= f.select :department_id_eq, options_from_collection_for_select(@departments, 'id', 'title', @department), {hide_label:true,title: "Select the Department" ,prompt: "Select the Department"},:class=>"form-control chosen-select"%>
-                  </div>
-                  <div class="col=lg-2 form-group float-left">
-                    <%= f.select :staff_type_eq, Staff.staff_types.map { |key, value| [key.humanize, value] },{hide_label:true,class: "form-control", required: true},:class=>"form-control" %>
-                  </div>
-                  <div class="col-lg-2 form-group float-left">
-                    <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
-                  </div>
-                  <div class="col-lg-1 form-group float-left">
-                  </div>
-                  <div class="col-lg-1 form-group float-left">
-                    <button class="form-control btn  badge badge-pill badge-danger" name="submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank"><i class="fa fa-file-pdf"></i></button>
-                  </div>
-                <% end %>
+                  <tbody>
+                    <% @expense_list.each do |exp| %>
+                      <tr>
+                        <td>
+                          <%= link_to expenses_path('q[expense_entries_expense_type_id_eq]':exp&.first&.first) do%>
+                            <i class="fa fa-address-book"></i><%= exp&.first&.last %>
+                          <%end %>
+
+                        </td>
+                        <td><%= number_with_delimiter(balance = exp.last.to_f.round(2)) %></td>
+                        <td><%= number_with_delimiter(credit_expense = @credit_expense[exp&.first&.last].to_f.round(2))%></td>
+                        <td>
+                          <% if balance == credit_expense%>
+                            <i class="fa fa-check"></i>
+                          <%else%>
+                            <i class="fa fa-trash"></i><%=balance-credit_expense%>
+                          <%end%>
+                        </td>
+                      </tr>
+                    <% end %>
+                    <tr>
+                      <td><h4>Total : <%=@expense_list.count%></h4></td>
+                      <td><h4><%= number_with_delimiter(@expense_total.abs.to_f.round(2))%><h4></td>
+                      <td><h4><%= number_with_delimiter(@total_credit_expense.abs.to_f.round(2))%><h4></td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
-            <table data-toggle="table" data-search="true">
-              <thead>
-                <tr>
-                  <th><%= sort_link(@sn, :staff_type, 'Status') %></th>
-                  <th><%= sort_link(@sn, :code, 'Code') %></th>
-                  <th><%= sort_link(@sn, :name, 'Name') %></th>
-                  <th><%= sort_link(@sn, :monthly_salary, 'Monthly/Wage') %></th>
-                  <th><%= sort_link(@sn, :department_id, 'Department/Raw') %></th>
-                  <th>Debit</th>
-                  <th>Credit</th>
-                  <th><%= sort_link(@sn, :balance, 'Balance') %></th>
-                  <th>Check</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                <% @staff_nill.each do |staff| %>
-                  <tr>
-                    <td><%= staff.staff_type %></td>
-                    <td>
-                      <%= link_to staff_ledger_books_path('q[staff_id_eq]':staff.id) do%>
-                        <i class="fa fa-address-book"></i><%= staff.code %>
-                      <%end %>
-                    </td>
-                    <td><%= staff.full_name %></td>
-                    <td><%= number_with_delimiter(staff.staff_salary_or_wage.to_f.round(2))%></td>
-                    <td><%= staff.department.present? ? staff.department.title : ""%>:<%= staff.staff_raw_products.present? ? staff.staff_raw_products_titles : ""%></td>
-                    <td><%= number_with_delimiter(debit_sum  = @staff_nill_ledger_book_debit[staff.id].to_d) %></td>
-                    <td><%= number_with_delimiter(credit_sum = @staff_nill_ledger_book_credit[staff.id].to_d) %></td>
-                    <td><%= number_with_delimiter(balance = staff.balance.to_f.round(2))%><%credit_debit = credit_sum-debit_sum%></td>
-                    <td>
-                      <% if balance == credit_debit%>
-                        <i class="fa fa-check"></i>
-                      <%else%>
-                        <i class="fa fa-trash"></i> <%=balance-credit_debit%>
-                      <%end%>
-                    </td>
-                  </tr>
-                <% end %>
-                <tr>
-                  <td><h4>Total<h4></td>
-                  <td><h4><%=@staff_nill.count%></h4></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td><h4><%= number_with_delimiter(@staff_nill.sum(:balance).abs)%><h4></td>
-                </tr>
-              </tbody>
-            </table>
           </div>
         </div>
       </div>
     </div>
-  </div>
+    <div class="tab-pane active mb-3 card shadow-sm mt-2 p-4 border-radius-1" id="p-reciveable" role="tabpanel">
+      <div class="card shadow mb-4">
+        <!-- Card Header - Accordion -->
+        <a href="#purchase-col" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample6">
+          <h6 class="m-0 font-weight-bold text-primary"><h1 style= "text-align : center">Purchase Reciveable</h1></h6>
+        </a>
+        <!-- Card Content - Collapse -->
+        <div class="collapse show" id="purchase-col" style="">
+          <div class="col-xl-12 col-md-12 mb-4">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <br>
+                <table data-toggle="table" data-search="true">
+                  <thead>
+                    <tr>
+                      <th><%= sort_link(@k, :staff_type, 'Title') %></th>
+                      <th><%= sort_link(@k, :code, 'Amount') %></th>
+                    </tr>
+                  </thead>
 
-  <div class="card shadow mb-4">
-		<!-- Card Header - Accordion -->
-		<a href="#collapseCardExample6" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample4">
-			<h6 class="m-0 font-weight-bold text-primary"><h1 style= "text-align : center">Accounts</h1></h6>
-		</a>
-		<!-- Card Content - Collapse -->
-    <div class="collapse show" id="collapseCardExample6" style="">
-  		<div class="col-xl-12 col-md-12 mb-4">
-  			<div class="row no-gutters align-items-center">
-  				<div class="col mr-2">
-            <br>
-            <div class="row">
-              <div class="col-lg-12 col-sm-12">
-                <%= search_form_for @sn, url: reports_trial_balance_path, class: "admin-controls", method: "get" do |f| %>
-                  <div class="col-lg-3 form-group float-left">
-                    <%= f.select :id_eq, options_from_collection_for_select(@staff_names, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code}"},@name),{:include_blank => "Select Staff"},:class=>"form-control chosen-select" %>
-                  </div>
-                  <div class="col-lg-2 form-group float-left">
-                    <%= f.select :department_id_eq, options_from_collection_for_select(@departments, 'id', 'title', @department), {hide_label:true,title: "Select the Department" ,prompt: "Select the Department"},:class=>"form-control chosen-select"%>
-                  </div>
-                  <div class="col=lg-2 form-group float-left">
-                    <%= f.select :staff_type_eq, Staff.staff_types.map { |key, value| [key.humanize, value] },{hide_label:true,class: "form-control", required: true},:class=>"form-control" %>
-                  </div>
-                  <div class="col-lg-2 form-group float-left">
-                    <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
-                  </div>
-                  <div class="col-lg-1 form-group float-left">
-                  </div>
-                  <div class="col-lg-1 form-group float-left">
-                    <button class="form-control btn  badge badge-pill badge-danger" name="submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank"><i class="fa fa-file-pdf"></i></button>
-                  </div>
-                <% end %>
+                  <tbody>
+                    <% @purchase_item_list.each do |exp| %>
+                      <tr>
+                        <td><%= exp.first %></td>
+                        <td><%= number_with_delimiter(exp.last.to_f.round(2)) %></td>
+                      </tr>
+                    <% end %>
+                    <% @purchase_product_list.each do |exp| %>
+                      <tr>
+                        <td><%= exp.first %></td>
+                        <td><%= number_with_delimiter(exp.last.to_f.round(2)) %></td>
+                      </tr>
+                    <% end %>
+                    <tr>
+                      <td><h4>Total : <%=@purchase_item_list.count.to_i+@purchase_product_list.count.to_i%></h4></td>
+                      <td><h4><%= number_with_delimiter(@purchase_item_total.to_i+@purchase_product_total.to_i) %><h4></td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
-            <table data-toggle="table" data-search="true">
-              <thead>
-                <tr>
-                  <th><%= sort_link(@sn, :code, 'Title') %></th>
-                  <th><%= sort_link(@sn, :name, 'Bank Name') %></th>
-                  <th>Debit</th>
-                  <th>Credit</th>
-                  <th><%= sort_link(@sn, :balance, 'Balance') %></th>
-                  <th>Check</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                <% @accounts.each do |account| %>
-                  <tr>
-                    <td>
-                      <%= link_to payments_path('q[account_id_eq]':account.id) do%>
-                        <i class="fa fa-address-book"></i><%= account.title %>
-                      <%end %>
-                    </td>
-                    <td><%= account.bank_name %></td>
-                    <td><%= number_with_delimiter(debit_sum  = @account_debit[account.title].to_d) %></td>
-                    <td><%= number_with_delimiter(credit_sum = @account_credit[account.title].to_d) %></td>
-                    <td><%= number_with_delimiter(balance = account.amount.to_f.round(2)) %> <%credit_debit = credit_sum-debit_sum%></td>
-                    <td>
-                      <% if balance == credit_debit%>
-                        <i class="fa fa-check"></i>
-                      <%else%>
-                        <i class="fa fa-trash"></i><%= balance-credit_debit%>
-                      <%end%>
-                    </td>
-                  </tr>
-                <% end %>
-                <tr>
-                  <td><h4>Total<h4></td>
-                  <td><h4><%=@accounts.count%></h4></td>
-                  <td><h4><%= number_with_delimiter(@account_debit_total.to_f.round(2)) %></h4></td>
-                  <td><h4><%= number_with_delimiter(@account_credit_total.to_f.round(2)) %></h4></td>
-                  <td><h4><%= number_with_delimiter(@accounts.sum(:amount).abs.to_f.round(2)) %><h4></td>
-                </tr>
-              </tbody>
-            </table>
           </div>
         </div>
       </div>
     </div>
-  </div>
+    <div class="tab-pane active mb-3 card shadow-sm mt-2 p-4 border-radius-1" id="sale-payable" role="tabpanel">
+      <div class="card shadow mb-4">
+        <!-- Card Header - Accordion -->
+        <a href="#sale-col" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample7">
+          <h6 class="m-0 font-weight-bold text-primary"><h1 style= "text-align : center">Sale Payable</h1></h6>
+        </a>
+        <!-- Card Content - Collapse -->
+        <div class="collapse show" id="sale-col" style="">
+          <div class="col-xl-12 col-md-12 mb-4">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <br>
+                <table data-toggle="table" data-search="true">
+                  <thead>
+                    <tr>
+                      <th><%= sort_link(@k, :staff_type, 'Title') %></th>
+                      <th><%= sort_link(@k, :code, 'Amount') %></th>
+                    </tr>
+                  </thead>
 
-  <div class="card shadow mb-4">
-    <!-- Card Header - Accordion -->
-    <a href="#expense-col" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample5">
-      <h6 class="m-0 font-weight-bold text-primary"><h1 style= "text-align : center">Expense Reciveable</h1></h6>
-    </a>
-    <!-- Card Content - Collapse -->
-    <div class="collapse show" id="expense-col" style="">
-      <div class="col-xl-12 col-md-12 mb-4">
-        <div class="row no-gutters align-items-center">
-          <div class="col mr-2">
-            <br>
-            <table data-toggle="table" data-search="true">
-              <thead>
-                <tr>
-                  <th><%= sort_link(@k, :staff_type, 'Title') %></th>
-                  <th>Debit</th>
-                  <th>Credit</th>
-                  <th>Check</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                <% @expense_list.each do |exp| %>
-                  <tr>
-                    <td>
-                      <%= link_to expenses_path('q[expense_entries_expense_type_id_eq]':exp&.first&.first) do%>
-                        <i class="fa fa-address-book"></i><%= exp&.first&.last %>
-                      <%end %>
-
-                    </td>
-                    <td><%= number_with_delimiter(balance = exp.last.to_f.round(2)) %></td>
-                    <td><%= number_with_delimiter(credit_expense = @credit_expense[exp&.first&.last].to_f.round(2))%></td>
-                    <td>
-                      <% if balance == credit_expense%>
-                        <i class="fa fa-check"></i>
-                      <%else%>
-                        <i class="fa fa-trash"></i><%=balance-credit_expense%>
-                      <%end%>
-                    </td>
-                  </tr>
-                <% end %>
-                <tr>
-                  <td><h4>Total : <%=@expense_list.count%></h4></td>
-                  <td><h4><%= number_with_delimiter(@expense_total.abs.to_f.round(2))%><h4></td>
-                  <td><h4><%= number_with_delimiter(@total_credit_expense.abs.to_f.round(2))%><h4></td>
-                </tr>
-              </tbody>
-            </table>
+                  <tbody>
+                    <% @sale_item_list.each do |exp| %>
+                      <tr>
+                        <td><%= exp.first %></td>
+                        <td><%= number_with_delimiter(exp.last.to_f.round(2)) %></td>
+                      </tr>
+                    <% end %>
+                    <% @sale_product_list.each do |exp| %>
+                      <tr>
+                        <td><%= exp.first %></td>
+                        <td><%= number_with_delimiter(exp.last.to_f.round(2)) %></td>
+                      </tr>
+                    <% end %>
+                    <tr>
+                      <td><h4>Total : <%=@sale_item_list.count.to_i+@sale_product_list.count.to_i%></h4></td>
+                      <td><h4><%= number_with_delimiter(@sale_item_total.to_i+@sale_product_total.to_i) %><h4></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+    <div class="tab-pane active mb-3 card shadow-sm mt-2 p-4 border-radius-1" id="salary" role="tabpanel">
+      <div class="card shadow mb-4">
+        <!-- Card Header - Accordion -->
+        <a href="#salary-col" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample8">
+          <h6 class="m-0 font-weight-bold text-primary"><h1 style= "text-align : center">Salary</h1></h6>
+        </a>
+        <!-- Card Content - Collapse -->
+        <div class="collapse show" id="salary-col" style="">
+          <div class="col-xl-12 col-md-12 mb-4">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <br>
+                <table data-toggle="table" data-search="true">
+                  <thead>
+                    <tr>
+                      <th><%= sort_link(@k, :staff_type, 'Title') %></th>
+                      <th><%= sort_link(@k, :code, 'Amount') %></th>
+                    </tr>
+                  </thead>
 
-  <div class="card shadow mb-4">
-    <!-- Card Header - Accordion -->
-    <a href="#purchase-col" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample6">
-      <h6 class="m-0 font-weight-bold text-primary"><h1 style= "text-align : center">Purchase Reciveable</h1></h6>
-    </a>
-    <!-- Card Content - Collapse -->
-    <div class="collapse show" id="purchase-col" style="">
-      <div class="col-xl-12 col-md-12 mb-4">
-        <div class="row no-gutters align-items-center">
-          <div class="col mr-2">
-            <br>
-            <table data-toggle="table" data-search="true">
-              <thead>
-                <tr>
-                  <th><%= sort_link(@k, :staff_type, 'Title') %></th>
-                  <th><%= sort_link(@k, :code, 'Amount') %></th>
-                </tr>
-              </thead>
+                  <tbody>
+                    <% @salary_detail_list.each do |exp| %>
+                      <tr>
+                        <td><%= exp.first %></td>
+                        <td><%= number_with_delimiter(exp.last.to_f.round(2)) %></td>
+                      </tr>
+                    <% end %>
 
-              <tbody>
-                <% @purchase_item_list.each do |exp| %>
-                  <tr>
-                    <td><%= exp.first %></td>
-                    <td><%= number_with_delimiter(exp.last.to_f.round(2)) %></td>
-                  </tr>
-                <% end %>
-                <% @purchase_product_list.each do |exp| %>
-                  <tr>
-                    <td><%= exp.first %></td>
-                    <td><%= number_with_delimiter(exp.last.to_f.round(2)) %></td>
-                  </tr>
-                <% end %>
-                <tr>
-                  <td><h4>Total : <%=@purchase_item_list.count.to_i+@purchase_product_list.count.to_i%></h4></td>
-                  <td><h4><%= number_with_delimiter(@purchase_item_total.to_i+@purchase_product_total.to_i) %><h4></td>
-                </tr>
-              </tbody>
-            </table>
+                    <% @khakar_salary_detail_list.each do |exp| %>
+                      <tr>
+                        <td><%= exp.first %></td>
+                        <td><%= number_with_delimiter(exp.last.to_f.round(2)) %></td>
+                      </tr>
+                    <% end %>
+                    <tr>
+                      <td><h4>Total : <%=@salary_detail_list.count.to_i%></h4></td>
+                      <td><h4><%= number_with_delimiter(@salary_detail_total.to_i) %><h4></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-
-  <div class="card shadow mb-4">
-    <!-- Card Header - Accordion -->
-    <a href="#sale-col" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample7">
-      <h6 class="m-0 font-weight-bold text-primary"><h1 style= "text-align : center">Sale Payable</h1></h6>
-    </a>
-    <!-- Card Content - Collapse -->
-    <div class="collapse show" id="sale-col" style="">
-      <div class="col-xl-12 col-md-12 mb-4">
-        <div class="row no-gutters align-items-center">
-          <div class="col mr-2">
-            <br>
-            <table data-toggle="table" data-search="true">
-              <thead>
-                <tr>
-                  <th><%= sort_link(@k, :staff_type, 'Title') %></th>
-                  <th><%= sort_link(@k, :code, 'Amount') %></th>
-                </tr>
-              </thead>
-
-              <tbody>
-                <% @sale_item_list.each do |exp| %>
-                  <tr>
-                    <td><%= exp.first %></td>
-                    <td><%= number_with_delimiter(exp.last.to_f.round(2)) %></td>
-                  </tr>
-                <% end %>
-                <% @sale_product_list.each do |exp| %>
-                  <tr>
-                    <td><%= exp.first %></td>
-                    <td><%= number_with_delimiter(exp.last.to_f.round(2)) %></td>
-                  </tr>
-                <% end %>
-                <tr>
-                  <td><h4>Total : <%=@sale_item_list.count.to_i+@sale_product_list.count.to_i%></h4></td>
-                  <td><h4><%= number_with_delimiter(@sale_item_total.to_i+@sale_product_total.to_i) %><h4></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="card shadow mb-4">
-    <!-- Card Header - Accordion -->
-    <a href="#salary-col" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample8">
-      <h6 class="m-0 font-weight-bold text-primary"><h1 style= "text-align : center">Salary</h1></h6>
-    </a>
-    <!-- Card Content - Collapse -->
-    <div class="collapse show" id="salary-col" style="">
-      <div class="col-xl-12 col-md-12 mb-4">
-        <div class="row no-gutters align-items-center">
-          <div class="col mr-2">
-            <br>
-            <table data-toggle="table" data-search="true">
-              <thead>
-                <tr>
-                  <th><%= sort_link(@k, :staff_type, 'Title') %></th>
-                  <th><%= sort_link(@k, :code, 'Amount') %></th>
-                </tr>
-              </thead>
-
-              <tbody>
-                <% @salary_detail_list.each do |exp| %>
-                  <tr>
-                    <td><%= exp.first %></td>
-                    <td><%= number_with_delimiter(exp.last.to_f.round(2)) %></td>
-                  </tr>
-                <% end %>
-
-                <% @khakar_salary_detail_list.each do |exp| %>
-                  <tr>
-                    <td><%= exp.first %></td>
-                    <td><%= number_with_delimiter(exp.last.to_f.round(2)) %></td>
-                  </tr>
-                <% end %>
-                <tr>
-                  <td><h4>Total : <%=@salary_detail_list.count.to_i%></h4></td>
-                  <td><h4><%= number_with_delimiter(@salary_detail_total.to_i) %><h4></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  </div>  
 </div>
 <script>
   $(document).ready(function() {

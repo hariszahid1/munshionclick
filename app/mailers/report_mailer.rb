@@ -28,4 +28,13 @@ class ReportMailer < ApplicationMailer
     @date = date
     mail(to: email, subject: "Database Backup File for #{company_type}")
   end
+
+  def send_report_files_email(email, path, file_name)
+    if file_name.present?
+      @file_name = file_name
+      attachments[file_name] = File.read(path)
+      mail(to: email, subject: 'Report File for')
+    end
+  end
+
 end
