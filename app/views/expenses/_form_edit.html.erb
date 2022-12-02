@@ -1,0 +1,54 @@
+<%= bootstrap_form_for(expense) do |f| %>
+  <% if expense.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(expense.errors.count, "error") %> prohibited this expense from being saved:</h2>
+      <ul>
+      <% expense.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <table>
+    <thead>
+      <th><%= f.label :comment do %>
+        <%= Expense.human_attribute_name :comment %>
+        <i class="fas fa-language"></i>
+        <% end %></th>
+      <th><h3 class="ml-5">Total Expense</h3></th>
+    </thead>
+    <tbody>
+      <tr>
+				<td><%= f.text_area :comment, placeholder:"Enter Comment" , hide_label: true ,class: 'urdu-font col-lg-12' %></td>
+        <td>
+					<%= f.hidden_field :expense%>
+					<%= f.hidden_field :credit%>
+					<%= f.hidden_field :debit%>
+					<h1 class="expense_total_bill ml-5">0.00</h1>
+					<h1 class="expense_debit_bill ml-5 d-none">0.00</h1>
+					<h1 class="expense_credit_bill ml-5 d-none">0.00</h1>
+				</td>
+        
+      </tr>
+
+      <tr class="mt-2">
+        <td> <%= f.date_select :created_at,{}, hide_label: true,class: "form-control" %> </td>
+      </tr>
+    </tbody>
+  </table>
+  <%= f.fields_for :expense_entries, class: "mt-2" do |expense_entry| %>
+    <%= render 'expenses_fields_edit', f: expense_entry %>
+  <% end %>
+
+  <br>
+  <div class="clearfix"></div>
+    
+    <div class="modal-footer">
+      <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      <%=f.object.id.nil? ? (f.submit class: "btn btn-success mr-4", style: "float: right")  :  (f.submit class: "btn btn-warning mr-4", style: "float: right")%>
+    </div>
+
+<% end %>
+
+<%= javascript_include_tag 'hover', 'data-turbolinks-track': 'reload' %>

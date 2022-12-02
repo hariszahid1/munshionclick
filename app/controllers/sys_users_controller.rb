@@ -20,26 +20,21 @@ class SysUsersController < ApplicationController
     send_email_file if params[:email].present?
     export_file if params[:export_data].present?
     @count_sys_user = SysUser.all.group(:user_group).count
-    @count_status = SysUser.all.group(:status).count  
+    @count_status = SysUser.all.group(:status).count
 
     @user_count = []
     @user_count.push(SysUser.where('balance > 0').count)
     @user_count.push(SysUser.where('balance < 0').count)
     @user_count.push(SysUser.where('balance = 0').count)
 
-    @user_group_title = @count_sys_user.keys.map { |a| a.gsub(' ', '-') }
+    @user_group_title = @count_sys_user.keys
     @user_group_count = @count_sys_user.values
     @status_title = @count_status.keys
     @status_count = @count_status.values
-    
+
     @total_cities_count = Contact.joins(:city).group('cities.title').count
     @city_title = @total_cities_count.keys.map { |a| a.gsub(' ', '-') }
     @city_user = @total_cities_count.values
-
-    respond_to do |format|
-      format.js
-      format.html
-    end
   end
 
   # GET /sys_users/1
@@ -292,6 +287,22 @@ class SysUsersController < ApplicationController
     end
   end
 
+  def view_history
+    @start_date = Date.today.beginning_of_month
+    @end_date =  Date.today.end_of_month
+    if params[:q].present?
+      @start_date = params[:q][:created_at_gteq] if params[:q][:created_at_gteq].present?
+      @end_date = params[:q][:created_at_lteq] if params[:q][:created_at_lteq].present?
+      @item_id = params[:q][:item_id_eq] if params[:q][:item_id_eq].present?
+      params[:q][:created_at_lteq] = params[:q][:created_at_lteq].to_date.end_of_day if params[:q][:created_at_lteq].present?
+    end
+    @event = %w[create update destroy]
+    @q = PaperTrail::Version.where(item_type:"SysUser").order('created_at desc').ransack(params[:q])
+    @sys_user_logs = @q.result.page(params[:page])
+    respond_to do |format|
+      format.js
+    end
+  end
 
   private
   # Use callbacks to share common setup or constraints between actions.
