@@ -75,6 +75,23 @@ class CustomerManagementSystemsController < ApplicationController
       format.json { render :show, status: :ok, location: @sys_user }
     end
   end
+
+  def view_history
+    @start_date = Date.today.beginning_of_month
+    @end_date =  Date.today.end_of_month
+    if params[:q].present?
+      @start_date = params[:q][:created_at_gteq] if params[:q][:created_at_gteq].present?
+      @end_date = params[:q][:created_at_lteq] if params[:q][:created_at_lteq].present?
+      @item_id = params[:q][:item_id_eq] if params[:q][:item_id_eq].present?
+      params[:q][:created_at_lteq] = params[:q][:created_at_lteq].to_date.end_of_day if params[:q][:created_at_lteq].present?
+    end
+    @event = %w[create update destroy]
+    @q = PaperTrail::Version.where(item_type:"SysUser").order('created_at desc').ransack(params[:q])
+    @cms_user_logs = @q.result.page(params[:page])
+    respond_to do |format|
+      format.js
+    end
+  end
   private
 
   def set_sys_user
@@ -98,7 +115,7 @@ class CustomerManagementSystemsController < ApplicationController
 
   def download_cms_csv_file
     @sys_user = @q.result
-    header_for_csv = %w[Number Name Agent_Id Project_Name Client_Type Client_status Category Deal_Status
+    header_for_csv = %w[Number Name Agent_name Project_Name Client_Type Client_status Category Deal_Status
                         Source Plot_size Short_Details Created_at City Country
                         ]
     data_for_csv = get_data_for_cms_csv
