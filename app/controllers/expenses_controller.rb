@@ -79,7 +79,12 @@ class ExpensesController < ApplicationController
 		@exp_date_join = @exp_date.join('&').to_s
 		@the_type_join = @the_type.join('&').to_s
 
-
+    respond_to do |format|
+      format.pdf
+      format.csv
+      format.js
+      format.html
+    end
   end
 
   # GET /expenses/1
