@@ -174,7 +174,11 @@ Rails.application.routes.draw do
 
   resources :cities
   resources :user_groups
-  resources :customer_management_systems
+  resources :customer_management_systems do
+    collection do
+      get :view_history, to: 'customer_management_systems#view_history'
+    end
+  end
   resources :notes, only: %i[create new]
   resources :follow_ups
   resources :countries
