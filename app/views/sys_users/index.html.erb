@@ -69,6 +69,7 @@
         </ul>
 
     <%= hidden_field_tag "userCount", @user_count, { :id => "userCount" } %>
+    <%= hidden_field_tag "balanceSum", @balance_sum, { :id => "balanceSum" } %>
     <%= hidden_field_tag "userGroupTitle", @user_group_title, { :id => "userGroupTitle" } %>
     <%= hidden_field_tag "userGroupCount", @user_group_count, { :id => "userGroupCount" } %>
     <%= hidden_field_tag "statusTitle", @status_title, { :id => "statusTitle" } %>
@@ -151,15 +152,23 @@
                   </div> 
                 </div>
               </div>
+              <div class="col-lg-6">
+                <div class="my-chart-Container">
+                  <div class="mychartBox card border-radius-1 shadow mt-2">
+                    <canvas id="myChart4"></canvas>
+                  </div> 
+                </div>
+              </div>
+              
+            </div>
+            <div class="row d-flex mt-3">
               <div class="col-lg-6">  
                 <div class="my-chart-Container">
                   <div class="mychartBox card border-radius-1 shadow mt-2">
                     <canvas id="myChart1"></canvas>
                   </div> 
                 </div>
-              </div>  
-            </div>
-            <div class="row d-flex mt-3">
+              </div> 
               <div class="col-lg-6">
                 <div class="my-chart-Container">
                   <div class="mychartBox card border-radius-1 shadow mt-2">
@@ -167,14 +176,15 @@
                   </div> 
                 </div>
               </div>
-              <div class="col-lg-6">  
-                <div class="my-chart-Container">
-                  <div class="mychartBox card border-radius-1 shadow mt-2">
-                    <canvas id="myChart3"></canvas>
-                  </div> 
-                </div>
-              </div>  
             </div>
+            <div class="col-lg-6">  
+              <div class="my-chart-Container">
+                <div class="mychartBox card border-radius-1 shadow mt-2">
+                  <canvas id="myChart3"></canvas>
+                </div> 
+              </div>
+            </div>  
+               
           </div>
           <div class="tab-pane card border-radius-1" id="import-export" role="tabpanel">
             <p>

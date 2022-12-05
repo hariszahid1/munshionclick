@@ -42,6 +42,10 @@ class StaffsController < ApplicationController
     @dep_title = @total_dep_count.keys.map { |a| a.gsub(' ', '-') }
     @dep_user = @total_dep_count.values
 
+    @balance_sum = []
+    @balance_sum.push(Staff.where('balance > 0').sum(:balance).to_f)
+    @balance_sum.push(Staff.where('balance < 0').sum(:balance).to_f)
+
   end
 
   def payable

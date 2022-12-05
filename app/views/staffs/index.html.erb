@@ -74,6 +74,7 @@
           </li>
         </ul>
       <%= hidden_field_tag "staffCount", @staff_count, { :id => "staffCount" } %>
+      <%= hidden_field_tag "balanceSum", @balance_sum, { :id => "balanceSum" } %>
       <%= hidden_field_tag "depTitle", @dep_title, { :id => "depTitle" } %>
       <%= hidden_field_tag "depCount", @dep_user, { :id => "depCount" } %>
         <div class="tab-content mb-2">
@@ -166,14 +167,21 @@
                   </div> 
                 </div>
               </div>
-              <div class="col-lg-6">  
+              <div class="col-lg-6">
                 <div class="my-chart-Container">
                   <div class="mychartBox card border-radius-1 shadow mt-2">
-                    <canvas id="myChart1"></canvas>
+                    <canvas id="myChart4"></canvas>
                   </div> 
                 </div>
-              </div>  
+              </div>
             </div>
+            <div class="col-lg-6">  
+              <div class="my-chart-Container">
+                <div class="mychartBox card border-radius-1 shadow mt-2">
+                  <canvas id="myChart1"></canvas>
+                </div> 
+              </div>
+            </div> 
           </div>
           <div class="tab-pane card border-radius-1" id="import-export" role="tabpanel">
               <p>

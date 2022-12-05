@@ -62,3 +62,37 @@ $( document ).ready(function() {
   });
   
 });
+$( document ).ready(function() {
+  var balanceSum=$('#balanceSum').val().split(' ')
+  const ctx = document.getElementById('myChart4');
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Jama / Payable','Benam / Receivable'],
+      datasets: [{
+        label: 'Total ',
+        data: balanceSum,
+        borderWidth: 1,
+        backgroundColor: ["blue", "red"],
+      }],
+    },
+    options: {
+      
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Total Balance Bar Chart',
+                font: {
+                  size: 16
+                }
+            }
+          
+
+        }
+      
+    }
+  });
+  
+});
