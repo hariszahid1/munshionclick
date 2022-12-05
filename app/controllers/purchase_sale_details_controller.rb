@@ -1073,6 +1073,23 @@ class PurchaseSaleDetailsController < ApplicationController
     @purchase_sale_details = @q.result.page(params[:page]).per(25)
   end
 
+  def view_history
+    @start_date = Date.today.beginning_of_month
+    @end_date =  Date.today.end_of_month
+    if params[:q].present?
+      @start_date = params[:q][:created_at_gteq] if params[:q][:created_at_gteq].present?
+      @end_date = params[:q][:created_at_lteq] if params[:q][:created_at_lteq].present?
+      @item_id = params[:q][:item_id_eq] if params[:q][:item_id_eq].present?
+      params[:q][:created_at_lteq] = params[:q][:created_at_lteq].to_date.end_of_day if params[:q][:created_at_lteq].present?
+    end
+    @event = %w[create update destroy]
+    @q = PaperTrail::Version.where(item_type:"PurchaseSaleDetail").order('created_at desc').ransack(params[:q])
+    @purchase_sale_logs = @q.result.page(params[:page])
+    respond_to do |format|
+      format.js
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_purchase_sale_detail

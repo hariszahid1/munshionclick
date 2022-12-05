@@ -57,11 +57,14 @@
   </div>
   <ul class="nav nav-pills ml-3" role="tablist">
     <li class="nav-item">
-      <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab">Search</a>
+      <a class="nav-link tab-label active purchase-sale-search-exp-tab" data-toggle="tab" href="#search" role="tab">Search</a>
     </li>
 		<li class="nav-item">
-			<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
+			<a class="nav-link tab-label purchase-sale-search-exp-tab" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
 		</li>
+    <li class="nav-item">
+      <a class="nav-link tab-label purchase-sale-logs-tab" data-toggle="tab" href="#logs" role="tab">Logs</a>
+    </li>
 	</ul>
   <div class="clearfix"></div>
   <div class="tab-content">
@@ -167,8 +170,18 @@
         </div>
       </p>
     </div>
+    <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="logs" role="tabpanel">
+      <p>
+        <div class="d-flex">
+          <%= link_to view_history_purchase_sale_details_path, class: "btn btn-success d-none", id: "purchase-sale-logs", remote:true do %>
+            show logs
+          <% end %>
+          <div id = "show-logs"></div>
+        </div>
+      </p>
+    </div>
   </div>
-  <div class="card border-radius-1 shadow p-3">
+  <div class="card border-radius-1 shadow p-3 purchase-sale-book-index-card">
     <table data-toggle="table" data-search="true">
       <thead>
         <tr>
@@ -421,6 +434,16 @@
     }
     $("#purchase_sale_detail_list").removeClass('hidden');
     FontAwesome.dom.i2svg();
+
+    $('.purchase-sale-logs-tab').on('click', function(){
+      $('#purchase-sale-logs').click();
+      $('.purchase-sale-book-index-card').addClass('d-none')
+    })
+
+
+    $('.purchase-sale-search-exp-tab').on('click', function(){
+      $('.purchase-sale-book-index-card').removeClass('d-none')
+    })
   });
   $(document).ready(function() {
     setTimeout(function(){
