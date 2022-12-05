@@ -115,9 +115,7 @@ class CustomerManagementSystemsController < ApplicationController
 
   def download_cms_csv_file
     @sys_user = @q.result
-    header_for_csv = %w[Number Name Agent_name Project_Name Client_Type Client_status Category Deal_Status
-                        Source Plot_size Short_Details Created_at City Country
-                        ]
+    header_for_csv = %w[Name Agent_name Project_Name Category Plot_size Short_Details Created_at]
     data_for_csv = get_data_for_cms_csv
     generate_csv(data_for_csv, header_for_csv, 'CMS')
   end
