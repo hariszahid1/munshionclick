@@ -61,6 +61,7 @@
     @investment = Investment.new(investment_params)
     respond_to do |format|
       if @investment.save
+        PaymentBalanceJob.perform_later(current_user.superAdmin.company_type, @investment&.account&.id)
         format.html { redirect_to investments_path, notice: 'Investment was successfully created.' }
         format.json { render :show, status: :created, location: @investment }
       else

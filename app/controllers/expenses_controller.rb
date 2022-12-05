@@ -119,6 +119,10 @@ class ExpensesController < ApplicationController
 
     respond_to do |format|
       if @expense.save
+        accounts = @expense&.expense_entries&.pluck(:account_id)
+        accounts.each do |account|
+          PaymentBalanceJob.perform_later(current_user.superAdmin.company_type, account)
+        end
         format.html { redirect_to expenses_path, notice: 'Expense was successfully created.' }
         format.json { render :show, status: :created, location: @expense }
       else
