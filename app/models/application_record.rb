@@ -60,10 +60,10 @@ class ApplicationRecord < ActiveRecord::Base
                                             right: '[page] of [topage]'
                                           }))
     date_for_folder = Date.yesterday.to_s.gsub('-', '')
-    Dir.mkdir(Rails.root.join("shared/reports/#{typeingly}/#{date_for_folder}")) unless File.exist?(Rails.root.join("shared/reports/#{typeingly}/#{date_for_folder}"))
-    Dir.mkdir(Rails.root.join("shared/reports/#{typeingly}/#{date_for_folder}/#{file_name}")) unless File.exist?(Rails.root.join("shared/reports/#{typeingly}/#{date_for_folder}/#{file_name}"))
+    Dir.mkdir(Rails.root.join("../../shared/reports/#{typeingly}/#{date_for_folder}")) unless File.exist?(Rails.root.join("../../shared/reports/#{typeingly}/#{date_for_folder}"))
+    Dir.mkdir(Rails.root.join("../../shared/reports/#{typeingly}/#{date_for_folder}/#{file_name}")) unless File.exist?(Rails.root.join("../../shared/reports/#{typeingly}/#{date_for_folder}/#{file_name}"))
     pdf_name = "#{file_type}-report.pdf"
-    pdf_path = Rails.root.join("shared/reports/#{typeingly}/#{date_for_folder}/#{file_name}", pdf_name)
+    pdf_path = Rails.root.join("../../shared/reports/#{typeingly}/#{date_for_folder}/#{file_name}", pdf_name)
     # create a new file
     File.open(pdf_path, 'wb') do |file|
       file.binmode
