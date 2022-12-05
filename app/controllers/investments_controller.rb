@@ -36,6 +36,22 @@
         end
       end
     end
+
+    @dc_sum = []
+    @dc_sum.push(Investment.sum(:debit))
+    @dc_sum.push(Investment.sum(:credit))
+
+    @dc_count = []
+    @dc_count.push(Investment.count(:debit))
+    @dc_count.push(Investment.count(:credit))
+
+    @db_by_date = Investment.group('date(created_at)').sum(:debit)
+    @cr_by_date = Investment.group('date(created_at)').sum(:credit)
+
+    @db_keys = @db_by_date.keys
+    @db_total = @db_by_date.values
+    @cr_total = @cr_by_date.values
+
   end
 
   # GET /investments/1

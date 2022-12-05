@@ -43,6 +43,10 @@
       <li class="nav-item">
         <a class="nav-link tab-label active investment-search-exp-tab" data-toggle="tab" href="#search" role="tab">Search</a>
       </li>
+
+      <li class="nav-item">
+        <a class="nav-link tab-label" data-remote="true" data-toggle="tab" href="#analytics" role="tab">Analytics</a>
+      </li>
 			
 			<%if (check_can_import_export(@module_permission))%>
 				<li class="nav-item">
@@ -53,7 +57,12 @@
         <a class="nav-link tab-label investment-logs-tab" data-toggle="tab" href="#logs" role="tab">Logs</a>
       </li>
 	</ul>
-
+  <%= hidden_field_tag "dcSum", @dc_sum, { :id => "dcSum" } %>
+  <%= hidden_field_tag "dcCount", @dc_count, { :id => "dcCount" } %>
+  <%= hidden_field_tag "dbKeys", @db_keys, { :id => "dbKeys" } %>
+  <%= hidden_field_tag "dbValues", @db_total, { :id => "dbValues" } %>
+  <%= hidden_field_tag "crValues", @cr_total, { :id => "crValues" } %>
+  
   <div class="tab-content">
     <div class="tab-pane active mb-3 card shadow-sm mt-2 p-3" style="border-radius: 20px" id="search" role="tabpanel">
       <%= search_form_for @q, url: investments_path, class: "admin-controls", method: "get" do |f| %>
@@ -123,6 +132,43 @@
         </div>
       <% end %>
     </div>
+    <div class="tab-pane card shadow-sm mt-2 border-radius-1 p-4" id="analytics" role="tabpanel">
+      <p>
+        <div class="row d-flex">
+          <div class="col-lg-6">
+            <div class="my-chart-Container">
+              <div class="mychartBox card border-radius-1 shadow mt-2">
+                <canvas id="myChart4"></canvas>
+              </div> 
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="my-chart-Container">
+              <div class="mychartBox card border-radius-1 shadow mt-2">
+                <canvas id="myChart5"></canvas>
+              </div> 
+            </div>
+          </div>
+         </div>  
+        <div class="row d-flex"> 
+          <div class="col-lg-6">
+            <div class="my-chart-Container">
+              <div class="mychartBox card border-radius-1 shadow mt-2">
+                <canvas id="myChart7"></canvas>
+              </div> 
+            </div>
+          </div> 
+          <div class="col-lg-6">
+            <div class="my-chart-Container">
+              <div class="mychartBox card border-radius-1 shadow mt-2">
+                <canvas id="myChart8"></canvas>
+              </div> 
+            </div>
+          </div>  
+        </div>  
+        
+      </p>
+    </div>
     <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="import-export" role="tabpanel">
       <p>
         <%= search_form_for @q, url: investments_path, class: "admin-controls", method: "get" do |f| %>
@@ -144,6 +190,7 @@
       </p>
     </div>
   </div>
+
   <div class="investment-book-index-card">
     <%= render 'map_columns/map_column_partials' %>
     <table data-toggle="table" data-search="true" id="investment_table">

@@ -10,31 +10,35 @@
     </div>
   <% end %>
 
-  <table>
-    <thead>
-      <th><%= f.label :comment do %>
+ 
+  <div class="card border-radius-1 shadow p-4">
+    <div class="row">
+      <div class="col">
+         <%= f.date_select :created_at,{}, hide_label: true,class: "form-control" %>
+         <%= f.label :comment do %>
         <%= Expense.human_attribute_name :comment %>
         <i class="fas fa-language"></i>
-        <% end %></th>
-      <th><h3 class="ml-5">Total Expense</h3></th>
-    </thead>
-    <tbody>
-      <tr>
-        <td><%= f.text_area :comment, placeholder:"Enter Comment" , hide_label: true ,class: 'urdu-font col-lg-12' %></td>
-        <td> <%= f.hidden_field :expense%><h1 class="expense_total_bill ml-5">0.00</h1></td>
-        
-      </tr>
+        <% end %>
+        <%= f.text_area :comment, placeholder:"Enter Comment" , hide_label: true ,class: 'urdu-font' %>
+      </div>
 
-      <tr class="mt-2">
-        <td> <%= f.date_select :created_at,{}, hide_label: true,class: "form-control" %> </td>
-      </tr>
-    </tbody>
-  </table>
+      <div class="col">
+        <div class="row">
+        </div>
+        <div class="row p-5 ml-5">
+          <h2 style="font-size: 50px">Total Expense:</h2>
+          <%= f.hidden_field :expense%>
+          <h2 class="expense_total_bill ml-3" style="font-size: 50px">0.00</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+  
   <%= f.fields_for :expense_entries, class: "mt-2" do |expense_entry| %>
     <%= render 'expenses_fields_new', f: expense_entry %>
   <% end %>
   <div id="new_links">
-    <div class="links">
+    <div class="links mt-5">
       <%= link_to_add_association 'Add More', f, :expense_entries, partial: 'expenses_fields_new', class: "btn btn-info" %>
     </div>
   </div>
@@ -42,7 +46,6 @@
   <div class="clearfix"></div>
     
     <div class="modal-footer">
-      <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
       <%=f.object.id.nil? ? (f.submit class: "btn btn-success mr-4", style: "float: right")  :  (f.submit class: "btn btn-warning mr-4", style: "float: right")%>
     </div>
 
