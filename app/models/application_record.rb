@@ -73,16 +73,16 @@ class ApplicationRecord < ActiveRecord::Base
 
   def self.set_variables_chart_of_accounts
     @pos_setting = PosSetting.first
-    @sys_user_payable = SysUser.where('balance > 0').sort_by(&:user_group)
-    @sys_user_receiveable = SysUser.where('balance < 0').sort_by(&:user_group)
+    @sys_user_payable = SysUser.where('balance > 0').order(:user_group)
+    @sys_user_receiveable = SysUser.where('balance < 0').order(:user_group)
     @all_user = SysUser.all
     @user_types = UserType.all
     @staff_names = Staff.all
     @sys_user_payable_group = SysUser.where('balance > 0').group(:user_group).sum(:balance)
     @sys_user_receiveable_group = SysUser.where('balance < 0').group(:user_group).sum(:balance)
     @departments = Department.all
-    @staff_reciveable = Staff.where('balance<0').where(deleted: false).sort_by(&:department_id)
-    @staff_payable = Staff.where('balance>0').where(deleted: false).sort_by(&:department_id)
+    @staff_reciveable = Staff.where('balance<0').where(deleted: false).sort_by{ |s| s.department_id.to_i }
+    @staff_payable = Staff.where('balance>0').where(deleted: false).sort_by{ |s| s.department_id.to_i }
     @staff_payable_group = Staff.joins(:department).where('balance>0').where(deleted: false).group('departments.title').sum(:balance)
     @credit_salary_list = SalaryDetail.joins(:staff).where('amount>0').where(purchase_sale_detail_id:nil,daily_book_id: nil).where.not(id: Payment.where(paymentable_type:"SalaryDetail").pluck(:paymentable_id)).group('staffs.name').sum(:amount)
     @credit_salary = SalaryDetail.joins(:staff).where('amount>0').where(purchase_sale_detail_id:nil,daily_book_id: nil).where.not(id: Payment.where(paymentable_type:"SalaryDetail").pluck(:paymentable_id)).sum(:amount).to_f
