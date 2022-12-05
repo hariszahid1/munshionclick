@@ -40,6 +40,7 @@ Rails.application.routes.draw do
       get :biller, to: 'orders#biller'
       get :auto_print, to: 'orders#auto_print'
       get :print_bulk, to: 'orders#print_bulk'
+      get :view_history, to: 'orders#view_history'
     end
     member do
       get :transfer, to: 'orders#transfer'
@@ -146,6 +147,7 @@ Rails.application.routes.draw do
       get "day_out"
       get "return"
       get "purchase_sale_details_return"
+      get :view_history, to: 'purchase_sale_details#view_history'
     end
   end
 
