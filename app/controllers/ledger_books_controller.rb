@@ -35,7 +35,7 @@ class LedgerBooksController < ApplicationController
     @ledger_books_all = @ledger_books.select('SUM(debit) as sum_debit','SUM(credit) as sum_credit','SUM(credit)-SUM(debit) as mean_sum')
     @customers=SysUser.all
 
-		
+
     if params[:submit_pdf].present? or params[:submit_pdf_without].present? or params[:desc_email].present? or params[:submit_pdf_short].present? or params[:submit_csv_without].present? or params[:submit_csv].present? or params[:submit_csv_short].present?
       @sys_users = SysUser.all
       sys_user_id = params[:q][:sys_user_id_eq].present? ? params[:q][:sys_user_id_eq] : @sys_users
@@ -71,7 +71,7 @@ class LedgerBooksController < ApplicationController
 				tempName='['+(LedgerBook.where(id:@ledger_books.ids).joins(:sys_user).pluck('name').uniq.join(' '))+']'
 
 				print_pdf("#{tempName}-LedgerBook -"+@created_at_gteq.to_s+" to "+@created_at_lteq.to_s,"pdf.html","A4")
-				
+
 			end
 	# 2nd if
     elsif params[:submit_form].present? or params[:submit_form_without].present? or params[:asc_email].present? or params[:submit_form_without_csv].present? or params[:submit_form_csv].present?
@@ -167,7 +167,7 @@ class LedgerBooksController < ApplicationController
        		 end
       	end
 			end
-      
+
     elsif params[:submit_credit].present? or params[:submit_credit_csv].present?
       if params[:q].present?
         @customer_debit=LedgerBook.joins(:sys_user).where.not('sys_users.user_group': ["Both","Supplier"]).where('debit>0').ransack(params[:q]).result.group('sys_users.name').sum(:debit)
@@ -220,7 +220,7 @@ class LedgerBooksController < ApplicationController
 				end
 			end
 
-      
+
     end
 
     if @q.result.count > 0
@@ -318,6 +318,7 @@ class LedgerBooksController < ApplicationController
       if @ledger_book.save
         @ledger_book.modify_account_balance
         @ledger_book.update(updated_at: @ledger_book.created_at)
+        PaymentBalanceJob.perform_later(current_user.superAdmin.company_type, @ledger_book&.account&.id)
         @phone = @ledger_book&.sys_user&.contact&.phone_with_comma
         if @pos_setting.sms_templates.present? && @phone.present?
           send_sms(@ledger_book.sys_user&.contact&.phone_with_comma,@pos_setting.sms_templates["user_new_ledger_credit"],'','') if @pos_setting.sms_templates["user_new_ledger_credit"].present? && @ledger_book.credit.to_f > 0

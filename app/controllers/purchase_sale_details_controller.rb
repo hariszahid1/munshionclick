@@ -684,6 +684,7 @@ class PurchaseSaleDetailsController < ApplicationController
     @purchase_sale_detail.user_name=current_user.name
     respond_to do |format|
       if @purchase_sale_detail.save!
+        PaymentBalanceJob.perform_later(current_user.superAdmin.company_type, @purchase_sale_detail&.account&.id)
         @purchase_sale_detail.purchase_sale_items.each do |purchase|
           product=purchase.product
           if product.present? && pos_setting_sys_type == 'MobileShop'

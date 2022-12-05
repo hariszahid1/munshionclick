@@ -117,6 +117,7 @@ class SalariesController < ApplicationController
     @salary.total_balance = @salary.total_balance.to_f - (@salary.advance.to_f+@salary.paid_salary.to_f)
     respond_to do |format|
       if @salary.save
+        PaymentBalanceJob.perform_later(current_user.superAdmin.company_type, @salary&.account&.id)
         if @salary.payment_type=="Advance"
           @paid_to_month=@salary.created_at.month
           @paid_to_year=@salary.created_at.year

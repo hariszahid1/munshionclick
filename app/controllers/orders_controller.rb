@@ -325,7 +325,7 @@ class OrdersController < ApplicationController
 
     respond_to do |format|
       if @order.save!
-
+        PaymentBalanceJob.perform_later(current_user.superAdmin.company_type, @order&.account&.id)
         if params[:commit]=="Save with Print"
           if @pos_setting.sys_type=="FastFood"
             format.html {render :partial => "/orders/fast_food/create"}
