@@ -115,7 +115,7 @@
         <td><h4>Total<h4></td>
         <td><h4><%=staff_payable.count%></h4></td>
         <td></td>
-        <td><h4><%=number_with_delimiter staff_payable.sum(:balance).abs if staff_payable.present?%><h4></td>
+        <td><h4><%=number_with_delimiter staff_payable.pluck(:balance).compact.sum.abs if staff_payable.present?%><h4></td>
       </tr>
     </tbody>
   </table>
@@ -454,12 +454,12 @@
       <% end %>
       <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
         <td><h4>Total : <%=purchase_sale_detail_discount_list.count.to_i%></h4></td>
-        <td><h4><%=number_with_delimiter purchase_sale_detail_discount_list.sum(:discount_price)%><h4></td>
+        <td><h4><%=number_with_delimiter purchase_sale_detail_discount_list.pluck(:discount_price).compact.sum %><h4></td>
       </tr>
     </tbody>
   </table>
 </div>
-<%@total_receiveable=sys_user_receiveable.pluck('balance').map(&:abs).sum+staff_reciveable.pluck(:balance).sum.abs+expense_total.to_i+purchase_item_total.to_i+purchase_product_total.to_i+salary_detail_total.to_i+credit_salary+investments_debit+purchase_sale_detail_discount_list.sum(:discount_price)%>
+<%@total_receiveable=sys_user_receiveable.pluck('balance').map(&:abs).sum+staff_reciveable.pluck(:balance).sum.abs+expense_total.to_i+purchase_item_total.to_i+purchase_product_total.to_i+salary_detail_total.to_i+credit_salary+investments_debit+purchase_sale_detail_discount_list.pluck(:discount_price).compact.sum %>
 <%@total_payable=sys_user_payable.pluck('balance').map(&:abs).sum+staff_payable.pluck(:balance).sum.abs+sale_item_total.to_i+sale_product_total.to_i+investments_credit.to_f%>
 <p style="border-bottom: double 4px;  margin: 0;"></p>
 <h2 style="text-align: center; margin: 0;">Cash in Hand = Payable-Reciveable</h2>
@@ -508,7 +508,7 @@
       <% end %>
       <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
         <td><h4>Total/Cash in Hand : <%=accounts.count.to_i%></h4></td>
-        <td><h4><%=number_with_delimiter accounts.sum(:amount).to_i%><h4></td>
+        <td><h4><%= number_with_delimiter accounts.pluck(:amount).compact.sum.to_i %><h4></td>
       </tr>
     </tbody>
   </table>

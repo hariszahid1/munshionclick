@@ -55,7 +55,7 @@ class ApplicationRecord < ActiveRecord::Base
                                             margin_bottom: @pos_setting&.pdf_margin_bottom.to_f,
                                             margin_left: @pos_setting&.pdf_margin_left.to_f
                                           },
-                                          layout: 'pdf.html',
+                                          layout: 'task_reports_pdf.html',
                                           footer: {
                                             right: '[page] of [topage]'
                                           }))
