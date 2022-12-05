@@ -35,6 +35,12 @@ class SysUsersController < ApplicationController
     @total_cities_count = Contact.joins(:city).group('cities.title').count
     @city_title = @total_cities_count.keys.map { |a| a.gsub(' ', '-') }
     @city_user = @total_cities_count.values
+
+    @balance_sum = []
+    @balance_sum.push(SysUser.where('balance > 0').sum(:balance).to_f)
+    @balance_sum.push(SysUser.where('balance < 0').sum(:balance).to_f)
+
+
   end
 
   # GET /sys_users/1
