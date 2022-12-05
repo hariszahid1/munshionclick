@@ -26,40 +26,24 @@
     <div>
       <table>
         <thead class="lite-gray">
-          <th class="text-center">ID</th>
-          <th class="text-center">Client Number</th>
           <th class="text-center">Client Name</th>
           <th class="text-center">Agent Name</th>
           <th class="text-center">Project Name</th>
-          <th class="text-center">Client Type</th>
-          <th class="text-center">Client Status</th>
           <th class="text-center">Category</th>
-          <th class="text-center">Deal Status</th>
-          <th class="text-center">Source</th>
           <th class="text-center">Plot Size</th>
           <th class="text-center">Short Details</th>
           <th class="text-center">Created at</th>
-          <th class="text-center">City</th>
-          <th class="text-center">Country</th>
         </thead>
         <tbody>
           <% data.each_with_index do |sys_user, index| %>
             <tr>
-              <th class="text-center"><%= sys_user['id'] %></th>
-              <td class="text-center"><%= sys_user['number'] %></td>
               <td class="text-center"><%= sys_user['name'] %></td>
               <td class="text-center"><%= sys_user['agent_name'] %></td>
               <th class="text-center"><%= sys_user['cms_data'].try(:[], 'project_name') %></th>
-              <td class="text-center"><%= sys_user['cms_data'].try(:[], 'client_type') %></td>
-              <td class="text-center"><%= sys_user['cms_data'].try(:[], 'client_status') %></td>
               <td class="text-center"><%= sys_user['cms_data'].try(:[], 'category') %></td>
-              <td class="text-center"><%= sys_user['cms_data'].try(:[], 'deal_status') %></td>
-              <th class="text-center"><%= sys_user['cms_data'].try(:[], 'source') %></th>
               <th class="text-center"><%= sys_user['plot_size'] %></th>
               <td class="text-center"><%= sys_user['short_details'] %></td>
               <td class="text-center"><%= Date.parse(sys_user['created_at'])&.strftime('%d-%m-%Y') %></td>
-              <td class="text-center"><%= sys_user['city'] %></td>
-              <td class="text-center"><%= sys_user['country'] %></td>
             </tr>
           <% end %>
         </tbody>
