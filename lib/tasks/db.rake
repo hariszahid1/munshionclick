@@ -106,28 +106,82 @@ namespace :db do
   end
 
   desc "Load report_files_save"
-  task report_files_save: :environment do
+  task report_files_save_daily: :environment do
     all_db_configs = Rails.configuration.database_configuration.select{ |dbs| dbs.include?(Rails.env + '_') }
     all_db_configs.each do |db_block, db_config|
       database = db_block.split(Rails.env + '_')[1]
       ActiveRecord::Base.establish_connection "#{Rails.env}_#{database}".to_sym
       reports = %w[chart-of-account sysuser-ledger-book staff-ledger-book sale purchase payment expense investment]
       reports.each do |a|
-        ApplicationRecord.chart_of_account_pdf(database, a)
+        ApplicationRecord.chart_of_account_pdf(database, a, 'daily')
       end
     end
   end
 
   desc 'Load send_report_files'
-  task send_report_files: :environment do
+  task send_report_files_daily: :environment do
     all_db_configs = Rails.configuration.database_configuration.select{ |dbs| dbs.include?(Rails.env + '_') }
     all_db_configs.each do |db_block, db_config|
       database = db_block.split(Rails.env + '_')[1]
       date_for_folder = Date.yesterday.to_s.gsub('-', '')
-      path_to_file = Dir[Rails.root.join("../../shared/reports/daily/#{date_for_folder}/#{database}/*").to_s]
+      path_to_file = Dir[Rails.root.join("shared/reports/daily/#{date_for_folder}/#{database}/*").to_s]
       path_to_file.each do |path|
         file_name = path.split('/').last if path.present?
-        ReportMailer.send_report_files_email('abbasanwar158@gmail.com', path, file_name).deliver
+        ReportMailer.send_report_files_email('abbasanwar158@gmail.com', path, file_name, database, 'daily').deliver
+      end
+    end
+  end
+
+  desc "Load report_files_save"
+  task report_files_save_weekly: :environment do
+    all_db_configs = Rails.configuration.database_configuration.select{ |dbs| dbs.include?(Rails.env + '_') }
+    all_db_configs.each do |db_block, db_config|
+      database = db_block.split(Rails.env + '_')[1]
+      ActiveRecord::Base.establish_connection "#{Rails.env}_#{database}".to_sym
+      reports = %w[chart-of-account sysuser-ledger-book staff-ledger-book sale purchase payment expense investment]
+      reports.each do |a|
+        ApplicationRecord.chart_of_account_pdf(database, a, 'weekly')
+      end
+    end
+  end
+
+  desc 'Load send_report_files'
+  task send_report_files_weekly: :environment do
+    all_db_configs = Rails.configuration.database_configuration.select{ |dbs| dbs.include?(Rails.env + '_') }
+    all_db_configs.each do |db_block, db_config|
+      database = db_block.split(Rails.env + '_')[1]
+      date_for_folder = Date.yesterday.to_s.gsub('-', '')
+      path_to_file = Dir[Rails.root.join("shared/reports/weekly/#{date_for_folder}/#{database}/*").to_s]
+      path_to_file.each do |path|
+        file_name = path.split('/').last if path.present?
+        ReportMailer.send_report_files_email('abbasanwar158@gmail.com', path, file_name, database, 'weekly').deliver
+      end
+    end
+  end
+
+  desc "Load report_files_save"
+  task report_files_save_monthly: :environment do
+    all_db_configs = Rails.configuration.database_configuration.select{ |dbs| dbs.include?(Rails.env + '_') }
+    all_db_configs.each do |db_block, db_config|
+      database = db_block.split(Rails.env + '_')[1]
+      ActiveRecord::Base.establish_connection "#{Rails.env}_#{database}".to_sym
+      reports = %w[chart-of-account sysuser-ledger-book staff-ledger-book sale purchase payment expense investment]
+      reports.each do |a|
+        ApplicationRecord.chart_of_account_pdf(database, a, 'monthly')
+      end
+    end
+  end
+
+  desc 'Load send_report_files'
+  task send_report_files_monthly: :environment do
+    all_db_configs = Rails.configuration.database_configuration.select{ |dbs| dbs.include?(Rails.env + '_') }
+    all_db_configs.each do |db_block, db_config|
+      database = db_block.split(Rails.env + '_')[1]
+      date_for_folder = Date.yesterday.to_s.gsub('-', '')
+      path_to_file = Dir[Rails.root.join("shared/reports/monthly/#{date_for_folder}/#{database}/*").to_s]
+      path_to_file.each do |path|
+        file_name = path.split('/').last if path.present?
+        ReportMailer.send_report_files_email('abbasanwar158@gmail.com', path, file_name, database, 'monthly').deliver
       end
     end
   end
