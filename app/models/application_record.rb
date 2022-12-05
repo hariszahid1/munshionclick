@@ -11,7 +11,15 @@ class ApplicationRecord < ActiveRecord::Base
     end
   end
 
-  def self.chart_of_account_pdf(file_name, file_type)
+  def self.chart_of_account_pdf(file_name, file_type, typeingly)
+    if typeingly == 'daily'
+      @search_of = 1.day.ago.all_day
+    elsif typeingly == 'weekly'
+      @search_of = 1.day.ago.all_week
+    else
+      @search_of = 1.day.ago.all_month
+    end
+
     case file_type
     when 'chart-of-account'
       pdf_file_path = 'reports/chart_of_account_report.pdf.erb'
@@ -52,10 +60,10 @@ class ApplicationRecord < ActiveRecord::Base
                                             right: '[page] of [topage]'
                                           }))
     date_for_folder = Date.yesterday.to_s.gsub('-', '')
-    Dir.mkdir(Rails.root.join("../../shared/reports/daily/#{date_for_folder}")) unless File.exist?(Rails.root.join("../../shared/reports/daily/#{date_for_folder}"))
-    Dir.mkdir(Rails.root.join("../../shared/reports/daily/#{date_for_folder}/#{file_name}")) unless File.exist?(Rails.root.join("../../shared/reports/daily/#{date_for_folder}/#{file_name}"))
+    Dir.mkdir(Rails.root.join("shared/reports/#{typeingly}/#{date_for_folder}")) unless File.exist?(Rails.root.join("shared/reports/#{typeingly}/#{date_for_folder}"))
+    Dir.mkdir(Rails.root.join("shared/reports/#{typeingly}/#{date_for_folder}/#{file_name}")) unless File.exist?(Rails.root.join("shared/reports/#{typeingly}/#{date_for_folder}/#{file_name}"))
     pdf_name = "#{file_type}-report.pdf"
-    pdf_path = Rails.root.join("../../shared/reports/daily/#{date_for_folder}/#{file_name}", pdf_name)
+    pdf_path = Rails.root.join("shared/reports/#{typeingly}/#{date_for_folder}/#{file_name}", pdf_name)
     # create a new file
     File.open(pdf_path, 'wb') do |file|
       file.binmode
@@ -153,9 +161,9 @@ class ApplicationRecord < ActiveRecord::Base
   end
 
   def self.set_variables_sys_user_ledger_book
-    @ledger_books = LedgerBook.where(created_at: 1.day.ago.all_day)
+    @ledger_books = LedgerBook.where(created_at: @search_of)
     @sys_user=SysUser.new(opening_balance: 0, created_at: DateTime.now)
-    @ledger_books_pdf = LedgerBook.where(created_at: 1.day.ago.all_day)
+    @ledger_books_pdf = LedgerBook.where(created_at: @search_of)
     @sys_users = SysUser.all
     @local_vars_hash = {
       ledger_books: @ledger_books,
@@ -167,7 +175,7 @@ class ApplicationRecord < ActiveRecord::Base
 
   def self.set_variables_staff_ledger_book
     @staff_ledger_books_pdf = StaffLedgerBook.joins(:staff).where('credit>0 or debit>0 or credit<0 or debit<0')
-                                             .where(created_at: 1.day.ago.all_day).sort_by(&:created_at)
+                                             .where(created_at: @search_of).sort_by(&:created_at)
     @debit = @staff_ledger_books_pdf.pluck(:debit).compact.sum
     @credit = @staff_ledger_books_pdf.pluck(:credit).compact.sum
     @quantity = StaffLedgerBook.joins(:staff, :salary_detail)
@@ -189,33 +197,33 @@ class ApplicationRecord < ActiveRecord::Base
                                                .where(transaction_type: type)
                                                .where('purchase_sale_items.product_id': @products)
                                                .where(sys_user_id: @sys_users,
-                                                      'purchase_sale_items.created_at': 1.day.ago.all_day,
+                                                      'purchase_sale_items.created_at': @search_of,
                                                       transaction_type: type)
                                                .group(:title).average('purchase_sale_items.sale_price')
       @products_sale = PurchaseSaleDetail.joins(purchase_sale_items: :product).where(transaction_type: type)
                                          .where('purchase_sale_items.product_id': @products)
-                                         .where(sys_user_id: @sys_users, 'purchase_sale_items.created_at': 1.day.ago.all_day,transaction_type: type)
+                                         .where(sys_user_id: @sys_users, 'purchase_sale_items.created_at': @search_of,transaction_type: type)
                                          .group(:title).sum(:total_sale_price)
-      @products_count = PurchaseSaleDetail.joins(purchase_sale_items: :product).where(transaction_type: type).where('purchase_sale_items.product_id': @products).where(sys_user_id: @sys_users, 'purchase_sale_items.created_at': 1.day.ago.all_day,transaction_type: type).group(:title).sum('purchase_sale_items.quantity')
-      @products_sale_total = PurchaseSaleDetail.joins(purchase_sale_items: :product).where(transaction_type: type).where('purchase_sale_items.product_id': @products).where(sys_user_id: @sys_users, 'purchase_sale_items.created_at': 1.day.ago.all_day,transaction_type: type).sum(:total_sale_price)
-      @product_carriage = PurchaseSaleDetail.where(sys_user_id: @sys_users, created_at: 1.day.ago.all_day, transaction_type: type, staff_id: @staffs).sum(:carriage)
-      @product_loading = PurchaseSaleDetail.where(sys_user_id: @sys_users, created_at: 1.day.ago.all_day, transaction_type: type, staff_id: @staffs).sum(:loading)
+      @products_count = PurchaseSaleDetail.joins(purchase_sale_items: :product).where(transaction_type: type).where('purchase_sale_items.product_id': @products).where(sys_user_id: @sys_users, 'purchase_sale_items.created_at': @search_of,transaction_type: type).group(:title).sum('purchase_sale_items.quantity')
+      @products_sale_total = PurchaseSaleDetail.joins(purchase_sale_items: :product).where(transaction_type: type).where('purchase_sale_items.product_id': @products).where(sys_user_id: @sys_users, 'purchase_sale_items.created_at': @search_of,transaction_type: type).sum(:total_sale_price)
+      @product_carriage = PurchaseSaleDetail.where(sys_user_id: @sys_users, created_at: @search_of, transaction_type: type, staff_id: @staffs).sum(:carriage)
+      @product_loading = PurchaseSaleDetail.where(sys_user_id: @sys_users, created_at: @search_of, transaction_type: type, staff_id: @staffs).sum(:loading)
     else
       @products_sale_price = PurchaseSaleDetail.joins(purchase_sale_items: :product)
                                                .where(transaction_type: type)
                                                .where('purchase_sale_items.product_id': @products)
                                                .where(sys_user_id: @sys_users,
-                                                      'purchase_sale_items.created_at': 1.day.ago.all_day,
+                                                      'purchase_sale_items.created_at': @search_of,
                                                       transaction_type: type)
                                                .group(:title).average(:cost_price)
       @products_sale = PurchaseSaleDetail.joins(purchase_sale_items: :product).where(transaction_type: type)
                                          .where('purchase_sale_items.product_id': @products)
-                                         .where(sys_user_id: @sys_users, 'purchase_sale_items.created_at': 1.day.ago.all_day,transaction_type: type)
+                                         .where(sys_user_id: @sys_users, 'purchase_sale_items.created_at': @search_of,transaction_type: type)
                                          .group(:title).sum(:total_cost_price)
-      @products_count = PurchaseSaleDetail.joins(purchase_sale_items: :product).where(transaction_type: type).where('purchase_sale_items.product_id': @products).where(sys_user_id: @sys_users, 'purchase_sale_items.created_at': 1.day.ago.all_day,transaction_type: type).group(:title).sum('purchase_sale_items.quantity')
-      @products_sale_total = PurchaseSaleDetail.joins(purchase_sale_items: :product).where(transaction_type: type).where('purchase_sale_items.product_id': @products).where(sys_user_id: @sys_users, 'purchase_sale_items.created_at': 1.day.ago.all_day,transaction_type: type).sum(:total_cost_price)
-      @product_carriage = PurchaseSaleDetail.where(sys_user_id: @sys_users, created_at: 1.day.ago.all_day, transaction_type: type, staff_id: @staffs).sum(:carriage)
-      @product_loading = PurchaseSaleDetail.where(sys_user_id: @sys_users, created_at: 1.day.ago.all_day, transaction_type: type, staff_id: @staffs).sum(:loading)
+      @products_count = PurchaseSaleDetail.joins(purchase_sale_items: :product).where(transaction_type: type).where('purchase_sale_items.product_id': @products).where(sys_user_id: @sys_users, 'purchase_sale_items.created_at': @search_of,transaction_type: type).group(:title).sum('purchase_sale_items.quantity')
+      @products_sale_total = PurchaseSaleDetail.joins(purchase_sale_items: :product).where(transaction_type: type).where('purchase_sale_items.product_id': @products).where(sys_user_id: @sys_users, 'purchase_sale_items.created_at': @search_of,transaction_type: type).sum(:total_cost_price)
+      @product_carriage = PurchaseSaleDetail.where(sys_user_id: @sys_users, created_at: @search_of, transaction_type: type, staff_id: @staffs).sum(:carriage)
+      @product_loading = PurchaseSaleDetail.where(sys_user_id: @sys_users, created_at: @search_of, transaction_type: type, staff_id: @staffs).sum(:loading)
     end
     @local_vars_hash = {
       products_sale_price: @products_sale_price,
@@ -229,15 +237,15 @@ class ApplicationRecord < ActiveRecord::Base
   end
 
   def self.set_variables_payment
-    @payments = Payment.where(created_at: 1.day.ago.all_day)
+    @payments = Payment.where(created_at: @search_of)
     @local_vars_hash = {
       payments: @payments
     }
   end
 
   def self.set_variables_expense
-    @expenses = Expense.order('id desc').where(created_at: 1.day.ago.all_day)
-    @expense_payment_total = Expense.joins(expense_entries: :payment).where('expenses.id': @expenses.pluck(:id), 'expenses.created_at': 1.day.ago.all_day).sum(:debit)
+    @expenses = Expense.order('id desc').where(created_at: @search_of)
+    @expense_payment_total = Expense.joins(expense_entries: :payment).where('expenses.id': @expenses.pluck(:id), 'expenses.created_at': @search_of).sum(:debit)
     @local_vars_hash = {
       expenses: @expenses,
       expense_payment_total: @expense_payment_total
@@ -245,7 +253,7 @@ class ApplicationRecord < ActiveRecord::Base
   end
 
   def self.set_variables_investment
-    @investments = Investment.where(created_at: 1.day.ago.all_day)
+    @investments = Investment.where(created_at: @search_of)
     @local_vars_hash = {
       investments: @investments
     }

@@ -79,11 +79,9 @@
           </td>
           <td>
             <% if ledger_book.purchase_sale_detail_id.present? %>
-            <%= link_to 'Delivery',edit_purchase_sale_detail_path(ledger_book.purchase_sale_detail_id) if ledger_book.purchase_sale_detail.transaction_type=="Sale"%>
-            <%= link_to 'Purchase',edit_purchase_sale_detail_path(ledger_book.purchase_sale_detail_id) if ledger_book.purchase_sale_detail.transaction_type=="Purchase"%>
+              <%= ledger_book.purchase_sale_detail.transaction_type == 'Sale' ? 'Delivery' : 'Purchase' %>
             <% elsif ledger_book.order.present? %>
-              <%= link_to 'Sale Order',edit_order_path(ledger_book.order_id) if ledger_book.order.transaction_type=="Sale"%>
-              <%= link_to 'Purchase Order',edit_order_path(ledger_book.order_id) if ledger_book.order.transaction_type=="Purchase"%>
+              <%= ledger_book.order.transaction_type == 'Sale' ? 'Sale Order' : 'Purchase Order' %>
             <%else%>
               Ledger Book
             <% end %>
