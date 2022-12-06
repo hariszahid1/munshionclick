@@ -318,7 +318,7 @@ class LedgerBooksController < ApplicationController
       if @ledger_book.save
         @ledger_book.modify_account_balance
         @ledger_book.update(updated_at: @ledger_book.created_at)
-        PaymentBalanceJob.perform_later(current_user.superAdmin.company_type, @ledger_book&.account&.id)
+        PaymentBalanceJob.set(wait: 1.minutes).perform_later(current_user.superAdmin.company_type)
         @phone = @ledger_book&.sys_user&.contact&.phone_with_comma
         if @pos_setting.sms_templates.present? && @phone.present?
           send_sms(@ledger_book.sys_user&.contact&.phone_with_comma,@pos_setting.sms_templates["user_new_ledger_credit"],'','') if @pos_setting.sms_templates["user_new_ledger_credit"].present? && @ledger_book.credit.to_f > 0
