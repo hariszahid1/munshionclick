@@ -19,7 +19,7 @@
               </ul>
             </div>
           <% end %>
-          <%= render 'form', sys_user: @sys_user %>
+          <%= render 'form', sys_user: @sys_user, model: @sys_user, local: true,  method: :put, url: customer_management_system_path(@sys_user) %>
         </div>
       </div>
     </div>
