@@ -1,0 +1,39 @@
+<% @date = Date.today  %>
+<% @time = DateTime.now %>
+<% @time = Time.zone.now %>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Staff Ledger Book History</h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<p style="text-align: center;margin: 0;">Report by: Server</p>
+<div >
+  <table data-toggle="table" data-search="true" id="country_table">
+    <thead class="bg-dark text-light border-radius-1">
+      <tr>
+        <th height="50">Event</th>
+        <th height="50">Who Done it</th>
+        <th height="50">Date</th>
+        <th height="50">ID/P</th>
+        <th height="50">User</th>
+        <th height="50" colspan="2" class="make-center">Debit</th>
+        <th height="50" colspan="2" class="make-center">Credit</th>
+        <th height="50">Comment</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% logs_data.each do |log| %>
+        <tr class=<%= (log.event == 'destroy') ? 'follow_up_color' :  (log.event == 'update') ? 'cms-table-row1' : 'bg-light' %>>
+          <td class="urdu-font"><%= log&.event  %></td>
+          <td class="urdu-font"><%=User.find_by(id:log&.whodunnit)&.name %></td>
+          <td class="urdu-font" ><%=log&.created_at.strftime("%d%b%y at %I:%M %p")%></td>
+          <td class="urdu-font"><%= log&.item_id.to_s %></td>
+          <td class="urdu-font"><%=StaffLedgerBook.find_by(id:log&.item_id)&.staff&.name %></td>
+          <td class="urdu-font"><%= number_with_delimiter(log&.changeset&.try(:[], 'debit')&.first.to_i )%></td>
+          <td class="urdu-font"><%= number_with_delimiter(log&.changeset&.try(:[], 'debit')&.last.to_i )%></td>
+          <td class="urdu-font"><%= number_with_delimiter(log&.changeset&.try(:[], 'credit')&.first.to_i) %></td>
+          <td class="urdu-font"><%= number_with_delimiter(log&.changeset&.try(:[], 'credit')&.last.to_i)  %></td>
+          <td class="urdu-font"><%=log&.changeset&.try(:[], 'comment')&.first %><%=log&.changeset&.try(:[], 'comment')&.last %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

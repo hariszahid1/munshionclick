@@ -11,7 +11,7 @@ class ApplicationRecord < ActiveRecord::Base
     end
   end
 
-  def self.chart_of_account_pdf(file_name, file_type, typeingly)
+  def self.chart_of_account_pdf(file_name, file_type, typeingly, logs)
     if typeingly == 'daily'
       @search_of = 1.day.ago.all_day
     elsif typeingly == 'weekly'
@@ -22,32 +22,39 @@ class ApplicationRecord < ActiveRecord::Base
 
     case file_type
     when 'chart-of-account'
-      pdf_file_path = 'reports/chart_of_account_report.pdf.erb'
       set_variables_chart_of_accounts
+      @pdf_file_path = 'reports/chart_of_account_report.pdf.erb'
     when 'sysuser-ledger-book'
-      pdf_file_path = 'ledger_books/sys_user_ledger_report.pdf.erb'
       set_variables_sys_user_ledger_book
+      check_for_logs_or_reports(logs, 'ledgerbook', nil, 'ledger_books/sys_user_ledger_logs.pdf.erb',
+                                'ledger_books/sys_user_ledger_report.pdf.erb')
     when 'staff-ledger-book'
-      pdf_file_path = 'staff_ledger_books/staff_ledger_book_report.pdf.erb'
       set_variables_staff_ledger_book
+      check_for_logs_or_reports(logs, 'StaffLedgerBook', nil, 'staff_ledger_books/staff_ledger_book_logs.pdf.erb',
+                                'staff_ledger_books/staff_ledger_book_report.pdf.erb')
     when 'sale'
-      pdf_file_path = 'purchase_sale_details/sale_details_report.pdf.erb'
       set_variables_sale('Sale')
+      check_for_logs_or_reports(logs, 'PurchaseSaleDetail', 'Sale', 'purchase_sale_details/sale_details_logs.pdf.erb',
+                                'purchase_sale_details/sale_details_report.pdf.erb')
     when 'purchase'
-      pdf_file_path = 'purchase_sale_details/sale_details_report.pdf.erb'
       set_variables_sale('Purchase')
+      check_for_logs_or_reports(logs, 'PurchaseSaleDetail', 'Purchase', 'purchase_sale_details/sale_details_logs.pdf.erb',
+                                'purchase_sale_details/sale_details_report.pdf.erb')
     when 'payment'
-      pdf_file_path = 'payments/payment_report.pdf.erb'
       set_variables_payment
+      check_for_logs_or_reports(logs, 'Payment', nil, 'payments/payment_logs.pdf.erb',
+                                'payments/payment_report.pdf.erb')
     when 'expense'
-      pdf_file_path = 'expenses/expense_report.pdf.erb'
       set_variables_expense
+      check_for_logs_or_reports(logs, 'ExpenseEntry', nil, 'expenses/expense_logs.pdf.erb',
+                                'expenses/expense_report.pdf.erb')
     when 'investment'
-      pdf_file_path = 'investments/investment_report.pdf.erb'
       set_variables_investment
+      check_for_logs_or_reports(logs, 'Investment', nil, 'investments/investment_logs.pdf.erb',
+                                'investments/investment_report.pdf.erb')
     end
     pdf = WickedPdf.new.pdf_from_string(ApplicationController.new.render_to_string(
-                                          template: pdf_file_path,
+                                          template: @pdf_file_path,
                                           locals: @local_vars_hash,
                                           margin: {
                                             margin_top: @pos_setting&.pdf_margin_top.to_f,
@@ -60,14 +67,29 @@ class ApplicationRecord < ActiveRecord::Base
                                             right: '[page] of [topage]'
                                           }))
     date_for_folder = Date.yesterday.to_s.gsub('-', '')
-    Dir.mkdir(Rails.root.join("../../shared/reports/#{typeingly}/#{date_for_folder}")) unless File.exist?(Rails.root.join("../../shared/reports/#{typeingly}/#{date_for_folder}"))
-    Dir.mkdir(Rails.root.join("../../shared/reports/#{typeingly}/#{date_for_folder}/#{file_name}")) unless File.exist?(Rails.root.join("../../shared/reports/#{typeingly}/#{date_for_folder}/#{file_name}"))
-    pdf_name = "#{file_type}-report.pdf"
-    pdf_path = Rails.root.join("../../shared/reports/#{typeingly}/#{date_for_folder}/#{file_name}", pdf_name)
-    # create a new file
+    if logs.present?
+      Dir.mkdir(Rails.root.join("../../shared/logs/#{typeingly}/#{date_for_folder}")) unless File.exist?(Rails.root.join("../../shared/logs/#{typeingly}/#{date_for_folder}"))
+      Dir.mkdir(Rails.root.join("../../shared/logs/#{typeingly}/#{date_for_folder}/#{file_name}")) unless File.exist?(Rails.root.join("../../shared/logs/#{typeingly}/#{date_for_folder}/#{file_name}"))
+      pdf_name = "#{file_type}-logs.pdf"
+      pdf_path = Rails.root.join("../../shared/logs/#{typeingly}/#{date_for_folder}/#{file_name}", pdf_name)
+    else
+      Dir.mkdir(Rails.root.join("../../shared/reports/#{typeingly}/#{date_for_folder}")) unless File.exist?(Rails.root.join("../../shared/reports/#{typeingly}/#{date_for_folder}"))
+      Dir.mkdir(Rails.root.join("../../shared/reports/#{typeingly}/#{date_for_folder}/#{file_name}")) unless File.exist?(Rails.root.join("../../shared/reports/#{typeingly}/#{date_for_folder}/#{file_name}"))
+      pdf_name = "#{file_type}-report.pdf"
+      pdf_path = Rails.root.join("../../shared/reports/#{typeingly}/#{date_for_folder}/#{file_name}", pdf_name)
+    end
     File.open(pdf_path, 'wb') do |file|
       file.binmode
       file << pdf.force_encoding('UTF-8')
+    end
+  end
+
+  def self.check_for_logs_or_reports(logs, item_type, sale_purchase, logs_pdf_path, report_pdf_path)
+    if logs.present?
+      set_variables_of_logs(item_type, sale_purchase)
+      @pdf_file_path = logs_pdf_path
+    else
+      @pdf_file_path = report_pdf_path
     end
   end
 
@@ -157,6 +179,18 @@ class ApplicationRecord < ActiveRecord::Base
       salary_detail_kharkar: @salary_detail_kharkar,
       salary_detail_total: @salary_detail_total,
       khakar_salary_detail_list: @khakar_salary_detail_list
+    }
+  end
+
+  def self.set_variables_of_logs(item_type, sale_purchase)
+    if sale_purchase.present?
+      @ledger_book_logs = PaperTrail::Version.where(item_id: PurchaseSaleDetail.where(transaction_type: sale_purchase), item_type:'PurchaseSaleDetail', created_at: @search_of).order('created_at desc')
+    else
+      @ledger_book_logs = PaperTrail::Version.where(item_type: item_type, created_at: @search_of).order('created_at desc')
+    end
+    @local_vars_hash = {
+      logs_data: @ledger_book_logs,
+      type: sale_purchase
     }
   end
 

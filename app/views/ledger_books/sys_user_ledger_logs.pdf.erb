@@ -1,0 +1,56 @@
+
+<head>
+  <style>
+    .text-center{
+      text-align: center;
+    }
+    .cms-table-row1{
+      background-color: rgba(255, 255, 0, 0.3);
+    }
+  </style>
+</head>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">User Ledger Book History</h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<p style="text-align: center;margin: 0;">Report by: Server</p>
+<div>
+  <table>
+    <th></th>
+    <th></th>
+    <tr>
+      <td>DateTime: <span><%=Time.zone.now%></span> </td>
+    </tr>
+  </table>
+</div>
+<div>
+  <table>
+    <thead>
+      <tr>
+        <th class="text-center">Event</th>
+        <th class="text-center">Who Done it</th>
+        <th class="text-center">Date</th>
+        <th class="text-center">ID/P</th>
+        <th class="text-center">User</th>
+        <th class="text-center" colspan="2" class="make-center">Debit</th>
+        <th class="text-center" colspan="2" class="make-center">Credit</th>
+        <th class="text-center">Comment</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% logs_data.each do |log| %>
+        <tr class=<%= (log.event == 'destroy') ? 'follow_up_color' :  (log.event == 'update') ? 'cms-table-row1' : 'bg-light' %>>
+          <td class="text-center"><%= log&.event  %></td>
+          <td class="text-center"><%=User.find_by(id:log&.whodunnit)&.name %></td>
+          <td class="text-center"><%=log&.created_at.strftime("%d%b%y at %I:%M %p")%></td>
+          <td class="text-center"><%= log&.item_id.to_s %></td>
+          <td class="text-center"><%=LedgerBook.find_by(id:log&.item_id)&.sys_user&.name %></td>
+          <td class="text-center"><%= number_with_delimiter(log&.changeset&.try(:[], 'debit')&.first.to_i )%></td>
+          <td class="text-center"><%= number_with_delimiter(log&.changeset&.try(:[], 'debit')&.last.to_i )%></td>
+          <td class="text-center"><%= number_with_delimiter(log&.changeset&.try(:[], 'credit')&.first.to_i) %></td>
+          <td class="text-center"><%= number_with_delimiter(log&.changeset&.try(:[], 'credit')&.last.to_i)  %></td>
+          <td class="text-center"><%=log&.changeset&.try(:[], 'comment')&.first %><%=log&.changeset&.try(:[], 'comment')&.last %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
