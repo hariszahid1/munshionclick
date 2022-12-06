@@ -152,7 +152,7 @@
     <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="logs" role="tabpanel">
       <p>
         <div class="d-flex">
-          <%= link_to view_history_purchase_sale_details_path, class: "btn btn-success d-none", id: "purchase-sale-logs", remote:true do %>
+          <%= link_to view_history_purchase_sale_details_path(type: @transaction_type_logs), class: "btn btn-success d-none", id: "purchase-sale-logs", remote:true do %>
             show logs
           <% end %>
           <div id = "show-logs"></div>
