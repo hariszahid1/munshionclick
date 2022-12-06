@@ -180,6 +180,7 @@
         <% end %>
         <div id = "show-logs"></div>
       </div>
+      <div class="my-loader mx-auto"></div>
     </div>
   </div>
   <div class='card p-3 ledger-book-index-card'>
@@ -469,6 +470,10 @@
       });
     }, 50);
   });
+
+  $(function() {
+    setTimeout(function() { $(".my-loader").fadeOut(1500); }, 5000)
+  })
 </script>
 
 

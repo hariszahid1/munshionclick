@@ -157,6 +157,7 @@
           <% end %>
           <div id = "show-logs"></div>
         </div>
+        <div class="my-loader mx-auto"></div>
       </p>
     </div>
   </div>
@@ -447,4 +448,8 @@
 });
     }, 50);
   });
+
+  $(function() {
+    setTimeout(function() { $(".my-loader").fadeOut(1500); }, 5000)
+  })
 </script>
