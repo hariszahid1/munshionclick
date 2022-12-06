@@ -5,7 +5,7 @@ class CustomerManagementSystemsController < ApplicationController
 	before_action :check_access
   before_action :index_search_data
   before_action :set_sys_user, only: %i[show edit update destroy]
-  before_action :new_edit_data, only: %i[new edit index]
+  before_action :new_edit_data, only: %i[new edit create index]
   include PdfCsvGeneralMethod
   include CmsHelper
 
@@ -44,11 +44,11 @@ class CustomerManagementSystemsController < ApplicationController
     @sys_user = SysUser.new(sys_user_params)
 
     respond_to do |format|
-      if @sys_user.save!
-        format.html { redirect_to get_request_referrer, notice: 'Sys user was successfully created.' }
+      if @sys_user.save
+        format.html { redirect_to get_request_referrer, notice: 'CMS user was successfully created.' }
         format.json { render :show, status: :created, location: @sys_user }
       else
-        format.html { render :new }
+        format.html { redirect_to get_request_referrer, alert: @sys_user.errors.full_messages[0] }
         format.json { render json: @sys_user.errors, status: :unprocessable_entity }
       end
     end
@@ -58,11 +58,11 @@ class CustomerManagementSystemsController < ApplicationController
   # PATCH/PUT /customer_manangement_Systems/1.json
   def update
     respond_to do |format|
-      if @sys_user.update!(sys_user_params)
-        format.html { redirect_to get_request_referrer, notice: 'Sys user was successfully updated.' }
+      if @sys_user.update(sys_user_params)
+        format.html { redirect_to get_request_referrer, notice: 'CMS user was successfully updated.' }
         format.json { render :show, status: :ok, location: @sys_user }
       else
-        format.html { render :edit }
+        format.html { redirect_to get_request_referrer, alert: @sys_user.errors.full_messages[0] }
         format.json { render json: @sys_user.errors, status: :unprocessable_entity }
       end
     end
@@ -93,6 +93,66 @@ class CustomerManagementSystemsController < ApplicationController
     end
   end
   private
+
+  def sys_user_params
+    params.require(:sys_user).permit(
+      :code,
+      :cnic,
+      :name,
+      :user_type_id,
+      :user_group,
+      :status,
+      :occupation,
+      :credit_status,
+      :credit_limit,
+      :opening_balance,
+      :profile_image,
+      :balance,
+      :gst,
+      :ntn,
+      :father,
+      :nom_name,
+      :nom_father,
+      :nom_cnic,
+      :nom_relation,
+      :contact_attributes => [
+        :id,
+        :address,
+        :home,
+        :office,
+        :mobile,
+        :fax,
+        :email,
+        :comment,
+        :status,
+        :city_id,
+        :country_id,
+        :sys_user_id,
+        :permanent_address
+      ],
+      :notes_attributes => [
+        :id,
+        :message,
+        :assigned_to_id,
+        :created_by,
+        :notable_id,
+        :notable_type
+      ],
+      :follow_ups_attributes =>[
+        :id,
+        :reminder_type,
+        :task_type,
+        :priority,
+        :assigned_to_id,
+        :created_by,
+        :date,
+        :comment,
+        :followable_id,
+        :followable_type
+      ],
+      cms_data: {}
+      )
+  end
 
   def set_sys_user
     @sys_user = SysUser.find(params[:id])
