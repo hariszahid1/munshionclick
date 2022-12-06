@@ -137,6 +137,7 @@ Rails.application.routes.draw do
   resources :products  do
     collection do
       get "get_product_data"
+      get :view_history, to: 'products#view_history'
     end
   end
   resources :product_sub_categories
