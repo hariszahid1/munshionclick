@@ -7,7 +7,7 @@
 
   <div class="row px-3">
     <div class="col-lg-12 col-sm-12 card shadow border-radius-1">
-      <%= search_form_for @q, url:view_history_purchase_sale_details_path, class: "admin-controls mt-3", remote: true, method: "get" do |f| %>
+      <%= search_form_for @q, url:view_history_purchase_sale_details_path(type: params[:type]), class: "admin-controls mt-3", remote: true, method: "get" do |f| %>
         <div class="col-lg-2 form-group float-left">
           <%= f.search_field :item_id_eq, value: @item_id, placeholder: "search by id", title: "search by id" ,:class=>"form-control" %>
         </div>

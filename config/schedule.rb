@@ -38,6 +38,7 @@ every :day, at: '12:00am' do
   rake 'db:filesend'
 end
 
+# For Report Files
 every :day, at: '12:00am' do
   puts 'Send file test'
   rake 'db:report_files_save_daily'
@@ -66,4 +67,36 @@ end
 every '0 8 1 * *' do
   puts 'Send file test'
   rake 'db:send_report_files_monthly'
+end
+
+# For Log Files
+
+every :day, at: '12:00am' do
+  puts 'Send file test'
+  rake 'db:logs_files_save_daily'
+end
+
+every :day, at: '8:00am' do
+  puts 'Send file test'
+  rake 'db:send_logs_files_daily'
+end
+
+every '0 0 * * MON' do
+  puts 'Send file test'
+  rake 'db:logs_files_save_weekly'
+end
+
+every '0 8 * * MON' do
+  puts 'Send file test'
+  rake 'db:send_logs_files_weekly'
+end
+
+every '0 0 1 * *' do
+  puts 'Send file test'
+  rake 'db:logs_files_save_monthly'
+end
+
+every '0 8 1 * *' do
+  puts 'Send file test'
+  rake 'db:send_logs_files_monthly'
 end
