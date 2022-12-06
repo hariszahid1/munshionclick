@@ -201,6 +201,7 @@
                 <% end %>
                 <div id = "show-logs"></div>
               </div>
+              <div class="my-loader mx-auto"></div>
             </p>
           </div>
         </div>
@@ -399,4 +400,8 @@
       $('.staff-book-index-card').removeClass('d-none')
     })
   });
+
+  $(function() {
+    setTimeout(function() { $(".my-loader").fadeOut(1500); }, 5000)
+  })
 </script>
