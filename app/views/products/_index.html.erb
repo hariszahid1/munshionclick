@@ -17,7 +17,7 @@
           Create
           <% end %>
       </div>
-    <% end %>
+  <% end %>
   <div class="float-right">
     <div class="dropdown ml-auto mr-4">
      <span class="btn btn-info" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
@@ -32,94 +32,110 @@
   </div>
   <ul class="nav nav-pills ml-3" role="tablist">
     <li class="nav-item">
-      <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab">Search</a>
+      <a class="nav-link tab-label active product-search-exp-tab" data-toggle="tab" href="#search" role="tab">Search</a>
     </li>			
 		<% if check_can_import_export(@module_permission) %>
 		<li class="nav-item">
-			<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
+			<a class="nav-link tab-label product-search-exp-tab" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
 		</li>
     <% end %>
+    <li class="nav-item">
+      <a class="nav-link tab-label product-logs-tab" data-toggle="tab" href="#logs" role="tab">Logs</a>
+    </li>
 	</ul>
 
-  <%= search_form_for @q, url: products_path, class: "admin-controls", method: "get" do |f| %>
     <div class="tab-content">
       <div class="tab-pane active mb-3 card shadow-sm mt-2 p-3 border-radius-1" id="search" role="tabpanel">
-        <div class="row d-flex mt-2">
-          <div class="col-lg-8">
-            <div class="col-lg-2 form-group float-left">
-              <%= f.select :item_type_id_in, options_for_select(@item_types.map {|i| ["#{i.second} \u{27F6} #{i.last}", i.first]}, f.object.item_type_id_in),{:include_blank => "Select the Block"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Block"} }%>
+        <%= search_form_for @q, url: products_path, class: "admin-controls", method: "get" do |f| %>
+          <div class="row d-flex mt-2">
+            <div class="col-lg-8">
+              <div class="col-lg-2 form-group float-left">
+                <%= f.select :item_type_id_in, options_for_select(@item_types.map {|i| ["#{i.second} \u{27F6} #{i.last}", i.first]}, f.object.item_type_id_in),{:include_blank => "Select the Block"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Block"} }%>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <%= f.select :id_in, options_for_select(@product.map {|i| ["#{i.second} \u{27F6} #{i.last}", i.first]}, f.object.id_in),{:include_blank => "Select Title/Code"},{:multiple => true, :class=>"form-control chosen-select", :data => {:placeholder => "Select Title/Code"}} %>
+              </div>
+              <div class="col-lg-3 form-group float-left">
+                <%= f.select :product_category_id_in, options_for_select(@product_categories.map {|i| ["#{i.second} \u{27F6} #{i.last}", i.first]}, f.object.product_category_id_in),{:include_blank => "Select Unit category"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select Unit-Category"}} %>
+              </div>
+              <div class="col-lg-3 form-group float-left">
+                <%= f.select :product_sub_category_id_in, options_for_select(@product_sub_categories.map {|i| ["#{i.second} \u{27F6} #{i.last}", i.first]}, f.object.product_sub_category_id_in),{:include_blank => "Select Unit sub category"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select Unit Sub-Category"}} %>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px;"><i class="fa fa-search"></i></button>
+              </div>
             </div>
-            <div class="col-lg-2 form-group float-left">
-              <%= f.select :id_in, options_for_select(@product.map {|i| ["#{i.second} \u{27F6} #{i.last}", i.first]}, f.object.id_in),{:include_blank => "Select Title/Code"},{:multiple => true, :class=>"form-control chosen-select", :data => {:placeholder => "Select Title/Code"}} %>
-            </div>
-            <div class="col-lg-3 form-group float-left">
-              <%= f.select :product_category_id_in, options_for_select(@product_categories.map {|i| ["#{i.second} \u{27F6} #{i.last}", i.first]}, f.object.product_category_id_in),{:include_blank => "Select Unit category"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select Unit-Category"}} %>
-            </div>
-            <div class="col-lg-3 form-group float-left">
-              <%= f.select :product_sub_category_id_in, options_for_select(@product_sub_categories.map {|i| ["#{i.second} \u{27F6} #{i.last}", i.first]}, f.object.product_sub_category_id_in),{:include_blank => "Select Unit sub category"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select Unit Sub-Category"}} %>
-            </div>
-            <div class="col-lg-2 form-group float-left">
-              <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px;"><i class="fa fa-search"></i></button>
-            </div>
-          </div>
-          <div class="col-lg-4 ">
-            <div class="row d-flex float-right mr-2">
-            <% if check_can_download_pdf(@module_permission)%>
-              <button class="form-control btn btn-danger float-right mr-2" style="width: 100px;" name="submit_pdf_staff_with" type="submit" value="Products PDF A4" formtarget="_blank">PDF &nbsp;<i class="fa fa-file-pdf"></i></button>
-              <button class="form-control btn btn-danger float-right mr-2" style="width: 120px;" name="submit_pdf_staff_barcode" type="submit" value="Products PDF A4" formtarget="_blank">Barcode </button>
-            <% end %>
-            <% if check_can_send_email(@module_permission)%>  
-              <button class="form-control btn btn-info d-flex justify-content-center float-right mr-2" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-1 mt-1"></i>&nbsp;Mail</button>
-                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                  <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                        </div>
-                        <div class="modal-body">
-                          <% @pos_setting = PosSetting.first %>
-                          <label>Email:</label>
-                          <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
-                          <br />
-                          <label>Subject:</label>
-                          <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Products Detail report from MunshiOnClick", class: 'form-control email-fields'%>
-                          <br />
-                          <label>Body:</label><br />
-                          <%= text_area_tag 'body', nil, class: 'form-control'%>
-                          <br />
-                          <label>Please select one of them.</label>
-                          <div>
-                            <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
-                            <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
-                            <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
+            <div class="col-lg-4 ">
+              <div class="row d-flex float-right mr-2">
+              <% if check_can_download_pdf(@module_permission)%>
+                <button class="form-control btn btn-danger float-right mr-2" style="width: 100px;" name="submit_pdf_staff_with" type="submit" value="Products PDF A4" formtarget="_blank">PDF &nbsp;<i class="fa fa-file-pdf"></i></button>
+                <button class="form-control btn btn-danger float-right mr-2" style="width: 120px;" name="submit_pdf_staff_barcode" type="submit" value="Products PDF A4" formtarget="_blank">Barcode </button>
+              <% end %>
+              <% if check_can_send_email(@module_permission)%>  
+                <button class="form-control btn btn-info d-flex justify-content-center float-right mr-2" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-1 mt-1"></i>&nbsp;Mail</button>
+                  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                          </div>
+                          <div class="modal-body">
+                            <% @pos_setting = PosSetting.first %>
+                            <label>Email:</label>
+                            <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
+                            <br />
+                            <label>Subject:</label>
+                            <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Products Detail report from MunshiOnClick", class: 'form-control email-fields'%>
+                            <br />
+                            <label>Body:</label><br />
+                            <%= text_area_tag 'body', nil, class: 'form-control'%>
+                            <br />
+                            <label>Please select one of them.</label>
+                            <div>
+                              <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
+                              <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
+                              <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
+                            </div>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
                           </div>
                         </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                          <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
-                        </div>
                       </div>
-                    </div>
-                </div>
-            <% end %>    
-              </div>  
-            </div>
-        </div>
+                  </div>
+              <% end %>    
+                </div>  
+              </div>
+          </div>
+        <% end %>
       </div>
       <div class="tab-pane card shadow-sm mt-2 border-radius-1 mb-3" id="import-export" role="tabpanel">
         <p>
+          <%= search_form_for @q, url: products_path, class: "admin-controls", method: "get" do |f| %>
+            <div class="d-flex">
+            <button class="btn btn-danger ml-4" name="export_data" type="submit" value="export_data">Export Data</button>
+            <button class="btn btn-info ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
+            </div>
+          <% end %>
+        </p>
+      </div>
+      <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="logs" role="tabpanel">
+        <p>
           <div class="d-flex">
-          <button class="btn btn-danger ml-4" name="export_data" type="submit" value="export_data">Export Data</button>
-          <button class="btn btn-info ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
+            <%= link_to view_history_products_path, class: "btn btn-success d-none", id: "product-logs", remote:true do %>
+              show logs
+            <% end %>
+            <div id = "show-logs"></div>
           </div>
         </p>
       </div>
-    </div>  
-  
-    <div class="card border-radius-1 shadow p-2">
+    </div>
+
+    <div class="card border-radius-1 shadow p-2 product-book-index-card">
       <table data-toggle="table" data-search="true" id="product_table">
         <thead>
           <th>Image</th>
@@ -236,11 +252,10 @@
         </tbody>
       </table>
     </div>  
-  <% end %>
 </div>
 
 <div class="clearfix"></div>
-<div class="row">
+<div class="row product-book-index-card">
   <div class="col-lg-4 col-sm-4">
     <%= page_entries_info @products %>
   </div>
@@ -282,5 +297,15 @@
     }
     $("#product_list").removeClass('hidden');
     FontAwesome.dom.i2svg();
+
+    $('.product-logs-tab').on('click', function(){
+      $('#product-logs').click();
+      $('.product-book-index-card').addClass('d-none')
+    })
+
+
+    $('.product-search-exp-tab').on('click', function(){
+      $('.product-book-index-card').removeClass('d-none')
+    })
   });
 </script>

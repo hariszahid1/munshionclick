@@ -116,7 +116,7 @@ class ExpenseEntriesController < ApplicationController
     respond_to do |format|
       if @expense_entry.update(expense_entry_params)
         AccountPaymentJob.perform_later(current_user.superAdmin.company_type,@expense_entry.account_id)
-        format.html { redirect_to @expense_entry, notice: 'Expense entry was successfully updated.' }
+        format.html { redirect_to expense_entries_path, notice: 'Expense entry was successfully updated.' }
         format.json { render :show, status: :ok, location: @expense_entry }
       else
         format.html { render :edit }
