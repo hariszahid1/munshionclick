@@ -19,6 +19,7 @@ class PurchaseSaleDetailsController < ApplicationController
       @name = params[:q][:sys_user_id_eq]
       @staff = params[:q][:staff_id_eq]
     end
+    @transaction_type_logs = params[:sale].present? ? 'Sale' : 'Purchase'
 
     @orders=Order.all
     if params[:purchase_sale_details].present?
@@ -1083,7 +1084,7 @@ class PurchaseSaleDetailsController < ApplicationController
       params[:q][:created_at_lteq] = params[:q][:created_at_lteq].to_date.end_of_day if params[:q][:created_at_lteq].present?
     end
     @event = %w[create update destroy]
-    @q = PaperTrail::Version.where(item_type:"PurchaseSaleDetail").order('created_at desc').ransack(params[:q])
+    @q = PaperTrail::Version.where(item_id:PurchaseSaleDetail.where(transaction_type: params[:type]),item_type:'PurchaseSaleDetail').order('created_at desc').ransack(params[:q])
     @purchase_sale_logs = @q.result.page(params[:page])
     respond_to do |format|
       format.js
