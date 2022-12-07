@@ -1,0 +1,167 @@
+$( document ).ready(function() {
+  var userCount=$('#userCount').val().split(' ')
+  const ctx = document.getElementById('myChart');
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Jama / Payable','Benam / Receivable', 'Nil'],
+      datasets: [{
+        label: 'Total Users',
+        data: userCount,
+        borderWidth: 1,
+        backgroundColor: ["blue", "red", "green"],
+      }],
+    },
+    options: {
+      
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Total Users by Balance Bar Chart',
+                font: {
+                  size: 16
+                }
+            }
+          
+
+        }
+      
+    }
+  });
+  
+});
+$( document ).ready(function() {
+  var balanceSum=$('#balanceSum').val().split(' ')
+  const ctx = document.getElementById('myChart1');
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Jama / Payable','Benam / Receivable'],
+      datasets: [{
+        label: 'Total Balance Rs',
+        data: balanceSum,
+        borderWidth: 1,
+        backgroundColor: ["blue", "red"],
+      }],
+    },
+    options: {
+      
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Total Balance in Rs. Bar Chart',
+                font: {
+                  size: 16
+                }
+            }
+          
+
+        }
+      
+    }
+  });
+  
+});
+
+$( document ).ready(function() {
+var jamaKeys=$('#jamaKeys').val().split(' ')
+var jamaValues=$('#jamaValues').val().split(' ')
+var benamValues=$('#benamValues').val().split(' ')
+var nilValues=$('#nilValues').val().split(' ')
+
+
+const data = {
+  labels: jamaKeys,
+  datasets: [
+    
+    {
+      label: 'Jama / Payable',
+      data:  jamaValues,
+    },
+     {
+      label: 'Benam / Receivable',
+      data: benamValues
+    },
+    {
+      label: 'Nil',
+      data: nilValues
+    }
+    
+    
+  ],
+  
+  
+};
+// config
+  const config = {
+  type: 'line',
+  data: data,
+  options: {
+    stacked: false,
+    plugins: {
+      title: {
+        display: true,
+        text: 'Jama/Benam by Date Line Chart',
+        font: {
+                  size: 20
+                },
+      }
+    },
+  },
+};
+// chart render
+const myChart = new Chart(
+      document.getElementById('myChart3'),
+      config
+    );
+})
+
+$( document ).ready(function() {
+var debitKeys=$('#debitKeys').val().split(' ')
+var debitValues=$('#debitValues').val().split(' ')
+var creditValues=$('#creditValues').val().split(' ')
+
+const data = {
+  labels: debitKeys,
+  datasets: [
+    
+    {
+      label: 'Total Debit',
+      data:  debitValues,
+    },
+     {
+      label: 'Total Credit',
+      data: creditValues
+    },
+
+  ],
+  
+  
+};
+// config
+  const config = {
+  type: 'line',
+  data: data,
+  options: {
+    stacked: false,
+    plugins: {
+      title: {
+        display: true,
+        text: 'Debit/Credit by Date Line Chart',
+        font: {
+                  size: 20
+                },
+      }
+    },
+  },
+};
+// chart render
+const myChart = new Chart(
+      document.getElementById('myChart4'),
+      config
+    );
+})
