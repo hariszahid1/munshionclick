@@ -22,6 +22,8 @@ class Product < ApplicationRecord
   validates_uniqueness_of :code
   validates_uniqueness_of :title
   has_one_attached :profile_image
+  before_create :generate_guid
+
 
   has_paper_trail ignore: [:updated_at]
   def category_title
@@ -31,4 +33,9 @@ class Product < ApplicationRecord
   scope :open_plot,   ->{ where( id: includes(:order_items).where(order_items: { product_id: nil }).pluck(:id) + includes(:order_items).where(order_items: {status: :open}).pluck(:id) )}
   scope :secure_plot, ->{ joins(:purchase_sale_items) }
   scope :only_booked_plot, ->{  joins(:order_items)-joins(:purchase_sale_items)}
+
+  def generate_guid
+    self.guid = SecureRandom.hex(6)
+    generate_guid if Product.exists?(guid: guid)
+  end
 end
