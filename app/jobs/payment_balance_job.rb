@@ -1,7 +1,6 @@
 class PaymentBalanceJob < ActiveJob::Base
   queue_as :default
-  def perform(db_name,account_id)
-    return unless account_id.present?
+  def perform(db_name)
     ActiveRecord::Base.establish_connection "#{Rails.env}_#{db_name}".to_sym
     puts "----------------------------CashInHand----------------------------------"
     @pos_setting = PosSetting.last

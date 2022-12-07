@@ -1,4 +1,5 @@
 class DashboardController < ApplicationController
+  before_action :check_access
   def index
     redirect_to orders_path(sale: true) if current_user.salesman?
     @product_count=Product.count

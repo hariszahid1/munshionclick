@@ -7,35 +7,64 @@
   <td><%= (staff_deal.product.sale.to_f.round(2)*(staff_deal.product.marla.to_f+(staff_deal.product.square_feet.to_f/225))).to_f.round(2) %></td>
   <td><%= staff_deal.product.marla.to_i %> Marla <%= staff_deal.product.square_feet.to_i%> Square Feet | <%= staff_deal.product.size_1.to_i %></td>
   <td>
-    <% staff_deal_orders = staff_deal.product.orders%>
-    <%if staff_deal_orders.present?%>
-      <%staff_deal_orders.each do |booking|%>
-        <b>Unit Commission to: </b>
-          <%token = booking.purchase_sale_details&.first%>
-          <%=token&.staff&.name%>
-        <br>
+  <div class="card">
+  <ul class="list-group list-group-flush">
+    
+      <% staff_deal_orders = staff_deal.product.orders%>
+      <%if staff_deal_orders.present?%>
+        <%staff_deal_orders.each do |booking|%>
+        <li class="list-group-item">
+          <b>Unit Commission to: </b><br>
+            <%token = booking.purchase_sale_details&.first%>
+            <%=token&.staff&.name%>
+        </li>        
+        
         <%if booking&.status!='Cancel'%>
-          <%= link_to edit_order_path(booking,product:true) do %>
-            Name: <%=booking.sys_user.name%>
-            <%=booking.sys_user.ledger_books.pluck('SUM(debit)','SUM(credit)').map { |sys| "<br> <b>Total:</b> "+sys.first.to_s+" <b>Paid:</b> "+sys.second.to_s+" <b>In %</b> "+((sys.second/sys.first)*100).round(2).to_s+" <br><b>Remaning:</b> "+(sys.first.to_i-sys.second.to_i).to_s+" <b>Commission:</b> "+token&.carriage.to_s+"<b> In % </b>"+((token&.carriage.to_f/sys.first)*100).round(2).to_s}.join(',').html_safe%>
-          <%end%>
-          <%=booking.sys_user.contact.phone_with_comma%>
-          <%= ("<br><b>Last Payment Date: </b>"+booking&.sys_user&.ledger_books&.last&.created_at&.strftime("%d%b%y at %I:%M%p")).html_safe if booking.present?%>
+          <li class="list-group-item">
+            <%= link_to edit_order_path(booking,product:true) do %>
+              <b class="text-dark">Name:</b><br> <%=booking.sys_user.name%>
+            <% end %>  
+          </li>
+          <li class="list-group-item">    
+            <%= link_to edit_order_path(booking,product:true) do %>
+              <%=booking.sys_user.ledger_books.pluck('SUM(debit)','SUM(credit)').map { |sys| "<b>Total:</b> "+ number_with_delimiter(sys.first.to_s)+" <br><b>Paid:</b> "+ number_with_delimiter(sys.second.to_s)+"<br> <b>In %</b> "+((sys.second/sys.first)*100).round(2).to_s+" <br><b>Remaning:</b> "+ number_with_delimiter((sys.first.to_i-sys.second.to_i).to_s) +" <b>Commission:</b> "+ number_with_delimiter(token&.carriage.to_s) +"<br> <b> In % </b>"+((token&.carriage.to_f/sys.first)*100).round(2).to_s}.join(',').html_safe%>
+            <%end%>
+          </li>    
+          <li class="list-group-item">  
+            <b>Contact:</b><br>
+            <%= booking.sys_user.contact.phone_with_comma%>
+          </li>
+          <li class="list-group-item">
+            <%= ("<b>Last Payment Date: </b></br>"+booking&.sys_user&.ledger_books&.last&.created_at&.strftime("%d%b%y at %I:%M%p")).html_safe if booking.present?%>
+          </li>  
         <%else%>
           <span>
-            <b>Booking-Canceled</b>
-            <%= link_to edit_order_path(booking,product:true) do %>
-              Name: <%=booking.sys_user.name%>
-              <%=booking.sys_user.ledger_books.pluck('SUM(debit)','SUM(credit)').map { |sys| "<br> <b>Total:</b> "+sys.first.to_s+" <b>Paid:</b> "+sys.second.to_s+" <b>In %</b> "+((sys.second/sys.first)*100).round(2).to_s+"<br><b>Remaning:</b> "+(sys.first.to_i-sys.second.to_i).to_s+" <b>Commission:</b> "+token&.carriage.to_s+"<b> In % </b>"+((token&.carriage.to_f/sys.first)*100).round(2).to_s}.join(',').html_safe%>
-            <%end%>
-            <%=booking.sys_user.contact.phone_with_comma%>
-            <%= ("<br><b>Last Payment Date: </b>"+booking&.sys_user&.ledger_books&.last&.created_at&.strftime("%d%b%y at %I:%M%p")).html_safe if booking.present?%>
-            <b>Booking-Canceled</b>
+            <li class="list-group-item">
+              <b>Booking-Canceled</b>
+              <%= link_to edit_order_path(booking,product:true) do %>
+                Name: <%=booking.sys_user.name%>
+              <% end %>
+            </li>
+            <li class="list-group-item">
+              <%= link_to edit_order_path(booking,product:true) do %>  
+                <%=booking.sys_user.ledger_books.pluck('SUM(debit)','SUM(credit)').map { |sys| "<b>Total:</b> "+ number_with_delimiter(sys.first.to_s) +" <br><b>Paid:</b> "+ number_with_delimiter(sys.second.to_s) +"<br> <b>In %</b> "+((sys.second/sys.first)*100).round(2).to_s+"<br><b>Remaning:</b> "+ number_with_delimiter((sys.first.to_i-sys.second.to_i).to_s) +" <b>Commission:</b> "+ number_with_delimiter(token&.carriage.to_s) +"<br><b> In % </b>"+((token&.carriage.to_f/sys.first)*100).round(2).to_s}.join(',').html_safe%>
+              <%end%>
+            </li>
+            <li class="list-group-item">  
+              <b>Contact:</b><br>
+              <%= booking.sys_user.contact.phone_with_comma%>
+            </li>
+            <li class="list-group-item">
+              <%= ("<b>Last Payment Date: </b></br>"+booking&.sys_user&.ledger_books&.last&.created_at&.strftime("%d%b%y at %I:%M%p")).html_safe if booking.present?%>
+              <b>Booking-Canceled</b>
+            </li>
           </span>
         <%end%>
         <br><br>
       <%end%>
     <%end%>
+     </ul>
+</div>
   </td>
   <td><%=staff_deal_orders.joins(:property_plans).where('property_plans.due_status':[nil, PropertyPlan.due_statuses["Unpaid"]],'property_plans.due_date': @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).sum(:advance)%></td>
   <td><%=staff_deal_orders.joins(property_plans: :property_installments).where('property_installments.due_status':[nil, PropertyPlan.due_statuses["Unpaid"]],'property_installments.due_date': @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).sum(:installment_price)%></td>
@@ -43,21 +72,46 @@
     <%= staff_deal.comment %>
   </td>
   <td>
-    <% if can?(:update, :all) %>
-      <%= link_to edit_staff_deal_path(staff_deal) do %>
-        <i class="fa fa-edit " aria-hidden="true"></i> |
-      <%end %>
-    <% end %>
-    <% if can?(:delete, :all) %>
-      <%= link_to staff_deal, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
-        <i class="fa fa-trash " aria-hidden="true"></i> |
-      <%end %>
-    <% end %>
-    <% if can?(:view, :all) %>
-      <%= link_to staff_deal do %>
-        <i class="fa fa-eye " aria-hidden="true"></i>
-      <%end %>
-    <%end%>
-
+  <div class="icon-container-1">
+      <div class="my-icon-1 my-view-1">
+        <div class="my-tooltip-1">
+          <div class="icon-container">
+            <div class="my-icon my-view">
+              <div class="my-tooltip">
+                Edit
+              </div>
+              <%if (check_can_update(@module_permission))%>
+                <%= link_to edit_staff_deal_path(staff_deal), remote: true, class:"icon-div" do %>
+                  <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+                <%end %>
+              <% end %>
+            </div>
+            <div class="my-icon my-view">
+              <div class="my-tooltip">
+                Delete
+              </div>
+              <%if (check_can_delete(@module_permission))%>
+                <%= link_to staff_deal, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+                  <i class="fa fa-trash mt-2" aria-hidden="true"></i>
+                <%end %>
+              <% end %> 
+            </div>
+            <div class="my-icon my-view">
+              <div class="my-tooltip">
+                Show
+              </div>
+              <%if (check_can_read(@module_permission))%>
+                <%= link_to staff_deal_path(staff_deal), remote: true, class:"icon-div" do %>
+                  <i class="fa fa-eye mt-2" aria-hidden="true"></i>
+                <%end %>
+              <%end%>    
+            </div>
+          </div>
+        </div>
+        <span class="icon-div-1">
+              <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+        </span>
+      </div>
+    </div>
   </td>
 </tr>
