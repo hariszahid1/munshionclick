@@ -19,6 +19,7 @@ class Order < ApplicationRecord
   after_update :update_account_balance
   has_many :remarks, as: :remarkable
   accepts_nested_attributes_for :remarks, allow_destroy: true
+  before_create :generate_guid
 
 
   has_paper_trail ignore: [:updated_at]
@@ -225,5 +226,10 @@ class Order < ApplicationRecord
     else
       return 0
     end
+  end
+
+  def generate_guid
+    self.guid = SecureRandom.hex(6)
+    generate_guid if Order.exists?(guid: guid)
   end
 end
