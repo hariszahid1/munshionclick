@@ -139,7 +139,7 @@
 				<th>CSV <input type="checkbox" id='select-all-checkbox-of-can-download-csv'></th>
 				<th>Email <input type="checkbox" id='select-all-checkbox-of-can-send-email'></th>
 				<th>Import/Export <input type="checkbox" id='select-all-checkbox-of-can-import-export'></th>
-				<th>Hidden <input type="checkbox" id='select-all-checkbox-of-hidden'></th>
+				<th class='hidden_column_head'>Hidden <input type="checkbox" id='select-all-checkbox-of-hidden'></th>
 			</thead>
 			<tbody>
 					<%= f.fields_for :user_permissions do |perm| %>
@@ -160,6 +160,17 @@
 
 <script>
 	$(document).ready(function () {
+	//for hidding isHidden column
+	const queryString = window.location.search;
+	const urlParams = new URLSearchParams(queryString);
+	const hidden = urlParams.get('hidden')
+
+if(!(hidden=='true')){
+	$('.hidden_column_td').css('display','none');
+	$('.hidden_column_head').css('display','none');
+}
+
+
 		// for create
 	$('#select-all-checkbox-of-create').on('click', function () {
 		if (this.checked) {
