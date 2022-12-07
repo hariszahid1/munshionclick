@@ -1,0 +1,35 @@
+$( document ).ready(function() {
+
+  const ctx = document.getElementById('myChart');
+  
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['A','B'],
+      datasets: [{
+        label: 'Users ',
+        data: [1,2],
+        borderWidth: 1,
+        backgroundColor: '#FF5C5C'
+      }],
+    },
+    options: {
+      
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Bar Chart',
+                font: {
+                  size: 16
+                }
+            }
+          
+
+        }
+      
+    }
+  });
+  
+});

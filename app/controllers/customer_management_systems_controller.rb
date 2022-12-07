@@ -51,9 +51,7 @@ class CustomerManagementSystemsController < ApplicationController
     @sys_user.build_contact
     @sys_user.notes.build
     @sys_user.follow_ups.build
-    respond_to do |format|
-      format.js
-    end
+    
   end
 
   def edit; end

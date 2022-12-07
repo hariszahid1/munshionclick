@@ -116,6 +116,7 @@ class OrdersController < ApplicationController
       @created_at_lteq = params[:q][:created_at_lteq] if params[:q][:created_at_lteq].present?
       params[:q][:created_at_lteq] = params[:q][:created_at_lteq].to_date.end_of_day if params[:q][:created_at_lteq].present?
     end
+    @transaction_type_order_logs = params[:sale].present? ? 'Sale' : 'Purchase'
     if params[:purchase_submit].present? or params[:sale_submit].present?
       product_id= params[:q][:purchase_sale_items_product_product_id].present? ? params[:q][:purchase_sale_items_product_product_id] : @products
       if params[:sale_submit].present?
@@ -452,7 +453,7 @@ class OrdersController < ApplicationController
       params[:q][:created_at_lteq] = params[:q][:created_at_lteq].to_date.end_of_day if params[:q][:created_at_lteq].present?
     end
     @event = %w[create update destroy]
-    @q = PaperTrail::Version.where(item_type:"Order").order('created_at desc').ransack(params[:q])
+    @q = PaperTrail::Version.where(item_id:Order.where(transaction_type: params[:type]),item_type:'Order').order('created_at desc').ransack(params[:q])
     @order_logs = @q.result.page(params[:page])
     respond_to do |format|
       format.js

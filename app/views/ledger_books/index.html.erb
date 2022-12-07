@@ -53,19 +53,33 @@
 <div class="hidden" id="item_types_list">
 
 </div>
-  <ul class="nav nav-pills mt-3" role="tablist">
+      <ul class="nav nav-pills mt-3 mb-2" role="tablist">
         <li class="nav-item">
           <a class="nav-link tab-label ledger-search-exp-tab active" data-toggle="tab" href="#search" role="tab">Search</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link tab-label sys-user-search-exp-tab" data-toggle="tab" href="#analytics" data-remote="true" role="tab">Analytics</a>
         </li>
         <li class="nav-item">
         <a class="nav-link tab-label ledger-search-exp-tab" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
         </li>
         <li class="nav-item">
           <a class="nav-link tab-label ledger-logs-tab" data-toggle="tab" href="#logs" role="tab">Logs</a>
-          
         </li> 
-    </ul>
-      <div class="tab-content mb-5">
+      </ul>
+
+      <%= hidden_field_tag "userCount", @user_count, { :id => "userCount" } %>
+      <%= hidden_field_tag "balanceSum", @balance_sum, { :id => "balanceSum" } %>
+      <%= hidden_field_tag "jamaKeys", @jama_keys, { :id => "jamaKeys" } %>
+      <%= hidden_field_tag "jamaValues", @jama_total, { :id => "jamaValues" } %>
+      <%= hidden_field_tag "benamValues", @benam_total, { :id => "benamValues" } %>
+      <%= hidden_field_tag "nilValues", @nil_total, { :id => "nilValues" } %>
+      <%= hidden_field_tag "debitKeys", @debit_keys, { :id => "debitKeys" } %>
+      <%= hidden_field_tag "debitValues", @debit_values, { :id => "debitValues" } %>
+      <%= hidden_field_tag "creditValues", @credit_values, { :id => "creditValues" } %>
+      
+
+      <div class="tab-content mb-2">
         <div class="tab-pane active mb-3 card shadow-sm mt-2 p-3 border-radius-1" id="search" role="tabpanel">
           <%= search_form_for @q, url: ledger_books_path, class: "admin-controls", method: "get" do |f| %>
           <div class="row d-flex">
@@ -158,10 +172,35 @@
                   </div>
                 </div>
               <% end %>
-              
             </div>
           </div>
         </div>
+        <div class="tab-pane card border-radius-1 p-5" id="analytics" role="tabpanel">
+          <div class="row d-flex">
+            <div class="col-lg-6">
+              <div class="my-chart-Container">
+                <div class="mychartBox card border-radius-1 shadow mt-2">
+                  <canvas id="myChart"></canvas>
+                </div> 
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="my-chart-Container">
+                <div class="mychartBox card border-radius-1 shadow mt-2">
+                  <canvas id="myChart1"></canvas>
+                </div> 
+              </div>
+            </div>
+          </div>
+          <div class="mychartBox2 card border-radius-1 shadow mt-2 p-3">
+            <canvas id="myChart3"></canvas>
+          </div>
+
+          <div class="mychartBox2 card border-radius-1 shadow mt-2 p-3">
+            <canvas id="myChart4"></canvas>
+          </div>
+        </div>
+
         <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="import-export" role="tabpanel">
           <p>
             <div class="d-flex ml-2">
@@ -183,6 +222,7 @@
       <div class="my-loader mx-auto"></div>
     </div>
   </div>
+  
   <div class='card p-3 ledger-book-index-card'>
     <table data-toggle="table" data-search="true" class=" overflow-hidden border-radius-1">
       <thead>

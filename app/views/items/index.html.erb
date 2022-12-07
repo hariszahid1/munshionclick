@@ -135,9 +135,15 @@
           <td></td>
           <td></td>
           <td></td>
-          <td></td>
-          <td></td>
+          <td><%= @total_cost%></td>
+          <td><%= @total_sale%></td>
           <td><h5><%=@items.sum(:stock)%></h5></td>
+          <td><%= @total_minimum%></td>
+          <td><%= @total_optimal%></td>
+          <td><%= @total_maximum%></td>
+          <td></td>
+          <td></td>
+          <td></td>
         </tr>
       </tbody>
     </table>
