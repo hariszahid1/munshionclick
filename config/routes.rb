@@ -223,6 +223,19 @@ Rails.application.routes.draw do
   get 'reports/chart_of_account'
   get 'reports/trial_balance'
   get 'reports/chart_of_account_report'
+
+  get 'reports/trial_balance_users_payable'
+  get 'reports/trial_balance_users_reciveable'
+  get 'reports/trial_balance_users_nill'
+  get 'reports/trial_balance_staffs_payable'
+  get 'reports/trial_balance_staffs_reciveable'
+  get 'reports/trial_balance_staffs_nill'
+  get 'reports/trial_balance_accounts'
+  get 'reports/trial_balance_expense_reciveable'
+  get 'reports/trial_balance_purchase_reciveable'
+  get 'reports/trial_balance_sale_payable'
+  get 'reports/trial_balance_salary'
+
   post :bulk_import_data, to: 'bulk_imports#bulk_import_data'
   post :bulk_delete_data, to: 'bulk_imports#bulk_delete_data'
 

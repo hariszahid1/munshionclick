@@ -68,10 +68,10 @@ class ApplicationRecord < ActiveRecord::Base
                                           }))
     date_for_folder = Date.yesterday.to_s.gsub('-', '')
     if logs.present?
-      Dir.mkdir(Rails.root.join("../../shared/logs/#{typeingly}/#{date_for_folder}")) unless File.exist?(Rails.root.join("../../shared/logs/#{typeingly}/#{date_for_folder}"))
-      Dir.mkdir(Rails.root.join("../../shared/logs/#{typeingly}/#{date_for_folder}/#{file_name}")) unless File.exist?(Rails.root.join("../../shared/logs/#{typeingly}/#{date_for_folder}/#{file_name}"))
+      Dir.mkdir(Rails.root.join("../../shared/version_reports/#{typeingly}/#{date_for_folder}")) unless File.exist?(Rails.root.join("../../shared/version_reports/#{typeingly}/#{date_for_folder}"))
+      Dir.mkdir(Rails.root.join("../../shared/version_reports/#{typeingly}/#{date_for_folder}/#{file_name}")) unless File.exist?(Rails.root.join("../../shared/version_reports/#{typeingly}/#{date_for_folder}/#{file_name}"))
       pdf_name = "#{file_type}-logs.pdf"
-      pdf_path = Rails.root.join("../../shared/logs/#{typeingly}/#{date_for_folder}/#{file_name}", pdf_name)
+      pdf_path = Rails.root.join("../../shared/version_reports/#{typeingly}/#{date_for_folder}/#{file_name}", pdf_name)
     else
       Dir.mkdir(Rails.root.join("../../shared/reports/#{typeingly}/#{date_for_folder}")) unless File.exist?(Rails.root.join("../../shared/reports/#{typeingly}/#{date_for_folder}"))
       Dir.mkdir(Rails.root.join("../../shared/reports/#{typeingly}/#{date_for_folder}/#{file_name}")) unless File.exist?(Rails.root.join("../../shared/reports/#{typeingly}/#{date_for_folder}/#{file_name}"))

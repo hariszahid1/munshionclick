@@ -21,7 +21,10 @@ class ProductCategoriesController < ApplicationController
     end
     download_product_categories_pdf_file if params[:pdf].present?
     send_email_file if params[:email].present?
-    export_file if params[:export_data].present?
+    if params[:export_data].present?
+      request.format = 'csv'
+      export_file
+    end
 
     @total_categories_count = Product.joins(:product_category).group("product_categories.title").count
     @total_sub_categories_count = ProductSubCategory.joins(:product_category).group('product_categories.title').count

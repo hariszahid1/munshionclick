@@ -1,15 +1,14 @@
 <tr>
   <td class='urdu-font'><%= staff_deal.staff&.name %></td>
-  <td class='urdu-font'><%=staff_deal.product.present? ? staff_deal.product.title+" "+staff_deal.product.item_type.title : "" %></td>
-  <td><%= staff_deal.product.product_category.title rescue 'nil'%></td>
-  <td><%= staff_deal.product.product_sub_category.title rescue 'nil'%></td>
-  <td><%= staff_deal.product.sale.to_f.round(2) %></td>
-  <td><%= (staff_deal.product.sale.to_f.round(2)*(staff_deal.product.marla.to_f+(staff_deal.product.square_feet.to_f/225))).to_f.round(2) %></td>
-  <td><%= staff_deal.product.marla.to_i %> Marla <%= staff_deal.product.square_feet.to_i%> Square Feet | <%= staff_deal.product.size_1.to_i %></td>
+  <td class='urdu-font'><%=staff_deal.product.present? ? staff_deal.product&.title.to_s+" "+staff_deal.product&.item_type&.title.to_s : "" %></td>
+  <td><%= staff_deal.product&.product_category&.title%></td>
+  <td><%= staff_deal.product&.product_sub_category&.title%></td>
+  <td><%= staff_deal.product&.sale.to_f.round(2) %></td>
+  <td><%= (staff_deal.product&.sale.to_f.round(2)*(staff_deal.product&.marla.to_f+(staff_deal.product&.square_feet.to_f/225))).to_f.round(2) %></td>
+  <td><%= staff_deal.product&.marla.to_i %> Marla <%= staff_deal.product&.square_feet.to_i%> Square Feet | <%= staff_deal.product&.size_1.to_i %></td>
   <td>
   <div class="card">
   <ul class="list-group list-group-flush">
-    
       <% staff_deal_orders = staff_deal.product.orders%>
       <%if staff_deal_orders.present?%>
         <%staff_deal_orders.each do |booking|%>
@@ -17,26 +16,26 @@
           <b>Unit Commission to: </b><br>
             <%token = booking.purchase_sale_details&.first%>
             <%=token&.staff&.name%>
-        </li>        
-        
+        </li>
+
         <%if booking&.status!='Cancel'%>
           <li class="list-group-item">
             <%= link_to edit_order_path(booking,product:true) do %>
               <b class="text-dark">Name:</b><br> <%=booking.sys_user.name%>
-            <% end %>  
+            <% end %>
           </li>
-          <li class="list-group-item">    
+          <li class="list-group-item">
             <%= link_to edit_order_path(booking,product:true) do %>
               <%=booking.sys_user.ledger_books.pluck('SUM(debit)','SUM(credit)').map { |sys| "<b>Total:</b> "+ number_with_delimiter(sys.first.to_s)+" <br><b>Paid:</b> "+ number_with_delimiter(sys.second.to_s)+"<br> <b>In %</b> "+((sys.second/sys.first)*100).round(2).to_s+" <br><b>Remaning:</b> "+ number_with_delimiter((sys.first.to_i-sys.second.to_i).to_s) +" <b>Commission:</b> "+ number_with_delimiter(token&.carriage.to_s) +"<br> <b> In % </b>"+((token&.carriage.to_f/sys.first)*100).round(2).to_s}.join(',').html_safe%>
             <%end%>
-          </li>    
-          <li class="list-group-item">  
+          </li>
+          <li class="list-group-item">
             <b>Contact:</b><br>
             <%= booking.sys_user.contact.phone_with_comma%>
           </li>
           <li class="list-group-item">
             <%= ("<b>Last Payment Date: </b></br>"+booking&.sys_user&.ledger_books&.last&.created_at&.strftime("%d%b%y at %I:%M%p")).html_safe if booking.present?%>
-          </li>  
+          </li>
         <%else%>
           <span>
             <li class="list-group-item">
@@ -46,11 +45,11 @@
               <% end %>
             </li>
             <li class="list-group-item">
-              <%= link_to edit_order_path(booking,product:true) do %>  
+              <%= link_to edit_order_path(booking,product:true) do %>
                 <%=booking.sys_user.ledger_books.pluck('SUM(debit)','SUM(credit)').map { |sys| "<b>Total:</b> "+ number_with_delimiter(sys.first.to_s) +" <br><b>Paid:</b> "+ number_with_delimiter(sys.second.to_s) +"<br> <b>In %</b> "+((sys.second/sys.first)*100).round(2).to_s+"<br><b>Remaning:</b> "+ number_with_delimiter((sys.first.to_i-sys.second.to_i).to_s) +" <b>Commission:</b> "+ number_with_delimiter(token&.carriage.to_s) +"<br><b> In % </b>"+((token&.carriage.to_f/sys.first)*100).round(2).to_s}.join(',').html_safe%>
               <%end%>
             </li>
-            <li class="list-group-item">  
+            <li class="list-group-item">
               <b>Contact:</b><br>
               <%= booking.sys_user.contact.phone_with_comma%>
             </li>
@@ -94,7 +93,7 @@
                 <%= link_to staff_deal, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
                   <i class="fa fa-trash mt-2" aria-hidden="true"></i>
                 <%end %>
-              <% end %> 
+              <% end %>
             </div>
             <div class="my-icon my-view">
               <div class="my-tooltip">
@@ -104,7 +103,7 @@
                 <%= link_to staff_deal_path(staff_deal), remote: true, class:"icon-div" do %>
                   <i class="fa fa-eye mt-2" aria-hidden="true"></i>
                 <%end %>
-              <%end%>    
+              <%end%>
             </div>
           </div>
         </div>

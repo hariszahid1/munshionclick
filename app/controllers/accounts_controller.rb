@@ -19,7 +19,10 @@ class AccountsController < ApplicationController
     end
     download_accounts_pdf_file if params[:pdf].present?
     send_email_file if params[:email].present?
-    export_file if params[:export_data].present?
+    if params[:export_data].present?
+      request.format = 'csv'
+      export_file
+    end
 
     @account_title = []
     @account_amount = []
