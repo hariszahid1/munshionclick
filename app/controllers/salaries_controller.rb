@@ -1,5 +1,6 @@
 class SalariesController < ApplicationController
   before_action :set_salary, only: [:show, :edit, :update, :destroy, :show_advance, :edit_advance]
+  before_action :check_access
 
   # GET /salaries
   # GET /salaries.json
