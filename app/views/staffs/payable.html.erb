@@ -71,7 +71,7 @@
 
     <tbody>
       <% @staffs.each do |staff| %>
-       <% if  staff.balance > 0 %>
+       <% if staff.balance.to_i > 0 %>
         <tr>
           <td>
             <% if  staff.profile_image.attached? %>

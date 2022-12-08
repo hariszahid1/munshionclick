@@ -1,0 +1,34 @@
+<div class="col-xl-12 col-md-12 mb-4">
+  <div class="row no-gutters align-items-center">
+    <div class="col mr-2">
+      <br>
+      <table data-toggle="table" data-search="true">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @sale_item_list.each do |exp| %>
+            <tr>
+              <td><%= exp.first %></td>
+              <td><%= number_with_delimiter(exp.last.to_f.round(2)) %></td>
+            </tr>
+          <% end %>
+          <% @sale_product_list.each do |exp| %>
+            <tr>
+              <td><%= exp.first %></td>
+              <td><%= number_with_delimiter(exp.last.to_f.round(2)) %></td>
+            </tr>
+          <% end %>
+          <tr>
+            <td><h4>Total : <%=@sale_item_list.count.to_i+@sale_product_list.count.to_i%></h4></td>
+            <td><h4><%= number_with_delimiter(@sale_item_total.to_i+@sale_product_total.to_i) %><h4></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

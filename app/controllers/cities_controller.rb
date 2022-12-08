@@ -23,7 +23,10 @@ class CitiesController < ApplicationController
     end
     download_cities_pdf_file if params[:pdf].present?
     send_email_file if params[:email].present?
-    export_file if params[:export_data].present?
+    if params[:export_data].present?
+      request.format = 'csv'
+      export_file
+    end
 
     @total_cities_count = Contact.joins(:city).group('cities.title').count
     @city_title = @total_cities_count.keys.map { |a| a.gsub(' ', '-') }
