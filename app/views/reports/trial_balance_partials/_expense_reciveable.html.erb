@@ -1,0 +1,43 @@
+<div class="col-xl-12 col-md-12 mb-4">
+  <div class="row no-gutters align-items-center">
+    <div class="col mr-2">
+      <br>
+      <table data-toggle="table" data-search="true">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Debit</th>
+            <th>Credit</th>
+            <th>Check</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @expense_list.each do |exp| %>
+            <tr>
+              <td>
+                <%= link_to expenses_path('q[expense_entries_expense_type_id_eq]':exp&.first&.first) do%>
+                  <i class="fa fa-address-book"></i><%= exp&.first&.last %>
+                <%end %>
+
+              </td>
+              <td><%= number_with_delimiter(balance = exp.last.to_f.round(2)) %></td>
+              <td><%= number_with_delimiter(credit_expense = @credit_expense[exp&.first&.last].to_f.round(2))%></td>
+              <td>
+                <% if balance == credit_expense%>
+                  <i class="fa fa-check"></i>
+                <%else%>
+                  <i class="fa fa-trash"></i><%=balance-credit_expense%>
+                <%end%>
+              </td>
+            </tr>
+          <% end %>
+          <tr>
+            <td><h4>Total : <%=@expense_list.count%></h4></td>
+            <td><h4><%= number_with_delimiter(@expense_total.abs.to_f.round(2))%><h4></td>
+            <td><h4><%= number_with_delimiter(@total_credit_expense.abs.to_f.round(2))%><h4></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
