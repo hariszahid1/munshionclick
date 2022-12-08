@@ -39,6 +39,31 @@ class LedgerBooksController < ApplicationController
                                              'SUM(credit)-SUM(debit) as mean_sum')
     @customers = SysUser.all
 
+    @user_count = []
+    @user_count.push(@q.result.where('balance > 0').count)
+    @user_count.push(@q.result.where('balance < 0').count)
+    @user_count.push(@q.result.where('balance = 0').count)
+
+    @balance_sum = []
+    @balance_sum.push(@q.result.where('balance > 0').sum(:balance).to_f)
+    @balance_sum.push(@q.result.where('balance < 0').sum(:balance).to_f)
+
+    @jama_by_date = @q.result.group('date(ledger_books.created_at)').where('balance > 0').count(:balance)
+    @benam_by_date = @q.result.group('date(ledger_books.created_at)').where('balance < 0').count(:balance)
+    @nil_by_date = @q.result.group('date(ledger_books.created_at)').where('balance = 0').count(:balance)
+    @jama_keys = @jama_by_date.keys
+    @jama_total = @jama_by_date.values
+    @benam_total = @benam_by_date.values
+    @nil_total = @nil_by_date.values
+    @debit_by_date = @q.result.group('date(ledger_books.created_at)').sum(:debit)
+    @debit_by_date_sorted = @debit_by_date.map { |a| [a.first, a.last.to_f] }.to_h
+    @credit_by_date = @q.result.group('date(ledger_books.created_at)').sum(:credit)
+    @credit_by_date_sorted = @credit_by_date.map { |a| [a.first, a.last.to_f] }.to_h
+    @debit_keys = @debit_by_date_sorted.keys
+    @debit_values = @debit_by_date_sorted.values
+    @credit_values = @credit_by_date_sorted.values
+
+
     if params[:submit_pdf].present? or params[:submit_pdf_without].present? or params[:desc_email].present? or params[:submit_pdf_short].present? or params[:submit_csv_without].present? or params[:submit_csv].present? or params[:submit_csv_short].present?
       @sys_users = SysUser.all
       sys_user_id = params[:q][:sys_user_id_eq].present? ? params[:q][:sys_user_id_eq] : @sys_users
@@ -67,6 +92,8 @@ class LedgerBooksController < ApplicationController
                                                    created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day, transaction_type: 'Sale').sum(:carriage)
       @product_loading = PurchaseSaleDetail.where(sys_user_id: sys_user_id,
                                                   created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day, transaction_type: 'Sale').sum(:loading)
+
+
       @q.sorts = ['created_at desc', 'id desc'] if @q.result.count > 0
 
       if params[:desc_email].present?
@@ -334,30 +361,6 @@ class LedgerBooksController < ApplicationController
     @ledger_books_credit = @q.result.sum(:credit)
     @ledger_books_debit = @q.result.sum(:debit)
 
-    @user_count = []
-    @user_count.push(@q.result.where('balance > 0').count)
-    @user_count.push(@q.result.where('balance < 0').count)
-    @user_count.push(@q.result.where('balance = 0').count)
-
-    @balance_sum = []
-    @balance_sum.push(@q.result.where('balance > 0').sum(:balance).to_f)
-    @balance_sum.push(@q.result.where('balance < 0').sum(:balance).to_f)
-
-    @jama_by_date = @q.result.group('date(created_at)').where('balance > 0').count(:balance)
-    @benam_by_date = @q.result.group('date(created_at)').where('balance < 0').count(:balance)
-    @nil_by_date = @q.result.group('date(created_at)').where('balance = 0').count(:balance)
-    @jama_keys = @jama_by_date.keys
-    @jama_total = @jama_by_date.values
-    @benam_total = @benam_by_date.values
-    @nil_total = @nil_by_date.values
-
-    @debit_by_date = @q.result.group('date(created_at)').sum(:debit)
-    @debit_by_date_sorted = @debit_by_date.map { |a| [a.first, a.last.to_f] }.to_h
-    @credit_by_date = @q.result.group('date(created_at)').sum(:credit)
-    @credit_by_date_sorted = @credit_by_date.map { |a| [a.first, a.last.to_f] }.to_h
-    @debit_keys = @debit_by_date_sorted.keys
-    @debit_values = @debit_by_date_sorted.values
-    @credit_values = @credit_by_date_sorted.values
 
   end
 
