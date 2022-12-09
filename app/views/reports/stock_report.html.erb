@@ -35,18 +35,18 @@
         <tr>
           <%total=0%>
           <td><%=ex.first%></td>
-          <td><%=ex.last[0].to_f.round(20)%></td>
-          <td><%=ex.last[1].to_f.round(20)%></td>
-          <td><%=ex.last[2].to_f.round(20)%></td>
-          <td><%=ex.last[3].to_f.round(20)%></td>
+          <td><%=number_with_delimiter(ex.last[0].to_f.round(20))%></td>
+          <td><%= number_with_delimiter(ex.last[1].to_f.round(20))%></td>
+          <td><%=number_with_delimiter(ex.last[2].to_f.round(20)) %></td>
+          <td><%= number_with_delimiter(ex.last[3].to_f.round(20))%></td>
         </tr>
       <%end%>
       <tr>
         <td><h5>Total</h5></td>
-        <td><h5><%=@purchase_stock%></h5></td>
-        <td><h5><%=@sale_stock%></h5></td>
-        <td><h5><%=@remaning_stock%></h5></td>
-        <td><h5></h5></td>
+        <td><h5><%= number_with_delimiter(@purchase_stock) %></h5></td>
+        <td><h5><%=number_with_delimiter(@sale_stock) %></h5></td>
+        <td><h5><%= number_with_delimiter(@remaning_stock) %></h5></td>
+        <td><h5><%= number_with_delimiter(@final_stock)%></h5></td>
       </tr>
     </tbody>
   </table>
@@ -67,18 +67,18 @@
         <tr>
           <%total=0%>
           <td><%=ex.first%></td>
-          <td><%=ex.last[0]%></td>
-          <td><%=ex.last[1]%></td>
-          <td><%=ex.last[2]%></td>
-          <td><%=ex.last[3]%></td>
+          <td><%=number_with_delimiter(ex.last[0]) %></td>
+          <td><%= number_with_delimiter(ex.last[1])  %></td>
+          <td><%= number_with_delimiter(ex.last[2]) %></td>
+          <td><%= number_with_delimiter(ex.last[3])%></td>
         </tr>
       <%end%>
       <tr>
         <td><h5>Total</h5></td>
-        <td><h5><%=@purchase_stock_day%></h5></td>
-        <td><h5><%=@sale_stock_day%></h5></td>
-        <td><h5><%=@remaning_stock_day%></h5></td>
-        <td><h5></h5></td>
+        <td><h5><%=number_with_delimiter(@purchase_stock_day)%></h5></td>
+        <td><h5><%= number_with_delimiter(@sale_stock_day) %></h5></td>
+        <td><h5><%= number_with_delimiter(@remaning_stock_day)%></h5></td>
+        <td><h5><%= number_with_delimiter(@final_stock_day)%></h5></td>
       </tr>
     </tbody>
   </table>

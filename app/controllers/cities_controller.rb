@@ -5,6 +5,7 @@ class CitiesController < ApplicationController
   include PdfCsvGeneralMethod
   include CitiesHelper
 
+  before_action :check_access
   before_action :set_city, only: %i[show edit update destroy]
   require 'tempfile'
   require 'csv'
@@ -15,10 +16,27 @@ class CitiesController < ApplicationController
     @q.sorts = 'id asc' if @q.sorts.empty? && @q.result.count.positive?
     @options_for_select = City.all
     @cities = @q.result.page(params[:page])
-    download_cities_csv_file if params[:csv].present?
+
+    if params[:csv].present?
+      request.format = 'csv'
+      download_cities_csv_file
+    end
     download_cities_pdf_file if params[:pdf].present?
     send_email_file if params[:email].present?
-    export_file if params[:export_data].present?
+    if params[:export_data].present?
+      request.format = 'csv'
+      export_file
+    end
+
+    @total_cities_count = Contact.joins(:city).group('cities.title').count
+    @city_title = @total_cities_count.keys.map { |a| a.gsub(' ', '-') }
+    @city_user = @total_cities_count.values
+    respond_to do |format|
+      format.pdf
+      format.csv
+      format.js
+      format.html
+    end
   end
 
   # GET /cities/1
@@ -95,23 +113,25 @@ class CitiesController < ApplicationController
     @cities = @q.result
     header_for_csv = %w[Id Title Comment]
     data_for_csv = get_data_for_cities_csv
-    generate_csv(data_for_csv, header_for_csv, "Cities-Total-#{@cities.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}")
+    generate_csv(data_for_csv, header_for_csv,
+                 "Cities-Total-#{@cities.count}-#{DateTime.now.strftime('%d-%m-%Y-%H-%M')}")
   end
 
   def download_cities_pdf_file
     @cities = @q.result
-    generate_pdf(@cities.as_json, "Cities-Total-#{@cities.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}", 'pdf.html', 'A4')
+    generate_pdf(@cities.as_json, "Cities-Total-#{@cities.count}-#{DateTime.now.strftime('%d-%m-%Y-%H-%M')}",
+                 'pdf.html', 'A4', false, 'cities/index.pdf.erb')
   end
 
   def send_email_file
     EmailJob.perform_later(@q.result.as_json, 'cities/index.pdf.erb', params[:email_value],
                            params[:email_choice], params[:subject], params[:body],
-                           current_user, "Cities-Total-#{@q.result.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}")
-    if params[:email_value].present?
-      flash[:notice] = "Email has been sent to #{params[:email_value]}"
-    else
-      flash[:notice] = "Email has been sent to #{current_user.email}"
-    end
+                           current_user, "Cities-Total-#{@q.result.count}-#{DateTime.now.strftime('%d-%m-%Y-%H-%M')}")
+    flash[:notice] = if params[:email_value].present?
+                       "Email has been sent to #{params[:email_value]}"
+                     else
+                       "Email has been sent to #{current_user.email}"
+                     end
     redirect_to cities_path
   end
 

@@ -22,4 +22,23 @@ class ReportMailer < ApplicationMailer
     end
     mail(to: email, subject: subject, body: body)
   end
+
+  def db_backup_file_email(email_to, email_cc, email_bcc, company_type, link, date)
+    @link = link
+    @date = date
+    mail(to: email_to, cc: email_cc, bcc: email_bcc, subject: "Database Backup File for #{company_type}") if email_to.present?
+  end
+
+  def send_report_files_email(email_to, email_cc, email_bcc, path_of_files, company_name, typeingly, type)
+    return unless path_of_files.present?
+
+    @typeingly = typeingly
+    @company_name = company_name
+    path_of_files.each do |p|
+      file_name = p.split('/').last if p.present?
+      attachments[file_name] = File.read(p)
+    end
+    mail(to: email_to, cc: email_cc, bcc: email_bcc, subject: "#{typeingly} #{type} Files") if email_to.present?
+  end
+
 end

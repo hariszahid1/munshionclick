@@ -1,0 +1,70 @@
+<% @date = Date.today  %>
+<% @time = DateTime.now %>
+<% @time = Time.zone.now %>
+<html>
+  <head>
+    <style>
+      .border-bottom{
+        border-bottom: double 4px;
+      }
+      .text-center{
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <p style="border-bottom: double 4px;  margin: 0;"></p>
+    <h1 class="text-center">Total Expense => <%= expenses.pluck('expense').sum.to_f.round(2) %> </h1>
+    <p style="border-bottom: double 4px;  margin: 0;"></p>
+    <p class="text-center" style="margin-top: 30px;">Report by: Server</p>
+    <div style="margin-bottom: 30px">
+      <table>
+        <th></th>
+        <th></th>
+        <tr>
+          <td style="width:67vw;">DateTime: <span><%=Time.zone.now%></span> </td>
+        </tr>
+        <tr>
+          <td>Payment by: Cash</td>
+          <td>Platform: POS</td>
+        </tr>
+      </table>
+    </div>
+    <div>
+      <table>
+        <thead class="lite-gray">
+          <th class="text-center">ID</th>
+          <th class="text-center">Date</th>
+          <th class="text-center">Type Wise</th>
+          <th class="text-center">Amount</th>
+          <th class="text-center">Paid By</th>
+          <th class="text-center">Expense Remark</th>
+          <th class="text-center">Comment</th>
+        </thead>
+        <tbody>
+          <% expenses.each_with_index do |exp, index| %>
+            <tr>
+              <td class="text-center"><%= exp.id %></td>
+              <td class="text-center"><%= exp.created_at.strftime('%d%b%y') != exp.updated_at.strftime('%d%b%y') ? exp.updated_at.strftime('%d%b%y at %H:%M%p') : exp.created_at.strftime('%d%b%y at %H:%M%p') %></td>
+              <td class="text-center">
+                <% exp.expense_entries.joins(:expense_type).group(:expense_type).sum(:amount).map do |exp| %>
+                  <%= exp.first.title.to_s + ':' + exp.last.to_s %>
+                <% end %>
+              </td>
+              <td class="text-center"><%= number_with_delimiter(exp.expense.to_f.round(2)) %></td>
+              <td class="text-center"><%= Account.where(id: exp.expense_entries.distinct.pluck(:account_id)).pluck(:title).to_s %></td>
+              <td class="text-center"><%= exp.comment %></td>
+              <td class="text-center"><%= exp.expense_entries.distinct.pluck(:comment) %></td>
+            </tr>
+          <% end %>
+          <tr>
+            <th></th>
+            <th></th>
+            <th><h2>Total</h2></th>
+            <th><h2><%= expense_payment_total %></h2></th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

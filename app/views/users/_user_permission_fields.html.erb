@@ -1,0 +1,16 @@
+	<tr class="">
+		<td>
+			<%= f.number_field :id, class: 'd-none user-permission-id',skip_label: true %>
+			<%= f.check_box :can_accessed, checked: f.object.can_accessed, skip_label: true,class:"form-checkbox h-5 w-4 ml-2 can-access-checkbox" %>
+		</td>
+		<td> <%= f.object.module%> </td>
+		<td> <%= f.check_box :can_create, checked: f.object.can_create, hide_label: true, class:"form-checkbox h-5 w-4 ml-2 can-create-checkbox" %></td>
+		<td> <%= f.check_box :can_read, checked: f.object.can_read, hide_label: true, class:"form-checkbox h-5 w-4 ml-2 can-read-checkbox" %></td>
+		<td> <%= f.check_box :can_update, checked: f.object.can_update, hide_label: true, class:"form-checkbox h-5 w-4 ml-2 can-update-checkbox" %></td>
+		<td> <%= f.check_box :can_delete, checked: f.object.can_delete, hide_label: true, class:"form-checkbox h-5 w-4 ml-2 can-delete-checkbox" %></td>
+		<td> <%= f.check_box :can_download_pdf, checked: f.object.can_download_pdf, hide_label: true, class:"form-checkbox h-5 w-4 ml-2 can-download-pdf-checkbox" %></td>
+		<td> <%= f.check_box :can_download_csv, checked: f.object.can_download_csv, hide_label: true, class:"form-checkbox h-5 w-4 ml-2 can-download-csv-checkbox" %></td>
+		<td> <%= f.check_box :can_send_email, checked: f.object.can_send_email, hide_label: true, class:"form-checkbox h-5 w-4 ml-2 can-send-email-checkbox" %></td>
+		<td> <%= f.check_box :can_import_export, checked: f.object.can_import_export, hide_label: true, class:"form-checkbox h-5 w-4 ml-2 can-import-export-checkbox" %></td>
+		<td class='hidden_column_td'> <%= f.check_box :is_hidden, checked: f.object.is_hidden, hide_label: true, class:"form-checkbox h-5 w-4 ml-2 is-hidden-checkbox" %></td>
+	</tr>

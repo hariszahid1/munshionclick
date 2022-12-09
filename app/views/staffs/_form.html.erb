@@ -83,13 +83,13 @@
   </div>
 
   <div class="col-lg-6 form-group float-left">
-    <%= f.number_field :wage_rate %>
+    <%= f.number_field :wage_rate, step: :any %>
   </div>
   <div class="col-lg-6 form-group float-left">
-    <%= f.number_field :wage_debit, {value:f.object.wage_debit.present? ? f.object.wage_debit : 0.0,label: 'Debit Balance'}%>
+    <%= f.number_field :wage_debit, value:f.object.wage_debit.present? ? f.object.wage_debit : 0.0,label: 'Debit Balance', step: :any%>
   </div>
   <div class="col-lg-6 form-group float-left">
-    <%= f.number_field :balance, {label: 'Credit Balance',required: true} %>
+    <%= f.number_field :balance, label: 'Credit Balance',required: true , step: :any %>
   </div>
   <div class="col-lg-6 form-group float-left">
     <%= f.file_field :profile_image %>

@@ -1,64 +1,90 @@
 class ExpensesController < ApplicationController
-  before_action :set_expense, only: [:show, :edit, :update, :destroy]
+  before_action :check_access
+  before_action :set_expense, only: %i[show edit update destroy]
+  include PdfCsvGeneralMethod
+  include ExpensesHelper
 
   # GET /expenses
   # GET /expenses.json
   def index
     @expense_types = ExpenseType.all
-    @accounts=Account.all
+    @accounts = Account.all
     @start_date = DateTime.current.beginning_of_month
     @end_date = DateTime.now
     @expense_type = @expense_types
-    @account=@accounts
+    @account = @accounts
     if params[:q].present?
-      @expense_type = params[:q][:expense_entries_expense_type_id_eq] if params[:q][:expense_entries_expense_type_id_eq].present?
+      if params[:q][:expense_entries_expense_type_id_eq].present?
+        @expense_type = params[:q][:expense_entries_expense_type_id_eq]
+      end
       @account = params[:q][:expense_entries_account_id_eq] if params[:q][:expense_entries_account_id_eq].present?
       @start_date = params[:q][:created_at_gteq] if params[:q][:created_at_gteq].present?
       @end_date = params[:q][:created_at_lteq] if params[:q][:created_at_lteq].present?
-      params[:q][:created_at_lteq] = params[:q][:created_at_lteq].to_date.end_of_day if params[:q][:created_at_lteq].present?
-      @q = Expense.ransack(params[:q])
+      if params[:q][:created_at_lteq].present?
+        params[:q][:created_at_lteq] =
+          params[:q][:created_at_lteq].to_date.end_of_day
+      end
+      @q = Expense.order('id desc').ransack(params[:q])
     else
-      @q = Expense.where(created_at: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day).ransack(params[:q])
-    end
-    if @q.result.count > 0
-      @q.sorts = 'id desc' if @q.sorts.empty?
+      @q = Expense.order('id desc').where(created_at: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day).ransack(params[:q])
     end
     @expenses = @q.result.page(params[:page])
-    @expense_payment = Expense.joins(expense_entries: :payment).where('expenses.id':@expenses.pluck(:id)).group(:id).sum(:debit)
-    @expense_payment_total = Expense.joins(expense_entries: :payment).where('expenses.id':@expenses.pluck(:id)).sum(:debit)
+    @expense_payment = Expense.joins(expense_entries: :payment).where('expenses.id': @expenses.pluck(:id)).group(:id).sum(:debit)
+    @expense_payment_total = Expense.joins(expense_entries: :payment).where('expenses.id': @expenses.pluck(:id)).sum(:debit)
 
-    @expense_total = ExpenseEntry.where(expense_type_id: @expense_type,account_id: @account, created_at: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day).sum(:amount)
-    if params[:submit_pdf_a4].present?
-      if @q.result.count > 0
-        @q.sorts = 'id desc' if @q.sorts.empty?
+    @expense_total = ExpenseEntry.where(expense_type_id: @expense_type, account_id: @account,
+                                        created_at: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day).sum(:amount)
+
+    if params[:submit_pdf_a8].present? || params[:submit_pdf_a4].present?
+      @pdf_page_size = 'A4'
+      @html_pdf = false
+      if params[:submit_pdf_a8].present?
+        @html_pdf = true
+        @pdf_page_size = 'A8'
       end
-      @expenses = @q.result
-      request.format = 'pdf'
-      print_pdf('Expenses From -'+@start_date.to_s+' to '+@end_date.to_s,'pdf.html','A4')
+      download_expenses_pdf_file
     end
-    if params[:email].present?
-      @pos_setting=PosSetting.first
-      @expenses = @q.result
-      @pdf_index=render_to_string(:pdf => "General Expenses",:template => 'expenses/index.pdf.erb',:filename => 'General Expenses')
-    end
-    if params[:submit_pdf_a8].present?
-      if @q.result.count > 0
-        @q.sorts = 'id desc' if @q.sorts.empty?
-      end
-      @expenses = @q.result
-      request.format = 'pdf'
-      print_pdf('Expenses From -'+@start_date.to_s+' to '+@end_date.to_s,'pdf.html','A8',true)
-    end
+    download_expenses_csv_file if params[:csv].present?
+    send_email_file if params[:email].present?
+    export_file if params[:export_data].present?
 
-    if params[:email].present?
-      @pos_setting=PosSetting.first
-      subject = "#{@pos_setting.display_name} - General Expenses"
-      email = current_user.superAdmin.email_to.present? ? current_user.superAdmin.email_to : "info@munshionclick.com"
-      pdf=[[@pdf_index,'General_Expenses']]
-      ReportMailer.new_report_email(pdf,subject,email,"").deliver
-      return redirect_to expenses_path
+    @exp_date = []
+    @exp_type = []
+    @the_type = []
+		@exp_types = Hash.new
+    @expenses_g = ExpenseEntry.joins(:expense_type).where(created_at: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day).group(:title, 'date(expense_entries.created_at)').sum(:amount)
+		@expenses_d = ExpenseEntry.joins(:expense_type).where(created_at: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day).group('date(expense_entries.created_at)').sum(:amount)
+		@expenses_t = ExpenseEntry.joins(:expense_type).where(created_at: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day).group(:title).sum(:amount)
+		@expenses_g.each do |expense|
+      @exp_type.push(expense.last.to_f.round(2).to_s)
     end
+		@expenses_d.each do |expense|
+      @exp_date.push(expense.first.to_s)
+    end
+		@expenses_t.each do |expense|
+      @the_type.push(expense.first.to_s)
+			exp = ExpenseEntry.joins(:expense_type).where(created_at: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day).where('expense_types.title': expense.first).group('date(expense_entries.created_at)').sum(:amount)
+			array = []
+			@exp_date.each do |date|
+				exp.each do |e|
+					if date.to_s == e.first.to_s
+						array.push(e.last)
+					else
+						array.push(0)
+					end
+				end
+			end
+			@exp_types[expense.first] = array
+    end
+		@exp_date_join = @exp_date.join('&').to_s
+		@the_type_join = @the_type.join('&').to_s
 
+    respond_to do |format|
+      format.pdf
+      format.csv
+      format.js
+      format.html
+    end
   end
 
   # GET /expenses/1
@@ -74,14 +100,14 @@ class ExpensesController < ApplicationController
     @expense = Expense.new
     @expense.expense_entries.build
     @expense_types = ExpenseType.all
-    @accounts=Account.all
-    @account=current_user.user_account
+    @accounts = Account.all
+    @account = current_user.user_account
   end
 
   # GET /expenses/1/edit
   def edit
     @expense_types = ExpenseType.all
-    @accounts=Account.all
+    @accounts = Account.all
   end
 
   # POST /expenses
@@ -89,10 +115,14 @@ class ExpensesController < ApplicationController
   def create
     @expense = Expense.new(expense_params)
     @expense_types = ExpenseType.all
-    @accounts=Account.all
+    @accounts = Account.all
 
     respond_to do |format|
       if @expense.save
+        accounts = @expense&.expense_entries&.pluck(:account_id)
+        accounts.each do |account|
+          PaymentBalanceJob.set(wait: 1.minutes).perform_later(current_user.superAdmin.company_type)
+        end
         format.html { redirect_to expenses_path, notice: 'Expense was successfully created.' }
         format.json { render :show, status: :created, location: @expense }
       else
@@ -109,7 +139,7 @@ class ExpensesController < ApplicationController
       if @expense.update(expense_params)
         accounts = @expense&.expense_entries&.pluck(:account_id)
         accounts.each do |account|
-          AccountPaymentJob.perform_later(current_user.superAdmin.company_type,account)
+          AccountPaymentJob.perform_later(current_user.superAdmin.company_type, account)
         end
         format.html { redirect_to expenses_path, notice: 'Expense was successfully updated.' }
         format.json { render :show, status: :ok, location: @expense }
@@ -126,7 +156,7 @@ class ExpensesController < ApplicationController
     accounts = @expense&.expense_entries&.pluck(:account_id)
     @expense.destroy
     accounts.each do |account|
-      AccountPaymentJob.perform_later(current_user.superAdmin.company_type,account)
+      AccountPaymentJob.perform_later(current_user.superAdmin.company_type, account)
     end
 
     respond_to do |format|
@@ -136,14 +166,64 @@ class ExpensesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_expense
-      @expense = Expense.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def expense_params
-      params.require(:expense).permit(:expense_type, :expense, :account_id, :comment, :expense_type_id,:created_at,
-      :expense_entries_attributes => [:id, :expense_id, :amount, :comment,:status, :account_id, :expense_type_id,:_destroy])
+  # Use callbacks to share common setup or constraints between actions.
+  def set_expense
+    @expense = Expense.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def expense_params
+    params.require(:expense).permit(:expense_type, :expense, :account_id, :comment, :expense_type_id, :created_at,
+                                    expense_entries_attributes: %i[id expense_id amount comment status account_id expense_type_id _destroy])
+  end
+
+  def download_expenses_csv_file
+    @expenses = @q.result
+    header_for_csv = %w[id type_wise expense paid_by expense_remark comment date]
+    data_for_csv = get_data_for_expenses_csv
+    generate_csv(data_for_csv, header_for_csv,
+                 "Expenses-Total-#{@expenses.count}-#{DateTime.now.strftime('%d-%m-%Y-%H-%M')}")
+  end
+
+  def download_expenses_pdf_file
+    sort_data_according
+    generate_pdf(@sorted_data.as_json, "Expenses-Total-#{@sorted_data.count}-#{DateTime.now.strftime('%d-%m-%Y-%H-%M')}",
+                 'pdf.html', @pdf_page_size, @html_pdf, 'expenses/index.pdf.erb')
+  end
+
+  def send_email_file
+    sort_data_according
+    EmailJob.perform_later(@sorted_data.as_json, 'expenses/index.pdf.erb', params[:email_value],
+                           params[:email_choice], params[:subject], params[:body],
+                           current_user, "Expenses-Total-#{@sorted_data.count}-#{DateTime.now.strftime('%d-%m-%Y-%H-%M')}")
+    flash[:notice] = if params[:email_value].present?
+                       "Email has been sent to #{params[:email_value]}"
+                     else
+                       "Email has been sent to #{current_user.email}"
+                     end
+    redirect_to expenses_path
+  end
+
+  def sort_data_according
+    @sorted_data = []
+    @q.result.each do |d|
+      @sorted_data << {
+        id: d.id,
+        type_wise: d.expense_entries.joins(:expense_type).group(:expense_type).sum(:amount).map do |d|
+                     d.first.title.to_s + ':' + d.last.to_s
+                   end,
+        expense: d.expense.to_f.round(2),
+        paid_by: Account.where(id: d.expense_entries.distinct.pluck(:account_id)).pluck(:title).to_s,
+        expense_remark: d.comment,
+        comment: d.expense_entries.distinct.pluck(:comment),
+        date: d.created_at.strftime('%d%b%y') != d.updated_at.strftime('%d%b%y') ? d.updated_at.strftime('%d%b%y at %H:%M%p') : d.created_at.strftime('%d%b%y at %H:%M%p'),
+        total: @expense_payment_total
+      }
     end
+  end
+
+  def export_file
+    export_data('Expense')
+  end
 end

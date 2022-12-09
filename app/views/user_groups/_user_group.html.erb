@@ -1,7 +1,11 @@
 <tr>
   <td><%= check_box_tag 'object_ids[]', user_group.id %></td>
   <td><%= user_group.id %></td>
-  <td class= 'urdu-font'><%= user_group.title %></td>
+  <td class= 'urdu-font'><%= user_group.title %>
+    <% unless @count_sys_user[user_group.title].blank?%>
+      <%= link_to " (" + @count_sys_user[user_group.title].to_s  + ")", sys_users_path('q[user_group_eq]':user_group.id,)%>
+    <% end%>
+  </td>
   <td><span title="<%= user_group.comment %>" class='truncate-text'><%= user_group.comment %></span></td>
   <td class="p-3">
     <div class="icon-container-1">
@@ -12,52 +16,55 @@
               <div class="my-tooltip">
                 Edit
               </div>
-              <% if can?(:update, :all) %>
+							<%if (check_can_update(@module_permission))%>
                 <%= link_to edit_user_group_path(user_group), remote: true, class:"icon-div" do %>
                   <i class="fa fa-edit mt-2" aria-hidden="true"></i>
                 <%end %>
               <% end %>
             </div>
+						<%if (check_can_delete(@module_permission))%>
+							<div class="my-icon my-view">
+								<div class="my-tooltip">
+									Delete
+								</div>
+								<%= link_to user_group, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+									<i class="fa fa-trash mt-2" aria-hidden="true"></i>
+								<%end %>
+							</div>
+						<% end %>
 
-            <div class="my-icon my-view">
-              <div class="my-tooltip">
-                Delete
-              </div>
-                <% if can?(:delete, :all) %>
-                  <%= link_to user_group, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
-                    <i class="fa fa-trash mt-2" aria-hidden="true"></i>
-                  <%end %>
-                <% end %>
-            </div>
+						<%if (check_can_read(@module_permission))%>
+							<div class="my-icon my-view">
+								<div class="my-tooltip">
+									Show
+								</div>
+									<%= link_to user_group_path(user_group), remote: true, class:"icon-div" do %>
+										<i class="fa fa-eye mt-2" aria-hidden="true"></i>
+									<%end %>
+							</div>
+						<%end%>
 
-            <div class="my-icon my-view">
-              <div class="my-tooltip">
-                Show
-              </div>
-              <% if can?(:view, :all) %>
-                <%= link_to user_group_path(user_group), remote: true, class:"icon-div" do %>
-                  <i class="fa fa-eye mt-2" aria-hidden="true"></i>
-                <%end %>
-              <%end%>
-            </div>
+						<%if (check_can_download_pdf(@module_permission))%>
+							<div class="my-icon my-view">
+								<div class="my-tooltip">
+									PDF
+								</div>
+								<%= link_to user_groups_path('q[id_eq]':user_group.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
+									<i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
+								<%end %>
+							</div>
+						<%end%>
+						<%if (check_can_download_csv(@module_permission))%>
+							<div class="my-icon my-view">
+								<div class="my-tooltip">
+									CSV
+								</div>
+								<%= link_to user_groups_path('q[id_eq]':user_group.id,'csv':true), title: 'Download CSV', class:"icon-div" do%>
+									<i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
+								<%end %>
+							</div>
+						<%end %>
 
-            <div class="my-icon my-view">
-              <div class="my-tooltip">
-                PDF
-              </div>
-              <%= link_to user_groups_path('q[id_eq]':user_group.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
-      			    <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
-              <%end %>
-            </div>
-
-            <div class="my-icon my-view">
-              <div class="my-tooltip">
-                CSV
-              </div>
-              <%= link_to user_groups_path('q[id_eq]':user_group.id,'csv':true), title: 'Download CSV', class:"icon-div" do%>
-                <i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
-              <%end %>
-            </div>
 
           </div>
         </div>

@@ -1,5 +1,6 @@
 class SalariesController < ApplicationController
   before_action :set_salary, only: [:show, :edit, :update, :destroy, :show_advance, :edit_advance]
+  before_action :check_access
 
   # GET /salaries
   # GET /salaries.json
@@ -117,6 +118,7 @@ class SalariesController < ApplicationController
     @salary.total_balance = @salary.total_balance.to_f - (@salary.advance.to_f+@salary.paid_salary.to_f)
     respond_to do |format|
       if @salary.save
+        PaymentBalanceJob.set(wait: 1.minutes).perform_later(current_user.superAdmin.company_type)
         if @salary.payment_type=="Advance"
           @paid_to_month=@salary.created_at.month
           @paid_to_year=@salary.created_at.year

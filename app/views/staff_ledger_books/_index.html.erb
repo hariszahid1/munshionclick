@@ -1,73 +1,222 @@
+<div id="custom-alert" class="alert alert-danger d-none">
+  <span class="custom-alert-text"></span>
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">×</span>
+  </button>
+</div>
 <div class="hidden" id="salary_detail_list">
-  <div class="row">
-    <div class="col-lg-12 col-sm-12">
-      <h1>Staff ledger Book</h1>
-      <% if can?(:delete, :all) %>
-      <div id="new_country">
-        <% link_to new_staff_ledger_book_path(Benam: true), class: "btn btn-success" do %>
-           <i class="fa fa-plus" aria-hidden="true"></i>
-           Benam/Debit
+  <div class="main-content-header">
+    <h1 class="ml-2">Staff/Dealer ledger Book</h1>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<%= root_path %>">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active">
+        <a href="<%= staff_ledger_books_path %>">Staff/Dealer ledger Book</a>
+      </li>
+    </ol>
+  </div>
+  <div class="float-right">
+    <div class="dropdown ml-auto mr-4">
+      <span class="btn btn-info" title= "About This page">Help</span>
+      <div class="dropdown-content">
+        <% if @help.present? %>
+        <% @help&.help_links.each do |link| %>
+        <a type="button" class="" target="_blank" href="<%= link[1] %>" >Help in <%= link[0] %></a>
+          <% end %>
         <% end %>
-        <% link_to new_staff_ledger_book_path, class: "btn btn-success" do %>
-           <i class="fa fa-plus" aria-hidden="true"></i>
-           Jama/Credit
-        <% end %>
-        <%= link_to transfer_staff_ledger_books_path, class: "btn btn-success" do %>
-          <i class="fa fa-credit-card" aria-hidden="true"></i>
-          Payment Transfer
-       <% end %>
-
       </div>
-      <% end %>
     </div>
   </div>
-  <div class="clearfix"></div>
-  <div class="row">
-    <%= search_form_for @q, url: staff_ledger_books_path, class: "admin-controls", method: "get" do |f| %>
-      <div class="col-lg-12 col-sm-12">
-        <div class="col-lg-4 form-group float-left">
-          <%= f.select :staff_id_eq, options_from_collection_for_select(@staff, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code} "},@staff_id),{:include_blank => "Select Name"},:class=>"form-control chosen-select" %>
-        </div>
-        <div class="col-lg-2 float-left">
-          <%= f.search_field :created_at_gteq, value:@created_at_gteq, class: 'form-control input-sm datepicker',placeholder: "YYYY-MM-DD" %>
-        </div>
-        <div class="col-lg-2 float-left">
-          <%= f.search_field :created_at_lteq, value:@created_at_lteq, class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
-        </div>
-        <div class="col-lg-2 float-left">
-          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+  <ul class="nav nav-pills" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link tab-label active ledger-search-exp-tab" data-toggle="tab" href="#search" role="tab">Search</a>
+    </li>
+      <li class="nav-item">
+      <a class="nav-link tab-label ledger-search-exp-tab" data-toggle="tab" href="#jamabenam" role="tab">Jama/ Benam</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link tab-label ledger-search-exp-tab" data-toggle="tab" href="#payment" role="tab">Payment Transfer</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link tab-label ledger-search-exp-tab" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link tab-label ledger-search-exp-tab" data-toggle="tab" href="#emails" role="tab">Send Email</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link tab-label ledger-search-exp-tab" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link tab-label ledger-logs-tab" data-toggle="tab" href="#logs" role="tab">Logs</a>
+    </li>
+  </ul>
+  
+    <div class="tab-content">
+      <div class="tab-pane active mb-3 card shadow-sm mt-2" style="border-radius: 20px" id="search" role="tabpanel">
+        <p>
+          <%= search_form_for @q, url: staff_ledger_books_path, class: "admin-controls", method: "get" do |f| %>
+            <div class="col-lg-10 form-group d-flex">
+              <div class="col-lg-4 ">
+                <%= f.select :staff_id_eq, options_from_collection_for_select(@staff, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code} "},@staff_id),{:include_blank => "Select Name"},:class=>"form-control chosen-select" %>
+              </div>
+              <div class="col-lg-2">
+                <%= f.search_field :created_at_gteq, value:@created_at_gteq, class: 'form-control input-sm datepicker',placeholder: "YYYY-MM-DD" %>
+              </div>
+              <div class="col-lg-2">
+                <%= f.search_field :created_at_lteq, value:@created_at_lteq, class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
+              </div>
+              <div class="col-lg-2">
+                <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+              </div>
+            </div>
+          <% end %>
+        </p>
+      </div>
+      <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="jamabenam" role="tabpanel">
+        <p>
+            <div class='ml-2 mt-2'>
+              <% if can?(:delete, :all) %>
+                  <%= link_to new_staff_ledger_book_path(Sbenam: true), class: "btn btn-success" do %>
+                    <i class="fa fa-plus" aria-hidden="true"></i>
+                    Benam/Debit
+                  <% end %>
+                  <%= link_to new_staff_ledger_book_path(Sjama: true), class: "btn btn-success" do %>
+                    <i class="fa fa-plus" aria-hidden="true"></i>
+                    Jama/Credit
+                  <% end %>
+              <% end %>
+            </div>
+        </p>
+      </div>
+      <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="payment" role="tabpanel">
+          <p>
+            <div class='ml-2 mt-2'>
+              <% if can?(:delete, :all) %>
+                <%= link_to transfer_staff_ledger_books_path, class: "btn btn-success" do %>
+                  <i class="fa fa-credit-card" aria-hidden="true"></i>
+                  Payment Transfer
+                <% end %>
+              <% end %>
+            </div>
+          </p>
+      </div>
+      <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="pdf" role="tabpanel">
+        <p>
+          <%= search_form_for @q, url: staff_ledger_books_path, class: "admin-controls", method: "get" do |f| %>
+            <div class="d-flex">
+              <div class="ml-2">
+                <button class="btn btn-danger" name="submit_pdf_staff_with_asc" type="submit" value="Accounts PDF A4" formtarget="_blank">ASC<i class="fa fa-file-pdf"></i></button>
+              </div>
+              <div class="ml-2">
+                <button class="btn btn-danger" name="submit_pdf_staff_with_desc" type="submit" value="Accounts PDF A4" formtarget="_blank">Desc<i class="fa fa-file-pdf"></i></button>
+              </div>
+              <div class="ml-2">
+                <button class="btn btn-danger" name="bulk" type="submit" value="Accounts PDF A4" formtarget="_blank">Bulk Record<i class="fa fa-file-pdf"></i></button>
+              </div>
+            </div>
+          <% end %>
+        </p>
+      </div>
+      <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="emails" role="tabpanel">
+        <p>
+          <%= search_form_for @q, url: staff_ledger_books_path, class: "admin-controls", method: "get" do |f| %>
+            <div class='d-flex'>
+              <div class="ml-2">
+                <button class="form-control btn btn-info" name="asc_email" type="submit" value="Email"><i class="fas fa-envelope"></i> Asc email</button>
+              </div>
+              <div class="ml-2">
+                <button class="form-control btn btn-info" name="desc_email" type="submit" value="Email"><i class="fas fa-envelope"></i> Desc email</button>
+              </div>
+            </div>
+          <% end %>
+        </p>
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              </div>
+              <div class="modal-body">
+                <% @pos_setting = PosSetting.first %>
+                <label>Email:</label>
+                <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
+                <br />
+                <label>Subject:</label>
+                <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Staff Ledger Book Detail report from MunshiOnClick", class: 'form-control email-fields'%>
+                <br />
+                <label>Body:</label><br />
+                <%= text_area_tag 'body', nil, class: 'form-control'%>
+                <br />
+
+                <label>Please select one of them.</label>
+                <div>
+                  <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
+                  <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
+                  <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
+              </div>
+              </div>
+          </div>
         </div>
       </div>
-      <div class="clearfix"></div>
-      <div class="col-lg-12 col-sm-12">
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn  badge badge-pill badge-danger" name="submit_pdf_staff_with_asc" type="submit" value="Accounts PDF A4" formtarget="_blank">ASC<i class="fa fa-file-pdf"></i></button>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn  badge badge-pill badge-danger" name="submit_pdf_staff_with_desc" type="submit" value="Accounts PDF A4" formtarget="_blank">Desc<i class="fa fa-file-pdf"></i></button>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn  badge badge-pill badge-danger" name="bulk" type="submit" value="Accounts PDF A4" formtarget="_blank">Bulk Record<i class="fa fa-file-pdf"></i></button>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn btn-info" name="asc_email" type="submit" value="Email"><i class="fas fa-envelope"></i> Asc email</button>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn btn-info" name="desc_email" type="submit" value="Email"><i class="fas fa-envelope"></i> Desc email</button>
-        </div>
+      <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="import-export" role="tabpanel">
+        <p>
+          <%= search_form_for @q, url: staff_ledger_books_path, class: "admin-controls", method: "get" do |f| %>
+            <div class="d-flex">
+            <button class="btn btn-success ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
+            <button class="btn btn-primary ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
+            </div>
+          <% end %>
+        </p>
       </div>
-      <% end %>
-  </div>
-  <table data-toggle="table" data-search="true" id="country_table">
+      <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="logs" role="tabpanel">
+        <p>
+          <div class="d-flex">
+            <%= link_to view_history_staff_ledger_books_path, class: "btn btn-success d-none", id: "ledger-logs", remote:true do %>
+              show logs
+            <% end %>
+            <div id = "show-logs"></div>
+          </div>
+          <div class="my-loader mx-auto"></div>
+        </p>
+      </div>
+    </div>
+</div>
+
+
+<div class="card shadow-sm border-radius-1 p-2 ledger-book-index-card">
+  <table data-toggle="table" data-search="true" id="ledger_book_table" class=" overflow-hidden border-radius-1">
     <thead>
-      <tr >
-        <th><%= sort_link(@q, :staff, 'Staff') %></th>
-        <th><%= sort_link(@q, :debit, 'Debit/Benam') %></th>
-        <th><%= sort_link(@q, :credit, 'Credit/Jama') %></th>
-        <th><%= sort_link(@q, :balance, 'Balance') %></th>
-        <th><%= sort_link(@q, :balance, 'Jama/Benam') %></th>
-        <th><%= sort_link(@q, :comment, 'Comment') %></th>
-        <th><%= sort_link(@q, :created_at, 'Date') %></th>
+      <tr>
+      <th>
+          <input type="checkbox" id="master" class='select-all-checkbox'>
+          <div class="icon-container float-center">
+            <span class="ml-2 mt-2">
+              <div class="my-icon my-view">
+                <button class="icon-div btn delete-selected p-2 " type='button' value='StaffLedgerBook'>
+                  <i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i> 
+                </button>
+              </div>
+            </span>
+          </div>
+        </th>
+        <th>ID<div class="float-right"><%= sort_link(@q, :id, "", {}, class: 'sorting-button') %></div></th>
+        <th>Staff<div class="float-right"><%= sort_link(@q, :staff, "", {}, class: 'sorting-button') %></div></th>
+        <th>Debit<div class="float-right"><%= sort_link(@q, :debit, "", {}, class: 'sorting-button') %></div></th>
+        <th>Credit<div class="float-right"><%= sort_link(@q, :credit, "", {}, class: 'sorting-button') %></div></th>
+        <th>Balance<div class="float-right"><%= sort_link(@q, :balance, "", {}, class: 'sorting-button') %></div></th>
+        <th>Jama/Benam<div class="float-right"><%= sort_link(@q, :balance, "", {}, class: 'sorting-button') %></div></th>
+        <th>Comment<div class="float-right"><%= sort_link(@q, :comment, "", {}, class: 'sorting-button') %></div></th>
+        <th>Created_at<div class="float-right"><%= sort_link(@q, :created_at, "", {}, class: 'sorting-button') %></div></th>
         <th class="border_none">Action</th>
       </tr>
     </thead>
@@ -75,10 +224,12 @@
     <tbody>
       <% @staff_ledger_books.each do |staff_ledger_book| %>
         <tr style="font-size:20px;,font-family: Arial Black, Gadget, sans-serif">
+          <td><%= check_box_tag 'object_ids[]', staff_ledger_book.id %></td>
+          <td><%= staff_ledger_book.id %></td>
           <td><%= link_to staff_ledger_book.staff.code+' '+staff_ledger_book.staff.full_name , staffs_path('q[id_eq]': staff_ledger_book.staff.id) %></td>
-          <td><%= staff_ledger_book.debit %></td>
-          <td><%= staff_ledger_book.credit %></td>
-          <td><%= staff_ledger_book.balance %></td>
+          <td><%=  number_with_delimiter(staff_ledger_book.debit )%></td>
+          <td><%=  number_with_delimiter(staff_ledger_book.credit) %></td>
+          <td><%=  number_with_delimiter(staff_ledger_book.balance) %></td>
           <td>
             <%if staff_ledger_book.balance.to_f > 0  %>
                      <b style="font-size:20px;color:blue;">Credit/Jama</b>
@@ -125,102 +276,127 @@
             <%end%>
           </td>
           <td>
-            <% if can?(:update, :all) %>
-              <%if staff_ledger_book.salary_detail.present? %>
-                <%if staff_ledger_book.salary_detail.purchase_sale_detail.present?%>
-                  <% if staff_ledger_book.salary_detail.purchase_sale_detail.present? and staff_ledger_book.salary_detail.purchase_sale_detail.transaction_type=="Sale"%>
-                    <%= link_to edit_purchase_sale_detail_path(staff_ledger_book.salary_detail.purchase_sale_detail,product:true) do %>
-                      <i class="fa fa-edit" aria-hidden="true"></i> |
-                    <%end%>
-                  <%else%>
-                    <%= link_to edit_purchase_sale_detail_path(staff_ledger_book.salary_detail.purchase_sale_detail,product:true) do %>
-                      <i class="fa fa-edit" aria-hidden="true"></i> |
-                    <%end%>
-                  <%end%>
-                <%elsif staff_ledger_book.salary_detail.staff.department.present? and staff_ledger_book.salary_detail.staff.department&.id==@departments.first&.id && staff_ledger_book.salary_detail.daily_book.present? %>
-                  <%if staff_ledger_book.salary_detail.quantity.to_i>0%>
-                    <%= link_to edit_daily_book_path(staff_ledger_book.salary_detail.daily_book) do %>
-                      <i class="fa fa-edit" aria-hidden="true"></i> |
-                    <%end%>
-                  <%end%>
-                <%elsif staff_ledger_book.salary_detail.staff.department.present? and staff_ledger_book.salary_detail.staff.department&.id==@departments.second&.id  && staff_ledger_book.salary_detail.daily_book.present?%>
-                  <%if staff_ledger_book.salary_detail.khakar_remaning.to_i>0%>
-                    <%= link_to edit_khakar_daily_book_path(staff_ledger_book.salary_detail.daily_book) do %>
-                      <i class="fa fa-edit" aria-hidden="true"></i> |
-                    <%end%>
-                  <%end%>
-                <%elsif staff_ledger_book.salary_detail.staff.department.present? and staff_ledger_book.salary_detail.staff.department&.id==@departments.third&.id  && staff_ledger_book.salary_detail.daily_book.present?%>
-                  <%if staff_ledger_book.salary_detail.quantity.to_i>0%>
-                    <%= link_to edit_nakasi_daily_book_path(staff_ledger_book.salary_detail.daily_book) do %>
-                      <i class="fa fa-edit" aria-hidden="true"></i> |
-                    <%end%>
-                  <%end%>
-                <%else%>
-                  <%= link_to (edit_salary_detail_path(staff_ledger_book.salary_detail) if staff_ledger_book.salary_detail.present?) do%>
-                    <i class="fa fa-edit" aria-hidden="true"></i> |
-                  <%end%>
-                <%end%>
-              <%else%>
-              <% if staff_ledger_book.salary.present? %>
-                <%if staff_ledger_book.salary.present? and staff_ledger_book.salary.paid_salary.present?%>
-                  <%= link_to edit_salary_path(staff_ledger_book.salary) do %>
-                    <i class="fa fa-edit" aria-hidden="true"></i> |
-                  <% end %>
-                <%else%>
-                  <%= link_to (edit_advance_salary_path(staff_ledger_book.salary) if staff_ledger_book.salary.present? and staff_ledger_book.salary.advance.present?) do %>
-                    <i class="fa fa-edit" aria-hidden="true"></i> |
-                  <% end %>
-                <%end%>
-              <%else%>
-                <%= link_to edit_staff_ledger_book_path(staff_ledger_book) do %>
-                  <i class="fa fa-edit" aria-hidden="true"></i> |
-                <% end %>
-              <%end%>
 
-              <%end%>
-            <% end %>
-            <% if can?(:delete, :all) %>
-              <%if staff_ledger_book.salary_detail.present? %>
-                <%if staff_ledger_book.salary_detail.purchase_sale_detail.present?%>
-                  <%= link_to purchase_sale_detail_path(staff_ledger_book.salary_detail.purchase_sale_detail), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
-                    <i class="fa fa-trash" aria-hidden="true"></i> |
-                  <%end%>
-                <%else%>
-                  <%= link_to salary_detail_path(staff_ledger_book.salary_detail), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
-                    <i class="fa fa-trash" aria-hidden="true"></i> |
-                  <%end%>
-                <%end%>
-              <%elsif staff_ledger_book.salary%>
-                <%= link_to salary_path(staff_ledger_book.salary), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
-                  <i class="fa fa-trash" aria-hidden="true"></i> |
-                <%end%>
-              <%else%>
-                <%= link_to staff_ledger_book, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
-                  <i class="fa fa-trash" aria-hidden="true"></i> |
-                <% end %>
-              <%end%>
-            <% end %>
-            <% if can?(:view, :all) %>
-              <%= link_to staff_ledger_book do %>
-                <i class="fa fa-eye " aria-hidden="true"></i>
-              <%end %>
-            <%end%>
+            <div class="icon-container-1">
+                <div class="my-icon-1 my-view-1">
+                  <div class="my-tooltip-1">
+                    <div class="icon-container">
+                      <div class="my-icon my-view">
+                        <div class="my-tooltip">
+                            Edit
+                          </div>
+                        <% if can?(:update, :all) %>
+                          <%if staff_ledger_book.salary_detail.present? %>
+                            <%if staff_ledger_book.salary_detail.purchase_sale_detail.present?%>
+                              <% if staff_ledger_book.salary_detail.purchase_sale_detail.present? and staff_ledger_book.salary_detail.purchase_sale_detail.transaction_type=="Sale"%>
+                                <%= link_to edit_purchase_sale_detail_path(staff_ledger_book.salary_detail.purchase_sale_detail,product:true) do %>
+                                  <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+                                <%end%>
+                              <%else%>
+                                <%= link_to edit_purchase_sale_detail_path(staff_ledger_book.salary_detail.purchase_sale_detail,product:true) do %>
+                                  <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+                                <%end%>
+                              <%end%>
+                            <%elsif staff_ledger_book.salary_detail.staff.department.present? and staff_ledger_book.salary_detail.staff.department&.id==@departments.first&.id && staff_ledger_book.salary_detail.daily_book.present? %>
+                              <%if staff_ledger_book.salary_detail.quantity.to_i>0%>
+                                <%= link_to edit_daily_book_path(staff_ledger_book.salary_detail.daily_book) do %>
+                                  <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+                                <%end%>
+                              <%end%>
+                            <%elsif staff_ledger_book.salary_detail.staff.department.present? and staff_ledger_book.salary_detail.staff.department&.id==@departments.second&.id  && staff_ledger_book.salary_detail.daily_book.present?%>
+                              <%if staff_ledger_book.salary_detail.khakar_remaning.to_i>0%>
+                                <%= link_to edit_khakar_daily_book_path(staff_ledger_book.salary_detail.daily_book) do %>
+                                  <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+                                <%end%>
+                              <%end%>
+                            <%elsif staff_ledger_book.salary_detail.staff.department.present? and staff_ledger_book.salary_detail.staff.department&.id==@departments.third&.id  && staff_ledger_book.salary_detail.daily_book.present?%>
+                              <%if staff_ledger_book.salary_detail.quantity.to_i>0%>
+                                <%= link_to edit_nakasi_daily_book_path(staff_ledger_book.salary_detail.daily_book) do %>
+                                  <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+                                <%end%>
+                              <%end%>
+                            <%else%>
+                              <%= link_to (edit_salary_detail_path(staff_ledger_book.salary_detail) if staff_ledger_book.salary_detail.present?) do%>
+                                <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+                              <%end%>
+                            <%end%>
+                          <%else%>
+                          <% if staff_ledger_book.salary.present? %>
+                            <%if staff_ledger_book.salary.present? and staff_ledger_book.salary.paid_salary.present?%>
+                              <%= link_to edit_salary_path(staff_ledger_book.salary) do %>
+                                <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+                              <% end %>
+                            <%else%>
+                              <%= link_to (edit_advance_salary_path(staff_ledger_book.salary) if staff_ledger_book.salary.present? and staff_ledger_book.salary.advance.present?) do %>
+                                <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+                              <% end %>
+                            <%end%>
+                          <%else%>
+                            <%= link_to edit_staff_ledger_book_path(staff_ledger_book) do %>
+                              <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+                            <% end %>
+                          <%end%>
+                          <%end%>
+                        <% end %>
+                      </div>
+                        <div class="my-icon my-view">
+                          <div class="my-tooltip">
+                            Delete
+                          </div>
+                           <% if can?(:delete, :all) %>
+                            <%if staff_ledger_book.salary_detail.present? %>
+                              <%if staff_ledger_book.salary_detail.purchase_sale_detail.present?%>
+                                <%= link_to purchase_sale_detail_path(staff_ledger_book.salary_detail.purchase_sale_detail), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+                                  <i class="fa fa-trash mt-2" aria-hidden="true"></i>
+                                <%end%>
+                              <%else%>
+                                <%= link_to salary_detail_path(staff_ledger_book.salary_detail), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+                                  <i class="fa fa-trash mt-2" aria-hidden="true"></i>
+                                <%end%>
+                              <%end%>
+                            <%elsif staff_ledger_book.salary%>
+                              <%= link_to salary_path(staff_ledger_book.salary), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+                                <i class="fa fa-trash mt-2" aria-hidden="true"></i>
+                              <%end%>
+                            <%else%>
+                              <%= link_to staff_ledger_book, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+                                <i class="fa fa-trash mt-2" aria-hidden="true"></i>
+                              <% end %>
+                            <%end%>
+                           <% end %>
+                        </div>
+                        <div class="my-icon my-view">
+                          <div class="my-tooltip">
+                            Show
+                          </div>
+                           <% if can?(:view, :all) %>
+                            <%= link_to staff_ledger_book do %>
+                              <i class="fa fa-eye " aria-hidden="true"></i>
+                            <%end %>
+                          <%end%>
+                        </div>
+                    </div>
+                  </div>
+                    <span class="icon-div-1">
+                      <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+                    </span>
+                </div>
+              </div>
           </td>
         </tr>
       <% end %>
       <tr>
         <td><b>Total<b></td>
+        <td></td>
+        <td></td>
         <td><b><%=@debit.to_i%></b></td>
         <td><b><%=@credit.to_i%></b></td>
-        <td><b><%=@credit.to_i-@debit.to_i%></b></td>
         <td><b><%=@staff_ledger_books.sum(:balance).to_f.round(2)%></b></td>
+        <td><b><%=@credit.to_i-@debit.to_i%></b></td>
         <td><b><%=@quantity.to_f.round(2)%></b></td>
-        <td></td>
-        <td></td>
       </tr>
     </tbody>
   </table>
-</div>
 
 <div class="clearfix"></div>
 <div class="row">
@@ -231,13 +407,55 @@
     <%= paginate @staff_ledger_books %>
   </div>
 </div>
-
+</div>
+<%= form_for :bulk_import, url: bulk_import_data_path, method: :post, html: {class: "bulk-import-form"} do |f| %>
+  <div class="modal fade" id="importFile" tabindex="-1" role="dialog" aria-labelledby="importFileTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Import file</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <%= f.file_field :file, required: true, accept: '.csv' %>
+          <%= f.hidden_field :table_name, value: 'StaffLedgerBook' %>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <%= f.submit 'Import', class: 'btn btn-primary' %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+<div class="show-data"></div>
 <script>
   $(document).ready(function() {
+    var sortingButtons = $('.sorting-button')
+    for(var i=0; i<sortingButtons.length; i++){
+      $(sortingButtons[i]).html("<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='blue' enable-background='new 0 0 512 512' viewBox='0 0 512 512'><path d='M163.919,494.293c-2.83,0-5.496-1.33-7.196-3.593L45.97,343.348c-2.986-3.974-2.187-9.615,1.787-12.602 c3.974-2.986,9.616-2.187,12.602,1.787l103.557,137.777l103.493-137.775c2.986-3.975,8.627-4.775,12.602-1.791 c3.974,2.985,4.775,8.627,1.79,12.602L171.113,490.698C169.414,492.961,166.749,494.293,163.919,494.293z'/><path d='M163.917 494.293c-4.971 0-9-4.029-9-9V26.192c0-4.971 4.029-9 9-9s9 4.029 9 9v459.101C172.917 490.264 168.888 494.293 163.917 494.293zM459.507 182.622c-2.734 0-5.435-1.241-7.203-3.597L348.78 41.18 245.257 179.025c-2.985 3.975-8.626 4.777-12.601 1.792-3.974-2.984-4.777-8.626-1.792-12.601l110.72-147.43c1.699-2.263 4.365-3.595 7.196-3.595s5.497 1.332 7.196 3.595l110.72 147.43c2.985 3.975 2.183 9.616-1.792 12.601C463.285 182.034 461.388 182.621 459.507 182.622z'/><path d='M348.78,494.293c-4.971,0-9-4.029-9-9V26.192c0-4.971,4.029-9,9-9s9,4.029,9,9v459.101 C357.78,490.264,353.751,494.293,348.78,494.293z'/></svg>")
+    }
     if ($(".bootstrap-table").length == 0){
       $("table").bootstrapTable();
     }
     $("#salary_detail_list").removeClass('hidden');
     FontAwesome.dom.i2svg();
+
+    $('.ledger-logs-tab').on('click', function(){
+      $('#ledger-logs').click();
+      $('.ledger-book-index-card').addClass('d-none')
+    })
+
+
+    $('.ledger-search-exp-tab').on('click', function(){
+      $('.ledger-book-index-card').removeClass('d-none')
+    })
+
   });
+
+   $(function() {
+    setTimeout(function() { $(".my-loader").fadeOut(1500); }, 5000)
+  })
 </script>

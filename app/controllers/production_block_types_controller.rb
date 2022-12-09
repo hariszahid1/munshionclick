@@ -1,4 +1,5 @@
 class ProductionBlockTypesController < ApplicationController
+	before_action :check_access
   before_action :set_production_block_type, only: [:show, :edit, :update, :destroy]
 
   # GET /production_block_types

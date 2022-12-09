@@ -1,0 +1,123 @@
+<div id="custom-alert" class="alert alert-danger d-none">
+  <span class="custom-alert-text"></span>
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">×</span>
+  </button>
+</div>
+<div class="hidden" id="city_list">
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <div class="main-content-header">
+        <h1 class="ml-2">Follow Ups</h1>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="<%= root_path %>">Dashboard</a>
+          </li>
+          <li class="breadcrumb-item active">
+            <a href="<%= follow_ups_path %>">follow_ups</a>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+    <ul class="nav nav-pills" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link tab-label active ml-3  " href="<%= customer_management_systems_path %>">CMS</a>
+      </li>
+    </ul>
+  <%= search_form_for @q, url: follow_ups_path, class: "admin-controls", method: "get" do |f| %>
+    <div class="tab-content mb-3">
+      <div class="tab-pane active card border-radius-1 mt-2" id="search" role="tabpanel">
+        <div class="row d-flex mt-3 mr-2">
+          <div class="col">
+            <div class="col-lg-3 form-group float-left">
+              <%= f.select :followable_id_eq, options_for_select(@options_for_select.map{ |p| [p.name , p.id]}, f.object.followable_id_eq),{:include_blank => "Select CMS User"},:class=>"form-control chosen-select" %>
+            </div>
+            <div class="col-lg-3 form-group float-left">
+              <%= f.select :assigned_to_id_eq, options_for_select(@staff.map{ |p| [p.name , p.id]}, f.object.assigned_to_id_eq),{:include_blank => "Select Staff"},:class=>"form-control chosen-select" %>
+            </div>
+            <div class="col-lg-3 form-group float-left">
+              <%= f.select :task_type_eq, options_for_select(FollowUp.task_types, f.object.task_type_eq), {:include_blank => "Select Task Type"},:class=>"form-control chosen-select" %>
+            </div>
+            <div class="col-lg-2 form-group float-left">
+              <%= f.search_field :task_type_or_priority_or_comment_cont, placeholder: "Search in FollowUp", title: "Enter your search" ,:class=>"form-control chosen-select" %>
+            </div>
+            <div class="col-lg-1 form-group float-left">
+              <button class="form-control btn btn-primary" title="search cities" name="search_submit"type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<div class='card p-3 border-radius-1'>
+  <table data-toggle="table" data-search="true" id="follow_up_table">
+    <thead>
+      <tr>
+        <th><input type="checkbox" id="master" class='select-all-checkbox'>
+					<div class="icon-container float-center">
+						<span class="ml-2 mt-2">
+          		<div class="my-icon my-view">
+								<button class="icon-div btn delete-selected p-2 " type='button' value='SysUser'>
+									<i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i>
+								</button>
+							</div>
+						</span>
+					</div>
+        <th>CMS User</th>
+        <th>Task Type<div class='float-right'><%= sort_link(@q, :task_type, "", {}, class: 'sorting-button') %></div></th>
+        <th>Priority<div class='float-right'><%= sort_link(@q, :priority, "", {}, class: 'sorting-button') %></div></th>
+        <th>Comment<div class='float-right'><%= sort_link(@q, :comment, "", {}, class: 'sorting-button') %></div></th>
+        <th>Assignee<div class='float-right'><%= sort_link(@q, :assigned_to_id, "", {}, class: 'sorting-button') %></div></th>
+        <th>Date<div class='float-right'><%= sort_link(@q, :date, "", {}, class: 'sorting-button') %></div></th>
+        <th class="border_none text-center">Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <%= render partial: 'follow_up', collection: @follow_ups.sort_by(&:id).reverse %>
+    </tbody>
+  </table>
+
+  <div class="row">
+    <div class="col-lg-4 col-sm-4">
+      <%= page_entries_info @follow_ups %>
+    </div>
+    <div class="col-lg-8 col-sm-8 pagination-left">
+      <%= paginate @follow_ups %>
+    </div>
+  </div>
+</div>
+
+<div class="show-data"></div>
+
+<script>
+  $(document).ready(function() {
+
+    var sortingButtons = $('.sorting-button')
+    for(var i=0; i<sortingButtons.length; i++){
+      $(sortingButtons[i]).html("<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='blue' enable-background='new 0 0 512 512' viewBox='0 0 512 512'><path d='M163.919,494.293c-2.83,0-5.496-1.33-7.196-3.593L45.97,343.348c-2.986-3.974-2.187-9.615,1.787-12.602 c3.974-2.986,9.616-2.187,12.602,1.787l103.557,137.777l103.493-137.775c2.986-3.975,8.627-4.775,12.602-1.791 c3.974,2.985,4.775,8.627,1.79,12.602L171.113,490.698C169.414,492.961,166.749,494.293,163.919,494.293z'/><path d='M163.917 494.293c-4.971 0-9-4.029-9-9V26.192c0-4.971 4.029-9 9-9s9 4.029 9 9v459.101C172.917 490.264 168.888 494.293 163.917 494.293zM459.507 182.622c-2.734 0-5.435-1.241-7.203-3.597L348.78 41.18 245.257 179.025c-2.985 3.975-8.626 4.777-12.601 1.792-3.974-2.984-4.777-8.626-1.792-12.601l110.72-147.43c1.699-2.263 4.365-3.595 7.196-3.595s5.497 1.332 7.196 3.595l110.72 147.43c2.985 3.975 2.183 9.616-1.792 12.601C463.285 182.034 461.388 182.621 459.507 182.622z'/><path d='M348.78,494.293c-4.971,0-9-4.029-9-9V26.192c0-4.971,4.029-9,9-9s9,4.029,9,9v459.101 C357.78,490.264,353.751,494.293,348.78,494.293z'/></svg>")
+    }
+
+
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#city_list").removeClass('hidden');
+    FontAwesome.dom.i2svg();
+  });
+  $(document).ready(function() {
+    setTimeout(function(){
+      $(".chosen-select").chosen({
+  allow_single_deselect: true,
+  width: '100%'
+});
+    }, 50);
+  });
+</script>

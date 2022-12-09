@@ -3,6 +3,7 @@ class SysUsersController < ApplicationController
   include PdfCsvGeneralMethod
   include SysUsersHelper
 
+  before_action :check_access, only: [:index, :show, :edit, :update, :destroy]
   before_action :set_sys_user, only: [:show, :edit, :update, :destroy]
 
   # GET /sys_users
@@ -18,6 +19,28 @@ class SysUsersController < ApplicationController
     download_sys_users_pdf_file if params[:pdf].present?
     send_email_file if params[:email].present?
     export_file if params[:export_data].present?
+    @count_sys_user = SysUser.all.group(:user_group).count
+    @count_status = SysUser.all.group(:status).count
+
+    @user_count = []
+    @user_count.push(SysUser.where('balance > 0').count)
+    @user_count.push(SysUser.where('balance < 0').count)
+    @user_count.push(SysUser.where('balance = 0').count)
+
+    @user_group_title = @count_sys_user.keys
+    @user_group_count = @count_sys_user.values
+    @status_title = @count_status.keys
+    @status_count = @count_status.values
+
+    @total_cities_count = Contact.joins(:city).group('cities.title').count
+    @city_title = @total_cities_count.keys.map { |a| a.gsub(' ', '-') }
+    @city_user = @total_cities_count.values
+
+    @balance_sum = []
+    @balance_sum.push(SysUser.where('balance > 0').sum(:balance).to_f)
+    @balance_sum.push(SysUser.where('balance < 0').sum(:balance).to_f)
+
+
   end
 
   # GET /sys_users/1
@@ -51,6 +74,7 @@ class SysUsersController < ApplicationController
   end
 
   def receiveable
+
     @q = SysUser.where('balance < 0 ').ransack(params[:q])
     if @q.result.count > 0
       @q.sorts = 'name asc' if @q.sorts.empty?
@@ -69,7 +93,7 @@ class SysUsersController < ApplicationController
       @opening_balance = params[:q][:opening_balance]
     end
     @sys_users = @q.result(distinct: true)
-	
+
     @all_user =SysUser.all
     @user_types=UserType.all
     if params[:submit_pdf_staff_with].present?
@@ -83,6 +107,7 @@ class SysUsersController < ApplicationController
   end
 
   def customer
+		check_access_of("sys_users/customer")
     @sys_user_all = SysUser.where(:user_group=>['Customer'])
     @q = SysUser.where(:user_group=>['Customer']).ransack(params[:q])
     if @q.result.count > 0
@@ -119,6 +144,7 @@ class SysUsersController < ApplicationController
   end
 
   def supplier
+		check_access_of("sys_users/supplier")
     @sys_user_all = SysUser.where(:user_group=>['Supplier'])
     @q = SysUser.where(:user_group=>['Supplier']).ransack(params[:q])
     if @q.result.count > 0
@@ -155,6 +181,7 @@ class SysUsersController < ApplicationController
   end
 
   def own
+		check_access_of("sys_users/own")
     @sys_user_all = SysUser.where(:user_group=>['Own'])
     @q = SysUser.where(:user_group=>['Own']).ransack(params[:q])
     if @q.result.count > 0
@@ -192,11 +219,14 @@ class SysUsersController < ApplicationController
 
   # GET /sys_users/new
   def new
-    @user_types=UserType.all
-    @sys_user = SysUser.new
-    @cities=City.all
-    @countries=Country.all
+    @user_types = UserType.all
+    @sys_user  =  SysUser.new
+    @cities = City.all
+    @countries = Country.all
+    @staff = Staff.all
+    @sys_user.notes.build
     @sys_user.build_contact
+    @sys_user.follow_ups.build
   end
 
   # GET /sys_users/1/edit
@@ -204,7 +234,7 @@ class SysUsersController < ApplicationController
     @user_types=UserType.all
     @cities=City.all
     @countries=Country.all
-
+    @staff = Staff.all
     respond_to do |format|
       format.js
     end
@@ -263,6 +293,22 @@ class SysUsersController < ApplicationController
     end
   end
 
+  def view_history
+    @start_date = Date.today.beginning_of_month
+    @end_date =  Date.today.end_of_month
+    if params[:q].present?
+      @start_date = params[:q][:created_at_gteq] if params[:q][:created_at_gteq].present?
+      @end_date = params[:q][:created_at_lteq] if params[:q][:created_at_lteq].present?
+      @item_id = params[:q][:item_id_eq] if params[:q][:item_id_eq].present?
+      params[:q][:created_at_lteq] = params[:q][:created_at_lteq].to_date.end_of_day if params[:q][:created_at_lteq].present?
+    end
+    @event = %w[create update destroy]
+    @q = PaperTrail::Version.where(item_type:"SysUser").order('created_at desc').ransack(params[:q])
+    @sys_user_logs = @q.result.page(params[:page])
+    respond_to do |format|
+      format.js
+    end
+  end
 
   private
   # Use callbacks to share common setup or constraints between actions.
@@ -306,7 +352,28 @@ class SysUsersController < ApplicationController
         :country_id,
         :sys_user_id,
         :permanent_address
-        ]
+      ],
+      :notes_attributes => [
+        :id,
+        :message,
+        :assigned_to_id,
+        :created_by,
+        :notable_id,
+        :notable_type
+      ],
+      :follow_ups_attributes =>[
+        :id,
+        :reminder_type,
+        :task_type,
+        :priority,
+        :assigned_to_id,
+        :created_by,
+        :date,
+        :comment,
+        :followable_id,
+        :followable_type
+      ],
+      cms_data: {}
       )
   end
 
@@ -315,7 +382,7 @@ class SysUsersController < ApplicationController
       csv_data = payable_csv
     elsif params[:submit_csv_sys_user_receivable].present?
       puts "-------------------------"
-      csv_data = receiveable_csv 
+      csv_data = receiveable_csv
     end
     request.format = 'csv'
     respond_to do |format|
@@ -340,7 +407,7 @@ class SysUsersController < ApplicationController
   def download_sys_users_pdf_file
     sort_data_according
     generate_pdf(@sorted_data.as_json, "Sys-users-Total-#{@sorted_data.count}-#{DateTime.now.strftime('%d-%m-%Y-%H-%M')}",
-                 'pdf.html', 'A4')
+                 'pdf.html', 'A4', false, 'sys_users/index.pdf.erb')
   end
 
   def send_email_file
@@ -358,8 +425,9 @@ class SysUsersController < ApplicationController
 
   def sort_data_according
     @sorted_data = []
+    data = params[:pdf] == "without_jama_benam_pdf" ? @q.result.where.not(balance: 0) : @q.result
     if pos_setting_sys_type.eql? 'CustomClear'
-      @q.result.each do |d|
+      data.each do |d|
         @sorted_data << {
                           id: d.id,
                           code: d.code,
@@ -374,7 +442,7 @@ class SysUsersController < ApplicationController
                         }
       end
     else
-      @q.result.each do |d|
+      data.each do |d|
         @sorted_data << {
                           id: d.id,
                           code: d.code,
@@ -384,7 +452,7 @@ class SysUsersController < ApplicationController
                           occupation: d.occupation,
                           opening_balance: d.opening_balance.to_f.round(2),
                           balance: d.balance.to_f.round(2),
-                          jama_benam: d.balance.to_i.zero? ? 'Nill' : d.balance.to_f.positive? ? 'Jama' : 'Benam',
+                          jama_benam: d.balance.to_f.zero? ? 'Nill' : d.balance.to_f.positive? ? 'Jama' : 'Benam',
                           address: d.contact&.city&.title
                         }
       end
@@ -394,5 +462,19 @@ class SysUsersController < ApplicationController
   def export_file
     export_data('SysUser')
   end
+
+	def check_access_of (tempModule)
+		if (check_is_hidden("#{tempModule}"))
+			respond_to do |format|
+				format.html { redirect_to dashboard_path, alert: "Your system does not have this module" }
+			end
+		else
+			if (check_can_accessed("#{tempModule}")==false)
+				respond_to do |format|
+					format.html { redirect_to dashboard_path, alert: "you are not authorized." }
+				end
+			end
+		end
+	end
 
 end

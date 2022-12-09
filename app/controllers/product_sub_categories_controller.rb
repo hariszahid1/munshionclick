@@ -1,6 +1,7 @@
 class ProductSubCategoriesController < ApplicationController
   include PdfCsvGeneralMethod
   include ProductSubCategoriesHelper
+	before_action :check_access
   before_action :set_product_sub_category, only: [:show, :edit, :update, :destroy]
   skip_before_action :verify_authenticity_token
   require 'tempfile'
@@ -13,10 +14,28 @@ class ProductSubCategoriesController < ApplicationController
     @options_for_select = ProductSubCategory.all
     @options_for_select_cat = ProductCategory.all
     @product_sub_categories = @q.result(distinct: true).page(params[:page])
-    download_product_sub_categories_csv_file if params[:csv].present?
+    if params[:csv].present?
+      request.format = 'csv'
+      download_product_sub_categories_csv_file
+    end
     download_product_sub_categories_pdf_file if params[:pdf].present?
     send_email_file if params[:email].present?
-    export_file if params[:export_data].present?
+    if params[:export_data].present?
+      request.format = 'csv'
+      export_file
+    end
+
+
+    @total_sub_count = Product.joins(:product_sub_category).group("product_sub_categories.title").count
+    @sub_title = @total_sub_count.keys.map { |a| a.gsub(' ', '-') }
+    @sub_unit =  @total_sub_count.values
+
+    respond_to do |format|
+      format.csv
+      format.pdf
+      format.js
+      format.html
+    end
   end
 
 
@@ -103,7 +122,8 @@ class ProductSubCategoriesController < ApplicationController
 
   def download_product_sub_categories_pdf_file
     @product_sub_categories = @q.result
-    generate_pdf(@product_sub_categories.as_json, "ProductSubCategories-Total-#{@product_sub_categories.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}", 'pdf.html', 'A4')
+    generate_pdf(@product_sub_categories.as_json, "ProductSubCategories-Total-#{@product_sub_categories.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}",
+                 'pdf.html', 'A4', false, 'product_sub_categories/index.pdf.erb')
   end
 
   def send_email_file

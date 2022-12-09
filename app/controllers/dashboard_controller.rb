@@ -1,4 +1,5 @@
 class DashboardController < ApplicationController
+  before_action :check_access
   def index
     redirect_to orders_path(sale: true) if current_user.salesman?
     @product_count=Product.count
@@ -6,6 +7,10 @@ class DashboardController < ApplicationController
     @total_sale_slips = PurchaseSaleDetail.where(transaction_type: "Sale").count
     @total_purchase_slips = PurchaseSaleDetail.where(transaction_type: "Purchase").count
     @total_expense_slips = ExpenseEntry.count
+    @total_expense_today = ExpenseEntry.where(created_at: Time.current.all_day).count
+    @total_expense_yesterday = ExpenseEntry.where(created_at: 1.day.ago.all_day).count
+    @total_exp_today = ExpenseEntry.where(created_at: Time.current.all_day).sum(:amount)
+    @total_exp_yesterday = ExpenseEntry.where(created_at: 1.day.ago.all_day).sum(:amount)
     @staff_count=Staff.count
     @transfer=Payment.where(confirmable: nil).count
     pos_setting = PosSetting.first
@@ -197,23 +202,22 @@ class DashboardController < ApplicationController
 
       #nakasi Sum Data
     end
-  #  @revenue=Hash.new
-  #  (1..12).each do |i|
-    #  @paid_to_month == 0 ? @paid_to_month = 12 : @paid_to_month
-  #    @revenue[Date::ABBR_MONTHNAMES[@paid_to_month.to_f]] =
-  #    DailyBook.where("extract(month from created_at)=? AND extract(year from created_at) = ?",@paid_to_month, @paid_to_year).where(department_id: @departments.first.id).RawProduct.sum(:raw_quantity)
-  #    @paid_to_month = @paid_to_month - 1
-  #    @paid_to_month == 0 ? @paid_to_year = @paid_to_year-1 : @paid_to_year
-  #  end
-  #  @revenue=@revenue.to_a.reverse.to_h
-
-  #  if params[:from].present?
-  #    @paid_to_month = params[:from][:month].present? ? params[:from][:month].to_i : Date.today.month
-  #    @paid_to_year =  params[:from][:year].present? ? params[:from][:year].to_i : Date.today.year
-  #  else
-  #    @paid_to_month = Date.today.month
-  #    @paid_to_year = Date.today.year
-  #  end
+    #  @revenue=Hash.new
+    #  (1..12).each do |i|
+      #  @paid_to_month == 0 ? @paid_to_month = 12 : @paid_to_month
+    #    @revenue[Date::ABBR_MONTHNAMES[@paid_to_month.to_f]] =
+    #    DailyBook.where("extract(month from created_at)=? AND extract(year from created_at) = ?",@paid_to_month, @paid_to_year).where(department_id: @departments.first.id).RawProduct.sum(:raw_quantity)
+    #    @paid_to_month = @paid_to_month - 1
+    #    @paid_to_month == 0 ? @paid_to_year = @paid_to_year-1 : @paid_to_year
+    #  end
+    #  @revenue=@revenue.to_a.reverse.to_h
+    #  if params[:from].present?
+    #    @paid_to_month = params[:from][:month].present? ? params[:from][:month].to_i : Date.today.month
+    #    @paid_to_year =  params[:from][:year].present? ? params[:from][:year].to_i : Date.today.year
+    #  else
+    #    @paid_to_month = Date.today.month
+    #    @paid_to_year = Date.today.year
+    #  end
 
 
 
@@ -268,6 +272,13 @@ class DashboardController < ApplicationController
         end
       end
     end
+
+    respond_to do |format|
+      format.js
+      format.pdf
+      format.html
+    end
+
   end
 
   def export

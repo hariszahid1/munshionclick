@@ -1,0 +1,30 @@
+$( document ).ready(function() {
+
+  const ctx = document.getElementById('myChart');
+  var accountTitle=$('#accountTitle').val().split(' ')
+  var accountAmount=$('#accountAmount').val().split(' ')
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: accountTitle,
+      datasets: [{
+        label: 'Amount: ',
+        data: accountAmount,
+        borderWidth: 1,
+        backgroundColor: '#FF5C5C'
+      }]
+    },
+    options: {
+      
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Accounts Bar Chart'
+            }
+        }
+      
+    }
+  });
+  
+});

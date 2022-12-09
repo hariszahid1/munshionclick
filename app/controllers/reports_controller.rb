@@ -90,7 +90,8 @@ class ReportsController < ApplicationController
       @salary_detail_total = SalaryDetail.joins(staff: :department).where(comment:["Payment Credit",nil]).where.not('departments.id=4').sum(:amount)+SalaryDetail.joins(staff: :department).where(comment:["Payment Credit",nil]).where('khakar_credit>0').where.not('departments.id=4').sum(:khakar_credit)
       @khakar_salary_detail_list = SalaryDetail.joins(staff: :department).where(comment:["Payment Credit",nil]).where('khakar_credit>0').where.not('departments.id=4').group('departments.title').sum(:khakar_credit)
     end
-    @investments = Investment.sum(:invest)
+    @investments_debit = Investment.sum(:debit)
+    @investments_credit = Investment.sum(:credit)
     @accounts = Account.all
     @root=root_url
     if params[:email].present?
@@ -254,7 +255,8 @@ class ReportsController < ApplicationController
       @salary_detail_total = SalaryDetail.joins(staff: :department).where(comment:["Payment Credit",nil]).where.not('departments.id=4').sum(:amount)+SalaryDetail.joins(staff: :department).where(comment:["Payment Credit",nil]).where('khakar_credit>0').where.not('departments.id=4').sum(:khakar_credit)
       @khakar_salary_detail_list = SalaryDetail.joins(staff: :department).where(comment:["Payment Credit",nil]).where('khakar_credit>0').where.not('departments.id=4').group('departments.title').sum(:khakar_credit)
     end
-    @investments = Investment.sum(:invest)
+    @investments_debit = Investment.sum(:debit)
+    @investments_credit = Investment.sum(:credit)
     @accounts = Account.all
     @root=root_url
     if params[:email].present?
@@ -284,6 +286,171 @@ class ReportsController < ApplicationController
       end
     end
   end
+
+# trial balance partialy data start
+
+  def trial_balance_users_payable
+    @pos_setting=PosSetting.first
+    @q = SysUser.where('balance > 0').order('user_group asc', 'name asc').ransack(params[:q])
+    @sys_user_payable = @q.result
+    @sys_user_payable_ledger_book_debit = LedgerBook.group('sys_user_id').sum(:debit)
+    @sys_user_payable_ledger_book_credit = LedgerBook.group('sys_user_id').sum(:credit)
+    @sys_user_payable_ledger_book_debit_total = LedgerBook.where('debit > 0').where(sys_user_id: @sys_user_payable.ids).sum(:debit)
+    @sys_user_payable_ledger_book_credit_total = LedgerBook.where('credit > 0').where(sys_user_id: @sys_user_payable.ids).sum(:credit)
+
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def trial_balance_users_reciveable
+    @q = SysUser.where('balance < 0').order('user_group asc', 'name asc').ransack(params[:q])
+    @sys_user_receiveable = @q.result
+    @sys_user_receiveable_ledger_book_debit = LedgerBook.group('sys_user_id').sum(:debit)
+    @sys_user_receiveable_ledger_book_credit = LedgerBook.group('sys_user_id').sum(:credit)
+    @sys_user_receiveable_ledger_book_debit_total = LedgerBook.where('debit > 0').where(sys_user_id: @sys_user_receiveable.ids).sum(:debit)
+    @sys_user_receiveable_ledger_book_credit_total = LedgerBook.where('credit > 0').where(sys_user_id: @sys_user_receiveable.ids).sum(:credit)
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def trial_balance_users_nill
+    @q = SysUser.where(balance: 0).order('user_group asc', 'name asc').ransack(params[:q])
+    @sys_user_nill = @q.result
+    @sys_user_nill_ledger_book_debit = LedgerBook.group('sys_user_id').sum(:debit)
+    @sys_user_nill_ledger_book_credit = LedgerBook.group('sys_user_id').sum(:credit)
+    @sys_user_nill_ledger_book_debit_total = LedgerBook.where('debit > 0').where(sys_user_id: @sys_user_nill.ids).sum(:debit)
+    @sys_user_nill_ledger_book_credit_total = LedgerBook.where('credit > 0').where(sys_user_id: @sys_user_nill.ids).sum(:credit)
+    respond_to do |format|
+      format.js
+    end
+  end
+  def trial_balance_staffs_payable
+    @all_user = SysUser.all
+    @user_types = UserType.all
+    @staff_names = Staff.all
+    @sys_user_payable_group = SysUser.where('balance > 0').group(:user_group).sum(:balance)
+    @sys_user_receiveable_group = SysUser.where('balance < 0').group(:user_group).sum(:balance)
+    @departments = Department.all
+    @q = Staff.where('balance>0').where(deleted: false).order('department_id asc', 'name asc').ransack(params[:q])
+
+    @staff_payable = @q.result
+    @staff_payable_group = Staff.joins(:department).where('balance>0').where(deleted: false).group('departments.title').sum(:balance)
+    @credit_salary_list = SalaryDetail.joins(:staff).where('amount>0').where(purchase_sale_detail_id:nil,daily_book_id:nil).where.not(id: Payment.where(paymentable_type:"SalaryDetail").pluck(:paymentable_id)).group('staffs.name').sum(:amount)
+    @credit_salary = SalaryDetail.joins(:staff).where('amount>0').where(purchase_sale_detail_id:nil,daily_book_id:nil).where.not(id: Payment.where(paymentable_type:"SalaryDetail").pluck(:paymentable_id)).sum(:amount).to_f
+    @staff_payable_ledger_book_debit = StaffLedgerBook.group('staff_id').sum(:debit)
+    @staff_payable_ledger_book_credit = StaffLedgerBook.group('staff_id').sum(:credit)
+    @staff_payable_ledger_book_debit_total = StaffLedgerBook.where('debit > 0').where(staff_id: @staff_payable.ids).sum(:debit)
+    @staff_payable_ledger_book_credit_total = StaffLedgerBook.where('credit > 0').where(staff_id: @staff_payable.ids).sum(:credit)
+    respond_to do |format|
+      format.js
+    end
+  end
+  def trial_balance_staffs_reciveable
+    @all_user = SysUser.all
+    @user_types = UserType.all
+    @staff_names = Staff.all
+    @sys_user_payable_group = SysUser.where('balance > 0').group(:user_group).sum(:balance)
+    @sys_user_receiveable_group = SysUser.where('balance < 0').group(:user_group).sum(:balance)
+    @departments = Department.all
+    @q = Staff.where('balance<0').where(deleted: false).order('department_id asc', 'name asc').ransack(params[:q])
+
+    @staff_reciveable = @q.result
+    @staff_reciveable_group = Staff.joins(:department).where('balance<0').where(deleted: false).group('departments.title').sum(:balance)
+    @staff_reciveable_ledger_book_debit = StaffLedgerBook.group('staff_id').sum(:debit)
+    @staff_reciveable_ledger_book_credit = StaffLedgerBook.group('staff_id').sum(:credit)
+    @staff_reciveable_ledger_book_debit_total = StaffLedgerBook.where('debit > 0').where(staff_id: @staff_reciveable.ids).sum(:debit)
+    @staff_reciveable_ledger_book_credit_total = StaffLedgerBook.where('credit > 0').where(staff_id: @staff_reciveable.ids).sum(:credit)
+    respond_to do |format|
+      format.js
+    end
+  end
+  def trial_balance_staffs_nill
+    @all_user = SysUser.all
+    @user_types = UserType.all
+    @staff_names = Staff.all
+    @sys_user_payable_group = SysUser.where('balance > 0').group(:user_group).sum(:balance)
+    @sys_user_receiveable_group = SysUser.where('balance < 0').group(:user_group).sum(:balance)
+    @departments = Department.all
+    @q = Staff.where(balance:0).where(deleted: false).order('department_id asc', 'name asc').ransack(params[:q])
+    @staff_nill = @q.result
+    @staff_nill_group=Staff.joins(:department).where(balance:0).where(deleted: false).group('departments.title').sum(:balance)
+    @staff_nill_ledger_book_debit = StaffLedgerBook.group('staff_id').sum(:debit)
+    @staff_nill_ledger_book_credit = StaffLedgerBook.group('staff_id').sum(:credit)
+    @staff_nill_ledger_book_debit_total = StaffLedgerBook.where('debit > 0').where(staff_id: @staff_nill.ids).sum(:debit)
+    @staff_nill_ledger_book_credit_total = StaffLedgerBook.where('credit > 0').where(staff_id: @staff_nill.ids).sum(:credit)
+    respond_to do |format|
+      format.js
+    end
+  end
+  def trial_balance_accounts
+    @all_user = SysUser.all
+    @user_types = UserType.all
+    @staff_names = Staff.all
+    @sys_user_payable_group = SysUser.where('balance > 0').group(:user_group).sum(:balance)
+    @sys_user_receiveable_group = SysUser.where('balance < 0').group(:user_group).sum(:balance)
+    @departments = Department.all
+    @q = Account.all.ransack(params[:q])
+    @accounts = @q.result
+    @account_debit = Payment.joins(:account).group(:title).sum(:debit)
+    @account_credit = Payment.joins(:account).group(:title).sum(:credit)
+    @account_debit_total = Payment.joins(:account).sum(:debit)
+    @account_credit_total = Payment.joins(:account).sum(:credit)
+
+    respond_to do |format|
+      format.js
+    end
+  end
+  def trial_balance_expense_reciveable
+    @expense_total = ExpenseEntry.joins(:expense_type).sum(:amount)
+    @expense_list = ExpenseEntry.joins(:expense_type).group('expense_types.id','expense_types.title').sum(:amount)
+
+    @credit_expense = ExpenseEntry.joins(:payment).joins(:expense_type).group('expense_types.title').sum(:debit)
+    @total_credit_expense = ExpenseEntry.joins(:payment).sum(:debit)
+
+    respond_to do |format|
+      format.js
+    end
+  end
+  def trial_balance_purchase_reciveable
+    @purchase_sale_detail_discount_list = PurchaseSaleDetail.where(transaction_type:'Sale').where.not(discount_price:[nil,0])
+    @purchase_item_list = PurchaseSaleItem.joins(:item).where(transaction_type:'Purchase').group('items.title').having('sum(total_cost_price)>0').sum(:total_cost_price)
+    @purchase_item_total = PurchaseSaleItem.joins(:item).where(transaction_type:'Purchase').sum(:total_cost_price)
+    @purchase_product_list = PurchaseSaleItem.joins(:product).where(transaction_type:'Purchase').group('products.title').having('sum(total_cost_price)>0').sum(:total_cost_price)
+    @purchase_product_total = PurchaseSaleItem.joins(:product).where(transaction_type:'Purchase').sum(:total_cost_price)
+    respond_to do |format|
+      format.js
+    end
+  end
+  def trial_balance_sale_payable
+    @sale_item_list = PurchaseSaleItem.joins(:item).where(transaction_type:'Sale').group('items.title').having('sum(total_sale_price)>0').sum(:total_sale_price)
+    @sale_item_total = PurchaseSaleItem.joins(:item).where(transaction_type:'Sale').sum(:total_sale_price)
+    @sale_product_list = PurchaseSaleItem.joins(:product).where(transaction_type:'Sale').group('products.title').having('sum(total_sale_price)>0').sum(:total_sale_price)
+    @sale_product_total = PurchaseSaleItem.joins(:product).where(transaction_type:'Sale').sum(:total_sale_price)
+    respond_to do |format|
+      format.js
+    end
+  end
+  def trial_balance_salary
+    @pos_type_batha = pos_type_batha
+    if @pos_type_batha.present?
+      @salary_detail_list = SalaryDetail.joins(staff: :department).where(comment:["Payment Credit",nil]).where.not('departments.id>=4').group('departments.title').sum(:amount)
+      @salary_detail_kharkar    = SalaryDetail.joins(staff: :department).where(comment:["Payment Credit",nil]).where('khakar_credit>0').where.not('departments.id=4').sum(:khakar_credit)
+      @salary_detail_total = SalaryDetail.joins(staff: :department).where(comment:["Payment Credit",nil]).where.not('departments.id>=4').sum(:amount)+SalaryDetail.joins(staff: :department).where(comment:["Payment Credit",nil]).where('khakar_credit>0').where.not('departments.id=4').sum(:khakar_credit)
+      @khakar_salary_detail_list = SalaryDetail.joins(staff: :department).where(comment:["Payment Credit",nil]).where('khakar_credit>0').where.not('departments.id=4').group('departments.title').sum(:khakar_credit)
+    else
+      @salary_detail_list = SalaryDetail.joins(staff: :department).where(comment:["Payment Credit",nil]).where.not('departments.id=4').group('departments.title').sum(:amount)
+      @salary_detail_kharkar    = SalaryDetail.joins(staff: :department).where(comment:["Payment Credit",nil]).where('khakar_credit>0').where.not('departments.id=4').sum(:khakar_credit)
+      @salary_detail_total = SalaryDetail.joins(staff: :department).where(comment:["Payment Credit",nil]).where.not('departments.id=4').sum(:amount)+SalaryDetail.joins(staff: :department).where(comment:["Payment Credit",nil]).where('khakar_credit>0').where.not('departments.id=4').sum(:khakar_credit)
+      @khakar_salary_detail_list = SalaryDetail.joins(staff: :department).where(comment:["Payment Credit",nil]).where('khakar_credit>0').where.not('departments.id=4').group('departments.title').sum(:khakar_credit)
+    end
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  # trial balance partialy data end
 
   def day_check
     @users=PurchaseSaleDetail.pluck(:user_name).uniq
@@ -691,7 +858,7 @@ class ReportsController < ApplicationController
       @accounts[[Date::ABBR_MONTHNAMES[@paid_to_month],@paid_to_year]] =
       Expense.where("extract(month from created_at)=? AND extract(year from created_at) = ?", @paid_to_month, @paid_to_year).group(:account_id).sum(:expense),
       ExpenseEntry.where("extract(month from expense_entries.created_at)=? AND extract(year from expense_entries.created_at) = ?", @paid_to_month, @paid_to_year).group(:account_id).sum(:amount),
-      Investment.where("extract(month from created_at)=? AND extract(year from created_at) = ?", @paid_to_month, @paid_to_year).group(:account_id).sum(:invest),
+      Investment.where("extract(month from created_at)=? AND extract(year from created_at) = ?", @paid_to_month, @paid_to_year).group(:account_id).sum(:debit),
       PurchaseSaleDetail.where("extract(month from created_at)=? AND extract(year from created_at) = ?", @paid_to_month, @paid_to_year).where(transaction_type: "Purchase").where(sys_user_id: @suppliers).group(:account_id).sum(:total_bill),
       Salary.where("extract(month from created_at)=? AND extract(year from created_at) = ?", @paid_to_month, @paid_to_year).group(:account_id).sum(:paid_salary),
       Salary.where("extract(month from created_at)=? AND extract(year from created_at) = ?", @paid_to_month, @paid_to_year).group(:account_id).sum(:advance)
@@ -750,7 +917,7 @@ class ReportsController < ApplicationController
     @investment=Hash.new
     (1..months).each do |i|
       @paid_to_month == 0 ? @paid_to_month = 12 : @paid_to_month
-      @investment[[Date::ABBR_MONTHNAMES[@paid_to_month],@paid_to_year]] = Investment.where("extract(month from created_at)=? AND extract(year from created_at) = ?", @paid_to_month, @paid_to_year).sum(:invest)
+      @investment[[Date::ABBR_MONTHNAMES[@paid_to_month],@paid_to_year]] = Investment.where("extract(month from created_at)=? AND extract(year from created_at) = ?", @paid_to_month, @paid_to_year).sum(:debit)
       @paid_to_month = @paid_to_month - 1
       @paid_to_month == 0 ? @paid_to_year = @paid_to_year-1 : @paid_to_year
     end
@@ -772,7 +939,7 @@ class ReportsController < ApplicationController
       @paid_to_month == 0 ? @paid_to_month = 12 : @paid_to_month
       total_salary = Salary.where("extract(month from created_at)=? AND extract(year from created_at) = ?", @paid_to_month, @paid_to_year).sum(:paid_salary)+Salary.where("extract(month from created_at)=? AND extract(year from created_at) = ?", @paid_to_month, @paid_to_year).sum(:advance)
       purchase_sale_detail = PurchaseSaleDetail.where("extract(month from created_at)=? AND extract(year from created_at) = ?", @paid_to_month, @paid_to_year).where(transaction_type: "Purchase").where(sys_user_id: @suppliers).sum(:total_bill)
-      investment=Investment.where("extract(month from created_at)=? AND extract(year from created_at) = ?", @paid_to_month, @paid_to_year).sum(:invest)
+      investment=Investment.where("extract(month from created_at)=? AND extract(year from created_at) = ?", @paid_to_month, @paid_to_year).sum(:debit)
       @total_salary=@total_salary+total_salary
       @investment_month=@investment_month+investment
       @purchase_sale_detail=@purchase_sale_detail+purchase_sale_detail
@@ -803,7 +970,7 @@ class ReportsController < ApplicationController
     (1..@lastday).each do |i|
       total_salary=Salary.where("extract(day from created_at)=? AND extract(month from created_at)=? AND extract(year from created_at) = ?",i, @paid_to_month, @paid_to_year).sum(:paid_salary)+Salary.where("extract(day from created_at)=? AND extract(month from created_at)=? AND extract(year from created_at) = ?",i, @paid_to_month, @paid_to_year).sum(:advance)
       purchase_sale_detail=PurchaseSaleDetail.where("extract(day from created_at)=? AND extract(month from created_at)=? AND extract(year from created_at) = ?",i, @paid_to_month, @paid_to_year).where(transaction_type: "Purchase").where(sys_user_id: @suppliers).sum(:total_bill)
-      investment=Investment.where("extract(day from created_at)=? AND extract(month from created_at)=? AND extract(year from created_at) = ?",i, @paid_to_month, @paid_to_year).sum(:invest)
+      investment=Investment.where("extract(day from created_at)=? AND extract(month from created_at)=? AND extract(year from created_at) = ?",i, @paid_to_month, @paid_to_year).sum(:debit)
       @expense_day=Expense.joins(:expense_type).where("extract(day from expenses.created_at)=? AND extract(month from expenses.created_at)=? AND extract(year from expenses.created_at) = ?",i, @paid_to_month, @paid_to_year).sum(:expense)+ExpenseEntry.joins(:expense_type).where("extract(day from expense_entries.created_at)=? AND extract(month from expense_entries.created_at)=? AND extract(year from expense_entries.created_at) = ?",i, @paid_to_month, @paid_to_year).sum(:amount)
       @total_salary_day=@total_salary_day+total_salary
       @purchase_sale_detail_day=@purchase_sale_detail_day+purchase_sale_detail
@@ -896,7 +1063,7 @@ class ReportsController < ApplicationController
     @salary   = Salary.where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).sum(:paid_salary)
     @advance = Salary.where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).sum(:advance)
     @expense  = ExpenseEntry.where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).sum(:amount)
-    @investment  = Investment.where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).sum(:invest)
+    @investment  = Investment.where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).sum(:debit)
 
     if params[:submit_pdf_staff_with].present?
       if @q.result.count > 0
@@ -954,7 +1121,7 @@ class ReportsController < ApplicationController
     @salary   = Salary.where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).group("DATE(created_at)").sum(:paid_salary)
     @advance = Salary.where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).group("DATE(created_at)").sum(:advance)
     @expense  = ExpenseEntry.where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).group("DATE(created_at)").sum(:amount)
-    @investment  = Investment.where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).group("DATE(created_at)").sum(:invest)
+    @investment  = Investment.where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).group("DATE(created_at)").sum(:debit)
 
     @sale_total     = PurchaseSaleDetail.where(transaction_type: "Sale",created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day ).sum(:total_bill)
     @sale_discount_total     = PurchaseSaleDetail.where(transaction_type: "Sale",created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day ).sum(:discount_price)
@@ -963,7 +1130,7 @@ class ReportsController < ApplicationController
     @salary_total   = Salary.where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).sum(:paid_salary)
     @advance_total = Salary.where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).sum(:advance)
     @expense_total  = ExpenseEntry.where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).sum(:amount)
-    @investment_total  = Investment.where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).sum(:invest)
+    @investment_total  = Investment.where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).sum(:debit)
     if params[:submit_pdf].present?
       if @q.result.count > 0
         @q.sorts = 'created_at desc' if @q.sorts.empty?

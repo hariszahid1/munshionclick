@@ -1,0 +1,44 @@
+<div class="modal fade" id="showdData" tabindex="-1" role="dialog" aria-labelledby="showdDataLabel">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+    <div class="modal-header">
+        <h3 class="modal-title ml-4" id="myModalLabel">Expense Entry Details</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="card">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <strong>Amount:</strong>
+              <%= @expense_entry.amount %>
+            </li>
+            <li class="list-group-item">
+              <strong>Expense:</strong>
+              <%= @expense_entry.expense %>
+            </li>
+            <li class="list-group-item">
+              <strong>Expense type:</strong>
+              <%= @expense_entry.expense_type %>
+            </li>
+            <li class="list-group-item">
+              <strong>Comment:</strong>
+              <%= @expense_entry.comment %>
+            </li>
+            <li class="list-group-item">
+              <strong>Status:</strong>
+              <%= @expense_entry.status %>
+            </li>
+          </ul>
+        </div>   
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger float-right" data-dismiss="modal" aria-label="Close">
+            <span class="text-light p-2">Close</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

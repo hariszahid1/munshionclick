@@ -33,8 +33,8 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
-      respond_to do |format|
-    format.js
+    respond_to do |format|
+      format.js
     end
   end
 
@@ -57,10 +57,11 @@ class UsersController < ApplicationController
     if params[:user][:password].blank?
       params[:user].delete :password
     end
+		# User.find(params[:id]).update(permission_updated:false)
     respond_to do |format|
       if @user.update(user_params)
-        save_user_ability
-        format.html { redirect_to dashboard_path, notice: "#{current_user.allowed_valid_roles.to_s.titleize} was successfully updated." }
+				save_user_ability
+        format.html { redirect_to users_path, notice: "#{current_user.allowed_valid_roles.to_s.titleize} was successfully updated." }
         format.json { render :show, status: :ok, location: @user }
       else
         set_part_list
@@ -120,8 +121,20 @@ class UsersController < ApplicationController
 
   def download_users_pdf_file
     @users = @q.result
-    generate_pdf(@users.as_json, "Admins-Total-#{@users.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}", 'pdf.html', 'A4')
+    generate_pdf(@users.as_json, "Admins-Total-#{@users.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}",
+                 'pdf.html', 'A4', false, 'users/index.pdf.erb')
   end
+
+    # Never trust parameters from the scary internet, only allow the white list through.
+	def user_params
+		params.require(:user).permit(
+			:name, :user_name, :email, :father_name, :city, :phone, :fax,
+			:address, :roles, :password, :confirm_password, :user_ability_roles,
+			:created_by_id, :email_to,:email_cc,:email_bcc,:roles_mask,:permission_updated,
+			user_permissions_attributes: %i[id can_accessed can_create can_read can_update can_delete can_download_pdf
+				can_download_csv can_send_email can_import_export is_hidden]
+		)
+	end
 
   def send_email_file
     EmailJob.perform_later(@q.result.as_json, 'users/index.pdf.erb', params[:email_value],

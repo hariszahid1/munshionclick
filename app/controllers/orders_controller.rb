@@ -116,6 +116,7 @@ class OrdersController < ApplicationController
       @created_at_lteq = params[:q][:created_at_lteq] if params[:q][:created_at_lteq].present?
       params[:q][:created_at_lteq] = params[:q][:created_at_lteq].to_date.end_of_day if params[:q][:created_at_lteq].present?
     end
+    @transaction_type_order_logs = params[:sale].present? ? 'Sale' : 'Purchase'
     if params[:purchase_submit].present? or params[:sale_submit].present?
       product_id= params[:q][:purchase_sale_items_product_product_id].present? ? params[:q][:purchase_sale_items_product_product_id] : @products
       if params[:sale_submit].present?
@@ -325,7 +326,7 @@ class OrdersController < ApplicationController
 
     respond_to do |format|
       if @order.save!
-
+        PaymentBalanceJob.set(wait: 1.minutes).perform_later(current_user.superAdmin.company_type)
         if params[:commit]=="Save with Print"
           if @pos_setting.sys_type=="FastFood"
             format.html {render :partial => "/orders/fast_food/create"}
@@ -441,6 +442,24 @@ class OrdersController < ApplicationController
   def user_type(id)
     SysUser.find(id).user_group
   end
+
+  def view_history
+    @start_date = Date.today.beginning_of_month
+    @end_date =  Date.today.end_of_month
+    if params[:q].present?
+      @start_date = params[:q][:created_at_gteq] if params[:q][:created_at_gteq].present?
+      @end_date = params[:q][:created_at_lteq] if params[:q][:created_at_lteq].present?
+      @item_id = params[:q][:item_id_eq] if params[:q][:item_id_eq].present?
+      params[:q][:created_at_lteq] = params[:q][:created_at_lteq].to_date.end_of_day if params[:q][:created_at_lteq].present?
+    end
+    @event = %w[create update destroy]
+    @q = PaperTrail::Version.where(item_id:Order.where(transaction_type: params[:type]),item_type:'Order').order('created_at desc').ransack(params[:q])
+    @order_logs = @q.result.page(params[:page])
+    respond_to do |format|
+      format.js
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_order

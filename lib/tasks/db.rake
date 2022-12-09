@@ -8,11 +8,15 @@ namespace :db do
   task migrate: :environment do
     # Invoking rake db:migrate executes against the usual/default db
     # first, then this gets executed.
-    all_db_configs   = Rails.configuration.database_configuration.select{|dbs| dbs.include?(Rails.env + '_')}
+    all_db_configs   = Rails.configuration.database_configuration.select{|dbs| dbs.include?(Rails.env)}
     all_db_configs.each do |db_block, db_config|
-      company_name = db_block.split(Rails.env + '_')[1]
-      puts company_name+' DB migration'
-      ActiveRecord::Base.establish_connection "#{Rails.env}_#{company_name}".to_sym
+      company_name = db_block.split(Rails.env)[1]
+      puts company_name.to_s+' DB migration'
+			if company_name.blank?
+	      ActiveRecord::Base.establish_connection "#{Rails.env}".to_sym
+			else
+				ActiveRecord::Base.establish_connection "#{Rails.env}#{company_name}".to_sym
+			end
       migrations = if ActiveRecord.version.version >= '5.2'
         ActiveRecord::Migration.new.migration_context.migrations
       else
@@ -84,4 +88,193 @@ namespace :db do
       end #if end
     end# databases end
   end #function End
+
+  desc "Load filesend"
+  task :filesend => :environment do
+    all_db_configs = Rails.configuration.database_configuration.select{|dbs| dbs.include?(Rails.env + '_')}
+    date_for_folder = Date.yesterday.to_s.gsub('-', '')
+    file_path = []
+    all_db_configs.each do |db_block, db_config|
+      path_to_file = Dir[Rails.root.join("../../shared/db_backup/#{date_for_folder}/#{db_block.split(Rails.env + '_')[1]}/*").to_s][0]
+      file_path << [db_block.split(Rails.env + '_')[1], path_to_file]
+      file = File.open(path_to_file)
+      db_backup_data = DbBackupFile.create(company_type: db_block, folder_date: Date.yesterday)
+      db_backup_data.back_up_file.attach(io: file, filename: path_to_file.split('/').last)
+      file_serice_url = "https://munshionclick.com/db_backup_files/#{db_backup_data.id}"
+      ActiveRecord::Base.establish_connection "#{Rails.env}_#{database}".to_sym
+      email_to = PosSetting.last&.email_to&.split(',')
+      email_cc = PosSetting.last&.email_cc&.split(',')
+      email_bcc = PosSetting.last&.email_bcc&.split(',')
+      ReportMailer.db_backup_file_email(email_to, email_cc, email_bcc, db_block, file_serice_url, Date.yesterday).deliver
+    end
+  end
+
+  desc "Load report_files_save"
+  task report_files_save_daily: :environment do
+    all_db_configs = Rails.configuration.database_configuration.select{ |dbs| dbs.include?(Rails.env + '_') }
+    all_db_configs.each do |db_block, db_config|
+      database = db_block.split(Rails.env + '_')[1]
+      ActiveRecord::Base.establish_connection "#{Rails.env}_#{database}".to_sym
+      reports = %w[chart-of-account sysuser-ledger-book staff-ledger-book sale purchase payment expense investment]
+      reports.each do |a|
+        ApplicationRecord.chart_of_account_pdf(database, a, 'daily', nil)
+      end
+    end
+  end
+
+  desc "Load report_files_save"
+  task logs_files_save_daily: :environment do
+    all_db_configs = Rails.configuration.database_configuration.select{ |dbs| dbs.include?(Rails.env + '_') }
+    all_db_configs.each do |db_block, db_config|
+      database = db_block.split(Rails.env + '_')[1]
+      ActiveRecord::Base.establish_connection "#{Rails.env}_#{database}".to_sym
+      reports = %w[sysuser-ledger-book staff-ledger-book sale purchase payment expense investment]
+      reports.each do |a|
+        ApplicationRecord.chart_of_account_pdf(database, a, 'daily', 'logs')
+      end
+    end
+  end
+
+  desc 'Load send_report_files'
+  task send_report_files_daily: :environment do
+    all_db_configs = Rails.configuration.database_configuration.select{ |dbs| dbs.include?(Rails.env + '_') }
+    all_db_configs.each do |db_block, db_config|
+      database = db_block.split(Rails.env + '_')[1]
+      ActiveRecord::Base.establish_connection "#{Rails.env}_#{database}".to_sym
+      email_to = PosSetting.last&.email_to&.split(',')
+      email_cc = PosSetting.last&.email_cc&.split(',')
+      email_bcc = PosSetting.last&.email_bcc&.split(',')
+      date_for_folder = Date.yesterday.to_s.gsub('-', '')
+      path_to_files = Dir[Rails.root.join("../../shared/reports/daily/#{date_for_folder}/#{database}/*").to_s]
+      ReportMailer.send_report_files_email(email_to, email_cc, email_bcc, path_to_files, database, 'Daily', 'Report').deliver
+    end
+  end
+
+  desc 'Load send_report_files'
+  task send_logs_files_daily: :environment do
+    all_db_configs = Rails.configuration.database_configuration.select{ |dbs| dbs.include?(Rails.env + '_') }
+    all_db_configs.each do |db_block, db_config|
+      database = db_block.split(Rails.env + '_')[1]
+      ActiveRecord::Base.establish_connection "#{Rails.env}_#{database}".to_sym
+      email_to = PosSetting.last&.email_to&.split(',')
+      email_cc = PosSetting.last&.email_cc&.split(',')
+      email_bcc = PosSetting.last&.email_bcc&.split(',')
+      date_for_folder = Date.yesterday.to_s.gsub('-', '')
+      path_to_files = Dir[Rails.root.join("../../shared/version_reports/daily/#{date_for_folder}/#{database}/*").to_s]
+      ReportMailer.send_report_files_email(email_to, email_cc, email_bcc, path_to_files, database, 'Daily', 'Log').deliver
+    end
+  end
+
+  desc "Load report_files_save"
+  task report_files_save_weekly: :environment do
+    all_db_configs = Rails.configuration.database_configuration.select{ |dbs| dbs.include?(Rails.env + '_') }
+    all_db_configs.each do |db_block, db_config|
+      database = db_block.split(Rails.env + '_')[1]
+      ActiveRecord::Base.establish_connection "#{Rails.env}_#{database}".to_sym
+      reports = %w[chart-of-account sysuser-ledger-book staff-ledger-book sale purchase payment expense investment]
+      reports.each do |a|
+        ApplicationRecord.chart_of_account_pdf(database, a, 'weekly', nil)
+      end
+    end
+  end
+
+  desc "Load report_files_save"
+  task logs_files_save_weekly: :environment do
+    all_db_configs = Rails.configuration.database_configuration.select{ |dbs| dbs.include?(Rails.env + '_') }
+    all_db_configs.each do |db_block, db_config|
+      database = db_block.split(Rails.env + '_')[1]
+      ActiveRecord::Base.establish_connection "#{Rails.env}_#{database}".to_sym
+      reports = %w[sysuser-ledger-book staff-ledger-book sale purchase payment expense investment]
+      reports.each do |a|
+        ApplicationRecord.chart_of_account_pdf(database, a, 'weekly', 'logs')
+      end
+    end
+  end
+
+  desc 'Load send_report_files'
+  task send_report_files_weekly: :environment do
+    all_db_configs = Rails.configuration.database_configuration.select{ |dbs| dbs.include?(Rails.env + '_') }
+    all_db_configs.each do |db_block, db_config|
+      database = db_block.split(Rails.env + '_')[1]
+      ActiveRecord::Base.establish_connection "#{Rails.env}_#{database}".to_sym
+      email_to = PosSetting.last&.email_to&.split(',')
+      email_cc = PosSetting.last&.email_cc&.split(',')
+      email_bcc = PosSetting.last&.email_bcc&.split(',')
+      date_for_folder = Date.yesterday.to_s.gsub('-', '')
+      path_to_files = Dir[Rails.root.join("../../shared/reports/weekly/#{date_for_folder}/#{database}/*").to_s]
+      ReportMailer.send_report_files_email(email_to, email_cc, email_bcc, path_to_files, database, 'Weekly', 'Report').deliver
+    end
+  end
+
+  desc 'Load send_report_files'
+  task send_logs_files_weekly: :environment do
+    all_db_configs = Rails.configuration.database_configuration.select{ |dbs| dbs.include?(Rails.env + '_') }
+    all_db_configs.each do |db_block, db_config|
+      database = db_block.split(Rails.env + '_')[1]
+      ActiveRecord::Base.establish_connection "#{Rails.env}_#{database}".to_sym
+      email_to = PosSetting.last&.email_to&.split(',')
+      email_cc = PosSetting.last&.email_cc&.split(',')
+      email_bcc = PosSetting.last&.email_bcc&.split(',')
+      date_for_folder = Date.yesterday.to_s.gsub('-', '')
+      path_to_files = Dir[Rails.root.join("../../shared/version_reports/weekly/#{date_for_folder}/#{database}/*").to_s]
+      ReportMailer.send_report_files_email(email_to, email_cc, email_bcc, path_to_files, database, 'Weekly', 'Log').deliver
+    end
+  end
+
+  desc "Load report_files_save"
+  task report_files_save_monthly: :environment do
+    all_db_configs = Rails.configuration.database_configuration.select{ |dbs| dbs.include?(Rails.env + '_') }
+    all_db_configs.each do |db_block, db_config|
+      database = db_block.split(Rails.env + '_')[1]
+      ActiveRecord::Base.establish_connection "#{Rails.env}_#{database}".to_sym
+      reports = %w[chart-of-account sysuser-ledger-book staff-ledger-book sale purchase payment expense investment]
+      reports.each do |a|
+        ApplicationRecord.chart_of_account_pdf(database, a, 'monthly', nil)
+      end
+    end
+  end
+
+  desc "Load report_files_save"
+  task logs_files_save_monthly: :environment do
+    all_db_configs = Rails.configuration.database_configuration.select{ |dbs| dbs.include?(Rails.env + '_') }
+    all_db_configs.each do |db_block, db_config|
+      database = db_block.split(Rails.env + '_')[1]
+      ActiveRecord::Base.establish_connection "#{Rails.env}_#{database}".to_sym
+      reports = %w[sysuser-ledger-book staff-ledger-book sale purchase payment expense investment]
+      reports.each do |a|
+        ApplicationRecord.chart_of_account_pdf(database, a, 'monthly', 'logs')
+      end
+    end
+  end
+
+  desc 'Load send_report_files'
+  task send_report_files_monthly: :environment do
+    all_db_configs = Rails.configuration.database_configuration.select{ |dbs| dbs.include?(Rails.env + '_') }
+    all_db_configs.each do |db_block, db_config|
+      database = db_block.split(Rails.env + '_')[1]
+      ActiveRecord::Base.establish_connection "#{Rails.env}_#{database}".to_sym
+      email_to = PosSetting.last&.email_to&.split(',')
+      email_cc = PosSetting.last&.email_cc&.split(',')
+      email_bcc = PosSetting.last&.email_bcc&.split(',')
+      date_for_folder = Date.yesterday.to_s.gsub('-', '')
+      path_to_files = Dir[Rails.root.join("../../shared/reports/monthly/#{date_for_folder}/#{database}/*").to_s]
+      ReportMailer.send_report_files_email(email_to, email_cc, email_bcc, path_to_files, database, 'Monthly', 'Report').deliver
+    end
+  end
+
+  desc 'Load send_report_files'
+  task send_logs_files_monthly: :environment do
+    all_db_configs = Rails.configuration.database_configuration.select{ |dbs| dbs.include?(Rails.env + '_') }
+    all_db_configs.each do |db_block, db_config|
+      database = db_block.split(Rails.env + '_')[1]
+      ActiveRecord::Base.establish_connection "#{Rails.env}_#{database}".to_sym
+      email_to = PosSetting.last&.email_to&.split(',')
+      email_cc = PosSetting.last&.email_cc&.split(',')
+      email_bcc = PosSetting.last&.email_bcc&.split(',')
+      date_for_folder = Date.yesterday.to_s.gsub('-', '')
+      path_to_files = Dir[Rails.root.join("../../shared/version_reports/monthly/#{date_for_folder}/#{database}/*").to_s]
+      ReportMailer.send_report_files_email(email_to, email_cc, email_bcc, path_to_files, database, 'Monthly', 'Log').deliver
+    end
+  end
+
 end

@@ -1,4 +1,5 @@
 class CountriesController < ApplicationController
+	before_action :check_access
   before_action :set_country, only: [:show, :edit, :update, :destroy]
   include PdfCsvGeneralMethod
   include CountriesHelper
@@ -10,10 +11,28 @@ class CountriesController < ApplicationController
     @q.sorts = 'id asc' if @q.result.count > 0 && @q.sorts.empty?
     @options_for_select = Country.all
     @countries = @q.result(distinct: true).page(params[:page])
-    download_countries_csv_file if params[:csv].present?
+    if params[:csv].present?
+      request.format = 'csv'
+      download_countries_csv_file
+    end
     download_countries_pdf_file if params[:pdf].present?
     send_email_file if params[:email].present?
-    export_file if params[:export_data].present?
+    if params[:export_data].present?
+      request.format = 'csv'
+      export_file
+    end
+
+    @total_countries_count = Contact.joins(:country).group("countries.title").count
+    @country_title = @total_countries_count.keys.map { |a| a.gsub(' ', '-') }
+    @country_user = @total_countries_count.values
+
+    respond_to do |format|
+      format.pdf
+      format.csv
+      format.js
+      format.html
+    end
+
   end
 
   # GET /countries/1
@@ -100,7 +119,8 @@ class CountriesController < ApplicationController
 
   def download_countries_pdf_file
     @countries = @q.result
-    generate_pdf(@countries.as_json, "Countries-Total-#{@countries.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}", 'pdf.html', 'A4')
+    generate_pdf(@countries.as_json, "Countries-Total-#{@countries.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}",
+                 'pdf.html', 'A4', false, 'countries/index.pdf.erb')
   end
 
   def send_email_file

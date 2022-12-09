@@ -21,6 +21,7 @@ class PurchaseSaleDetail < ApplicationRecord
   after_create :modify_account_balance
   after_update :update_account_balance
   after_destroy :delete_account_balance
+  before_create :generate_guid
 
   def check_rejectable?(attributes)
     if attributes['product_id'].blank? && attributes['item_id'].blank?
@@ -185,5 +186,10 @@ class PurchaseSaleDetail < ApplicationRecord
 
   def staff_full_name
     self.staff.full_name if staff.present?
+  end
+
+  def generate_guid
+    self.guid = SecureRandom.hex(6)
+    generate_guid if PurchaseSaleDetail.exists?(guid: guid)
   end
 end

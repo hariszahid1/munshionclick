@@ -1,0 +1,87 @@
+<div class="p-3">
+  <div class="row mb-2 mt-2">
+    <div class="col-lg-12 col-sm-12">
+      <h2>Orders History</h2>
+    </div>
+  </div>
+
+  <div class="row px-3">
+    <div class="col-lg-12 col-sm-12 card shadow border-radius-1">
+      <%= search_form_for @q, url:view_history_orders_path(type: params[:type]), class: "admin-controls mt-3", remote: true, method: "get" do |f| %>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.search_field :item_id_eq, value: @item_id, placeholder: "search by id", title: "search by id" ,:class=>"form-control" %>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.date_field :created_at_gteq, value:@start_date, class: 'form-control input-sm',title: "Select date from",  placeholder: "YYYY-MM-DD" %>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.date_field :created_at_lteq, value:@end_date,class: 'form-control input-sm' ,title: "Select date to", placeholder: "YYYY-MM-DD"%>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.select :event_eq, options_for_select(@event, f.object.event_eq), {:include_blank => "Select Event"},:class=>"form-control chosen-select" %>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px">Search</button>
+        </div>
+        <div class="col-lg-1.5 form-group float-right mr-3">
+          <button class="form-control btn btn-danger" style="width: 100px;" name="submit_pdf" type="submit" value="Logs PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mr-2"></i>Logs &nbsp;</button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="card shadow border-radius-1 mt-3">
+    <table data-toggle="table" data-search="true" class="log-table border-radius-1">
+      <thead class="bg-dark text-light border-radius-1">
+        <tr>
+          <th height="50">Event</th>
+          <th height="50">Who Done it</th>
+          <th height="50">Date</th>
+          <th height="50">ID/P</th>
+          <th height="50">Customers</th>
+          <th height="50" colspan="2" class="make-center">Total Bill</th>
+          <th height="50" colspan="2" class="make-center">
+            <%= (pos_setting_sys_type.present? && pos_setting_sys_type.eql?('HousingScheme')) ? 'Received' : 'Paid'%>
+          </th>
+          <th height="50" colspan="2" class="make-center">Discount</th>
+          <% if pos_setting_sys_type.present? && pos_setting_sys_type != 'HousingScheme' %>
+            <th height="50" colspan="2" class="make-center">Status</th>
+          <% end %>
+          <th height="50">Comment</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @order_logs.each do |log| %>
+          <tr class=<%= (log.event == 'destroy') ? 'follow_up_color' :  (log.event == 'update') ? 'cms-table-row1' : 'bg-light' %>>
+            <td class="urdu-font"><%= log&.event  %></td>
+            <td class="urdu-font"><%=User.find_by(id:log&.whodunnit)&.name %></td>
+            <td class="urdu-font" ><%=log&.created_at.strftime("%d%b%y at %I:%M %p")%></td>
+            <td class="urdu-font"><%= link_to " (" + log&.item_id.to_s  + ")", orders_path('q[id_eq]':log&.item_id,)%></td>
+            <td class="urdu-font"><%=Order.find_by(id:log&.item_id)&.sys_user&.name %></td>
+            <td class="urdu-font"><%= number_with_delimiter(log&.changeset&.try(:[], 'total_bill')&.first.to_i) %></td>
+            <td class="urdu-font"><%= number_with_delimiter(log&.changeset&.try(:[], 'total_bill')&.last.to_i)  %></td>
+            <td class="urdu-font"><%= number_with_delimiter(log&.changeset&.try(:[], 'amount')&.first.to_i) %></td>
+            <td class="urdu-font"><%= number_with_delimiter(log&.changeset&.try(:[], 'amount')&.last.to_i)  %></td>
+            <td class="urdu-font"><%= number_with_delimiter(log&.changeset&.try(:[], 'discount_price')&.first.to_i) %></td>
+            <td class="urdu-font"><%= number_with_delimiter(log&.changeset&.try(:[], 'discount_price')&.last.to_i)  %></td>
+            <% if pos_setting_sys_type.present? && pos_setting_sys_type != 'HousingScheme' %>
+              <td class="urdu-font"><%= log&.changeset&.try(:[], 'status')&.first %></td>
+              <td class="urdu-font"><%= log&.changeset&.try(:[], 'status')&.last  %></td>
+            <% end %>
+            <td class="urdu-font"><%=log&.changeset&.try(:[], 'comment')&.first %><%=log&.changeset&.try(:[], 'comment')&.last %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <div class="row mt-3 mb-3 ml-1 mr-1">
+      <div class="col-lg-4 col-sm-4">
+        <%= page_entries_info @order_logs %>
+      </div>
+      <div class="col-lg-8 col-sm-8 pagination-left">
+        <%= paginate @order_logs, remote: true %>
+      </div>
+    </div>
+  </div>
+
+</div>

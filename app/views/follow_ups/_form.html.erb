@@ -11,10 +11,6 @@
   <% end %>
   <div class="col-lg-12 row">
     <div class="col-lg-12 form-group float-left">
-      <%= f.select :reminder_type, FollowUp.reminder_types.map { |key, value| [key.humanize, key] },{include_blank: "Please Select Reminder Type"},{class: "form-control", required: true} %>
-    </div>
-
-    <div class="col-lg-12 form-group float-left">
       <%= f.select :task_type, FollowUp.task_types.map { |key, value| [key.humanize, key] },{include_blank: "Please Select Priority"},{class: "form-control", required: true} %>
     </div>
 
@@ -25,8 +21,13 @@
     <div class="col-lg-12" style="float:left">
       <%= f.select :assigned_to_id, options_from_collection_for_select(@staff, 'id', 'name',f.object.assigned_to_id.present? ? f.object.assigned_to_id : nil ),{include_blank: "Please Seleect Assignee"},{class: "form-control"} %>
     </div>
+
     <div class="col-lg-12" style="float:left">
-      <%= f.date_field :date, required:true %></th>
+      <%= f.text_area :comment, placeholder: "Enter your comment"%>
+    </div>
+
+    <div class="col-lg-12" style="float:left">
+      <%= f.datetime_select :date, class: "form-control" %>
     </div>
   </div>
 
@@ -34,7 +35,7 @@
     <%= f.hidden_field :created_by, value: current_user.id %>
   </div>
   <div class="field">
-    <%= f.hidden_field :followable_id, value: params[:sys_user_id].to_i %>
+    <%= f.hidden_field :followable_id, value: f.object.id.present? ? f.object.followable_id : params[:sys_user_id].to_i %>
   </div>
   <div class="field">
     <%= f.hidden_field :followable_type, value: 'SysUser' %>

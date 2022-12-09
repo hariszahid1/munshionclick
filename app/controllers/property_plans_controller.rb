@@ -1,4 +1,5 @@
 class PropertyPlansController < ApplicationController
+  before_action :check_access
   before_action :set_property_plan, only: %i[show edit update destroy]
   before_action :set_property_installment, only: [:show]
   before_action :set_property_installment_edit, only: %i[edit_property_installment update_installment]
@@ -248,7 +249,7 @@ class PropertyPlansController < ApplicationController
   def download_property_plans_pdf_file
     sort_data_according
     generate_pdf(@sorted_data.as_json, "Property-Plan-Total-#{@sorted_data.count}-#{DateTime.now.strftime('%d-%m-%Y-%H-%M')}",
-                 'pdf.html', 'A4')
+                 'pdf.html', 'A4', false, 'property_plans/index.pdf.erb')
   end
 
   def send_email_file

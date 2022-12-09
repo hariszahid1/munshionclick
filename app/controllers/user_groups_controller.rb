@@ -4,7 +4,7 @@
 class UserGroupsController < ApplicationController
   include PdfCsvGeneralMethod
   include CitiesHelper
-
+	before_action :check_access
   before_action :set_user_group, only: %i[show edit update destroy]
   require 'tempfile'
   require 'csv'
@@ -15,10 +15,28 @@ class UserGroupsController < ApplicationController
     @q.sorts = 'id asc' if @q.sorts.empty? && @q.result.count.positive?
     @options_for_select = UserGroup.all
     @user_groups = @q.result.page(params[:page])
-    download_user_groups_csv_file if params[:csv].present?
+
+    if params[:csv].present?
+      request.format = 'csv'
+      download_user_groups_csv_file
+    end
     download_user_groups_pdf_file if params[:pdf].present?
     send_email_file if params[:email].present?
-    export_file if params[:export_data].present?
+    if params[:export_data].present?
+      request.format = 'csv'
+      export_file
+    end
+    
+    @count_sys_user = SysUser.all.group(:user_group).count
+    @user_group_title = @count_sys_user.keys.map { |a| a.gsub(' ', '-') }
+    @user_group_count = @count_sys_user.values
+    
+    respond_to do |format|
+      format.pdf
+      format.csv
+      format.js
+      format.html
+    end
   end
 
   # GET /user_groups/1
@@ -61,9 +79,9 @@ class UserGroupsController < ApplicationController
   # PATCH/PUT /cities/1.json
   def update
     respond_to do |format|
-      if @user_group.update(city_params)
-        format.html { redirect_to cities_path, notice: 'User Group was successfully updated.' }
-        format.json { render :show, status: :ok, location: @city }
+      if @user_group.update(user_group_params)
+        format.html { redirect_to user_groups_path, notice: 'User Group was successfully updated.' }
+        format.json { render :show, status: :ok, location: @user_group }
       else
         format.html { render :edit }
         format.json { render json: @user_group.errors, status: :unprocessable_entity }
@@ -102,7 +120,8 @@ class UserGroupsController < ApplicationController
 
   def download_user_groups_pdf_file
     @user_groups = @q.result
-    generate_pdf(@user_groups.as_json, "User_groups-Total-#{@user_groups.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}", 'pdf.html', 'A4')
+    generate_pdf(@user_groups.as_json, "User_groups-Total-#{@user_groups.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}",
+                 'pdf.html', 'A4', false, 'user_groups/index.pdf.erb')
   end
 
   def send_email_file

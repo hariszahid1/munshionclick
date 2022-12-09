@@ -1,0 +1,39 @@
+<div class="card shadow mb-4">
+    <!-- Card Header - Accordion -->
+    <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+      <h6 class="m-0 font-weight-bold text-primary"><h1>City Details</h1></h6>
+    </a>
+    <!-- Card Content - Collapse -->
+    <div class="collapse show" id="collapseCardExample" style="">
+      <div class="card-body">
+        <table>
+          <thead>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Comment</th>
+
+         </thead>
+          <tbody>
+            <tr>
+              <td>  <%= @city.id %></td>
+              <td><%= @city.title %> </td>
+              <td><%= @city.comment %></td>
+            </tr>
+         </tbody>
+        </table>
+        <div class="row">
+          <div class="col-lg-1 float-left">
+            <%= link_to cities_path do %>
+            <i class="fa fa-arrow-left " aria-hidden="true"></i>
+            <% end %>
+          </div>
+  
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+<p id="notice"><%= notice %></p>

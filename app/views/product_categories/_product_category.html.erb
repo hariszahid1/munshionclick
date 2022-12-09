@@ -2,80 +2,80 @@
   <td><%= check_box_tag 'object_ids[]', product_category.id %></td>
   <td><%= product_category.id %></td>
   <td class='urdu-font'><%= product_category.title %></td>
-  <td><%= product_category.code %></td>
+	<td>
+		<% unless @total_categories_count[product_category.title].blank?%>
+  		<%= link_to " (" + @total_categories_count[product_category.title].to_s  + ")", products_path('q[product_category_id_eq]':product_category.id)%>
+  	<% end%>
+	</td>
+	<td>
+		<% unless @total_sub_categories_count[product_category.title].blank?%>
+  		<%= link_to " (" + @total_sub_categories_count[product_category.title].to_s  + ")", product_sub_categories_path('q[product_category_id_eq]':product_category.id)%>
+  	<% end%>
+	</td>
+  <td><%= product_category.code %>  </td>
   <td><span title="<%= product_category.comment %>" class='truncate-text'><%= product_category.comment %></span></td>
   <td class="p-3">
-     <div class="icon-container-1">
-        <div class="my-icon-1 my-view-1">
-          <div class="my-tooltip-1">
-        <div class="icon-container">
-          <div class="my-icon my-view">
-          <div class="my-tooltip">
-            Edit
+		  <div class="icon-container-1">
+      <div class="my-icon-1 my-view-1">
+        <div class="my-tooltip-1">
+          <div class="icon-container">
+						<%if (check_can_update(@module_permission))%>
+            	<div class="my-icon my-view">
+            	  <div class="my-tooltip">
+            	    Edit
+            	  </div>
+            	    <%= link_to edit_product_category_path(product_category), remote: true, class:"icon-div" do %>
+            	      <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+            	    <%end %>
+            	</div>
+						<% end %>
+						<%if (check_can_delete(@module_permission))%>
+            	<div class="my-icon my-view">
+            	  <div class="my-tooltip">
+            	    Delete
+            	  </div>
+            	    <%= link_to product_category, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+            	      <i class="fa fa-trash mt-2" aria-hidden="true"></i>
+            	    <%end %>
+            	</div>
+						<% end %> 
+						<%if (check_can_read(@module_permission))%>
+            	<div class="my-icon my-view">
+            	  <div class="my-tooltip">
+            	    Show
+            	  </div>
+            	    <%= link_to product_category_path(product_category), remote: true, class:"icon-div" do %>
+            	      <i class="fa fa-eye mt-2" aria-hidden="true"></i>
+            	    <%end %>
+            	</div>
+						<%end%>
+						<%if (check_can_download_pdf(@module_permission))%>
+            	<div class="my-icon my-view">
+            	  <div class="my-tooltip">
+            	    PDF
+            	  </div>
+            	   <%= link_to product_categories_path('q[id_eq]':product_category.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
+            	      <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
+            	    <%end %>  
+            	</div>
+						<% end %>  
+						<%if (check_can_download_csv(@module_permission))%>
+            	<div class="my-icon my-view">
+            	  <div class="my-tooltip">
+            	    CSV
+            	  </div>
+            	    <%= link_to product_categories_path('q[id_eq]':product_category.id,'csv':true), title: 'Download CSV', class:"icon-div" do%>
+            	      <i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
+            	    <%end %>
+            	</div>
+						<% end %>
           </div>
-         
-                <% if can?(:update, :all) %>
-              <%= link_to edit_product_category_path(product_category), remote: true, class:"icon-div" do %>
-                <i class="fa fa-edit mt-2" aria-hidden="true"></i>
-              <%end %>
-            <% end %>
-          
         </div>
-
-          <div class="my-icon my-view">
-              <div class="my-tooltip">
-                Delete
-              </div>
-                
-                  <% if can?(:delete, :all) %>
-                    <%= link_to product_category, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
-                    <i class="fa fa-trash mt-2" aria-hidden="true"></i>
-                  <%end %>
-                <% end %>
-              
-          </div>
-
-      <div class="my-icon my-view">
-                <div class="my-tooltip">
-                  Show
-                </div>
-              
-                   <% if can?(:view, :all) %>
-                    <%= link_to product_category_path(product_category), remote: true, class:"icon-div" do %>
-                    <i class="fa fa-eye mt-2" aria-hidden="true"></i>
-                <%end %>
-            <%end%>
-        
+        <span class="icon-div-1">
+              <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+        </span>
       </div>
-
-      <div class="my-icon my-view">
-            <div class="my-tooltip">
-              PDF
-            </div>
-            
-                <%= link_to product_categories_path('q[id_eq]':product_category.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
-			<i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
-		<%end %>
-            
-      </div>
-
-       <div class="my-icon my-view">
-            <div class="my-tooltip">
-              CSV
-            </div>
-            
-                 <%= link_to product_categories_path('q[id_eq]':product_category.id,'csv':true), title: 'Download CSV', class:"icon-div" do%>
-			<i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
-		<%end %>
-          
-          </div>
-          </div>
-              </div>
-              <span class="icon-div-1">
-                    <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
-              </span>
-          </div>
     </div>
-    
+
   </td>
 </tr>

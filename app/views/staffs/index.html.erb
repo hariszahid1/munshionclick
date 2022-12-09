@@ -13,9 +13,40 @@
               </li>
             </ol>
           </div>
+          <%= search_form_for @q, url: staffs_path, class: "admin-controls", method: "get" do |f| %>
+            <div class="row ml-1 mb-5">
+              <% if check_can_create(@module_permission)%>
+                <%= link_to new_staff_path, remote: true, class: "btn btn-success " do %>
+                  <i class="fa fa-plus" aria-hidden="true"></i>
+                    Create
+                <% end %>
+                <%= link_to payable_staffs_path, class: "btn btn-warning ml-2" do %>
+                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                      Payable
+                <% end %>
+                <%= link_to receiveable_staffs_path, class: "btn btn-info ml-2" do %>
+                  <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                    Reciveable
+                <% end %>
+                <%= link_to dasti_staffs_path, class: "btn ml-2", style:"background-color: #9D52FF; color: white" do %>
+                  <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                    Dasti
+                <% end %>
+                <%= link_to loan_salaries_path, class: "btn btn-danger ml-2" do %>
+                  <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                    Loan/Pashgyi
+                <% end %>
+                <%= link_to transfer_staff_ledger_books_path, class: "btn btn-primary ml-2" do %>
+                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                      Payment Transfer
+                <% end %>
+              <% end %>
+              <button class="form-control btn  btn-danger ml-2 d-flex" style="width: 125px" name="submit_remove_wege_debit" type="submit" value="Short Pay 0"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>ShortPay0</button>
+            </div>
+          <% end %>  
         <div class="float-right">
           <div class="dropdown">
-           <span class="btn btn-info" title= "About This page">Help</span>
+           <span class="btn btn-info" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
             <div class="dropdown-content">
               <% if @help.present? %>
               <% @help&.help_links.each do |link| %>
@@ -26,340 +57,297 @@
           </div>
         </div>
 
-        <ul class="nav nav-tabs" role="tablist">
+        <ul class="nav nav-pills mb-2" role="tablist">
           <li class="nav-item">
-            <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
-          </li>
+            <a class="nav-link tab-label staff-search-exp-tab active" data-toggle="tab" href="#search" role="tab">Search</a>
+          </li> 
           <li class="nav-item">
-            <a class="nav-link tab-label" data-toggle="tab" href="#create" role="tab">Create</a>
+            <a class="nav-link tab-label staff-search-exp-tab" data-toggle="tab" href="#analytics" data-remote="true" role="tab">Analytics</a>
           </li>
+          <%if (check_can_import_export(@module_permission))%>
+            <li class="nav-item">
+             <a class="nav-link tab-label staff-search-exp-tab" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
+            </li>
+          <% end %>
           <li class="nav-item">
-            <a class="nav-link tab-label" data-toggle="tab" href="#payable" role="tab">Payable</a>
+            <a class="nav-link tab-label staff-logs-tab" data-toggle="tab" href="#logs" role="tab">Logs</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link tab-label" data-toggle="tab" href="#receivable" role="tab">Receiveable</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link tab-label" data-toggle="tab" href="#dasti" role="tab">Dasti</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link tab-label" data-toggle="tab" href="#loan" role="tab">Loan/Pashgyi</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link tab-label" data-toggle="tab" href="#payment" role="tab">Payment Transfer</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link tab-label" data-toggle="tab" href="#shortpay" role="tab">Short Pay</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
-          </li>
-          <li class="nav-item">
-           <a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
-          </li>
-      </ul>
-
-      <%= search_form_for @q, url: staffs_path, class: "admin-controls", method: "get" do |f| %>
-       <div class="tab-content mb-5">
-          <div class="tab-pane active" id="search" role="tabpanel">
-           <p class="p-5">
+        </ul>
+      <%= hidden_field_tag "staffCount", @staff_count, { :id => "staffCount" } %>
+      <%= hidden_field_tag "balanceSum", @balance_sum, { :id => "balanceSum" } %>
+      <%= hidden_field_tag "depTitle", @dep_title, { :id => "depTitle" } %>
+      <%= hidden_field_tag "depCount", @dep_user, { :id => "depCount" } %>
+        <div class="tab-content mb-2">
+          <div class="tab-pane active card border-radius-1" id="search" role="tabpanel">
+            <div class="row d-flex mt-3 mb-3">
+            <div class="col-lg-8">
               <%= search_form_for @q, url: staffs_path, class: "admin-controls mb-4", method: "get" do |f| %>
-                <span class="col-lg-3 form-group float-left">
-                  <%= f.select :id_eq, options_from_collection_for_select(@staff_names, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code}"},@name),{:include_blank => "Select Staff"},:class=>"form-control chosen-select" %>
-                </span>
-                <span class="col-lg-2 form-group float-left">
-                  <%= f.select :department_id_eq, options_from_collection_for_select(@departments, 'id', 'title', @department), {hide_label:true,title: "Select the Department" ,prompt: "Select the Department"},:class=>"form-control chosen-select"%>
-                </span>
-                <span class="col=lg-2 form-group float-left">
-                  <%= f.select :staff_type_eq, Staff.staff_types.map { |key, value| [key.humanize, value] }, {include_blank: "Select the Status", hide_label:true, required: true },:class=>"form-control  chosen-select"%>
-                </span>
-                <span class="col-lg-2 form-group float-left">
-                  <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
-                </span>
-              <% end %>
-            </p>
-          </div>
+                    <span class="col-lg-4 form-group float-left">
+                      <%= f.select :id_eq, options_from_collection_for_select(@staff_names, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code}"},@name),{:include_blank => "Select Staff"},:class=>"form-control chosen-select" %>
+                    </span>
+                    <span class="col-lg-4 form-group float-left">
+                      <%= f.select :department_id_eq, options_from_collection_for_select(@departments, 'id', 'title', @department), {hide_label:true,title: "Select the Department" ,prompt: "Select the Department"},:class=>"form-control chosen-select"%>
+                    </span>
+                    <span class="col-lg-3 form-group float-left">
+                      <%= f.select :staff_type_eq, Staff.staff_types.map { |key, value| [key.humanize, value] }, {include_blank: "Select the Status", hide_label:true, required: true },:class=>"form-control  chosen-select"%>
+                    </span>
+                    <span class="col-lg-1 form-group float-left">
+                      <button class="form-control btn btn-primary" name="search_submit" style="width: 80px;" type="submit" value="Search"><i class="fa fa-search"></i></button>
+                    </span>
+                </div> 
 
-          <div class="tab-pane" id="create" role="tabpanel">
-              <p>
-                <% if can?(:add, :all) %>
-                  <%= link_to new_staff_path, remote: true, class: "btn btn-success mt-3 ml-3" do %>
-                    <i class="fa fa-plus" aria-hidden="true"></i>
-                      New Staff
-                  <% end %>
-                <% end %>
-              </p>
-          </div>
-
-          <div class="tab-pane" id="payable" role="tabpanel">
-              <p>
-                <%= link_to payable_staffs_path, class: "btn btn-primary mt-3 ml-3" do %>
-                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                      Payable
-                <% end %>
-              </p>
-          </div>
-
-          <div class="tab-pane" id="receivable" role="tabpanel">
-              <p>
-                <%= link_to receiveable_staffs_path, class: "btn btn-primary mt-3 ml-3" do %>
-                  <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                    Reciveable
-                <% end %>
-              </p>
-          </div>
-
-          <div class="tab-pane" id="dasti" role="tabpanel">
-              <p>
-                <%= link_to dasti_staffs_path, class: "btn btn-primary mt-3 ml-3" do %>
-                  <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                    Dasti
-                <% end %>
-              </p>
-          </div>
-
-          <div class="tab-pane" id="loan" role="tabpanel">
-              <p>
-                <%= link_to loan_salaries_path, class: "btn btn-success mt-3 ml-3" do %>
-                  <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                    Loan / Pashgyi
-                <% end %>
-              </p>
-          </div>
-
-          <div class="tab-pane" id="payment" role="tabpanel">
-              <p>
-                <%= link_to transfer_staff_ledger_books_path, class: "btn btn-success mt-3 ml-3" do %>
-                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                      Payment Transfer
-                <% end %>
-              </p>
-          </div>
-
-          <div class="tab-pane" id="shortpay" role="tabpanel">
-              <p>
-                  <button class="form-control btn  btn-danger col-lg-1 mt-3 ml-3" name="submit_remove_wege_debit" type="submit" value="Short Pay 0">Short Pay 0</button>
-              </p>
-          </div>
-
-          <div class="tab-pane" id="pdf" role="tabpanel">
-            <p>
-              <div class="col-lg-4 d-flex">
-                <button class="form-control btn btn-danger ml-2 mr-2" name="submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank">staff&nbsp;<i class="fa fa-file-pdf"></i></button>
-                <button class="form-control btn btn-danger ml-2 mr-2" name="wage_submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank">wage staff&nbsp;<i class="fa fa-file-pdf"></i></button>
-                <button class="form-control btn btn-danger ml-2 mr-2"name="salary_submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank">salary staff&nbsp;<i class="fa fa-file-pdf"></i></button>
-              </div>
-            </p>
-          </div>
-          <div class="tab-pane" id="csv" role="tabpanel">
-            <p>
-              <div class="col-lg-4 d-flex">
-                <button class="form-control btn btn-success ml-2 mr-2" name="submit_csv" type="submit" value="Full CSV A4" formtarget="_blank">staff&nbsp;<i class="fa fa-file-excel"></i></button>
-                <button class="form-control btn btn-success ml-2 mr-2" name="wage_submit_csv" type="submit" value="Full CSV A4" formtarget="_blank">wage staff&nbsp;<i class="fa fa-file-excel"></i></button>
-                <button class="form-control btn btn-success ml-2 mr-2"name="salary_submit_csv" type="submit" value="Full CSV A4" formtarget="_blank">salary staff&nbsp;<i class="fa fa-file-excel"></i></button>
-              </div>
-            </p>
-          </div>
-          <div class="tab-pane" id="emails" role="tabpanel">
-            <p>
-              <div class="col-lg-2 d-flex">
-                <button class="form-control btn btn-info" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-2"></i>&nbsp;Mail</button>
-              </div>
-           </p>
-
-            <!-- Modal -->
-            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                  </div>
-                  <div class="modal-body">
-                    <% @pos_setting = PosSetting.first %>
-                      <label>Email:</label>
-                      <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
-                      <br />
-                      <label>Subject:</label>
-                        <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Staffs List Detail report from MunshiOnClick", class: 'form-control email-fields'%>
-                      <br />
-                      <label>Body:</label><br />
-                        <%= text_area_tag 'body', nil, class: 'form-control'%>
-                      <br />
-
-                    <label>Please select one of them.</label>
-                    <div>
-                      <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
-                      <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
-                      <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
+                <div class="col-lg-4"> 
+                  <% if check_can_send_email(@module_permission)%>
+                    <button class="form-control btn btn-info float-right mr-3" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-1"></i>&nbsp;Mail</button> 
+                    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                          </div>
+                          <div class="modal-body">
+                            <% @pos_setting = PosSetting.first %>
+                              <label>Email:</label>
+                              <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
+                              <br />
+                              <label>Subject:</label>
+                                <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Staffs List Detail report from MunshiOnClick", class: 'form-control email-fields'%>
+                              <br />
+                              <label>Body:</label><br />
+                                <%= text_area_tag 'body', nil, class: 'form-control'%>
+                              <br />
+                            <label>Please select one of them.</label>
+                            <div>
+                              <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
+                              <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
+                              <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
+                            </div>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
+                          </div>
+                          </div>
+                      </div>
                     </div>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
-                  </div>
-                  </div>
+                  <% end %>
+                  <% if check_can_download_pdf(@module_permission)%>
+                    <div class="dropdown my-dropdown mr-2 float-right">
+                      <button type="button" class="form-control bg-danger text-light" style="width:100px">PDF List</button>
+                      <div class="dropdown-content my-dropdown-content p-2">
+                        <button class="btn btn-danger ml-2 mr-2 mt-2" name="submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mr-1"></i>Staff</button>
+                        <button class="btn btn-danger ml-2 mr-2 mt-2 d-flex" name="wage_submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mr-1"></i>Wage_Staff</button>
+                        <button class="btn btn-danger ml-2 mr-2 mt-2 d-flex"name="salary_submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mr-1"></i>Salary_Staff</button>
+                      </div>
+                    </div>
+                  <% end %>  
+                  <% if check_can_download_csv(@module_permission)%>
+                    <div class="dropdown my-dropdown mr-2 float-right">
+                      <button type="button" class="form-control bg-warning" style="width:100px">CSV List</button>
+                      <div class="dropdown-content my-dropdown-content p-2">
+                        <button class="btn btn-warning d-flex ml-2 mr-2 mt-2" name="submit_csv" type="submit" value="Full CSV A4"><i class="fa fa-file-excel mr-2"></i>Staff</button>
+                        <button class="btn btn-warning d-flex ml-2 mr-2 mt-2" name="wage_submit_csv" type="submit" value="Full CSV A4"><i class="fa fa-file-excel mr-2"></i>Wage_Staff</button>
+                        <button class="btn btn-warning d-flex ml-2 mr-2 mt-2"name="salary_submit_csv" type="submit" value="Full CSV A4"><i class="fa fa-file-excel mr-2"></i>Salary_Staff</button>
+                      </div>
+                    </div>
+                  <% end %> 
+                </div>
+              <% end %>
+            </div>
+          </div>
+          <div class="tab-pane card border-radius-1 p-5" id="analytics" role="tabpanel">
+            <div class="row d-flex">
+              <div class="col-lg-6">
+                <div class="my-chart-Container">
+                  <div class="mychartBox card border-radius-1 shadow mt-2">
+                    <canvas id="myChart"></canvas>
+                  </div> 
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="my-chart-Container">
+                  <div class="mychartBox card border-radius-1 shadow mt-2">
+                    <canvas id="myChart4"></canvas>
+                  </div> 
+                </div>
               </div>
             </div>
+            <div class="col-lg-6">  
+              <div class="my-chart-Container">
+                <div class="mychartBox card border-radius-1 shadow mt-2">
+                  <canvas id="myChart1"></canvas>
+                </div> 
+              </div>
+            </div> 
           </div>
-
-          <div class="tab-pane" id="import-export" role="tabpanel">
+          <div class="tab-pane card border-radius-1" id="import-export" role="tabpanel">
               <p>
-                <div class="d-flex">
-                  <button class="btn btn-success ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
-                  <button class="btn btn-primary ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
-                </div>
+                <%= search_form_for @q, url: staffs_path, class: "admin-controls", method: "get" do |f| %>
+                  <div class="d-flex ml-2">
+                    <button class="btn btn-danger ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
+                    <button class="btn btn-info ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
+                  </div>
+                <% end %>
               </p>
-            </div>
           </div>
-      <% end %>  
+          <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="logs" role="tabpanel">
+            <p>
+              <div class="d-flex">
+                <%= link_to view_history_staffs_path, class: "btn btn-success d-none", id: "staff-logs", remote:true do %>
+                  show logs
+                <% end %>
+                <div id = "show-logs"></div>
+              </div>
+              <div class="my-loader mx-auto"></div>
+            </p>
+          </div>
+        </div>
 
   <div class="clearfix"></div>
-  <%= render 'map_columns/map_column_partials' %>
-  <table data-toggle="table" data-search="true" class="overflow-hidden border-radius-1">
-    <thead>
-      <tr>
-        <th>Profile Image</th>
-        <th><%= sort_link(@q, :staff_type, 'Status') %></th>
-        <th><%= sort_link(@q, :code, 'Code') %></th>
-        <th class="urdu-font"><%= sort_link(@q, :name, 'Name') %></th>
-        <th><%= sort_link(@q, :phone, 'Phone') %></th>
-        <th><%= sort_link(@q, :department_id, 'Department/Raw') %></th>
-        <th><%= sort_link(@q, :monthly_salary, 'Monthly/Wage') %></th>
-        <th><%= sort_link(@q, :advance_amount, 'Advance') %></th>
-        <th><%= sort_link(@q, :wage_debit, 'Short-Pay') %></th>
-        <th><%= sort_link(@q, :balance, 'Balance') %></th>
-        <th>Jama/Benam</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <% @staffs.each do |staff| %>
+  <div class="card border-radius-1 p-2 staff-book-index-card">
+    <%= render 'map_columns/map_column_partials' %>
+    <table data-toggle="table" data-search="true" class="overflow-hidden border-radius-1">
+      <thead>
         <tr>
-          <td>
-            <% if  staff.profile_image.attached? %>
-              <%= image_tag staff.profile_image.service_url, width: 100 %>
-            <% end %>
-          </td>
-          <td><%= staff.staff_type %></td>
-          <td><%= staff.code %></td>
-          <td class="urdu-font">
-            <%=link_to staff_ledger_books_path('q[staff_id_eq]':staff.id) do%>
-              <i class="fa fa-address-book"></i><%= staff.full_name %>
-            <%end %>
-          </td>
-          <td><%= staff.phone%></td>
-          <td><%= staff.department.present? ? staff.department.title : ""%>:<%= staff.staff_raw_products.present? ? staff.staff_raw_products_titles : ""%></td>
-          <td><%= staff.staff_salary_or_wage.to_f %><% @monthly_wage += staff.staff_salary_or_wage.to_f.round(2) %></td>
-          <td><%= staff.advance_amount.to_f.round(2) %><%#@advance += staff.advance_amount.to_f.round(2) %></td>
-          <td><%= staff.wage_debit.to_f.round(2) %><% @short_pay += staff.wage_debit.to_f.round(2) %></td>
-          <td><%= staff.balance.to_f.round(2) %><% @balance += staff.balance.to_f.round(2) %></td>
-          <td>      <%if staff.balance.to_f > 0  %>
-                     <b style="font-size:20px;color:blue;">Jama</b>
-                <%elsif  staff.balance.to_f < 0  %>
-                <b style="font-size:20px;color:red;">Benam</b>
-                <%else%>
-                <b style="font-size:20px;color: #6cec53 ;">Nill</b>
-                <%end%>
-          </td>
-          <% already_paid = staff_paid_this_month_salary?(staff) %>
-          <td>
-          <% if already_paid %>
-              <div class="" style="background-color:chartreuse;margin: -12px;padding: 5px;">
-                <%= link_to 'Paid Salary', "javascript:void(0)", title: "Salary already paid for this month", class: "isDisabled" %><br>
-              </div>
-          <%else%>
-          <div class="icon-container-1">
-            <div class="my-icon-1 my-view-1">
-              <div class="my-tooltip-1">
-                <div class="icon-container">
-                    <div class="my-icon my-view">
-                      <div class="my-tooltip">
-                        Pay Salary
-                      </div>
-                        <% if can?(:add, :all) %>
-                          <%= link_to new_salary_path(:staff_id=>staff.id), title: "pay salary of staff", class: "icon-div" do %>
-                            <i class="fa fa-envelope-open mt-2" aria-hidden="true"></i>
-                          <%end %>
-                        <% end %>
-                    </div>
-
-                    <div class="my-icon my-view">
-                      <div class="my-tooltip">
-                        Edit
-                      </div>
-                        <% if can?(:update, :all) %>
-                          <%= link_to edit_staff_path(staff), remote: true, class: "icon-div" do %>
-                            <i class="fa fa-edit mt-2" aria-hidden="true"></i>
-                          <%end %>
-                        <% end %>
-                    </div>
-
-                      <div class="my-icon my-view">
-                        <div class="my-tooltip">
-                            Delete
-                          </div>
-                          <% if can?(:delete, :all) %>
-                            <%= link_to staff, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
-                            <i class="fa fa-trash mt-2" aria-hidden="true"></i>
-                          <%end %>
-                        <% end %>
-                      </div>
-
-                      <div class="my-icon my-view">
-                        <div class="my-tooltip">
-                          Show
-                        </div>
-                        <% if can?(:view, :all) %>
-                          <%= link_to staff_path(staff), remote: true, class: "icon-div" do %>
-                            <i class="fa fa-eye mt-2" aria-hidden="true"></i>
-                          <%end %>
-                        <%end%>
-                      </div>
-
-                      <div class="my-icon my-view">
-                        <div class="my-tooltip">
-                          Ledger Book
-                        </div>
-                        <%=link_to staff_ledger_books_path('q[staff_id_eq]':staff.id), class: "icon-div" do%>
-                          <i class="fa fa-address-book mt-2"></i>
-                        <%end %>
-                      </div>
-                     </div>
-        </div>
-                          <span class="icon-div-1">
-                                <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
-                          </span>
-                      </div>
-                </div>
-          <%end%>
-        </td>
+          <th>Profile Image</th>
+          <th><%= sort_link(@q, :staff_type, 'Status') %></th>
+          <th><%= sort_link(@q, :code, 'Code') %></th>
+          <th class="urdu-font"><%= sort_link(@q, :name, 'Name') %></th>
+          <th><%= sort_link(@q, :phone, 'Phone') %></th>
+          <th><%= sort_link(@q, :department_id, 'Department/Raw') %></th>
+          <th><%= sort_link(@q, :monthly_salary, 'Monthly/Wage') %></th>
+          <th><%= sort_link(@q, :advance_amount, 'Advance') %></th>
+          <th><%= sort_link(@q, :wage_debit, 'Short-Pay') %></th>
+          <th><%= sort_link(@q, :balance, 'Balance') %></th>
+          <th>Jama/Benam</th>
+          <th>Action</th>
         </tr>
-      <% end %>
-      <tr>
-        <td><h4>Total<h4></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td><h4><%= @monthly_wage.to_i.round(2) if @monthly_wage.present?%><h4></td>
-        <td><h4><%= @total.first.first.to_i.round(2) if @total.first.present?%><h4></td>
-        <td></td>
-        <td><h4><%= @total.first.last.to_i.round(2) %><h4></td>
-        <td><h4><%= @total.first.second.to_i.round(2) %><h4></td>
+      </thead>
+
+      <tbody>
+        <% @staffs.each do |staff| %>
+          <tr>
+            <td>
+              <div>
+                <% if  staff.profile_image.attached? %>
+                  <%= image_tag staff.profile_image.service_url, style:"width: 120px; height: 120px; border: 1px solid gray", class:"shadow border-radius-1" %>
+                <% end %>
+              </div>  
+            </td>
+            <td><%= staff.staff_type %></td>
+            <td><%= staff.code %></td>
+            <td class="urdu-font">
+              <%=link_to staff_ledger_books_path('q[staff_id_eq]':staff.id) do%>
+                <i class="fa fa-address-book"></i><%= staff.full_name %>
+              <%end %>
+            </td>
+            <td><%= staff.phone%></td>
+            <td><%= staff.department.present? ? staff.department.title : ""%>:<%= staff.staff_raw_products.present? ? staff.staff_raw_products_titles : ""%></td>
+            <td><%= number_with_delimiter(staff.staff_salary_or_wage.to_f) %><% @monthly_wage += staff.staff_salary_or_wage.to_f.round(2) %></td>
+            <td><%= number_with_delimiter(staff.advance_amount.to_f.round(2)) %><%#@advance += staff.advance_amount.to_f.round(2) %></td>
+            <td><%= number_with_delimiter(staff.wage_debit.to_f.round(2)) %><% @short_pay += staff.wage_debit.to_f.round(2) %></td>
+            <td><%= number_with_delimiter(staff.balance.to_f.round(2)) %><% @balance += staff.balance.to_f.round(2) %></td>
+            <td>      <%if staff.balance.to_f > 0  %>
+                       <b style="font-size:20px;color:blue;">Jama</b>
+                  <%elsif  staff.balance.to_f < 0  %>
+                  <b style="font-size:20px;color:red;">Benam</b>
+                  <%else%>
+                  <b style="font-size:20px;color: #6cec53 ;">Nill</b>
+                  <%end%>
+            </td>
+            <% already_paid = staff_paid_this_month_salary?(staff) %>
+            <td>
+            <% if already_paid %>
+                <div class="" style="background-color:chartreuse;margin: -12px;padding: 5px;">
+                  <%= link_to 'Paid Salary', "javascript:void(0)", title: "Salary already paid for this month", class: "isDisabled" %><br>
+                </div>
+            <%else%>
+            <div class="icon-container-1">
+              <div class="my-icon-1 my-view-1">
+                <div class="my-tooltip-1">
+                  <div class="icon-container">
+                      <div class="my-icon my-view">
+                        <div class="my-tooltip">
+                          Pay Salary
+                        </div>
+                          <% if can?(:add, :all) %>
+                            <%= link_to new_salary_path(:staff_id=>staff.id), title: "pay salary of staff", class: "icon-div" do %>
+                              <i class="fa fa-envelope-open mt-2" aria-hidden="true"></i>
+                            <%end %>
+                          <% end %>
+                      </div>
+
+                      <div class="my-icon my-view">
+                        <div class="my-tooltip">
+                          Edit
+                        </div>
+                          <% if can?(:update, :all) %>
+                            <%= link_to edit_staff_path(staff), remote: true, class: "icon-div" do %>
+                              <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+                            <%end %>
+                          <% end %>
+                      </div>
+
+                        <div class="my-icon my-view">
+                          <div class="my-tooltip">
+                              Delete
+                            </div>
+                            <% if can?(:delete, :all) %>
+                              <%= link_to staff, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+                              <i class="fa fa-trash mt-2" aria-hidden="true"></i>
+                            <%end %>
+                          <% end %>
+                        </div>
+
+                        <div class="my-icon my-view">
+                          <div class="my-tooltip">
+                            Show
+                          </div>
+                          <% if can?(:view, :all) %>
+                            <%= link_to staff_path(staff), remote: true, class: "icon-div" do %>
+                              <i class="fa fa-eye mt-2" aria-hidden="true"></i>
+                            <%end %>
+                          <%end%>
+                        </div>
+
+                        <div class="my-icon my-view">
+                          <div class="my-tooltip">
+                            Ledger Book
+                          </div>
+                          <%=link_to staff_ledger_books_path('q[staff_id_eq]':staff.id), class: "icon-div" do%>
+                            <i class="fa fa-address-book mt-2"></i>
+                          <%end %>
+                        </div>
+                       </div>
+                    </div>
+                            <span class="icon-div-1">
+                                  <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                  </div>
+            <%end%>
+          </td>
+          </tr>
+        <% end %>
+        <tr>
+          <td><h4>Total<h4></td>
           <td></td>
-      </tr>
-    </tbody>
-  </table>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td><h4><%= number_with_delimiter(@monthly_wage.to_i.round(2)) if @monthly_wage.present?%><h4></td>
+          <td><h4><%= number_with_delimiter(@total.first.first.to_i.round(2)) if @total.first.present?%><h4></td>
+          <td><h4><%= number_with_delimiter(@total.first.last.to_i.round(2)) %><h4></td>
+          <td><h4><%= number_with_delimiter(@total.first.second.to_i.round(2)) %><h4></td>
+            <td></td>
+        </tr>
+      </tbody>
+    </table>
+   </div> 
 </div>
 <%= form_for :bulk_import, url: bulk_import_data_path, method: :post, html: {class: "bulk-import-form"} do |f| %>
   <div class="modal fade" id="importFile" tabindex="-1" role="dialog" aria-labelledby="importFileTitle" aria-hidden="true">
@@ -385,10 +373,10 @@
 <% end %>
 <div class="clearfix"></div>
 <div class="row">
-  <div class="col-lg-4 col-sm-4">
+  <div class="col-lg-4 col-sm-4 staff-book-index-card">
     <%= page_entries_info @staffs %>
   </div>
-  <div class="col-lg-8 col-sm-8 pagination-left">
+  <div class="col-lg-8 col-sm-8 pagination-left staff-book-index-card">
     <%= paginate @staffs %>
   </div>
 </div>
@@ -401,5 +389,19 @@
     }
     $("#staff_list").removeClass('hidden');
     FontAwesome.dom.i2svg();
+
+    $('.staff-logs-tab').on('click', function(){
+      $('#staff-logs').click();
+      $('.staff-book-index-card').addClass('d-none')
+    })
+
+
+    $('.staff-search-exp-tab').on('click', function(){
+      $('.staff-book-index-card').removeClass('d-none')
+    })
   });
+
+  $(function() {
+    setTimeout(function() { $(".my-loader").fadeOut(1500); }, 5000)
+  })
 </script>

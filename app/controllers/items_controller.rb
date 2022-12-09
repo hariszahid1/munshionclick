@@ -1,4 +1,5 @@
 class ItemsController < ApplicationController
+  before_action :check_access
   before_action :set_item, only: [:show, :edit, :update, :destroy]
 
   # GET /items
@@ -20,6 +21,7 @@ class ItemsController < ApplicationController
       @items=@q.result(distinct: true)
       print_pdf('Raw Material List', 'pdf.html','A4')
     end
+    total_count_for_index
   end
 
   # GET /items/1
@@ -96,5 +98,13 @@ class ItemsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def item_params
       params.require(:item).permit(:item_type_id, :title, :code, :minimum, :optimal, :maximun, :comment, :status, :quantity_type, :weight_type, :stock,:cost,:sale, :measurement_quantity)
+    end
+
+    def total_count_for_index
+      @total_cost = @items.sum(:cost)
+      @total_sale = @items.sum(:sale)
+      @total_optimal = @items.sum(:optimal)
+      @total_minimum = @items.sum(:minimum)
+      @total_maximum = @items.sum(:maximun)
     end
 end

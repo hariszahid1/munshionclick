@@ -6,166 +6,144 @@
 </div>
 
 <div class="hidden" id="city_list">
-          <div class="main-content-header">
-            <h1 class="ml-2">Accounts</h1>
-            <ol class="breadcrumb mb-4">
-              <li class="breadcrumb-item">
-                <a href="<%= root_path %>">Dashboard</a>
-              </li>
-              <li class="breadcrumb-item active">
-                <a href="<%= accounts_path %>">Accounts</a>
-              </li>
-            </ol>
-          </div>
-          <div class="float-right">
-            <div class="dropdown ml-auto mr-4">
-             <span class="btn btn-info" title= "About This page">Help</span>
-              <div class="dropdown-content">
-                <% if @help.present? %>
-                <% @help&.help_links.each do |link| %>
-                <a type="button" class="" target="_blank" href="<%= link[1] %>" >Help in <%= link[0] %></a>
-                 <% end %>
-                <% end %>
-              </div>
-            </div>
-          </div>
+  <div class="main-content-header">
+    <h1 class="ml-2">Accounts</h1>
+    <ol class="breadcrumb mb-4">
+      <li class="breadcrumb-item">
+        <a href="<%= root_path %>">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active">
+        <a href="<%= accounts_path %>">Accounts</a>
+      </li>
+    </ol>
     
-  <ul class="nav nav-pills" role="tablist">
-      <li class="nav-item">
-        <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link tab-label" data-toggle="tab" href="#create" role="tab">Create</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link tab-label" data-toggle="tab" href="#payments" role="tab">Payments</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link tab-label" data-toggle="tab" href="#paymentstransfer" role="tab">Payments Ttransfer</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download PDF</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download CSV</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
-      </li>
-      <li class="nav-item">
-       <a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
-      </li>
-  </ul>
+  </div>
+  <div class="row d-flex ml-1 mb-5">
+  <%if (check_can_create(@module_permission))%>
+    <div>
+      <%= link_to new_account_path, class: "btn btn-success mr-2", remote: true do %>
+        <i class="fa fa-plus" aria-hidden="true"></i>
+        Create
+      <% end %>
+    </div>  
+    <% end %>
+    <%if (check_can_create(@module_permission))%>
+    <div>
+      <%= link_to payments_path, class: "btn btn-danger mr-2" do %>
+        <i class="fa fa-credit-card" aria-hidden="true"></i>
+        Payments
+      <% end %>
+    </div>  
+    <% end %>
+    <%if (check_can_create(@module_permission))%>
+    <div>
+      <%= link_to transfer_payments_path, class: "btn btn-warning" do %>
+        <i class="fa fa-credit-card" aria-hidden="true"></i>
+        Transfer Payments
+      <% end %>
+    </div>  
+    <% end %>
+    </div>
+  <div class="float-right">
+    <div class="dropdown ml-auto mr-4">
+     <span class="btn btn-info" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
+      <div class="dropdown-content">
+        <% if @help.present? %>
+        <% @help&.help_links.each do |link| %>
+        <a type="button" class="" target="_blank" href="<%= link[1] %>" >Help in <%= link[0] %></a>
+         <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
 
+	<ul class="nav nav-pills" role="tablist"> 
+		<li class="nav-item">
+			<a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
+		</li>
+		<%if (check_can_import_export(@module_permission ))%>
+			<li class="nav-item">
+				<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
+			</li>
+		<%end%>
+    <li class="nav-item">
+			<a class="nav-link tab-label" data-toggle="tab" href="#analytics" data-remote="true" role="tab">Analytics</a>
+		</li>
+	</ul>
+<%= hidden_field_tag "accountTitle", @account_title, { :id => "accountTitle" } %>
+<%= hidden_field_tag "accountAmount", @account_amount, { :id => "accountAmount" } %>
 <%= search_form_for @q, url: accounts_path, class: "admin-controls", method: "get" do |f| %>
-    
+
   <div class="tab-content">
-    <div class="tab-pane active mb-3 card shadow-sm mt-2" style="border-radius: 20px" id="search" role="tabpanel">
-     <p>
-      <div class="col-lg-10 form-group d-flex">
-      <div class="col-lg-2 form-group float-left">
+    <div class="tab-pane active mb-3 card shadow-sm mt-2 border-radius-1" id="search" role="tabpanel">
+     <div class="row d-flex mt-3 mr-2">
+      <div class="col">
+      <div class="col-lg-4 form-group float-left">
           <%= f.select :id_in, options_from_collection_for_select(@accounts, "id", ->(st){"#{st.title} \u{27F6} #{st.bank_name}"},f.object.id_in),{:include_blank => "Select the Title"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Title"} }%>
         </div>
         <div class="col-lg-2 form-group float-left">
           <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
         </div>
-        
         </div>
-      </p>
-    </div>
-    <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="create" role="tabpanel">
-        <p>
-         <%= link_to new_account_path, class: "btn btn-success ml-3 mt-3", remote: true do %>
-           <i class="fa fa-plus" aria-hidden="true"></i>
-           New Account
-         <% end %>
-        </p>
-    </div>
-    <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="payments" role="tabpanel">
-      <p>
-        
-          <%= link_to payments_path, class: "btn btn-primary ml-3 mt-3" do %>
-            <i class="fa fa-credit-card" aria-hidden="true"></i>
-            Payments
-         <% end %>
-
-        
-      </p>
-    </div>
-    <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="paymentstransfer" role="tabpanel">
-      <p>
-        
-          <%= link_to transfer_payments_path, class: "btn btn-success ml-3 mt-3" do %>
-             <i class="fa fa-credit-card" aria-hidden="true"></i>
-             Payment Transfer
-          <% end %>
-
-        
-      </p>
-    </div>
-    <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="pdf" role="tabpanel">
-      <p>
-        <div class="col-lg-2 d-flex">
-          <button class="form-control btn btn-danger" name="submit_pdf_staff_with" type="submit" value="Accounts PDF A4" formtarget="_blank">Accounts <i class="fa fa-file-pdf"></i></button>
-        </div>
-      </p>
-    </div>
-    <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="csv" role="tabpanel">
-      <p>
-        <div class="col-lg-2 d-flex">
-          <button class="form-control btn btn-success" name="submit_csv_staff_with" type="submit" value="Accounts CSV" formtarget="_blank">Accounts <i class="fa fa-file-excel"></i></button>
-        </div>
-        
-      </p>
-    </div>
-    <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="emails" role="tabpanel">
-      <p>
-        <div class="col-lg-2 d-flex">
-        <button class="form-control btn btn-info" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-2"></i>&nbsp;Mail</button>
-        </div>
-     </p>
-      <!-- Modal -->
-      <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
+        <div class="col">
+        <%if (check_can_download_pdf(@module_permission))%>
+          <button class="form-control d-flex justify-content-center btn btn-danger ml-3 float-right" name="pdf" style="width:100px" type="submit" value="Accounts PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mr-2"></i>PDF</button>
+        <% end %>
+        <%if (check_can_download_csv(@module_permission))%>
+          <button class="form-control d-flex justify-content-center btn btn-warning ml-3 float-right" name="csv" style="width:100px" type="submit" value="Accounts CSV"><i class="fa fa-file-excel mr-2"></i>CSV</button>
+        <% end %>
+        <%if (check_can_send_email(@module_permission))%>
+          <button class="form-control d-flex justify-content-center btn btn-info ml-3 float-right" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-1"></i>&nbsp;Mail</button>
+          <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                  <% @pos_setting = PosSetting.first %>
+                  <label>Email:</label>
+                  <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
+                  <br />
+                  <label>Subject:</label>
+                  <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Accounts Detail report from MunshiOnClick", class: 'form-control email-fields'%>
+                  <br />
+                  <label>Body:</label><br />
+                  <%= text_area_tag 'body', nil, class: 'form-control'%>
+                  <br />
+                  <label>Please select one of them.</label>
+                  <div>
+                    <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
+                    <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
+                    <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                  <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
+                </div>
+                </div>
             </div>
-            <div class="modal-body">
-              <% @pos_setting = PosSetting.first %>
-              <label>Email:</label>
-              <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
-              <br />
-              <label>Subject:</label>
-              <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Payments Detail report from MunshiOnClick", class: 'form-control email-fields'%>
-              <br />
-              <label>Body:</label><br />
-              <%= text_area_tag 'body', nil, class: 'form-control'%>
-              <br />
-
-              <label>Please select one of them.</label>
-              <div>
-                <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
-                <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
-                <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-              <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
-            </div>
-            </div>
+          </div>
+        <% end %>
         </div>
       </div>
     </div>
+    <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="analytics" role="tabpanel">
+        <div class="my-chart-Container">
+          <div class="mychartBox">
+            <canvas id="myChart"></canvas>
+          </div> 
+        </div>   
+    </div>
     <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="import-export" role="tabpanel">
       <p>
-        <div class="d-flex">
-        <button class="btn btn-success ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
-        <button class="btn btn-primary ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
+        <div class="d-flex ml-2">
+        <button class="btn btn-danger ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
+        <button class="btn btn-info ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
         </div>
       </p>
     </div>
@@ -174,11 +152,10 @@
   </div>
   <div>
 
-
   <div class="card shadow-sm border-radius-1 p-2">
   <%# <button class='btn btn-outline-danger float-right delete-selected' type='button' style="width:163px"value='City' >Delete Selected</button> %>
     <%= render 'map_columns/map_column_partials' %>
-    
+
     <table data-toggle="table" data-search="true" class=" overflow-hidden border-radius-1">
     <thead>
       <tr>
@@ -197,9 +174,11 @@
       <% @accounts.each do |account| %>
         <tr>
           <td>
+          <div class="shadow border-radius-1">
             <% if account.profile_image.attached? %>
-              <%= image_tag account.profile_image.service_url, width: 100 %>
+              <%= image_tag account.profile_image.service_url, style:"width: 120px; height: 120px; border: 1px solid gray", class:"shadow border-radius-1" %>
             <% end %>
+          </div>  
           </td>
           <td><%= account.id %></td>
           <td class="urdu-font">
@@ -208,106 +187,88 @@
             <%end %>
           </td>
           <td class="urdu-font"><%= account.bank_name %></td>
-          <td><%= account.amount.to_f.round(2) %></td>
+          <td><%= number_with_delimiter(account.amount.to_f.round(2)) %></td>
           <td>
-
-                  <%if account.amount.to_f < 0  %>
-                       <b style="font-size:20px;color:blue;">Jama</b>
-                  <%elsif  account.amount.to_f > 0  %>
-                  <b style="font-size:20px;color:red;">Benam</b>
-                  <%else%>
-                  <b style="font-size:20px;color: #6cec53 ;">Nill</b>
-                  <%end%>
-            </td>
-
-          <% if can?(:add, :all) %>
-          <td>
-
-          <div class="icon-container-1">
-  <div class="my-icon-1 my-view-1">
-    <div class="my-tooltip-1">
-    
-    <div class="icon-container">
-
-    <div class="my-icon my-view">
-          <div class="my-tooltip">
-            New Payment
-          </div>
-          
-                <% if can?(:delete, :all) %>
-              <%= link_to new_payment_path(account_id:account), title: "Make New Payment", class:"icon-div" do %>
-                <i class="fa fa-plus mt-2 " aria-hidden="true"></i>
-               <%end %>
-             <%end %>
-          <% end %>
-          
-        </div>
-
-          <div class="my-icon my-view">
-          <div class="my-tooltip">
-            Edit
-          </div>
-          
-                <% if can?(:update, :all) %>
-              <%= link_to edit_account_path(account), remote: true, class:"icon-div" do %>
-                <i class="fa fa-edit mt-2" aria-hidden="true"></i>
-              <%end %>
-            <% end %>
-          
-        </div>
-
-          <div class="my-icon my-view">
-              <div class="my-tooltip">
-                Delete
-              </div>
-                
-                  <% if can?(:delete, :all) %>
-                    <%= link_to account, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
-                    <i class="fa fa-trash mt-2" aria-hidden="true"></i>
-                  <%end %>
-                <% end %>
-              
-          </div>
-
-         <div class="my-icon my-view">
-                <div class="my-tooltip">
-                  Show
-                </div>
-                
-                   <% if can?(:view, :all) %>
-                    <%= link_to account_path(account), remote: true, class:"icon-div" do %>
-                    <i class="fa fa-eye mt-2" aria-hidden="true"></i>
-                <%end %>
+            <%if account.amount.to_f < 0  %>
+             <b style="font-size:20px;color:blue;">Jama</b>
+            <%elsif  account.amount.to_f > 0  %>
+              <b style="font-size:20px;color:red;">Benam</b>
+            <%else%>
+              <b style="font-size:20px;color: #6cec53 ;">Nill</b>
             <%end%>
-          
-      </div>
+          </td>
 
-      <div class="my-icon my-view">
-            <div class="my-tooltip">
-              PDF
-            </div>
-            
-                <%= link_to accounts_path('q[id_eq]':account.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
-    			      <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
-    		      <%end %>
-            
-      </div>
+				<td>
+        <div class="icon-container-1">
+          <div class="my-icon-1 my-view-1">
+            <div class="my-tooltip-1">
+              <div class="icon-container">
+        		  	<div class="my-icon my-view">
+        		  		<div class="my-tooltip">
+        		  			New Payment
+        		  		</div>
+        		  		<%= link_to new_payment_path(account_id:account), title: "Make New Payment", class:"icon-div" do %>
+        		  			<i class="fa fa-plus mt-2 " aria-hidden="true"></i>
+        		  		<%end %>
+        		  	</div>
 
-       <div class="my-icon my-view">
-            <div class="my-tooltip">
-              CSV
-            </div>
-            
-                  <%= link_to accounts_path('q[id_eq]':account.id,'csv':true), title: 'Download CSV', class:"icon-div" do%>
-    			        <i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
-    		      <%end %>
-            
-          </div>
-        </div>
-        </div>
-            <span class="icon-div-1">
-                  <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
-            </span>
+        		  		<%if (check_can_update(@module_permission))%>
+        		  			<div class="my-icon my-view">
+        		  				<div class="my-tooltip">
+        		  					Edit
+        		  				</div>
+        		  				<%= link_to edit_account_path(account), remote: true, class:"icon-div" do %>
+        		  					<i class="fa fa-edit mt-2" aria-hidden="true"></i>
+        		  				<%end %>
+        		  			</div>
+        		  		<% end %>
+
+        		  		<%if (check_can_delete(@module_permission))%>
+        		  			<div class="my-icon my-view">
+        		  				<div class="my-tooltip">
+        		  					Delete
+        		  				</div>
+        		  				<%= link_to account, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+        		  					<i class="fa fa-trash mt-2" aria-hidden="true"></i>
+        		  				<%end %>
+        		  			</div>
+        		  		<% end %>
+
+        		  		<%if (check_can_read(@module_permission))%>
+        		  			<div class="my-icon my-view">
+        		  				<div class="my-tooltip">
+        		  					Show
+        		  				</div>
+        		  				<%= link_to account_path(account), remote: true, class:"icon-div" do %>
+        		  					<i class="fa fa-eye mt-2" aria-hidden="true"></i>
+        		  				<%end %>
+        		  			</div>
+        		  		<%end%>
+        		  		<%if (check_can_download_pdf(@module_permission))%>
+        		  			<div class="my-icon my-view">
+        		  				<div class="my-tooltip">
+        		  					PDF
+        		  				</div>
+        		  				<%= link_to accounts_path('q[id_eq]':account.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
+        		  					<i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
+        		  				<%end %>
+        		  			</div>
+        		  		<%end %>
+        		  		<%if (check_can_download_csv(@module_permission))%>
+        		  			<div class="my-icon my-view">
+        		  				<div class="my-tooltip">
+        		  					CSV
+        		  				</div>
+        		  				<%= link_to accounts_path('q[id_eq]':account.id,'csv':true), title: 'Download CSV', class:"icon-div" do%>
+        		  					<i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
+        		  				<%end %>
+        		  			</div>
+        		  		<%end %>
+        		  </div>
+        	</div>
+        	<span class="icon-div-1">
+        				<i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+        	</span>
         </div>
       </div>
       </div>
@@ -322,7 +283,7 @@
         <td></td>
         <td></td>
         <td></td>
-        <td><h5><%=@account_total.first.to_f.round(2)%></h5></td>
+        <td><h5><%=number_with_delimiter(@account_total.first.to_f.round(2))%></h5></td>
         <td></td>
 
       </tr>
@@ -338,8 +299,6 @@
     </div>
   </div>
   </div>
-
-
 
 <%= form_for :bulk_import, url: bulk_import_data_path, method: :post, html: {class: "bulk-import-form"} do |f| %>
   <div class="modal fade" id="importFile" tabindex="-1" role="dialog" aria-labelledby="importFileTitle" aria-hidden="true">
@@ -365,6 +324,9 @@
 <% end %>
 <div class="show-data"></div>
 
+
+
+
 <script>
   $(document).ready(function() {
 
@@ -388,3 +350,5 @@
     }, 50);
   });
 </script>
+
+

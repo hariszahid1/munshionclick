@@ -6,13 +6,14 @@ module PdfCsvGeneralMethod
   require 'tempfile'
   require 'csv'
 
-  def generate_pdf(data, pdf_title, pdf_layout, page_size)
+  def generate_pdf(data, pdf_title, pdf_layout, page_size, html_type, pdf_file_path)
     @pos_setting = PosSetting.first
     request.format = 'pdf'
     @pdf_path = respond_to do |format|
       format.html
       format.pdf do
-        render pdf: pdf_title,
+        render template: pdf_file_path,
+               pdf: pdf_title,
                locals: { data: data },
                layout: pdf_layout,
                page_size: page_size,
@@ -27,9 +28,22 @@ module PdfCsvGeneralMethod
                footer: {
                  right: '[page] of [topage]'
                },
-               show_as_html: false
+               show_as_html: html_type
       end
     end
+  end
+
+  def generate_csv_extra_rows_top(top_data, data, column_names, name)
+		file = CSV.generate do |csv|
+      top_data.each do |d|
+        csv.add_row d
+      end
+			csv.add_row column_names
+			data.each do |item|
+				csv.add_row item
+			end
+		end
+    send_data file, type: 'text/csv; charset=utf-8; header=present', disposition: "attachment; filename=#{name}.csv"
   end
 
   def generate_csv(data, column_names, name)

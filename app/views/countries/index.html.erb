@@ -9,7 +9,7 @@
 
           <div class="main-content-header">
             <h1 class="ml-2 mt-2">Countries</h1>
-            <ol class="breadcrumb mt-2 mb-5">
+            <ol class="breadcrumb mt-2 mb-3">
               <li class="breadcrumb-item">
                 <a href="<%= root_path %>">Dashboard</a>
               </li>
@@ -18,9 +18,17 @@
               </li>
             </ol>
           </div>
+          <%if (check_can_create(@module_permission))%>
+              <div id="new_country">
+                <%= link_to new_country_path, remote: true, class: "btn btn-success mb-4" do %>
+                  <i class="fa fa-plus" aria-hidden="true"></i>
+                  Create
+                <% end %>
+              </div>
+          <% end %>
           <div class="float-right">
           <div class="dropdown ml-auto mr-4">
-           <span class="btn btn-info" title= "About This page">Help</span>
+           <span class="btn btn-info" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
             <div class="dropdown-content">
               <% if @help.present? %>
               <% @help&.help_links.each do |link| %>
@@ -35,137 +43,133 @@
       <li class="nav-item">
         <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link tab-label" data-toggle="tab" href="#create" role="tab">Create</a>
+       <li class="nav-item">
+        <a class="nav-link tab-label" data-toggle="tab" href="#analytics" data-remote="true" role="tab">Analytics</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link tab-label" data-toggle="tab" href="#pdf" role="tab">Download pdf</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link tab-label" data-toggle="tab" href="#csv" role="tab">Download Csv</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link tab-label" data-toggle="tab" href="#emails" role="tab">Send Email</a>
-      </li>
-      <li class="nav-item">
-       <a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
-      </li>
-</ul>
+			<%if (check_can_import_export(@module_permission))%>
+				<li class="nav-item">
+					<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
+				</li>
+			<%end%>
+     
+	</ul>
+  <%= hidden_field_tag "countryTitle", @country_title, { :id => "countryTitle" } %>
+  <%= hidden_field_tag "countryUser", @country_user, { :id => "countryUser" } %>
+  <%= hidden_field_tag "countryTitle1", @country_title, { :id => "countryTitle1" } %>
+  <%= hidden_field_tag "countryUser1", @country_user, { :id => "countryUser1" } %>
   <%= search_form_for @q, url: countries_path, class: "admin-controls", method: "get" do |f| %>
-    <div class="tab-content mb-5">
+    <div class="tab-content">
       <div class="tab-pane active mb-3 card shadow-sm mt-2 border-radius-1"" id="search" role="tabpanel">
-      <p>
-        <div class="col-lg-10 form-group d-flex">
-          <div class='col-lg-3'>
-          <%# , "title", ->(st){"#{st.title} \u{27F6} #{st.code} "} %>
-          <%= f.select :id_eq, options_for_select(@options_for_select.map{ |p| [p.title , p.id]}, f.object.id_eq),{:include_blank => "Select Title"},:class=>"form-control chosen-select" %>
-          </div>
-            <div class='col-lg-3'>
-              <%= f.search_field :title_or_comment_cont, placeholder: "Search in countries", title: "Enter country name" ,:class=>"form-control" %>
+      <div class="row d-flex mt-3 mr-2">
+          <div class="col">
+            <div class='col-lg-4 form-group float-left'>
+            <%# , "title", ->(st){"#{st.title} \u{27F6} #{st.code} "} %>
+            <%= f.select :id_eq, options_for_select(@options_for_select.map{ |p| [p.title , p.id]}, f.object.id_eq),{:include_blank => "Select Title"},:class=>"form-control chosen-select" %>
             </div>
-            <div class='col-lg-3'>
-              <button class="btn btn-primary" title="search in country" name="search_submit" type="submit" value="Search"><i class="fa fa-search"></i></button>
-            </div>
-        </div>
-        </p>
-      </div>
-      <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1"" id="create" role="tabpanel">
-        <p>
-          <% if can?(:add, :all) %>
-          <div id="new_country">
-            <%= link_to new_country_path, remote: true, class: "btn btn-success ml-2" do %>
-              <i class="fa fa-plus" aria-hidden="true"></i>
-              New Country
-            <% end %>
-          </div>
-          <% end %>
-        </p>
-      </div>
-      <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1"" id="pdf" role="tabpanel">
-        <p>
-          <div class="col-lg-2 form-group d-flex">
-          <button class="btn btn-danger" title="Download countries pdf" name="pdf" type="submit" value="pdf" formtarget="_blank">Countries &nbsp;<i class="fa fa-file-pdf"></i></button>
-          </div>
-        </p>
-      </div>
-      <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1"" id="csv" role="tabpanel">
-        <p>
-          <div class="col-lg-2 d-flex">
-        <button class="btn btn-success" title= "download countries csv" name="csv" type="submit" value="csv">Countries &nbsp;<i class="fa fa-file-excel"></i></button>
-          </div>
-        </p>
-      </div>
-      <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1"" id="emails" role="tabpanel">
-        <p>
-          <div class="col-lg-2 form-group d-flex">
-            <button class="btn btn-info" type="button" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-envelope mr-2"></i>Mail</button>
-          </div>
-        </p>
-      <!-- Modal -->
-      <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-            </div>
-            <div class="modal-body">
-              <% @pos_setting = PosSetting.first %>
-                <label>Email:</label>
-                <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
-                <br />
-                <label>Subject:</label>
-                <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Countries Detail report from MunshiOnClick", class: 'form-control email-fields'%>
-                <br />
-                <label>Body:</label><br />
-                <%= text_area_tag 'body', nil, class: 'form-control'%>
-                <br />
-              <br />
-              <label>Please select one of them.</label>
-              <div>
-                <label class="cursor-pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
-                <label class="cursor-pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
-                <label class="cursor-pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
+              <div class='col-lg-4 form-group float-left'>
+                <%= f.search_field :title_or_comment_cont, placeholder: "Search in countries", title: "Enter country name" ,:class=>"form-control" %>
               </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-              <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
-            </div>
-            </div>
+              <div class="col-lg-3 form-group float-left">
+                <button class="form-control btn btn-primary" style="width:100px" title="search in country" name="search_submit" type="submit" value="Search"><i class="fa fa-search"></i></button>
+              </div>
+          </div>
+            <div class="col">
+            <%if (check_can_download_pdf(@module_permission))%>
+              <button class="form-control btn btn-danger d-flex ml-2 float-right justify-content-center" style="width:100px" title="Download countries pdf" name="pdf" type="submit" value="pdf" formtarget="_blank">PDF &nbsp;<i class="fa fa-file-pdf mt-1 ml-1"></i></button>
+            <% end %>
+            <%if (check_can_download_csv(@module_permission))%>
+              <button class="form-control btn btn-warning d-flex ml-2 float-right justify-content-center mr-2" style="width:100px" title= "download countries csv" name="csv" type="submit" value="csv">CSV &nbsp;<i class="fa fa-file-excel mt-1 ml-1"></i></button>
+            <% end %>
+            <%if (check_can_send_email(@module_permission))%>
+              <button class="btn btn-info d-flex ml-2 float-right justify-content-center mr-2" type="button" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-envelope mr-2 mt-1 ml-1"></i>Mail</button>
+              <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <% @pos_setting = PosSetting.first %>
+                        <label>Email:</label>
+                        <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
+                        <br />
+                        <label>Subject:</label>
+                        <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Countries Detail report from MunshiOnClick", class: 'form-control email-fields'%>
+                        <br />
+                        <label>Body:</label><br />
+                        <%= text_area_tag 'body', nil, class: 'form-control'%>
+                        <br />
+                      <br />
+                      <label>Please select one of them.</label>
+                      <div>
+                        <label class="cursor-pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
+                        <label class="cursor-pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
+                        <label class="cursor-pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                      <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+        </div>
         </div>
       </div>
-    </div>
+      <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1 p-1" id="analytics" role="tabpanel">
+        <div class="row d-flex border-radius-1">
+          <div class="col-lg-6">
+            <div class="my-chart-Container">
+              <div class="mychartBox">
+                <canvas id="myChart"></canvas>
+              </div> 
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="my-chart-Container">
+              <div class="mychartBox">
+                <canvas id="myChart1"></canvas>
+              </div> 
+            </div>
+          </div>  
+        </div>  
+      </div>
       <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="import-export" role="tabpanel">
         <p>
           <div class="d-flex">
-          <button class="btn btn-success ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
-          <button class="btn btn-primary ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
+          <button class="btn btn-danger ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
+          <button class="btn btn-info ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
           </div>
         </p>
       </div>
+      
     </div>
   <% end %>
 
 <div class="card shadow-sm border-radius-1 p-2">
   <%= render 'map_columns/map_column_partials' %>
-
   <table data-toggle="table" data-search="true" id="country_table" class="overflow-hidden border-radius-1">
-   
+
     <thead>
       <tr>
-       <th><input type="checkbox" id="master" class='select-all-checkbox'><div class="icon-container float-center">
-            <span class="ml-2 mt-2">
-            <div class="my-icon my-view">
-            
-                        <button class="icon-div btn delete-selected p-2 " type='button' value='Country'>
-                                  <i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i> 
-                        </button>
-                    </div>
-                    </span>
-              </div></th>
+       <th><input type="checkbox" id="master" class='select-all-checkbox'>
+				<%if (check_can_delete(@module_permission))%>
+					<div class="icon-container float-center">
+						<span class="ml-2 mt-2">
+							<div class="my-icon my-view">
+								<button class="icon-div btn delete-selected p-2 " type='button' value='Country'>
+										<i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i>
+								</button>
+							</div>
+						</span>
+					</div>
+				<%end%>
+			</th>
         <th>ID<div class='float-right'><%= sort_link(@q, :id, '', {}, class: 'sorting-button') %></div></th>
         <th>Title<div class='float-right'><%= sort_link(@q, :title, '', {}, class: 'sorting-button') %></div></th>
         <th>Comment<div class='float-right'><%= sort_link(@q, :comment, '', {}, class: 'sorting-button') %></div></th>
@@ -234,3 +238,6 @@
     }, 50);
   });
 </script>
+
+
+

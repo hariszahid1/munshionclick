@@ -1,4 +1,5 @@
 class ExpenseEntriesController < ApplicationController
+  before_action :check_access
   before_action :set_expense_entry, only: [:show, :edit, :update, :destroy]
 
   # GET /expense_entries
@@ -115,7 +116,7 @@ class ExpenseEntriesController < ApplicationController
     respond_to do |format|
       if @expense_entry.update(expense_entry_params)
         AccountPaymentJob.perform_later(current_user.superAdmin.company_type,@expense_entry.account_id)
-        format.html { redirect_to @expense_entry, notice: 'Expense entry was successfully updated.' }
+        format.html { redirect_to expense_entries_path, notice: 'Expense entry was successfully updated.' }
         format.json { render :show, status: :ok, location: @expense_entry }
       else
         format.html { render :edit }
@@ -133,6 +134,23 @@ class ExpenseEntriesController < ApplicationController
       format.html { redirect_to expense_entries_url, notice: 'Expense entry was successfully destroyed.' }
       format.json { head :no_content }
       format.js   { render :layout => false }
+    end
+  end
+
+  def view_history
+    @start_date = Date.today.beginning_of_month
+    @end_date =  Date.today.end_of_month
+    if params[:q].present?
+      @start_date = params[:q][:created_at_gteq] if params[:q][:created_at_gteq].present?
+      @end_date = params[:q][:created_at_lteq] if params[:q][:created_at_lteq].present?
+      @item_id = params[:q][:item_id_eq] if params[:q][:item_id_eq].present?
+      params[:q][:created_at_lteq] = params[:q][:created_at_lteq].to_date.end_of_day if params[:q][:created_at_lteq].present?
+    end
+    @event = %w[create update destroy]
+    @q = PaperTrail::Version.where(item_type:"ExpenseEntry").order('created_at desc').ransack(params[:q])
+    @expense_logs = @q.result.page(params[:page])
+    respond_to do |format|
+      format.js
     end
   end
 

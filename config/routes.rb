@@ -29,6 +29,7 @@ Rails.application.routes.draw do
   resources :staff_ledger_books  do
     collection do
       get :transfer, to: 'staff_ledger_books#transfer'
+      get :view_history, to: 'staff_ledger_books#view_history'
     end
   end
   resources :product_stock_exchanges
@@ -39,6 +40,7 @@ Rails.application.routes.draw do
       get :biller, to: 'orders#biller'
       get :auto_print, to: 'orders#auto_print'
       get :print_bulk, to: 'orders#print_bulk'
+      get :view_history, to: 'orders#view_history'
     end
     member do
       get :transfer, to: 'orders#transfer'
@@ -85,7 +87,11 @@ Rails.application.routes.draw do
   resources :staff_raw_products
   resources :raw_products
   resources :departments
-  resources :expense_entries
+  resources :expense_entries do
+    collection do
+      get :view_history, to: 'expense_entries#view_history'
+    end
+  end
   resources :salary_details do
     collection do
       get :vehicle, to: 'salary_details#index_vehicle'
@@ -104,6 +110,7 @@ Rails.application.routes.draw do
   resources :payments do
     collection do
       get :transfer, to: 'payments#transfer'
+      get :view_history, to: 'payments#view_history'
     end
   end
   resources :accounts do
@@ -112,11 +119,16 @@ Rails.application.routes.draw do
     end
   end
   resources :logs
-  resources :investments
+  resources :investments do
+    collection do
+      get :view_history, to: 'investments#view_history'
+    end
+  end
   resources :pos_settings
   resources :ledger_books do
     collection do
       get :transfer, to: 'ledger_books#transfer'
+      get :view_history, to: 'ledger_books#view_history'
     end
   end
   resources :materials
@@ -125,6 +137,7 @@ Rails.application.routes.draw do
   resources :products  do
     collection do
       get "get_product_data"
+      get :view_history, to: 'products#view_history'
     end
   end
   resources :product_sub_categories
@@ -135,6 +148,7 @@ Rails.application.routes.draw do
       get "day_out"
       get "return"
       get "purchase_sale_details_return"
+      get :view_history, to: 'purchase_sale_details#view_history'
     end
   end
 
@@ -155,6 +169,7 @@ Rails.application.routes.draw do
       get :own, to: 'sys_users#own', as: :own
 
       get :sys_user_balance, to: 'sys_users#sys_user_balance', as: :sys_user_balance
+      get :view_history, to: 'sys_users#view_history'
     end
   end
 
@@ -162,12 +177,17 @@ Rails.application.routes.draw do
 
   resources :cities
   resources :user_groups
-  resources :customer_management_systems
+  resources :customer_management_systems do
+    collection do
+      get :view_history, to: 'customer_management_systems#view_history'
+    end
+  end
   resources :notes, only: %i[create new]
-  resources :follow_ups, only: %i[create new]
+  resources :follow_ups
   resources :countries
   resources :expense_types
   resources :expenses
+  resources :db_backup_files
   get 'home/index'
   get :dashboard, to: 'dashboard#index', as: :dashboard
   get :export, to: 'dashboard#export', as: :export
@@ -203,6 +223,19 @@ Rails.application.routes.draw do
   get 'reports/chart_of_account'
   get 'reports/trial_balance'
   get 'reports/chart_of_account_report'
+
+  get 'reports/trial_balance_users_payable'
+  get 'reports/trial_balance_users_reciveable'
+  get 'reports/trial_balance_users_nill'
+  get 'reports/trial_balance_staffs_payable'
+  get 'reports/trial_balance_staffs_reciveable'
+  get 'reports/trial_balance_staffs_nill'
+  get 'reports/trial_balance_accounts'
+  get 'reports/trial_balance_expense_reciveable'
+  get 'reports/trial_balance_purchase_reciveable'
+  get 'reports/trial_balance_sale_payable'
+  get 'reports/trial_balance_salary'
+
   post :bulk_import_data, to: 'bulk_imports#bulk_import_data'
   post :bulk_delete_data, to: 'bulk_imports#bulk_delete_data'
 
@@ -217,6 +250,7 @@ Rails.application.routes.draw do
       get :payable, to: 'staffs#payable', as: :payable
       get :receiveable, to: 'staffs#receiveable', as: :receiveable
       get :dasti, to: 'staffs#dasti', as: :dasti
+      get :view_history, to: 'staffs#view_history'
     end
     member do
       get :salary_info

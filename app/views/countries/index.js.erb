@@ -1,0 +1,72 @@
+$( document ).ready(function() {
+
+  const ctx = document.getElementById('myChart');
+  var countryTitle=$('#countryTitle').val().split(' ')
+  var countryUser=$('#countryUser').val().split(' ')
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: countryTitle,
+      datasets: [{
+        label: 'User ',
+        data: countryUser,
+        borderWidth: 1,
+        backgroundColor: '#FF5C5C'
+      }],
+    },
+    options: {
+      
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Bar Chart',
+                font: {
+                  size: 16
+                }
+            }
+          
+
+        }
+      
+    }
+  });
+  
+});
+  
+
+$( document ).ready(function() {
+
+  const ctx = document.getElementById('myChart1');
+  var countryTitle1=$('#countryTitle1').val().split(' ')
+  var countryUser1=$('#countryUser1').val().split(' ')
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: countryTitle1,
+      datasets: [{
+        label: 'User ',
+        data: countryUser1,
+        borderWidth: 1,
+      }]
+    },
+    options: {
+      
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Pie Chart',
+                font: {
+                  size: 16
+                }
+            }
+        }
+      
+    }
+  });
+  
+});
+
+

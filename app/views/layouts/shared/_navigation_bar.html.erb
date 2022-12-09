@@ -1,78 +1,75 @@
-<nav class="navbar navbar-light navbar-top py-3">
+<nav class="navbar navbar-top py-3 justify-content-center" style="background-color: #f2f2f7">
   <h4 class="ml-3"><%= admin_name_on_nav %></h4>
-  <svg version="1.1" id="Layer_1" class="cursor-pointer sidebar-toggle-icon d-none d-lg-block mx-3" style="margin-top: -10px;" height="50px" width="40px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+  <svg version="1.1" id="Layer_1" class="cursor-pointer sidebar-toggle-icon d-none d-lg-block mx-5" style="margin-top: -10px;" height="50px" width="40px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
     viewBox="0 0 455 455" style="enable-background:new 0 0 455 455;" xml:space="preserve"><g><rect y="312.5" width="455" height="50"/><rect y="212.5" width="455" height="50"/><rect y="112.5" width="455" height="50"/></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g>
   </svg>
   <svg version="1.1" id="Layer_1" class="cursor-pointer sidebar-toggle-icon-mobile d-block d-lg-none mx-3" style="margin-top: -10px;" height="50px" width="40px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
     viewBox="0 0 455 455" style="enable-background:new 0 0 455 455;" xml:space="preserve"><g><rect y="312.5" width="455" height="50"/><rect y="212.5" width="455" height="50"/><rect y="112.5" width="455" height="50"/></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g>
   </svg>
-  <div class="d-flex">
-    <div class="d-flex">
-      <div class="navbar-tabs d-none d-lg-block">
-        <span>
-          Cash in Hand: <b><%=@account_amount_total.to_i%></b>
-        </span>
-      </div>
 
-      <div class="navbar-tabs d-none d-lg-block">
-        <span>
-          Account Balance: <b><%=@total_payable.to_i-@total_reciveable.to_i%></b>
-        </span>
-      </div>
-
-      <div class="navbar-tabs d-none d-lg-block">
-        <strong class="text-danger">
-          Hosting Expiry Date <span id="expiryDateDisplay"><%=check_expiry_date(@pos_setting)%></span>
-        </strong>
-      </div>
-
-      <div class="navbar-tabs d-block d-lg-none">
-        <a href="#AccountSubmenuDetails" data-toggle="collapse" aria-expanded="false">
-          <i class="fas fa-tasks"></i>
-          Account Details
-        </a>
-        <ul class="collapse list-unstyled position-absolute bg-white" style="border: 1px solid lightgray;" id="AccountSubmenuDetails">
-          <li class="px-2 py-1">
+      <div class="d-flex mr-auto">
+          <div class="d-none d-lg-block col mr-auto mb-2 mt-2">
             <span>
-              Cash in Hand: <b><%=@account_amount_total.to_i%></b>
+              <div class="dropdown my-nav-dropdown">
+                <button type="button" class="p-3 card d-flex shadow" style="width: 350px; background-color: #f2f2f7; color: black;"><span class="d-flex mx-auto"><span class="mr-2"><i class="fas fa-hand-holding-usd fa-1x mr-2" aria-hidden="true"></i>Cash in Hand:</span><b><%=@account_amount_total.to_i%></b></span></button>
+                <div class="dropdown-content my-nav-dropdown-content p-3 border-radius-1">
+                    <%@account_balance.each do |account|%>
+                        <i class="fas fa-check" aria-hidden="true"></i>
+                          <%=account&.first%> <%=account&.last%><br>
+                    <%end%>
+                </div>
+              </div>
             </span>
-          </li>
+          </div>
+      </div>
 
-          <li class="px-2 py-1">
-            <span>
-              Account Balance: <b><%=@total_payable.to_i-@total_reciveable.to_i%></b>
+      <div class="d-flex ml-auto ml-4">   
+          <div class="d-none d-lg-block col mx-auto mb-2 mt-2">
+            <span class="d-flex card p-3 shadow" style="width: 300px; background-color: #f2f2f7; color: black;">
+              <span class="d-flex mx-auto"><i class="fas fa-credit-card fa-1x mr-1" aria-hidden="true"></i>Account Balance: <b><%= @total_cash %></b></span>
             </span>
-          </li>
+          </div>
+      </div>
 
-          <li class="px-2 py-1">
+      
+      <div class="d-flex mx-auto">
+          <%# <div class="navbar-tabs d-none d-lg-block">
             <strong class="text-danger">
-              Hosting Expiry Date <span id="expiryDateDisplay"><%=check_expiry_date(@pos_setting)%></span>
-            </strong>
-          </li>
-        </ul>
+              <%# Hosting Expiry Date <span id="expiryDateDisplay"><%=check_expiry_date(@pos_setting)%>
+            <%# </strong>
+          </div> %> 
+          <div class="d-none d-block d-lg-none col mr-auto mb-2 mt-2">
+            <span>
+              <div class="dropdown my-nav-dropdown">
+                <button type="button" class="p-3 card d-flex shadow" style="width: 350px; background-color: #f2f2f7; color: black;"><span class="d-flex mx-auto"><span class="mr-2"><i class="fas fa-hand-holding-usd fa-1x mr-2" aria-hidden="true"></i>Cash in Hand:</span><b><%=@account_amount_total.to_i%></b></span></button>
+                <div class="dropdown-content my-nav-dropdown-content p-3 border-radius-1">
+                    <span>Account Balance:<%= @total_cash %></span><br>
+                    <%@account_balance.each do |account|%>
+                        <i class="fas fa-check" aria-hidden="true"></i>
+                          <%=account&.first%> <%=account&.last%><br>
+                    <%end%>
+                </div>
+              </div>
+            </span>
+          </div>
       </div>
-
-      <div class="navbar-tabs">
-        <a href="#AccountSubmenu" data-toggle="collapse" aria-expanded="false">
-          <i class="fas fa-tasks"></i>
-          Account Balance
-        </a>
-        <ul class="collapse list-unstyled position-absolute bg-white" style="border: 1px solid lightgray;" id="AccountSubmenu">
-          <%@account_balance.each do |account|%>
-            <li class="px-2 py-1">
-              <i class="fas fa-tasks" aria-hidden="true"></i>
-                <%=account&.first%> <%=account&.last%>
-            </li>
-          <%end%>
-        </ul>
+      <div class="d-flex ml-auto">
+       <div class="d-lg-block col ml-auto mb-2 mt-2">
+            <span>
+              <div class="dropdown my-nav-dropdown ">
+                <button type="button" class="p-2 card d-flex shadow" style="width: 280px; background-color: #f2f2f7; color: black;"> <span class="d-flex mx-auto">
+                <i class="fas fa-user-circle fa-2x" aria-hidden="true"></i>
+                <span class="ml-2 mt-1"><%= current_user.name %></span></span>
+                </button>
+                <div class="dropdown-content my-nav-dropdown-content dropdown-content-1 p-3 border-radius-1">
+                      <%= link_to pos_settings_path, style:"width: 240px;", class: "btn bg-info text-light mb-2" do %>
+                        <i class="fas fa-cogs" aria-hidden="true"></i>
+                          <span class="link-text">General Setting</span>
+                      <% end %>
+                     <%= link_to 'Logout', destroy_user_session_path, method: :delete, style:"width: 240px;", class: "btn bg-danger text-light" %>
+                </div>
+              </div>
+            </span>
+          </div>
       </div>
-    </div>
-  </div>
-  <div class="d-flex ml-auto" id="navbarSupportedContent">
-    <span class="nav ml-2">
-      <i class="fas fa-user-circle fa-2x" aria-hidden="true"></i>
-      <%= link_to current_user.name, root_path, class: "nav-link text-primary" %>
-    </span>
-    <%= link_to 'Logout', destroy_user_session_path, method: :delete, class: "btn btn-danger mr-2" %>
-  </div>
 </nav>

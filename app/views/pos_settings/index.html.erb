@@ -1,26 +1,26 @@
-<p id="notice"><%= notice %></p>
+<h1 class="mt-2 mb-4 ml-1">General Settings</h1>
+<div class="card shadow border-radius-1 p-4">
+  <div class="mt-3">
+    <table  id="pos_table" style="overflow: hidden;">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Display name</th>
+          <th>Account</th>
+          <th>Phone</th>
+          <th>Logo</th>
+          <th>Address</th>
+          <th>Action</th>
 
-<h1>General Settings</h1>
+        </tr>
+      </thead>
 
-<table id="pos_table">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Display name</th>
-      <th>Account</th>
-      <th>Phone</th>
-      <th>Logo</th>
-      <th>Address</th>
-      <th>Action</th>
-
-    </tr>
-  </thead>
-
-  <tbody>
-  <%= render partial: 'pos_setting', collection: @pos_settings %>
-  </tbody>
-</table>
-
+      <tbody>
+      <%= render partial: 'pos_setting', collection: @pos_settings %>
+      </tbody>
+    </table>
+  </div>  
+</div>
 <br>
 <%if @pos_settings.blank?%>
 <%end%>

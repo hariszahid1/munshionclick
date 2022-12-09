@@ -127,6 +127,9 @@ class PosSettingsController < ApplicationController
         :company_mask,
         :qr_links,
         :extra_settings,
+        :email_to,
+        :email_cc,
+        :email_bcc,
         logo_images: [],
         images: [],
       )

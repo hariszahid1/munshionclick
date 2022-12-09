@@ -1,0 +1,171 @@
+$( document ).ready(function() {
+  var userCount=$('#userCount').val().split(' ')
+  const ctx = document.getElementById('myChart');
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Jama / Payable','Benam / Receivable', 'Nil'],
+      datasets: [{
+        label: 'Total Users',
+        data: userCount,
+        borderWidth: 1,
+        backgroundColor: ["blue", "red", "green"],
+      }],
+    },
+    options: {
+      
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Total Users by Balance Bar Chart',
+                font: {
+                  size: 16
+                }
+            }
+          
+
+        }
+      
+    }
+  });
+  
+});
+
+$( document ).ready(function() {
+  
+  const ctx = document.getElementById('myChart1');
+  var userGroupTitle=$('#userGroupTitle').val().split(' ')
+  var userGroupCount=$('#userGroupCount').val().split(' ')
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: userGroupTitle,
+      datasets: [{
+        label: 'Total',
+        data: userGroupCount,
+        borderWidth: 1,
+
+      }],
+    },
+    options: {
+      
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Total Users by Groups Pie Chart',
+                font: {
+                  size: 16
+                }
+            }
+          
+
+        }
+      
+    }
+  });
+  
+});
+
+$( document ).ready(function() {
+  
+  const ctx = document.getElementById('myChart2');
+  var statusTitle=$('#statusTitle').val().split(' ')
+  var statusCount=$('#statusCount').val().split(' ')
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: ['Active','Non-Active'],
+      datasets: [{
+        label: 'Total Users ',
+        data: statusCount,
+        borderWidth: 1,
+      }]
+    },
+    options: {
+      
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Total Users by Status Pie Chart',
+                
+            }
+        }
+      
+    }
+  });
+  
+});
+
+$( document ).ready(function() {
+
+  const ctx = document.getElementById('myChart3');
+  var cityTitle=$('#cityTitle').val().split(' ')
+  var cityUser=$('#cityUser').val().split(' ')
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: cityTitle,
+      datasets: [{
+        label: 'Total Users ',
+        data: cityUser,
+        borderWidth: 1,
+        backgroundColor: [ "blue", "orange", "red", "green", "gray", "brown", "purple"]
+      }],
+    },
+    options: {
+      
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Total Users by Present Cities Doughnut Chart',
+              
+            }
+          
+
+        }
+      
+    }
+  });
+  
+});
+$( document ).ready(function() {
+  var balanceSum=$('#balanceSum').val().split(' ')
+  const ctx = document.getElementById('myChart4');
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Jama / Payable','Benam / Receivable'],
+      datasets: [{
+        label: 'Total ',
+        data: balanceSum,
+        borderWidth: 1,
+        backgroundColor: ["blue", "red"],
+      }],
+    },
+    options: {
+      
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Total Balance Bar Chart',
+                font: {
+                  size: 16
+                }
+            }
+          
+
+        }
+      
+    }
+  });
+  
+});

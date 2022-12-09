@@ -1,12 +1,14 @@
 class StaffDealsController < ApplicationController
+  before_action :check_access
   before_action :set_staff_deal, only: [:show, :edit, :update, :destroy]
   skip_before_action :authenticate_user!, only: [:index]
+
   # GET /staff_deals
   # GET /staff_deals.json
   def index
     @created_at_gteq = DateTime.now-10000
     @created_at_lteq = DateTime.now
-    @staffs = Department.find_by(title:'Dealer').staffs
+    @staffs = Department.find_by(title:'Dealer')&.staffs || Staff.all
     @products = Product.all
     @product_categories = ProductCategory.all
     @product_sub_categories = ProductSubCategory.all
@@ -44,7 +46,7 @@ class StaffDealsController < ApplicationController
       print_pdf('DealerList', 'pdf.html','A4')
     end
 
-
+  
   end
 
   # GET /staff_deals/1
@@ -72,7 +74,7 @@ class StaffDealsController < ApplicationController
 
     respond_to do |format|
       if @staff_deal.save
-        format.html { redirect_to @staff_deal, notice: 'Staff deal was successfully created.' }
+        format.html { redirect_to staff_deals_url, notice: 'Staff deal was successfully created.' }
         format.json { render :show, status: :created, location: @staff_deal }
       else
         @staffs = Staff.all
@@ -88,7 +90,7 @@ class StaffDealsController < ApplicationController
   def update
     respond_to do |format|
       if @staff_deal.update(staff_deal_params)
-        format.html { redirect_to @staff_deal, notice: 'Staff deal was successfully updated.' }
+        format.html { redirect_to staff_deals_url, notice: 'Staff deal was successfully updated.' }
         format.json { render :show, status: :ok, location: @staff_deal }
       else
         @staffs = Staff.all

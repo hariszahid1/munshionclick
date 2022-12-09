@@ -1,4 +1,5 @@
 class ProductsController < ApplicationController
+  before_action :check_access
   before_action :set_product, only: [:show, :edit, :update, :destroy]
   skip_before_action :authenticate_user!, only: [:index]
   include CsvMethods
@@ -253,6 +254,26 @@ class ProductsController < ApplicationController
       respond_to do |format|
         format.json { render json: {status: 'success', cost: product.cost, sale: product.sale, stock: product.stock, serial: product.with_serial, warranty_list: product_warranty_list, size_1: product.size_1, size_2: product.size_2, size_3: product.size_3, size_4: product.size_4, size_5: product.size_5, size_6: product.size_6, size_7: product.size_7, size_8: product.size_8, size_9: product.size_9, size_10: product.size_10, size_11: product.size_11, size_12: product.size_12, size_13: product.size_13, gst: gst, marla: product.marla, square_feet: product.square_feet, sys_type: pos_setting_sys_type}, status: :ok}
       end
+    end
+  end
+
+  def view_history
+    @start_date = Date.today.beginning_of_month
+    @end_date =  Date.today.end_of_month
+    if params[:q].present?
+      @start_date = params[:q][:created_at_gteq] if params[:q][:created_at_gteq].present?
+      @end_date = params[:q][:created_at_lteq] if params[:q][:created_at_lteq].present?
+      @item_id = params[:q][:item_id_eq] if params[:q][:item_id_eq].present?
+      params[:q][:created_at_lteq] = params[:q][:created_at_lteq].to_date.end_of_day if params[:q][:created_at_lteq].present?
+    end
+    @event = %w[create update destroy]
+    @q = PaperTrail::Version.where(item_type:"Product").order('created_at desc').ransack(params[:q])
+    @product_logs = @q.result.page(params[:page])
+    @product_sub_categories = ProductSubCategory.all.pluck(:id, :title).to_h
+    @item_types = ItemType.all.pluck(:id, :title).to_h
+    @product_categories = ProductCategory.all.pluck(:id, :title).to_h
+    respond_to do |format|
+      format.js
     end
   end
   private

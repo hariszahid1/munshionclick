@@ -1,0 +1,22 @@
+<%= search_form_for @q, url: sys_users_path, class: "admin-controls", method: "get" do |f| %>
+        <div class="col-lg-3 form-group float-left">
+          <%= f.select :id_eq, options_from_collection_for_select(@all_user, "id", ->(st){"#{st.name} \u{27F6} \u{27F6} #{st.code} "},@name),{:include_blank => "Select Name/Code"},:class=>"form-control chosen-select" %>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <%= f.select :user_group_eq, options_for_select(SysUser.user_groups, @user_group), {:include_blank => "Select User group"},:class=>"form-control chosen-select" %>
+        </div>
+        <div class="col=lg-2 form-group float-left">
+          <%= f.select :status_eq, SysUser.statuses.map { |key, value| [key.humanize, value] },{include_blank: "Select Status", hide_label:true, required: true },:class=>"form-control chosen-select" %>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+        </div>
+				<div class="col-lg-1 form-group float-right">
+					<button class="form-control btn  badge badge-pill badge-success" title="Download user csv" name="submit_csv_staff_with" type="submit" value="User CSV" formtarget="_blank">Users &nbsp; <i class="fa fa-file-excel" aria-hidden="true"></i></button>
+				</div>
+
+
+        <div class="col-1 float-right d-flex">
+          <button class="form-control btn  badge badge-pill badge-danger" title="Download user pdf" name="submit_pdf_staff_with" type="submit" value="Customer/Salesman PDF A4" formtarget="_blank">Users &nbsp;<i class="fa fa-file-pdf"></i></button>
+        </div>
+      <% end %>

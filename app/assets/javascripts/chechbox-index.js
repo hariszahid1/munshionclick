@@ -49,15 +49,15 @@ $(window).on('turbolinks:load', function () {
 });
 
 $(window).on('document:load', function () {
-  $('.cover-spin, .loading').addClass('d-none')
+  $('.cover-spin').addClass('d-none')
 });
 
 $(document).on('turbolinks:click', function () {
-  $('.cover-spin, .loading').removeClass('d-none')
+  $('.cover-spin').removeClass('d-none')
 });
 
 $(document).on('turbolinks:load', function () {
-  $('.cover-spin, .loading').addClass('d-none')
+  $('.cover-spin').addClass('d-none')
 });
 
 // $(document).on('turbolinks:render', function () {
