@@ -1,0 +1,33 @@
+google.charts.load("current", {packages:["corechart"]});
+google.charts.setOnLoadCallback(drawChart);
+function drawChart() {
+  var data = google.visualization.arrayToDataTable([
+  ["Element", "Quantity", { role: "style" } ],
+  ["Investment", <%=@investment_total%>, " #b1bf22 "],
+  ["Purchase", <%=(@purchase_total-@purchase_discount_total)%>, "#3ac6d6"],
+  ["Salary", <%=(@salary_total+@advance_total).round(2) %>, "silver"],
+  ["Expense", <%=(@expense_total).round(2)%>, "gold"],
+  ["Sale", <%=(@sale_total-@sale_discount_total)%>, " #4f52e2 "],
+  ["Stock", <%=((@purchase_total-@purchase_discount_total)-(@sale_total-@sale_discount_total)).round(2)%>, "red"],
+  ["Profit", <%=@total_profit_s%>, " #12aaa1 "],
+  ["Profit 1", <%=@total_profit%>, " #53c43d "],
+  ["Profilt 2", <%=@total_profit_without_invesment%>, "color: #d6783a"]
+  ]);
+  var view = new google.visualization.DataView(data);
+  view.setColumns([0, 1,
+  { calc: "stringify",
+  sourceColumn: 1,
+  type: "string",
+  role: "annotation" },
+  2]);
+  var options = {
+    title: "Income Statement",
+    width: 800,
+    height: 600,
+    bar: {groupWidth: "95%"},
+    legend: { position: "none" },
+  };
+  var chart = new google.visualization.BarChart(document.getElementById("barchart_values"));
+  chart.draw(view, options);
+}
+  

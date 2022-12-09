@@ -245,9 +245,9 @@
           <td><%= number_with_delimiter(payment.amount) %></td>
           <td>
                 <%if payment.amount.to_f < 0  %>
-                     <b style="font-size:20px;color:blue;">Jama</b>
+                     <b style="font-size:20px;color:blue;">Jama/Payable</b>
                 <%elsif  payment.amount.to_f > 0  %>
-                <b style="font-size:20px;color:red;">Benam</b>
+                <b style="font-size:20px;color:red;">Benam/Receivable</b>
                 <%else%>
                 <b style="font-size:20px;color: #6cec53 ;">Nill</b>
                 <%end%>
@@ -482,6 +482,7 @@
         </tr>
       <% end %>
       <tr>
+        <td></td>
         <td><h5>Total</h5></td>
         <td></td>
         <td><h5><%=number_with_delimiter(@t_dabit.first.sum_debit)%></h5></td>
