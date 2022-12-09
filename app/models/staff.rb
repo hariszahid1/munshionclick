@@ -16,6 +16,8 @@ class Staff < ApplicationRecord
   has_many :follow_ups, foreign_key: 'assigned_to_id', primary_key: 'id'
   has_many :notes, foreign_key: 'assigned_to_id', primary_key: 'id'
   has_paper_trail ignore: [:updated_at]
+  has_one :contact, as: :contactable, dependent: :destroy
+  accepts_nested_attributes_for :contact
 
   def full_name
     self.name.to_s+' '+self.father.to_s
