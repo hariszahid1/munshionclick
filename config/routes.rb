@@ -100,6 +100,7 @@ Rails.application.routes.draw do
       get :pather, to: 'salary_details#index_batha'
       get :khakar_full, to: 'salary_details#index_khakar_full'
       get :advance_all
+      get :analytics
     end
   end
   get :salary_detail_edit_salaries, to: 'salary_details#edit_bulk', as: :salary_detail_edit_bulk
