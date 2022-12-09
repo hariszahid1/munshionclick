@@ -11,6 +11,7 @@
       </li>
     </ol>
   </div>
+  
   <div class="row">
     <div class="col-lg-12 col-sm-12">
   <% if check_can_create(@module_permission) %>
@@ -38,7 +39,10 @@
   <ul class="nav nav-pills ml-3" role="tablist">
     <li class="nav-item">
       <a class="nav-link tab-label active product-search-exp-tab" data-toggle="tab" href="#search" role="tab">Search</a>
-    </li>			
+    </li>	
+    <li class="nav-item">
+      <a class="nav-link tab-label " data-toggle="tab" href="#analytics" data-remote="true" role="tab">Analytics</a>
+    </li>		
 		<% if check_can_import_export(@module_permission)%>
 		  <li class="nav-item">
 		  	<a class="nav-link tab-label product-search-exp-tab" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
@@ -48,6 +52,16 @@
       <a class="nav-link tab-label product-logs-tab" data-toggle="tab" href="#logs" role="tab">Logs</a>
     </li>
 	</ul>
+
+  <%= hidden_field_tag "blockKeys", @block_keys, { :id => "blockKeys" } %>
+  <%= hidden_field_tag "blockCount", @block_count, { :id => "blockCount" } %>
+  <%= hidden_field_tag "bTitle", @b_title, { :id => "bTitle" } %>
+  <%= hidden_field_tag "bCount", @b_count, { :id => "bCount" } %>
+  <%= hidden_field_tag "catKeys", @cat_keys, { :id => "catKeys" } %>
+  <%= hidden_field_tag "catSum", @cat_sum, { :id => "catSum" } %>
+  <%= hidden_field_tag "SubcatKeys", @sub_cat_keys, { :id => "SubcatKeys" } %>
+  <%= hidden_field_tag "SubcatSum", @sub_cat_sum, { :id => "SubcatSum" } %>
+  
     <div class="tab-content">
       <div class="tab-pane active mb-3 card shadow-sm mt-2 p-3 border-radius-1" id="search" role="tabpanel">
         <%= search_form_for @q, url: products_path, class: "admin-controls", method: "get" do |f| %>
@@ -147,6 +161,41 @@
           </div>
         <% end %>
       </div>
+      <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1 p-4" id="analytics" role="tabpanel">
+        <div class="row d-flex border-radius-1 m-2">
+          <div class="col-lg-6">
+            <div class="my-chart-Container">
+              <div class="mychartBox card border-radius-1 shadow">
+                <canvas id="myChart1"></canvas>
+              </div> 
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="my-chart-Container">
+              <div class="mychartBox card border-radius-1 shadow">
+                <canvas id="myChart"></canvas>
+              </div> 
+            </div>
+          </div>   
+        </div> 
+        <div class="row d-flex border-radius-1 m-2">
+          <div class="col-lg-6">
+            <div class="my-chart-Container">
+              <div class="mychartBox card border-radius-1 shadow">
+                <canvas id="myChart2"></canvas>
+              </div> 
+            </div>
+          </div> 
+          <div class="col-lg-6">
+            <div class="my-chart-Container">
+              <div class="mychartBox card border-radius-1 shadow">
+                <canvas id="myChart3"></canvas>
+              </div> 
+            </div>
+          </div> 
+          
+        </div> 
+      </div>
       <div class="tab-pane card shadow-sm mt-2 border-radius-1 mb-3" id="import-export" role="tabpanel">
         <p>
           <%= search_form_for @q, url: products_path, class: "admin-controls", method: "get" do |f| %>
@@ -168,6 +217,7 @@
         </p>
       </div>
     </div>
+    
     <div class="card border-radius-1 shadow p-3 product-book-index-card">
       <table data-toggle="table" data-search="true" id="product_table">
         <thead>
@@ -341,3 +391,4 @@
     })
   });
 </script>
+

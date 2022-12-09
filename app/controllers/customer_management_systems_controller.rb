@@ -14,35 +14,15 @@ class CustomerManagementSystemsController < ApplicationController
   # GET /customer_manangement_Systems
   # GET /customer_manangement_Systems.json
   def index
+    
     @q = SysUser.ransack(params[:q])
-    # @q.sorts = 'id asc' if @q.sorts.empty? && @q.result.count.positive?
+    @q.sorts = 'id asc' if @q.sorts.empty? && @q.result.count.positive?
     @sys_users = @q.result.page(params[:page])
     export_file if params[:export_data].present?
     download_cms_csv_file if params[:csv].present?
     download_cms_pdf_file if params[:pdf].present?
     send_email_file if params[:email].present?
-
-    @total_agent_count = SysUser.group(:credit_status).count.except(0, nil).sort.to_h
-    agent_ids = @total_agent_count.keys
-    @agent_name = User.where(id:agent_ids).pluck(:name)
-    @agent_count = @total_agent_count.values
-    
-    @client_count = @q.result.group("cms_data->'$.client_type'").count.except(nil, '', "\"\"")
-    @ct_name = @client_count.keys.map { |a| a.gsub(' ', '-') }
-    @ct_type = @client_count.values
-
-    @deal_status_count = @q.result.group("cms_data->'$.deal_status'").count.except(nil, '', "\"\"")
-    @deal_status = @deal_status_count.keys.map { |a| a.gsub(' ', '-') }
-    @deal_count = @deal_status_count.values
-
-    @category_count = @q.result.group("cms_data->'$.category'").count.except(nil, '', "\"\"")
-    @ctg_name = @category_count.keys.map { |a| a.gsub(' ', '-') }
-    @ctg_count = @category_count.values
-
-    @project_count = @q.result.group("cms_data->'$.project_name'").count.except(nil, '', "\"\"")
-    @prg_name = @project_count.keys.map { |a| a.gsub(' ', '-') }
-    @prg_count = @project_count.values
-  
+    cms_charts
   end
 
   def new
@@ -232,4 +212,28 @@ class CustomerManagementSystemsController < ApplicationController
     @user_groups = UserGroup.all
     @follow_up_count = FollowUp.where(created_at: Time.current.all_day).count
   end
+end
+
+def cms_charts
+    
+    @total_agent_count = SysUser.group(:credit_status).count.except(0, nil).sort.to_h
+    agent_ids = @total_agent_count.keys
+    @agent_name = User.where(id:agent_ids).pluck(:name)
+    @agent_count = @total_agent_count.values
+    
+    @client_count = SysUser.group("cms_data->'$.client_type'").count.except(nil, '', "\"\"")
+    @ct_name = @client_count.keys.map { |a| a.gsub(' ', '-') }
+    @ct_type = @client_count.values
+
+    @deal_status_count = SysUser.group("cms_data->'$.deal_status'").count.except(nil, '', "\"\"")
+    @deal_status = @deal_status_count.keys.map { |a| a.gsub(' ', '-') }
+    @deal_count = @deal_status_count.values
+
+    @category_count = SysUser.group("cms_data->'$.category'").count.except(nil, '', "\"\"")
+    @ctg_name = @category_count.keys.map { |a| a.gsub(' ', '-') }
+    @ctg_count = @category_count.values
+
+    @project_count = SysUser.group("cms_data->'$.project_name'").count.except(nil, '', "\"\"")
+    @prg_name = @project_count.keys.map { |a| a.gsub(' ', '-') }
+    @prg_count = @project_count.values
 end

@@ -1,70 +1,93 @@
-<h1>Salaries Debit From Staff Balance</h1>
+<div class="main-content-header">
+  <h1>Salaries Debit From Staff Balance</h1>
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="<%= root_path %>">Dashboard</a>
+    </li>
+    <li class="breadcrumb-item active">
+      <a href="<%= salaries_path %>">Salaries Debit From Staff Balance</a>
+    </li>
+  </ol>
+</div>
 
-<div class="row col-lg-12 form-group float-left">
-<% if can?(:add, :all) %>
-  <div class="col-lg-2">
-    <%= link_to new_salary_path, class: "btn btn-success" do %>
-           <i class="fa fa-envelope-open" aria-hidden="true"></i>
-           Pay Salary
+<div class="d-flex">
+  <% if can?(:add, :all) %>
+    <%= link_to new_salary_path, class: "btn btn-success mr-2" do %>
+      <i class="fa fa-envelope-open" aria-hidden="true"></i>
+      Pay Salary
     <% end %>
-  </div>
   <% end %>
-  <div class="col-lg-2">
-    <%= link_to advance_salaries_path, class: "btn btn-success" do %>
-           <i class="fa fa-envelope-open" aria-hidden="true"></i>
-           Pay Dasti
-    <% end %>
-  </div>
-  <div class="col-lg-2">
-    <%= link_to loan_salaries_path, class: "btn btn-success" do %>
-           <i class="fa fa-envelope-open" aria-hidden="true"></i>
-           Loan/pashgyi
-    <% end %>
-  </div>
+  <%= link_to advance_salaries_path, class: "btn btn-success mr-2" do %>
+    <i class="fa fa-envelope-open" aria-hidden="true"></i>
+    Pay Dasti
+  <% end %>
+  <%= link_to loan_salaries_path, class: "btn btn-success mr-2" do %>
+    <i class="fa fa-envelope-open" aria-hidden="true"></i>
+    Loan/pashgyi
+  <% end %>
   <%if @pos_setting.sys_type=="batha"  or pos_setting_sys_type=="Factory"%>
-    <div class="col-lg-3">
-      <%= link_to advance_all_salaries_path, class: "btn btn-primary",style: "width:250" do %>
-             <i class="fa fa-envelope-open" aria-hidden="true"></i>
-             Weekly Labour Kharcha
-      <% end %>
-    </div>
-    <div class="col-lg-3">
-      <%= link_to work_detail_salaries_path, class: "btn btn-primary",style: "width:250" do %>
-         <i class="fa fa-envelope-open" aria-hidden="true"></i>
-         Work/Salary Detail
-      <% end %>
-    </div>
+    <%= link_to advance_all_salaries_path, class: "btn btn-primary mr-2",style: "width:250" do %>
+      <i class="fa fa-envelope-open" aria-hidden="true"></i>
+      Weekly Labour Kharcha
+    <% end %>
+    <%= link_to work_detail_salaries_path, class: "btn btn-primary mr-2",style: "width:250" do %>
+      <i class="fa fa-envelope-open" aria-hidden="true"></i>
+      Work/Salary Detail
+    <% end %>
   <%end%>
+  <div class="ml-auto">
+    <div class="dropdown ml-auto mr-4">
+     <span class="btn btn-info" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
+      <div class="dropdown-content">
+        <% if @help.present? %>
+          <% @help&.help_links.each do |link| %>
+            <a type="button" class="" target="_blank" href="<%= link[1] %>" >Help in <%= link[0] %></a>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div class="clearfix"></div>
-<div class="row">
-  <div class="col-lg-12 col-sm-12">
-    <%= search_form_for @q, url: salaries_path, class: "admin-controls", method: "get" do |f| %>
-    <div class="col-lg-3 form-group float-left">
-      <%= f.select :staff_id_eq, options_from_collection_for_select(@salary_searchs, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code}"},@id),{:include_blank => "Select Staff"},:class=>"form-control chosen-select" %>
-    </div>
-      <div class="col-lg-2 form-group float-left">
-        <%= f.select :payment_type_eq, options_for_select(Salary.payment_types, @payment_type), {:include_blank => "Select Payment type"},:class=>"form-control chosen-select" %>
-      </div>
-      <div class="col-lg-2 form-group float-left">
-          <%= f.select :staff_department_id_eq, options_from_collection_for_select(@departments, 'id', 'title', @department), {hide_label:true,title: "Select the Department" ,prompt: "Select the Department"},:class=>"form-control chosen-select"%>
+  <ul class="nav nav-pills mt-4" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab">Search</a>
+    </li>
+	</ul>
+  <div class="tab-content">
+    <div class="tab-pane active mb-3 card shadow-sm mt-2 p-3 border-radius-1" id="search" role="tabpanel">
+      <div class="row d-flex">
+        <div class="row">
+          <div class="col-lg-12 col-sm-12">
+            <%= search_form_for @q, url: salaries_path, class: "admin-controls", method: "get" do |f| %>
+            <div class="col-lg-3 form-group float-left">
+              <%= f.select :staff_id_eq, options_from_collection_for_select(@salary_searchs, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code}"},@id),{:include_blank => "Select Staff"},:class=>"form-control chosen-select" %>
+            </div>
+              <div class="col-lg-2 form-group float-left">
+                <%= f.select :payment_type_eq, options_for_select(Salary.payment_types, @payment_type), {:include_blank => "Select Payment type"},:class=>"form-control chosen-select" %>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                  <%= f.select :staff_department_id_eq, options_from_collection_for_select(@departments, 'id', 'title', @department), {hide_label:true,title: "Select the Department" ,prompt: "Select the Department"},:class=>"form-control chosen-select"%>
+                </div>
+              <div class="col-lg-2 form-group float-left">
+                <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker',value: @created_at_gteq,placeholder: "YYYY-MM-DD" %>
+              </div>
+              <div class="col-sm-2 form-group float-left">
+                <%= f.search_field :created_at_lteq, class: 'form-control input-sm datepicker' ,value: @created_at_lteq,placeholder: "YYYY-MM-DD"%>
+              </div>
+              <div class="col-sm-2 form-group float-left">
+                <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+              </div>
+
+              <div class="col-lg-1 form-group float-right">
+                <button class="form-control btn btn-danger mr-2 d-flex float-right justify-content-center" title= "download salaries pdf" name="submit_pdf" type="submit" value="Salaries Detail PDF A8" formtarget="_blank" style="width:100px">PDF &nbsp;<i class="fa fa-file-pdf mt-1"></i></button>
+              </div>
+            <% end %>
+          </div>
         </div>
-      <div class="col-lg-2 form-group float-left">
-        <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker',value: @created_at_gteq,placeholder: "YYYY-MM-DD" %>
       </div>
-      <div class="col-sm-2 form-group float-left">
-        <%= f.search_field :created_at_lteq, class: 'form-control input-sm datepicker' ,value: @created_at_lteq,placeholder: "YYYY-MM-DD"%>
-      </div>
-      <div class="col-sm-2 form-group float-left">
-        <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
-      </div>
-      <div class="col-lg-1 form-group float-right">
-        <button class="form-control badge badge-pill badge-danger" name="submit_pdf" type="submit" value="Salaries Detail PDF A8" formtarget="_blank" ><i class="fa fa-file-pdf"></i>&nbsp; Salaries</button >
-      </div>
-    <% end %>
+    </div>
   </div>
-</div>
 
 <table data-toggle="table" data-search="true">
   <thead>
@@ -101,22 +124,55 @@
         </td>
         <td><%= salary.comment %> | <%= salary.payment_type %></td>
         <td>
-          <%= link_to salary, target: "_blank" do %>
-            <i class="fa fa-print" aria-hidden="true"></i> |
-          <%end %>
-          <% if can?(:update, :all) %>
-          <%= link_to salary.Salary? ? edit_salary_path(salary) : edit_advance_salary_path(salary) do %>
-                      <i class="fa fa-edit" aria-hidden="true"></i> |
-          <% end %>
-        <% end %>
-        <% if can?(:delete, :all) %>
-          <%= link_to salary, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
-            <i class="fa fa-trash" aria-hidden="true"></i> |
-          <% end %>
-        <% end %>
-          <%= link_to salary do %>
-            <i class="fa fa-eye" aria-hidden="true"></i>
-          <% end %>
+          <div class="icon-container-1">
+            <div class="my-icon-1 my-view-1">
+              <div class="my-tooltip-1">
+                <div class="icon-container">
+                  <div class="my-icon my-view">
+                    <div class="my-tooltip">
+                      Print
+                    </div>
+                    <%= link_to salary, target: "_blank", class:"icon-div" do %>
+                      <i class="fa fa-print mt-2" aria-hidden="true"></i>
+                    <%end %>
+                  </div>
+                  <div class="my-icon my-view">
+                    <div class="my-tooltip">
+                      Edit
+                    </div>
+                    <%if (check_can_update(@module_permission))%>
+                      <%= link_to salary.Salary? ? edit_salary_path(salary) : edit_advance_salary_path(salary), class:"icon-div" do %>
+                        <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+                      <%end %>
+                    <% end %>
+                  </div>
+                  <div class="my-icon my-view">
+                    <div class="my-tooltip">
+                      Delete
+                    </div>
+                    <%if (check_can_delete(@module_permission))%>
+                      <%= link_to salary, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, remote: true, class: 'icon-div' do %>
+                        <i class="fa fa-trash mt-2" aria-hidden="true"></i>
+                      <%end %>
+                    <% end %>
+                  </div>
+                  <div class="my-icon my-view">
+                    <div class="my-tooltip">
+                      Show
+                    </div>
+                    <%if (check_can_read(@module_permission))%>
+                      <%= link_to salary, class:"icon-div" do %>
+                        <i class="fa fa-eye mt-2" aria-hidden="true"></i>
+                      <%end %>
+                    <%end%>
+                  </div>
+                </div>
+              </div>
+              <span class="icon-div-1">
+                <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+              </span>
+            </div>
+          </div>
         </td>
       </tr>
     <% end %>
@@ -131,7 +187,6 @@
   </tbody>
 </table>
 
-<div class="clearfix"></div>
 <div class="row">
   <div class="col-lg-4 col-sm-4">
     <%= page_entries_info @salaries %>
