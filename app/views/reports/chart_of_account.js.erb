@@ -1,0 +1,144 @@
+$( document ).ready(function() {
+
+const ctx = document.getElementById('myChart');
+  var uGroupKeys=$('#uGroupKeys').val().split(' ')
+  var uGroupCount=$('#uGroupCount').val().split(' ')
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: uGroupKeys,
+      datasets: [{
+        label: 'Users ',
+        data: uGroupCount,
+        borderWidth: 1,
+      }],
+    },
+    options: {
+      
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Pie Chart',
+                font: {
+                  size: 16
+                }
+            }
+          
+
+        }
+      
+    }
+  });
+  
+});
+
+$( document ).ready(function() {
+
+const ctx = document.getElementById('myChart2');
+  var uGroupBalance=$('#uGroupBalance').val().split(' ')
+  var uGroupSum=$('#uGroupSum').val().split(' ')
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: uGroupBalance,
+      datasets: [{
+        label: 'Balance ',
+        data: uGroupSum,
+        borderWidth: 1,
+        backgroundColor: '#FF5C5C'
+      }],
+    },
+    options: {
+      
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Bar Chart',
+                font: {
+                  size: 16
+                }
+            }
+          
+
+        }
+      
+    }
+  });
+  
+});
+
+$( document ).ready(function() {
+
+const ctx = document.getElementById('myChart3');
+  var depKeys=$('#depKeys').val().split(' ')
+  var depValues=$('#depValues').val().split(' ')
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: depKeys,
+      datasets: [{
+        label: 'Total Staffs ',
+        data: depValues,
+        borderWidth: 1,
+      }],
+    },
+    options: {
+      
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Pie Chart',
+                font: {
+                  size: 16
+                }
+            }
+          
+
+        }
+      
+    }
+  });
+  
+});
+
+$( document ).ready(function() {
+
+const ctx = document.getElementById('myChart4');
+  var depBKeys=$('#depBKeys').val().split(' ')
+  var depBValues=$('#depBValues').val().split(' ')
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: depBKeys,
+      datasets: [{
+        label: 'Total Balance ',
+        data: depBValues,
+        borderWidth: 1,
+      }],
+    },
+    options: {
+      
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Bar Chart',
+                font: {
+                  size: 16
+                }
+            }
+          
+
+        }
+      
+    }
+  });
+  
+});

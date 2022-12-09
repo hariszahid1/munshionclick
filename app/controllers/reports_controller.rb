@@ -120,6 +120,9 @@ class ReportsController < ApplicationController
         format.csv { send_data csv_data, filename: "Chart of Account - #{Date.today}.csv" }
       end
     end
+    
+    chart_of_account_analytics
+    
   end
 
   def trial_balance
@@ -1314,4 +1317,25 @@ class ReportsController < ApplicationController
       @q = model_name.constantize.where(terminated: true).ransack(params[:q])
       @q.result
     end
+end
+
+def chart_of_account_analytics
+  
+  @user_group_count = SysUser.where('balance > 0').group('user_group').count
+  @u_group_keys = @user_group_count.keys.map { |a| a.gsub(' ', '-') }
+  @u_group_count = @user_group_count.values
+
+  @user_group_balance = SysUser.where('balance > 0').group('user_group').sum(:balance)
+  @u_balance_keys = @user_group_balance.keys.map { |a| a.gsub(' ', '-') }
+  @u_balance_count = @user_group_balance.values
+
+  @staff_dep_count = Staff.joins(:department).where('balance > 0').group('departments.title').count
+  @dep_keys = @staff_dep_count.keys.map { |a| a.gsub(' ', '-') }
+  @dep_values = @staff_dep_count.values
+
+  @staff_dep_balance = Staff.joins(:department).where('balance > 0').group('departments.title').sum(:balance)
+  @staff_dep_sorted = @staff_dep_balance.map { |a| [a.first, a.last.to_f] }.to_h
+  @staff_balance_keys = @staff_dep_sorted.keys.map { |a| a.gsub(' ', '-') }
+  @staff_balance_values = @staff_dep_sorted.values
+
 end
