@@ -2,7 +2,7 @@
   <div class="row no-gutters align-items-center">
     <div class="col mr-2">
       <br>
-      <div class="row">
+      <div class="row mb-2">
         <div class="col-lg-12 col-sm-12">
           <%= search_form_for @q, url: reports_trial_balance_accounts_path, class: "admin-controls", remote: true, method: "get" do |f| %>
             <div class="col-lg-3 form-group float-left">
@@ -10,7 +10,7 @@
               <%= f.select :id_eq, options_for_select(Account.all.map{ |p| [p.title , p.id]}, f.object.id_eq), include_blank: "Select title", class: "form-control chosen-select" %>
             </div>
             <div class="col-lg-2 form-group float-left">
-              <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+              <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px">Search</button>
             </div>
           <% end %>
         </div>

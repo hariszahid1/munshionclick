@@ -2,6 +2,8 @@ class StaffsController < ApplicationController
   before_action :check_access
 	include StaffCsvMethods
   before_action :set_staff, only: [:show, :edit, :update, :destroy, :salary_info, :salary_wage_rate_info]
+  before_action :set_edit_new_data, only: %i[new create edit]
+
   include PdfCsvGeneralMethod
   include StaffsHelper
 
@@ -141,16 +143,11 @@ class StaffsController < ApplicationController
   # GET /staffs/new
   def new
     @staff = Staff.new
-    @departments=Department.all
-    @raw_products = RawProduct.all
-    @departments=Department.all
+    @staff.build_contact
   end
 
   # GET /staffs/1/edit
   def edit
-    @departments=Department.all
-    @raw_products = RawProduct.all
-
     respond_to do |format|
       format.js
     end
@@ -242,7 +239,9 @@ class StaffsController < ApplicationController
   def staff_params
     params.require(:staff).permit(:code, :name, :father, :education, :gender, :phone, :address, :cnic, :date_of_joining, :date_of_leaving, :yearly_increment,
                                   :monthly_salary, :school_branch_id, :wage_rate, :balance, :staff_department, :department_id, :staff_type, :wage_debit,
-                                    :raw_product_quantity, :profile_image, :staff_raw_products_attributes => [:id, :staff_id, :raw_product_id, :_destroy])
+                                    :raw_product_quantity, :profile_image, :staff_raw_products_attributes => [:id, :staff_id, :raw_product_id, :_destroy],
+                                  contact_attributes: [:country_id, :city_id, :address, :home, :office, :Mobile, :fax,
+                                    :email, :comment, :status, :permanent_address, :contactable_id, :contactable_type])
   end
 
   def createCSV(csv_name,csv_data)
@@ -365,4 +364,10 @@ class StaffsController < ApplicationController
     ]
   end
 
+  def set_edit_new_data
+    @departments = Department.all
+    @cities = City.all
+    @countries = Country.all
+    @raw_products = RawProduct.all
+  end
 end

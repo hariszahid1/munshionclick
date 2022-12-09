@@ -2,44 +2,46 @@
   <% if staff.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(staff.errors.count, "error") %> prohibited this staff from being saved:</h2>
-
       <ul>
-      <% staff.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
+        <% staff.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
       </ul>
     </div>
   <% end %>
+
   <%if ApplicationController.new.pos_type_batha%>
-  <div class="col-lg-6 form-group float-left">
+    <div class="col-lg-6 form-group float-left">
       <%= link_to_add_association 'Attachment Raw Product', f, :staff_raw_products, partial: 'staff_raw_products_fields_new', class: "btn btn-info" %>
     </div>
   <%end%>
+
   <div class="col-lg-12 form-group float-left">
     <%= f.fields_for :staff_raw_products do |staff_raw_product| %>
       <%= render 'staff_raw_products_fields', f: staff_raw_product %>
     <% end %>
   </div>
 
-<div class="col-lg-2 form-group float-left">
+  <div class="col-lg-2 form-group float-left">
     <%= f.text_field :code, {placeholder: "Enter the code", required: true , value: (f.object.code.nil? ? ("AGC-"+"%.4i" % (Staff.maximum(:id).present? ? Staff.maximum(:id).next : 1)) : (f.object.code ))} %>
   </div>
 
   <div class="col-lg-4 form-group float-left">
     <%= f.label :name do %>
-          <%= Staff.human_attribute_name :name %>
-          <i class="fas fa-language"></i>
-        <% end %>
+      <%= Staff.human_attribute_name :name %>
+      <i class="fas fa-language"></i>
+    <% end %>
     <%= f.text_field :name,required:true, placeholder:"Enter Name", hide_label: true ,class: 'urdu-font' %>
   </div>
 
   <div class="col-lg-6 form-group float-left">
     <%= f.label :father do %>
-          <%= Staff.human_attribute_name :father %>
-          <i class="fas fa-language"></i>
-        <% end %>
+      <%= Staff.human_attribute_name :father %>
+        <i class="fas fa-language"></i>
+      <% end %>
     <%= f.text_field :father, hide_label: true , placeholder:"Enter Father Name",class: 'urdu-font' %>
   </div>
+
   <div class="col-lg-6 form-group float-left">
     <%= f.select :staff_type, Staff.staff_types.map { |key, value| [key.humanize, key] },{},{class: "form-control", required: true} %>
   </div>
@@ -54,9 +56,9 @@
 
   <div class="col-lg-6" style="float:left">
     <%= f.label :address do %>
-          <%= Staff.human_attribute_name :address %>
-          <i class="fas fa-language"></i>
-        <% end %>
+      <%= Staff.human_attribute_name :address %>
+      <i class="fas fa-language"></i>
+    <% end %>
     <%= f.text_area :address, hide_label: true , placeholder:"Enter Address",class: 'urdu-font' %>
   </div>
 
@@ -71,9 +73,11 @@
   <div class="col-lg-6 form-group float-left">
     <%= f.number_field :monthly_salary %>
   </div>
+
   <div class="col-lg-6 form-group float-left">
     <%= f.select :department_id, options_from_collection_for_select(@departments, 'id', 'title', f.object.department_id), {prompt: "Select the Department"},class:"form-control"%>
   </div>
+
   <div class="col-lg-6 form-group float-left">
     <%= f.text_field :staff_department , placeholder:"Enter Department" %>
   </div>
@@ -85,38 +89,50 @@
   <div class="col-lg-6 form-group float-left">
     <%= f.number_field :wage_rate, step: :any %>
   </div>
+
   <div class="col-lg-6 form-group float-left">
     <%= f.number_field :wage_debit, value:f.object.wage_debit.present? ? f.object.wage_debit : 0.0,label: 'Debit Balance', step: :any%>
   </div>
+
   <div class="col-lg-6 form-group float-left">
     <%= f.number_field :balance, label: 'Credit Balance',required: true , step: :any %>
   </div>
+
   <div class="col-lg-6 form-group float-left">
     <%= f.file_field :profile_image %>
   </div>
+
   <div class="col-lg-6 form-group float-left">
     <% if  staff.profile_image.attached? %>
       <%= image_tag staff.profile_image, width: 300 %>
     <% end %>
   </div>
 
-  <div class="col-lg-6 form-group float-left">
+  <div class="col-lg-12 form-group float-left">
     <%= f.collection_radio_buttons :gender, Staff.genders.map {|k,v| [k,k]}, :first, :last do |b| %>
       <%= b.radio_button %>
       <%= b.label %>
     <% end %>
   </div>
 
-<div class="clearfix">
-  <div class="col-lg-12 row ">
+  <div >
+    <h4 class="card-header">
+      Contact Form
+    </h4>
+    <%= f.fields_for :contact do |af| %>
+      <%= render 'contact', af: af %>
+    <% end %>
+  </div>
 
-          
-    <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-            <%=f.object.id.nil? ? (f.submit class: "btn btn-success", style: "float: left")  :  (f.submit class: "btn btn-warning", style: "float: left")%>      
-          </div>
-        <% end %>
+  <div class="clearfix">
+    <div class="col-lg-12 row ">
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        <%=f.object.id.nil? ? (f.submit class: "btn btn-success", style: "float: left")  :  (f.submit class: "btn btn-warning", style: "float: left")%>      
+      </div>
     </div>
+  </div>
+<% end %>
 <script>
   $(document).ready(function() {
     if ($(".bootstrap-table").length == 0){

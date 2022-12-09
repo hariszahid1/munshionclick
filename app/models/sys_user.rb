@@ -1,7 +1,7 @@
 class SysUser < ApplicationRecord
   has_one_attached :profile_image
   belongs_to :user_type
-  has_one :contact
+  has_one :contact, as: :contactable, dependent: :destroy
   has_many :ledger_books
   has_many :orders
   has_many :purchase_sale_details
