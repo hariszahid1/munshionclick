@@ -351,7 +351,9 @@ class SysUsersController < ApplicationController
         :city_id,
         :country_id,
         :sys_user_id,
-        :permanent_address
+        :permanent_address,
+        :contactable_type,
+        :contactable_id
       ],
       :notes_attributes => [
         :id,
