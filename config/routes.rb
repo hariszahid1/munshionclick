@@ -150,6 +150,7 @@ Rails.application.routes.draw do
       get "return"
       get "purchase_sale_details_return"
       get :view_history, to: 'purchase_sale_details#view_history'
+      get :analytics
     end
   end
 
