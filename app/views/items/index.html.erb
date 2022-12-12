@@ -135,12 +135,12 @@
           <td></td>
           <td></td>
           <td></td>
-          <td><%= @total_cost%></td>
-          <td><%= @total_sale%></td>
-          <td><h5><%=@items.sum(:stock)%></h5></td>
-          <td><%= @total_minimum%></td>
-          <td><%= @total_optimal%></td>
-          <td><%= @total_maximum%></td>
+          <td><%= number_with_delimiter @total_cost%></td>
+          <td><%= number_with_delimiter @total_sale%></td>
+          <td><h5><%=number_with_delimiter @items.sum(:stock)%></h5></td>
+          <td><%= number_with_delimiter @total_minimum%></td>
+          <td><%= number_with_delimiter @total_optimal%></td>
+          <td><%= number_with_delimiter @total_maximum%></td>
           <td></td>
           <td></td>
           <td></td>

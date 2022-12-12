@@ -49,14 +49,13 @@
       <%= render partial: 'product_stock', collection: @product_stocks %>
       <tr>
         <td><b>Total</b></td>
-        <td><b><%=@in_stock%></b></td>
-        <td><b><%=@out_stock%></b></td>
-        <td><b><%=@in_stock-@out_stock%></b></td>
-        <td><b></b></td>
-        <td><b></b></td>
-        <td><b></b></td>
-        <td>
-        </td>
+        <td><b><%= number_with_delimiter @in_stock%></b></td>
+        <td><b><%= number_with_delimiter @out_stock%></b></td>
+        <td><b><%= number_with_delimiter @in_stock-@out_stock%></b></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
       </tr>
     </tbody>
   </table>

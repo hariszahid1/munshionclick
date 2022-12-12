@@ -5,7 +5,7 @@
     </div>
     <div class="col-lg-12 row">
       <div class="col-lg-6 form-group float-left text-black">
-        <%= f.text_area :message, placeholder: "Enter your message", hide_label: true ,class: 'urdu-font' %>
+        <%= f.text_area :message, placeholder: "Enter your message", hide_label: true ,class: 'urdu-font', required: true %>
       </div>
       <div class="col-lg-6 form-group float-left text-black">
         <%= f.select :assigned_to_id, options_from_collection_for_select(@staff, 'id', 'name',f.object&.assigned_to_id.present? ? f.object&.assigned_to_id : nil ),{include_blank: "Please Select Assignee"},{class: "form-control"} %>

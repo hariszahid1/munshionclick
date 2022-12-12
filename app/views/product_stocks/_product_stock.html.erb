@@ -1,10 +1,10 @@
 <tr>
   <td><%= product_stock.product.title %></td>
-  <td><%= product_stock.in_stock %></td>
-  <td><%= product_stock.out_stock %></td>
-  <td><%= product_stock.stock %></td>
-  <td><%= product_stock.cost_price %></td>
-  <td><%= product_stock.sale_price %></td>
+  <td><%= number_with_delimiter product_stock.in_stock %></td>
+  <td><%= number_with_delimiter product_stock.out_stock %></td>
+  <td><%= number_with_delimiter product_stock.stock %></td>
+  <td><%= number_with_delimiter product_stock.cost_price %></td>
+  <td><%= number_with_delimiter product_stock.sale_price %></td>
   <td><%= product_stock.created_at.strftime("%d%b%y at %I:%M %p") %></td>
   <td>
     <% if can?(:update, :all) %>
