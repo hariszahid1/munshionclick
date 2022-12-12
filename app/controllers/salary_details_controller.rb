@@ -1104,6 +1104,8 @@ class SalaryDetailsController < ApplicationController
   def analytics
     type = params[:type]
     case type
+    when 'daily'
+      date_limit = DateTime.current.all_day
     when 'weekly'
       date_limit = DateTime.current.all_week
     when 'monthly'

@@ -1,0 +1,166 @@
+$("#show-analytics").html("<%= escape_javascript(render(:partial => "analytics"))%>");
+
+$( document ).ready(function() {
+
+  const ctx = document.getElementById('myChart');
+  var staffNames=$('#staffNames').val().split(' ')
+  var staffDebit=$('#staffDebit').val().split(' ')
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: staffNames,
+      datasets: [{
+        label: 'Total Debit/Benam',
+        data: staffDebit,
+        borderWidth: 1,
+        backgroundColor: '#FF5C5C'
+      }],
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Total Credit Chart Staff Wise',
+                
+            }
+        }
+    }
+  });
+});
+
+$( document ).ready(function() {
+
+  const ctx = document.getElementById('myChart1');
+  var staffNamesC=$('#staffNamesC').val().split(' ')
+  var staffCredit=$('#staffCredit').val().split(' ')
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: staffNamesC,
+      datasets: [{
+        label: 'Total Credit/Jama',
+        data: staffCredit,
+        borderWidth: 1,
+        backgroundColor: 'green'
+      }],
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Total Debit Chart Staff Wise',
+                
+            }
+        }
+    }
+  });
+});
+
+$( document ).ready(function() {
+
+  const ctx = document.getElementById('myChart2');
+  var debitDate=$('#debitDate').val().split(' ')
+  var debitDateV=$('#debitDateV').val().split(' ')
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: debitDate,
+      datasets: [{
+        label: 'Total Debit/Benam',
+        data: debitDateV,
+        borderWidth: 1,
+      }],
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Total Debit Chart Date Wise',
+                
+            }
+        }
+    }
+  });
+});
+
+$( document ).ready(function() {
+var staffNames=$('#staffNames').val().split(' ')
+var staffDebit=$('#staffDebit').val().split(' ')
+var staffCredit=$('#staffCredit').val().split(' ')
+
+
+const data = {
+  labels: staffNames,
+  datasets: [
+    
+    {
+      label: 'Total Debit',
+      data:  staffDebit,
+      
+    },
+     {
+      label: 'Total Credit',
+      data: staffCredit
+    },
+    
+  ]
+  
+};
+// config
+  const config = {
+  type: 'line',
+  data: data,
+  options: {
+    stacked: false,
+    plugins: {
+      title: {
+        display: true,
+        text: 'Total Debit/Credit by Staff',
+        font: {
+                  size: 20
+                },
+      }
+    },
+  },
+};
+// chart render
+const myChart = new Chart(
+      document.getElementById('myChart3'),
+      config
+    );
+})
+
+$( document ).ready(function() {
+
+  const ctx = document.getElementById('myChart4');
+  var creditDate=$('#creditDate').val().split(' ')
+  var creditDateV=$('#creditDateV').val().split(' ')
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: creditDate,
+      datasets: [{
+        label: 'Total Credit/Jama',
+        data: creditDateV,
+        borderWidth: 1,
+      }],
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Total Credit Chart Date Wise',
+                
+            }
+        }
+    }
+  });
+});

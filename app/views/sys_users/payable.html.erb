@@ -208,8 +208,8 @@
           <td><%= sys_user.user_group %></td>
           <td><%= sys_user.status %></td>
           <td><%= sys_user.occupation %></td>
-          <td><b><%= sys_user.opening_balance %></b></td>
-          <td><b><%= sys_user.balance %><%@sys_user_balance += sys_user.balance.abs %></b> </td>
+          <td><b><%= number_with_delimiter sys_user.opening_balance %></b></td>
+          <td><b><%= number_with_delimiter sys_user.balance %><%@sys_user_balance += sys_user.balance.abs %></b> </td>
           <td><%= date.strftime("%d%b%y at %I:%M%p") %> </td>
           <td>
            <div class="icon-container-1">
@@ -290,7 +290,7 @@
         <td></td>
         <td><%= %></td>
         <td><%=  %></td>
-        <td><h5><%=@sys_user_balance %></h5></td>
+        <td><h5><%=number_with_delimiter @sys_user_balance %></h5></td>
       </tr>
     </tbody>
   </table>

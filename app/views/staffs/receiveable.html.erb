@@ -83,11 +83,11 @@
           <td><%= staff.name %></td>
           <td><%= staff.father %></td>
           <td><%= staff.date_of_joining.strftime("%A,  %d-%b-%y") if staff.date_of_joining%></td>
-          <td><%= staff.staff_salary_or_wage.to_f.round(2)%><% @monthly_wage += staff.staff_salary_or_wage.to_f.round(2) %></td>
-          <td><%= staff.advance_amount.to_f.round(2) %><% @advance += staff.advance_amount.to_f.round(2) %></td>
-          <td><%= staff.department.present? ? staff.department.title : ""%>:<%= staff.staff_raw_products.present? ? staff.staff_raw_products_titles : ""%></td>
-          <td><%= staff.wage_debit.to_f.round(2) %><% @short_pay += staff.wage_debit.to_f.round(2) %></td>
-          <td><%= staff.balance.to_f.round(2) %><% @balance += staff.balance.to_f.round(2) %></td>
+          <td><%= number_with_delimiter staff.staff_salary_or_wage.to_f.round(2)%><% @monthly_wage += staff.staff_salary_or_wage.to_f.round(2) %></td>
+          <td><%= number_with_delimiter staff.advance_amount.to_f.round(2) %><% @advance += staff.advance_amount.to_f.round(2) %></td>
+          <td><%= number_with_delimiter staff.department.present? ? staff.department.title : ""%>:<%= staff.staff_raw_products.present? ? staff.staff_raw_products_titles : ""%></td>
+          <td><%= number_with_delimiter staff.wage_debit.to_f.round(2) %><% @short_pay += staff.wage_debit.to_f.round(2) %></td>
+          <td><%= number_with_delimiter staff.balance.to_f.round(2) %><% @balance += staff.balance.to_f.round(2) %></td>
           <td>
           <% if can?(:update, :all) %>
             <%= link_to edit_staff_path(staff) do %>
@@ -118,11 +118,11 @@
         <td></td>
         <td></td>
         <td></td>
-        <td><h4><%= @monthly_wage.round(2) %><h4></td>
-        <td><h4><%= @advance.round(2) %><h4></td>
+        <td><h4><%= number_with_delimiter @monthly_wage.round(2) %><h4></td>
+        <td><h4><%= number_with_delimiter @advance.round(2) %><h4></td>
         <td></td>
-        <td><h4><%= @short_pay.round(2) %><h4></td>
-        <td><h4><%= @balance.round(2) %><h4></td>
+        <td><h4><%= number_with_delimiter @short_pay.round(2) %><h4></td>
+        <td><h4><%= number_with_delimiter @balance.round(2) %><h4></td>
       </tr>
     </tbody>
   </table>

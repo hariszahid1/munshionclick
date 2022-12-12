@@ -30,6 +30,7 @@ Rails.application.routes.draw do
     collection do
       get :transfer, to: 'staff_ledger_books#transfer'
       get :view_history, to: 'staff_ledger_books#view_history'
+      get :analytics
     end
   end
   resources :product_stock_exchanges
@@ -150,6 +151,7 @@ Rails.application.routes.draw do
       get "return"
       get "purchase_sale_details_return"
       get :view_history, to: 'purchase_sale_details#view_history'
+      get :analytics
     end
   end
 
@@ -246,6 +248,7 @@ Rails.application.routes.draw do
     end
   end
   resources :reports, only: [:index, :chart, :sale_report, :stock_report, :product_report]
+    
   resources :staffs do
     collection do
       get :payable, to: 'staffs#payable', as: :payable
@@ -271,6 +274,7 @@ Rails.application.routes.draw do
       get :loan
       get :advance
       get :advance_all
+      get :analytics
     end
   end
 

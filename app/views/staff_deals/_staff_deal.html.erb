@@ -3,8 +3,8 @@
   <td class='urdu-font'><%=staff_deal.product.present? ? staff_deal.product&.title.to_s+" "+staff_deal.product&.item_type&.title.to_s : "" %></td>
   <td><%= staff_deal.product&.product_category&.title%></td>
   <td><%= staff_deal.product&.product_sub_category&.title%></td>
-  <td><%= staff_deal.product&.sale.to_f.round(2) %></td>
-  <td><%= (staff_deal.product&.sale.to_f.round(2)*(staff_deal.product&.marla.to_f+(staff_deal.product&.square_feet.to_f/225))).to_f.round(2) %></td>
+  <td><%= number_with_delimiter staff_deal.product&.sale.to_f.round(2) %></td>
+  <td><%= number_with_delimiter((staff_deal.product&.sale.to_f.round(2)*(staff_deal.product&.marla.to_f+(staff_deal.product&.square_feet.to_f/225))).to_f.round(2)) %></td>
   <td><%= staff_deal.product&.marla.to_i %> Marla <%= staff_deal.product&.square_feet.to_i%> Square Feet | <%= staff_deal.product&.size_1.to_i %></td>
   <td>
   <div class="card">

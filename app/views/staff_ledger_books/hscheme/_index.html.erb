@@ -13,7 +13,7 @@
         <a href="<%= root_path %>">Dashboard</a>
       </li>
       <li class="breadcrumb-item active">
-        <a href="<%= staff_ledger_books_path %>">Staff/Dealer ledger Book</a>
+        <a href="<%= staff_ledger_books_path %>">Staff/Dealer Ledger Book</a>
       </li>
     </ol>
   </div>
@@ -45,12 +45,17 @@
       <a class="nav-link tab-label ledger-search-exp-tab active" data-toggle="tab" href="#search" role="tab">Search</a>
     </li>
     <li class="nav-item">
+      <a class="nav-link tab-label analytics-tab" data-toggle="tab" href="#analytics" role="tab">Analytics</a>
+    </li>
+    <li class="nav-item">
       <a class="nav-link tab-label ledger-search-exp-tab" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
     </li>
     <li class="nav-item">
       <a class="nav-link tab-label ledger-logs-tab" data-toggle="tab" href="#logs" role="tab">Logs</a>
     </li>
+
   </ul>
+  <%= link_to '', analytics_staff_ledger_books_path, id: 'analytics-path', class: 'd-none', remote: true %>
   <div class="tab-content">
     <div class="tab-pane active mb-3 card shadow-sm mt-2 border-radius-1" id="search" role="tabpanel">
       <%= search_form_for @q, url: staff_ledger_books_path, class: "admin-controls", method: "get" do |f| %>
@@ -71,11 +76,8 @@
           </div>
         </div> 
         <div class="col float-left">
-          <%if (check_can_download_csv(@module_permission))%>
-            <button class="form-control d-flex justify-content-center ml-2 btn btn-warning float-left" style="width:100px" title= "download staff ledger book csv" name="csv" type="submit" value="csv">CSV &nbsp;<i class="fa fa-file-excel mt-1"></i></button>
-          <% end %>
           <%if (check_can_download_pdf(@module_permission))%>
-            <div class="dropdown my-dropdown float-left mr-3 ml-3">
+            <div class="dropdown my-dropdown float-left mr-2 ml-3">
               <button type="button" class="form-control bg-danger text-light">PDF List</button>
               <div class="dropdown-content my-dropdown-content p-2">
                 <button class="form-control d-flex justify-content-center ml-2 mt-2 btn btn-danger" style="width:150px" name="submit_pdf_staff_with_asc" type="submit" value="Accounts PDF A4" formtarget="_blank">ASC<i class="fa fa-file-pdf ml-1 mt-1"></i></button>
@@ -84,6 +86,11 @@
               </div>
             </div>
           <% end %>
+
+          <%if (check_can_download_csv(@module_permission))%>
+            <button class="form-control d-flex justify-content-center ml-2 btn btn-warning float-left mr-2" style="width:100px" title= "download staff ledger book csv" name="csv" type="submit" value="csv"><i class="fa fa-file-excel mr-2 mt-1"></i>CSV &nbsp;</button>
+          <% end %>
+          
           <%if (check_can_send_email(@module_permission))%>
           <div class="dropdown my-dropdown float-left mr-2">
             <button type="button" class="form-control bg-info text-light">Mail List</button>
@@ -131,7 +138,10 @@
       </div>
       <% end %>
     </div>
-    <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="import-export" role="tabpanel">
+    <div class="tab-pane mb-3 card shadow-sm mt-2 p-3 border-radius-1" id="analytics" role="tabpanel">
+      <div id="show-analytics" class="row"></div>
+    </div>
+    <div class="tab-pane card shadow-sm mt-2 mb-3 border-radius-1" id="import-export" role="tabpanel">
       <p>
         <%= search_form_for @q, url: staff_ledger_books_path, class: "admin-controls", method: "get" do |f| %>
           <div class="d-flex ml-2">
@@ -226,14 +236,14 @@
             <%end%>
           </td>
           <td>
-            <%= staff_ledger_book.created_at.strftime("%d%b%y at %I:%M:%S %p") %>
+            <%= staff_ledger_book.created_at.strftime("%d/%b/%y at %I:%M:%S %p") %>
             <% if staff_ledger_book.salary.present? && staff_ledger_book.created_at.strftime("%d%b%y")!=staff_ledger_book.salary.created_at.strftime("%d%b%y") %>
               <br>
-              <%= staff_ledger_book.salary.created_at.strftime("%d%b%y at %I:%M:%S %p") %>
+              <%= staff_ledger_book.salary.created_at.strftime("%d/%b/%y at %I:%M:%S %p") %>
             <%end%>
             <%if staff_ledger_book.salary_detail.present? && staff_ledger_book.created_at.strftime("%d%b%y")!=staff_ledger_book.salary_detail.created_at.strftime("%d%b%y") %>
               <br>
-              <%= staff_ledger_book.salary_detail.created_at.strftime("%d%b%y at %I:%M:%S %p") %>
+              <%= staff_ledger_book.salary_detail.created_at.strftime("%d/%b/%y at %I:%M:%S %p") %>
             <%end%>
           </td>
           <td>
@@ -417,4 +427,8 @@
    $(function() {
     setTimeout(function() { $(".my-loader").fadeOut(1500); }, 5000)
   })
+
+   $('.analytics-tab').on('click', function(){
+      $('#analytics-path').click();
+    })
 </script>

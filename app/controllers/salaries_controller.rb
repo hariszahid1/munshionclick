@@ -20,7 +20,7 @@ class SalariesController < ApplicationController
     if @q.result.count > 0
       @q.sorts = 'id desc' if @q.sorts.empty?
     end
-    @salaries = @q.result(distinct: true).page(params[:page])
+    @salaries = @q.result.page(params[:page])
     if params[:submit_pdf].present?
       request.format = 'pdf'
     end
@@ -28,7 +28,7 @@ class SalariesController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf do
-        @salaries = @q.result(distinct: true)
+        @salaries = @q.result
         render pdf: "Day-Out",
         layout: 'pdf.html',
         page_size: 'A4',
@@ -247,6 +247,37 @@ class SalariesController < ApplicationController
       format.html { redirect_to salaries_url, notice: 'Record was successfully destroyed.' }
       format.json { head :no_content }
       format.js   { render :layout => false }
+    end
+  end
+
+  def analytics
+    type = params[:type]
+    case type
+    when 'weekly'
+      date_limit = DateTime.current.all_week
+    when 'monthly'
+      date_limit = DateTime.current.all_month
+    when 'yearly'
+      date_limit = DateTime.current.all_year
+    else
+      date_limit = DateTime.current.all_day
+    end
+
+    if params[:q].present?
+      params[:q][:created_at_gteq] = params[:q][:created_at_gteq].to_date.beginning_of_day if params[:q][:created_at_gteq].present?
+      params[:q][:created_at_lteq] = params[:q][:created_at_lteq].to_date.end_of_day if params[:q][:created_at_lteq].present?
+      @q = Salary.joins(staff: :department).includes(staff: :department).ransack(params[:q])
+    else
+      @q = Salary.joins(staff: :department).includes(staff: :department).where(created_at: date_limit).ransack(params[:q])
+    end
+    @salaries_paid_staff = @q.result.group('staffs.name').sum(:paid_salary)
+    @advance_paid_staff = @q.result.group('staffs.name').sum(:advance)
+    @salaries_paid_department = @q.result.group('departments.title').sum(:paid_salary)
+    @advance_paid_department = @q.result.group('departments.title').sum(:advance)
+    @salaries_date_paid = @q.result.group("date(salaries.created_at)").sum(:paid_salary)
+    @advance_date_paid = @q.result.group("date(salaries.created_at)").sum(:advance)
+    respond_to do |format|
+      format.js
     end
   end
 

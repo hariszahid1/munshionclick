@@ -41,9 +41,9 @@
       <% @productions.each do |production| %>
         <tr>
           <td><%= production.product.title %> - <%= production.product&.product_category&.title %> </td>
-          <td><%= production.operation_cost %></td>
-          <td><%= production.cost_price %></td>
-          <td><%= production.sale_price %></td>
+          <td><%= number_with_delimiter production.operation_cost %></td>
+          <td><%= number_with_delimiter production.cost_price %></td>
+          <td><%= number_with_delimiter production.sale_price %></td>
           <td><%= production.comment %></td>
           <td><%= production.status %></td>
 
