@@ -1091,6 +1091,44 @@ class PurchaseSaleDetailsController < ApplicationController
     end
   end
 
+  def analytics
+    type = params[:type]
+    case type
+    when 'weekly'
+      date_limit = DateTime.current.all_week
+    when 'monthly'
+      date_limit = DateTime.current.all_month
+    when 'yearly'
+      date_limit = DateTime.current.all_year
+    else
+      date_limit = DateTime.current.all_day
+    end
+
+    if params[:q].present?
+      params[:q][:created_at_gteq] = params[:q][:created_at_gteq].to_date.beginning_of_day if params[:q][:created_at_gteq].present?
+      params[:q][:created_at_lteq] = params[:q][:created_at_lteq].to_date.end_of_day if params[:q][:created_at_lteq].present?
+      @q = PurchaseSaleDetail.joins(:sys_user, purchase_sale_items: :product)
+                              .includes(:sys_user, purchase_sale_items: :product)
+                              .where(transaction_type: params[:transaction_type])
+                              .ransack(params[:q])
+    else
+      @q = PurchaseSaleDetail.joins(:sys_user, purchase_sale_items: :product)
+                              .includes(:sys_user, purchase_sale_items: :product)
+                              .where(created_at: date_limit, transaction_type: params[:transaction_type])
+                              .ransack(params[:q])
+    end
+    @total_purchase_customer = @q.result.group('sys_users.name').sum(:total_bill)
+    @total_paid_customer = @q.result.group('sys_users.name').sum(:amount)
+    @total_purchase_products = @q.result.group('products.title').sum('purchase_sale_items.quantity')
+    @total_purchase_customer_date = @q.result.group("date(purchase_sale_details.created_at)").sum(:total_bill)
+    @total_paid_customer_date = @q.result.group("date(purchase_sale_details.created_at)").sum(:amount)
+    @total_purchase_product_date = @q.result.group("date(purchase_sale_details.created_at)").sum('purchase_sale_items.quantity')
+
+    respond_to do |format|
+      format.js
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_purchase_sale_detail

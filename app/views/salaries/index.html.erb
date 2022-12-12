@@ -53,7 +53,11 @@
     <li class="nav-item">
       <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab">Search</a>
     </li>
+    <li class="nav-item">
+      <a class="nav-link tab-label analytics-tab" data-toggle="tab" href="#analytics" role="tab">Analytics</a>
+    </li>
 	</ul>
+  <%= link_to '', analytics_salaries_path, id: 'analytics-path', class: 'd-none', remote: true %>
   <div class="tab-content">
     <div class="tab-pane active mb-3 card shadow-sm mt-2 p-3 border-radius-1" id="search" role="tabpanel">
       <div class="row d-flex">
@@ -86,6 +90,9 @@
           </div>
         </div>
       </div>
+    </div>
+    <div class="tab-pane mb-3 card shadow-sm mt-2 p-3 border-radius-1" id="analytics" role="tabpanel">
+      <div id="show-analytics" class="row"></div>
     </div>
   </div>
 
@@ -179,9 +186,9 @@
     <tr>
       <td><h5>Total</h5></td>
       <td></td>
-      <td></td>
-      <td></td>
       <td><h5><%= number_with_delimiter(@salaries.sum(:paid_salary)+@salaries.sum(:advance))%></h5></td>
+      <td></td>
+      <td></td>
       <td></td>
     </tr>
   </tbody>
@@ -203,5 +210,9 @@
     }
     $("#students_list").removeClass('hidden');
     FontAwesome.dom.i2svg();
+
+    $('.analytics-tab').on('click', function(){
+      $('#analytics-path').click();
+    })
   });
 </script>

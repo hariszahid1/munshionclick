@@ -51,11 +51,19 @@
 		<li class="nav-item">
 			<a class="nav-link tab-label active purchase-sale-search-exp-tab" data-toggle="tab" href="#search" role="tab">Search</a>
 		</li>
-
     <li class="nav-item">
       <a class="nav-link tab-label purchase-sale-logs-tab" data-toggle="tab" href="#logs" role="tab">Logs</a>
     </li>
+    <li class="nav-item">
+      <a class="nav-link tab-label analytics-tab" data-toggle="tab" href="#analytics" role="tab">Analytics</a>
+    </li>
 	</ul>
+  <% if params[:sale].present?%>
+    <%= link_to '', analytics_purchase_sale_details_path(transaction_type: 'Sale'), id: 'analytics-path', class: 'd-none', remote: true %>
+  <% else %>
+    <%= link_to '', analytics_purchase_sale_details_path(transaction_type: 'Purchase'), id: 'analytics-path', class: 'd-none', remote: true %>
+  <% end %>
+
   <div class="clearfix"></div>
   <div class="tab-content">
     <div class="tab-pane active mb-3 card shadow-sm mt-2 border-radius-1 mr-4" id="search" role="tabpanel">
@@ -159,6 +167,9 @@
         </div>
         <div class="my-loader mx-auto"></div>
       </p>
+    </div>
+    <div class="tab-pane mb-3 card shadow-sm mt-2 p-3 border-radius-1" id="analytics" role="tabpanel">
+      <div id="show-analytics" class="row"></div>
     </div>
   </div>
   <div class= "purchase-sale-book-index-card">
@@ -345,7 +356,7 @@
             <%end%>
           <%end%>
         <% end %>
-        <tr ">
+       <tr>
           <td><h5></h5></td>
           <td></td>
           <td></td>
@@ -443,10 +454,13 @@
   $(document).ready(function() {
     setTimeout(function(){
       $(".chosen-select").chosen({
-  allow_single_deselect: true,
-  width: '100%'
-});
+      allow_single_deselect: true,
+      width: '100%'
+    });
     }, 50);
+    $('.analytics-tab').on('click', function(){
+      $('#analytics-path').click();
+    })
   });
 
   $(function() {
