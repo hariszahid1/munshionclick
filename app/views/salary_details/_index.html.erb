@@ -38,15 +38,15 @@
         <div class="col-lg-12 col-sm-12">
           <%= search_form_for @q, url: salary_details_path, class: "admin-controls", method: "get" do |f| %>
             <div class="col-lg-4 form-group float-left">
-              <%= f.select :staff_id_in, options_from_collection_for_select(@staffs, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code}"},f.object.staff_id_in),{:include_blank => "Select Staff"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Staff"}}%>
+              <%= f.select :staff_id_in, options_from_collection_for_select(@staffs, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code}"},f.object.staff_id_in),{include_blank_disabled: "Select Staff"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Staff"}}%>
+            </div>
+            <div class="col-lg-2 form-group float-left">
+              <%= f.select :staff_department_id_eq, options_from_collection_for_select(@departments, 'id', 'title', @department), {hide_label:true,title: "Select the Department" ,prompt: "Select the Department"},:class=>"form-control chosen-select"%>
             </div>
             <div class="col-lg-2 form-group float-left">
               <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker', 'datepicker' => true,placeholder: "YYYY-MM-DD" %>
               <%= f.search_field :quantity_or_raw_quantity_gt,value: '0', class: 'hidden' %>
             </div>
-            <div class="col-lg-2 form-group float-left">
-                <%= f.select :staff_department_id_eq, options_from_collection_for_select(@departments, 'id', 'title', @department), {hide_label:true,title: "Select the Department" ,prompt: "Select the Department"},:class=>"form-control chosen-select"%>
-              </div>
             <div class="col-lg-2 form-group float-left">
               <%= f.search_field :created_at_lteq, class: 'form-control button-sm datepicker', 'datepicker' => true ,placeholder: "YYYY-MM-DD"%>
             </div>
