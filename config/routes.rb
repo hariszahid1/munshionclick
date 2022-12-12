@@ -271,6 +271,7 @@ Rails.application.routes.draw do
       get :loan
       get :advance
       get :advance_all
+      get :analytics
     end
   end
 
