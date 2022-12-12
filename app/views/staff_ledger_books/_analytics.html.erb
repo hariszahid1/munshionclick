@@ -1,0 +1,69 @@
+<%= hidden_field_tag "staffNames", @staff_debit.keys.map{ |a| a.gsub(' ', '-') }, { id: "staffNames" } %>
+<%= hidden_field_tag "staffDebit", @staff_debit.values, { id: "staffDebit" } %>
+<%= hidden_field_tag "staffNamesC", @staff_credit.keys.map{ |a| a.gsub(' ', '-') }, { id: "staffNamesC" } %>
+<%= hidden_field_tag "staffCredit", @staff_credit.values, { id: "staffCredit" } %>
+<%= hidden_field_tag "debitDate", @debit_date.keys, { id: "debitDate" } %>
+<%= hidden_field_tag "debitDateV", @debit_date.values, { id: "debitDateV" } %>
+<%= hidden_field_tag "creditDate", @credit_date.keys, { id: "creditDate" } %>
+<%= hidden_field_tag "creditDateV", @credit_date.values, { id: "creditDateV" } %>
+
+<%= search_form_for @q, url: analytics_staff_ledger_books_path, class: "admin-controls col-12 row mb-3", remote: true, method: "get" do |f| %>
+  <%= link_to 'Daily', analytics_staff_ledger_books_path(type: 'daily'), class: 'btn btn-info ml-2 mb-2', remote: true %>
+  <%= link_to 'Weekly', analytics_staff_ledger_books_path(type: 'weekly'), class: 'btn btn-danger ml-2 mb-2', remote: true %>
+  <%= link_to 'Monthly', analytics_staff_ledger_books_path(type: 'monthly'), class: 'btn btn-success ml-2 mb-2', remote: true %>
+  <%= link_to 'Yearly', analytics_staff_ledger_books_path(type: 'yearly'), class: 'btn btn-warning ml-2 mb-2', remote: true %>
+
+  <div class="col-lg-2">
+    <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker mb-2', datepicker: true, placeholder: "YYYY-MM-DD" %>
+  </div>
+
+  <div class="col-lg-2">
+    <%= f.search_field :created_at_lteq, class: 'form-control button-sm datepicker mb-2', datepicker: true , placeholder: "YYYY-MM-DD" %>
+  </div>
+  <div class="col-lg-2">
+    <%= f.select :staff_id_eq, options_from_collection_for_select(Staff.all, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code} "}, f.object.staff_id_eq),{:include_blank => "Select Staff Name"},:class=>"form-control chosen-select mb-2" %>
+  </div>
+  <button class="form-control btn btn-primary ml-3" style="width: 100px;" name="search_submit" type="submit" value="Search"><i class="fa fa-search"></i></button>
+<% end %>
+<div class="col-lg-12 mb-3">
+  <div class="my-chart-Container card border-radius-1 shadow p-2 m-1">
+    <canvas id="myChart3"></canvas>
+  </div>
+</div>
+<div class="col-lg-6 mb-3">
+  <div class="my-chart-Container">
+    <div class="mychartBox card border-radius-1 shadow">
+      <canvas id="myChart"></canvas>
+    </div>
+  </div>
+</div>
+<div class="col-lg-6 mb-3">
+  <div class="my-chart-Container">
+    <div class="mychartBox card border-radius-1 shadow">
+      <canvas id="myChart1"></canvas>
+    </div>
+  </div>
+</div>
+<div class="col-lg-6 mb-3">
+  <div class="my-chart-Container">
+    <div class="mychartBox card border-radius-1 shadow">
+      <canvas id="myChart2"></canvas>
+    </div>
+  </div>
+</div>
+<div class="col-lg-6 mb-3">
+  <div class="my-chart-Container">
+    <div class="mychartBox card border-radius-1 shadow">
+      <canvas id="myChart4"></canvas>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  $(document).ready(function() {
+    $('.datepicker').datetimepicker({
+      format: "YYYY-MM-DD"
+    });
+  });
+</script>

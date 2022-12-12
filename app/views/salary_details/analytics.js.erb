@@ -7,13 +7,14 @@ $( document ).ready(function() {
   var salaries_amount=$('#salaries_amount').val().split(' ')
   Chart.defaults.font.size = 16;
   new Chart(ctx, {
-    type: 'pie',
+    type: 'bar',
     data: {
       labels: staffNames,
       datasets: [{
         label: 'Total Amount',
         data: salaries_amount,
         borderWidth: 1,
+        backgroundColor: 'red'
       }],
     },
     options: {
@@ -44,6 +45,7 @@ $( document ).ready(function() {
         label: 'Total Amount',
         data: department_amount_total,
         borderWidth: 1,
+        backgroundColor: 'green'
       }],
     },
     options: {
@@ -76,6 +78,7 @@ $( document ).ready(function() {
         label: 'Total Amount',
         data: salaries_date_amount,
         borderWidth: 1,
+        backgroundColor: 'blue'
       }],
     },
     options: {
