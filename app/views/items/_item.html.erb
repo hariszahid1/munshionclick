@@ -3,12 +3,12 @@
   <td><%= item.item_type.title %></td>
   <td><%= item.title %></td>
   <td><%= item.code %></td>
-  <td><%= item.cost.to_f.round(2) %></td>
-  <td><%= item.sale.to_f.round(2) %></td>
-  <td><%= item.stock %></td>
-  <td><%= item.minimum %></td>
-  <td><%= item.optimal %></td>
-  <td><%= item.maximun %></td>
+  <td><%= number_with_delimiter item.cost.to_f.round(2) %></td>
+  <td><%= number_with_delimiter item.sale.to_f.round(2) %></td>
+  <td><%= number_with_delimiter item.stock %></td>
+  <td><%= number_with_delimiter item.minimum %></td>
+  <td><%= number_with_delimiter item.optimal %></td>
+  <td><%= number_with_delimiter item.maximun %></td>
   <td><span title="<%= item.comment %>" class='truncate-text'><%= item.comment %></span></td>
   <td><%= item.status %></td>
   <td>

@@ -23,29 +23,29 @@
                 <%total=0%>
                 <td><%=ex.first.last%></td>
                 <td><%=ex.first.first%></td>
-                <td><%=ex.last.first%>       <%total=total+(ex.last.first)%></td>
+                <td><%= number_with_delimiter ex.last.first %>       <%total=total+(ex.last.first)%></td>
                 <%ExpenseType.pluck(:title).each_with_index do |rev, indx|%>
                   <td>
-                    <%with    =ex.second.second[rev].present? ? ex.second.second[rev] : 0%>
-                    <%without =ex.second.third[rev].present? ? ex.second.third[rev] : 0%>
-                    <%=with+without%>  <%@rev[rev]=@rev[rev].present? ? @rev[rev]+with+without : with+without%>     <%total=total+(without+with)%>
+                    <%with = ex.second.second[rev].present? ? ex.second.second[rev] : 0%>
+                    <%without = ex.second.third[rev].present? ? ex.second.third[rev] : 0%>
+                    <%=number_with_delimiter with+without %>  <%@rev[rev]=@rev[rev].present? ? @rev[rev]+with+without : with+without%>     <%total=total+(without+with)%>
                   </td>
                 <%end%>
-                <td><%=ex.last.fourth%><%total=total+ex.last.fourth%></td>
-                <td><%=ex.last.last%><%total=total+ex.last.last%></td>
-                <td><%=total%><%@total=@total+total%></td>
+                <td><%= number_with_delimiter ex.last.fourth%><%total=total+ex.last.fourth.round(2) %></td>
+                <td><%= number_with_delimiter ex.last.last%><%total=total+ex.last.last.round(2) %></td>
+                <td><%= number_with_delimiter total.round(2) %><%@total=@total+total%></td>
               </tr>
             <%end%>
             <tr>
               <td><h5>Total</h5></td>
               <td></td>
-              <td><h5><%=@total_salary%></h5></td>
+              <td><h5><%=number_with_delimiter @total_salary%></h5></td>
               <%ExpenseType.pluck(:title).each_with_index do |rev, indx|%>
-                <td><h5><%=@rev[rev]%></h5></td>
+                <td><h5><%=number_with_delimiter @rev[rev]%></h5></td>
               <%end%>
-              <td><h5><%=@purchase_sale_detail%></h5></td>
-              <td><h5><%=@investment_month%></h5></td>
-              <td><h5><%=@total%></h5></td>
+              <td><h5><%=number_with_delimiter @purchase_sale_detail%></h5></td>
+              <td><h5><%=number_with_delimiter @investment_month%></h5></td>
+              <td><h5><%=number_with_delimiter @total%></h5></td>
             </tr>
         </tbody>
       </table>
