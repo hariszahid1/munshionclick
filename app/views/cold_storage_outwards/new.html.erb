@@ -1,0 +1,3 @@
+<input class="hidden" value=<%=pos_setting_sys_type%> id="pos_setting_sys_type">
+<input class="hidden" value=<%=@purchase_sale_detail.id%> id="purchase_sale_detail_id">
+<%= render 'form', purchase_sale_detail: @purchase_sale_detail, model: @purchase_sale_detail, local: true,  method: :post, url: cold_storage_outwards_path(@purchase_sale_detail) %>

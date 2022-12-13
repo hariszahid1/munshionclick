@@ -1,0 +1,120 @@
+<%= bootstrap_form_with(model: @order, method: method, url: url, local: true) do |f| %>
+  <% if order.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(order.errors.count, "error") %> prohibited this order from being saved:</h2>
+
+      <ul>
+      <% order.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="col-xl-12 col-md-12 mb-12">
+    <div class="card border-left-primary shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="row">
+              <div class='hidden'>Status</div>
+              <div class="col-lg-4 form-group float-left font-weight-bold ">Customer</div>
+              <div class="col-lg-4 form-group float-left font-weight-bold ">Casher</div>
+              <div class="col-lg-2 form-group float-left font-weight-bold ">Received Amount</div>
+            </div>
+          <div class="row">
+            <div class='hidden'>
+              <%= f.hidden_field :transaction_type, value: "Outward" %>
+              <%= f.select :status, Order.statuses.map { |key, value| [key.humanize, key] },{hide_label:true,class: "form-control", required: true} %>
+            </div>
+            <div class="col-lg-4 form-group float-left">
+              <%= f.select :sys_user_id, options_from_collection_for_select(@suppliers, 'id', 'name', f.object.sys_user_id), {hide_label:true,prompt: "Select the Supplier"},class:"form-control chosen-select", required: true %>
+            </div>
+            <div class="col-lg-4 form-group float-left">
+              <%= f.select :account_id , options_from_collection_for_select(@accounts, 'id', 'title', (f.object.account_id.present? ? f.object.account_id : @account)), {hide_label:true},class:"form-control"%>
+            </div>
+            <div class="col-lg-3 form-group float-left">
+              <%= f.hidden_field :total_bill%><%= f.number_field :amount,step: :any,hide_label:true,onchange:"remaingUpdateAmountOrder()",onkeyup:"remaingUpdateAmountOrder()", required: true %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-12 col-md-12 mb-12">
+    <div class="card border-left-primary shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="row">
+              <div class="col-lg-2 form-group float-left">
+                <h5>Order</h5>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <h5>Marka</h5>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <h5>Builty No</h5>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <h5>Vehicle</h5>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <h5>Challan No</h5>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <h5>Stock</h5>
+              </div>
+            </div>
+
+            <%if @order.order_items.present?%>
+              <%= f.fields_for :order_items do |order_item| %>
+              <%= render '/order_outwards/order_items_fields', f: order_item%>
+              <% end %>
+            <%end%>
+            <div class="links font-weight-bold text-success text-uppercase">
+              <%# //ADD PRODUCT HERE %>
+              <%= link_to_add_association f, :order_items, partial: 'order_outwards/order_items_fields', class: "new_product"  do %>
+                <i class="fa fa-plus"></i> Add Product (<span id="total_product_quantity"></span>)
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- PurchaseSaleItem -->
+  <div class="col-xl-12 col-md-12 mb-12">
+    <div class="card border-left-primary shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col">
+            <div class="row">
+              <% if f.object.persisted? && f.object.order_images.present? %>
+                <% f.object.order_images.each do |image| %>
+                  <%= image_tag image, width: 200, style: 'margin-right:20px;' %>
+                <% end %>
+              <% end %>
+              <div class="col-lg-12 form-group float-left font-weight-bold ">
+                <%= f.file_field :order_images, multiple: true,'Filelimit' => 10, accept: 'image/*,.png', placeholder: '100 MB', class: "cursor-pointer upload_field" %>
+              </div>
+              <div class="col-lg-6 form-group float-left font-weight-bold ">
+                <%= f.datetime_select :created_at%>
+              </div><hr>
+              <div class="col-lg-6 form-group float-left font-weight-bold ">
+                Comment<%= f.text_area :comment, placeholder:"Enter Comment",hide_label:true%>
+              </div>
+            </div>
+            <div class="actions">
+              <div class="col-lg-6" style="float:left">
+                <%= f.submit class: "btn btn-success col-lg-12", style: "float: right",value: "Save", onclick:"save_sale_order()" %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<% end %>
+<%= javascript_include_tag 'hover', 'data-turbolinks-track': 'reload' %>

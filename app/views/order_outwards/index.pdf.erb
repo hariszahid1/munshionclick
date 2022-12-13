@@ -1,0 +1,65 @@
+<html>
+  <head>
+    <style>
+      .border-bottom{
+        border-bottom: double 4px;
+      }
+      .text-center{
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <% @date = Date.today  %>
+    <% @time = DateTime.now %>
+    <% @time = Time.zone.now %>
+    <div>
+      <p class="border-bottom"></p>
+      <h1 class="text-center">Outward Details</h1>
+      <h1 class="text-center">
+        Date: <b><span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%></span>
+        Time: <span><%=@time.strftime("at %I:%M%p")%></span></b>
+      </h1>
+      <p class="border-bottom"></p>
+      <p class="text-center">Report by: <%=current_user.name%></p>
+    </div>
+    <div>
+      <table>
+        <thead class="lite-gray">
+          <th class="text-center">Type</th>
+          <th class="text-center">Name</th>
+          <th class="text-center">Amount</th>
+          <th class="text-center">status</th>
+        </thead>
+        <tbody>
+          <% data.each_with_index do |order, index| %>
+            <tr>
+              <td class="text-center"><%= order['type'] %></td>
+              <td class="text-center"><%= order['name'] %></td>
+              <th class="text-center"><%= order['amount'] %></th>
+              <th class="text-center"><%= order['status'] %></th>
+            </tr>
+            <tr>
+              <th class="text-center">Product</th>
+              <th class="text-center">Marka</th>
+              <th class="text-center">Builty No</th>
+              <th class="text-center">Vehicle</th>
+              <th class="text-center">Challan No</th>
+              <th class="text-center">Quantity</th>
+            </tr>
+            <% order['items'].each_with_index do |item, index| %>
+            <tr>
+              <td class="text-center"><%= item['product'] %></td>
+              <td class="text-center"><%= item['marka'] %></td>
+              <th class="text-center"><%= item['builty_no'] %></th>
+              <th class="text-center"><%= item['vehicle_no'] %></th>
+              <th class="text-center"><%= item['challan_no'] %></th>
+              <th class="text-center"><%= item['quantity'] %></th>
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

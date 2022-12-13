@@ -1,0 +1,194 @@
+<div class="hidden" id="order_list">
+  <h1>Inwards</h1>
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <div class="col-lg-2 form-group float-left">
+        <%= link_to new_order_inward_path(), class: "btn btn-success" do %>
+          <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+          Product Inward
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <ul class="nav nav-pills ml-1 mt-2" role="tablist">
+		<li class="nav-item">
+			<a class="nav-link tab-label active order-search-exp-tab" data-toggle="tab" href="#search" role="tab">Search</a>
+		</li>
+
+    <li class="nav-item">
+      <a class="nav-link tab-label order-logs-tab" data-toggle="tab" href="#logs" role="tab">Logs</a>
+    </li>
+	</ul>
+  <div class="tab-content">
+    <div class="tab-pane active mb-3 card shadow-sm mt-2 border-radius-1 mr-4" id="search" role="tabpanel">
+      <div class="row mt-4">
+        <div class="col-lg-12 col-sm-12">
+          <%= search_form_for @q, url: order_inwards_path, class: "admin-controls", method: "get" do |f| %>
+            <div class="col-lg-3 form-group float-left">
+              <%= f.select :order_items_product_item_type_id_eq, options_from_collection_for_select(ItemType.all, 'id', "title",f.object.order_items_product_item_type_id_eq), {hide_label:true,title: "Select the Line Item" ,prompt: "Select the Line Item"},class: 'form-control chosen-select'%>
+            </div>
+
+            <div class="col-lg-3 form-group float-left">
+              <%= f.select :order_items_product_id_eq, options_from_collection_for_select(@products, 'id', ->(st){"#{st.title} \u{27F6} #{st.code}"}), {hide_label:true,title: "Select the Products" ,prompt: "Select the Pruducts"},class: 'form-control chosen-select'%>
+            </div>
+
+            <div class="col-lg-3 form-group float-left">
+              <%= f.select :sys_user_id_eq, options_from_collection_for_select(@suppliers, 'id', 'name', f.object.sys_user_id), {class: 'form-control',hide_label:true,title: "Select the Supplier" ,prompt: "Select the Customer"},class: 'form-control chosen-select'%>
+            </div>
+
+            <div class="col-lg-3 form-group float-left">
+              <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker',placeholder: "YYYY-MM-DD" %>
+            </div>
+
+            <div class="col-lg-3 form-group float-left">
+              <%= f.search_field :created_at_lteq,class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
+            </div>
+
+            <div class="col-lg-3 form-group float-left">
+              <%= f.text_field :id_eq, class: "form-control",placeholder: "Voucher Number"%>
+            </div>
+
+            <div class="col-lg-2 form-group float-left">
+              <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+            </div>
+            <button class="form-control btn btn-danger float-left" style="width:100px" title= "download inwards pdf " name="pdf" type="submit"  value="Total Purchase PDF A8" formtarget="_blank" style="width:160px">PDF &nbsp;<i class="fa fa-file-pdf"></i></button>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class = "order-book-index-card">
+    <table data-toggle="table" data-search="true">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th class= "urdu-font"><%= sort_link(@q, :sys_user_name, 'Customers') %></th>
+          <th><%= sort_link(@q, :amount, 'Paid') %></th>
+          <th><%= sort_link(@q, :status, 'Status') %></th>
+          <th><%= sort_link(@q, :created_at, 'Date/Time') %></th>
+          <th><%= sort_link(@q, :comment, '') %></th>
+          <th><%= sort_link(@q, :comment, 'Comment') %></th>
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @orders.each do |order| %>
+          <tr class="table-success">
+            <td><b style="font-size:20px;color:blue;"><%= order.voucher_id.to_s+'#'+order.id.to_s %></b></td>
+            <td>
+              <b style="font-size:20px;color:blue;">
+                <%= link_to sys_users_path('q[id_eq]':order.sys_user) do %>
+                  <%= order.sys_user.name %>
+                <%end %>
+              </b>
+            </td>
+            <td><%= order.amount.to_f.round(2) rescue 0%></td>
+            <td><%= order.status %></td>
+            <td>
+              <%if order.created_at.strftime("%d-%b-%y")!=order.updated_at.strftime("%d-%b-%y")%>
+                <%= order.created_at.present? ? order.created_at.strftime("%d-%b-%y at %I:%M %p") : '' %> | <%= order.updated_at.present? ? order.updated_at.strftime("%d%b%y at %H:%M%p") : '' %>
+              <%else%>
+                <%= order.created_at.present? ? order.created_at.strftime("%d-%b-%y at %I:%M %p") : '' %>
+              <%end%>
+            </td>
+
+            <td><%= order.purchase_sale_items.expiry rescue '' %> </td>
+            <td><%= order.comment %></td>
+            <td>
+            	  <%= link_to order_inwards_path('q[id_eq]':order.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
+            	    <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i> |
+            	  <%end %>
+              <%if order.order_items.present?%>
+                <%if order.order_items.first.product.present? %>
+                  <% if can?(:update, :all) %>
+                    <%= link_to edit_order_inward_path(order) do %>
+                      <i class="fa fa-edit" aria-hidden="true"></i> |
+                    <% end %>
+                  <% end %>
+                <%end%>
+              <%end%>
+              <% if can?(:delete, :all) %>
+              <%= link_to order, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+                        <i class="fa fa-trash" aria-hidden="true"></i> |
+              <% end %>
+              <% end %>
+              <%= link_to order_inward_path(order) do %>
+                 <i class="fa fa-eye" aria-hidden="true"></i>
+              <% end %>
+            </td>
+          </tr>
+          <tr class="table-warning">
+            <td ></td>
+            <td>Order Detail</td>
+            <td>Product</td>
+            <td>Marka</td>
+            <td>Builty No</td>
+            <td>Vehicle</td>
+            <td>Challan No</td>
+            <td>Quantity</td>
+            <td></td>
+            <td></td>
+            <td></td>
+
+          </tr>
+          <%order.order_items.each do |order_item|%>
+            <tr>
+              <td></td>
+              <td></td>
+              <td class= "urdu-font"><%=order_item.product.title%></td>
+              <td><%=order_item.marka%></td>
+              <td><%=order_item.builty_no%></td>
+              <td><%=order_item.vehicle_no%></td>
+              <td><%=order_item.challan_no%></td>
+              <td><%=order_item.quantity%></td>
+              <td></td>
+            </tr>
+          <%end%>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="clearfix"></div>
+<div class="row order-book-index-card">
+  <div class="col-lg-4 col-sm-4">
+    <%= page_entries_info @orders %>
+  </div>
+  <div class="col-lg-8 col-sm-8 pagination-left">
+    <%= paginate @orders %>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#order_list").removeClass('hidden');
+    FontAwesome.dom.i2svg();
+
+    $('.order-logs-tab').on('click', function(){
+      $('#order-logs').click();
+      $('.order-book-index-card').addClass('d-none')
+    })
+
+
+    $('.order-search-exp-tab').on('click', function(){
+      $('.order-book-index-card').removeClass('d-none')
+    })
+  });
+  $(document).ready(function() {
+    setTimeout(function(){
+      $(".chosen-select").chosen({
+  allow_single_deselect: true,
+  width: '100%'
+});
+    }, 50);
+  });
+
+  $(function() {
+    setTimeout(function() { $(".my-loader").fadeOut(1500); }, 5000)
+  })
+</script>
