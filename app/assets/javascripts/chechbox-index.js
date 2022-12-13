@@ -41,6 +41,17 @@ $( document ).ready(function() {
     }
   });
 
+  $(document).on('keyup', '.challan-no-value', function () {
+    debugger;
+    if($(this).val().includes('/')){
+      value_for_stocks = $(this).val().split('/')[1]
+      $(this).closest('.challan-stock-container').find('.stock-value').val(value_for_stocks)
+    }
+    else{
+      $(this).closest('.challan-stock-container').find('.stock-value').val(0)
+    }
+  })
+
 })
 
 // Preloader JS

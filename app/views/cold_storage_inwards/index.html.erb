@@ -1,0 +1,287 @@
+<%@total_pro=0%>
+<%@total_discont=0%>
+<div class="hidden" id="purchase_sale_detail_list">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="col-lg-3 form-group float-left">
+        <%= link_to new_cold_storage_inward_path(), class: "btn btn-success col-lg-12" do %>
+          <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+          InWard
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+  <%= search_form_for @q, url: cold_storage_inwards_path, class: "admin-controls", method: "get" do |f| %>
+  <div class="clearfix"></div>
+
+  <div class="row">
+    <div class="col-lg-12 collapse show" id="multiCollapseExample1">
+      <div class="col-lg-3 form-group float-left">
+        <%= f.select :purchase_sale_items_product_id_eq, options_from_collection_for_select(@products, 'id', 'title',@title),{:include_blank => "Select product"}, class: "chosen-select"%>
+      </div>
+      <div class="col-lg-3 form-group float-left">
+        <%= f.select :sys_user_id_eq, options_from_collection_for_select(@customers, 'id', 'name', @name),{:include_blank => "Select Customer"},class: 'form-control chosen-select'%>
+      </div>
+      <div class="col-lg-3 form-group float-left">
+        <%= f.select :user_name_eq, @users,{:include_blank => "Select Creater"},class: 'form-control chosen-select'%>
+      </div>
+      <div class="col-lg-3 form-group float-left">
+        <%= f.select :account_id_eq, options_from_collection_for_select(@accounts, 'id', 'title',f.object.account_id_eq),{:include_blank => "Select Account's"},class: 'form-control chosen-select'%>
+      </div>
+      <div class="col-lg-2 form-group float-left">
+        <%= f.search_field :created_at_gteq,class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
+      </div>
+      <div class="col-lg-2 form-group float-left">
+        <%= f.search_field :created_at_lteq,class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
+      </div>
+      <div class="col-lg-2 form-group float-left">
+        <%= f.text_field :purchase_sale_items_size_13_cont, class: "form-control",placeholder: "Marka"%>
+      </div>
+      <div class="col-lg-2 form-group float-left">
+        <%= f.text_field :purchase_sale_items_size_12_cont, class: "form-control",placeholder: "Builty No"%>
+      </div>
+      <div class="col-lg-1 form-group float-left">
+        <button class="form-control btn btn-primary" name="search_submit" type="submit" style="width:100px" value="Search"><i class="fa fa-search"></i></button>
+      </div>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+  <% end %>
+
+  <table data-toggle="table" data-search="true">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th><%= sort_link(@q, :sys_user_name, 'Customers') %></th>
+        <th><%= sort_link(@q, :purchase_sale_item_count, 'Items') %></th>
+        <th><%= sort_link(@q, :amount, 'Paid') %></th>
+        <th><%= sort_link(@q, :discount_price, 'Discount') %></th>
+        <th><%= sort_link(@q, :status, 'Status') %></th>
+        <th><%= sort_link(@q, :created_at, 'Time') %></th>
+        <th><%= sort_link(@q, :bill_no, 'EDate/Bill/PO') %></th>
+        <th><%= sort_link(@q, :comment, 'Comment') %></th>
+        <th>Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @purchase_sale_details.each do |purchase_sale_detail| %>
+        <tr class="table-success">
+          <td><b><%= purchase_sale_detail.voucher_id.to_s+'#'+purchase_sale_detail.id.to_s %></b></td>
+          <td class="urdu-font">
+            <b>
+            <%= link_to sys_users_path('q[id_eq]':purchase_sale_detail.sys_user) do %>
+              <%= purchase_sale_detail.sys_user.name %>
+            <%end %>
+            </b>
+          </td>
+          <td><b><%= purchase_sale_detail.purchase_sale_items.count rescue 0 %></b></td>
+          <td><b><%= purchase_sale_detail.amount.to_f.round(2) rescue 0%></b></td>
+          <td><b><%= purchase_sale_detail.discount_price.to_f.round(2) rescue 0%></b></td>
+          <td>
+            <b>
+              <% if (purchase_sale_detail.total_bill.to_i - (purchase_sale_detail.amount.to_f + purchase_sale_detail.discount_price.to_f)) > 0 %>
+                <p class="text-danger">
+                Pending
+                <br>
+                </p>
+                <h5 style="color:#FF0000"><%= (purchase_sale_detail.total_bill.to_i - (purchase_sale_detail.amount.to_f+purchase_sale_detail.discount_price.to_f))%></h5>
+              <% else %>
+                <p class="text-success">
+                  <b><%= purchase_sale_detail.status  %></b>
+                </p>
+              <% end %>
+            </b>
+          </td>
+          <td>
+            <%if purchase_sale_detail.created_at.strftime("%d%b%y")!=purchase_sale_detail.updated_at.strftime("%d%b%y")%>
+              <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d%b%y at %I:%M%p") : '' %> | <%= purchase_sale_detail.updated_at.present? ? purchase_sale_detail.updated_at.strftime("%d%b%y at %H:%M%p") : '' %>
+            <%else%>
+              <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d%b%y at %I:%M%p") : '' %>
+            <%end%>
+          </td>
+          <td><%= purchase_sale_detail.purchase_sale_items.expiry rescue '' %> <%= purchase_sale_detail.bill_no%></td>
+          <td><%=purchase_sale_detail.staff_full_name%> | <%= purchase_sale_detail.comment %> <%=purchase_sale_detail.with_gst.present? ? "GST" : ""%></td>
+          <td>
+            <%if purchase_sale_detail.with_gst=="true"%>
+              <%= link_to purchase_sale_detail_path(purchase_sale_detail,with_gst: true),target: "_blank" do %>
+                <i class="fa fa-print" aria-hidden="true"></i> |
+              <% end %>
+            <%else%>
+              <%= link_to purchase_sale_detail,target: "_blank" do %>
+                <i class="fa fa-print" aria-hidden="true"></i> |
+              <% end %>
+            <%end%>
+            <%if purchase_sale_detail.purchase_sale_items.present?%>
+              <%if purchase_sale_detail.purchase_sale_items.first.product.present? %>
+                <% if can?(:update, :all) %>
+                  <%= link_to edit_cold_storage_inward_path(purchase_sale_detail) do %>
+                    <i class="fa fa-edit" aria-hidden="true"></i> |
+                  <% end %>
+                <% end %>
+              <%else%>
+                <% if can?(:update, :all) %>
+                  <%= link_to edit_purchase_sale_detail_path(purchase_sale_detail) do %>
+                    <i class="fa fa-edit" aria-hidden="true"></i> |
+                  <% end %>
+                <% end %>
+              <%end%>
+            <%end%>
+          <% if can?(:destory, :all) %>
+            <%= link_to purchase_sale_detail, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+                      <i class="fa fa-trash" aria-hidden="true"></i> |
+            <% end %>
+          <% end %>
+          <%if ['Purchase','Sale'].include? purchase_sale_detail.transaction_type.to_s%>
+            <%= link_to new_purchase_sale_detail_path(purchase_sale_detail_id:purchase_sale_detail.id,product:true,transaction_type:'sale',purchase_sale_type: "SaleReturn") do %>
+              <i class="fa fa-undo"></i> |
+            <% end %>
+          <%end%>
+          <%if purchase_sale_detail.with_gst=="true"%>
+            <%= link_to purchase_sale_detail_path(purchase_sale_detail,pdf: true),target: "_blank"  do %>
+              <i class="fa fa-eye" aria-hidden="true"></i>
+            <% end %>
+          <%else%>
+            <%= link_to purchase_sale_detail_path(purchase_sale_detail,pdf: true),target: "_blank"  do %>
+              <i class="fa fa-eye" aria-hidden="true"></i>
+            <% end %>
+          <%end%>
+          </td>
+        </tr>
+        <tr >
+          <td></td>
+          <td></td>
+          <td class="table-active"><b>Item type</b></td>
+          <td class="table-active"><b>Marka</b></td>
+          <td class="table-active"><b>Builty No:</b></td>
+          <td class="table-active"><b>Vehicle</b></td>
+          <td class="table-active"><b>Challan</b></td>
+          <td class="table-active"><b>Stock</b></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+          <%profit=0%>
+          <%gst=0%>
+          <%purchase_sale_detail.purchase_sale_items.each do |item|%>
+            <tr>
+              <td></td>
+              <td></td>
+              <td><%=item&.product&.title %></td>
+              <td><%=item.size_13%></td>
+              <td><%=item.size_12%></td>
+              <td><%=item.size_11%></td>
+              <td><%= item.size_10 %></td>
+              <td><%= item.size_9 %></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          <%end%>
+            <tr class="table-info">
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td><%=profit.to_f.round(2)-purchase_sale_detail.discount_price.to_f%></td>
+              <td><%=gst.to_f.round(2)%></td>
+              <td></td>
+            </tr>
+      <% end %>
+      <tr>
+        <td><h5></h5><td
+        <td></td>
+        <td></td>
+        <td class="table-active"><h5>Total Stock</h5></td>
+        <td class="table-active"><h5>Total Paid</h5></td>
+        <td class="table-active"><h5>Total Discount</h5></td>
+        <td class="table-active"><h5>Pending</h5></td>
+        <td></td>
+        <td  class="table-active"><h5>Profit</h5></td>
+        <td></td>
+        <td></td>
+
+
+      </tr>
+      <tr>
+        <td class="table-active"><h5>Total</h5><td>
+        <td></td>
+        <td><h5><%=@total_stock.to_f.round(2)%></h5></td>
+        <td><h5><%=@total_am.to_f.round(2)%></h5></td>
+        <td><h5><%=@total_dis.to_f.round(2)%></h5></td>
+        <td></td>
+        <td><h5><%=@total_profit.to_f.round(2)%></h5></td>
+        <td></td>
+        <td></td>
+
+
+
+      </tr>
+      <tr>
+        <td><h5></h5><td>
+        <td></td>
+        <td class="table-active"><h5>Total Quantity</h5></td>
+        <td></td>
+        <td><h4></h4></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+
+
+
+      </tr>
+      <tr>
+        <td class="table-active"><h5>Product Sold</h5><td>
+        <td></td>
+        <td><h5><%=@total_pro%></h5></td>
+        <td></td>
+        <td><h4></h4></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+
+
+
+      </tr>
+
+
+    </tbody>
+  </table>
+</div>
+
+<div class="clearfix"></div>
+<div class="row">
+  <div class="col-lg-4 col-sm-4">
+    <%= page_entries_info @purchase_sale_details %>
+  </div>
+  <div class="col-lg-8 col-sm-8 pagination-left">
+    <%= paginate @purchase_sale_details %>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#purchase_sale_detail_list").removeClass('hidden');
+    FontAwesome.dom.i2svg();
+  });
+  $(document).ready(function() {
+    setTimeout(function(){
+      $(".chosen-select").chosen({
+  allow_single_deselect: true,
+  width: '100%'
+});
+    }, 50);
+  });
+</script>

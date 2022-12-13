@@ -24,6 +24,10 @@ Rails.application.routes.draw do
   end
   resources :product_warranties
   resources :warranties
+  resources :cold_storage_inwards
+  resources :cold_storage_outwards
+  resources :order_inwards
+  resources :order_outwards
   resources :product_stocks
   resources :gates
   resources :staff_ledger_books  do
