@@ -1,0 +1,7 @@
+<%if pos_setting_sys_type == "HousingScheme"%>
+  <%= render '/order_sales/hscheme/create_hscheme' %>
+<%elsif pos_setting_sys_type == "FastFood"%>
+  <%= render '/order_sales/fast_food/create' %>
+<% else%>
+  <%= render 'order_sales/default_partial/create' %>
+<% end%>

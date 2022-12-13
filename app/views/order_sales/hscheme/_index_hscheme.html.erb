@@ -1,0 +1,356 @@
+<div class="hidden" id="order_list">
+
+  <h1>Bookings</h1>
+  <% if can?(:add, :all) %>
+  <%= link_to new_order_sale_path(transaction_type: :sale,product: true), class: "btn btn-success" do %>
+    <i class="fa fa-plus" aria-hidden="true"></i>
+    Make Booking
+  <% end %>
+  <% end %>
+
+  <ul class="nav nav-pills ml-1 mt-2" role="tablist">
+		<li class="nav-item">
+			<a class="nav-link tab-label active order-search-exp-tab" data-toggle="tab" href="#search" role="tab">Search</a>
+		</li>
+	</ul>
+
+  <div class="clearfix"></div>
+  <div class="tab-content">
+    <div class="tab-pane active mb-3 card shadow-sm mt-2 border-radius-1 mr-4" id="search" role="tabpanel">
+      <div class="row mt-4">
+        <div class="col-lg-12 col-sm-12">
+          <%= search_form_for @q, url: order_sales_path, class: "admin-controls", method: "get" do |f| %>
+            <div class="col-lg-3 form-group float-left">
+              <%= f.select :order_items_product_item_type_id_eq, options_from_collection_for_select(ItemType.all, 'id', "title",f.object.order_items_product_item_type_id_eq), {hide_label:true,title: "Select the Line Item" ,prompt: "Select the Line Item"},class: 'form-control chosen-select'%>
+            </div>
+            <div class="col-lg-3 form-group float-left">
+              <%= f.select :order_items_product_id_eq, options_from_collection_for_select(@products, 'id', ->(st){"#{st.title} \u{27F6} #{st.code}"},f.object.order_items_product_id_eq), {hide_label:true,title: "Select the Unit" ,prompt: "Select the Unit"},class: 'form-control chosen-select'%>
+            </div>
+            <div class="col-lg-3 form-group float-left">
+              <%= f.select :sys_user_id_eq, options_from_collection_for_select(@customers, 'id', 'name', f.object.sys_user_id_eq), {class: 'form-control',hide_label:true,title: "Select the Customer" ,prompt: "Select the Customer"},class: 'form-control chosen-select'%>
+            </div>
+        
+            <div class="col-lg-3 form-group float-left">
+              <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker',placeholder: "YYYY-MM-DD" %>
+            </div>
+            <div class="col-lg-3 form-group float-left">
+              <%= f.search_field :created_at_lteq,class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
+            </div>
+            <div class="col-lg-3 form-group float-left">
+              <%= f.text_field :voucher_id_eq, class: "form-control",placeholder: "Voucher Number"%>
+            </div>
+            <div class="col=lg-3 form-group float-left">
+              <%order_status = {"Clear"=>0, "Cancel"=>5}%>
+              <%= f.select :status_eq, order_status.map { |key, value| [key.humanize, value] },{include_blank: "Select Status", hide_label:true,class: 'form-control'}, class:"form-control chosen-select" %>
+            </div>
+            <div class="col-lg-2 form-group float-left">
+              <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+            </div>
+            <div class="col-lg-2 form-group float-right">
+              <button class="form-control btn  badge badge-pill badge-danger" name="sale_submit" title="Download sales pdf" type="submit" value="Total Sale PDF A8" formtarget="_blank">Sale &nbsp;<i class="fa fa-file-pdf"></i></button>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class = "order-book-index-card">
+    <table data-toggle="table" data-search="true">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th><%= sort_link(@q, :sys_user_name, 'Customers') %></th>
+          <th><%= sort_link(@q, :purchase_sale_item_count, 'Plot') %></th>
+          <th><%= sort_link(@q, :total_bill, 'Total Bill') %></th>
+          <th><%= sort_link(@q, :amount, 'Received') %></th>
+          <th><%= sort_link(@q, :discount, 'Discount') %></th>
+          <th><%= sort_link(@q, :created_at, 'Date/Time') %></th>
+          <th><%= sort_link(@q, :comment, 'Comment') %></th>
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @orders.each do |order| %>
+          <tr class=<%=order.status =='Cancel' ? "table-danger" : "table-success"%> >
+            <td><b style="font-size:20px;color:blue;"><%= order.voucher_id.to_s+'#'+order.id.to_s %></b></td>
+            <td>
+              <b style="font-size:20px;color:blue;">
+                <%= link_to sys_users_path('q[id_eq]':order.sys_user) do %>
+                  <%= order.sys_user.name %>
+                <%end %>
+              </b>
+            </td>
+            <td><%= order.purchase_sale_items.count rescue 0 %></td>
+            <td><h6><%= number_with_delimiter(order.total_bill.to_f.round(2)) rescue 0 %></h6></td>
+            <td></td>
+            <td><h6><%= number_with_delimiter(order.discount_price.to_f.round(2)) rescue 0%></h6></td>
+            <td>
+              <%if order.created_at.strftime("%d%b%y")!=order.updated_at.strftime("%d%b%y")%>
+                <%= order.created_at.present? ? order.created_at.strftime("%d%b%y at %I:%M %p") : '' %> | <%= order.updated_at.present? ? order.updated_at.strftime("%d%b%y at %H:%M%p") : '' %>
+              <%else%>
+                <%= order.created_at.present? ? order.created_at.strftime("%d%b%y at %I:%M %p") : '' %>
+              <%end%>
+            </td>
+            <td><%= order.comment %></td>
+            <td>
+              <%= link_to order_sale_path(order), target: "_blank", title: "Download A4 size pdf" do %>
+                        <i class="fa fa-print" aria-hidden="true"></i> |
+              <% end %>
+              <%= link_to order_sale_path(order,page_size:"legal"), target: "_blank", title: "Download legal size print" do %>
+                        <i class="fa fa-print" aria-hidden="true"></i> |
+              <% end %>
+              <%= link_to booking_print_order_sale_path(order,page_size:"legal",style: :new), target: "_blank", title: "Download booking size print" do %>
+                        <i class="fa fa-print" aria-hidden="true"></i> |
+              <% end %>
+              <%if order.order_items.present?%>
+                <%if order.order_items.first.product.present? %>
+                <% if can?(:update, :all) %>
+                  <%= link_to edit_order_sale_path(order,product: true), title: "Edit order" do %>
+                    <i class="fa fa-edit" aria-hidden="true"></i> |
+                  <% end %>
+                  <% end %>
+                <%else%>
+                <% if can?(:update, :all) %>
+                  <%= link_to edit_order_sale_path(order), title: "Edit order" do %>
+                    <i class="fa fa-edit" aria-hidden="true"></i> |
+                  <% end %>
+                  <% end %>
+                <%end%>
+              <%end%>
+            <% if can?(:delete, :all) %>
+              <%= link_to order_sale_path(order), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'},title:"Delete order", :remote => true, :class => 'delete' do %>
+                        <i class="fa fa-trash" aria-hidden="true"></i> |
+              <% end %>
+            <% end %>
+              <%= link_to order_sale_path(order), title: "View detail" do %>
+                        <i class="fa fa-eye" aria-hidden="true"></i>
+              <% end %>
+            </td>
+          </tr>
+          <% if order.property_plans.present? %>
+            <tr>
+              <td>
+                <%= link_to edit_property_plan_path(order.property_plans.first), class: "btn #{order.property_plans.first.due_status=='Paid' ? 'btn-success':'btn-warning'}" do %>
+                  <i class="fa fa-gavel" aria-hidden="true"></i>
+                  <%=order.property_plans&.first&.due_date&.strftime('%b/%y')%>
+                  <%=order.property_plans&.first&.due_status%>
+                <% end %>
+              </td>
+              <td colspan="7">
+                <%order.property_plans.first.property_installments.each_with_index do |property,i|%>
+                  <div class="col-lg-2 float-left">
+                    <%= link_to property_installment_edit_property_plan_path(property), class: "btn #{property.due_status=='Paid' ? 'btn-success':'btn-warning'}" do %>
+                      <%="%.2i" % (i+1).abs%>
+                      <i class="fa fa-gavel" aria-hidden="true"></i>
+                      <%=property&.due_date&.strftime('%b/%Y')%>
+                      <%=property&.due_status&.present? ? "Paid" : "UnPaid"%>
+                    <% end %>
+                  </div>
+                <%end%>
+              </td>
+            </tr>
+          <% end %>
+          <tr class=<%=order.status =='Cancel' ? "table-danger" : "table-warning"%> >
+            <td></td>
+            <td>Booking Detail</td>
+            <td>Unit</td>
+            <td>Size</td>
+            <td>
+            </td>
+            <td>
+              <%= link_to new_purchase_sale_detail_path(transaction_type: :sale,product: true,sys_user_id: order.sys_user_id, order_id: order.id), class: "btn btn-success" do %>
+                <i class="fa fa-gavel" aria-hidden="true"></i>
+                Possession
+              <% end %>
+            </td>
+            <td>
+              <%= link_to property_installment_property_plans_path('q[property_plan_order_sys_user_id_eq]':+order.sys_user_id.to_s), class: "btn btn-success" do %>
+                <i class="fa fa-gavel" aria-hidden="true"></i>
+                Challan Form
+              <% end %>
+            </td>
+            <td>
+              <%= link_to transfer_order_sale_path(id: order.id), class: "btn btn-success" do %>
+                <i class="fa fa-exchange-alt" aria-hidden="true"></i>
+                Transfer
+              <% end %>
+            </td>
+            <td>
+              <% if order.status !='Cancel' %>
+                <%= link_to booking_cancel_order_sale_path(order), class: "btn btn-danger" do %>
+                  <i class="fa fa-trash" aria-hidden="true"></i>
+                  Cancel
+                <% end %>
+              <%else%>
+                <%= link_to booking_cancel_order_sale_path(order), class: "btn btn-danger" do %>
+                  <i class="fa fa-reply " aria-hidden="true"></i>
+                  Uncanceled
+                <% end %>
+              <%end%>
+            </td>
+          </tr>
+          <%if order.order_items_names_and_quantity!=0%>
+            <%order.order_items_names_and_quantity.each do |name_quantity|%>
+              <tr class = <%=order.status =='Cancel' ? "table-danger" : ""%> >
+                <td></td>
+                <td></td>
+                <td><%=name_quantity.first%> <%=name_quantity[5]%></td>
+                <td><%=name_quantity[8]%>-M <%=name_quantity[9]%>-Sqr</td>
+                <td><%= order.amount.to_f.round(2) rescue 0%></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                </td>
+              </tr>
+            <%end%>
+          <%end%>
+          <tr class = <%=order.status =='Cancel' ? "table-danger" : "table-active" %> >
+            <td></td>
+            <td>Depost Detail</td>
+            <td>Unit</td>
+            <td>Total Bill</td>
+            <td>Received</td>
+            <td>Discount</td>
+            <td>Date/Time</td>
+            <td>
+              <%= link_to new_purchase_sale_detail_path(transaction_type: :sale,product: true,sys_user_id: order.sys_user_id, order_id: order.id), class: "btn btn-success" do %>
+                <i class="fa fa-plus" aria-hidden="true"></i>
+                Add Depost
+              <% end %>
+            </td>
+            <td>
+              <%= link_to new_purchase_sale_detail_path(transaction_type: :sale,product: true,sys_user_id: order.sys_user_id, order_id: order.id,service:true), class: "btn btn-success" do %>
+                <i class="fa fa-plus" aria-hidden="true"></i>
+                Fine-Extra
+              <% end %>
+            </td>
+
+          </tr>
+          <%if order.purchase_sale_details.present?%>
+          <% order.purchase_sale_details.each do |purchase_sale_detail| %>
+            <tr class = <%=order.status =='Cancel' ? "table-danger" : "" %>>
+              <td></td>
+              <td><%= purchase_sale_detail.voucher_id.to_s+'#'+purchase_sale_detail.id.to_s %></td>
+              <td><%= purchase_sale_detail.purchase_sale_items.count rescue 0 %></td>
+              <td><h6><%= number_with_delimiter(purchase_sale_detail.total_bill.to_f.round(2)) rescue 0 %></h6></td>
+              <td><%= number_with_delimiter(purchase_sale_detail.amount.to_f.round(2)) rescue 0%></td>
+              <td><%= number_with_delimiter(purchase_sale_detail.discount_price.to_f.round(2)) %></td>
+              <td>
+                <%if purchase_sale_detail.created_at.strftime("%d%b%y")!=purchase_sale_detail.updated_at.strftime("%d%b%y")%>
+                  <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d%b%y at %I:%M%p") : '' %> | <%= purchase_sale_detail.updated_at.present? ? purchase_sale_detail.updated_at.strftime("%d%b%y at %H:%M%p") : '' %>
+                <%else%>
+                  <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d%b%y at %I:%M%p") : '' %>
+                <%end%>
+              </td>
+              <td><%= purchase_sale_detail.comment %></td>
+              <td>
+                <%= link_to purchase_sale_detail, target: "_blank" do %>
+                          <i class="fa fa-print" aria-hidden="true"></i> |
+                <% end %>
+
+                <%if purchase_sale_detail.purchase_sale_items.present?%>
+                <%if purchase_sale_detail.purchase_sale_items.first.product.present? %>
+                <% if can?(:update, :all) %>
+                  <%= link_to edit_purchase_sale_detail_path(purchase_sale_detail,product: true) do %>
+                            <i class="fa fa-edit" aria-hidden="true"></i> |
+                  <% end %>
+                  <% end %>
+                <%else%>
+                <% if can?(:update, :all) %>
+                  <%= link_to edit_purchase_sale_detail_path(purchase_sale_detail) do %>
+                    <i class="fa fa-edit" aria-hidden="true"></i> |
+                  <% end %>
+                  <% end %>
+                <%end%>
+                <%else%>
+                  <% if can?(:update, :all) %>
+                    <%= link_to edit_purchase_sale_detail_path(purchase_sale_detail) do %>
+                      <i class="fa fa-edit" aria-hidden="true"></i> |
+                      <% end %>
+                  <% end %>
+                <%end%>
+              <% if can?(:delete, :all) %>
+                <%= link_to purchase_sale_detail, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+                          <i class="fa fa-trash" aria-hidden="true"></i>
+                <% end %>
+                <%= link_to purchase_sale_detail do %>
+                          <i class="fa fa-eye" aria-hidden="true"></i>
+                <% end %>
+              </td>
+              <% end %>
+            </tr>
+            <%if purchase_sale_detail.purchase_sale_items_names_and_quantity!=0%>
+              <%purchase_sale_detail.purchase_sale_items_names_and_quantity.each do |name_quantity|%>
+                <tr class = <%=order.status =='Cancel' ? "table-danger" : "" %>>
+                  <td></td>
+                  <td></td>
+                  <td><%=name_quantity.first%> <%=name_quantity[8]%></td>
+                  <td><%=name_quantity[10]%>-M <%=name_quantity[12]%>-sqr</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td><%=name_quantity.fifth.strftime("%d%b%y") if name_quantity.fifth.present?%></td>
+                </tr>
+              <%end%>
+            <%end%>
+          <% end %>
+          <tr class="btn-success">
+            <td><h5>B-Total  </h5></td>
+            <td></td>
+            <td></td>
+            <td><h5><%=number_with_delimiter(order.sys_user.ledger_books.sum(:debit).to_i)%></h5></td>
+            <td><h5><%=number_with_delimiter(order.amount.to_i+order.purchase_sale_details.sum(:amount).to_i)%></h5></td>
+            <td><h5><%=number_with_delimiter(order.purchase_sale_details.sum(:discount_price).to_f.round(2))%></h5></td>
+            <td><h5>Remaing</h5></td>
+            <td><h5><%=number_with_delimiter(order.sys_user.balance.to_f)%></h5></td>
+            <td>
+                <%if (order.sys_user.balance > 0 ) %>
+                    <b style="font-size:20px;color:blue;">Jama</b>
+                <%elsif (order.sys_user.balance < 0 ) %>
+                <b style="font-size:20px;color:red;">Benam</b>
+                <%else%>
+                <b style="font-size:20px;color: #6cec53 ;">Nill</b>
+                <%end%>
+
+
+            </td>
+
+          </tr>
+          <%end%>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="clearfix"></div>
+<div class="row order-book-index-card">
+  <div class="col-lg-4 col-sm-4">
+    <%= page_entries_info @orders %>
+  </div>
+  <div class="col-lg-8 col-sm-8 pagination-left">
+    <%= paginate @orders %>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#order_list").removeClass('hidden');
+    FontAwesome.dom.i2svg();
+
+  });
+  $(document).ready(function() {
+    setTimeout(function(){
+      $(".chosen-select").chosen({
+  allow_single_deselect: true,
+  width: '100%'
+});
+    }, 50);
+  });
+</script>
