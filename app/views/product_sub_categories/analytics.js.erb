@@ -1,3 +1,5 @@
+$("#show-analytics").html("<%= escape_javascript(render(:partial => "analytics"))%>");
+
 $( document ).ready(function() {
 
   const ctx = document.getElementById('myChart');
@@ -9,7 +11,7 @@ $( document ).ready(function() {
     data: {
       labels: subTitle,
       datasets: [{
-        label: 'Units ',
+        label: 'Total Sub-Categories ',
         data: subUnit,
         borderWidth: 1,
         backgroundColor: '#FF5C5C'
@@ -21,7 +23,7 @@ $( document ).ready(function() {
       plugins: {
             title: {
                 display: true,
-                text: 'Bar Chart',
+                text: 'Total Sub Categories per Category Chart',
                 font: {
                   size: 16
                 }
@@ -43,11 +45,11 @@ $( document ).ready(function() {
   var subUnit1=$('#subUnit1').val().split(' ')
   Chart.defaults.font.size = 16;
   new Chart(ctx, {
-    type: 'pie',
+    type: 'line',
     data: {
       labels: subTitle1,
       datasets: [{
-        label: 'Units ',
+        label: 'Total Sub Categories Created ',
         data: subUnit1,
         borderWidth: 1,
       }],
@@ -58,7 +60,7 @@ $( document ).ready(function() {
       plugins: {
             title: {
                 display: true,
-                text: 'Pie Chart',
+                text: 'Total Sub Categories Date Wise Chart',
                 font: {
                   size: 16
                 }
@@ -72,3 +74,4 @@ $( document ).ready(function() {
   
 });
   
+

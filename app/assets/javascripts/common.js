@@ -475,7 +475,7 @@ function newBalancePayment(value_1,value_2,position_1,position_2){
 }
 
 function newBalancePurchaseSaleDetails(){
-  if($("#purchase_sale_detail_transaction_type").val()=="Purchase")
+  if(($("#purchase_sale_detail_transaction_type").val()=="Purchase") || ($(".inward-outward-field").val()=="InWard") || ($(".inward-outward-field").val()=="OutWard"))  
   { var oldBalance =$('#sys_user_balance').text();
     var remaining=$('.purchase_sale_detail_amount').text();
     oldBalance=parseFloat(oldBalance);

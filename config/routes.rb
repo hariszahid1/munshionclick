@@ -24,6 +24,10 @@ Rails.application.routes.draw do
   end
   resources :product_warranties
   resources :warranties
+  resources :cold_storage_inwards
+  resources :cold_storage_outwards
+  resources :order_inwards
+  resources :order_outwards
   resources :product_stocks
   resources :gates
   resources :staff_ledger_books  do
@@ -142,7 +146,11 @@ Rails.application.routes.draw do
       get :view_history, to: 'products#view_history'
     end
   end
-  resources :product_sub_categories
+  resources :product_sub_categories do
+    collection do
+      get :analytics
+    end
+  end
   resources :product_categories
   resources :purchase_sale_items
   resources :purchase_sale_details do
@@ -158,6 +166,7 @@ Rails.application.routes.draw do
   resources :items do
     collection do
       get "get_item_data"
+      get :analytics
     end
   end
   resources :item_types
@@ -242,6 +251,20 @@ Rails.application.routes.draw do
   post :bulk_import_data, to: 'bulk_imports#bulk_import_data'
   post :bulk_delete_data, to: 'bulk_imports#bulk_delete_data'
 
+  resources :order_sales do
+    collection do
+      get :biller, to: 'order_sales#biller'
+      get :auto_print, to: 'order_sales#auto_print'
+      get :print_bulk, to: 'order_sales#print_bulk'
+      get :view_history, to: 'order_sales#view_history'
+    end
+    member do
+      get :transfer, to: 'order_sales#transfer'
+      get :booking_print, to: 'order_sales#booking_print'
+      get :booking_cancel, to: 'order_sales#booking_cancel'
+    end
+  end
+  
   resources :application do
     member do
       delete :delete_image_attachment

@@ -1,0 +1,153 @@
+<div class="col-xl-12 col-md-12 mb-12">
+    <div class="card border-left-primary shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="row">
+                <div class="col-lg-4 form-group float-left">
+                  <div class="col-lg-3 form-group float-left">
+                    <%= link_to new_purchase_sale_detail_path(transaction_type: :sale, with_gst: true,product: true), class: "btn btn-success col-lg-12" do %>
+                      <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                      with GST
+                    <% end %>
+                  </div>
+                  <h2>
+                    <%if params[:transaction_type].present?%>
+                    <%= (params[:transaction_type].present?) ? "New Sale # "+(PurchaseSaleDetail.maximum(:id).present? ? PurchaseSaleDetail.maximum(:id).next : 1).to_s : "New Purchase # "+(PurchaseSaleDetail.maximum(:id).present? ? PurchaseSaleDetail.maximum(:id).next : 1).to_s%> /
+                    <%elsif @purchase_sale_detail.id%>
+                    <%= (@purchase_sale_detail.transaction_type=='Sale') ? "Edit Sale # "+@purchase_sale_detail.id.to_s : "Purchase # "+@purchase_sale_detail.id.to_s%> /
+                    <%else%>
+                    <%= (@purchase_sale_detail.transaction_type=='Sale') ? "New Sale # "+(PurchaseSaleDetail.maximum(:id).present? ? PurchaseSaleDetail.maximum(:id).next : 1).to_s : "Purchase # "+(PurchaseSaleDetail.maximum(:id).present? ? PurchaseSaleDetail.maximum(:id).next : 1).to_s%> /
+                    <%end%>
+                    <span class="oldBalance" id="sys_user_balance">
+                      0.0
+                    </span>
+                  </h2>
+                </div>
+                <div class="col-lg-2 form-group float-left font-weight-bold">New Balance <h2 class="newBalance1">0.00</h2></div>
+                <div class="col-lg-2 form-group float-left font-weight-bold">Total Bill <h2 class="purchase_sale_detail_total_bill totalBill">0.00</h2></div>
+                <div class="col-lg-2 form-group float-left font-weight-bold">Total <h2 class="purchase_sale_discount_amount">0.00</h2></div>
+                <div class="col-lg-2 form-group float-left font-weight-bold">Remaning <h2 class="purchase_sale_detail_amount">0.00</h2></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<div>
+
+<%= bootstrap_form_with(model: @purchase_sale_detail, method: method, url: url, local: true) do |f| %>
+  <% if purchase_sale_detail.errors.any? %>
+    <div class="col-xl-12 col-md-12 mb-12">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="row">
+                <div id="error_explanation">
+                  <h2><%= pluralize(purchase_sale_detail.errors.count, "error") %> prohibited this purchase_sale_detail from being saved:</h2>
+                  <ul>
+                  <% purchase_sale_detail.errors.full_messages.each do |message| %> <li><%= message %></li><% end %>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+  <div class="col-xl-12 col-md-12 mb-12">
+    <div class="card border-left-primary shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="row">
+              <div class='hidden'>
+                <%= f.hidden_field :transaction_type, value: 'OutWard', class: 'inward-outward-field'%>
+                <%= f.select :status, PurchaseSaleDetail.statuses.map { |key, value| [key.humanize, key] },{hide_label:true,class: "form-control", required: true} %>
+              </div>
+              <div class="col-lg-2 form-group float-left font-weight-bold"><%= f.select :sys_user_id, options_from_collection_for_select(@suppliers, 'id', 'name', f.object.sys_user_id), {label:'User',prompt: "Select the Supplier"}, required: true,:class=>"form-control chosen-select",onchange:"set_sys_user_balance(this.value,'sys_user_balance')",onkeyup:"set_sys_user_balance(this.value,'sys_user_balance')" %></div>
+              <div class="col-lg-2 form-group float-left font-weight-bold">
+                <%= f.select :order_id, options_from_collection_for_select(@orders, 'id', ->(st){"#{st.id} \u{27F6} #{st.total_bill} "}, f.object.order_id), {prompt: "Select the Order"},class: "form-control"%>
+              </div>
+              <div class="col-lg-2 form-group float-left font-weight-bold">
+                <%= f.select :account_id , options_from_collection_for_select(@accounts, 'id', 'title', (f.object.account_id.present? ? f.object.account_id : @account)),{},class: "form-control"%>
+              </div>
+              <div class="col-lg-2 form-group float-left font-weight-bold"> <%= f.hidden_field :total_bill%>
+                <%= f.number_field :amount,step: :any,label:'Paid Amount', id: "purchase_sale_detail_amount", onchange:"remaingUpdateAmount()",onkeyup:"remaingUpdateAmount()", required: true %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xl-12 col-md-12 mb-12">
+    <div class="card border-left-primary shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="row">
+              <div class="col-lg-2 form-group float-left">
+                <h5>Product</h5>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <h5>Marka</h5>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <h5>Builty No.</h5>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <h5>Vehicle</h5>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <h5>Challan No</h5>
+              </div>
+              <div class="col-lg-1 form-group float-left">
+                <h5>Stock</h5>
+              </div>
+            </div>
+            <%= f.fields_for :purchase_sale_items do |purchase_sale_item| %>
+              <%= render 'purchase_sale_items_fields_new', f: purchase_sale_item %>
+            <% end %>
+            <div class="links font-weight-bold text-success text-uppercase">
+              <%# //ADD PRODUCT HERE %>
+              <%= link_to_add_association f, :purchase_sale_items, partial: 'purchase_sale_items_fields_new', class: "new_product"  do %>
+                <i class="fa fa-plus"></i> Add Product (<span id="total_product_quantity"></span>)
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-12 col-md-12 mb-12 ">
+    <div class="card border-left-primary shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="row">
+              <div class="col-lg-6 form-group float-left font-weight-bold">
+                <%= f.datetime_select :created_at,{},class: "form-control"%>
+              </div>
+            </div>
+            <div class="row">
+              <div class="actions col-lg-6 form-group float-left font-weight-bold">
+                <div class="form-group">
+                  <div class="actions col-lg-12 form-group float-left font-weight-bold">
+                    <label for="commit">Save/Update</label>
+                  </div>
+                  <div class="actions col-lg-6 form-group float-left font-weight-bold">
+                    <%= f.submit class: "btn btn-success col-lg-12", style: "float: right",value: "Save", onclick:"return save_sale();" %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end%>

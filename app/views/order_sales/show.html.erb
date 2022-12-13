@@ -1,0 +1,36 @@
+<p>
+  <strong>User:</strong>
+  <%= @order.sys_user_id %>
+</p>
+
+<p>
+  <strong>Transaction type:</strong>
+  <%= @order.transaction_type %>
+</p>
+
+<p>
+  <strong>Total bill:</strong>
+  <%= @order.total_bill %>
+</p>
+
+<p>
+  <strong>Amount:</strong>
+  <%= @order.amount.to_f.round(2) %>
+</p>
+
+<p>
+  <strong>Discount price:</strong>
+  <%= @order.discount_price.to_f.round(2) %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @order.status %>
+</p>
+
+<p>
+  <strong>Comment:</strong>
+  <%= @order.comment %>
+</p>
+
+<%= link_to 'Back', orders_path %>

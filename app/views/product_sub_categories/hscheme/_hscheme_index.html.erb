@@ -44,7 +44,7 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link tab-label" data-toggle="tab" href="#analytics" data-remote="true" role="tab">Analytics</a>
+        <a class="nav-link tab-label analytics-tab" data-toggle="tab" href="#analytics" role="tab">Analytics</a>
       </li>
 			
 			<%if (check_can_import_export(@module_permission))%>
@@ -53,10 +53,7 @@
 				</li>
 			<%end%>
 	</ul>
-  <%= hidden_field_tag "subTitle", @sub_title, { :id => "subTitle" } %>
-  <%= hidden_field_tag "subUnit", @sub_unit, { :id => "subUnit" } %>
-  <%= hidden_field_tag "subTitle1", @sub_title, { :id => "subTitle1" } %>
-  <%= hidden_field_tag "subUnit1", @sub_unit, { :id => "subUnit1" } %>
+<%= link_to '', analytics_product_sub_categories_path, id: 'analytics-path', class: 'd-none', remote: true %>
 <%= search_form_for @q, url: product_sub_categories_path, class: "admin-controls", method: "get" do |f| %>
   <div class="tab-content">
       <div class="tab-pane active mb-3 card shadow-sm mt-2 border-radius-1" id="search" role="tabpanel">
@@ -122,23 +119,8 @@
           </div>
         </div>
     </div>
-    <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1 p-1" id="analytics" role="tabpanel">
-      <div class="row d-flex">
-        <div class="col-lg-6">
-          <div class="my-chart-Container">
-            <div class="mychartBox">
-              <canvas id="myChart"></canvas>
-            </div> 
-          </div>
-        </div>
-        <div class="col-lg-6">
-          <div class="my-chart-Container">
-            <div class="mychartBox">
-              <canvas id="myChart1"></canvas>
-            </div> 
-          </div>
-        </div>
-      </div>
+    <div class="tab-pane mb-3 card shadow-sm mt-2 p-3 border-radius-1" id="analytics" role="tabpanel">
+      <div id="show-analytics" class="row p-3"></div>
     </div>
     <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="import-export" role="tabpanel">
       <p>
@@ -228,6 +210,9 @@
     $("#product_sub_category_list").removeClass('hidden');
     FontAwesome.dom.i2svg();
   });
+  $('.analytics-tab').on('click', function(){
+      $('#analytics-path').click();
+    })
 </script>
 
 
