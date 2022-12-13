@@ -251,6 +251,20 @@ Rails.application.routes.draw do
   post :bulk_import_data, to: 'bulk_imports#bulk_import_data'
   post :bulk_delete_data, to: 'bulk_imports#bulk_delete_data'
 
+  resources :order_sales do
+    collection do
+      get :biller, to: 'order_sales#biller'
+      get :auto_print, to: 'order_sales#auto_print'
+      get :print_bulk, to: 'order_sales#print_bulk'
+      get :view_history, to: 'order_sales#view_history'
+    end
+    member do
+      get :transfer, to: 'order_sales#transfer'
+      get :booking_print, to: 'order_sales#booking_print'
+      get :booking_cancel, to: 'order_sales#booking_cancel'
+    end
+  end
+  
   resources :application do
     member do
       delete :delete_image_attachment

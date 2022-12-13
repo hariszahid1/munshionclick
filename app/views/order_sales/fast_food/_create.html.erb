@@ -1,0 +1,52 @@
+<% @time = Time.zone.now %>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h2 style="text-align: center; margin: 0;">Customer: <%=@order.sys_user.name%></h2>
+<h2 style="text-align: center; margin: 0;">Queue Of Kitchen OD # <%= @order.voucher_id.to_s+'/'+@order.id.to_s %></h2>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<p style="text-align: center;margin: 0;">Report by: <%=current_user.name%></p>
+<div style="width:90vw;">
+ <table >
+   <tr>
+     <td>Print: <b><span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%></span>  Time: <span><%=@time.strftime("at %I:%M%p")%></span></b> </td>
+     <td>Created: <b><span><%= @order.created_at.strftime("%d")%>/<%=@order.created_at.strftime("%b")%>/<%= @order.created_at.strftime("%y")%></span></b> </td>
+   </tr>
+</table>
+</div>
+<p style="border-bottom: dotted 3px;  margin: 0;"></p>
+<div>
+  <table data-toggle="table" data-search="true">
+    <thead>
+      <tr class="lite-gray">
+        <th>Qty</th>
+        <th>Items</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <%if @order.order_items_names_and_quantity!=0%>
+        <%@order.order_items_names_and_quantity.each_with_index do |name_quantity,i|%>
+          <tr style="text-align:center">
+            <td style="border-bottom: 1px solid #000; font-weight: bold;"><%=name_quantity.second%></td>
+            <td style="border-bottom: 1px solid #000; font-weight: bold; text-align:left;" class = "urdu-font"><%=name_quantity.first%></td>
+          </tr>
+        <%end%>
+      <%end%>
+      <tr style="text-align:center" class="lite-gray">
+        <td colspan="5"> <%= "Comment:"+@order.comment.to_s if  @order.comment.present?%></td>
+      </tr>
+      </tbody>
+    </table>
+
+</div>
+<%@printfun=@pos_setting&.extra_settings.present? ? @pos_setting&.extra_settings["printfun"].to_f : 100%>
+<%@redirectfun=@pos_setting&.extra_settings.present? ? @pos_setting&.extra_settings["redirectfun"].to_f : 1200%>
+<script type="text/javascript">
+    window.setTimeout(printfun, <%=@printfun%>);
+    window.setTimeout(redirectfun, <%=@redirectfun%>);
+    function printfun(){
+      window.print();
+    }
+    function redirectfun(){
+      window.location.replace("/order_sales/biller"); return true;
+    }
+</script>
