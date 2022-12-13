@@ -32,6 +32,9 @@
     <li class="nav-item">
       <a class="nav-link tab-label active ledger-search-exp-tab" data-toggle="tab" href="#search" role="tab">Search</a>
     </li>
+    <li class="nav-item">
+      <a class="nav-link tab-label analytics-tab" data-toggle="tab" href="#analytics" role="tab">Analytics</a>
+    </li>
       <li class="nav-item">
       <a class="nav-link tab-label ledger-search-exp-tab" data-toggle="tab" href="#jamabenam" role="tab">Jama/ Benam</a>
     </li>
@@ -51,7 +54,7 @@
       <a class="nav-link tab-label ledger-logs-tab" data-toggle="tab" href="#logs" role="tab">Logs</a>
     </li>
   </ul>
-  
+  <%= link_to '', analytics_staff_ledger_books_path, id: 'analytics-path', class: 'd-none', remote: true %>
     <div class="tab-content">
       <div class="tab-pane active mb-3 card shadow-sm mt-2" style="border-radius: 20px" id="search" role="tabpanel">
         <p>
@@ -72,6 +75,9 @@
             </div>
           <% end %>
         </p>
+      </div>
+      <div class="tab-pane mb-3 card shadow-sm mt-2 p-3 border-radius-1" id="analytics" role="tabpanel">
+        <div id="show-analytics" class="row"></div>
       </div>
       <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="jamabenam" role="tabpanel">
         <p>
@@ -455,7 +461,10 @@
 
   });
 
-   $(function() {
+  $(function() {
     setTimeout(function() { $(".my-loader").fadeOut(1500); }, 5000)
+  })
+  $('.analytics-tab').on('click', function(){
+    $('#analytics-path').click();
   })
 </script>
