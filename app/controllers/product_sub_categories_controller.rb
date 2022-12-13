@@ -25,20 +25,7 @@ class ProductSubCategoriesController < ApplicationController
       export_file
     end
 
-
-    @total_sub_count = Product.joins(:product_sub_category).group("product_sub_categories.title").count
-    @sub_title = @total_sub_count.keys.map { |a| a.gsub(' ', '-') }
-    @sub_unit =  @total_sub_count.values
-
-    respond_to do |format|
-      format.csv
-      format.pdf
-      format.js
-      format.html
-    end
   end
-
-
 
   # GET /product_sub_categories/1
   # GET /product_sub_categories/1.json
@@ -99,6 +86,40 @@ class ProductSubCategoriesController < ApplicationController
       notice_text = 'Unit Sub category was successfully Deleted.' if pos_setting_sys_type.eql? 'HousingScheme'
       format.html { redirect_to product_sub_categories_path, notice: notice_text }
       format.json { render :show, status: :ok, location: @product_sub_category }
+    end
+  end
+
+  def analytics
+    type = params[:type]
+    case type
+    when 'daily'
+      date_limit = DateTime.current.all_day
+    when 'weekly'
+      date_limit = DateTime.current.all_week
+    when 'monthly'
+      date_limit = DateTime.current.all_month
+    when 'yearly'
+      date_limit = DateTime.current.all_year
+    else
+      date_limit = DateTime.current.all_day
+    end
+
+    if params[:q].present?
+      params[:q][:created_at_gteq] = params[:q][:created_at_gteq].to_date.beginning_of_day if params[:q][:created_at_gteq].present?
+      params[:q][:created_at_lteq] = params[:q][:created_at_lteq].to_date.end_of_day if params[:q][:created_at_lteq].present?
+      @q = ProductSubCategory.includes(:product_category).joins(:product_category).ransack(params[:q])
+    else
+      @q = ProductSubCategory.includes(:product_category).joins(:product_category).where(created_at: date_limit).ransack(params[:q])
+    end
+    @total_sub_count = @q.result.group("product_categories.title").count
+    @sub_title = @total_sub_count.keys.map { |a| a.gsub(' ', '-') }
+    @sub_unit =  @total_sub_count.values
+    @sub_date_count = @q.result.group("date(product_sub_categories.created_at)").count
+    @sub_date_keys = @sub_date_count.keys
+    @sub_date_values =  @sub_date_count.values
+    
+    respond_to do |format|
+      format.js
     end
   end
 

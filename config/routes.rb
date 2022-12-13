@@ -142,7 +142,11 @@ Rails.application.routes.draw do
       get :view_history, to: 'products#view_history'
     end
   end
-  resources :product_sub_categories
+  resources :product_sub_categories do
+    collection do
+      get :analytics
+    end
+  end
   resources :product_categories
   resources :purchase_sale_items
   resources :purchase_sale_details do
@@ -158,6 +162,7 @@ Rails.application.routes.draw do
   resources :items do
     collection do
       get "get_item_data"
+      get :analytics
     end
   end
   resources :item_types

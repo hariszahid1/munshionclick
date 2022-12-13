@@ -10,70 +10,96 @@
       </ul>
     </div>
   <% end %>
-  <%if params[:Sbenam].present? or params[:Sjama].present?%>
-    <div class="col-lg-6 col-md-6 col-sm-6 from-group float-left">
-      <%= f.select :sys_user_id, options_from_collection_for_select(@suppliers, 'id', 'name', f.object.sys_user_id), {label:"Supplier",prompt: "Select the Customer/Supplier"},:class=>"form-control chosen-select",required: true,onchange:"set_sys_user_balance(this.value,'sys_user_balance')",onkeyup:"set_sys_user_balance(this.value,'sys_user_balance')"%>
+  <div class="row">
+    <div class="col card border-radius-1 shadow p-4 m-2">
+      <div class="row">
+        <%if params[:Sbenam].present? or params[:Sjama].present?%>
+          <div class="col-lg-6">
+            <%= f.select :sys_user_id, options_from_collection_for_select(@suppliers, 'id', 'name', f.object.sys_user_id), {label:"Supplier",prompt: "Select the Customer/Supplier"},:class=>"form-control chosen-select",required: true,onchange:"set_sys_user_balance(this.value,'sys_user_balance')",onkeyup:"set_sys_user_balance(this.value,'sys_user_balance')"%>
+          </div>
+        <%else%>
+          <div class="col-lg-6">
+            <%= f.select :sys_user_id, options_from_collection_for_select(@customers, 'id', 'name', f.object.sys_user_id), {label:"Customer/Supplier",prompt: "Select the Customer/Supplier"},:class=>"form-control chosen-select",required: true,onchange:"set_sys_user_balance(this.value,'sys_user_balance')",onkeyup:"set_sys_user_balance(this.value,'sys_user_balance')"%>
+          </div>
+        <%end%>
+        <div class="col-lg-6">
+          <%= f.select :account_id , options_from_collection_for_select(@accounts, 'id', 'title', (f.object.account_id.present? ? f.object.account_id : @account)), {prompt: "Select the Account"},class: "form-control",onchange:"set_account_balance(this.value,'sys_user_balance_1')",onkeyup:"set_account_balance(this.value,'sys_user_balance_1')",required: true%>
+        </div>
+      </div>
+      <div class="row">
+        <% if params[:benam].present?%>
+          <div class="col-lg-12">
+            <%= f.text_field :credit,label: "Credit/Udhar", required:true %>
+           </div>
+        <%elsif params[:Sjama].present?%>
+          <div class="col-lg-12">
+            <%= f.text_field :credit,label: "Credit", placeholder:"Enter Credit", required:true, class:"credit",onchange:"newBalance('oldBalance','newBalance1');newBalance('oldBalance1','newBalance2');price_in_words(this.value,'price_in_words');", onkeyup:"newBalance('oldBalance','newBalance1');newBalance('oldBalance1','newBalance2');price_in_words(this.value,'price_in_words');", autocomplete: "off"  %>
+          </div>
+        <%elsif params[:Sbenam].present?%>
+          <div class="col-lg-12">
+            <%= f.text_field :debit ,label: "Debit", required:true, placeholder:"Enter Debit",  class:"form-control debit", onchange:"newBalance('oldBalance','newBalance1');newBalance('oldBalance1','newBalance2');price_in_words(this.value,'price_in_words');",onkeyup:"newBalance('oldBalance','newBalance1');newBalance('oldBalance1','newBalance2');price_in_words(this.value,'price_in_words');",  autocomplete: "off" %>
+          </div>
+        <%else%>
+          <div class=" col-lg-12 ">
+            <%= f.text_field :debit ,label: "Debit/Wasool", placeholder:"Debit/Wasool",class: "form-control", required:true, onchange:"price_in_words(this.value,'price_in_word_id');",onkeyup:"price_in_words(this.value,'price_in_words');", autocomplete: "off"%>
+          </div>
+        <%end%>
+      </div>
+      <div class="row">
+        <div  class="col-lg-12">
+          <h5>Payment in Words: <span id="price_in_words" style="font-size:20px;color:blue;">0.0</span></h5>
+        </div>
+      </div>
+      <div class="row mt-4 mb-3">
+        <div class="col-lg-12">
+          <%= f.datetime_select :created_at,{},class: "form-control" %>
+        </div>
+      </div>
+      
+      <%= f.label :comment do %>
+          <%= LedgerBook.human_attribute_name :comment %>
+          <i class="fas fa-language"></i>
+      <% end %>
+      <%= f.text_area :comment, placeholder:"Enter Comment", hide_label: true ,class: 'urdu-font ' %>
+      
     </div>
-  <%else%>
-    <div class="col-lg-6 col-md-6 col-sm-6 from-group float-left">
-      <%= f.select :sys_user_id, options_from_collection_for_select(@customers, 'id', 'name', f.object.sys_user_id), {label:"Customer/Supplier",prompt: "Select the Customer/Supplier"},:class=>"form-control chosen-select",required: true,onchange:"set_sys_user_balance(this.value,'sys_user_balance')",onkeyup:"set_sys_user_balance(this.value,'sys_user_balance')"%>
+    <div class="col card border-radius-1 shadow p-4 m-2">
+      <div class="row mb-5 ml-1">
+        <% if params[:benam].present?%>
+          <h2>Balance: <span class="oldBalance" id="sys_user_balance">0.0</span> <br> Account Balance: <span  class="oldBalance1" id="sys_user_balance_1">0.0</span></h2>
+        <%elsif params[:Sbenam].present?%>
+          <h2>Balance: <span class="oldBalance" id="sys_user_balance">0.0</span> <br> Account Balance: <span  class="oldBalance1" id="sys_user_balance_1">0.0</span></h2>
+        <%elsif params[:Sjama].present?%>
+          <h2>Balance: <span class="oldBalance" id="sys_user_balance">0.0</span> <br> Account Balance: <span  class="oldBalance1" id="sys_user_balance_1">0.0</span></h2>
+        <%else%>
+          <h2>Balance: <span class="oldBalance" id="sys_user_balance">0.0</span> <br> Account Balance: <span  class="oldBalance1" id="sys_user_balance_1">0.0</span></h2>
+        <%end%>
+      </div>
+      <hr>
+      
+      <div class="row mb-5 ml-1">
+        <h2>Account New Balance: <span class="newBalance2">0.0</span></h2>
+        <h2>User New Balance: <span class="newBalance1">0.0</span></h2>
+      </div>
+      
     </div>
-  <%end%>
-  <div class="col-lg-6 col-md-6 col-sm-6 from-group float-left">
-    <%= f.select :account_id , options_from_collection_for_select(@accounts, 'id', 'title', (f.object.account_id.present? ? f.object.account_id : @account)), {prompt: "Select the Account"},class: "form-control",onchange:"set_account_balance(this.value,'sys_user_balance_1')",onkeyup:"set_account_balance(this.value,'sys_user_balance_1')",required: true%>
-  </div>
-  <% if params[:benam].present?%>
-    <div class="col-lg-6 col-md-6 col-sm-6 from-group float-left">
-      <%= f.text_field :credit,label: "Credit/Udhar", required:true %>
-     </div>
-  <%elsif params[:Sjama].present?%>
-    <div class="col-lg-6 col-md-6 col-sm-6 from-group float-left">
-      <%= f.text_field :credit,label: "Credit", placeholder:"Enter Credit", required:true, class:"credit",onchange:"newBalance('oldBalance','newBalance1');newBalance('oldBalance1','newBalance2');price_in_words(this.value,'price_in_words');", onkeyup:"newBalance('oldBalance','newBalance1');newBalance('oldBalance1','newBalance2');price_in_words(this.value,'price_in_words');", autocomplete: "off"  %>
-    </div>
-  <%elsif params[:Sbenam].present?%>
-    <div class="col-lg-6 col-md-6 col-sm-6 from-group float-left">
-      <%= f.text_field :debit ,label: "Debit", required:true, placeholder:"Enter Debit",  class:"form-control debit", onchange:"newBalance('oldBalance','newBalance1');newBalance('oldBalance1','newBalance2');price_in_words(this.value,'price_in_words');",onkeyup:"newBalance('oldBalance','newBalance1');newBalance('oldBalance1','newBalance2');price_in_words(this.value,'price_in_words');",  autocomplete: "off" %>
-    </div>
-  <%else%>
-    <div class=" col-lg-6 col-md-6 col-sm-6 from-group float-left">
-      <%= f.text_field :debit ,label: "Debit/Wasool", placeholder:"Debit/Wasool",class: "form-control", required:true, onchange:"price_in_words(this.value,'price_in_word_id');",onkeyup:"price_in_words(this.value,'price_in_words');", autocomplete: "off"%>
-    </div>
-  <%end%>
-  <div class="col-lg-6 col-md-6 col-sm-6 from-group float-left">
-    <%= f.datetime_select :created_at,{},class: "form-control" %>
+
   </div>
 
-  <div  class="col-lg-12 col-md-6 col-sm-6 from-group float-left">
-    <h5>Payment in Words: <span id="price_in_words" style="font-size:20px;color:blue;">0.0</span></h5>
-  </div>
-
-  <div class="col-lg-6 col-md-6 col-sm-6 from-group float-left">
-    <%= f.label :comment do %>
-        <%= LedgerBook.human_attribute_name :comment %>
-        <i class="fas fa-language"></i>
-    <% end %>
-    <%= f.text_area :comment, placeholder:"Enter Comment", hide_label: true ,class: 'urdu-font' %>
-  </div>
-  <div class="col-lg-6 col-md-6 col-sm-6 from-group float-left">
-    <h1>Account New Balance: <span class="newBalance2">0.0</span></h1>
-    <h1>User New Balance: <span class="newBalance1">0.0</span></h1>
-  </div>
-  <div class="clearfix">
+    <div class="clearfix">
     <hr>
-    <div class="col-lg-12 row ">
-      <div class="col-lg-6 form-group float-left">
-        <%= link_to ledger_books_path do %>
-        <i class="fa fa-arrow-left " aria-hidden="true"></i>
+    <div class="row d-flex ">
+      <div class="col form-group float-left">
+        <%= link_to ledger_books_path, class:"btn btn-info" do %>
+        <i class="fa fa-arrow-left mr-2" aria-hidden="true"></i>Back to Ledger Book
         <% end %>
       </div>
-      <div class="col-lg-6 form-group float-left">
-        <div class="col-lg-6 form-group float-left">
-          <%=f.object.id.nil? ? (f.submit class: "btn btn-success", style: "float: left",value: "Save")  :  (f.submit class: "btn btn-warning", style: "float: left",value: "Save")%>
-        </div>
-        <div class="actions col-lg-6 form-group float-left font-weight-bold">
-          <%= f.submit class: "btn btn-success  col-lg-12", style: "float: right",value: "Save with Print" %>
-        </div>
+       
+      <div class="actions col form-group float-left font-weight-bold">
+        <%=f.object.id.nil? ? (f.submit class: "btn btn-success", style: "float: right; width: 100px;",value: "Save")  :  (f.submit class: "btn btn-warning", style: "float: right; width: 100px;",value: "Save")%>
+        <%= f.submit class: "btn btn-primary mr-2", style: "float: right; width: 150px;",value: "Save with Print" %>
       </div>
+      
     </div>
   </div>
 
