@@ -131,23 +131,9 @@
             <%end%>
           <% if can?(:destory, :all) %>
             <%= link_to purchase_sale_detail, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
-                      <i class="fa fa-trash" aria-hidden="true"></i> |
+                      <i class="fa fa-trash" aria-hidden="true"></i>
             <% end %>
           <% end %>
-          <%if ['Purchase','Sale'].include? purchase_sale_detail.transaction_type.to_s%>
-            <%= link_to new_purchase_sale_detail_path(purchase_sale_detail_id:purchase_sale_detail.id,product:true,transaction_type:'sale',purchase_sale_type: "SaleReturn") do %>
-              <i class="fa fa-undo"></i> |
-            <% end %>
-          <%end%>
-          <%if purchase_sale_detail.with_gst=="true"%>
-            <%= link_to purchase_sale_detail_path(purchase_sale_detail,pdf: true),target: "_blank"  do %>
-              <i class="fa fa-eye" aria-hidden="true"></i>
-            <% end %>
-          <%else%>
-            <%= link_to purchase_sale_detail_path(purchase_sale_detail,pdf: true),target: "_blank"  do %>
-              <i class="fa fa-eye" aria-hidden="true"></i>
-            <% end %>
-          <%end%>
           </td>
         </tr>
         <tr >

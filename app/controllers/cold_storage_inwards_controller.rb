@@ -3,7 +3,7 @@
 # FollowUps Controller
 class ColdStorageInwardsController < ApplicationController
 
-  before_action :set_coldstorage, only: %i[show edit update]
+  before_action :set_cold_storage, only: %i[show edit update]
   before_action :index_edit_new_data, only: %i[new show edit index]
 
   def index
