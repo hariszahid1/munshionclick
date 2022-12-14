@@ -270,11 +270,11 @@ class SalariesController < ApplicationController
     else
       @q = Salary.joins(staff: :department).includes(staff: :department).where(created_at: date_limit).ransack(params[:q])
     end
-    @salaries_paid_staff = @q.result.group('staffs.name').sum(:paid_salary)
+    @salaries_paid_staff = @q.result.group('staffs.name').sum(:total_balance)
     @advance_paid_staff = @q.result.group('staffs.name').sum(:advance)
-    @salaries_paid_department = @q.result.group('departments.title').sum(:paid_salary)
+    @salaries_paid_department = @q.result.group('departments.title').sum(:total_balance)
     @advance_paid_department = @q.result.group('departments.title').sum(:advance)
-    @salaries_date_paid = @q.result.group("date(salaries.created_at)").sum(:paid_salary)
+    @salaries_date_paid = @q.result.group("date(salaries.created_at)").sum(:total_balance)
     @advance_date_paid = @q.result.group("date(salaries.created_at)").sum(:advance)
     respond_to do |format|
       format.js
