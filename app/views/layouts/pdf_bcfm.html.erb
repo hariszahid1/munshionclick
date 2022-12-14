@@ -23,6 +23,13 @@
 <%end%>
 
 <body class="bond_pos_pdf">
+  <% if @pos_setting&.footer.present? %>
+    <div class="<%= @pos_setting&.footer_address_placement%> footer" style="<%=@pos_setting.footer_style%>" >
+      <p style="margin: 0; font-size: 10px !important;"><span><%=@pos_setting.address if @pos_setting.present?%></span></p>
+      <p style="margin: 0; font-size: 10px !important;"><span><%=@pos_setting.phone if @pos_setting.present?%></span></p>
+    </div>
+  <% end %>
+
   <% if @pos_setting&.header.present? %>
     <div class="header" style="height: <%=@pos_setting.header_hieght%>px; <%=@pos_setting.header_style%> ">
       <div class="<%= @pos_setting.header_logo_placement%>_text">
@@ -32,14 +39,5 @@
   <% end %>
 
   <%= yield %>
-
-  <% if @pos_setting&.footer.present? %>
-    <div class="<%= @pos_setting&.footer_address_placement%> footer" style="<%=@pos_setting.footer_style%>" >
-      <p style="border-bottom: double 4px;  margin: 0;"></p>
-      <p style="margin: 0; font-size: 15px;"><span><%=@pos_setting.address if @pos_setting.present?%></span></p>
-      <p style="margin: 0; font-size: 15px;"><span><%=@pos_setting.phone if @pos_setting.present?%></span></p>
-      <p style="border-bottom: double 4px;  margin: 0;"></p>
-    </div>
-  <% end %>
 </body>
 </html>
