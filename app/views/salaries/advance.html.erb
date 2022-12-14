@@ -1,9 +1,10 @@
-<div class="card">
-  <div class="card-header">
-    <h1>Pay Advance </h1>
-    <h2>Balance: <span id='wage_debit'>0.00</span> | OutStanding Balance: <span id='balance'>0.00</span></h2>
-  </div>
-  <div class="card-body">
-    <%= render 'advance_form', salary: @salary %>
-    </div>
+<div class="card border-radius-1 shadow-sm">
+<div class="card-header p-4">
+  <h1 class="float-left mt-3">Pay Advance </h1>
+  <h3 class="float-right">Balance: <span id='wage_debit'>0.00</span><br><hr> OutStanding Balance: <span id='balance'>0.00</span></h3>
 </div>
+</div>
+<div class="card border-radius-1 shadow-sm p-3 mt-3">
+  <%= render 'advance_form', salary: @salary %>
+</div>
+

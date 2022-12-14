@@ -10,7 +10,7 @@
       </ul>
     </div>
   <% end %>
-<div class="bg-white nested-fields">
+<div class=" card border-radius-1 shadow p-3 bg-white nested-fields">
   <% if salary.persisted? %>
     <div class="form-group has-warning">
       <label for="student_section_id">Name</label>
@@ -63,22 +63,30 @@
     </div>
   <% end %>
 
-  <div id="calculate_teach_staff_salary_btn" class="calculate_teach_staff_salary_btn hidden">
-    <button class="btn btn-info" onclick="calculate_teach_staff_salary(); return false;">Re-Calculate Salary</button>
+  <div id="calculate_teach_staff_salary_btn" class="calculate_teach_staff_salary_btn hidden mb-5">
+    <button class="btn btn-warning" onclick="calculate_teach_staff_salary(); return false;">Re-Calculate Salary</button>
   </div>
+  
   <%= f.number_field :paid_salary, label: "Paid Amount (after advance deducted)", required: true %>
   <%= f.hidden_field :payment_type %>
-  <div class="col-lg-6" style="float:left">
-    <%= f.datetime_select :created_at %>
+  <div class="row">
+    <div class="col-lg-6" style="float:left">
+      <%= f.select :account_id , options_from_collection_for_select(@accounts, 'id', 'title', (f.object.account_id.present? ? f.object.account_id : @account)), {prompt: "Select the Account"},class:"form-control", required: true%>
+    </div>
+    <div class="col-lg-6" style="float:right">
+      <%= f.datetime_select :created_at %>
+    </div>
   </div>
-  <div class="col-lg-6" style="float:left">
-    <%= f.select :account_id , options_from_collection_for_select(@accounts, 'id', 'title', (f.object.account_id.present? ? f.object.account_id : @account)), {prompt: "Select the Account"},class:"form-control", required: true%>
-  </div>
-  <div class="col-lg-12" style="float:left">
+ 
+  
+  <div class="row-lg-12" style="float:left">
     <%= f.text_area :comment, placeholder:"Enter Commnet"%>
   </div>
+  <hr>
   <div class="actions">
-    <%= link_to 'Salaries', salaries_path, class: "btn btn-info" %>
+    <%= link_to salaries_path, class:"btn btn-info" do %>
+      <i class="fa fa-arrow-left mr-2" aria-hidden="true"></i>Back to Salaries 
+    <% end %>
     <%= f.submit class: "btn btn-success", style: "float: right" %>
   </div>
 <% end %>

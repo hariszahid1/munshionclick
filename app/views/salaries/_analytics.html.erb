@@ -1,71 +1,61 @@
-<%= hidden_field_tag "salaries_to_staffs", @salaries_paid_staff.keys, { id: "salaries_to_staffs" } %>
+<%= hidden_field_tag "salaries_to_staffs", @salaries_paid_staff.keys.map{ |a| a.gsub(' ', '-') }, { id: "salaries_to_staffs" } %>
 <%= hidden_field_tag "salary_paid_amount", @salaries_paid_staff.values, { id: "salary_paid_amount" } %>
-<%= hidden_field_tag "advance_to_staffs", @advance_paid_staff.keys, { id: "advance_to_staffs" } %>
+<%= hidden_field_tag "advance_to_staffs", @advance_paid_staff.keys.map{ |a| a.gsub(' ', '-') }, { id: "advance_to_staffs" } %>
 <%= hidden_field_tag "advance_paid_amount", @advance_paid_staff.values, { id: "advance_paid_amount" } %>
-<%= hidden_field_tag "salaries_to_departments", @salaries_paid_department.keys, { id: "salaries_to_departments" } %>
+<%= hidden_field_tag "salaries_to_departments", @salaries_paid_department.keys.map{ |a| a.gsub(' ', '-') }, { id: "salaries_to_departments" } %>
 <%= hidden_field_tag "salary_paid_amount_departments", @salaries_paid_department.values, { id: "salary_paid_amount_departments" } %>
-<%= hidden_field_tag "advance_to_departments", @advance_paid_department.keys, { id: "advance_to_departments" } %>
+<%= hidden_field_tag "advance_to_departments", @advance_paid_department.keys.map{ |a| a.gsub(' ', '-') }, { id: "advance_to_departments" } %>
 <%= hidden_field_tag "advance_paid_amount_departments", @advance_paid_department.values, { id: "advance_paid_amount_departments" } %>
 <%= hidden_field_tag "salaries_by_date", @salaries_date_paid.keys, { id: "salaries_by_date" } %>
 <%= hidden_field_tag "salary_paid_amount_date", @salaries_date_paid.values, { id: "salary_paid_amount_date" } %>
 <%= hidden_field_tag "avdance_by_date", @advance_date_paid.keys, { id: "avdance_by_date" } %>
 <%= hidden_field_tag "advance_paid_amount_date", @advance_date_paid.values, { id: "advance_paid_amount_date" } %>
 
-<%= search_form_for @q, url: analytics_salaries_path, class: "admin-controls col-12 row", remote: true, method: "get" do |f| %>
-  <%= link_to 'Weekly', analytics_salaries_path(type: 'weekly'), class: 'btn btn-danger ml-2', remote: true %>
-  <%= link_to 'Monthly', analytics_salaries_path(type: 'monthly'), class: 'btn btn-success ml-2', remote: true %>
-  <%= link_to 'Yearly', analytics_salaries_path(type: 'yearly'), class: 'btn btn-warning ml-2', remote: true %>
+<%= search_form_for @q, url: analytics_salaries_path, class: "admin-controls col-12 row mb-3", remote: true, method: "get" do |f| %>
+  <%= link_to 'Weekly', analytics_salaries_path(type: 'weekly'), class: 'btn btn-danger ml-2 mb-2', remote: true %>
+  <%= link_to 'Monthly', analytics_salaries_path(type: 'monthly'), class: 'btn btn-success ml-2 mb-2', remote: true %>
+  <%= link_to 'Yearly', analytics_salaries_path(type: 'yearly'), class: 'btn btn-warning ml-2 mb-2', remote: true %>
 
-  <div class="col-lg-2 ml-5">
-    <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker', datepicker: true, placeholder: "YYYY-MM-DD" %>
+  <div class="col-lg-2">
+    <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker mb-2', datepicker: true, placeholder: "YYYY-MM-DD" %>
   </div>
 
   <div class="col-lg-2">
-    <%= f.search_field :created_at_lteq, class: 'form-control button-sm datepicker', datepicker: true , placeholder: "YYYY-MM-DD" %>
+    <%= f.search_field :created_at_lteq, class: 'form-control button-sm datepicker mb-2', datepicker: true , placeholder: "YYYY-MM-DD" %>
   </div>
-  <button class="btn btn-primary" name="search_submit" type="submit" value="Search"><i class="fa fa-search"></i></button>
+  <div class="col-lg-2">
+    <button class="btn btn-primary" style="width: 100px;" name="search_submit" type="submit" value="Search"><i class="fa fa-search"></i></button>
+  </div>
 <% end %>
 
-<div class="col-lg-6">
-  <div class="my-chart-Container">
-    <div class="mychartBox">
+<div class="col-lg-12">
+  <div class="my-chart-Container card border-radius-1 shadow p-3 mb-3">
       <canvas id="myChart"></canvas>
-    </div>
   </div>
 </div>
-<div class="col-lg-6">
-  <div class="my-chart-Container">
-    <div class="mychartBox">
+<div class="col-lg-12">
+  <div class="my-chart-Container card border-radius-1 shadow p-3 mb-3">
       <canvas id="myChart1"></canvas>
-    </div>
   </div>
 </div>
-<div class="col-lg-6">
-  <div class="my-chart-Container">
-    <div class="mychartBox">
+<div class="col-lg-12">
+  <div class="my-chart-Container card border-radius-1 shadow p-3 mb-3">
       <canvas id="myChart2"></canvas>
-    </div>
   </div>
 </div>
-<div class="col-lg-6">
-  <div class="my-chart-Container">
-    <div class="mychartBox">
+<div class="col-lg-12">
+  <div class="my-chart-Container card border-radius-1 shadow p-3 mb-3">
       <canvas id="myChart3"></canvas>
-    </div>
   </div>
 </div>
-<div class="col-lg-6">
-  <div class="my-chart-Container">
-    <div class="mychartBox">
+<div class="col-lg-12">
+  <div class="my-chart-Container card border-radius-1 shadow p-3 mb-3">
       <canvas id="myChart4"></canvas>
-    </div>
   </div>
 </div>
-<div class="col-lg-6">
-  <div class="my-chart-Container">
-    <div class="mychartBox">
+<div class="col-lg-12">
+  <div class="my-chart-Container card border-radius-1 shadow p-3 mb-3">
       <canvas id="myChart5"></canvas>
-    </div>
   </div>
 </div>
 <script>
