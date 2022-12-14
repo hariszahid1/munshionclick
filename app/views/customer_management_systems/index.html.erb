@@ -18,15 +18,29 @@
           </li>
         </ol>
       </div>
-      <% if check_can_create(@module_permission) %>
-        <div id="new_city">
-          <%= link_to new_customer_management_system_path, remote: true,class: "btn btn-success" do %>
-            <i class="fa fa-plus" aria-hidden="false"></i>
-            Create
-          <% end %>
-        <%= link_to "#{@follow_up_count.positive? ? '(' + @follow_up_count.to_s + ')' + ' ' + 'Follow Up': 'Follow Up'}" , follow_ups_path, class:"ml-3 #{@follow_up_count.positive? ? 'text-danger' : 'text-success'}", style: 'text-decoration: underline;'%>
-        </div>
-      <% end %>
+      <div class="row d-flex">
+        <% if check_can_create(@module_permission) %>
+          <div id="new_city" class="col-lg-1">
+            <%= link_to new_customer_management_system_path, remote: true,class: "btn btn-success mt-3", style: "width: 100px;" do %>
+              <i class="fa fa-plus" aria-hidden="false"></i>
+              Create
+            <% end %>
+            
+          </div>
+        <% end %>
+        <% if check_can_create(@module_permission) %>
+          <div id="new_city" class="col-lg-1">
+            <%= link_to follow_ups_path, :class => "text-primary notif", title: "Follow Up" do %>
+              <i class="fas fa-envelope fa-4x p-2 mt-1" aria-hidden="true"></i>      
+              <% if @follow_up_count.positive? %>
+                <span class = "badge rounded-pill badge-notification bg-danger text-light p-2 follow_num my_blinker" ><%= @follow_up_count.to_s %></span>
+              <% else%>
+                <span class = "badge rounded-pill badge-notification bg-info text-light p-2 follow_num" ><%= @follow_up_count.to_s %></span>
+              <% end %>
+            <% end %>
+          </div>
+        <% end %>  
+      </div>
     </div>
   </div>
 

@@ -1,4 +1,9 @@
-<h1>Pay Loan </h1>
-<h2>Balance: <span id='wage_debit'>0.00</span> | OutStanding Balance: <span id='balance'>0.00</span></h2>
-
-<%= render 'advance_form', salary: @salary %>
+<div class="card border-radius-1 shadow-sm">
+  <div class="card-header p-3">
+    <h1 class="float-left mt-4">Pay Loan </h1>
+    <h2 class="float-right">Balance: <span id='wage_debit'>0.00</span> <br><hr> OutStanding Balance: <span id='balance'>0.00</span></h2>
+  </div>
+</div>
+<div class="card border-radius-1 shadow-sm p-3 mt-3">
+  <%= render 'advance_form', salary: @salary %>
+</div>
