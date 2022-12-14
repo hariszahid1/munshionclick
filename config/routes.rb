@@ -222,13 +222,11 @@ Rails.application.routes.draw do
     end
   end
   get 'reports/index'
-
-
-
   get 'reports/chart'
   get 'reports/day_out_report'
   get 'reports/day_check'
   get 'reports/sale_report'
+  get 'reports/sale_report_analytics'
   get 'reports/stock_report'
   get 'reports/product_report'
 

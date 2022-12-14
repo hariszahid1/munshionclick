@@ -95,6 +95,7 @@ namespace :db do
     date_for_folder = Date.yesterday.to_s.gsub('-', '')
     file_path = []
     all_db_configs.each do |db_block, db_config|
+      database = db_block.split(Rails.env + '_')[1]
       path_to_file = Dir[Rails.root.join("../../shared/db_backup/#{date_for_folder}/#{db_block.split(Rails.env + '_')[1]}/*").to_s][0]
       file_path << [db_block.split(Rails.env + '_')[1], path_to_file]
       file = File.open(path_to_file)

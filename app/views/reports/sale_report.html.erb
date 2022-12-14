@@ -15,7 +15,7 @@
       <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab">Search</a>
     </li>
     <li class="nav-item">
-     <a class="nav-link tab-label " data-toggle="tab" data-remote="true" href="#analytics" role="tab">Analytics</a>
+     <a class="nav-link tab-label analytics-tab" data-toggle="tab" href="#analytics" role="tab">Analytics</a>
     </li>
 	</ul>
   <div class="tab-content">
@@ -31,9 +31,7 @@
             <div class="col-lg-1 form-group float-left">
               <input class="form-control btn btn-primary" name="search_submit" type="submit" value="Search">
             </div>
-            
             <button class="form-control btn btn-danger float-right mr-2" style="width: 100px;" name="submit_pdf" type="submit" value="Income Statement PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mr-2"></i>PDF</button>
-            
           <% end %>
         </div>
         <div class="card border-radius-1 shadow p-2 m-2">
@@ -121,12 +119,12 @@
         </div>
       </div>
       <div class="tab-pane card shadow-sm border-radius-1 p-3" id="analytics" role="tabpanel">
-        <div class="d-flex justify-content-center">
-          <div id="barchart_values"></div>
-        </div>  
+        <%# <div id="barchart_values"></div> %>
+        <div id="show-analytics"></div>
       </div>
-  </div>    
+  </div>
 </div>
+<%= link_to 'test', reports_sale_report_analytics_path, id: 'analytics-path', class: 'd-none', remote: true %>
 <script>
   $(document).ready(function() {
     if ($(".bootstrap-table").length == 0){
@@ -145,8 +143,6 @@
   });
 </script>
 
-
-
 <script>
   $(document).ready(function() {
     if ($(".bootstrap-table").length == 0){
@@ -158,11 +154,14 @@
   $(document).ready(function() {
     setTimeout(function(){
       $(".chosen-select").chosen({
-  allow_single_deselect: true,
-  width: '100%'
-});
+      allow_single_deselect: true,
+      width: '100%'
+    });
     }, 50);
+
+    $('.analytics-tab').on('click', function(){
+      $('#analytics-path').click();
+    })
+
   });
 </script>
-
-  
