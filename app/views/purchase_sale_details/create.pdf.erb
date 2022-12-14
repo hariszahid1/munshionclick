@@ -11,7 +11,11 @@
 <%elsif @purchase_sale_detail.with_gst.present? %>
   <%= render partial: "order_show_with_gst", locals: {purchase_sale_detail: @purchase_sale_detail} %>
 <%else%>
-  <%= render partial: "create_order_show", locals: {purchase_sale_detail: @purchase_sale_detail} %>
+  <% if current_user&.company_type == 'bcfm'%>
+    <%= render partial: "create_order_show_bcfm", locals: {purchase_sale_detail: @purchase_sale_detail} %>
+  <%else%>
+    <%= render partial: "create_order_show", locals: {purchase_sale_detail: @purchase_sale_detail} %>
+  <%end%>
 <%end%>
 <%if @pos_setting&.is_qr.present? && @pos_setting&.website.present? %>
   <p style="text-align: center; margin: 0;">
