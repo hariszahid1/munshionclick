@@ -13,6 +13,7 @@
   </div>
   <div id="new_investment">
     <div class="row d-flex mt-4 ml-2 mb-4">
+      <%if (check_can_delete(@module_permission))%>
 	    	<%= link_to new_loan_path, class: "btn btn-success mr-2" do %>
 	    		<i class="fa fa-plus" aria-hidden="true"></i>
 	    			Debit
@@ -21,6 +22,7 @@
           <i class="fa fa-plus" aria-hidden="true"></i>
             Credit
         <% end %>
+      <% end %>
     </div>
   </div>
   <div class="float-right">
@@ -72,9 +74,16 @@
           </div>
         </div>
         <div class="row ml-3">
+          <%if (check_can_update(@module_permission))%>
             <button class="form-control btn btn-danger mr-2 d-flex float-right justify-content-center" title= "download cities pdf" name="pdf" type="submit" value="pdf" formtarget="_blank" style="width:100px">PDF &nbsp;<i class="fa fa-file-pdf mt-1"></i></button>
+          <% end %>
+          <%if (check_can_update(@module_permission))%>
             <button class="form-control btn btn-warning ml-2 mr-2 d-flex float-right justify-content-center mr-2" title= "download cities csv" name="csv" type="submit" value="csv" style="width:100px">CSV &nbsp;<i class="fa fa-file-excel mt-1 ml-1"></i></button>
+          <% end %>
+          <%if (check_can_update(@module_permission))%>
             <button class="form-control btn btn-info d-flex justify-content-center float-right mr-2" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-1 mt-1"></i>&nbsp;Mail</button>
+          <% end %>
+          <%if (check_can_update(@module_permission))%>
             <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
               <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -109,7 +118,8 @@
                 </div>
               </div>
             </div>
-          </div>
+          <% end %>
+        </div>
       <% end %>
     </div>
     <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="import-export" role="tabpanel">
@@ -141,6 +151,7 @@
       <thead>
         <tr>
           <th><input type="checkbox" id="master" class='select-all-checkbox' style="cursor: pointer;">
+            <%if (check_can_delete(@module_permission))%>
               <div class="icon-container float-center">
                 <span class="ml-2 mt-2">
                   <div class="my-icon my-view">
@@ -150,6 +161,7 @@
                   </div>
                 </span>
               </div>
+            <% end %>
           </th>
           <th><%= sort_link(@q, :id, 'ID') %></th>
           <th><%= sort_link(@q, :debit, 'Debit') %></th>

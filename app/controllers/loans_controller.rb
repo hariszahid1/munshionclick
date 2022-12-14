@@ -2,6 +2,7 @@
 
 # Loans Controller
 class LoansController < ApplicationController
+  before_action :check_access
   before_action :set_loan, only: %i[show edit update destroy]
   before_action :set_account, only: %i[new edit update index]
   include PdfCsvGeneralMethod

@@ -273,12 +273,14 @@
             <% end %>
           </li>
         <% end %>
+        <% if check_is_hidden_by_module('investments') %>  
           <li class="activ-link">
             <%= link_to loans_path, class:"activ-link" do %>
               <i class="fas fa-tasks"></i>
               <span class="link-text">Loan</span>
             <% end %>
           </li>
+        <% end %>
         <% if check_is_hidden_by_module('items') %>  
           <li class="activ-link">
             <%= link_to items_path, class:"activ-link" do %>
