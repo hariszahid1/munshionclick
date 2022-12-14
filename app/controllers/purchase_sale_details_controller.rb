@@ -746,9 +746,16 @@ class PurchaseSaleDetailsController < ApplicationController
                 format.html {render :partial => "/purchase_sale_details/fast_food/create"}
               else
                 request.format = 'pdf'
-                format.pdf do
-                  name = @purchase_sale_detail.sys_user.name+' Invoice #'+@purchase_sale_detail.id.to_s
-                  print_pdf(name,'pdf.html','A4',true)
+                if current_user.company_type == 'bcfm'
+                  format.pdf do
+                    name = @purchase_sale_detail.sys_user.name+' Invoice #'+@purchase_sale_detail.id.to_s
+                    print_pdf(name,'pdf_bcfm.html','A4',true)
+                  end
+                else
+                  format.pdf do
+                    name = @purchase_sale_detail.sys_user.name+' Invoice #'+@purchase_sale_detail.id.to_s
+                    print_pdf(name,'pdf.html','A4',true)
+                  end
                 end
               end
             end
