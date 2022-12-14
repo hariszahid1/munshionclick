@@ -130,6 +130,11 @@ Rails.application.routes.draw do
       get :view_history, to: 'investments#view_history'
     end
   end
+  resources :loans do
+    collection do
+      get :view_history, to: 'loans#view_history'
+    end
+  end
   resources :pos_settings
   resources :ledger_books do
     collection do

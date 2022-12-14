@@ -232,6 +232,12 @@
               <%end%>
             </li>
         <% end %>    
+            <li class="activ-link">
+            <%= link_to loans_path, class:"activ-link" do %>
+              <i class="fas fa-tasks"></i>
+              <span class="link-text">Loan</span>
+            <% end %>
+          </li>
         <% if can?(:view, :purchase_sale_detail) %>
           <li>
               <a href="#InventorySubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">

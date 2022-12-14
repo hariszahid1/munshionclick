@@ -142,6 +142,12 @@
                 <span class="link-text">Investment</span>
             <% end %>
         </li>
+        <li class="activ-link">
+            <%= link_to loans_path, class:"activ-link" do %>
+              <i class="fas fa-tasks"></i>
+              <span class="link-text">Loan</span>
+            <% end %>
+        </li>
 
         <% if can?(:delete, :all) %>
         <li>
