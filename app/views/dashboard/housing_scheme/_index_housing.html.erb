@@ -228,7 +228,6 @@
   <div class="tab-content">
     <div class="tab-pane active mb-5 mt-4 card mt-2 p-3 text-primary" style="border: none; background-color: #F5F5F5;" id="categories" role="tabpanel">
       <p>
-        
           <div class="col-lg-12 col-sm-12">
             <% if check_is_hidden_by_module('customer_management_systems') %>
               <div class="col-lg-3 col-md-6 mb-4 form-group float-left">
@@ -247,6 +246,35 @@
                         </div>
                         <hr>
         	  						<%= link_to customer_management_systems_path do %>
+        	  							<span class="h5 mb-0  text-gray-800 btn btn-outline-info"><i class="fas fa-eye mr-1"></i>List</span>
+        	  						<%end%>
+        	  						<%= link_to new_customer_management_system_path do %>
+        	  							<span class="h5 mb-0  text-gray-800 btn btn-outline-danger" style="float: right;"><i class="fas fa-plus mr-1"></i>Add</span>
+        	  						<%end%>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+        	  	</div>
+            <% end %> 
+
+            <% if check_is_hidden_by_module('customer_management_systems') %>
+              <div class="col-lg-3 col-md-6 mb-4 form-group float-left">
+        	  		<div class="card border-left-primary shadow h-100 py-2 border-radius-1">
+        	  			<div class="card-body">
+        	  				<div class="row no-gutters align-items-center">
+        	  					<div class="col mr-2">
+        	  						<div class="text-xs font-weight-bold text-success text-uppercase mb-1 d-flex">
+                          <%= link_to follow_ups_path do %>
+                            <i class="fas fa-user-check text-dark fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
+                          <% end %>
+                          <%= link_to follow_ups_path, class:"ml-3" do %>
+        	  								<h5  style="text-align: left; color:black;font-weight: bold;">Follow Ups</h5>
+                            <h5 class="text-primary"><%= @total_follow_ups %></h5>
+                          <% end %>
+                        </div>
+                        <hr>
+        	  						<%= link_to follow_ups_path do %>
         	  							<span class="h5 mb-0  text-gray-800 btn btn-outline-info"><i class="fas fa-eye mr-1"></i>List</span>
         	  						<%end%>
         	  						<%= link_to new_customer_management_system_path do %>
@@ -437,6 +465,36 @@
                   </div>
                 </div>
       		  	</div>
+            <% end %>  
+
+            <% if check_is_hidden_by_module('compaigns') %>
+              <div class="col-lg-3 col-md-6 mb-4 form-group float-left">
+      			  	<div class="card border-left-primary shadow h-100 py-2 border-radius-1">
+      			  		<div class="card-body">
+      			  			<div class="row no-gutters align-items-center">
+      			  				<div class="col mr-2">
+      			  					<div class="text-xs font-weight-bold text-success text-uppercase mb-1 d-flex">
+                          <%= link_to compaigns_path do %>
+                            <i class="fas fa-address-card text-dark fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
+                          <% end %>
+                          <%= link_to compaigns_path, class: "ml-2" do %>
+      			  						  <h5  style="text-align: left; color:black;font-weight: bold;">Compaign</h5>
+                            <h5 class="text-primary"><%=@total_compaigns %></h5>
+                          <% end %>
+                        </div>
+                        
+                        <hr>
+                        <%= link_to compaigns_path do %>
+      		  							<span class="h5 mb-0  text-gray-800 btn btn-outline-info"><i class="fas fa-eye mr-1"></i>List</span>
+      		  						<%end%>
+      		  						<%= link_to new_compaign_path do %>
+      		  							<span class="h5 mb-0  text-gray-800 btn btn-outline-danger" style="float: right;"><i class="fas fa-plus mr-1"></i>Add</span>
+      		  						<%end%>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+      			  </div>
             <% end %>  
 
             <% if check_is_hidden_by_module('ledger_books') %>
@@ -730,7 +788,7 @@
                   </div>
                 </div>
       			  </div>
-            <% end %>  
+            <% end %> 
           </div>      
         
       </p>
@@ -840,27 +898,6 @@
                           </div>
                           <div class="h5 mb-0  text-gray-800">
                             Staff Deals
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                <% end %>
-              </div>
-            <% end %>  
-
-            <% if check_is_hidden_by_module('compaigns') %>  
-              <div class="col-lg-3 col-md-6 mb-4 form-group float-left">
-                <%= link_to compaigns_path do %>
-                  <div class="card border-left-primary shadow h-100 py-2 border-radius-1">
-                    <div class="card-body" >
-                      <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                          <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                            <i class="fa fa-address-card fa-2x" aria-hidden="true"></i>
-                          </div>
-                          <div class="h5 mb-0  text-gray-800">
-                            Compaign
                           </div>
                         </div>
                       </div>

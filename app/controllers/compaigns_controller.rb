@@ -1,5 +1,6 @@
 class CompaignsController < ApplicationController
   before_action :set_compaign, only: %i[ show edit update destroy ]
+  before_action :check_access
 
   # GET /compaigns or /compaigns.json
   def index

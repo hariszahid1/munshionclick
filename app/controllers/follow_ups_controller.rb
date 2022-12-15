@@ -12,6 +12,8 @@ class FollowUpsController < ApplicationController
     @follow_ups = @q.result.page(params[:page])
     @options_for_select = SysUser.all
     @staff = Staff.all
+    @follow_up_count = FollowUp.where(created_at: Time.current.all_day).count
+    @total_follow_ups = FollowUp.count
   end
 
   # GET /follow_ups/1
