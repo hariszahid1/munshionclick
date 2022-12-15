@@ -7,6 +7,9 @@ class DashboardController < ApplicationController
     @total_sale_slips = PurchaseSaleDetail.where(transaction_type: "Sale").count
     @total_purchase_slips = PurchaseSaleDetail.where(transaction_type: "Purchase").count
     @total_expense_slips = ExpenseEntry.count
+    @total_follow_ups = FollowUp.count
+    @follow_up_count = FollowUp.where(created_at: Time.current.all_day).count
+    @total_compaigns = Compaign.count
     @total_expense_today = ExpenseEntry.where(created_at: Time.current.all_day).count
     @total_expense_yesterday = ExpenseEntry.where(created_at: 1.day.ago.all_day).count
     @total_exp_today = ExpenseEntry.where(created_at: Time.current.all_day).sum(:amount)

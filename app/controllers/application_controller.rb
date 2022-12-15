@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
   before_action :get_request_referrer
 
   include PublicActivity::StoreController
-
+  
   rescue_from CanCan::AccessDenied do |exception|
     respond_to do |format|
       format.json { head :forbidden, content_type: 'text/html' }
@@ -41,6 +41,9 @@ class ApplicationController < ActionController::Base
     ''
   end
 
+  @follow_up_count = FollowUp.where(created_at: Time.current.all_day).count
+  @total_follow_ups = FollowUp.count
+
   def after_sign_in_path_for(_resource)
     dashboard_index_path
   end
@@ -56,6 +59,7 @@ class ApplicationController < ActionController::Base
     elsif current_user.staff?
       User.find_by(id: current_user.created_by_id).name
     end
+    
   end
 
   def check_display_name_for_nav(pos_setting)
@@ -329,6 +333,10 @@ class ApplicationController < ActionController::Base
   helper_method :check_can_import_export
   helper_method :check_can_send_email
   helper_method :check_is_hidden_by_module
+
+  
+    
+
 
   def set_company_type
     if current_user.present?
