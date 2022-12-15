@@ -8,11 +8,11 @@
             <span class="link-text">Dashboard</span>
           <% end %>
         </li>
-        <% if check_is_hidden_by_module('customer_management_systems') %>
+        <% if check_is_hidden_by_module('crms') %>
           <li class="activ-link">
-            <a href="<%=customer_management_systems_path%>", class="activ-link">
+            <a href="<%=crms_path%>", class="activ-link">
               <i class="fas fa-user-plus"></i>
-              <span class="link-text">CMS</span>
+              <span class="link-text">CRM</span>
             </a>
           </li>
         <% end %>

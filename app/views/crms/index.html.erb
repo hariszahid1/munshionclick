@@ -8,39 +8,25 @@
   <div class="row mb-4">
     <div class="col-lg-12 col-sm-12">
       <div class="main-content-header">
-        <h1 class="ml-2">Customer Management System</h1>
+        <h1 class="ml-2">Customer Realtion Management</h1>
         <ol class="breadcrumb">
           <li class="breadcrumb-item">
             <a href="<%= root_path %>">Dashboard</a>
           </li>
           <li class="breadcrumb-item active">
-            <a href="<%= customer_management_systems_path %>">CMS</a>
+            <a href="<%= crms_path %>">CRM</a>
           </li>
         </ol>
       </div>
-      <div class="row d-flex">
-        <% if check_can_create(@module_permission) %>
-          <div id="new_city" class="col-lg-1">
-            <%= link_to new_customer_management_system_path, remote: true,class: "btn btn-success mt-3", style: "width: 100px;" do %>
-              <i class="fa fa-plus" aria-hidden="false"></i>
-              Create
-            <% end %>
-            
-          </div>
-        <% end %>
-        <% if check_can_create(@module_permission) %>
-          <div id="new_city" class="col-lg-1">
-            <%= link_to follow_ups_path, :class => "text-primary notif", title: "Follow Up" do %>
-              <i class="fas fa-envelope fa-4x p-2 mt-1" aria-hidden="true"></i>      
-              <% if @follow_up_count.positive? %>
-                <span class = "badge rounded-pill badge-notification bg-danger text-light p-2 follow_num my_blinker" ><%= @follow_up_count.to_s %></span>
-              <% else%>
-                <span class = "badge rounded-pill badge-notification bg-info text-light p-2 follow_num" ><%= @follow_up_count.to_s %></span>
-              <% end %>
-            <% end %>
-          </div>
-        <% end %>  
-      </div>
+      <% if check_can_create(@module_permission) %>
+        <div id="new_city">
+          <%= link_to new_crm_path, remote: true,class: "btn btn-success" do %>
+            <i class="fa fa-plus" aria-hidden="false"></i>
+            Create
+          <% end %>
+        <%= link_to "#{@follow_up_count.positive? ? '(' + @follow_up_count.to_s + ')' + ' ' + 'Follow Up': 'Follow Up'}" , follow_ups_path, class:"ml-3 #{@follow_up_count.positive? ? 'text-danger' : 'text-success'}", style: 'text-decoration: underline;'%>
+        </div>
+      <% end %>
     </div>
   </div>
 
@@ -65,9 +51,9 @@
         <a class="nav-link tab-label " data-toggle="tab" href="#analytics" data-remote="true" role="tab">Analytics</a>
       </li>
 		<%if (check_can_import_export(@module_permission))%>
-			<!--li class="nav-item">
+			<li class="nav-item">
 				<a class="nav-link tab-label cms-search-exp-tab" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
-			</li-->
+			</li>
 		<%end%>
     <li class="nav-item">
       <a class="nav-link tab-label cms-logs-tab" data-toggle="tab" href="#logs" role="tab">Logs</a>
@@ -88,7 +74,7 @@
 
     <div class="tab-content mb-3">
       <div class="tab-pane active card border-radius-1 mt-2" id="search" role="tabpanel">
-        <%= search_form_for @q, url: customer_management_systems_path, class: "admin-controls", method: "get" do |f| %>
+        <%= search_form_for @q, url: crms_path, class: "admin-controls", method: "get" do |f| %>
           <div class="row d-flex mt-3 mr-2">
             <div class="col">
               <div class='col-lg-2 form-group float-left'>
@@ -123,10 +109,10 @@
               </div>
 
               <%if (check_can_download_pdf(@module_permission))%>
-                <button class="form-control btn btn-danger float-left mr-2 ml-3" style="width:100px" title= "download customer_management_systems pdf" name="pdf" type="submit" value="pdf" formtarget="_blank" style="width:160px">PDF &nbsp;<i class="fa fa-file-pdf"></i></button>
+                <button class="form-control btn btn-danger float-left mr-2 ml-3" style="width:100px" title= "download crm pdf" name="pdf" type="submit" value="pdf" formtarget="_blank" style="width:160px">PDF &nbsp;<i class="fa fa-file-pdf"></i></button>
               <% end %>
               <%if (check_can_download_csv(@module_permission))%>
-                <button class="btn btn-warning float-left mr-2" style="width:100px" title= "download customer_management_systems csv" name="csv" type="submit" value="csv">CSV &nbsp;<i class="fa fa-file-excel"></i></button>
+                <button class="btn btn-warning float-left mr-2" style="width:100px" title= "download crm csv" name="csv" type="submit" value="csv">CSV &nbsp;<i class="fa fa-file-excel"></i></button>
               <% end %>
               <%if (check_can_send_email(@module_permission))%>
                 <button class="form-control btn btn-info float-left" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope"></i>&nbsp;Mail</button>
@@ -217,10 +203,10 @@
       </div>
       <div class="tab-pane card border-radius-1 mt-2" id="import-export" role="tabpanel">
         <p>
-          <%= search_form_for @q, url: customer_management_systems_path, class: "admin-controls", method: "get" do |f| %>
+          <%= search_form_for @q, url: crms_path, class: "admin-controls", method: "get" do |f| %>
             <div class="d-flex">
               <button class="btn btn-success ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
-              <button class="btn btn-primary ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
+              <button class="btn btn-primary ml-2" type="button" data-toggle="modal" value="crm" data-target="#importFile">Import Data</button>
             </div>
           <% end %>
         </p>
@@ -229,7 +215,7 @@
       <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="logs" role="tabpanel">
         <p>
           <div class="d-flex">
-            <%= link_to view_history_customer_management_systems_path, class: "btn btn-success d-none", id: "cms-logs", remote:true do %>
+            <%= link_to view_history_crms_path, class: "btn btn-success d-none", id: "cms-logs", remote:true do %>
               show logs
             <% end %>
             <div id = "show-logs"></div>
@@ -296,7 +282,7 @@
         </div>
         <div class="modal-body">
           <%= f.file_field :file, required: true, accept: '.csv' %>
-          <%= f.hidden_field :table_name, value: 'SysUser' %>
+          <%= f.hidden_field :table_name, value: 'CRM' %>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

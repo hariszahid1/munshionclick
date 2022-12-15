@@ -9,7 +9,7 @@
       </div>
       <div class="modal-body">
         <div class="card-body">
-          <%= render 'form', sys_user: @sys_user, model: @sys_user, local: true,  method: :post, url: customer_management_systems_path(@sys_user) %>
+          <%= render 'form', sys_user: @sys_user, model: @sys_user, local: true,  method: :post, url: crms_path(@sys_user) %>
         </div>
       </div>
     </div>

@@ -1,13 +1,13 @@
 <div class="p-3">
   <div class="row mb-2 mt-2">
     <div class="col-lg-12 col-sm-12">
-      <h2>CMS User History</h2>
+      <h2>CRM User History</h2>
     </div>
   </div>
 
   <div class="row px-3">
     <div class="col-lg-12 col-sm-12 card shadow border-radius-1">
-      <%= search_form_for @q, url:view_history_customer_management_systems_path, class: "admin-controls mt-3", remote: true, method: "get" do |f| %>
+      <%= search_form_for @q, url:view_history_crms_path, class: "admin-controls mt-3", remote: true, method: "get" do |f| %>
         <div class="col-lg-2 form-group float-left">
           <%= f.search_field :item_id_eq, value: @item_id, placeholder: "search by id", title: "search by id" ,:class=>"form-control" %>
         </div>
@@ -53,7 +53,7 @@
             <td class="urdu-font"><%= log&.event  %></td>
             <td class="urdu-font"><%=User.find_by(id:log&.whodunnit)&.name %></td>
             <td class="urdu-font" ><%=log&.created_at.strftime("%d%b%y at %I:%M %p")%></td>
-            <td class="urdu-font"><%= link_to " (" + log&.item_id.to_s  + ")", customer_management_systems_path('q[id_eq]':log&.item_id,)%></td>
+            <td class="urdu-font"><%= link_to " (" + log&.item_id.to_s  + ")", crms_path('q[id_eq]':log&.item_id,)%></td>
             <td class="urdu-font"><%=SysUser.find_by(id:log&.item_id)&.name %></td>
             <td class="urdu-font"><%= log&.changeset&.try(:[], 'cms_data')&.first&.try(:[], 'project_name') %></td>
             <td class="urdu-font"><%= log&.changeset&.try(:[], 'cms_data')&.last&.try(:[], 'project_name') %></td>
