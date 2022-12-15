@@ -194,9 +194,9 @@ Rails.application.routes.draw do
 
   resources :cities
   resources :user_groups
-  resources :customer_management_systems do
+  resources :crms do
     collection do
-      get :view_history, to: 'customer_management_systems#view_history'
+      get :view_history, to: 'crms#view_history'
     end
   end
   resources :notes, only: %i[create new]

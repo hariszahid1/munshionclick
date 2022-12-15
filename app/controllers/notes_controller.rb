@@ -14,7 +14,7 @@ class NotesController < ApplicationController
     respond_to do |format|
       if @note.save
         format.js
-        format.html { redirect_to customer_management_system_path(params[:note][:notable_id].to_i), notice: 'Note was successfully created.' }
+        format.html { redirect_to crms_path(params[:note][:notable_id].to_i), notice: 'Note was successfully created.' }
         format.json { render :show, status: :created, location: @note }
       else
         format.html { render :new }

@@ -1,28 +1,28 @@
 # frozen_string_literal: true
 
-# CMS Controller
-class CustomerManagementSystemsController < ApplicationController
+# CRM Controller
+class CrmsController < ApplicationController
 	before_action :check_access
   before_action :index_search_data
   before_action :set_sys_user, only: %i[show edit update destroy]
   before_action :new_edit_data, only: %i[new edit create index]
   include PdfCsvGeneralMethod
-  include CmsHelper
+  include CrmHelper
 
   require 'tempfile'
   require 'csv'
-  # GET /customer_manangement_Systems
-  # GET /customer_manangement_Systems.json
+  # GET /crms
+  # GET /crms.json
   def index
-    
+
     @q = SysUser.ransack(params[:q])
     @q.sorts = 'id asc' if @q.sorts.empty? && @q.result.count.positive?
     @sys_users = @q.result.page(params[:page])
     export_file if params[:export_data].present?
-    download_cms_csv_file if params[:csv].present?
-    download_cms_pdf_file if params[:pdf].present?
+    download_crm_csv_file if params[:csv].present?
+    download_crm_pdf_file if params[:pdf].present?
     send_email_file if params[:email].present?
-    cms_charts
+    crm_charts
   end
 
   def new
@@ -31,21 +31,20 @@ class CustomerManagementSystemsController < ApplicationController
     @sys_user.build_contact
     @sys_user.notes.build
     @sys_user.follow_ups.build
-    
   end
 
   def edit; end
 
   def show; end
 
-  # POST /customer_manangement_Systems
-  # POST /customer_manangement_Systems.json
+  # POST /crms
+  # POST /crms.json
   def create
     @sys_user = SysUser.new(sys_user_params)
 
     respond_to do |format|
       if @sys_user.save
-        format.html { redirect_to get_request_referrer, notice: 'CMS user was successfully created.' }
+        format.html { redirect_to get_request_referrer, notice: 'CRM user was successfully created.' }
         format.json { render :show, status: :created, location: @sys_user }
       else
         format.html { redirect_to get_request_referrer, alert: @sys_user.errors.full_messages[0] }
@@ -54,12 +53,12 @@ class CustomerManagementSystemsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /customer_manangement_Systems/1
-  # PATCH/PUT /customer_manangement_Systems/1.json
+  # PATCH/PUT /crms/1
+  # PATCH/PUT /crms/1.json
   def update
     respond_to do |format|
       if @sys_user.update(sys_user_params)
-        format.html { redirect_to get_request_referrer, notice: 'CMS user was successfully updated.' }
+        format.html { redirect_to get_request_referrer, notice: 'CRM user was successfully updated.' }
         format.json { render :show, status: :ok, location: @sys_user }
       else
         format.html { redirect_to get_request_referrer, alert: @sys_user.errors.full_messages[0] }
@@ -71,7 +70,7 @@ class CustomerManagementSystemsController < ApplicationController
   def destroy
     @sys_user.destroy!
     respond_to do |format|
-      format.html { redirect_to customer_management_systems_path, notice: 'CMS user was successfully Deleted.' }
+      format.html { redirect_to crms_path, notice: 'CRM user was successfully Deleted.' }
       format.json { render :show, status: :ok, location: @sys_user }
     end
   end
@@ -169,37 +168,41 @@ class CustomerManagementSystemsController < ApplicationController
     @client_type = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['client_type']&.map(&:downcase) : []
     @client_status = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['client_status'] : []
     @category = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['category']&.map(&:downcase) : []
-    @deal_status = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['deal_status']&.map(&:downcase) : []
+    @deal_stat = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['deal_status']&.map(&:downcase) : []
     @source = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['source']&.map(&:downcase) : []
   end
 
-  def download_cms_csv_file
-    @sys_user = @q.result
+  def download_crm_csv_file
+    @sys_user = params[:export].present? ? SysUser.all : @q.result
     header_for_csv = %w[Name Agent_name Project_Name Category Plot_size Short_Details Created_at]
-    data_for_csv = get_data_for_cms_csv
-    generate_csv(data_for_csv, header_for_csv, 'CMS')
+    data_for_csv = get_data_for_crm_csv
+    generate_csv(data_for_csv, header_for_csv, 'CRM')
   end
 
-  def download_cms_pdf_file
+  def download_crm_pdf_file
     @sys_users = @q.result
     sorted_data
-    generate_pdf(@sorted_data.as_json, 'CMS', 'pdf.html', 'A4', false, 'customer_management_systems/index.pdf.erb')
+    generate_pdf(@sorted_data.as_json, 'CRM', 'pdf.html', 'A4', false, 'crms/index.pdf.erb')
   end
 
   def send_email_file
-    EmailJob.perform_later(@q.result.as_json, 'customer_management_systems/index.pdf.erb', params[:email_value],
+    EmailJob.perform_later(@q.result.as_json, 'crms/index.pdf.erb', params[:email_value],
                            params[:email_choice], params[:subject], params[:body],
-                           current_user, 'customer_management_systems')
+                           current_user, 'crms')
     if params[:email_value].present?
       flash[:notice] = "Email has been sent to #{params[:email_value]}"
     else
       flash[:notice] = "Email has been sent to #{current_user.email}"
     end
-    redirect_to customer_management_systems_path
+    redirect_to crms_path
   end
 
   def export_file
-    export_data('SysUser')
+    @sys_user = SysUser.all
+    header_for_csv = %w[id number name agent_id plot_size short_details project_name client_type client_status
+                       category deal_status source]
+    data_for_csv = get_data_for_crm_export
+    generate_csv(data_for_csv, header_for_csv, 'CRM')
   end
 
   def index_search_data
@@ -214,7 +217,7 @@ class CustomerManagementSystemsController < ApplicationController
   end
 end
 
-def cms_charts
+def crm_charts
     
     @total_agent_count = SysUser.group(:credit_status).count.except(0, nil).sort.to_h
     agent_ids = @total_agent_count.keys

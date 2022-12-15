@@ -26,7 +26,7 @@
         <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link tab-label active ml-3  " href="<%= customer_management_systems_path %>">CMS</a>
+        <a class="nav-link tab-label active ml-3  " href="<%= crms_path %>">CRM</a>
       </li>
     </ul>
   <%= search_form_for @q, url: follow_ups_path, class: "admin-controls", method: "get" do |f| %>
@@ -70,7 +70,7 @@
 							</div>
 						</span>
 					</div>
-        <th>CMS User</th>
+        <th>CRM User</th>
         <th>Task Type<div class='float-right'><%= sort_link(@q, :task_type, "", {}, class: 'sorting-button') %></div></th>
         <th>Priority<div class='float-right'><%= sort_link(@q, :priority, "", {}, class: 'sorting-button') %></div></th>
         <th>Comment<div class='float-right'><%= sort_link(@q, :comment, "", {}, class: 'sorting-button') %></div></th>
