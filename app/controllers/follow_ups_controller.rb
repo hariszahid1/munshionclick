@@ -12,6 +12,8 @@ class FollowUpsController < ApplicationController
     @follow_ups = @q.result.page(params[:page])
     @options_for_select = SysUser.all
     @staff = Staff.all
+    @follow_up_count = FollowUp.where(created_at: Time.current.all_day).count
+    @total_follow_ups = FollowUp.count
   end
 
   # GET /follow_ups/1
@@ -37,7 +39,7 @@ class FollowUpsController < ApplicationController
     respond_to do |format|
       if @follow_up.save
         format.js
-        format.html { redirect_to customer_management_system_path(params[:follow_up][:followable_id].to_i), notice: 'Follow Up was successfully created.' }
+        format.html { redirect_to crms_path(params[:follow_up][:followable_id].to_i), notice: 'Follow Up was successfully created.' }
         format.json { render :show, status: :created, location: @follow_up }
       else
         format.html { render :new }

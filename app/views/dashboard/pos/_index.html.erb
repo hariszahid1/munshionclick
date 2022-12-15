@@ -223,6 +223,35 @@
       <p>
         
           <div class="col-lg-12 col-sm-12">
+            <% if check_is_hidden_by_module('crms') %>
+              <div class="col-lg-3 col-md-6 mb-4 form-group float-left">
+        	  		<div class="card border-left-primary shadow h-100 py-2 border-radius-1">
+        	  			<div class="card-body">
+        	  				<div class="row no-gutters align-items-center">
+        	  					<div class="col mr-2">
+        	  						<div class="text-xs font-weight-bold text-success text-uppercase mb-1 d-flex">
+                          <%= link_to crms_path do %>
+                            <i class="fas fa-users text-dark fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
+                          <% end %>
+                          <%= link_to crms_path, class:"ml-3" do %>
+        	  								<h5  style="text-align: left; color:black;font-weight: bold;">CRM</h5>
+                            <h5 class="text-primary"><%= @sys_user_count %></h5>
+                          <% end %>
+                        </div>
+                        <hr>
+        	  						<%= link_to crms_path do %>
+        	  							<span class="h5 mb-0  text-gray-800 btn btn-outline-info"><i class="fas fa-eye mr-1"></i>List</span>
+        	  						<%end%>
+        	  						<%= link_to new_crm_path do %>
+        	  							<span class="h5 mb-0  text-gray-800 btn btn-outline-danger" style="float: right;"><i class="fas fa-plus mr-1"></i>Add</span>
+        	  						<%end%>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+        	  	</div>
+            <% end %>
+
             <% if check_is_hidden_by_module('customer_management_systems') %>
               <div class="col-lg-3 col-md-6 mb-4 form-group float-left">
         	  		<div class="card border-left-primary shadow h-100 py-2 border-radius-1">
@@ -230,16 +259,16 @@
         	  				<div class="row no-gutters align-items-center">
         	  					<div class="col mr-2">
         	  						<div class="text-xs font-weight-bold text-success text-uppercase mb-1 d-flex">
-                          <%= link_to customer_management_systems_path do %>
-                            <i class="fas fa-users text-dark fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
+                          <%= link_to follow_ups_path do %>
+                            <i class="fas fa-user-check text-dark fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
                           <% end %>
-                          <%= link_to customer_management_systems_path, class:"ml-3" do %>
-        	  								<h5  style="text-align: left; color:black;font-weight: bold;">CMS</h5>
-                            <h5 class="text-primary"><%= @sys_user_count %></h5>
+                          <%= link_to follow_ups_path, class:"ml-3" do %>
+        	  								<h5  style="text-align: left; color:black;font-weight: bold;">Follow Ups</h5>
+                            <h5 class="text-primary"><%= @total_follow_ups %></h5>
                           <% end %>
                         </div>
                         <hr>
-        	  						<%= link_to customer_management_systems_path do %>
+        	  						<%= link_to follow_ups_path do %>
         	  							<span class="h5 mb-0  text-gray-800 btn btn-outline-info"><i class="fas fa-eye mr-1"></i>List</span>
         	  						<%end%>
         	  						<%= link_to new_customer_management_system_path do %>
@@ -251,6 +280,7 @@
                 </div>
         	  	</div>
             <% end %>
+            
             <% if check_is_hidden_by_module('products') %>  
         	  	<div class="col-lg-3 col-md-6 mb-4 form-group float-left">
         	  		<div class="card border-left-primary shadow h-100 py-2 border-radius-1">
