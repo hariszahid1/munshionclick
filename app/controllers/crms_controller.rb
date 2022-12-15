@@ -168,7 +168,7 @@ class CrmsController < ApplicationController
     @client_type = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['client_type']&.map(&:downcase) : []
     @client_status = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['client_status'] : []
     @category = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['category']&.map(&:downcase) : []
-    @deal_status = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['deal_status']&.map(&:downcase) : []
+    @deal_stat = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['deal_status']&.map(&:downcase) : []
     @source = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['source']&.map(&:downcase) : []
   end
 

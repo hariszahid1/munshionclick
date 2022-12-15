@@ -93,10 +93,10 @@
                 <%= f.select :cms_data_cont_any, options_for_select(@category, f.object.cms_data_cont_any), {:include_blank => "Select Category"}, class: "form-control chosen-select" %>
               </div>
               <div class="col-lg-2 form-group float-left">
-                <%= f.select :cms_data_i_cont_any, options_for_select(@project_name, f.object.cms_data_cont_any), {:include_blank => "Select Project Name"}, class: "form-control chosen-select" %>
+                <%= f.select :cms_data_i_cont_any, options_for_select(@project_name, f.object.cms_data_i_cont_any), {:include_blank => "Select Project Name"}, class: "form-control chosen-select" %>
               </div>
               <div class="col-lg-2 form-group float-left">
-                <%= f.select :cms_data_i_cont, options_for_select(@deal_status, f.object.cms_data_cont_any), {:include_blank => "Select Deal Status"}, class: "form-control chosen-select" %>
+                <%= f.select :cms_data_i_cont, options_for_select(@deal_stat, f.object.cms_data_i_cont_any), {:include_blank => "Select Deal Status"}, class: "form-control chosen-select" %>
               </div>
               <div class="col-lg-2 form-group float-left">
                 <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker',title: "Select date from",  placeholder: "YYYY-MM-DD" %>
