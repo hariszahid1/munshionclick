@@ -258,7 +258,7 @@
         	  	</div>
             <% end %> 
 
-            <% if check_is_hidden_by_module('customer_management_systems') %>
+            <% if check_is_hidden_by_module('crms') %>
               <div class="col-lg-3 col-md-6 mb-4 form-group float-left">
         	  		<div class="card border-left-primary shadow h-100 py-2 border-radius-1">
         	  			<div class="card-body">
@@ -277,7 +277,7 @@
         	  						<%= link_to follow_ups_path do %>
         	  							<span class="h5 mb-0  text-gray-800 btn btn-outline-info"><i class="fas fa-eye mr-1"></i>List</span>
         	  						<%end%>
-        	  						<%= link_to new_customer_management_system_path do %>
+        	  						<%= link_to new_crm_path do %>
         	  							<span class="h5 mb-0  text-gray-800 btn btn-outline-danger" style="float: right;"><i class="fas fa-plus mr-1"></i>Add</span>
         	  						<%end%>
                       </div>
