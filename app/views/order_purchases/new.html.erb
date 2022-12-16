@@ -1,0 +1,58 @@
+<% service_charges=(@pos_setting&.extra_settings.present? && params[:service_charges].blank?) ? @pos_setting&.extra_settings["order_invoice_extra_setting"].to_f : 0%>
+<input class="form-control" type="hidden" value=<%=service_charges%> name="order_extra_charges" id="order_extra_charges">
+<%if pos_setting_sys_type!="FastFood"%>
+  <div class="col-xl-12 col-md-12 mb-12">
+    <div class="card border-left-primary shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="row">
+              <div class="col-lg-4 form-group float-left">
+                <div class="col-lg-3 form-group float-left font-weight-bold ">
+                  <%= link_to new_order_purchase_path(transaction_type: :purchase, with_gst: true,product: true), class: "btn btn-success col-lg-12" do %>
+                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                    with GST
+                  <% end %>
+                </div>
+                <%if pos_setting_sys_type=="HousingScheme"%>
+                  <h1><%="Purchase Booking Detail"%></h1>
+                <% else%>
+                  <h1><%="Purchase Order Detail"%></h1>
+                <% end%>
+              </div><hr>
+              <div class="col-lg-2 form-group float-left font-weight-bold ">Total Bill  <h1 class="purchase_sale_detail_total_bill">0.00</h1></div>
+              <div class="col-lg-2 form-group float-left font-weight-bold ">Total       <h1 class="purchase_sale_discount_amount">0.00</h1></div>
+              <div class="col-lg-2 form-group float-left font-weight-bold ">Remaning    <h1 class="purchase_sale_detail_amount">0.00</h1></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<%end%>
+<% if pos_setting_sys_type=="HousingScheme" %>
+  <%= render '/order_purchases/hscheme/form', order: @order %>
+<% elsif pos_setting_sys_type=="CustomClear" %>
+  <%= render '/order_purchases/custom/form_custom', order: @order %>
+<% elsif params[:with_gst].present? %>
+  <%= render '/order_purchases/default_partial/form_with_gst', order: @order %>
+<% elsif pos_setting_sys_type=="FastFood" %>
+  <%= render '/order_purchases/fast_food/form', order: @order %>
+<% else%>
+  <%= render 'form', order: @order %>
+<% end%>
+
+<script>
+  document.addEventListener("turbolinks:load", function() {
+    costUpdateReturnOrder();
+    $('#return_links').on("cocoon:after-remove", function() {
+      costUpdateReturnOrder();
+    });
+    $('#new_links').on("cocoon:after-remove", function() {
+      costUpdateReturnOrder();
+    });
+    $('#data_list').on("cocoon:after-remove", function() {
+      costUpdateReturnOrder();
+    });
+  });
+</script>

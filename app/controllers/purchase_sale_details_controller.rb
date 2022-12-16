@@ -600,7 +600,7 @@ class PurchaseSaleDetailsController < ApplicationController
       unless order.purchase_sale_details.present?
         order.order_items.each do |oi|
           @purchase_sale_detail.purchase_sale_items.build(product_id: oi.product_id,item_id: oi.item_id,quantity:oi.quantity,cost_price:oi.cost_price,sale_price:oi.sale_price)
-          @purchase_sale_detail.product_warranties.build(product_id: oi.product_id) if oi.product.with_serial
+          @purchase_sale_detail.product_warranties.build(product_id: oi.product_id) if oi.product&.with_serial
         end
       end
     elsif params[:purchase_sale_detail_id].present? && params[:purchase_sale_type]=="SaleReturn"
@@ -649,7 +649,7 @@ class PurchaseSaleDetailsController < ApplicationController
       @purchase_sale_detail.purchase_sale_items.destroy_all
       order.order_items.each do |oi|
         @purchase_sale_detail.purchase_sale_items.build(product_id: oi.product_id,item_id: oi.item_id,quantity:oi.quantity,cost_price:oi.cost_price,sale_price:oi.sale_price)
-        @purchase_sale_detail.product_warranties.build(product_id: oi.product_id) if oi.product.with_serial
+        @purchase_sale_detail.product_warranties.build(product_id: oi.product_id) if oi.product&.with_serial
       end
     end
   end
