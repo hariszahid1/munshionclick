@@ -1,3 +1,52 @@
+<style>
+.popup-overlay {
+  /*Hides pop-up when there is no "active" class*/
+  visibility: hidden;
+  background: #ffffff;
+  position: fixed;
+  border-radius: 8px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin-top: 18%;
+  margin-left: 65%;
+  width: 30%;
+  height: 50%;
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+
+}
+
+.popup-overlay.active {
+  /*displays pop-up when "active" class is present*/
+  visibility: visible;
+  text-align: center;
+}
+
+.popup-content {
+  /*Hides pop-up content when there is no "active" class */
+  visibility: hidden;
+}
+
+.popup-content.active {
+  /*Shows pop-up content when "active" class is present */
+  visibility: visible;
+
+  
+}
+div.popup-content{
+  overflow-y: scroll;
+}
+
+ul li a.active{
+  color: black;
+  background-color: orange;
+  border-radius: 30px;
+}
+
+</style>
+
+
 <nav class="navbar navbar-top py-3 justify-content-center" style="background-color: #f2f2f7">
   <h4 class="ml-3"><%= admin_name_on_nav %></h4>
   <svg version="1.1" id="Layer_1" class="cursor-pointer sidebar-toggle-icon d-none d-lg-block mx-5" style="margin-top: -10px;" height="50px" width="40px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
@@ -7,6 +56,52 @@
     viewBox="0 0 455 455" style="enable-background:new 0 0 455 455;" xml:space="preserve"><g><rect y="312.5" width="455" height="50"/><rect y="212.5" width="455" height="50"/><rect y="112.5" width="455" height="50"/></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g>
   </svg>
 
+      <span class = "text-light my_follow_btn open" title= "Follow Up" style="cursor: pointer; height: 20px;">
+        <i class="fas fa-envelope fa-5x p-3 mt-1 card shadow-lg" style="border-radius: 80px; background-color: #0f1d59;" aria-hidden="true"></i>      
+        <% if @follow_up_count.positive? %> 
+          <span class = "badge rounded-pill badge-notification bg-danger text-light p-2 follow_num my_blinker" ><%= @follow_up_count %></span>
+          <% else %>
+          <span class = "badge rounded-pill badge-notification bg-info text-dark p-2 follow_num" ><%= @follow_up_count %></span>
+        <% end %>  
+      </span>
+      
+      <div class="popup-overlay card" style="background-color: rgb(255, 255, 255);">
+        <div class="modal-header" >
+          <h4 class="modal-title">Follow Up</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <ul class="nav navbar text-decoration-none" style="background-color: #0f1d59; color: white;"  role="tablist">
+	      	<li class="nav-item">
+	      		<a class="nav-link tab-label active" data-toggle="tab" href="#read" role="tab">Read</a>
+	      	</li>
+           <li class="nav-item">
+              <a class="nav-link tab-label " data-toggle="tab" href="#unread" data-remote="true" role="tab">Unread</a>
+            </li>
+        </ul>    
+        <!--Creates the popup content-->
+        <div class="popup-content" >
+          <div class="tab-content mb-3" >
+            <div class="tab-pane active mt-2 p-2" style="outline: none !important; border: none;" id="read" role="tabpanel">
+              <% @follow_up.each do |follow_up|%>
+              <%= link_to follow_ups_path, class:"text-decoration-none" do %>
+                <span class="badge badge-primary p-2"><%= follow_up.task_type %></span>
+                <span class="badge badge-danger p-2 mb-2"><%= follow_up.priority %></span>
+                <span><%= follow_up.date%></span>
+                <br>
+                <span class="h6"><%= follow_up&.followable&.name %></span><br>
+                <%= follow_up.comment%>
+                <hr>
+              <% end %>  
+              <% end %>
+            </div>
+            <div class="tab-pane card border-radius-1 mt-2" id="unread" role="tabpanel">
+              
+            </div>
+          </div>    
+        </div>
+      </div>
       <div class="d-flex mr-auto">
           <div class="d-none d-lg-block col mr-auto mb-2 mt-2">
             <span>
@@ -53,6 +148,9 @@
             </span>
           </div>
       </div>
+
+           
+           
       <div class="d-flex ml-auto">
        <div class="d-lg-block col ml-auto mb-2 mt-2">
             <span>
@@ -73,3 +171,18 @@
           </div>
       </div>
 </nav>
+
+<script>
+
+$(".open").on("click", function() {
+  $(".popup-overlay, .popup-content").addClass("active");
+});
+
+//removes the "active" class to .popup and .popup-content when the "Close" button is clicked 
+$(".close").on("click", function() {
+  $(".popup-overlay, .popup-content").removeClass("active");
+});
+
+
+
+</script>
