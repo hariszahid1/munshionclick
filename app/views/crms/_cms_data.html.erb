@@ -20,7 +20,7 @@
 
 <div class="col-lg-12 row">
   <div class="col-lg-6 form-group">
-    <%= cd.select :deal_status, options_for_select(@deal_status, f.object.cms_data.try(:[], 'deal_status')), {:include_blank => "Select Deal Status"}, class: "form-control chosen-select" %>
+    <%= cd.select :deal_status, options_for_select(@deal_stat, f.object.cms_data.try(:[], 'deal_status')), {:include_blank => "Select Deal Status"}, class: "form-control chosen-select" %>
   </div>
   <div class="col-lg-6 form-group">
     <%= cd.select :source, options_for_select(@source, f.object.cms_data.try(:[], 'source')), {:include_blank => "Select Source"}, class: "form-control chosen-select" %>
