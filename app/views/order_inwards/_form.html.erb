@@ -62,8 +62,11 @@
               <div class="col-lg-2 form-group float-left">
                 <h5>Challan No</h5>
               </div>
-              <div class="col-lg-2 form-group float-left">
+              <div class="col-lg-1 form-group float-left">
                 <h5>Stock</h5>
+              </div>
+              <div class="form-group float-left">
+                <%= search_field_tag :count, {}, class:'add-count', style:"width: 70px;" %>
               </div>
             </div>
 
@@ -118,3 +121,30 @@
 
 <% end %>
 <%= javascript_include_tag 'hover', 'data-turbolinks-track': 'reload' %>
+<script>
+$(document).ready(function(){
+    $('.add-count').on('keypress', e => {
+        if (e.keyCode == 13) {
+            var count = $('.add-count').val()
+            for(var i = 0; i<count; i++){
+                $('.new_product').trigger('click')
+            }
+            var marka = $('.inward-marka').val()
+            var product = $('.inward-product').val()
+            var builty = $('.inward-builty').val()
+            var vehicle = $('.inward-vehicle').val()
+            var challan = $('.inward-challan').val()
+            var stock = $('.inward-stock').val()
+            $('.inward-marka').val(marka)
+            $('.inward-product').val(product)
+            $('.inward-builty').val(builty)
+            $('.inward-vehicle').val(vehicle)
+            $('.inward-challan').val(challan)
+            $('.inward-stock').val(stock)
+
+            return false;
+        }
+    });
+
+})
+</script>

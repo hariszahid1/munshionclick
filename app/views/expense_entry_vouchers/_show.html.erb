@@ -1,0 +1,40 @@
+<div class="modal fade" id="showdData" tabindex="-1" role="dialog" aria-labelledby="showdDataLabel">
+  <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title ml-4" id="myModalLabel">Expense Entry Voucher Details</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="card shadow mb-4">
+          <!-- Card Content - Collapse -->
+          <div class="collapse show" id="collapseCardExample" style="">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-12 col-sm-12">
+                  <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                    <h3>Expense Type:<h5><%= @expense_entry_voucher.expense_type.title %></h5></h3>
+                  </div>
+
+                  <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                    <h3>Amount:<h5><%= @expense_entry_voucher.amount.to_f.round(2) %></h5> </h3>
+                  </div>
+
+                  <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                    <h3>Comment:<h5><%= @expense_entry_voucher.comment %></h5> </h3>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

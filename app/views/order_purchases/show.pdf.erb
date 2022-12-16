@@ -1,0 +1,21 @@
+<%if pos_setting_sys_type=="FastFood"%>
+  <%= render '/order_purchases/fast_food/create', locals: {order: @order} %>
+<%elsif @pos_setting&.sys_type=="industry"%>
+  <%= render partial: "industry_invoice", locals: {order: @order, copy: :Customer} %>
+  <div class="page-break"></div>
+  <%= render partial: "industry_invoice", locals: {order: @order, copy: :Office} %>
+  <div class="page-break"></div>
+  <%= render partial: "/order_purchases/default_partial/delivery_show", locals: {order: @order} %>
+<%else%>
+  <%if @pos_setting&.sys_type=="batha"%>
+    <%= render partial: "/order_purchases/batha/order_show_batha", locals: {order: @order} %>
+  <%elsif @pos_setting&.sys_type=="HousingScheme"%>
+    <%= render partial: "/order_purchases/hscheme/show", locals: {order: @order} %>
+  <%elsif pos_setting_sys_type=="CustomClear" %>
+    <%= render partial: "/order_purchases/custom/order_show_custom", locals: {order: @order} %>
+  <%elsif params[:with_gst].present? %>
+    <%= render partial: "/order_purchases/default_partial/order_show_with_gst", locals: {purchase_sale_detail: @purchase_sale_detail} %>
+  <%else%>
+    <%= render partial: "/order_purchases/default_partial/order_show", locals: {order: @order} %>
+  <%end%>
+<%end%>

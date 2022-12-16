@@ -1,0 +1,64 @@
+<% @date = Date.today  %>
+<% @time = DateTime.now %>
+<% @time = Time.zone.now %>
+<html>
+  <head>
+    <style>
+      .border-bottom{
+        border-bottom: double 4px;
+      }
+      .text-center{
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <p style="border-bottom: double 4px;  margin: 0;"></p>
+    <h1 class="text-center">Total Expense => <%= data.pluck('expense').sum.to_f.round(2) %> </h1>
+    <p style="border-bottom: double 4px;  margin: 0;"></p>
+    <p class="text-center" style="margin-top: 30px;">Report by: <%=current_user.name%></p>
+    <div style="margin-bottom: 30px">
+      <table>
+        <th></th>
+        <th></th>
+        <tr>
+          <td style="width:67vw;">DateTime: <span><%=Time.zone.now%></span> </td>
+          <td style="width:33vw;">From: <span> <%=@start_date%></span> To: <span> <%=@end_date%></span></td>
+        </tr>
+        <tr>
+          <td>Platform: POS</td>
+        </tr>
+      </table>
+    </div>
+    <div>
+      <table>
+        <thead class="lite-gray">
+          <th class="text-center">ID</th>
+          <th class="text-center">Date</th>
+          <th class="text-center">Type Wise</th>
+          <th class="text-center">Amount</th>
+          <th class="text-center">Expense Remark</th>
+          <th class="text-center">Comment</th>
+        </thead>
+        <tbody>
+          <% data.each_with_index do |exp, index| %>
+            <tr>
+              <th class="text-center"><%= exp['id'] %></th>
+              <td class="text-center"><%= exp['date'] %></td>
+              <td class="text-center"><%= exp['type_wise'] %></td>
+              <td class="text-center"><%= number_with_delimiter(exp['expense']) %></td>
+              <td class="text-center"><%= exp['expense_remark'] %></td>
+              <td class="text-center"><%= exp['comment'] %></td>
+            </tr>
+          <% end %>
+          <tr>
+            <th></th>
+            <th></th>
+            <th><h2>Total</h2></th>
+            <th><h2><%= data.first['total'] %></h2></th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,43 @@
+<div class="card">
+  <div class="card-header">
+    <h3>Edit Expense Voucher</h3>
+  </div>
+  <div class="card-body">
+    <%= render 'form', expense_voucher: @expense_voucher %>
+  </div>
+</div>
+<%if @expense_voucher.versions.present?%>
+  <div class="">
+    <div class="card border-left-primary shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+              <%@expense_voucher.versions.each do |expense|%>
+                <div class="row col-lg-12">
+                  <div class="links font-weight-bold text-success text-uppercase">
+                    <i class="fa fa-history "></i> Log -> <%=expense.created_at%>
+                    <p>Event : <span><%=expense.event%></span> Event By : <span><%=expense.whodunnit.to_i%></span></p>
+                    <p>
+                      Total: <span><%=expense&.changeset[:expense].present? ? expense&.changeset[:expense] : expense&.reify&.expense%></span>
+                      Comment: <span><%=expense&.changeset[:comment].present? ? expense&.changeset[:comment] : expense&.reify&.comment%></span>
+                    </p>
+                  </div>
+                </div>
+              <%end%>
+              <%PaperTrail::Version.where(item_type: "ExpenseEntry").where(item_id: @expense_voucher.expense_entries.pluck(:id)).order(:created_at).each do |expense_item|%>
+                  <p>
+                    -- <i class="fa fa-history "></i> Log -> <%=expense_item.created_at%>
+                    Event By : <span><%=expense_item.whodunnit.to_i%></span>
+                    AMOUNT: <span><%=expense_item&.changeset[:amount].present? ? expense_item&.changeset[:amount] : expense_item&.reify&.amount%></span>
+                    EXPENSE_TYPE_ID: <span><%=expense_item&.changeset[:expense_type_id].present? ? expense_item&.changeset[:expense_type_id] : expense_item&.reify&.expense_type_id%></span>
+                    ACCOUNT_ID: <span><%=expense_item&.changeset[:account_id].present? ? expense_item&.changeset[:account_id] : expense_item&.reify&.account_id%></span>
+                    COMMENT: <span><%=expense_item&.changeset[:comment].present? ? expense_item&.changeset[:comment] : expense_item&.reify&.comment%></span>
+                  </p>
+              <%end%>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<%end%>

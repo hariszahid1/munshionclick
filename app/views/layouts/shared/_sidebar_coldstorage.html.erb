@@ -16,80 +16,9 @@
             </a>
           </li>
         <% end %>
-        <% if check_is_hidden_by_module('orders') %>
+         <% if check_is_hidden_by_module('orders') %>
           <li class="activ-link">
-            <a href="#OrderMenu", data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-              <i class="fas fa fa-cart-arrow-down"></i>
-              <span class="link-text">Order</span>
-            </a>
-            <ul class="collapse list-unstyled" id="OrderMenu">
-              <li class="activ-link">
-                <%= link_to order_outwards_path, class:"activ-link" do %>
-                  <i class="fas fa-plus"></i>
-                  <i class="fas fa-shopping-cart"></i>
-                  <span class="link-text">Outward Order</span>
-                <% end %>
-              </li>
-              <li class="activ-link">
-                <%= link_to order_inwards_path, class:"activ-link" do %>
-                  <i class="fas fa-plus"></i>
-                  <i class="fas fa-shopping-cart"></i>
-                  <span class="link-text">Inward Order</span>
-                <% end %>
-              </li>
-            </ul>
-          </li>
-        <% end %>
-        <li>
-          <a href="#SaleSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-            <i class="fas fa fa-percent"></i>
-            <span class="link-text">OutWard</span>
-          </a>
-          <ul class="collapse list-unstyled" id="SaleSubmenu">
-            <% if check_is_hidden_by_module('purchase_sale_details') %>
-              <li class="activ-link">
-                <%= link_to cold_storage_outwards_path, class:"activ-link" do %>
-                  <i class="fas fa-plus"></i>
-                  <i class="fas fa-shopping-cart"></i>
-                  <span class="link-text">Outward</span>
-                <% end %>
-              </li>
-              <li>
-                <%= link_to new_cold_storage_outward_path() do %>
-                  <i class="fas fa-plus"></i>
-                  <span class="link-text">Add outward</span>
-                <% end %>
-              </li>
-              <li>
-                <%= link_to purchase_sale_details_path(sale: true) do %>
-                  <i class="fas fa-th-list"></i>
-                  <span class="link-text">List of Sale</span>
-                <% end %>
-              </li>
-            <% end %>
-            <% if check_is_hidden_by_module('purchase_sale_details') %>
-              <li>
-                <%= link_to daily_sales_path do %>
-                  <i class="fas fa-plus"></i>
-                  <i class="fas fa-th-list"></i>
-                  <span class="link-text">Daily Day Out</span>
-                <% end %>
-              </li>
-            <% end %>
-            <% if check_is_hidden_by_module('purchase_sale_details') %>
-              <li>
-                <%= link_to purchase_sale_details_return_purchase_sale_details_path(return: true) do %>
-                  <i class="fas fa-plus"></i>
-                  <i class="fas fa-th-list"></i>
-                  <span class="link-text">SaleReturn</span>
-                <% end %>
-              </li>
-            <% end %>
-          </ul>
-        </li>
-        <% if check_is_hidden_by_module('purchase_sale_details') %>
-          <li class="activ-link">
-            <%= link_to cold_storage_inwards_path, class:"activ-link" do %>
+            <%= link_to order_inwards_path, class:"activ-link" do %>
               <i class="fas fa-plus"></i>
               <i class="fas fa-shopping-cart"></i>
               <span class="link-text">Inward</span>
