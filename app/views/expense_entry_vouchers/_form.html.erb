@@ -1,0 +1,35 @@
+<%= bootstrap_form_for(expense_entry_voucher) do |f| %>
+  <% if expense_entry_voucher.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(expense_entry_voucher.errors.count, "error") %> prohibited this expense_entry from being saved:</h2>
+
+      <ul>
+      <% expense_entry_voucher.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="col-lg-6 form-group float-left">
+    <%= f.number_field :amount , placeholder:"Enter Amount",  required: true%>
+  </div>
+
+  <div class="col-lg-6 form-group float-left">
+    <%= f.number_field :expense_voucher_id, placeholder:"Enter Expense Voucher id",  required: true  %>
+  </div>
+
+  <div class="col-lg-6 form-group float-left">
+    <%= f.select :expense_type_id, options_from_collection_for_select(@expense_types, 'id', 'title', f.object.expense_type_id), {hide_label:true,prompt: "Select the Expense Type"}, required: true,class: "form-control" %> 
+  </div>
+
+  <div class="col-lg-6 form-group float-left">
+    <%= f.text_area :comment, placeholder:"Enter Comment", hide_label: true ,class: 'urdu-font'%>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+    <div class="actions">
+      <%= f.submit class:"bg-warning p-2 mt-1", style:"border-radius: 3px; border: none; " %>
+    </div>
+  </div>
+<% end %>

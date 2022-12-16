@@ -1,0 +1,4 @@
+$('.show-data').children().remove();
+$('.show-data').append("<%= escape_javascript(render partial: 'edit', locals: { expense_entry_voucher: @expense_entry_voucher }) %>");
+$("#showdData").modal('show');
+
