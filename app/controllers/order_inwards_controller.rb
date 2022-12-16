@@ -38,7 +38,7 @@ class OrderInwardsController < ApplicationController
     @pos_setting = PosSetting.first
     ledgerbook = LedgerBook.where(sys_user_id: order_params[:sys_user_id]).present? ? LedgerBook.where(sys_user_id: order_params[:sys_user_id]).last.balance : 0
     balance = ledgerbook
-    @sysuser= SysUser.find(order_params[:sys_user_id]).present? ? SysUser.find(order_params[:sys_user_id]) : SysUser.first
+    @sysuser= order_params[:sys_user_id].present? ?  SysUser.find_by(id: order_params[:sys_user_id]) : SysUser.first
     if balance.zero?
       sysuser = @sysuser.present? ? @sysuser.opening_balance : 0
       balance = sysuser
