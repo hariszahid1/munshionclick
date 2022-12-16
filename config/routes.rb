@@ -269,7 +269,21 @@ Rails.application.routes.draw do
       get :booking_cancel, to: 'order_sales#booking_cancel'
     end
   end
-  
+
+  resources :order_purchases do
+    collection do
+      get :biller, to: 'order_purchases#biller'
+      get :auto_print, to: 'order_purchases#auto_print'
+      get :print_bulk, to: 'order_purchases#print_bulk'
+      get :view_history, to: 'order_purchases#view_history'
+    end
+    member do
+      get :transfer, to: 'order_purchases#transfer'
+      get :booking_print, to: 'order_purchases#booking_print'
+      get :booking_cancel, to: 'order_purchases#booking_cancel'
+    end
+  end
+
   resources :application do
     member do
       delete :delete_image_attachment

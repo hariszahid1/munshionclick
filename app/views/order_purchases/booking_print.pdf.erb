@@ -1,0 +1,234 @@
+<%padding_top = @pos_setting.extra_settings["booking_file_top_padding"] if @pos_setting.extra_settings.present?%>
+<%padding_top.present? ? padding_top : padding_top=100%>
+<style>
+  /* .background-img{
+    background-image: url('http://localhost:3000/assets/background-6168eb3f3e03a647b178f356e745b20330c54361e95141b68dd64223bbaf17a0.jpg');
+    height: 100%;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+  } */
+  div{
+    font-size: 20px;
+  }
+  .qrlink{
+    padding-top: <%=padding_top%>px;
+    padding-left: 850px;
+  }
+  .reference-number{
+    padding-top: 110px;
+    padding-left: 190px;
+  }
+  .reg-plot-date{
+    padding-top: 21px
+  }
+  .reg-number{
+    padding-left: 210px;
+    float: left;
+  }
+  .plot{
+    padding-left: 345px;
+    float: left;
+  }
+  .date{
+    float: left;
+    padding-left: 230px;
+  }
+  .profit{
+    padding-left: 980px;
+  }
+  .profile-image{
+    margin-top: -450px;
+    float: left;
+    width: 200px;
+    height: 250px;
+  }
+  .name{
+    padding: 425px 0px 0px 190px;
+  }
+  .cnic{
+    margin-top: -23px;
+    padding: 0px 0px 0px 765px;
+  }
+  .father-name{
+    padding: 27px 0px 0px 350px;
+  }
+  .phone-number-res{
+    padding: 30px 0px 0px 250px;
+  }
+  .phone-number-ofc{
+    padding: 0px 0px 0px 700px;
+    margin-top: -25px;
+  }
+  .email{
+    padding: 30px 0px 0px 120px;
+  }
+  .mobile-no{
+    padding: 0px 0px 0px 700px;
+    margin-top: -25px;
+  }
+  .postal-add{
+    padding: 20px 0px 0px 260px;
+    width: 700px;
+    line-height: 38pt;
+  }
+  .permanent-address{
+    padding: 10px 0px 0px 260px;
+    width: 700px;
+    line-height: 38pt;
+  }
+  .permanent-add{
+    padding: 12px 0px 0px 360px;
+    width: 800px;
+    line-height: 40pt;
+  }
+  .nominee-name{
+    padding: 58px 0px 0px 120px;
+  }
+  .nominee-father-name{
+    padding: 0px 0px 0px 770px;
+    margin-top: -30px;
+  }
+  .nominee-cnic{
+    padding: 40px 0px 0px 120px;
+  }
+  .relation-applicant{
+    padding: 0px 0px 0px 770px;
+    margin-top: -30px;
+  }
+  .payment-figures{
+    padding: 125px 0px 0px 980px;
+  }
+  .payment-words{
+    padding: 25px 0px 0px 380px;
+  }
+  .deposit-payment{
+    padding: 25px 0px 0px 430px;
+  }
+  .paymeny-date{
+    padding: 0px 0px 0px 850px;
+    margin-top: -25px;
+  }
+  .payment-check{
+    padding: 25px 0px 0px 480px;
+  }
+  .payment-bank{
+    padding: 0px 0px 0px 850px;
+    margin-top: -25px;
+  }
+</style>
+<div class="background-img">
+  <div class="qrlink">
+    <% @order.links.each do |link| %>
+      <% if link.qrcode.present? %>
+        <%
+          require "rqrcode"
+          qrcode = RQRCode::QRCode.new(link.qrcode)
+          @svg = qrcode.as_svg(
+              color: "000",
+              shape_rendering: "crispEdges",
+              module_size: 11,
+              standalone: true,
+              use_path: true
+            )
+            @str=Base64.encode64(@svg ).gsub("\n", '')
+        %>
+        <img width="150px" height="115px" class="figure" style=""src=<%="data:image/svg+xml;base64,"+@str%> ></img>
+      <%end%>
+    <% end %>
+  </div>
+  <div class="reference-number">
+    <%=@order.sys_user&.code %>
+  </div>
+  <div class="reg-plot-date">
+    <div class="reg-number">
+      <%=@product_detail&.first&.last%>
+    </div>
+    <div class="plot">
+      <%if @product_detail!=0%>
+        <%@product_detail.each do |name_quantity|%>
+          <%=name_quantity.first %>
+        <% end %>
+      <% end %>
+    </div>
+    <div class="date">
+    <%=@order.created_at.strftime("%d-%b-%y")%>
+    </div>
+  </div>
+  <div class="name">
+    <%=@order.sys_user.name %>
+  </div>
+  <div class="cnic">
+    <%cnic = @order.sys_user&.cnic&.split('')%>
+    <%if cnic.present?%>
+      <%=cnic[0]%>&nbsp<%=cnic[1]%>&nbsp<%=cnic[2]%>&nbsp<%=cnic[3]%>&nbsp<%=cnic[4]%>&nbsp &nbsp<%=cnic[5]%>&nbsp<%=cnic[6]%>&nbsp<%=cnic[7]%>&nbsp<%=cnic[8]%>&nbsp<%=cnic[9]%>&nbsp<%=cnic[10]%>&nbsp<%=cnic[11]%>&nbsp &nbsp<%=cnic[12]%>
+    <%end%>
+  </div>
+  <div class="father-name">
+    <%=@order.sys_user.father %>
+  </div>
+  <div class="phone-number-res">
+    <%=@order.sys_user&.contact&.home %>
+  </div>
+  <div class="phone-number-ofc">
+    <%=@order.sys_user&.contact&.office %>
+  </div>
+  <div class="email">
+    <%=@order.sys_user&.contact&.email %>
+  </div>
+  <div class="mobile-no">
+    <%=@order.sys_user&.contact&.mobile %>
+  </div>
+  <div class="postal-add">
+    <%=@order.sys_user&.contact&.address%>
+  </div>
+  <div class="postal-add">
+    <%=@order.sys_user&.contact&.permanent_address%>
+  </div>
+  <div class="permanent-add">
+  </div>
+  <div class="nominee-name">
+    <%=@order.sys_user.nom_name %>
+  </div>
+  <div class="nominee-father-name">
+    <%=@order.sys_user.nom_father %>
+  </div>
+  <div class="profit">
+    <%if @order.sys_user.profile_image.attached?%>
+    <%= image_tag @order.sys_user.profile_image.service_url, class:"profile-image", style:"float: right;"%>
+    <% end %>
+  </div>
+  <div class="nominee-cnic">
+    <%cnic = @order.sys_user&.nom_cnic&.split('')%>
+    <%if cnic.present?%>
+      <%=cnic[0]%>&nbsp<%=cnic[1]%>&nbsp<%=cnic[2] %>&nbsp<%=cnic[3]%>&nbsp<%=cnic[4]%>&nbsp &nbsp<%=cnic[5]%>&nbsp<%=cnic[6]%>&nbsp<%=cnic[7]%>&nbsp<%=cnic[8]%>&nbsp<%=cnic[9]%>&nbsp<%=cnic[10]%>&nbsp<%=cnic[11]%>&nbsp &nbsp<%=cnic[12]%>
+    <%end%>
+  </div>
+  <div class="relation-applicant">
+    <%=@order.sys_user.nom_relation %>
+  </div>
+  <div class="payment-figures">
+    <%=payment=(@order&.total_bill-@order.purchase_sale_details.sum(:discount_price)).to_f.round(2) %>
+  </div>
+  <div class="payment-words">
+    <%=number_to_words(payment).capitalize%>
+  </div>
+  <%if @order.property_plans.present?%>
+      <% @order.property_plans.each do |properties| %>
+        <div class="deposit-payment">
+          <%=properties.advance%>
+        </div>
+        <div class="paymeny-date">
+          <%=@order.created_at.strftime("%d-%b-%y")%>
+        </div>
+        <div class="payment-check">
+          <%=properties.payment_method%>
+        </div>
+        <div class="payment-bank">
+          <%=properties.bank_detail%>
+        </div>
+        <%end%>
+    <%end%>
+
+</div>

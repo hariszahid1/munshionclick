@@ -1,0 +1,73 @@
+<div class="nested-fields">
+  <div class="row font-weight-bold mt-2">
+        <%if params[:product].present? %>
+            <div class="col-lg-4 from-group float-left">
+              <%= f.hidden_field :order_id %>
+              <%= f.hidden_field :id %>
+              <%= f.hidden_field :transaction_type, value: "Purchase"%>
+              <%= f.hidden_field :purchase_sale_type, value: "Sale_type"%>
+              <%= f.select :product_id, options_from_collection_for_select(@products, 'id', ->(st){"#{st.title} \u{27F6} #{st.code}"},f.object.product_id), {hide_label: true,prompt: "Select the Unit/Place"},onchange: 'set_cost_order(this.value,this.id); return false;',class: "product chosen-select",required: true%>
+            </div>
+        <%else%>
+        <div class="col-lg-4 from-group float-left">
+              <%= f.hidden_field :order_id %>
+              <%= f.hidden_field :id %>
+              <%= f.hidden_field :transaction_type, value: "Purchase"%>
+              <%= f.hidden_field :purchase_sale_type, value: "Sale_type"%>
+              <%= f.select :item_id, options_from_collection_for_select(@items, 'id', ->(st){"#{st.title} \u{27F6} #{st.code}"}, f.object.item_id), {hide_label: true,prompt: "Select the Unit/Place"},onchange: 'set_raw_purchase_cost(this.value,this.id); return false;', class: "product chosen-select",required: true %>
+            </div>
+        <%end%>
+        <div class="col-lg-1 from-group float-left hidden">
+          <div class="hidden">
+            <%=f.number_field :comment,step: :any,class:'stock', hide_label: true,placeholder: :Stock,readonly: true%>
+          </div>
+          <span><%=f.object.comment%></span>
+          <br>
+          <span class="span-cost-price text-danger"></span>
+        </div>
+        <div class="col-lg-2 from-group float-left">
+          <%= f.text_field :marla,step: :any,class:'marla', hide_label: true,placeholder: :marla,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()", required: true%>
+        </div>
+        <div class="col-lg-2 from-group float-left">
+          <%= f.text_field :square_feet,step: :any,class:'square_feet', hide_label: true,placeholder: :square_feet,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()", required: true%>
+          <%= f.hidden_field :quantity,step: :any,class:'quantity-price', hide_label: true,placeholder: :quantity,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()", required: true%>
+        </div>
+        <div class="col-lg-2 from-group float-left">
+        <%= f.text_field :cost_price, step: :any, class:'cost-price',hide_label: true, placeholder: :cost_price,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()", required: true%></div>
+        <div class="col-lg-2 from-group float-left">
+        <%= f.text_field :total_cost_price, step: :any, class:'total-cost-price', hide_label: true,placeholder: :total_cost,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()", required: true%></div>
+        <div class="col-lg-1 from-group float-left hidden">
+        <%= f.text_field :discount_price,step: :any, class:'discount-price', hide_label: true,placeholder: :discount,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()"%>
+        </div>
+        <div class="col-lg-2 form-group float-left text-xs font-weight-bold text-danger text-uppercase">
+          <%= link_to_remove_association f do %>
+            <i class="fa fa-minus-circle"></i> Drop
+          <% end %>
+        </div>
+
+
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    FontAwesome.dom.i2svg();
+    var $mySelect= $("#"+$(".product.chosen-select")[$(".product.chosen-select").length-1].id);
+    var $myquantity= $("#"+$(".quantity-price")[$(".quantity-price").length-1].id);
+    var enableChosen = setTimeout(function() {
+      $mySelect.chosen();
+      $mySelect.trigger('chosen:activate');
+    }, 50);
+    setTimeout(function(){
+      $(".chosen-select").chosen({
+  allow_single_deselect: true,
+  width: '100%'
+});
+    }, 60);
+    $('.span-line:last').text($(".product.chosen-select").length);
+    $("#total_product_quantity").text($(".product.chosen-select").length-1);
+    $('html, body').animate({
+        scrollTop: $myquantity.offset().top-200
+    }, 100);
+  });
+</script>

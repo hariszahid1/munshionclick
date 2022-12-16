@@ -1,0 +1,141 @@
+
+
+<% service_charges=(@pos_setting&.extra_settings.present? && params[:service_charges].blank?) ? @pos_setting&.extra_settings["order_invoice_extra_setting"].to_f : 0%>
+<input class="form-control" type="hidden" value=<%=service_charges%> name="order_extra_charges" id="order_extra_charges">
+<div class="col-xl-12 col-md-12 mb-12">
+  <div class="card border-left-primary shadow h-100 py-2">
+    <div class="card-body">
+      <div class="row no-gutters align-items-center">
+        <div class="col mr-2">
+          <div class="row">
+            <div class="col-lg-4 form-group float-left font-weight-bold">
+              <h1><%="Transfer File From one to other Person"%></h1>
+            </div>
+            <hr>
+            <div class="col-lg-6 form-group float-left font-weight-bold">
+              Current Customer
+              <h1>
+                <%=@order&.sys_user.name%>
+              </h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  <div class="col-xl-12 col-md-12 mb-12">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="row">
+                <%sys_user=@sys_user%>
+                <%= bootstrap_form_for(sys_user) do |f| %>
+                  <% if sys_user.errors.any? %>
+                    <div id="error_explanation">
+                      <h2><%= pluralize(sys_user.errors.count, "error") %> prohibited this sys_user from being saved:</h2>
+
+                      <ul>
+                      <% sys_user.errors.full_messages.each do |message| %>
+                        <li><%= message %></li>
+                      <% end %>
+                      </ul>
+                    </div>
+                  <% end %>
+                <div class="bg-white nested-fields">
+
+                  <div class="col-lg-6 form-group float-left">
+                    <%= f.text_field :cnic , placeholder:"Enter CNIC"%>
+                  </div>
+
+                  <div class="col-lg-6 form-group float-left">
+                    <%= f.label :name do %>
+                          <%= SysUser.human_attribute_name :name %>
+                          <i class="fas fa-language"></i>
+                        <% end %>
+                    <%= f.text_field :name,required:true, placeholder:"Enter Name", hide_label: true ,class: 'urdu-font' %>
+                  </div>
+                  <div class="col-lg-6 form-group float-left">
+                    <%= f.file_field :profile_image %>
+                  </div>
+                  <div class="col-lg-6 form-group float-left">
+                    <% if  sys_user.profile_image.attached? %>
+                      <%= image_tag sys_user.profile_image.service_url, width: 300 %>
+                    <% end %>
+                  </div>
+                  <div class="col-lg-6 form-group float-left">
+                    <input class="form-control valid" type="text" value="<%=@order.id%>" placeholder="Enter Transfer Amount" name="transfer_payment" id="transfer_payment" required=true>
+                  </div>
+
+                  <div class="clearfix">
+                  </div>
+                  <div >
+                    <input class="form-control form-control" type="hidden" value="<%=@order.id%>" name="order_id" id="order_id">
+                    <h4 class="card-header">
+
+                      Contact Form
+
+                    </h4>
+                    <%= f.fields_for :contact do |af| %>
+                      <%= render '/order_purchases/default_partial/contact', af: af %>
+                    <% end %>
+                  </div>
+
+                <div class="clearfix">
+                  <hr>
+                  <div class="col-lg-12 row ">
+
+                          <div class="col-lg-6 form-group float-left">
+                            <%= link_to sys_users_path do %>
+                            <i class="fa fa-arrow-left " aria-hidden="true"></i>
+                            <% end %>
+                          </div>
+                          <div class="col-lg-6 form-group float-left">
+                            <div class="col-lg-6 form-group float-left">
+                              <%= f.submit class: "btn btn-success col-lg-12", style: "float: right",value: "Transfer" %>
+                            </div>
+                          </div>
+                 <% end %>
+                </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+  <div class="col-xl-12 col-md-12 mb-12">
+    <div class="card shadow mb-4">
+      <!-- Card Header - Accordion -->
+      <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+        <h6 class="m-0 font-weight-bold text-primary"><h1>Transfer History</h1></h6>
+      </a>
+      <!-- Card Content - Collapse -->
+        <div class="collapse show" id="collapseCardExample" style="">
+          <div class="card-body">
+            <table>
+              <thead>
+                <th>From</th>
+                <th>To</th>
+                <th>By</th>
+                <th>DateTime</th>
+             </thead>
+              <tbody>
+                <% @order.remarks.each do |remark| %>
+                  <%if remark.id.present? && @order.remarks.present? %>
+                    <tr>
+                      <td><b style="font-size:20px;color:blue;"><%=remark.comment%></b></td>
+                      <td><b style="font-size:20px;color: #c30059 ;"><%=remark.body%></b></td>
+                      <td><b style="font-size:20px;color: #7386d5 ;"><%=remark.message%></b></td>
+                      <td><b style="font-size:20px;color: #7286d5 ;"><%= remark.created_at.strftime("%d%b%y at %I:%M %p") %></b></td>
+                    </tr>
+                  <%end%>
+                <%end%>
+             </tbody>
+            </table>
+          </div>
+        </div>
+    </div>
+  </div>

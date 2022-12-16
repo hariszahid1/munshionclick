@@ -1,0 +1,7 @@
+<%if pos_setting_sys_type=="HousingScheme"%>
+  <%= render '/order_purchases/hscheme/index_hscheme' %>
+<%elsif pos_setting_sys_type=="FastFood"%>
+  <%= render '/order_purchases/fast_food/index' %>
+<% else%>
+  <%= render 'index'%>
+<% end%>

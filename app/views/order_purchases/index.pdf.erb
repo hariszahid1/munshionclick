@@ -1,0 +1,5 @@
+<%if pos_setting_sys_type=="HousingScheme"%>
+  <%= render '/order_purchases/hscheme/index_hscheme', order: @order %>
+<% else%>
+  <%= render '/order_purchases/default_partial/index', order: @order %>
+<% end%>
