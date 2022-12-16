@@ -204,6 +204,9 @@ Rails.application.routes.draw do
   resources :countries
   resources :expense_types
   resources :expenses
+  resources :expense_vouchers
+  resources :expense_entry_vouchers
+
   resources :db_backup_files
   get 'home/index'
   get :dashboard, to: 'dashboard#index', as: :dashboard
