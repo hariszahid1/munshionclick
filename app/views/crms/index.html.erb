@@ -5,10 +5,20 @@
   </button>
 </div>
 <div class="hidden" id="city_list">
+  <div class="row mb-3">
+  <h1 class="ml-2 col">Customer Relation Management</h1>
+  <div class="col">
+   <div class="card float-right mr-4 ml-4 shadow  text-dark p-1 border-radius-1" style=" border: 5px solid rgba(255, 255, 0, 0.3) ;">
+      <h5 class="m-2"><b>CLOSED:</b> <%= @deal_count&.first.to_s %></h5>
+    </div>
+    <div class="card float-right mr-4 shadow text-dark p-1 border-radius-1" style=" border: 5px solid rgba(102, 255, 51, 0.3) ;">
+      <h5 class="m-2"><b>IN PROCESS:</b> <%= @deal_count&.second.to_s %></h5>
+    </div>
+  </div>  
+  </div>  
   <div class="row mb-4">
     <div class="col-lg-12 col-sm-12">
       <div class="main-content-header">
-        <h1 class="ml-2">Customer Relation Management</h1>
         <ol class="breadcrumb">
           <li class="breadcrumb-item">
             <a href="<%= root_path %>">Dashboard</a>
@@ -18,18 +28,19 @@
           </li>
         </ol>
       </div>
-      <% if check_can_create(@module_permission) %>
-        <div id="new_city">
-          <%= link_to new_crm_path, remote: true,class: "btn btn-success" do %>
-            <i class="fa fa-plus" aria-hidden="false"></i>
-            Create
-          <% end %>
-        <%= link_to "#{@follow_up_count.positive? ? '(' + @follow_up_count.to_s + ')' + ' ' + 'Follow Up': 'Follow Up'}" , follow_ups_path, class:"ml-3 #{@follow_up_count.positive? ? 'text-danger' : 'text-success'}", style: 'text-decoration: underline;'%>
-        </div>
-      <% end %>
+      <div class="row d-flex">
+        <% if check_can_create(@module_permission) %>
+          <div id="new_city" class="col-lg-1">
+            <%= link_to new_crm_path, remote: true,class: "btn btn-success mt-3", style: "width: 100px;" do %>
+              <i class="fa fa-plus" aria-hidden="false"></i>
+              Create
+            <% end %>
+          </div>
+        <% end %>
+      </div>
     </div>
   </div>
-
+  
   <div class="float-right">
     <div class="dropdown ml-auto mr-4">
       <span class="btn btn-info " title= "About This page"><i class="fa fa-question-circle"></i>Help</span>
@@ -42,6 +53,7 @@
       </div>
     </div>
   </div>
+  
 
   <ul class="nav nav-pills" role="tablist">
 		<li class="nav-item">
@@ -73,7 +85,7 @@
     
 
     <div class="tab-content mb-3">
-      <div class="tab-pane active card border-radius-1 mt-2" id="search" role="tabpanel">
+      <div class="tab-pane active card border-radius-1 mt-3" id="search" role="tabpanel">
         <%= search_form_for @q, url: crms_path, class: "admin-controls", method: "get" do |f| %>
           <div class="row d-flex mt-3 mr-2">
             <div class="col">
@@ -243,6 +255,7 @@
 					</div>
 				<%end%>
         </th>
+        <th>Date</th>
         <th>Client Name<div class='float-right'><%= sort_link(@q, :name, "", {}, class: 'sorting-button') %></div></th>
         <th><div class="d-flex">Agent Name<div><%= sort_link(@q, :father, "", {}, class: 'sorting-button ml-auto') %></div></div></th>
         <th>Client Type</th>

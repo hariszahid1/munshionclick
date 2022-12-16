@@ -25,6 +25,9 @@ class ApplicationController < ActionController::Base
   end
 
   def get_request_referrer
+    @follow_up_count = FollowUp.where(created_at: Time.current.all_day).count
+    @follow_up = FollowUp.all
+    @total_follow_ups = FollowUp.count
     unless (request.referrer.to_s.include? 'edit') || (request.referrer.to_s.include? 'new')
       return session[:referrer].to_s
     end
@@ -40,9 +43,6 @@ class ApplicationController < ActionController::Base
 
     ''
   end
-
-  @follow_up_count = FollowUp.where(created_at: Time.current.all_day).count
-  @total_follow_ups = FollowUp.count
 
   def after_sign_in_path_for(_resource)
     dashboard_index_path

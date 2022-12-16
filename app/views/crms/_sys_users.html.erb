@@ -1,5 +1,6 @@
 <tr class= <%= (sys_users.cms_data.try(:[], 'deal_status') == "in process") ? "cms-table-row2" : "cms-table-row1"%>>
   <td><%= check_box_tag 'object_ids[]', sys_users.id %></td>
+	<td><%=(sys_users.cms_data.try(:[], 'deal_status') == "in process") ? sys_users.created_at.strftime('%d/%m/%y') : sys_users.updated_at.strftime('%d/%m/%y')%></td>
   <td class='urdu-font'>	<%= link_to crm_path(sys_users) do%>
 		<i class="fa fa-book mr-2" aria-hidden="true" title="Notes and Follow Up"></i><% end %>
 	<%= sys_users.name %></td>
