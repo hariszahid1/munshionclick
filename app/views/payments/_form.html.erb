@@ -23,15 +23,15 @@
         </div>
         <% if params[:jama].present?%>
         <div class="row-lg-12 form-group float-left">
-          <%= f.text_field :debit, required:true, class:"debit",onkeyup:"price_in_words(this.value,'price_in_word_id');newBalance('oldBalance','newBalance1')", onchange:"price_in_words(this.value,'price_in_words');", autocomplete: "off" %>
+          <%= f.text_field :debit, required:true, class:"debit",onkeyup:"price_in_words(this.value,'price_in_words');newBalance('oldBalance','newBalance1')", onchange:"price_in_words(this.value,'price_in_words');", autocomplete: "off" %>
         </div>
         <%else%>
         <div class="row-lg-12 form-group float-left">
-          <%= f.text_field :credit, required:true, class:"credit",onkeyup:"price_in_words(this.value,'price_in_word_id');newBalance('oldBalance','newBalance1')", onchange:"price_in_words(this.value,'price_in_words');", autocomplete: "off" %>
+          <%= f.text_field :credit, required:true, class:"credit",onkeyup:"price_in_words(this.value,'price_in_words');newBalance('oldBalance','newBalance1')", onchange:"price_in_words(this.value,'price_in_words');", autocomplete: "off" %>
         </div>
         <%if request.original_url.include? 'edit'%>
           <div class="row-lg-12 form-group float-left">
-            <%= f.text_field :debit, required:true, class:"debit",onkeyup:"price_in_words(this.value,'price_in_word_id');newBalance('oldBalance','newBalance1')", onchange:"price_in_words(this.value,'price_in_words');", autocomplete: "off" %>
+            <%= f.text_field :debit, required:true, class:"debit",onkeyup:"price_in_words(this.value,'price_in_words');newBalance('oldBalance','newBalance1')", onchange:"price_in_words(this.value,'price_in_words');", autocomplete: "off" %>
           </div>
          <%end%>
         <%end%>

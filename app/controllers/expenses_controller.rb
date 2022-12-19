@@ -48,43 +48,7 @@ class ExpensesController < ApplicationController
     send_email_file if params[:email].present?
     export_file if params[:export_data].present?
 
-    @exp_date = []
-    @exp_type = []
-    @the_type = []
-		@exp_types = Hash.new
-    @expenses_g = ExpenseEntry.joins(:expense_type).where(created_at: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day).group(:title, 'date(expense_entries.created_at)').sum(:amount)
-		@expenses_d = ExpenseEntry.joins(:expense_type).where(created_at: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day).group('date(expense_entries.created_at)').sum(:amount)
-		@expenses_t = ExpenseEntry.joins(:expense_type).where(created_at: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day).group(:title).sum(:amount)
-		@expenses_g.each do |expense|
-      @exp_type.push(expense.last.to_f.round(2).to_s)
-    end
-		@expenses_d.each do |expense|
-      @exp_date.push(expense.first.to_s)
-    end
-		@expenses_t.each do |expense|
-      @the_type.push(expense.first.to_s)
-			exp = ExpenseEntry.joins(:expense_type).where(created_at: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day).where('expense_types.title': expense.first).group('date(expense_entries.created_at)').sum(:amount)
-			array = []
-			@exp_date.each do |date|
-				exp.each do |e|
-					if date.to_s == e.first.to_s
-						array.push(e.last)
-					else
-						array.push(0)
-					end
-				end
-			end
-			@exp_types[expense.first] = array
-    end
-		@exp_date_join = @exp_date.join('&').to_s
-		@the_type_join = @the_type.join('&').to_s
-
-    respond_to do |format|
-      format.pdf
-      format.csv
-      format.js
-      format.html
-    end
+    
   end
 
   # GET /expenses/1
@@ -167,6 +131,53 @@ class ExpensesController < ApplicationController
       format.html { redirect_to expenses_path, notice: 'Expense was successfully Deleted.' }
       format.json { render :show, status: :ok, location: @expense }
     end
+  end
+
+    def analytics
+    type = params[:type]
+    case type
+    when 'weekly'
+      date_limit = DateTime.current.all_week
+    when 'monthly'
+      date_limit = DateTime.current.all_month
+    when 'yearly'
+      date_limit = DateTime.current.all_year
+    else
+      date_limit = DateTime.current.all_day
+    end
+
+    @exp_date = []
+    @exp_type = []
+    @the_type = []
+    @exp_types = {}
+    @expenses_g = ExpenseEntry.joins(:expense_type).where(created_at: date_limit).group(:title, 'date(expense_entries.created_at)').sum(:amount)
+    @expenses_d = ExpenseEntry.joins(:expense_type).where(created_at: date_limit).group('date(expense_entries.created_at)').sum(:amount)
+    @expenses_t = ExpenseEntry.joins(:expense_type).where(created_at: date_limit).group(:title).sum(:amount)
+		
+    @expenses_g.each do |expense|
+      @exp_type.push(expense.last.to_f.round(2).to_s)
+    end
+		@expenses_d.each do |expense|
+      @exp_date.push(expense.first.to_s)
+    end
+		@expenses_t.each do |expense|
+      @the_type.push(expense.first.to_s)
+			exp = ExpenseEntry.joins(:expense_type).where(created_at: date_limit).where('expense_types.title': expense.first).group('date(expense_entries.created_at)').sum(:amount)
+			array = []
+			@exp_date.each do |date|
+				exp.each do |e|
+					if date.to_s == e.first.to_s
+						array.push(e.last)
+					else
+						array.push(0)
+					end
+				end
+			end
+			@exp_types[expense.first] = array
+    end
+		@exp_date_join = @exp_date.join('&').to_s
+		@the_type_join = @the_type.join('&').to_s
+
   end
 
   private

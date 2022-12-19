@@ -4,7 +4,11 @@ Rails.application.routes.draw do
   require 'sidekiq/web'
   mount Sidekiq::Web => '/sidekiq'
 
-  resources :compaigns
+  resources :compaigns do
+    collection do
+      resources :analytics
+    end
+  end
   resources :compaign_entries
   get 'sms/index'
   get 'sms/sms_to_staff'
@@ -203,7 +207,11 @@ Rails.application.routes.draw do
   resources :follow_ups
   resources :countries
   resources :expense_types
-  resources :expenses
+  resources :expenses do
+    collection do
+      get :analytics
+    end
+  end
   resources :expense_vouchers
   resources :expense_entry_vouchers
 

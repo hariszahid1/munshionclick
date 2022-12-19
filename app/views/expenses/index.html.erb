@@ -44,18 +44,16 @@
 		<li class="nav-item">
 			<a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
 		</li>
-    <li class="nav-item">
-			<a class="nav-link tab-label" data-toggle="tab" data-remote="true" href="#analytics" role="tab">Analytics</a>
-		</li>
+   <li class="nav-item">
+      <a class="nav-link tab-label analytics-tab" data-toggle="tab" href="#analytics" role="tab">Analytics</a>
+    </li>
 		<%if (check_can_import_export(@module_permission))%>
 			<li class="nav-item">
 				<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
 			</li>
 		<%end%>
 	</ul>
-        <%= hidden_field_tag "ExpenseDate", @exp_date, { :id => "ExpenseDate" } %>
-        <%= hidden_field_tag "ExpenseType", @exp_type, { :id => "ExpenseType" } %>
-        <%= hidden_field_tag "theType", @the_type, { :id => "theType" } %>
+   <%= link_to '', analytics_expenses_path, id: 'analytics-path', class: 'd-none', remote: true %>     
   <%= search_form_for @q, url: expenses_path, class: "admin-controls", method: "get" do |f| %>
     <div class="tab-content">
       <div class="tab-pane active mb-3 card shadow-sm mt-2 border-radius-1" id="search" role="tabpanel">
@@ -133,50 +131,9 @@
           </div>
         </p>
       </div>
-      <div class="tab-pane mb-3 shadow-sm mt-2 border-radius-1 p-5" id="analytics" role="tabpanel">
-
-      <div class="row mb-4">
-        <div class="col-lg-10 mx-auto">
-         <div class="my-chart-Container1">
-            <div class="mychartBox1 card border-radius-1 shadow">
-              <canvas id="myChart5"></canvas>
-            </div>
-          </div>
-        </div>  
-      </div>
-        <div class="row d-flex mb-3">
-          <div class="col-lg-6">
-            <div class="my-chart-Container">
-              <div class="mychartBox card border-radius-1 shadow mt-3">
-                <canvas id="myChart" class="ml-5"></canvas>
-              </div> 
-            </div>
-          </div>
-          <div class="col-lg-6">
-            <div class="my-chart-Container">
-              <div class="mychartBox card border-radius-1 shadow mt-3">
-                <canvas id="myChart1" ></canvas>
-              </div> 
-            </div>
-          </div>  
-        </div>  
-        <div class="row d-flex">
-          <div class="col-lg-6">
-            <div class="my-chart-Container">
-              <div class="mychartBox card border-radius-1 shadow mt-3">
-                <canvas id="myChart2"></canvas>
-              </div> 
-            </div>
-          </div>
-          <div class="col-lg-6">
-            <div class="my-chart-Container">
-              <div class="mychartBox card border-radius-1 shadow mt-3">
-                <canvas id="myChart3"></canvas>
-              </div> 
-            </div>
-          </div>  
-        </div> 
-      </div>
+      <div class="tab-pane mb-3 card shadow-sm mt-2 p-3 border-radius-1" id="analytics" role="tabpanel">
+      <div id="show-analytics" class="row p-3"></div>
+    </div>
       <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="import-export" role="tabpanel">
         <p>
           <div class="d-flex">
@@ -385,5 +342,8 @@
         width: '100%'
       });
     }, 50);
+     $('.analytics-tab').on('click', function(){
+      $('#analytics-path').click();
+    })
   });
 </script>
