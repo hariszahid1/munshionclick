@@ -1,0 +1,65 @@
+<%= hidden_field_tag "ExpenseDate", @exp_date, { :id => "ExpenseDate" } %>
+<%= hidden_field_tag "ExpenseType", @exp_type, { :id => "ExpenseType" } %>
+<%= hidden_field_tag "theType", @the_type, { :id => "theType" } %>
+<div>
+  <%= link_to 'Weekly', analytics_expenses_path(type: 'weekly'), class: 'btn btn-danger ml-2 mb-2', remote: true %>
+  <%= link_to 'Monthly', analytics_expenses_path(type: 'monthly'), class: 'btn btn-success ml-2 mb-2', remote: true %>
+  <%= link_to 'Yearly', analytics_expenses_path(type: 'yearly'), class: 'btn btn-warning ml-2 mb-2', remote: true %>
+</div>
+<%#= search_form_for @q, url: analytics_expenses_path, class: "admin-controls col-12 row mb-3", remote: true, method: "get" do |f| %>
+
+  <div class="col-lg-2">
+    <%#= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker mb-2', datepicker: true, placeholder: "YYYY-MM-DD" %>
+  </div>
+
+  <div class="col-lg-2">
+    <%#= f.search_field :created_at_lteq, class: 'form-control button-sm datepicker mb-2', datepicker: true , placeholder: "YYYY-MM-DD" %>
+  </div>
+  <div class="col-lg-2">
+    <%# <button class="btn btn-primary" style="width: 100px;" name="search_submit" type="submit" value="Search"><i class="fa fa-search"></i></button> %>
+  </div>
+<%# end %>
+
+<div class="col-lg-12">
+<div class="chartWrapper card border-radius-1 shadow mt-3 p-2">
+  <div class="chartAreaWrapper">
+    <div class="chartAreaWrapper2">
+        <canvas id="myChart5"></canvas>
+    </div>
+  </div>
+</div>  
+</div>
+<div class="col-lg-12">
+  <div class="chartWrapper card border-radius-1 shadow mt-3 p-2">
+    <div class="chartAreaWrapper">
+      <div class="chartAreaWrapper2">
+          <canvas id="myChart1"></canvas>
+      </div>
+    </div>
+  </div> 
+</div>
+<div class="col-lg-12">
+  <div class="chartWrapper card border-radius-1 shadow mt-3 p-2">
+    <div class="chartAreaWrapper">
+      <div class="chartAreaWrapper2">
+          <canvas id="myChart2"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col-lg-12">
+  <div class="chartWrapper card border-radius-1 shadow mt-3 p-2">
+    <div class="chartAreaWrapper">
+      <div class="chartAreaWrapper2">
+          <canvas id="myChart3"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  $(document).ready(function() {
+    $('.datepicker').datetimepicker({
+      format: "YYYY-MM-DD"
+    });
+  });
+</script>

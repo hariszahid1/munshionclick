@@ -1,3 +1,5 @@
+$("#show-analytics").html("<%= escape_javascript(render(:partial => "analytics"))%>");
+
 $( document ).ready(function() {
 rails_exp= '<%=@expenses_g%>'
 rails_label = '<%=@exp_date_join%>'

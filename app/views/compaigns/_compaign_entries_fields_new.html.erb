@@ -1,18 +1,18 @@
-    <div class="nested-fields font-weight-bold">
-      <div class="row font-weight-bold">
-        <div class="col-lg-2 form-group float-left font-weight-bold">
-          <%= f.hidden_field :compaign_id %>
-          <%= f.hidden_field :id %>
-          <%= f.text_field :name, hide_label: true, placeholder:"Enter Name"%>
-        </div>
-        <div class="col-lg-2 form-group float-left"><%= f.text_field :phone , hide_label: true, placeholder:"Enter Phone"%></div>
-        <div class="col-lg-2 form-group float-left"><%= f.text_field :mobile , hide_label: true, placeholder:"Enter Mobile"%></div>
-        <div class="col-lg-2 form-group float-left"><%= f.text_field :email , hide_label: true, placeholder:"Enter Email"%></div>
-        <div class="col-lg-2 form-group float-left"><%= f.text_area :comment , hide_label: true, placeholder:"Enter Comment"%></div>
-        <div class="col-lg-2 form-group float-left links"><%= link_to_remove_association "Remove", f , class: "btn btn-danger" %></div>
-      </div>
-
+<div class="nested-fields font-weight-bold card border-radius-1 shadow mt-2">
+  <div class="row font-weight-bold mt-5 p-3">
+    <div class="col-lg-2 form-group float-left font-weight-bold">
+      <%= f.hidden_field :compaign_id %>
+      <%= f.hidden_field :id %>
+      <%= f.text_field :name, hide_label: true, placeholder:"Enter Name"%>
+    </div>
+    <div class="col-lg-2 form-group float-left"><%= f.text_field :phone , hide_label: true, placeholder:"Enter Phone"%></div>
+    <div class="col-lg-2 form-group float-left"><%= f.text_field :mobile , hide_label: true, placeholder:"Enter Mobile"%></div>
+    <div class="col-lg-2 form-group float-left"><%= f.text_field :email , hide_label: true, placeholder:"Enter Email"%></div>
+    <div class="col-lg-2 form-group float-left"><%= f.text_area :comment , hide_label: true, placeholder:"Enter Comment"%></div>
+    <div class="col-lg-2 form-group float-left links"><%= link_to_remove_association "Remove", f , class: "btn btn-danger" %></div>
+  </div>
 </div>
+
 <script>
   $(document).ready(function() {
     setTimeout(function(){

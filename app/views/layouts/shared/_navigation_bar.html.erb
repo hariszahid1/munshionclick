@@ -161,9 +161,9 @@ ul li a.active{
                 <span class="ml-2 mt-1"><%= current_user.name %></span></span>
                 </button>
                 <div class="dropdown-content my-nav-dropdown-content dropdown-content-1 p-3 border-radius-1">
-                      <%= link_to pos_settings_path, style:"width: 240px;", class: "btn bg-info text-light mb-2" do %>
+                      <%= link_to edit_pos_setting_path(@pos_setting), style:"width: 240px;", class: "btn bg-info text-light mb-2" do %>
                         <i class="fas fa-cogs" aria-hidden="true"></i>
-                          <span class="link-text">General Setting</span>
+                          <span class="link-text">Edit Profile</span>
                       <% end %>
                      <%= link_to 'Logout', destroy_user_session_path, method: :delete, style:"width: 240px;", class: "btn bg-danger text-light" %>
                 </div>
