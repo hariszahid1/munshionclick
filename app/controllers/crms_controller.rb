@@ -15,8 +15,7 @@ class CrmsController < ApplicationController
   # GET /crms.json
   def index
 
-    @q = SysUser.ransack(params[:q])
-    @q.sorts = 'id asc' if @q.sorts.empty? && @q.result.count.positive?
+    @q = SysUser.order('id desc').ransack(params[:q])
     @sys_users = @q.result.page(params[:page])
     export_file if params[:export_data].present?
     download_crm_csv_file if params[:csv].present?

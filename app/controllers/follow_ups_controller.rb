@@ -7,8 +7,7 @@ class FollowUpsController < ApplicationController
   # GET /follow_ups/1
   # GET /follow_ups/1.json
   def index
-    @q = FollowUp.includes(:staff).ransack(params[:q])
-    @q.sorts = 'id asc' if @q.sorts.empty? && @q.result.count.positive?
+    @q = FollowUp.includes(:staff).order('id desc').ransack(params[:q])
     @follow_ups = @q.result.page(params[:page])
     @options_for_select = SysUser.all
     @staff = Staff.all

@@ -97,8 +97,12 @@ class ExpensesController < ApplicationController
 
   # GET /expenses/new
   def new
-    @expense = Expense.new
-    @expense.expense_entries.build
+    if params['expense_id'].present?
+      expense_vouchers_data
+    else
+      @expense = Expense.new
+      @expense.expense_entries.build
+    end
     @expense_types = ExpenseType.all
     @accounts = Account.all
     @account = current_user.user_account
@@ -225,5 +229,12 @@ class ExpensesController < ApplicationController
 
   def export_file
     export_data('Expense')
+  end
+
+  def expense_vouchers_data
+    object = ExpenseVoucher.find(params['expense_id'].to_i)
+    @expense = Expense.new(object.as_json.excluding('id'))
+    object2 = object.expense_entry_vouchers.as_json.map { |ab| ab.excluding('expense_voucher_id', 'id') }
+    @expense.expense_entries.build(object2)
   end
 end

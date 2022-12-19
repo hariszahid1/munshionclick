@@ -17,6 +17,12 @@
               <%end%>
             </td>
             <td>
+              <%= link_to new_expense_path(expense_id: expense_voucher.id), class: "btn btn-success" do %>
+                <i class="fa fa-plus" aria-hidden="true"></i>
+                Add Bill
+              <% end %>
+            </td>
+            <td>
               <div class="icon-container-1">
                 <div class="my-icon-1 my-view-1">
                   <div class="my-tooltip-1">
