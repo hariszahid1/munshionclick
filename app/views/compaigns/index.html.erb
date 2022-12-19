@@ -39,6 +39,11 @@
     <li class="nav-item">
       <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab">Search</a>
     </li>
+    <%if (check_can_import_export(@module_permission))%>
+			<li class="nav-item">
+				<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
+			</li>
+		<%end%>
 	</ul>
   <div class="tab-content">
       <div class="tab-pane active mb-3 card shadow-sm mt-2 p-3 border-radius-1" id="search" role="tabpanel">
@@ -65,12 +70,33 @@
           </div>
         </div>
       </div>
+      <div class="tab-pane card shadow-sm mt-2 border-radius-1 mb-3" id="import-export" role="tabpanel">
+        <p>
+          <div class="d-flex">
+          <button class="btn btn-danger ml-4" name="export_data" type="submit" value="export_data">Export Data</button>
+          <button class="btn btn-info ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
+          </div>
+        </p>
+      </div>
   </div>    
   <div class="clearfix"></div>
   <div class="card border-radius-1 shadow p-3">
+  <%= render 'map_columns/map_column_partials' %>
     <table data-toggle="table" data-search="true" id="compaign_table">
       <thead>
         <tr>
+        <th><input type="checkbox" id="master" class='select-all-checkbox' style="cursor: pointer;">
+				<%if (check_can_delete(@module_permission))%>
+					<div class="icon-container float-center">
+						<span class="ml-2 mt-2">
+          		<div class="my-icon my-view">
+								<button class="icon-div btn delete-selected p-2 " type='button' value='Compaign'>
+									<i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i>
+								</button>
+							</div>
+						</span>
+					</div>
+				<%end%>
           <th><%= sort_link(@q, :id, 'ID') %></th>
           <th><%= sort_link(@q, :title, 'Title') %></th>
           <th><%= sort_link(@q, :comment, 'Comment') %></th>
@@ -93,8 +119,29 @@
     </div>
   </div>  
 </div>
-
-
+<%= form_for :bulk_import, url: bulk_import_data_path, method: :post, html: {class: "bulk-import-form"} do |f| %>
+  <div class="modal fade" id="importFile" tabindex="-1" role="dialog" aria-labelledby="importFileTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Import file</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <%= f.file_field :file, required: true, accept: '.csv' %>
+          <%= f.hidden_field :table_name, value: 'Compaign' %>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <%= f.submit 'Import', class: 'btn btn-primary' %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+<div class="show-data"></div>
 
 <script>
   $(document).ready(function() {

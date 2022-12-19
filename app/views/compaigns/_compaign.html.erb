@@ -1,4 +1,5 @@
 <tr>
+  <td><%= check_box_tag 'object_ids[]', compaign.id %></td>
   <td><%= compaign.id %></td>
   <td class='urdu-font'><%= compaign.title %></td>
   <td><%= compaign.comment %></td>
@@ -39,7 +40,7 @@
                 Show
               </div>
               <%if (check_can_read(@module_permission))%>
-                <%= link_to compaign_path(compaign), class:"icon-div" do %>
+                <%= link_to compaign_path(compaign), class:"icon-div", remote: true do %>
                   <i class="fa fa-eye mt-2" aria-hidden="true"></i>
                 <%end %>
               <%end%>    
