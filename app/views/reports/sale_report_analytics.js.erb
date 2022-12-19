@@ -1,0 +1,31 @@
+$("#show-analytics").html("<%= escape_javascript(render(:partial => "sale_report_analytics"))%>");
+$( document ).ready(function() {
+
+  const ctx = document.getElementById('myChart');
+  var keys_arr=$('#keys_arr').val().split(' ')
+  var values_arr=$('#values_arr').val().split(' ')
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: keys_arr,
+      datasets: [{
+        label: 'Total Data',
+        data: values_arr,
+        borderWidth: 1,
+      }],
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Sale Report Chart.',
+                font: {
+                  size: 16
+                }
+            }
+        }
+    }
+  });
+});

@@ -1,0 +1,20 @@
+<%= hidden_field_tag "values_arr", @values_arr, { id: "values_arr" } %>
+<%= hidden_field_tag "keys_arr", @keys_arr, { id: "keys_arr" } %>
+
+<%= link_to 'Daily', reports_sale_report_analytics_path(type: 'daily'), class: 'btn btn-info ml-3 mb-2', remote: true %>
+<%= link_to 'Weekly', reports_sale_report_analytics_path(type: 'weekly'), class: 'btn btn-danger ml-2 mb-2', remote: true %>
+<%= link_to 'Monthly', reports_sale_report_analytics_path(type: 'monthly'), class: 'btn btn-success ml-2 mb-2', remote: true %>
+<%= link_to 'Yearly', reports_sale_report_analytics_path(type: 'yearly'), class: 'btn btn-warning ml-2 mb-2', remote: true %>
+
+<div class="col-lg-6 mb-3">
+  <div class="my-chart-Container card border-radius-1 shadow p-2">
+    <canvas id="myChart"></canvas>
+  </div>
+</div>
+<script>
+  $(document).ready(function() {
+    $('.datepicker').datetimepicker({
+      format: "YYYY-MM-DD"
+    });
+  });
+</script>
