@@ -214,6 +214,8 @@ Rails.application.routes.draw do
   end
   resources :expense_vouchers
   resources :expense_entry_vouchers
+  resources :pdf_templates
+  resources :pdf_template_elements
 
   resources :db_backup_files
   get 'home/index'
