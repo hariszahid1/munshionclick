@@ -1093,6 +1093,10 @@ class PurchaseSaleDetailsController < ApplicationController
     @event = %w[create update destroy]
     @q = PaperTrail::Version.where(item_id:PurchaseSaleDetail.where(transaction_type: params[:type]),item_type:'PurchaseSaleDetail').order('created_at desc').ransack(params[:q])
     @purchase_sale_logs = @q.result.page(params[:page])
+    if @purchase_sale_logs.present?
+      @q = PaperTrail::Version.where(item_type:'PurchaseSaleDetail').order('created_at desc').ransack(params[:q])
+      @purchase_sale_logs = @q.result.page(params[:page])
+    end
     respond_to do |format|
       format.js
     end
