@@ -13,7 +13,18 @@
   <td><%= sys_users.cms_data.try(:[], 'source')&.titleize %></td>
   <td><%= sys_users.cms_data.try(:[], 'deal_status')&.titleize %></td>
   <td><%= sys_users.ntn%></td>
-	<td><%= sys_users.cms_data.try(:[], 'client_status')&.titleize %></td>
+	<td class ="client-status-width">
+		<span class= "mr-3"><%= sys_users.cms_data.try(:[], 'client_status')&.titleize %></span>
+		<% if @total_followups&.keys&.include?(sys_users.id) %>
+			<%= link_to crm_path(sys_users), class:"activ-link" do %>
+				(<%= @total_followups[sys_users&.id]%>) followup
+			<% end %>
+		<% else%>
+			<%= link_to new_follow_up_path(sys_user_id: sys_users.id), remote: true do %>
+				<i class="fas fa-plus"></i>
+			<% end %>
+		<% end %>
+	</td>
   <td>
   <div class="icon-container-1">
       <div class="my-icon-1 my-view-1">

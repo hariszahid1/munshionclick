@@ -212,6 +212,7 @@ class CrmsController < ApplicationController
     @all_plot_sizes = SysUser.pluck(:ntn).uniq
     @user_types = UserType.all
     @user_groups = UserGroup.all
+    @total_followups = FollowUp.where(followable_type: 'SysUser').group(:followable_id).count
     @follow_up_count = FollowUp.where(created_at: Time.current.all_day).count
   end
 end
