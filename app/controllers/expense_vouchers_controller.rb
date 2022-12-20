@@ -10,7 +10,7 @@ class ExpenseVouchersController < ApplicationController
   # GET /expense_vouchers
   # GET /expense_vouchers.json
   def index
-    @q = ExpenseVoucher.ransack(params[:q])
+    @q = ExpenseVoucher.includes(:expense_entry_vouchers, expenses: [expense_entries: :account]).ransack(params[:q])
     download_expenses_pdf_file if params[:pdf].present?
     download_expenses_csv_file if params[:csv].present?
     @expense_vouchers = @q.result.page(params[:page])
@@ -20,8 +20,8 @@ class ExpenseVouchersController < ApplicationController
   # GET /expexpense_vouchersenses/1.json
   def show
     respond_to do |format|
-      format.js
-    end
+        format.js
+      end
   end
 
   # GET /expense_vouchers/new
@@ -81,7 +81,7 @@ class ExpenseVouchersController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def expense_voucher_params
-    params.require(:expense_voucher).permit(:expense, :comment, :expense_type_id, :created_at,
+    params.require(:expense_voucher).permit(:amount, :comment, :expense_type_id, :created_at,
                                             expense_entry_vouchers_attributes: %i[id expense_id amount comment
                                                                                   status expense_type_id _destroy])
   end

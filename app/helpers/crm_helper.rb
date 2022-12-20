@@ -10,10 +10,11 @@ module CrmHelper
 				data2 = User.find_by(id: sys_user.credit_status)&.name
 				data3 = sys_user.cms_data.try(:[], 'project_name')
 				data4 = sys_user.cms_data.try(:[], 'category')
-				data5 = sys_user.ntn
-				data6 = sys_user.gst
-				data7 = sys_user.created_at&.strftime('%d-%m-%Y')
-				temp.push([data1, data2, data3, data4, data5, data6, data7
+				data5 = sys_user.cms_data.try(:[], 'client_status')
+				data6 = sys_user.ntn
+				data7 = sys_user.gst
+				data8 = sys_user.created_at&.strftime('%d-%m-%Y')
+				temp.push([data1, data2, data3, data4, data5, data6, data7, data8
 					])
 			end
 		end

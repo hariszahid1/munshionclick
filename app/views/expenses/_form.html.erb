@@ -31,9 +31,12 @@
           <h2 class="expense_total_bill ml-3" style="font-size: 50px">0.00</h2>
         </div>
       </div>
+      <% if params['expense_id'].present? %>
+        <%= f.hidden_field :expense_voucher_id, value: params['expense_id'].to_i %>
+      <% end %>
     </div>
   </div>
-  
+
   <%= f.fields_for :expense_entries, class: "mt-2" do |expense_entry| %>
     <%= render 'expenses_fields_new', f: expense_entry %>
   <% end %>

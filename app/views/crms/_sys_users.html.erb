@@ -1,4 +1,4 @@
-<tr class= <%= (sys_users.cms_data.try(:[], 'deal_status') == "in process") ? "cms-table-row2" : "cms-table-row1"%>>
+<tr class= <%= (sys_users.cms_data.try(:[], 'deal_status') == "in process") ? "cms-table-row2" : (sys_users.cms_data.try(:[], 'deal_status') == "closed") ? "cms-table-row1" : "follow_up_color" %>>
   <td><%= check_box_tag 'object_ids[]', sys_users.id %></td>
 	<td><%=(sys_users.cms_data.try(:[], 'deal_status') == "in process") ? sys_users.created_at.strftime('%d/%m/%y') : sys_users.updated_at.strftime('%d/%m/%y')%></td>
   <td class='urdu-font'>	<%= link_to crm_path(sys_users) do%>
@@ -13,6 +13,7 @@
   <td><%= sys_users.cms_data.try(:[], 'source')&.titleize %></td>
   <td><%= sys_users.cms_data.try(:[], 'deal_status')&.titleize %></td>
   <td><%= sys_users.ntn%></td>
+	<td><%= sys_users.cms_data.try(:[], 'client_status')&.titleize %></td>
   <td>
   <div class="icon-container-1">
       <div class="my-icon-1 my-view-1">
