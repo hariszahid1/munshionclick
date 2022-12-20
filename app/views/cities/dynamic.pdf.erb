@@ -1,0 +1,21 @@
+<%= wicked_pdf_stylesheet_link_tag ("pdf") -%>
+<%= @pdf_header.content
+               .gsub('[[date]]', DateTime.now.strftime("%d/%b/%y"))
+               .gsub('[[time]]', DateTime.now.strftime("at %I:%M%p"))
+               .gsub('[[current_user]]', current_user.name)
+               .gsub('[[image]]', @pdf_header.pdf_template.logo.service_url)
+               .html_safe
+%>
+
+<%= @table_headers.content.html_safe %>
+
+<% @cities.each do |city| %>
+  <%= @table_data.content
+                 .gsub('[[id]]', "#{city.id}")
+                 .gsub('[[title]]', city.title)
+                 .gsub('[[comment]]', city.comment)
+                 .html_safe
+  %>
+<% end %>
+
+<%= @pdf_footer.content.html_safe %>

@@ -75,6 +75,9 @@
           <div class="col">
             <%if (check_can_download_pdf(@module_permission))%>
               <button class="form-control btn btn-danger mr-2 d-flex float-right justify-content-center" title= "download cities pdf" name="pdf" type="submit" value="pdf" formtarget="_blank" style="width:100px">PDF &nbsp;<i class="fa fa-file-pdf mt-1"></i></button>
+              <%if @pdf_template.present? %>
+                <button class="form-control btn btn-danger mr-2 d-flex float-right justify-content-center" title= "download cities pdf" name="dynamic_pdf" type="submit" value="dynamic_pdf" formtarget="_blank" style="width:100px">Dynamic &nbsp;<i class="fa fa-file-pdf mt-1"></i></button>
+              <% end %>
             <% end %>
             <%if (check_can_download_csv(@module_permission))%>
               <button class="form-control btn btn-warning ml-2 mr-2 d-flex float-right justify-content-center mr-2" title= "download cities csv" name="csv" type="submit" value="csv" style="width:100px">CSV &nbsp;<i class="fa fa-file-excel mt-1 ml-1"></i></button>
