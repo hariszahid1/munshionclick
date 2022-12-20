@@ -19,7 +19,7 @@
         <%= ExpenseVoucher.human_attribute_name :comment %>
         <i class="fas fa-language"></i>
         <% end %>
-        <%= f.text_area :comment, placeholder:"Enter Comment" , hide_label: true ,class: 'urdu-font' %>
+        <%= f.text_area :comment, placeholder:"Enter Summary" , hide_label: true ,class: 'urdu-font' %>
       </div>
 
       <div class="col">
@@ -27,7 +27,7 @@
         </div>
         <div class="row p-5 ml-5">
           <h2 style="font-size: 50px">Total Expense:</h2>
-          <%= f.hidden_field :expense%>
+          <%= f.hidden_field :amount%>
           <h2 class="expense_voucher_total_bill ml-3" style="font-size: 50px">0.00</h2>
         </div>
       </div>

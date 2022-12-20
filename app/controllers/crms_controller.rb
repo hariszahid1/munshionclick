@@ -173,7 +173,7 @@ class CrmsController < ApplicationController
 
   def download_crm_csv_file
     @sys_user = params[:export].present? ? SysUser.all : @q.result
-    header_for_csv = %w[Name Agent_name Project_Name Category Plot_size Short_Details Created_at]
+    header_for_csv = %w[Name Agent_name Project_Name Category Client_Status Plot_size Short_Details Created_at]
     data_for_csv = get_data_for_crm_csv
     generate_csv(data_for_csv, header_for_csv, 'CRM')
   end
