@@ -189,7 +189,7 @@ class ExpensesController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def expense_params
-    params.require(:expense).permit(:expense_type, :expense, :account_id, :comment, :expense_type_id, :created_at,
+    params.require(:expense).permit(:expense_type, :expense_voucher_id, :expense, :account_id, :comment, :expense_type_id, :created_at,
                                     expense_entries_attributes: %i[id expense_id amount comment status account_id expense_type_id _destroy])
   end
 
@@ -244,7 +244,8 @@ class ExpensesController < ApplicationController
 
   def expense_vouchers_data
     object = ExpenseVoucher.find(params['expense_id'].to_i)
-    @expense = Expense.new(object.as_json.excluding('id'))
+    data = object.as_json.transform_keys( {'amount'=> 'expense'} )
+    @expense = Expense.new(data.excluding('id'))
     object2 = object.expense_entry_vouchers.as_json.map { |ab| ab.excluding('expense_voucher_id', 'id') }
     @expense.expense_entries.build(object2)
   end
