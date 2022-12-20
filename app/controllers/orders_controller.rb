@@ -1,7 +1,8 @@
 class OrdersController < ApplicationController
   before_action :set_order, only: [:show, :edit, :update, :destroy, :transfer, :booking_print, :booking_cancel]
   skip_before_action :authenticate_user!, only: [:show]
-
+  before_action :check_access
+  
   # GET /orders
   # GET /orders.json
   def biller
