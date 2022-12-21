@@ -19,9 +19,11 @@ class ExpenseVouchersController < ApplicationController
   # GET /expense_vouchers/1
   # GET /expexpense_vouchersenses/1.json
   def show
+    return show_voucher_pdf if params[:pdf].present?
+
     respond_to do |format|
-        format.js
-      end
+      format.js
+    end
   end
 
   # GET /expense_vouchers/new
@@ -101,5 +103,9 @@ class ExpenseVouchersController < ApplicationController
   def new_edit_index
     @expense_types = ExpenseType.all
     @accounts = Account.all
+  end
+
+  def show_voucher_pdf
+    generate_pdf(@expense_voucher, 'Exense Voucher', 'pdf.html', 'A4', false, 'expense_vouchers/show.pdf.erb')
   end
 end

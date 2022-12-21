@@ -54,6 +54,8 @@ class ExpensesController < ApplicationController
   # GET /expenses/1
   # GET /expenses/1.json
   def show
+    return show_expense_pdf if params[:pdf].present?
+
     respond_to do |format|
       format.js
     end
@@ -248,5 +250,13 @@ class ExpensesController < ApplicationController
     @expense = Expense.new(data.excluding('id'))
     object2 = object.expense_entry_vouchers.as_json.map { |ab| ab.excluding('expense_voucher_id', 'id') }
     @expense.expense_entries.build(object2)
+  end
+
+  def show_expense_pdf
+    entry_ids = @expense.expense_entries.pluck(:id)
+    @payments = Payment.where(paymentable_id: entry_ids, paymentable_type: 'ExpenseEntry')
+    @total_debit = @payments.sum(:debit)
+    @total_credit = @payments.sum(:credit)
+    generate_pdf([@expense, @payments], 'Expense Voucher', 'pdf.html', 'A4', false, 'expenses/show.pdf.erb')
   end
 end
