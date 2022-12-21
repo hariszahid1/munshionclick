@@ -7,13 +7,14 @@
               <span class="link-text">Dashboard</span>
           <% end %>
         </li>
+        <% if check_is_hidden_by_module('crms') %>
         <li>
           <a href="<%=crms_path%>">
             <i class="fas fa-user-plus"></i>
             <span class="link-text">CRM</span>
           </a>
         </li>
-
+        <% end %>
         <!-- only Developer can start-->
 
 
