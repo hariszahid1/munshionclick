@@ -93,9 +93,8 @@
     <%= paginate @products %>
   </div>
 </div>
-<div class="row">
-<div class="col-lg-12">
-  <div class="col-lg-6">
+<div class="clearfix"></div>
+<div class="row mt-5">
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
       google.charts.load("current", {packages:["corechart"]});
@@ -121,14 +120,7 @@
         chart.draw(data, options);
       }
     </script>
-    <div id="piechart_3d" style="width: 900px; height: 500px;"></div>
-  </div>
-  <div class="col-lg-6">
-
-
-  </div>
-
-</div>
+    <div class="ml-auto" id="piechart_3d" style="width: 900px; height: 300px;"></div>
 </div>
 
 
