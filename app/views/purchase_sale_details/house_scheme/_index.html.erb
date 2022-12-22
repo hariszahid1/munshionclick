@@ -1,3 +1,15 @@
+<style>
+.table tr {
+    cursor: pointer;
+}
+.hiddenRow {
+    padding: 0 4px !important;
+    background-color: #eeeeee;
+    font-size: 13px;
+}
+</style>
+
+
 <%@total_pro=0%>
 <%@total_discont=0%>
 <div class="hidden" id="purchase_sale_detail_list">
@@ -185,6 +197,7 @@
     <table data-toggle="table" data-search="true">
       <thead>
         <tr>
+          <th></th>
           <th>#</th>
           <th><%= sort_link(@q, :sys_user_name, 'Customers') %></th>
           <th><%= sort_link(@q, :purchase_sale_item_count, 'Plot') %></th>
@@ -196,10 +209,11 @@
           <th>Action</th>
         </tr>
       </thead>
-
       <tbody>
-        <% @purchase_sale_details.each do |purchase_sale_detail| %>
+        <% @purchase_sale_details.each_with_index do |purchase_sale_detail, index| %>
+          <% demo_id = "demo#{index}"%>
           <tr class="table-success">
+            <td class="accordion-toggle" data-toggle="collapse" data-target="#<%= demo_id %>"><i class="fa fa-plus-circle ml-4"></i></td>
             <td><b><%= purchase_sale_detail.voucher_id.to_s+'#'+purchase_sale_detail.id.to_s %></b></td>
             <td class="urdu-font">
               <b>
@@ -228,9 +242,9 @@
             </td>
             <td>
               <%if purchase_sale_detail.created_at.strftime("%d%b%y")!=purchase_sale_detail.updated_at.strftime("%d%b%y")%>
-                <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d%b%y at %I:%M%p") : '' %> | <%= purchase_sale_detail.updated_at.present? ? purchase_sale_detail.updated_at.strftime("%d%b%y at %H:%M%p") : '' %>
+                <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d/%b/%y at %I:%M%p") : '' %> <br><br> <%= purchase_sale_detail.updated_at.present? ? purchase_sale_detail.updated_at.strftime("%d/%b/%y at %H:%M%p") : '' %>
               <%else%>
-                <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d%b%y at %I:%M%p") : '' %>
+                <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d/%b/%y at %I:%M%p") : '' %>
               <%end%>
             </td>
             <td><%= purchase_sale_detail.comment %></td>
@@ -300,62 +314,64 @@
                   </span>
                 </div>
               </div>
-             
             </td>
-
           </tr>
-          <%if purchase_sale_detail.purchase_sale_items_names_and_quantity!=0%>
-            <tr >
-              <td></td>
-              <td></td>
-              <td class="table-active"><b>Unit</b></td>
-              <td class="table-active"><b>Marla</b></td>
-              <td class="table-active"><b>Rate</b></td>
-              <td class="table-active"><b>Amount</b></td>
-              <td></td>
-              <td></td>
-              <td></td>
-
-            </tr>
-            <%if purchase_sale_detail.transaction_type=="Sale"%>
-              <%purchase_sale_detail.purchase_sale_items_names_and_quantity.each do |name_quantity|%>
-                <tr>
-                  <td></td>
-                  <td></td>
-                  <td><%=name_quantity.first%> <%=name_quantity[8]%></td>
-                  <td><%= name_quantity.second%><% @total_pro += name_quantity.second %></td>
-                  <td><%= number_with_delimiter(name_quantity.third)%></td>
-                  <td><%= number_with_delimiter(name_quantity.fourth) %><% @total_discont += name_quantity.fourth if name_quantity.fourth.present? %></td>
-                  <td></td>
-                  <td><%=name_quantity.fifth.strftime("%d%b%y") if name_quantity.fifth.present?%></td>
-                  <td></td>
-                </tr>
+          <td colspan="10" class="hiddenRow">
+            <div class="accordian-body collapse card shadow m-2 p-3" style="border-radius: 5px;" id="<%= demo_id %>">
+              <%if purchase_sale_detail.purchase_sale_items_names_and_quantity!=0%>
+                <div class="row">
+                  <div class="col"></div>
+                  <div class="col"></div>
+                  <div class="col"><b class="h5 ml-auto">Unit</b></div>
+                  <div class="col"><b class="h5 ml-auto">Marla</b></div>
+                  <div class="col"><b class="h5 ml-auto">Rate</b></div>
+                  <div class="col"><b class="h5 ml-auto">Amount</b></div>
+                  <div class="col"></div>
+                  <div class="col"></div>
+                  <div class="col"></div>
+                </div>
+                <%if purchase_sale_detail.transaction_type=="Sale"%>
+                  <%purchase_sale_detail.purchase_sale_items_names_and_quantity.each do |name_quantity|%>
+                    <div class="row">
+                      <div class="col"></div>
+                      <div class="col"></div>
+                      <div class="col"><%=name_quantity.first%> <%=name_quantity[8]%></div>
+                      <div class="col"><%= name_quantity.second%><% @total_pro += name_quantity.second %></div>
+                      <div class="col"><%= number_with_delimiter(name_quantity.third)%></div>
+                      <div class="col"><%= number_with_delimiter(name_quantity.fourth) %><% @total_discont += name_quantity.fourth if name_quantity.fourth.present? %></div>
+                      <div class="col"></div>
+                      <div class="col"><%=name_quantity.fifth.strftime("%d%b%y") if name_quantity.fifth.present?%></div>
+                      <div class="col"></div>
+                    </div>
+                  <%end%>
+                <%else%>
+                  <%purchase_sale_detail.purchase_sale_items_names_and_quantity.each do |name_quantity|%>
+                    <div class="row">
+                      <div class="col"></div>
+                      <div class="col"></div>
+                      <div class="col"><%=name_quantity.first%></div>
+                      <div class="col"><%=name_quantity.second%><% @total_pro += name_quantity.second %></div>
+                      <div class="col"><%=number_with_delimiter(name_quantity[5])%></div>
+                      <div class="col"><%=number_with_delimiter(name_quantity[6])%><% @total_discont += name_quantity[6] if name_quantity.fourth.present? %></div>
+                      <div class="col"></div>
+                      <div class="col"><%=name_quantity.fifth.strftime("%d%b%y") if name_quantity.fifth.present?%></div>
+                      <div class="col"></div>
+                    </div>
+                  <%end%>
+                <%end%>
               <%end%>
-            <%else%>
-              <%purchase_sale_detail.purchase_sale_items_names_and_quantity.each do |name_quantity|%>
-                <tr>
-                  <td></td>
-                  <td></td>
-                  <td><%=name_quantity.first%></td>
-                  <td><%=name_quantity.second%><% @total_pro += name_quantity.second %></td>
-                  <td><%=number_with_delimiter(name_quantity[5])%></td>
-                  <td><%=number_with_delimiter(name_quantity[6])%><% @total_discont += name_quantity[6] if name_quantity.fourth.present? %></td>
-                  <td></td>
-                  <td><%=name_quantity.fifth.strftime("%d%b%y") if name_quantity.fifth.present?%></td>
-                  <td></td>
-                </tr>
-              <%end%>
-            <%end%>
-          <%end%>
-        <% end %>
+            </div>
+          </td> 
+        <% end %>  
         <tr>
-          
           <td></td>
           <td></td>
           <td class="table-active"><h5>Total Bill</h5></td>
           <td class="table-active"><h5>Total Paid</h5></td>
           <td class="table-active"><h5>Total Discount</h5></td>
           <td class="table-active"><h5>Pending</h5></td>
+          <td></td>
+          <td></td>
           <td></td>
           <td></td>
         </tr>
@@ -368,6 +384,7 @@
           <td><h5><%=number_with_delimiter((@total_bil.to_f-(@total_am+@total_dis)).to_f.round(2))%></h5></td>
           <td></td>
           <td></td>
+          <td></td>
         </tr>
         <tr>
           <td><h5></h5><td>
@@ -375,6 +392,7 @@
           <td class="table-active"><h5>Total Quantity</h5></td>
           <td></td>
           <td><h4></h4></td>
+          <td></td>
           <td></td>
           <td></td>
           <td></td>
@@ -388,7 +406,8 @@
           <td></td>
           <td></td>
           <td></td>
-        </tr>
+          <td></td>
+        </tr>   
       </tbody>
     </table>
     <div class="clearfix"></div>
@@ -457,4 +476,13 @@
   $(function() {
     setTimeout(function() { $(".my-loader").fadeOut(1500); }, 5000)
   })
+</script>
+
+<script>
+$('.accordian-body').on('show.bs.collapse', function () {
+    $(this).closest("table")
+        .find(".collapse.in")
+        .not(this)
+        .collapse('toggle')
+})
 </script>
