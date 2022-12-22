@@ -1,25 +1,31 @@
 <div class="nested-fields">
       <%= f.hidden_field :purchase_sale_detail_id %>
       <%= f.hidden_field :id %>
-
+      <% readonly_param = params[:order_id].present? ? true : false %>
       <div class="row font-weight-bold challan-stock-container">
         <div class="col-lg-2 form-group float-left">
           <%= f.select :product_id, options_from_collection_for_select(@products, 'id', ->(st){"#{st.title} \u{27F6} #{st.code}"}, f.object.item_id), {hide_label: true,prompt: "Select the Items"}, class: "chosen-select product",required: true %>
         </div>
-        <div class="col-lg-2 form-group float-left">
-          <%= f.text_field :size_13, hide_label: true, placeholder: "Marka", value: "#{(f.object.size_13 == '0' ? nil : f.object.size_13)}"%>
+        <div class="col-lg-1 form-group float-left">
+          <%= f.text_field :size_13, hide_label: true, placeholder: "Marka", value: "#{(f.object.size_13 == '0' ? nil : f.object.size_13)}", readonly: readonly_param %>
         </div>
         <div class="col-lg-2 form-group float-left">
-          <%= f.text_field :size_12, placeholder: "Builty No:", hide_label: true, label: "Builty No:", value: "#{(f.object.size_12 == '0' ? nil : f.object.size_12)}" %>
+          <%= f.text_field :size_12, placeholder: "Builty No:", hide_label: true, label: "Builty No:", value: "#{(f.object.size_12 == '0' ? nil : f.object.size_12)}", readonly: readonly_param %>
+        </div>
+        <div class="col-lg-1 form-group float-left">
+          <%= f.text_field :size_11, placeholder: "Vehicle:", hide_label: true, label: "Vehicle:", value: "#{(f.object.size_11 == '0' ? nil : f.object.size_11)}", readonly: readonly_param %>
         </div>
         <div class="col-lg-2 form-group float-left">
-          <%= f.text_field :size_11, placeholder: "Vehicle:", hide_label: true, label: "Vehicle:", value: "#{(f.object.size_11 == '0' ? nil : f.object.size_11)}" %>
+          <%= f.text_field :size_10, hide_label: true, placeholder: "Challan", label: "Challen", class: 'challan-no-value', value: "#{(f.object.size_10 == '0' ? nil : f.object.size_10)}",  readonly: readonly_param %>
         </div>
-        <div class="col-lg-2 form-group float-left">
-          <%= f.text_field :size_10, hide_label: true, placeholder: "Challan", label: "Challen", class: 'challan-no-value', value: "#{(f.object.size_10 == '0' ? nil : f.object.size_10)}"%>
-        </div>
-        <div class="col-lg-2 form-group float-left">
+        <div class="col-lg-1 form-group float-left">
           <%= f.text_field :size_9, hide_label: true, placeholder: "Stock", label: "Stock", class:'stock-value', readonly: true%>
+        </div>
+        <div class="col-lg-1 form-group float-left">
+          <%= f.text_field :size_8, hide_label: true, label: "Room", value: "#{(f.object.size_8 == '0' ? nil : f.object.size_8)}", class:'inward-room-num'%>
+        </div>
+        <div class="col-lg-1 form-group float-left">
+          <%= f.text_field :size_7, hide_label: true, label: "Rack",  value: "#{(f.object.size_7 == '0' ? nil : f.object.size_8)}", class:'inward-rack-num'%>
         </div>
         <%= f.hidden_field :quantity, class: "stock-value" %>
         <%= f.hidden_field :transaction_type, value: PurchaseSaleItem.transaction_types.first.first%>

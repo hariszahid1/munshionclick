@@ -68,6 +68,8 @@
           <th><%= sort_link(@q, :created_at, 'Date/Time') %></th>
           <th><%= sort_link(@q, :comment, '') %></th>
           <th><%= sort_link(@q, :comment, 'Comment') %></th>
+          <th></th>
+          <th></th>
           <th>Action</th>
         </tr>
       </thead>
@@ -95,6 +97,8 @@
 
             <td><%= order.purchase_sale_items.expiry rescue '' %> </td>
             <td><%= order.comment %></td>
+            <td></td>
+            <td></td>
             <td>
             	  <%= link_to order_inwards_path('q[id_eq]':order.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
             	    <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i> |
@@ -129,10 +133,8 @@
             <td>Quantity</td>
             <td></td>
             <td></td>
-            <td></td>
-
           </tr>
-          <%order.order_items.each do |order_item|%>
+          <% order.order_items.each do |order_item| %>
             <tr>
               <td></td>
               <td></td>
@@ -143,8 +145,76 @@
               <td><%=order_item.challan_no%></td>
               <td><%=order_item.quantity%></td>
               <td></td>
+              <td></td>
             </tr>
           <%end%>
+          <tr>
+            <td><b>Total<b></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><b><%= @order_inward_total[order.id].to_f.round(2)%></b></td>
+          </tr>
+          <tr class="table-active">
+            <td>
+              <%= link_to new_cold_storage_inward_path(sys_user_id: order.sys_user_id, order_id: order.id), class: "btn btn-success" do %>
+                <i class="fa fa-plus" aria-hidden="true"></i>
+                Assign Rack
+              <% end %>
+            </td>
+            <td>Rack Detail</td>
+            <td>Product</td>
+            <td>Marka</td>
+            <td>Builty No</td>
+            <td>Vehicle</td>
+            <td>Challan No</td>
+            <td>Quantity</td>
+            <td>Room No.</td>
+            <td>Rack No.</td>
+          </tr>
+
+          <% order.purchase_sale_details.each do |purchase_sale_detail| %>
+            <% purchase_sale_detail.purchase_sale_items.each do |purchase_sale_item| %>
+              <tr>
+                <td></td>
+                <td></td>
+                <td> <%= purchase_sale_item.product&.title %> </td>
+                <td> <%= purchase_sale_item.size_13 %> </td>
+                <td> <%= purchase_sale_item.size_12 %> </td>
+                <td> <%= purchase_sale_item.size_11 %> </td>
+                <td> <%= purchase_sale_item.size_10 %> </td>
+                <td> <%= purchase_sale_item.size_9 %> </td>
+                <td> <%= purchase_sale_item.size_8 %> </td>
+                <td> <%= purchase_sale_item.size_7 %> </td>
+              </tr>
+            <% end %>
+            <tr>
+              <td></td>
+            </tr>
+          <% end %>
+          <tr>
+            <td><b>Total</b></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><b><%= @order_inward_purchase_item_total[order.id].to_f.round(2) %></b></td>
+          </tr>
+          <tr>
+            <td><b>Remaining Total</b></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><b><%= @order_inward_total[order.id].to_f - @order_inward_purchase_item_total[order.id].to_f %></b></td>
+          </tr>
         <% end %>
       </tbody>
     </table>
