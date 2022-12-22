@@ -120,14 +120,9 @@
                 <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search"><i class="fa fa-search"></i></button>
               </div>
 
-              <%if (check_can_download_pdf(@module_permission))%>
-                <button class="form-control btn btn-danger float-left mr-2 ml-3" style="width:100px" title= "download crm pdf" name="pdf" type="submit" value="pdf" formtarget="_blank" style="width:160px">PDF &nbsp;<i class="fa fa-file-pdf"></i></button>
-              <% end %>
-              <%if (check_can_download_csv(@module_permission))%>
-                <button class="btn btn-warning float-left mr-2" style="width:100px" title= "download crm csv" name="csv" type="submit" value="csv">CSV &nbsp;<i class="fa fa-file-excel"></i></button>
-              <% end %>
+              
               <%if (check_can_send_email(@module_permission))%>
-                <button class="form-control btn btn-info float-left" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope"></i>&nbsp;Mail</button>
+                <button class="form-control btn btn-info float-right mr-3 mb-2" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope"></i>&nbsp;Mail</button>
                   <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
                       <div class="modal-content">
@@ -165,6 +160,13 @@
                     </div>
                   </div>
               <% end %>
+               <%if (check_can_download_csv(@module_permission))%>
+                <button class="btn btn-warning float-right mr-2 mb-2" style="width:100px" title= "download crm csv" name="csv" type="submit" value="csv">CSV &nbsp;<i class="fa fa-file-excel"></i></button>
+              <% end %>
+              <%if (check_can_download_pdf(@module_permission))%>
+                <button class="form-control btn btn-danger float-right mr-2 ml-3 mb-2" style="width:100px" title= "download crm pdf" name="pdf" type="submit" value="pdf" formtarget="_blank" style="width:160px">PDF &nbsp;<i class="fa fa-file-pdf"></i></button>
+              <% end %>
+             
 
             </div>
           </div>
@@ -239,32 +241,28 @@
 </div>
 
 <div class='card p-3 border-radius-1 cms-book-index-card'>
+
+<%if (check_can_delete(@module_permission))%>
+	<button class="btn btn-outline-danger delete-selected mt-2" style=" position: absolute;" type='button' value='SysUser'>
+		Delete Selected
+	</button>		
+<%end%>
   <table data-toggle="table" data-search="true" id="sys_user_table">
     <thead>
       <tr>
         <th><input type="checkbox" id="master" class='select-all-checkbox'>
-          <%if (check_can_delete(@module_permission))%>
-					<div class="icon-container float-center">
-						<span class="ml-2 mt-2">
-          		<div class="my-icon my-view">
-								<button class="icon-div btn delete-selected p-2 " type='button' value='SysUser'>
-									<i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i>
-								</button>
-							</div>
-						</span>
-					</div>
-				<%end%>
+          
         </th>
         <th>Date</th>
-        <th>Client Name<div class='float-right'><%= sort_link(@q, :name, "", {}, class: 'sorting-button') %></div></th>
-        <th><div class="d-flex">Agent Name<div><%= sort_link(@q, :father, "", {}, class: 'sorting-button ml-auto') %></div></div></th>
-        <th>Client Type</th>
+        <th>Client<div class='float-right'><%= sort_link(@q, :name, "", {}, class: 'sorting-button') %></div></th>
+        <th><div class="d-flex">Agent<div><%= sort_link(@q, :father, "", {}, class: 'sorting-button ml-auto') %></div></div></th>
+        <th>Status</th>
+        <th>Type</th>
         <th>Category</th>
-        <th>Project  Name</th>
+        <th>Project</th>
         <th>Source</th>
-        <th>Deal Status</th>
-        <th>Plot Size</th>
-        <th>Client Status</th>
+        <th>Deal</th>
+        <th>Plot</th>
         <th class="border_none text-center">Action</th>
       </tr>
     </thead>
