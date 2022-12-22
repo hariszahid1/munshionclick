@@ -84,13 +84,13 @@
               <div class="col-lg-2 form-group float-left">
                 <h5>Product</h5>
               </div>
-              <div class="col-lg-2 form-group float-left">
+              <div class="col-lg-1 form-group float-left">
                 <h5>Marka</h5>
               </div>
               <div class="col-lg-2 form-group float-left">
                 <h5>Builty No.</h5>
               </div>
-              <div class="col-lg-2 form-group float-left">
+              <div class="col-lg-1 form-group float-left">
                 <h5>Vehicle</h5>
               </div>
               <div class="col-lg-2 form-group float-left">
@@ -98,6 +98,18 @@
               </div>
               <div class="col-lg-1 form-group float-left">
                 <h5>Stock</h5>
+              </div>
+               <div class="col-lg-1 form-group float-left">
+                <h5>Room No.</h5>
+              </div>
+              <div class="form-group">
+                <%= search_field_tag :room_count, {}, class:'add-inward-room', style:"width: 50px;" %>
+              </div>
+               <div class="col-lg-1 form-group float-left">
+                <h5>Rack No.</h5>
+              </div>
+              <div class="form-group">
+                <%= search_field_tag :rack_count, {}, class:'add-inward-rack', style:"width: 50px;" %>
               </div>
             </div>
             <%= f.fields_for :purchase_sale_items do |purchase_sale_item| %>
@@ -123,6 +135,9 @@
               <div class="col-lg-6 form-group float-left font-weight-bold">
                 <%= f.datetime_select :created_at,{},class: "form-control"%>
               </div>
+               <div class="col-lg-6 form-group float-left font-weight-bold">
+                <%= f.text_area :comment%>
+               </div>
             </div>
             <div class="row">
               <div class="actions col-lg-6 form-group float-left font-weight-bold">
@@ -142,3 +157,24 @@
     </div>
   </div>
 <% end%>
+
+<script>
+$(document).ready(function(){
+    $('.add-inward-room').on('keypress', e => {
+        if (e.keyCode == 13) {
+          var room = $('.add-inward-room').val()
+          $('.inward-room-num').val(room)
+          return false;
+        }
+    });
+
+    $('.add-inward-rack').on('keypress', e => {
+        if (e.keyCode == 13) {
+          var room = $('.add-inward-rack').val()
+          $('.inward-rack-num').val(room)
+          return false;
+        }
+    });
+
+})
+</script>

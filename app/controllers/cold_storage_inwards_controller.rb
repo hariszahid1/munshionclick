@@ -18,7 +18,12 @@ class ColdStorageInwardsController < ApplicationController
     @purchase_sale_details = PurchaseSaleDetail.all
     @purchase_sale_detail = PurchaseSaleDetail.new(order_id: params[:order_id],
                                                    sys_user_id: params[:sys_user_id])
-    @purchase_sale_detail.purchase_sale_items.build
+    if params[:order_id].present?
+      order=Order.find(params[:order_id])
+      order.order_items.each do |ord|
+        @purchase_sale_detail.purchase_sale_items.build(product_id: ord.product_id, size_13: ord.marka, size_12: ord.builty_no, size_11: ord.vehicle_no, size_10: ord.challan_no, size_9: ord.challan_no.split('/').last, quantity: ord.challan_no.split('/').last)
+      end
+    end
   end
 
   def edit; end
@@ -36,7 +41,7 @@ class ColdStorageInwardsController < ApplicationController
           (purchase_sale_detail_params["created_at(1i)"])+" "+ @time.strftime("at %I:%M%p"),
           purchase_sale_detail_id: @purchase_sale_detail.id,account_id: @purchase_sale_detail.account_id)
         @ledger_book.save!
-        format.html { redirect_to cold_storage_inwards_path, notice: 'Cold Storage was successfully created.' }
+        format.html { redirect_to order_inwards_path, notice: 'Cold Storage was successfully created.' }
         format.json { render :show, status: :created, location: @purchase_sale_detail }
       else
         format.html { render :new }
