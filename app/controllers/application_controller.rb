@@ -26,7 +26,10 @@ class ApplicationController < ActionController::Base
 
   def get_request_referrer
     @follow_up_count = FollowUp.where(created_at: Time.current.all_day).count
-    @follow_up = FollowUp.all
+    @follow_up_unread = FollowUp.includes(:followable).where(is_read: false)
+    @follow_up_read = FollowUp.includes(:followable).where(is_read: true)
+    @follow_up_uncompleted = FollowUp.includes(:followable).where(is_complete: false)
+    @follow_up_completed = FollowUp.includes(:followable).where(is_complete: true)
     @total_follow_ups = FollowUp.count
     unless (request.referrer.to_s.include? 'edit') || (request.referrer.to_s.include? 'new')
       return session[:referrer].to_s
@@ -447,5 +450,13 @@ class ApplicationController < ActionController::Base
     # @all_permissions = User.eager_load(:user_permissions).find(current_user.id).user_permissions
     # Current User Current Module Permission
     (@all_permissions.pluck(:module,:is_hidden).include? [temp_module,false])
+  end
+
+  def notification
+    FollowUp.find(params[:follow_up_id].to_i).update(is_complete: true) if params[:complete].present?
+    FollowUp.find(params[:follow_up_id].to_i).update(is_read: true) if params[:read].present?
+    respond_to do |format|
+      format.json { render json: { success: 'Data updated successfully' } }
+    end
   end
 end
