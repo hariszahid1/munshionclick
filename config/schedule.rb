@@ -100,3 +100,8 @@ every '0 8 1 * *' do
   puts 'Send file test'
   rake 'db:send_logs_files_monthly'
 end
+
+every :day, at: '8:00am' do
+  puts 'Send file test'
+  rake 'db:follow_ups_notify'
+end

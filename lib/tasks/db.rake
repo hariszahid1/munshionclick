@@ -116,7 +116,7 @@ namespace :db do
     all_db_configs.each do |db_block, db_config|
       database = db_block.split(Rails.env + '_')[1]
       ActiveRecord::Base.establish_connection "#{Rails.env}_#{database}".to_sym
-      reports = %w[chart-of-account sysuser-ledger-book staff-ledger-book sale purchase payment expense investment]
+      reports = %w[chart-of-account sysuser-ledger-book staff-ledger-book sale purchase payment expense investment payable recieveable]
       reports.each do |a|
         ApplicationRecord.chart_of_account_pdf(database, a, 'daily', nil)
       end
@@ -148,6 +148,7 @@ namespace :db do
       date_for_folder = Date.yesterday.to_s.gsub('-', '')
       path_to_files = Dir[Rails.root.join("../../shared/reports/daily/#{date_for_folder}/#{database}/*").to_s]
       ReportMailer.send_report_files_email(email_to, email_cc, email_bcc, path_to_files, database, 'Daily', 'Report').deliver
+      remove_dir(Rails.root.join("../../shared/reports/daily/#{date_for_folder}/#{database}"))
     end
   end
 
@@ -163,6 +164,7 @@ namespace :db do
       date_for_folder = Date.yesterday.to_s.gsub('-', '')
       path_to_files = Dir[Rails.root.join("../../shared/version_reports/daily/#{date_for_folder}/#{database}/*").to_s]
       ReportMailer.send_report_files_email(email_to, email_cc, email_bcc, path_to_files, database, 'Daily', 'Log').deliver
+      remove_dir(Rails.root.join("../../shared/version_reports/daily/#{date_for_folder}/#{database}"))
     end
   end
 
@@ -172,7 +174,7 @@ namespace :db do
     all_db_configs.each do |db_block, db_config|
       database = db_block.split(Rails.env + '_')[1]
       ActiveRecord::Base.establish_connection "#{Rails.env}_#{database}".to_sym
-      reports = %w[chart-of-account sysuser-ledger-book staff-ledger-book sale purchase payment expense investment]
+      reports = %w[chart-of-account sysuser-ledger-book staff-ledger-book sale purchase payment expense investment payable recieveable]
       reports.each do |a|
         ApplicationRecord.chart_of_account_pdf(database, a, 'weekly', nil)
       end
@@ -204,6 +206,7 @@ namespace :db do
       date_for_folder = Date.yesterday.to_s.gsub('-', '')
       path_to_files = Dir[Rails.root.join("../../shared/reports/weekly/#{date_for_folder}/#{database}/*").to_s]
       ReportMailer.send_report_files_email(email_to, email_cc, email_bcc, path_to_files, database, 'Weekly', 'Report').deliver
+      remove_dir(Rails.root.join("../../shared/reports/weekly/#{date_for_folder}/#{database}"))
     end
   end
 
@@ -219,6 +222,7 @@ namespace :db do
       date_for_folder = Date.yesterday.to_s.gsub('-', '')
       path_to_files = Dir[Rails.root.join("../../shared/version_reports/weekly/#{date_for_folder}/#{database}/*").to_s]
       ReportMailer.send_report_files_email(email_to, email_cc, email_bcc, path_to_files, database, 'Weekly', 'Log').deliver
+      remove_dir(Rails.root.join("../../shared/version_reports/weekly/#{date_for_folder}/#{database}"))
     end
   end
 
@@ -228,7 +232,7 @@ namespace :db do
     all_db_configs.each do |db_block, db_config|
       database = db_block.split(Rails.env + '_')[1]
       ActiveRecord::Base.establish_connection "#{Rails.env}_#{database}".to_sym
-      reports = %w[chart-of-account sysuser-ledger-book staff-ledger-book sale purchase payment expense investment]
+      reports = %w[chart-of-account sysuser-ledger-book staff-ledger-book sale purchase payment expense investment payable recieveable]
       reports.each do |a|
         ApplicationRecord.chart_of_account_pdf(database, a, 'monthly', nil)
       end
@@ -260,6 +264,7 @@ namespace :db do
       date_for_folder = Date.yesterday.to_s.gsub('-', '')
       path_to_files = Dir[Rails.root.join("../../shared/reports/monthly/#{date_for_folder}/#{database}/*").to_s]
       ReportMailer.send_report_files_email(email_to, email_cc, email_bcc, path_to_files, database, 'Monthly', 'Report').deliver
+      remove_dir(Rails.root.join("../../shared/reports/monthly/#{date_for_folder}/#{database}"))
     end
   end
 
@@ -275,6 +280,22 @@ namespace :db do
       date_for_folder = Date.yesterday.to_s.gsub('-', '')
       path_to_files = Dir[Rails.root.join("../../shared/version_reports/monthly/#{date_for_folder}/#{database}/*").to_s]
       ReportMailer.send_report_files_email(email_to, email_cc, email_bcc, path_to_files, database, 'Monthly', 'Log').deliver
+      remove_dir(Rails.root.join("../../shared/version_reports/monthly/#{date_for_folder}/#{database}"))
+
+    end
+  end
+
+  desc 'Load follow_ups_notify'
+  task follow_ups_notify: :environment do
+    all_db_configs = Rails.configuration.database_configuration.select{ |dbs| dbs.include?(Rails.env + '_') }
+    all_db_configs.each do |db_block, db_config|
+      database = db_block.split(Rails.env + '_')[1]
+      ActiveRecord::Base.establish_connection "#{Rails.env}_#{database}".to_sym
+      email_to = PosSetting.last&.email_to&.split(',')
+      email_cc = PosSetting.last&.email_cc&.split(',')
+      email_bcc = PosSetting.last&.email_bcc&.split(',')
+      follow_ups = FollowUp.where(date: Time.current.all_day)
+      ReportMailer.follow_ups_notification(email_to, email_cc, email_bcc, follow_ups).deliver
     end
   end
 

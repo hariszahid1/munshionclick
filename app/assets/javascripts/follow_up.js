@@ -1,6 +1,6 @@
 $(document).ready(function(){
     $(".notification-read").click(function(){
-      element = $(this)
+      var element = $(this)
       $.ajax({
         type: "post",
         url: `/notification`,
@@ -19,7 +19,7 @@ $(document).ready(function(){
 
 $(document).ready(function(){
   $(".notification-complete").click(function(){
-    element = $(this)
+    var element = $(this)
     $.ajax({
       type: "post",
       url: `/notification`,
