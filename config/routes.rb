@@ -264,6 +264,9 @@ Rails.application.routes.draw do
   get 'reports/trial_balance_sale_payable'
   get 'reports/trial_balance_salary'
 
+  post :notification, to: 'application#notification'
+
+
   post :bulk_import_data, to: 'bulk_imports#bulk_import_data'
   post :bulk_delete_data, to: 'bulk_imports#bulk_delete_data'
 
