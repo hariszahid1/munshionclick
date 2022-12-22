@@ -1,100 +1,202 @@
 <%@total_sale=0%>
 <%@total_cash=0%>
 <div class="hidden" id="daily_list">
-  <h1>Daily Sale/Cash Out</h1>
-  <div class="row">
+  <div class="main-content-header ml-2">
+    <h1>Daily Sales/Cash Out</h1>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<%= root_path %>">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active">
+        <a href="<%= daily_sales_path %>">Daily Sales/Cash Out</a>
+      </li>
+    </ol>
+  </div>
+  <div class="row mb-3">
     <div class="col-lg-12 col-sm-12">
       <div class="col-lg-2" style="padding-right: 0;">
-        <% if can?(:add, :all) %>
+        <% if check_can_create(@module_permission) %>
         <%= link_to new_daily_sale_path, class: "btn btn-success" do %>
               <i class="fas fa-plus" aria-hidden="true"></i>
-              Add Sale
+              Create
           <% end %>
         <% end %>
       </div>
     </div>
   </div>
-  <div class="clearfix"></div>
-  <div class="row">
-    <div class="col-lg-12 col-sm-12">
-      <%= search_form_for @q, url: daily_sales_path, class: "admin-controls", method: "get" do |f| %>
-        <div class="col-lg-3 form-group float-left">
-         <%= f.search_field :created_at_gteq, title: 'Select date from', class: 'form-control input-sm datepicker',placeholder: "YYYY-MM-DD" %>
-        </div>
-        <div class="col-lg-3 form-group float-left">
-          <%= f.search_field :created_at_lteq, title: 'Select date to',class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn btn-primary"   name="search_submit" type="submit" value="Search" style="width: 100px"><i class="fa fa-search"></i></button>
-        </div>
-        <div class="col-lg-1 form-group float-right">
-          <button class="form-control btn  badge badge-pill badge-danger" title="Download Daily sales pdf" name="submit_pdf_staff_with" type="submit" value="Sale/Cash PDF A4" formtarget="_blank">Daily sales &nbsp;<i class="fa fa-file-pdf"></i></button>
-        </div>
-      <% end %>
+  <div class="float-right">
+    <div class="dropdown ml-auto mr-4">
+     <span class="btn btn-info" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
+      <div class="dropdown-content">
+        <% if @help.present? %>
+        <% @help&.help_links.each do |link| %>
+        <a type="button" class="" target="_blank" href="<%= link[1] %>" >Help in <%= link[0] %></a>
+         <% end %>
+        <% end %>
+      </div>
     </div>
   </div>
-
-  <table data-toggle="table" data-search="true">
-    <thead>
-      <tr>
-        <th><%= sort_link(@q, :sale, 'Sale') %></th>
-        <th><%= sort_link(@q, :cash_out, 'Cash out') %></th>
-        <th><%= sort_link(@q, :shift, 'Shitf') %></th>
-        <th class="border_none">Action</th>
-        <th><%= sort_link(@q, :comment, 'Comment') %></th>
-
-
-        <th class="border_none">Action</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <% @daily_sales.each do |daily_sale| %>
-        <tr>
-          <td><%= number_with_delimiter(daily_sale.sale.to_f.round(2)) %><% @total_sale+=daily_sale.sale.to_f.round(2)%></td>
-          <td><%= number_with_delimiter(daily_sale.cash_out.to_f.round(2)) %><% @total_cash+=daily_sale.cash_out.to_f.round(2)%></td>
-          <td><%= daily_sale.shift %></td>
-          <td><%= daily_sale.created_at.strftime("%d %B %Y") %> || <%= daily_sale.comment %></td>
-          <td></td>
-          <td>
-            <% if can?(:update, :all) %>
-              <%= link_to edit_daily_sale_path(daily_sale) do %>
-                <i class="fa fa-edit " aria-hidden="true"></i> |
-              <%end %>
+  <ul class="nav nav-pills ml-3 mb-2" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab">Search</a>
+    </li>
+		<%if (check_can_import_export(@module_permission))%>
+			<li class="nav-item">
+				<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
+			</li>
+		<%end%>
+	</ul>
+  <div class="tab-content">
+      <div class="tab-pane active mb-3" style="border: none;" id="search" role="tabpanel">
+        <div class="row card border-radius-1 shadow p-3 m-1 mb-2">
+          <div class="col-lg-12 col-sm-12">
+            <%= search_form_for @q, url: daily_sales_path, class: "admin-controls mt-3", method: "get" do |f| %>
+              <div class="col-lg-3 form-group float-left">
+               <%= f.search_field :created_at_gteq, title: 'Select date from', class: 'form-control input-sm datepicker',placeholder: "YYYY-MM-DD" %>
+              </div>
+              <div class="col-lg-3 form-group float-left">
+                <%= f.search_field :created_at_lteq, title: 'Select date to',class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <button class="form-control btn btn-primary"   name="search_submit" type="submit" value="Search" style="width: 100px"><i class="fa fa-search"></i></button>
+              </div>
+              <div class="col-lg-1 form-group float-right">
+                <button class="form-control btn btn-danger" style="width: 100px;" title="Download Daily sales pdf" name="submit_pdf_staff_with" type="submit" value="Sale/Cash PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mr-1"></i> PDF &nbsp;</button>
+              </div>
             <% end %>
-            <% if can?(:delete, :all) %>
-              <%= link_to daily_sale, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
-                <i class="fa fa-trash " aria-hidden="true"></i> |
-              <%end %>
-            <% end %>
-            <% if can?(:view, :all) %>
-              <%= link_to daily_sale do %>
-                <i class="fa fa-eye " aria-hidden="true"></i>
-              <%end %>
-            <%end%>
-          </td>
-        </tr>
-      <% end %>
-      <tr>
-        <td><h5><%=number_with_delimiter(@total_sale)%></h5></td>
-        <td><h5><%=number_with_delimiter(@total_cash)%></h5></td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+          </div>
+        </div>
+        <div class="card border-radius-1 shadow p-3 mb-2 m-1">
+          <%= render 'map_columns/map_column_partials' %>
+          <table data-toggle="table" data-search="true">
+            <thead>
+              <tr>
+                <th></th>
+                <th><%= sort_link(@q, :sale, 'Sale') %></th>
+                <th><%= sort_link(@q, :cash_out, 'Cash out') %></th>
+                <th><%= sort_link(@q, :shift, 'Shift') %></th>
+                <th class="border_none">Created At</th>
+                <th><%= sort_link(@q, :comment, 'Comment') %></th>
+                <th class="border_none">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @daily_sales.each do |daily_sale| %>
+                <tr>
+                  <td></td>
+                  <td><%= number_with_delimiter(daily_sale.sale.to_f.round(2)) %><% @total_sale+=daily_sale.sale.to_f.round(2)%></td>
+                  <td><%= number_with_delimiter(daily_sale.cash_out.to_f.round(2)) %><% @total_cash+=daily_sale.cash_out.to_f.round(2)%></td>
+                  <td><%= daily_sale.shift %></td>
+                  <td><%= daily_sale.created_at.strftime("%d %B %Y") %> || <%= daily_sale.comment %></td>
+                  <td></td>
+                  <td class="p-3">
+                  <div class="icon-container-1">
+                    <div class="my-icon-1 my-view-1">
+                      <div class="my-tooltip-1">
+                        <div class="icon-container">
+                          <div class="my-icon my-view">
+                            <div class="my-tooltip">
+                              Edit
+                            </div>
+                            <%if (check_can_update(@module_permission))%>
+                              <%= link_to edit_daily_sale_path(daily_sale), class:"icon-div" do %>
+                                <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+                              <%end %>
+                            <% end %>
+                          </div>
+                          <div class="my-icon my-view">
+                            <div class="my-tooltip">
+                              Delete
+                            </div>
+                            <%if (check_can_delete(@module_permission))%>
+                              <%= link_to daily_sale, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+                                <i class="fa fa-trash mt-2" aria-hidden="true"></i>
+                              <%end %>
+                            <% end %> 
+                          </div>
+                          <div class="my-icon my-view">
+                            <div class="my-tooltip">
+                              Show
+                            </div>
+                            <%if (check_can_read(@module_permission))%>
+                              <%= link_to daily_sale_path(daily_sale), class:"icon-div" do %>
+                                <i class="fa fa-eye mt-2" aria-hidden="true"></i>
+                              <%end %>
+                            <%end%>    
+                          </div>
+                        </div>
+                      </div>
+                      <span class="icon-div-1">
+                            <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+                      </span>
+                    </div>
+                  </div>               
+                  </td>
+                </tr>
+              <% end %>
+              <tr>
+                <td><h5>Total</h5></td>
+                <td><h5><%=number_with_delimiter(@total_sale)%></h5></td>
+                <td><h5><%=number_with_delimiter(@total_cash)%></h5></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="row">
+            <div class="col-lg-4 col-sm-4">
+              <%= page_entries_info @daily_sales %>
+            </div>
+            <div class="col-lg-8 col-sm-8 pagination-left">
+              <%= paginate @daily_sales %>
+            </div>
+          </div>
+        </div>  
+      </div>
+      <div class="tab-pane card shadow-sm mt-2 border-radius-1 mb-3" id="import-export" role="tabpanel">
+        <p>
+          <div class="d-flex">
+          <button class="btn btn-danger ml-4" name="export_data" type="submit" value="export_data">Export Data</button>
+          <button class="btn btn-info ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
+          </div>
+        </p>
+      </div>
 
-<div class="clearfix"></div>
-<div class="row">
-  <div class="col-lg-4 col-sm-4">
-    <%= page_entries_info @daily_sales %>
-  </div>
-  <div class="col-lg-8 col-sm-8 pagination-left">
-    <%= paginate @daily_sales %>
-  </div>
+  </div>    
+  <div class="clearfix"></div>
 </div>
+<%= form_for :bulk_import, url: bulk_import_data_path, method: :post, html: {class: "bulk-import-form"} do |f| %>
+  <div class="modal fade" id="importFile" tabindex="-1" role="dialog" aria-labelledby="importFileTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Import file</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <%= f.file_field :file, required: true, accept: '.csv' %>
+          <%= f.hidden_field :table_name, value: 'Daily Sale' %>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <%= f.submit 'Import', class: 'btn btn-primary' %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
 
 <script>
   $(document).ready(function() {
+    var sortingButtons = $('.sorting-button')
+    for(var i=0; i<sortingButtons.length; i++){
+      $(sortingButtons[i]).html("<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='blue' enable-background='new 0 0 512 512' viewBox='0 0 512 512'><path d='M163.919,494.293c-2.83,0-5.496-1.33-7.196-3.593L45.97,343.348c-2.986-3.974-2.187-9.615,1.787-12.602 c3.974-2.986,9.616-2.187,12.602,1.787l103.557,137.777l103.493-137.775c2.986-3.975,8.627-4.775,12.602-1.791 c3.974,2.985,4.775,8.627,1.79,12.602L171.113,490.698C169.414,492.961,166.749,494.293,163.919,494.293z'/><path d='M163.917 494.293c-4.971 0-9-4.029-9-9V26.192c0-4.971 4.029-9 9-9s9 4.029 9 9v459.101C172.917 490.264 168.888 494.293 163.917 494.293zM459.507 182.622c-2.734 0-5.435-1.241-7.203-3.597L348.78 41.18 245.257 179.025c-2.985 3.975-8.626 4.777-12.601 1.792-3.974-2.984-4.777-8.626-1.792-12.601l110.72-147.43c1.699-2.263 4.365-3.595 7.196-3.595s5.497 1.332 7.196 3.595l110.72 147.43c2.985 3.975 2.183 9.616-1.792 12.601C463.285 182.034 461.388 182.621 459.507 182.622z'/><path d='M348.78,494.293c-4.971,0-9-4.029-9-9V26.192c0-4.971,4.029-9,9-9s9,4.029,9,9v459.101 C357.78,490.264,353.751,494.293,348.78,494.293z'/></svg>")
+    }
+
     if ($(".bootstrap-table").length == 0){
       $("table").bootstrapTable();
     }
