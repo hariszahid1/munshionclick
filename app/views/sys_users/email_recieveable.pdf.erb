@@ -1,0 +1,47 @@
+<% @time = Time.zone.now %>
+<% @sys_user_balance=0%>
+<% @date = Date.today  %>
+<% @time = DateTime.now %>
+<% @time = Time.zone.now %>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h2 style="text-align: center; margin: 0;">Receiveable Details => <%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%> <%=@time.strftime(" %I:%M%p")%></h2>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+  <table>
+    <thead>
+      <tr style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+        <th>Code</th>
+        <th>Name</th>
+        <th>User type</th>
+        <th>User group</th>
+        <th>Balance</th>
+        <th>Last Payment</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <%@count=0%>
+      <% pr_data.each do |sys_user| %>
+        <% if  (sys_user.balance < 0 )  %>
+          <% date = (sys_user.ledger_books.present? ? sys_user.ledger_books.last.created_at : sys_user.created_at)%>
+          <tr  style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif" class=<%=((DateTime.now.to_datetime-date.to_datetime).to_i>30 && !sys_user.balance.to_i.zero?) ? 'lite-gray' : ''%> >
+           <td><%@count=@count+1%><%= sys_user.code %></td>
+           <td class="urdu-font"><b><%= sys_user.name %></b></td>
+           <td><%= sys_user.user_type.title %></td>
+           <td><%= sys_user.user_group %></td>
+           <td><b><%= sys_user.balance.abs %><%@sys_user_balance += sys_user.balance.abs %></b> </td>
+           <td><%= date.strftime("%d%b%y at %I:%M%p") %> </td>
+          </tr>
+          <tr>
+            <td style="border-bottom: 1px solid #000;" colspan="8"></td>
+          </tr>
+        <% end %>
+      <% end %>
+      <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+        <td><h4>Total</h4></td>
+        <td><h4><%=@count%></h4></td>
+        <td></td>
+      </tr>
+    </tbody>
+
+  </table>
+</div>
