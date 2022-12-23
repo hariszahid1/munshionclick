@@ -102,9 +102,9 @@
         <% @staff_ledger_books.each do |staff_ledger_book| %>
           <tr style="font-size:20px;,font-family: Arial Black, Gadget, sans-serif">
             <td class="urdu-font"><%= link_to staff_ledger_book.staff.code+' '+staff_ledger_book.staff.full_name , staffs_path('q[id_eq]': staff_ledger_book.staff.id) %></td>
-            <td><%= staff_ledger_book.debit %></td>
-            <td><%= staff_ledger_book.credit %></td>
-            <td><%= staff_ledger_book.balance %></td>
+            <td><%= number_with_delimiter(staff_ledger_book.debit) %></td>
+            <td><%= number_with_delimiter(staff_ledger_book.credit) %></td>
+            <td><%= number_with_delimiter(staff_ledger_book.balance) %></td>
             <td>
               <%if staff_ledger_book.balance.to_f > 0  %>
                       <b style="font-size:20px;color:blue;">Credit/Jama</b>
@@ -264,9 +264,9 @@
         <% end %>
         <tr>
           <td><b>Total<b></td>
-          <td><b><%=@debit.to_i%></b></td>
-          <td><b><%=@credit.to_i%></b></td>
-          <td><b><%=@credit.to_i-@debit.to_i%></b></td>
+          <td><b><%= number_with_delimiter(@debit.to_i) %></b></td>
+          <td><b><%= number_with_delimiter(@credit.to_i) %></b></td>
+          <td><b><%= number_with_delimiter(@credit.to_i-@debit.to_i) %></b></td>
           <td></td>
           <td><b><%=@quantity%></b></td>
           <td></td>
