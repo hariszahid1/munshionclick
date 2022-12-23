@@ -25,11 +25,10 @@ class ApplicationController < ActionController::Base
   end
 
   def get_request_referrer
-    @follow_up_count = FollowUp.where(created_at: Time.current.all_day).count
-    @follow_up_unread = FollowUp.includes(:followable).where(is_read: false)
-    @follow_up_read = FollowUp.includes(:followable).where(is_read: true)
-    @follow_up_uncompleted = FollowUp.includes(:followable).where(is_complete: false)
-    @follow_up_completed = FollowUp.includes(:followable).where(is_complete: true)
+    @follow_up_unread_count = FollowUp.where(is_read: false).count
+    @follow_up_all = FollowUp.order('id desc')
+    @follow_up_unread = FollowUp.order('id desc').where(is_read: false)
+
     @total_follow_ups = FollowUp.count
     unless (request.referrer.to_s.include? 'edit') || (request.referrer.to_s.include? 'new')
       return session[:referrer].to_s
@@ -452,11 +451,16 @@ class ApplicationController < ActionController::Base
     (@all_permissions.pluck(:module,:is_hidden).include? [temp_module,false])
   end
 
-  def notification
-    FollowUp.find(params[:follow_up_id].to_i).update(is_complete: true) if params[:complete].present?
-    FollowUp.find(params[:follow_up_id].to_i).update(is_read: true) if params[:read].present?
+  def read_all
+    FollowUp.where(id: JSON.parse(params[:ids])).update_all(is_read: true)
     respond_to do |format|
       format.json { render json: { success: 'Data updated successfully' } }
     end
+  end
+
+  def read_follow_up
+    follow_up = FollowUp.find(params[:follow_up_id])
+    follow_up.update(is_read: true)
+    redirect_to crm_path(follow_up.followable.id)
   end
 end
