@@ -189,7 +189,7 @@
             <td><%= number_with_delimiter(expense.expense.to_f.round(2)) %></td>
             <td>
               <%=Account.where(id: expense.expense_entries.distinct.pluck(:account_id)).pluck(:title)  %>
-              <%=@expense_payment[expense.id]%>
+              <%=number_with_delimiter(@expense_payment[expense.id])%>
             </td>
             <td class="urdu-font"><%= expense.comment %> <%=expense.expense_entries.distinct.pluck(:comment) %></td>
             <td>

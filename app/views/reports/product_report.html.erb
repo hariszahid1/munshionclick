@@ -187,7 +187,7 @@
               var data = google.visualization.arrayToDataTable([
               ['Task', 'Hours per Day'],
               <%@purchase_item.each do |purchase|%>
-              ['<%=purchase.first%>',<%=(purchase.fourth).round(2) if purchase.second%>],
+              ['<%=purchase.first%>',<%=(purchase&.fourth)&.round(2) if purchase.second%>],
               <% end %>
               ]);
               var options = {
