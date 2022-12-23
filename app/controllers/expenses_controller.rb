@@ -29,11 +29,9 @@ class ExpensesController < ApplicationController
       @q = Expense.order('id desc').where(created_at: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day).ransack(params[:q])
     end
     @expenses = @q.result.page(params[:page])
+    @expense_total = @expenses.sum(:expense)
     @expense_payment = Expense.joins(expense_entries: :payment).where('expenses.id': @expenses.pluck(:id)).group(:id).sum(:debit)
     @expense_payment_total = Expense.joins(expense_entries: :payment).where('expenses.id': @expenses.pluck(:id)).sum(:debit)
-
-    @expense_total = ExpenseEntry.where(expense_type_id: @expense_type, account_id: @account,
-                                        created_at: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day).sum(:amount)
 
     if params[:submit_pdf_a8].present? || params[:submit_pdf_a4].present?
       @pdf_page_size = 'A4'
@@ -48,7 +46,7 @@ class ExpensesController < ApplicationController
     send_email_file if params[:email].present?
     export_file if params[:export_data].present?
 
-    
+
   end
 
   # GET /expenses/1
@@ -236,7 +234,7 @@ class ExpensesController < ApplicationController
         expense_remark: d.comment,
         comment: d.expense_entries.distinct.pluck(:comment),
         date: d.created_at.strftime('%d%b%y') != d.updated_at.strftime('%d%b%y') ? d.updated_at.strftime('%d%b%y at %H:%M%p') : d.created_at.strftime('%d%b%y at %H:%M%p'),
-        total: @expense_payment_total
+        total: @expense_total
       }
     end
   end
