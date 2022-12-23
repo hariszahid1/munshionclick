@@ -52,6 +52,12 @@ class ApplicationRecord < ActiveRecord::Base
       set_variables_investment
       check_for_logs_or_reports(logs, 'Investment', nil, 'investments/investment_logs.pdf.erb',
                                 'investments/investment_report.pdf.erb')
+    when 'payable'
+      set_variables_payable_reciveable('payable')
+      @pdf_file_path = 'sys_users/email_payable.pdf.erb'
+    when 'recieveable'
+      set_variables_payable_reciveable('recieveable')
+      @pdf_file_path = 'sys_users/email_recieveable.pdf.erb'
     end
     pdf = WickedPdf.new.pdf_from_string(ApplicationController.new.render_to_string(
                                           template: @pdf_file_path,
@@ -293,6 +299,16 @@ class ApplicationRecord < ActiveRecord::Base
     }
   end
 
+  def self.set_variables_payable_reciveable(check)
+    if check.eql? 'payable'
+      @pr_data = SysUser.where('balance > 0 ')
+    else
+      @pr_data = SysUser.where('balance < 0 ')
+    end
+    @local_vars_hash = {
+      pr_data: @pr_data
+    }
+  end
   # include PublicActivity::Model
   # tracked owner: Proc.new{ |controller, model| controller.current_user },
   #         parameters: :previous_changes
