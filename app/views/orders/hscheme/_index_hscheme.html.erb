@@ -155,6 +155,24 @@
                       </div>
                       <div class="my-icon my-view">
                         <div class="my-tooltip">
+                          Dynamic PDF
+                        </div>
+                        <%if (check_can_download_pdf(@module_permission))%>
+                          <% if @pdf_template.present? %>
+                            <% if params[:sale].present? %>
+                              <%= link_to dynamic_pdf_orders_path(order_id: order.id, sale: true), target: "_blank", title: "Download A4 size pdf", class:"icon-div" do %>
+                                <i class="fa fa-print mt-2" aria-hidden="true"></i>
+                              <% end %>
+                            <%else%>
+                              <%= link_to dynamic_pdf_orders_path(order_id: order.id, purchase: true), target: "_blank", title: "Download A4 size pdf", class:"icon-div" do %>
+                                <i class="fa fa-print mt-2" aria-hidden="true"></i>
+                              <% end %>
+                            <%end%>
+                          <%end%>
+                        <% end %>
+                      </div>
+                      <div class="my-icon my-view">
+                        <div class="my-tooltip">
                           Legal Size PDF
                         </div>
                         <%if (check_can_download_pdf(@module_permission))%>

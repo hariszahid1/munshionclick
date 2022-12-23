@@ -5,13 +5,9 @@
   background: #ffffff;
   position: fixed;
   border-radius: 8px;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin-top: 18%;
-  margin-left: 65%;
-  width: 30%;
+  right: 100px;
+  bottom: 105px;
+  width: 35%;
   height: 50%;
   box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
 
@@ -35,7 +31,7 @@
 
 }
 div.popup-content{
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 ul li a.active{
@@ -57,11 +53,11 @@ ul li a.active{
   </svg>
     <% if check_is_hidden_by_module('crms')%>
       <span class = "text-light my_follow_btn open" title= "Follow Up" style="cursor: pointer; height: 20px;">
-        <i class="fas fa-envelope fa-5x p-3 mt-1 card shadow-lg" style="border-radius: 80px; background-color: #0f1d59;" aria-hidden="true"></i>
-        <% if @follow_up_count.positive? %>
-          <span class = "badge rounded-pill badge-notification bg-danger text-light p-2 follow_num my_blinker" ><%= @follow_up_count %></span>
+        <i class="fa fa-bell fa-4x p-3 mt-1 card shadow-lg" style="border-radius: 80px; background-color: #0f1d59;" aria-hidden="true"></i>
+        <% if @follow_up_unread_count.positive? %>
+          <span class = "badge rounded-pill badge-notification bg-danger text-light p-2 follow_num my_blinker" ><%= @follow_up_unread_count %></span>
           <% else %>
-          <span class = "badge rounded-pill badge-notification bg-info text-dark p-2 follow_num" ><%= @follow_up_count %></span>
+          <span class = "badge rounded-pill badge-notification bg-info text-dark p-2 follow_num" ><%= @follow_up_unread_count %></span>
         <% end %>
       </span>
     <% end %>
@@ -75,76 +71,71 @@ ul li a.active{
         </div>
         <ul class="nav navbar text-decoration-none" style="background-color: #0f1d59; color: white;"  role="tablist">
            <li class="nav-item">
-              <a class="nav-link tab-label active" data-toggle="tab" href="#unread" data-remote="true" role="tab">Unread</a>
+              <a class="nav-link tab-label active" data-toggle="tab" href="#all" data-remote="true" role="tab">All</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link tab-label" data-toggle="tab" href="#read" role="tab">Read</a>
+              <a class="nav-link tab-label" data-toggle="tab" href="#unread" role="tab">Unread</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link tab-label" data-toggle="tab" href="#uncompleted" data-remote="true" role="tab">Uncompleted</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link tab-label" data-toggle="tab" href="#completed" role="tab">Completed</a>
-            </li -->
+            <button class='follow_ups_unread_ids d-none', value="<%= @follow_up_unread.pluck(:id) %>"></button>
+            <div class="icon-container-1 ml-auto">
+              <div class="my-icon-1 my-view-1">
+                <div class="my-tooltip-1">
+                  <div class="icon-container">
+                    <div class="my-icon my-view">
+                      <div class="my-tooltip">
+                        Read All
+                      </div>
+                      <div class= "icon-div text-info read-all-button">
+                        <i class="fa fa-envelope-open mt-2" aria-hidden="true"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <span class="icon-div-1 text-dark">
+                  <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+                </span>
+              </div>
+            </div>
           </ul>
         <!--Creates the popup content-->
         <div class="popup-content" >
           <div class="tab-content mb-3" >
-            <div class="tab-pane active mt-2 p-2" style="outline: none !important; border: none;" id="unread" role="tabpanel">
+            <div class="tab-pane active" style="outline: none !important; border: none;" id="all" role="tabpanel">
+              <% @follow_up_all.each do |follow_up|%>
+                <%= link_to read_follow_up_path(follow_up_id: follow_up.id) do %>
+                  <div class="text-decoration-none text-left pl-2 py-3 d-flex border-bottom <%= follow_up.is_read? ? '' : 'bg-unread-color'%>">
+                    <div class='col-3 mt-2'>
+                      <span class="badge badge-danger p-2 mb-2"><%= follow_up.priority %></span><br>
+                      <span class="badge badge-primary p-2"><%= follow_up.task_type %></span>
+                    </div>
+                    <div class='col-9'>
+                      <span class="h6"><%= follow_up&.followable&.name %></span><br>
+                      <%= follow_up.comment %><br>
+                      <span><%= follow_up.date.strftime('%d/%m/%Y %H:%M %p')%></span>
+                    </div>
+                  </div>
+                <% end %>
+              <% end %>
+            </div>
+
+            <div class="tab-pane card" style="outline: none !important; border: none;" id="unread" role="tabpanel">
               <% @follow_up_unread.each do |follow_up|%>
-                <div class="text-decoration-none">
-                  <button class="notification-read" value="<%= follow_up.id %>", title="Mark Read", style="background: none; outline: none !important; border: none;"><input type="checkbox" style="cursor: pointer;"></button>
-                  <span class="badge badge-primary p-2"><%= follow_up.task_type %></span>
-                  <span class="badge badge-danger p-2 mb-2"><%= follow_up.priority %></span>
-                  <span><%= follow_up.date%></span>
-                  <br>
-                  <span class="h6"><%= follow_up&.followable&.name %></span><br>
-                  <%= follow_up.comment %>
-                  <hr>
-                </div>
+                <%= link_to read_follow_up_path(follow_up_id: follow_up.id) do %>
+                  <div class="text-decoration-none text-left pl-2 py-3 d-flex border-bottom bg-unread-color unread-data-container">
+                    <div class='col-3 mt-2'>
+                      <span class="badge badge-danger p-2 mb-2"><%= follow_up.priority %></span><br>
+                      <span class="badge badge-primary p-2"><%= follow_up.task_type %></span>
+                    </div>
+                    <div class='col-9'>
+                      <span class="h6"><%= follow_up&.followable&.name %></span><br>
+                      <%= follow_up.comment %><br>
+                      <span><%= follow_up.date.strftime('%d/%m/%Y %H:%M %p')%></span>
+                    </div>
+                  </div>
+                <% end %>
               <% end %>
-            </div>
-
-            <div class="tab-pane card border-radius-1 mt-2" id="read" role="tabpanel">
-              <% @follow_up_read.each do |follow_up|%>
-                <div class="text-decoration-none">
-                  <span class="badge badge-primary p-2"><%= follow_up.task_type %></span>
-                  <span class="badge badge-danger p-2 mb-2"><%= follow_up.priority %></span>
-                  <span><%= follow_up.date%></span>
-                  <br>
-                  <span class="h6"><%= follow_up&.followable&.name %></span><br>
-                  <%= follow_up.comment %>
-                  <hr>
-                </div>
-              <% end %>
-            </div>
-
-            <div class="tab-pane card border-radius-1 mt-2" id="uncompleted" role="tabpanel">
-              <% @follow_up_uncompleted.each do |follow_up|%>
-                <div class="text-decoration-none">
-                  <button class="notification-complete" value="<%= follow_up.id %>", title="Mark Complete", style="background: none; outline: none !important; border: none;"><input type="checkbox" style="cursor: pointer;"></button>
-                  <span class="badge badge-primary p-2"><%= follow_up.task_type %></span>
-                  <span class="badge badge-danger p-2 mb-2"><%= follow_up.priority %></span>
-                  <span><%= follow_up.date%></span>
-                  <br>
-                  <span class="h6"><%= follow_up&.followable&.name %></span><br>
-                  <%= follow_up.comment %>
-                  <hr>
-                </div>
-              <% end %>
-            </div>
-
-            <div class="tab-pane card border-radius-1 mt-2" id="completed" role="tabpanel">
-              <% @follow_up_completed.each do |follow_up|%>
-                <div class="text-decoration-none">
-                  <span class="badge badge-primary p-2"><%= follow_up.task_type %></span>
-                  <span class="badge badge-danger p-2 mb-2"><%= follow_up.priority %></span>
-                  <span><%= follow_up.date%></span>
-                  <br>
-                  <span class="h6"><%= follow_up&.followable&.name %></span><br>
-                  <%= follow_up.comment %>
-                  <hr>
-                </div>
+              <% unless @follow_up_unread.present? %>
+                <p class='text-danger mt-2'>No unread follow ups exists.</p>
               <% end %>
             </div>
           </div>
@@ -232,6 +223,25 @@ ul li a.active{
   $(".close").on("click", function() {
     $(".popup-overlay, .popup-content").removeClass("active");
   });
+
+  $(".read-all-button").click(function(){
+    var ids = $('.follow_ups_unread_ids').val();
+    var elements = $('.bg-unread-color')
+    var unread_elems = $('.unread-data-container')
+    $.ajax({
+      type: "post",
+      url: `/read_all`,
+      data: {'ids': ids },
+      success: function (result) {
+        elements.removeClass('bg-unread-color')
+        unread_elems.removeClass('d-flex').addClass('d-none')
+        $('.my_blinker').addClass('d-none')
+      },
+      error: function (error){
+        console.error(error)
+      }
+    });
+  })
 
 
 
