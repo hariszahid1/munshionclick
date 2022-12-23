@@ -31,6 +31,8 @@ class AccountPaymentJob < ActiveJob::Base
       @expense_total = ExpenseEntry.sum(:amount)
       @investments_debit = Investment.sum(:debit)
       @investments_credit = Investment.sum(:credit)
+      @loans_debit = Loan.sum(:debit)
+      @loans_credit = Loan.sum(:credit)
       @purchase_sale_detail_discount_list = PurchaseSaleDetail.where(transaction_type:'Sale').where.not(discount_price:[nil,0]).sum(:discount_price)
       @credit_salary = SalaryDetail.joins(:staff).where('amount>0').where(purchase_sale_detail_id:nil,daily_book_id:nil).where.not(id: Payment.where(paymentable_type:"SalaryDetail").pluck(:paymentable_id)).sum(:amount).to_f
       if @pos_setting.sys_type == 'batha'
@@ -44,10 +46,10 @@ class AccountPaymentJob < ActiveJob::Base
       @purchase_product_total = PurchaseSaleItem.joins(:product).where(transaction_type:'Purchase').sum(:total_cost_price)
 
       @total_payable = @sys_user_payable_group_total + @staff_payable_group_total + @sale_product_total +
-                       @investments_credit
+      @investments_credit + @loans_credit
       @total_reciveable = @sys_user_receiveable_group_total.abs + @staff_reciveable_group_total.abs + @expense_total +
-                          @investments_debit + @salary_detail_total + @credit_salary +
-                          @purchase_sale_detail_discount_list + @purchase_item_total + @purchase_product_total
+         @investments_debit + @salary_detail_total + @credit_salary +
+         @purchase_sale_detail_discount_list + @purchase_item_total + @purchase_product_total + @loans_debit
       PosSetting.last.update(cash_in_hand: (@total_payable.to_i - @total_reciveable.to_i))
       puts "----------------------------CashInHand----------------------------------"
     end
