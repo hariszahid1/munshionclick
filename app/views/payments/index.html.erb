@@ -255,8 +255,8 @@
             <%= link_to 'Purchase Order',order_path(payment.paymentable,product:true) if payment&.paymentable.present? and payment&.paymentable_type=="Order" and payment&.paymentable&.transaction_type=="Purchase"%>
             <%= link_to 'Expense',expense_path(payment.paymentable.expense.id) if payment&.paymentable.present? and payment&.paymentable_type=="ExpenseEntry" and payment&.paymentable&.expense.present?%>
             <%= link_to 'P-Expense',purchase_sale_detail_path(payment.paymentable.expenseable) if payment&.paymentable.present? and payment&.paymentable_type=="ExpenseEntry" and payment&.paymentable&.expenseable.present?%>
-            <%= link_to 'Salary',salary_path(payment.paymentable) if payment&.paymentable&.present? and payment&.paymentable_type=="Salary" and payment&.paymentable&.paid_salary.present?%>
-            <%= link_to 'Wage Salary',advance_salary_path(payment.paymentable) if payment&.paymentable.present? and payment&.paymentable_type=="Salary" and payment&.paymentable&.advance.present?%>
+            <%= link_to 'Salary',edit_salary_path(payment.paymentable) if payment&.paymentable&.present? and payment&.paymentable_type=="Salary" and payment&.paymentable&.paid_salary.present?%>
+            <%= link_to 'Wage Salary',show_advance_salary_path(payment.paymentable) if payment&.paymentable.present? and payment&.paymentable_type=="Salary" and payment&.paymentable&.advance.present?%>
             <%= link_to 'Investment',investment_path(payment.paymentable) if payment&.paymentable.present? and payment&.paymentable_type=="Investment"%>
             <%= link_to 'Ledger Book',ledger_book_path(payment.paymentable) if payment&.paymentable.present? and payment&.paymentable_type=="LedgerBook"%>
             <%= link_to 'Staff Credit',salary_detail_path(payment.paymentable) if payment&.paymentable.present? and payment&.paymentable_type=="SalaryDetail"%>
