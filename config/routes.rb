@@ -50,6 +50,7 @@ Rails.application.routes.draw do
       get :auto_print, to: 'orders#auto_print'
       get :print_bulk, to: 'orders#print_bulk'
       get :view_history, to: 'orders#view_history'
+      get :dynamic_pdf, to: 'orders#dynamic_pdf'
     end
     member do
       get :transfer, to: 'orders#transfer'
@@ -264,7 +265,8 @@ Rails.application.routes.draw do
   get 'reports/trial_balance_sale_payable'
   get 'reports/trial_balance_salary'
 
-  post :notification, to: 'application#notification'
+  post :read_all, to: 'application#read_all'
+  get :read_follow_up, to: 'application#read_follow_up'
 
 
   post :bulk_import_data, to: 'bulk_imports#bulk_import_data'

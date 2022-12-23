@@ -142,6 +142,8 @@ class OrdersController < ApplicationController
       end
       @orders = @q.result.page(params[:page])
     end
+
+    @pdf_template = PdfTemplate.find_by(table_name: 'order', method_name: 'index')
   end
 
   # GET /orders/1
@@ -196,6 +198,57 @@ class OrdersController < ApplicationController
       render :partial => "/orders/fast_food/create"
     else
       print_pdf(@order&.sys_user&.name.to_s+" Order-Detail",'pdf.html','A4')
+    end
+  end
+
+  def dynamic_pdf
+    @order = Order.find(params[:order_id])
+    @products = Product.all
+    @created_at_gteq = DateTime.current.beginning_of_month
+    @created_at_lteq = DateTime.now
+    if params[:sale].present?
+      @products_sale = OrderItem.joins(:product).where(product_id: @products, created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).group(:title).sum(:total_sale_price)
+      @products_sale_total = OrderItem.joins(:product).where(product_id: @products, created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).sum(:total_sale_price)
+      @products_count = OrderItem.joins(:product).where(product_id: @products, created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day,transaction_type: "Sale").group(:title).sum(:quantity)
+      # pdf_templates_data_sale
+      @pdf_template = PdfTemplate.includes(:pdf_template_elements).find_by(table_name: 'city', method_name: 'index')
+      @pdf_header = @pdf_template&.pdf_template_elements&.find_by(title: 'sale_header')
+      @pdf_data = @pdf_template&.pdf_template_elements&.find_by(title: 'sale_pdf_data')
+      @pdf_footer = @pdf_template&.pdf_template_elements&.find_by(title: 'sale_footer')
+
+    else
+      @products_sale = OrderItem.joins(:product).where(product_id: @products, created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).group(:title).sum(:total_cost_price)
+      @products_sale_total = OrderItem.joins(:product).where(product_id: @products, created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).sum(:total_cost_price)
+      @products_count = OrderItem.joins(:product).where(product_id: @products, created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day,transaction_type: "Purchase").group(:title).sum(:quantity)
+      # pdf_templates_data_purchase
+      @pdf_template = PdfTemplate.includes(:pdf_template_elements).find_by(table_name: 'city', method_name: 'index')
+      @pdf_header = @pdf_template&.pdf_template_elements&.find_by(title: 'purchase_header')
+      @pdf_data = @pdf_template&.pdf_template_elements&.find_by(title: 'purchase_pdf_data')
+      @pdf_footer = @pdf_template&.pdf_template_elements&.find_by(title: 'purchase_footer')
+
+    end
+    @pos_setting = PosSetting.first
+
+    request.format = 'pdf'
+    respond_to do |format|
+      format.html
+      format.pdf do
+        render pdf: 'order-dynamic-pdf',
+              template: 'orders/dynamic_pdf.pdf.erb',
+              page_size: 'A4',
+              orientation: 'Portrait',
+              margin: {
+                margin_top: @pos_setting&.pdf_margin_top.to_f,
+                margin_right: @pos_setting&.pdf_margin_right.to_f,
+                margin_bottom: @pos_setting&.pdf_margin_bottom.to_f,
+                margin_left: @pos_setting&.pdf_margin_left.to_f
+              },
+              encoding: 'UTF-8',
+              footer: {
+                right: '[page] of [topage]'
+              },
+              show_as_html: false
+      end
     end
   end
 

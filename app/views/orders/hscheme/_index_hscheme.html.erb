@@ -127,14 +127,14 @@
                 </b>
               </td>
               <td><%= order.purchase_sale_items.count rescue 0 %></td>
-              <td><h6><%= order.total_bill.to_f.round(2) rescue 0 %></h6></td>
+              <td><h6><%= number_with_delimiter(order.total_bill.to_f.round(2)) rescue 0 %></h6></td>
               <td></td>
               <td><h6><%=order.discount_price.to_f.round(2) rescue 0%></h6></td>
               <td>
                 <%if order.created_at.strftime("%d%b%y")!=order.updated_at.strftime("%d%b%y")%>
-                  <%= order.created_at.present? ? order.created_at.strftime("%d%b%y at %I:%M %p") : '' %> | <%= order.updated_at.present? ? order.updated_at.strftime("%d%b%y at %H:%M%p") : '' %>
+                  <%= order.created_at.present? ? order.created_at.strftime("%d/%b/%y at %I:%M %p") : '' %> | <%= order.updated_at.present? ? order.updated_at.strftime("%d/%b/%y at %H:%M%p") : '' %>
                 <%else%>
-                  <%= order.created_at.present? ? order.created_at.strftime("%d%b%y at %I:%M %p") : '' %>
+                  <%= order.created_at.present? ? order.created_at.strftime("%d/%b/%y at %I:%M %p") : '' %>
                 <%end%>
               </td>
               <td><%= order.comment %></td>
@@ -151,6 +151,24 @@
                           <%= link_to order, target: "_blank", title: "Download A4 size pdf", class:"icon-div" do %>
                                     <i class="fa fa-print mt-2" aria-hidden="true"></i>
                           <% end %>
+                        <% end %>
+                      </div>
+                      <div class="my-icon my-view">
+                        <div class="my-tooltip">
+                          Dynamic PDF
+                        </div>
+                        <%if (check_can_download_pdf(@module_permission))%>
+                          <% if @pdf_template.present? %>
+                            <% if params[:sale].present? %>
+                              <%= link_to dynamic_pdf_orders_path(order_id: order.id, sale: true), target: "_blank", title: "Download A4 size pdf", class:"icon-div" do %>
+                                <i class="fa fa-print mt-2" aria-hidden="true"></i>
+                              <% end %>
+                            <%else%>
+                              <%= link_to dynamic_pdf_orders_path(order_id: order.id, purchase: true), target: "_blank", title: "Download A4 size pdf", class:"icon-div" do %>
+                                <i class="fa fa-print mt-2" aria-hidden="true"></i>
+                              <% end %>
+                            <%end%>
+                          <%end%>
                         <% end %>
                       </div>
                       <div class="my-icon my-view">
@@ -522,7 +540,4 @@ $('.accordian-body').on('show.bs.collapse', function () {
         .not(this)
         .collapse('toggle')
 })
-
-
-
 </script>
