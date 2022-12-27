@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class FollowUp < ApplicationRecord
-  belongs_to :staff, optional: true, foreign_key: :assigned_to_id
+  belongs_to :assigned_user, class_name: :User, optional: true, foreign_key: :assigned_to_id
   belongs_to :user, optional: true, foreign_key: :created_by
   belongs_to :followable, polymorphic: true
   enum task_type: {

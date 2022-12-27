@@ -43,6 +43,7 @@ class ReportMailer < ApplicationMailer
 
   def follow_ups_notification(email_to, email_cc, email_bcc, follow_ups)
     @follow_ups = follow_ups
+    return unless @follow_ups.present?
     mail(to: email_to, cc: email_cc, bcc: email_bcc, subject: "Alert for today Follow Ups") if email_to.present?
   end
 end

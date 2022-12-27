@@ -169,6 +169,9 @@ class CrmsController < ApplicationController
     @category = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['category']&.map(&:downcase) : []
     @deal_stat = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['deal_status']&.map(&:downcase) : []
     @source = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['source']&.map(&:downcase) : []
+    created_by_ids = current_user.created_by_ids_list_to_view
+    roles_mask = current_user.allowed_to_view_roles_mask_for
+    @users = User.where(roles_mask: roles_mask).where('company_type=? or created_by_id=?',current_user.company_type,created_by_ids)
   end
 
   def download_crm_csv_file

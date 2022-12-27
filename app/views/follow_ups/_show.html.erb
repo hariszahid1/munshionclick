@@ -28,7 +28,7 @@
                         <td><h6><%= follow_up&.followable&.name %></h6></td>
                         <td><h6><%= follow_up.task_type %></h6></td>
                         <td><h6><%= follow_up.priority %></h6></td>
-                        <td><h6><%= follow_up&.staff&.name %></h6></td>
+                        <td><h6><%= follow_up&.assigned_user&.name %></h6></td>
                         <td><h6><%= follow_up.comment %><h6></td>
                       </tr>
                     </tbody>

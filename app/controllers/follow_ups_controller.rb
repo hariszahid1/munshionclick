@@ -3,11 +3,11 @@
 # FollowUps Controller
 class FollowUpsController < ApplicationController
   before_action :set_follow_up, only: %i[show edit update destroy]
-
+  before_action :set_follow_up_users, only: %i[index new show edit update destroy]
   # GET /follow_ups/1
   # GET /follow_ups/1.json
   def index
-    @q = FollowUp.includes(:staff).order('id desc').ransack(params[:q])
+    @q = FollowUp.includes(:assigned_user).order('id desc').ransack(params[:q])
     @follow_ups = @q.result.page(params[:page])
     @options_for_select = SysUser.all
     @staff = Staff.all
@@ -79,6 +79,12 @@ class FollowUpsController < ApplicationController
   def set_follow_up
     @follow_up = FollowUp.find(params[:id])
     @staff = Staff.all
+  end
+
+  def set_follow_up_users
+    created_by_ids = current_user.created_by_ids_list_to_view
+    roles_mask = current_user.allowed_to_view_roles_mask_for
+    @users = User.where(roles_mask: roles_mask).where('company_type=? or created_by_id=?',current_user.company_type,created_by_ids)
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
