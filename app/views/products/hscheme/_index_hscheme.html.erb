@@ -241,9 +241,9 @@
               <td><%= product.title rescue 'nil'%></td>
               <td><%= product.product_category.title rescue 'nil'%></td>
               <td><%= product.product_sub_category.title rescue 'nil'%></td>
-              <td><%= product.sale.to_f.round(2) %></td>
-              <td><%= (product.sale.to_f/225).round(2) %></td>
-              <td><%= (product.sale.to_f.round(2)*(product.marla.to_f+(product.square_feet.to_f/225))).to_f.round(2) %></td>
+              <td><%= number_with_delimiter(product.sale.to_f.round(2)) %></td>
+              <td><%= number_with_delimiter((product.sale.to_f/225).round(2)) %></td>
+              <td><%= number_with_delimiter((product.sale.to_f.round(2)*(product.marla.to_f+(product.square_feet.to_f/225))).to_f.round(2)) %></td>
               <td><%= product.marla.to_i %> Marla <%= product.square_feet.to_i%> Square Feet</td>
               <td>
                 <% staff_deal_orders = product.orders%>
