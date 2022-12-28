@@ -1,14 +1,3 @@
-<style>
-.table tr {
-    cursor: pointer;
-}
-.hiddenRow {
-    padding: 0 4px !important;
-    background-color: #eeeeee;
-    font-size: 13px;
-}
-</style>
-
 <div class="hidden" id="order_list">
   <% if params[:sale].present?%>
     <div class="main-content-header">
@@ -18,7 +7,7 @@
         <a href="<%= root_path %>">Dashboard</a>
       </li>
       <li class="breadcrumb-item active">
-        <a href="<%= orders_path %>">Bookings</a>
+        <a href="<%= orders_path(sale: 'true') %>">Bookings</a>
       </li>
     </ol>
   </div>
@@ -116,8 +105,8 @@
       <tbody>
         <% @orders.each_with_index do |order, index| %>
         <% demo_id = "demo#{index}"%>
-        <tr class=<%=order.status =='Cancel' ? "table-danger " : "table-success"%>>
-              <td class="p-4 accordion-toggle" data-toggle="collapse" data-target="#<%= demo_id %>"><i class="fa fa-plus-circle"></i></td>
+        <tr class=<%=order.status =='Cancel' ? "table-danger " : ""%>>
+              <td class="p-4 accordion-toggle acc-pointer" data-toggle="collapse" data-target="#<%= demo_id %>"><i class="fa fa-plus-circle"></i></td>
               <td><b style="font-size:20px;"><%= order.voucher_id.to_s+'#'+order.id.to_s %></b></td>
               <td>
                 <b style="font-size:20px;color:blue;">
@@ -128,8 +117,8 @@
               </td>
               <td><%= order.purchase_sale_items.count rescue 0 %></td>
               <td><h6><%= number_with_delimiter(order.total_bill.to_f.round(2)) rescue 0 %></h6></td>
-              <td></td>
-              <td><h6><%=order.discount_price.to_f.round(2) rescue 0%></h6></td>
+              <td><h6><%= number_with_delimiter(order.amount.to_i+order.purchase_sale_details.sum(:amount).to_i) %></h6></td>
+              <td><h6><%= number_with_delimiter(order.purchase_sale_details.sum(:discount_price).to_f.round(2)) %></h6></td>
               <td>
                 <%if order.created_at.strftime("%d%b%y")!=order.updated_at.strftime("%d%b%y")%>
                   <%= order.created_at.present? ? order.created_at.strftime("%d/%b/%y at %I:%M %p") : '' %> | <%= order.updated_at.present? ? order.updated_at.strftime("%d/%b/%y at %H:%M%p") : '' %>
@@ -241,25 +230,25 @@
               </div>
               </td>
             </tr>
-          <tr >
+          <tr>
             <td colspan="10" class="hiddenRow">
               <div class="accordian-body collapse card shadow-lg m-4" style="border-radius: 18px;" id="<%= demo_id %>"> 
                 <% if order.property_plans.present? %> 
                   <div class="row m-3">
-                    <%= link_to edit_property_plan_path(order.property_plans.first), class: "btn #{order.property_plans.first.due_status=='Paid' ? 'btn-success':'btn-warning'}" do %>
+                    <%= link_to edit_property_plan_path(order.property_plans.first), class: "btn m-2 #{order.property_plans.first.due_status=='Paid' ? 'btn-success':'btn-warning'}" do %>
                       <i class="fa fa-gavel" aria-hidden="true"></i>
                       <%=order.property_plans&.first&.due_date&.strftime('%b/%y')%>
                       <%=order.property_plans&.first&.due_status%>
                     <% end %>
+                  </div>
+                  <div class="row m-3">
                     <%order.property_plans.first.property_installments.each_with_index do |property,i|%>
-                      <div class="col-lg-2 float-left">
-                        <%= link_to property_installment_edit_property_plan_path(property), class: "btn #{property.due_status=='Paid' ? 'btn-success':'btn-warning'}" do %>
-                          <%="%.2i" % (i+1).abs%>
-                          <i class="fa fa-gavel" aria-hidden="true"></i>
-                          <%=property&.due_date&.strftime('%b/%Y')%>
-                          <%=property&.due_status&.present? ? "Paid" : "UnPaid"%>
-                        <% end %>
-                      </div>
+                      <%= link_to property_installment_edit_property_plan_path(property), class: "btn m-2 #{property.due_status=='Paid' ? 'btn-success':'btn-warning'}" do %>
+                        <%="%.2i" % (i+1).abs%>
+                        <i class="fa fa-gavel" aria-hidden="true"></i>
+                        <%=property&.due_date&.strftime('%b/%Y')%>
+                        <%=property&.due_status&.present? ? "Paid" : "UnPaid"%>
+                      <% end %>
                     <%end%>
                   </div>
                 <% end %>
@@ -317,7 +306,7 @@
                         <div class="col"></div>
                         <div class="col"><%=name_quantity.first%> <%=name_quantity[5]%></div>
                         <div class="col"><%=name_quantity[8]%>-M <%=name_quantity[9]%>-Sqr</div>
-                        <div class="col"><%= order.amount.to_f.round(2) rescue 0%></div>
+                        <div class="col"><%= number_with_delimiter(order.amount.to_f.round(2)) rescue 0%></div>
                         <div class="col"></div>
                         <div class="col"></div>
                         <div class="col"></div>
@@ -355,17 +344,16 @@
                   <% order.purchase_sale_details.each do |purchase_sale_detail| %>
                     <div class = <%=order.status =='Cancel' ? "table-danger" : "" %>>
                       <div class="row p-3">  
-                        
                         <div class="col"><%= purchase_sale_detail.voucher_id.to_s+'#'+purchase_sale_detail.id.to_s %></div>
                         <div class="col"><%= purchase_sale_detail.purchase_sale_items.count rescue 0 %></div>
-                        <div class="col"><h6><%= purchase_sale_detail.total_bill.to_f.round(2) rescue 0 %></h6></div>
-                        <div class="col"><%= purchase_sale_detail.amount.to_f.round(2) rescue 0%></div>
-                        <div class="col"><%=purchase_sale_detail.discount_price.to_f.round(2)%></div>
+                        <div class="col"><h6><%= number_with_delimiter(purchase_sale_detail.total_bill.to_f.round(2)) rescue 0 %></h6></div>
+                        <div class="col"><%= number_with_delimiter(purchase_sale_detail.amount.to_f.round(2)) rescue 0%></div>
+                        <div class="col"><%= number_with_delimiter(purchase_sale_detail.discount_price.to_f.round(2)) %></div>
                         <div class="col">
                           <%if purchase_sale_detail.created_at.strftime("%d%b%y")!=purchase_sale_detail.updated_at.strftime("%d%b%y")%>
-                            <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d%b%y at %I:%M%p") : '' %> | <%= purchase_sale_detail.updated_at.present? ? purchase_sale_detail.updated_at.strftime("%d%b%y at %H:%M%p") : '' %>
+                            <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d/%b/%y at %I:%M%p") : '' %> | <%= purchase_sale_detail.updated_at.present? ? purchase_sale_detail.updated_at.strftime("%d/%b/%y at %H:%M%p") : '' %>
                           <%else%>
-                            <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d%b%y at %I:%M%p") : '' %>
+                            <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d/%b/%y at %I:%M%p") : '' %>
                           <%end%>
                         </div>
                         <div class="col"><%= purchase_sale_detail.comment %></div>
@@ -463,11 +451,11 @@
                       <div class="col"><h5>B-Total  </h5></div>
                       
                       <div class="col"></div>
-                      <div class="col"><h5><%=order.sys_user.ledger_books.sum(:debit).to_i%></h5></div>
-                      <div class="col"><h5><%=order.amount.to_i+order.purchase_sale_details.sum(:amount).to_i%></h5></div>
-                      <div class="col"><h5><%=order.purchase_sale_details.sum(:discount_price).to_f.round(2)%></h5></div>
+                      <div class="col"><h5><%= number_with_delimiter(order.sys_user.ledger_books.sum(:debit).to_i) %></h5></div>
+                      <div class="col"><h5><%= number_with_delimiter(order.amount.to_i+order.purchase_sale_details.sum(:amount).to_i) %></h5></div>
+                      <div class="col"><h5><%= number_with_delimiter(order.purchase_sale_details.sum(:discount_price).to_f.round(2)) %></h5></div>
                       <div class="col"><h5>Remaining</h5></div>
-                      <div class="col"><h5><%=order.sys_user.balance.to_f%></h5></div>
+                      <div class="col"><h5><%= number_with_delimiter(order.sys_user.balance.to_f) %></h5></div>
                       <div class="col">
                           <%if (order.sys_user.balance > 0 ) %>
                               <b style="font-size:20px;color:blue;">Jama</b>
@@ -483,7 +471,18 @@
               </div> 
             </td>
           </tr>
-        <% end %>    	
+           
+        <% end %> 
+         	<tr>
+          <td><h5>Total:</h5></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td><%= number_with_delimiter(@orders.sum(:total_bill)) %></td>
+          <td><%= number_with_delimiter(@orders.sum(:amount)+@orders.sum('purchase_sale_details.amount')) %></td>
+          <td><%= number_with_delimiter(@orders.sum('purchase_sale_details.discount_price')) %></td>
+          <td></td>
+          </tr> 
       </tbody>
       
     </table>

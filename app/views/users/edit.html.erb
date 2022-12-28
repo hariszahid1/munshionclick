@@ -1,3 +1,7 @@
-<h1>Editing <%= current_user.allowed_valid_roles.to_s.titleize %></h1>
+<div class="card border-radius-1 shadow p-3 mb-2">
+<h1>Edit <%= current_user.allowed_valid_roles.to_s.titleize %></h1>
+</div>
 <% @btn_value = "Update "+current_user.allowed_valid_roles.to_s.titleize %>
+<div class="card border-radius-1 shadow p-3">
 <%= render 'form', user: @user %>
+</div>
