@@ -1,209 +1,143 @@
 <%= wicked_pdf_stylesheet_link_tag ("pdf") -%>
 
-
 <%= @pdf_header.content
                .gsub('[[date]]', DateTime.now.strftime("%d/%b/%y"))
                .gsub('[[time]]', DateTime.now.strftime("at %I:%M%p"))
-               .gsub('[[current_user]]', current_user.name)
-               .gsub('[[image]]', @pdf_header.pdf_template.logo.service_url)
+               .gsub('[[image]]', "#{@pdf_header.pdf_template.logo.service_url}")
                .html_safe
 %>
 
-<%date=@order.created_at%>
-  <h1 style="text-align: center;">Account Statement</h1>
-<div>
-  <h2 style="text-align: left;" class="lite-gray">Client's details</h2>
-  <table class="pdf_font1">
-    <tr>
-      <td style="font-weight: bold;">Registration No:</td>
-      <td><%=@order.sys_user&.code %></td>
-      <td rowspan="5">
-        <div style="float: right;">
-          <%if @order.sys_user.profile_image.attached?%>
-          <%= image_tag @order.sys_user.profile_image.service_url, class:"profile_image", style:"float: right;"%>
-          <% end %>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td style="font-weight: bold;">CNIC No:</td>
-      <td><%=@order.sys_user&.cnic %></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td style="font-weight: bold;">Member Name:</td>
-      <td><%=@order.sys_user.name %></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td style="font-weight: bold;">Address:</td>
-      <td><p style="padding: 0px 0px 0px 0px; width: 300px; line-height: 10pt;"><%=@order.sys_user&.contact&.address %></p></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td style="width:33vw; font-weight: bold;">Contacts:</td>
-      <td style="width:33vw;"><%=@order.sys_user&.contact&.mobile %></td>
-      <td></td>
-      <td></td>
-    </tr>
-  </table>
-</div>
+<% date = @order.created_at%>
+<%= @account_statement.content
+               .gsub('[[sys_user_code]]', "#{@order.sys_user&.code}")
+               .gsub('[[sys_user_img]]', @order.sys_user&.profile_image&.service_url)
+               .gsub('[[sys_user_cninc]]', @order.sys_user&.cnic)
+               .gsub('[[sys_user_name]]', @order.sys_user.name)
+               .gsub('[[sys_user_address]]', @order.sys_user&.contact&.address)
+               .gsub('[[sys_user_contact]]', @order.sys_user&.contact&.mobile)
+               .html_safe
+%>
+
 
 <h2 style="text-align: left; margin: 0;" class="lite-gray">Property details</h2>
 <div>
   <%if @order.order_items_names_and_quantity!=0%>
     <%@order.order_items_names_and_quantity.each do |name_quantity|%>
-      <table class="pdf_font">
-        <tr>
-          <td style="width:120px; font-weight: bold;">Block Name:</td>
-          <td ><%=name_quantity[6] %></td>
-          <td style="width:120px; font-weight: bold;">Property Size: </td>
-          <td><%=name_quantity[8] %>-M <%=name_quantity[9] %>-Sqr</td>
-        </tr>
-        <tr>
-          <td style="width:120px; font-weight: bold;">Property No.</td>
-          <td ><%=name_quantity.first %></td>
-          <td style="width:120px; font-weight: bold;">Type:</td>
-          <td ><%=name_quantity[5] %></td>
-        </tr>
-      </table>
+      <%= @property_details.content
+               .gsub('[[block_name]]', "#{name_quantity[6]}")
+               .gsub('[[property_size_m]]', "#{name_quantity[8]}")
+               .gsub('[[property_size_sqr]]', "#{name_quantity[9]}")
+               .gsub('[[property_no]]', "#{name_quantity.first}")
+               .gsub('[[type]]', "#{name_quantity[5]}")
+               .html_safe
+      %>
     <% end %>
   <% end %>
 </div>
-<h2 style="text-align: left; margin: 0;" class="lite-gray">Payment details</h2>
-<div>
-  <table class="pdf_font">
-    <tr>
-      <td style="width:120px; font-weight: bold;">Net Price:</td>
-      <td ><%=@order&.total_bill-@order.purchase_sale_details.sum(:discount_price).to_f.round(2) %></td>
-      <td style="width:120px; font-weight: bold;">Grand Due Amt: </td>
-      <td><%=@order&.sys_user&.balance&.to_f %></td>
-      <td style="width:120px; font-weight: bold;">Net Price Received:</td>
-      <td><%= @received = @order.amount.to_i+@order.purchase_sale_details.sum(:amount).to_i%> </td>
-    </tr>
-    <tr>
-      <td style="width:120px; font-weight: bold;">Grand Received %: </td>
-      <td><% if @order.total_bill.present? && @order.total_bill > 0%><%=@r = ((@received/(@order.total_bill.to_f-@order.purchase_sale_details.sum(:discount_price).to_f.round(2))) * 100).round(2) %><% end %></td>
-      <td style="width:150px; font-weight: bold;">Net Price O.S Amt:</td>
-      <td ><%#=@order.sys_user.name %></td>
-      <td style="width:150px; font-weight: bold;">Cash Discount: </td>
-      <td><%=(@order.purchase_sale_details.sum(:discount_price)+@order.discount_price.to_f).to_f.round(2)%></td>
-    </tr>
-  </table>
-</div>
+
+<%= @received = @order.amount.to_i+@order.purchase_sale_details.sum(:amount).to_i%>
+<% if @order.total_bill.present? && @order.total_bill > 0%>
+  <% @r = ((@received/(@order.total_bill.to_f-@order.purchase_sale_details.sum(:discount_price).to_f.round(2))) * 100).round(2) %>
+<% end %>
+<%= @payment_details.content
+                    .gsub('[[net_price]]', "#{@order&.total_bill-@order.purchase_sale_details.sum(:discount_price).to_f.round(2)}")
+                    .gsub('[[due_amt]]', "#{@order&.sys_user&.balance&.to_f}")
+                    .gsub('[[price_recieved]]', "#{@received}")
+                    .gsub('[[grand_recieved]]', "#{@r}")
+                    .gsub('[[sys_user_name]]', "#{@order.sys_user.name}")
+                    .gsub('[[cash_discount]]', "#{(@order.purchase_sale_details.sum(:discount_price)+@order.discount_price.to_f).to_f.round(2)}")
+                    .html_safe
+%>
+
 <div class="row">
     <table class="table1 pdf_font ">
-            <%if @order.property_plans.present?%>
-                <% @order.property_plans.each do |properties| %>
-                  <tr class="lite-gray">
-                    <th>Inst#</th>
-                    <th>Due Date</th>
-                    <th>Due</th>
-                    <th>Inst#</th>
-                    <th>Due Date</th>
-                    <th>Due</th>
-                  </tr>
-                  <tr>
-                    <td class="lite-gray"></td>
-                    <td style="text-align:left">Down Payment</td>
-                    <td style="text-align:right">
-                      <b><%=properties.advance%></b>
-                      <%=properties.due_status.present? ? properties.due_status : 'Unpaid'%>
-                    </td>
-                    <td class="lite-gray"></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <%properties.property_installments.each_slice(2) do |installments|%>
-                    <tr class="pdf_font">
-                      <%installments.each do |installment|%>
-                          <td style="text-align:left" class="lite-gray"><%=installment.installment_no%></td>
-                          <td style="text-align:left"><%=installment.due_date.present? ? installment.due_date.strftime("%B %Y") : (date+30.day).strftime("%B %Y")%><%(date=date+30.day)%></td>
-                          <td style="text-align:right">
-                              <%if installment.high_price.to_i > 0 && installment.normal_price.to_i < installment.installment_price.to_i%>
-                              (<%=installment.high_price.to_i%>+<%=installment.normal_price.to_i%>)
-                              <%end%>
-                              <b><%=installment.installment_price.to_i%></b>
-                              <%=installment.due_status.present? ? installment.due_status : 'Unpaid'%>
-                          </td>
-                        <%end%>
-                      </tr>
-                    <%end%>
-                    <tr class="lite-gray" style="text-align:right">
-                      <td><h4>Total</h4></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td><h4><%=properties.property_installments.sum(:installment_price)%></h4></td>
-                    </tr>
-                  <% end %>
-      <% end %>
-    </table>
-          <table class="table1 pdf_font">
-            <tr class="lite-gray">
-              <td></td>
-              <th>Delivery Detail</th>
-              <th>Received</th>
-              <th>Date/Time</th>
-              <th>Comment</th>
-            </tr>
-            <tr>
-              <td></td>
-              <td>Booking</td>
-              <td><%= @order.amount%></td>
-              <td><%= @order.created_at.present? ? @order.created_at.strftime("%d%b%y at %I:%M%p") : '' %> </td>
-              <td><%= @order.comment%></td>
-            </tr>
-            <%if @order.purchase_sale_details.present?%>
-            <% @order.purchase_sale_details.each do |purchase_sale_detail| %>
-              <tr style="text-align:center" class="pdf_font">
-                <td></td>
-                <td><%= purchase_sale_detail.voucher_id.to_s+'#'+purchase_sale_detail.id.to_s %></td>
-                <td><%= purchase_sale_detail.amount.to_f.round(2) rescue 0%></td>
-                <td>
-                  <%if purchase_sale_detail.created_at.strftime("%d%b%y")!=purchase_sale_detail.updated_at.strftime("%d%b%y")%>
-                    <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d%b%y at %I:%M%p") : '' %> | <%= purchase_sale_detail.updated_at.present? ? purchase_sale_detail.updated_at.strftime("%d%b%y at %H:%M%p") : '' %>
-                  <%else%>
-                    <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d%b%y at %I:%M%p") : '' %>
+      <% @order.property_plans.each do |properties| %>
+        <%= @property_plans.content
+                   .gsub('[[property_advance]]', "#{properties.advance}")
+                    .gsub('[[property_status]]', "#{properties.due_status.present? ? properties.due_status : 'Unpaid'}")
+                   .html_safe
+        %>
+        <%properties.property_installments.each_slice(2) do |installments|%>
+          <tr class="pdf_font">
+            <%installments.each do |installment|%>
+              <td style="text-align:left" class="lite-gray"><%=installment.installment_no%></td>
+              <td style="text-align:left"><%=installment.due_date.present? ? installment.due_date.strftime("%B %Y") : (date+30.day).strftime("%B %Y")%><%(date=date+30.day)%></td>
+              <td style="text-align:right">
+                  <%if installment.high_price.to_i > 0 && installment.normal_price.to_i < installment.installment_price.to_i%>
+                    (<%=installment.high_price.to_i%>+<%=installment.normal_price.to_i%>)
                   <%end%>
-                </td>
-                <td><%= purchase_sale_detail.comment %></td>
-              </tr>
-            <% end %>
-            <tr class="lite-gray" style="text-align:center">
-              <td><h4>Total</h4></td>
-              <td><h4><%=@order.total_bill%></h4></td>
-              <td><h4><%=@order.amount.to_i+@order.purchase_sale_details.sum(:amount).to_i%></h4></td>
-              <td><h4>Remaining</h4></td>
-              <td><h4><%=@order.sys_user.balance.to_f%></h4></td>
-            </tr>
-          <% end %>
-          </table>
-</div>
-<div>
-    <table class="table1 pdf_font">
-      <tbody>
-        <tr class="lite-gray">
-          <th>Transfer From</th>
-          <th>Transfer To</th>
-          <th>By</th>
-          <th>DateTime</th>
-        </tr>
-        <%@order.remarks.each do |remark| %>
-          <tr>
-            <td><h3><%=remark.comment%></h3></td>
-            <td><h3><%=remark.body%></h3></td>
-            <td><%=remark.message%></td>
-            <td><%= remark.created_at.strftime("%d%b%y at %I:%M %p") %></td>
+                  <b><%=installment.installment_price.to_i%></b>
+                  <%=installment.due_status.present? ? installment.due_status : 'Unpaid'%>
+              </td>
+            <%end%>
           </tr>
         <%end%>
-      </tbody>
-      </table>
+          <tr class="lite-gray" style="text-align:right">
+            <td><h4>Total</h4></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><h4><%=properties.property_installments.sum(:installment_price)%></h4></td>
+          </tr>
+      <% end %>
+    </table>
+
+
+    <table class="table1 pdf_font">
+      <%= @delivery_details.content
+                    .gsub('[[order_amount]]', "#{@order.amount}")
+                    .gsub('[[order_date]]', "#{@order.created_at.present? ? @order.created_at.strftime("%d%b%y at %I:%M%p") : ''}")
+                    .gsub('[[order_comment]]', "#{@order.comment}")
+                    .html_safe
+      %>
+      <%if @order.purchase_sale_details.present?%>
+        <% @order.purchase_sale_details.each do |purchase_sale_detail| %>
+          <tr style="text-align:center" class="pdf_font">
+            <td></td>
+            <td><%= purchase_sale_detail.voucher_id.to_s+'#'+purchase_sale_detail.id.to_s %></td>
+            <td><%= purchase_sale_detail.amount.to_f.round(2) rescue 0%></td>
+            <td>
+              <%if purchase_sale_detail.created_at.strftime("%d%b%y")!=purchase_sale_detail.updated_at.strftime("%d%b%y")%>
+                <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d%b%y at %I:%M%p") : '' %> | <%= purchase_sale_detail.updated_at.present? ? purchase_sale_detail.updated_at.strftime("%d%b%y at %H:%M%p") : '' %>
+              <%else%>
+                <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d%b%y at %I:%M%p") : '' %>
+              <%end%>
+            </td>
+            <td><%= purchase_sale_detail.comment %></td>
+          </tr>
+        <% end %>
+        <tr class="lite-gray" style="text-align:center">
+          <td><h4>Total</h4></td>
+          <td><h4><%=@order.total_bill%></h4></td>
+          <td><h4><%=@order.amount.to_i+@order.purchase_sale_details.sum(:amount).to_i%></h4></td>
+          <td><h4>Remaining</h4></td>
+          <td><h4><%=@order.sys_user.balance.to_f%></h4></td>
+        </tr>
+      <% end %>
+    </table>
 </div>
+
+<div>
+  <table class="table1 pdf_font">
+    <tbody>
+      <tr class="lite-gray">
+        <th>Transfer From</th>
+        <th>Transfer To</th>
+        <th>By</th>
+        <th>DateTime</th>
+      </tr>
+      <%@order.remarks.each do |remark| %>
+        <%= @transfer_details.content
+                    .gsub('[[comment]]', remark.comment)
+                    .gsub('[[body]]', remark.body)
+                    .html_safe
+        %>
+      <%end%>
+    </tbody>
+  </table>
+</div>
+
 <% if @order.links.present? and pos_setting_is_qr.present? or params[:receivable]=="lmc"%>
 <div class="col-lg-12 form-group float-left">
   <table class="pdf_font">
@@ -212,44 +146,35 @@
     <th>Web Link</th>
     <%if @pos_setting.qr_links.present?%>
       <%@pos_setting.qr_links.values.each_slice(2) do |qr_link|%>
-        <tr>
-          <td>
-            <%
-              require "rqrcode"
-              qrcode = RQRCode::QRCode.new(qr_link.first)
-              @svg = qrcode.as_svg(
-                  color: "000",
-                  shape_rendering: "crispEdges",
-                  module_size: 11,
-                  standalone: true,
-                  use_path: true
-                )
-                @str=Base64.encode64(@svg ).gsub("\n", '')
-            %>
-            <img width="150px" height="115px" class="figure" style=""src=<%="data:image/svg+xml;base64,"+@str%> ></img>
-          </td>
-          <td>
-            <h4 style="text-align:left">For verification of your Unit booking:</h4>
-            <p style="text-align:left"> 1) Open Camrea/QRScaner app on your phone</p>
-            <p style="text-align:left"> 2) Point your phone to this QRCODE to capture the code</p>
-            <p style="text-align:left"> 3) After capturing you will redirect to Company Sites</p>
-          </td>
-          <td>
-                <%
-                  require "rqrcode"
-                  qrcode = RQRCode::QRCode.new(qr_link.last)
-                  @svg = qrcode.as_svg(
-                      color: "000",
-                      shape_rendering: "crispEdges",
-                      module_size: 11,
-                      standalone: true,
-                      use_path: true
-                    )
-                    @str=Base64.encode64(@svg ).gsub("\n", '')
-                %>
-                <img width="150px" height="115px" class="figure" style=""src=<%="data:image/svg+xml;base64,"+@str%> ></img>
-          </td>
-        </tr>
+        <%
+          require "rqrcode"
+          qrcode = RQRCode::QRCode.new(qr_link.first)
+          @svg = qrcode.as_svg(
+              color: "000",
+              shape_rendering: "crispEdges",
+              module_size: 11,
+              standalone: true,
+              use_path: true
+            )
+            @str_first=Base64.encode64(@svg ).gsub("\n", '')
+        %>
+        <%
+          require "rqrcode"
+          qrcode = RQRCode::QRCode.new(qr_link.last)
+          @svg = qrcode.as_svg(
+              color: "000",
+              shape_rendering: "crispEdges",
+              module_size: 11,
+              standalone: true,
+              use_path: true
+            )
+            @str_last=Base64.encode64(@svg ).gsub("\n", '')
+        %>
+        <%= @web_links.content
+                    .gsub('[[qr_first]]', "data:image/svg+xml;base64,"+@str_first)
+                    .gsub('[[qr_last]]', "data:image/svg+xml;base64,"+@str_last)
+                    .html_safe
+        %>
     <%end%>
   <%end%>
 
@@ -279,7 +204,10 @@
                 )
                 @str=Base64.encode64(@svg ).gsub("\n", '')
             %>
-            <img width="150px" height="115px" class="figure" style=""src=<%="data:image/svg+xml;base64,"+@str%> ></img>
+            <%= @booking_qr.content
+                    .gsub('[[qr_src]]', "data:image/svg+xml;base64,"+@str)
+                    .html_safe
+            %>
           <%end%>
         <% end %>
       </td>
@@ -287,44 +215,8 @@
   </table>
 </div>
 
-<div>
-    <table data-toggle="table" data-search="true">
-      <tbody>
-        <tr>
-          <th style="text-align:left" colspan="4"></th>
-          <th style="text-align:center" colspan="4"></th>
-        </tr>
-        <tr>
-          <th style="text-align:left" colspan="4"></th>
-          <th style="text-align:center" colspan="4"></th>
-        </tr>
-        <tr>
-          <th style="text-align:left" colspan="4"></th>
-          <th style="text-align:center" colspan="4"></th>
-        </tr>
-        <tr>
-          <th style="text-align:left" colspan="4"></th>
-          <th style="text-align:center" colspan="4"></th>
-        </tr>
-        <tr>
-          <th style="text-align:left" colspan="4"></th>
-          <th style="text-align:center" colspan="4"></th>
-        </tr>
-        <tr>
-          <th style="text-align:left" colspan="4"></th>
-          <th style="text-align:center" colspan="4"></th>
-        </tr>
-        <tr>
-          <th style="text-align:left" colspan="4"></th>
-          <th style="text-align:center" colspan="4"></th>
-        </tr>
-        <tr>
-          <th style="text-align:left" colspan="4">Account Department Signature</th>
-          <th style="text-align:center">Customer Signature</th>
-        </tr>
-      </tbody>
-    </table>
-</div>
+<%= @account_signature.content.html_safe %>
+
 <%else%>
 <div class="col-lg-12 form-group float-left">
   <table class="pdf_font">
@@ -350,51 +242,18 @@
                 )
                 @str=Base64.encode64(@svg ).gsub("\n", '')
             %>
-            <img width="150px" height="115px" class="figure" style=""src=<%="data:image/svg+xml;base64,"+@str%> ></img>
+            <%= @booking_qr_else.content
+                    .gsub('[[qr_src]]', "data:image/svg+xml;base64,"+@str)
+                    .html_safe
+            %>
           <%end%>
         <% end %>
       </td>
     </tr>
   </table>
 </div>
+<%= @company_signature.content.html_safe %>
 
-<div>
-    <table data-toggle="table" data-search="true">
-      <tbody>
-        <tr>
-          <th style="text-align:left" colspan="4"></th>
-          <th style="text-align:center" colspan="4"></th>
-        </tr>
-        <tr>
-          <th style="text-align:left" colspan="4"></th>
-          <th style="text-align:center" colspan="4"></th>
-        </tr>
-        <tr>
-          <th style="text-align:left" colspan="4"></th>
-          <th style="text-align:center" colspan="4"></th>
-        </tr>
-        <tr>
-          <th style="text-align:left" colspan="4"></th>
-          <th style="text-align:center" colspan="4"></th>
-        </tr>
-        <tr>
-          <th style="text-align:left" colspan="4"></th>
-          <th style="text-align:center" colspan="4"></th>
-        </tr>
-        <tr>
-          <th style="text-align:left" colspan="4"></th>
-          <th style="text-align:center" colspan="4"></th>
-        </tr>
-        <tr>
-          <th style="text-align:left" colspan="4"></th>
-          <th style="text-align:center" colspan="4"></th>
-        </tr>
-        <tr>
-          <th style="text-align:left" colspan="4">Company Signature</th>
-          <th style="text-align:center">Customer Signature</th>
-        </tr>
-      </tbody>
-    </table>
-</div>
 <% end %>
+
 <%= @pdf_footer.content.html_safe %>
