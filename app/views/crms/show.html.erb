@@ -36,7 +36,7 @@
           <div class="col-lg-12">
             <%  @sys_user.notes.order("id desc").each do |note|%>
               <div class = "tab-pane card border-radius-1 mb-3 p-2">
-                <p class="font-weight-bold text-dark">Note by <%= note&.staff&.name %></p>
+                <p class="font-weight-bold text-dark">Note by <%= note&.assigned_user&.name %></p>
                 <div class= 'row'>
                   <span class='col-8 text-dark'><%= note.message %></span>
                   <p class='col-4 text-right text-dark'><%= note.created_at %></p><br/>
@@ -67,7 +67,7 @@
                   <li class="list-group-item"><span><b class="mr-2"> Time:</b> <%= follow_up&.date %></span><br/></li>
                   <li class="list-group-item"> <span><b class="mr-2">Priority:</b> <%= follow_up.priority %></span><br/></li>
                   <li class="list-group-item"> <span><b class="mr-2">Comment:</b> <%= follow_up.comment %></span><br/></li>
-                  <li class="list-group-item"> <span><b class="mr-2">Assigned to:</b> <%= follow_up&.staff&.name %></span><br/></li>
+                  <li class="list-group-item"> <span><b class="mr-2">Assigned to:</b> <%= follow_up&.assigned_user&.name %></span><br/></li>
                   <li class="list-group-item"> <p class= "text-right mb-0">by <%= follow_up&.user&.name %></p></li>
                 </ul>
               </div>

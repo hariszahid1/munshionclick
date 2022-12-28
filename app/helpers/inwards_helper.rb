@@ -5,7 +5,7 @@ module InwardsHelper
 
 	def sorted_data
     @sorted_data = []
-    @orders.each do |o|
+    @pdf_orders.each do |o|
       @sorted_data << {
                         type: o.transaction_type,
 												name: o.sys_user.name,

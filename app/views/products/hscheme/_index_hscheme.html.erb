@@ -223,7 +223,7 @@
         <thead>
           <th>Block<div class="float-right"><%= sort_link(@q, :item_type_title, '', {}, class: 'sorting-button') %></div></th>
           <th>Code<div class="float-right"><%= sort_link(@q, :code,'', {}, class: 'sorting-button') %></div></th>
-          <th>Title<div class="float-right"><%= sort_link(@q, :tile, '', {}, class: 'sorting-button') %></div></th>
+          <th>Title/MS Number<div class="float-right"><%= sort_link(@q, :tile, '', {}, class: 'sorting-button') %></div></th>
           <th>Ctgy<div class="float-right"><%= sort_link(@q, :product_category_title, '', {}, class: 'sorting-button') %></div></th>
           <th>Sub-Ctgy<div class="float-right"><%= sort_link(@q, :product_sub_category_title, '', {}, class: 'sorting-button') %></div></th>
           <th>PerMarla<div class="float-right"><%= sort_link(@q, :cost, '', {}, class: 'sorting-button') %></div></th>
@@ -241,9 +241,9 @@
               <td><%= product.title rescue 'nil'%></td>
               <td><%= product.product_category.title rescue 'nil'%></td>
               <td><%= product.product_sub_category.title rescue 'nil'%></td>
-              <td><%= product.sale.to_f.round(2) %></td>
-              <td><%= (product.sale.to_f/225).round(2) %></td>
-              <td><%= (product.sale.to_f.round(2)*(product.marla.to_f+(product.square_feet.to_f/225))).to_f.round(2) %></td>
+              <td><%= number_with_delimiter(product.sale.to_f.round(2)) %></td>
+              <td><%= number_with_delimiter((product.sale.to_f/225).round(2)) %></td>
+              <td><%= number_with_delimiter((product.sale.to_f.round(2)*(product.marla.to_f+(product.square_feet.to_f/225))).to_f.round(2)) %></td>
               <td><%= product.marla.to_i %> Marla <%= product.square_feet.to_i%> Square Feet</td>
               <td>
                 <% staff_deal_orders = product.orders%>
@@ -256,19 +256,19 @@
                     <%if booking&.status!='Cancel'%>
                       <%= link_to edit_order_path(booking,product:true) do %>
                         Name: <%=booking.sys_user.name%>
-                        <%=booking.sys_user.ledger_books.pluck('SUM(debit)','SUM(credit)').map { |sys| "<br> <b>Total:</b> "+sys.first.to_s+" <b>Paid:</b> "+sys.second.to_s+" <b>In %</b> "+((sys.second/sys.first)*100).round(2).to_s+" <br><b>Remaning:</b> "+(sys.first.to_i-sys.second.to_i).to_s+" <b>Commission:</b> "+token&.carriage.to_s+"<b> In % </b>"+((token&.carriage.to_f/sys.first)*100).round(2).to_s}.join(',').html_safe%>
+                        <%=booking.sys_user.ledger_books.pluck('SUM(debit)','SUM(credit)').map { |sys| "<br> <b>Total:</b> "+ number_with_delimiter(sys.first.to_s) + " <b>Paid:</b> "+ number_with_delimiter(sys.second.to_s) +" <b>In %</b> "+((sys.second/sys.first)*100).round(2).to_s+" <br><b>Remaining:</b> "+ number_with_delimiter((sys.first.to_i-sys.second.to_i).to_s)+" <b>Commission:</b> "+token&.carriage.to_s+"<b> In % </b>"+((token&.carriage.to_f/sys.first)*100).round(2).to_s}.join(',').html_safe%>
                       <%end%>
                       <%=booking.sys_user.contact.phone_with_comma%>
-                      <%= ("<br><b>Last Payment Date: </b>"+booking&.sys_user&.ledger_books&.last&.created_at&.strftime("%d%b%y at %I:%M%p")).html_safe if booking.present?%>
+                      <%= ("<br><b>Last Payment Date: </b>"+booking&.sys_user&.ledger_books&.last&.created_at&.strftime("%d/%b/%y at %I:%M%p")).html_safe if booking.present?%>
                     <%else%>
                       <span>
                         <b>Booking-Canceled</b>
                         <%= link_to edit_order_path(booking,product:true) do %>
                           Name: <%=booking.sys_user.name%>
-                          <%=booking.sys_user.ledger_books.pluck('SUM(debit)','SUM(credit)').map { |sys| "<br> <b>Total:</b> "+sys.first.to_s+" <b>Paid:</b> "+sys.second.to_s+" <b>In %</b> "+((sys.second/sys.first)*100).round(2).to_s+"<br><b>Remaning:</b> "+(sys.first.to_i-sys.second.to_i).to_s+" <b>Commission:</b> "+token&.carriage.to_s+"<b> In % </b>"+((token&.carriage.to_f/sys.first)*100).round(2).to_s}.join(',').html_safe%>
+                          <%=booking.sys_user.ledger_books.pluck('SUM(debit)','SUM(credit)').map { |sys| "<br> <b>Total:</b> "+ number_with_delimiter(sys.first.to_s) +" <b>Paid:</b> "+ number_with_delimiter(sys.second.to_s) +" <b>In %</b> "+((sys.second/sys.first)*100).round(2).to_s+"<br><b>Remaining:</b> "+ number_with_delimiter((sys.first.to_i-sys.second.to_i).to_s) +" <b>Commission:</b> "+token&.carriage.to_s+"<b> In % </b>"+((token&.carriage.to_f/sys.first)*100).round(2).to_s}.join(',').html_safe%>
                         <%end%>
                         <%=booking.sys_user.contact.phone_with_comma%>
-                        <%= ("<br><b>Last Payment Date: </b>"+booking&.sys_user&.ledger_books&.last&.created_at&.strftime("%d%b%y at %I:%M%p")).html_safe if booking.present?%>
+                        <%= ("<br><b>Last Payment Date: </b>"+booking&.sys_user&.ledger_books&.last&.created_at&.strftime("%d/%b/%y at %I:%M%p")).html_safe if booking.present?%>
                         <b>Booking-Canceled</b>
                       </span>
                     <%end%>
