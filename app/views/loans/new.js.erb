@@ -1,1 +1,3 @@
-$('#new_investment a').hide().parent().append("<%= j render 'form', loan: @loan %>");
+$('.show-data').children().remove();
+$('.show-data').append("<%= escape_javascript(render partial: 'new_form', locals: { loan: @loan }) %>");
+$("#showdData").modal('show');

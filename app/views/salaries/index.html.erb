@@ -114,7 +114,7 @@
         <tr>
           <td><%= salary.id %></td>
           <td><%= salary.staff.full_name %></td>
-          <td><%= salary.paid_salary.present? ? number_with_delimiter(salary.paid_salary) : "" %><%= salary.advance.present? ? number_with_delimiter(salary.advance) : "" %> </td>
+          <td><%= salary.paid_salary.present? ? number_with_delimiter(salary.paid_salary.to_f.round(2)) : "" %><%= salary.advance.present? ? number_with_delimiter(salary.advance.to_f.round(2)) : "" %> </td>
           <td><%= number_with_delimiter(salary.staff.wage_debit.to_f.round(2)) %></td>
           <td><%= number_with_delimiter(salary.total_balance.to_f.round(2)) %></td>
           <td><%= salary.leaves_in_month %></td>
