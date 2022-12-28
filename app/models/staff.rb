@@ -13,8 +13,6 @@ class Staff < ApplicationRecord
   has_many :pathera_salary_details, class_name: "SalaryDetail", foreign_key: "staff_pathera_id"
   validates_uniqueness_of :code
   accepts_nested_attributes_for :staff_raw_products,reject_if: :all_blank, allow_destroy: true
-  has_many :follow_ups, foreign_key: 'assigned_to_id', primary_key: 'id'
-  has_many :notes, foreign_key: 'assigned_to_id', primary_key: 'id'
   has_paper_trail ignore: [:updated_at]
   has_one :contact, as: :contactable, dependent: :destroy
   accepts_nested_attributes_for :contact

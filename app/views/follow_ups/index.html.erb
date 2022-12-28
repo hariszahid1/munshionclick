@@ -38,7 +38,7 @@
               <%= f.select :followable_id_eq, options_for_select(@options_for_select.map{ |p| [p.name , p.id]}, f.object.followable_id_eq),{:include_blank => "Select CMS User"},:class=>"form-control chosen-select" %>
             </div>
             <div class="col-lg-3 form-group float-left">
-              <%= f.select :assigned_to_id_eq, options_for_select(@staff.map{ |p| [p.name , p.id]}, f.object.assigned_to_id_eq),{:include_blank => "Select Staff"},:class=>"form-control chosen-select" %>
+              <%= f.select :assigned_to_id_eq, options_for_select(@users.map{ |p| [p.name , p.id]}, f.object.assigned_to_id_eq),{:include_blank => "Select User"},:class=>"form-control chosen-select" %>
             </div>
             <div class="col-lg-3 form-group float-left">
               <%= f.select :task_type_eq, options_for_select(FollowUp.task_types, f.object.task_type_eq), {:include_blank => "Select Task Type"},:class=>"form-control chosen-select" %>

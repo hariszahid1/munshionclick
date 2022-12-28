@@ -14,6 +14,7 @@ class OrderInwardsController < ApplicationController
     date_search
     @q = Order.includes(:sys_user, order_items: :product).where(transaction_type: 'Inward').order('created_at desc').ransack(params[:q])
     @orders = @q.result.page(params[:page])
+    @pdf_orders = @q.result
     download_inwards_pdf_file if params[:pdf].present?
     @order_inward_total = Order.joins(:order_items).includes(:order_items).group('orders.id').sum('order_items.quantity')
     @order_inward_purchase_item_total = Order.joins(purchase_sale_details: :purchase_sale_items).includes(purchase_sale_details: :purchase_sale_items).group('orders.id').sum('purchase_sale_items.size_9')
