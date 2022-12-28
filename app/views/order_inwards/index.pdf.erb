@@ -7,6 +7,9 @@
       .text-center{
         text-align: center;
       }
+      .text-left{
+        text-align: left;
+      }
     </style>
   </head>
   <body>
@@ -15,48 +18,70 @@
     <% @time = Time.zone.now %>
     <div>
       <p class="border-bottom"></p>
-      <h1 class="text-center">Inwards Details</h1>
-      <h1 class="text-center">
-        Date: <b><span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%></span>
-        Time: <span><%=@time.strftime("at %I:%M%p")%></span></b>
-      </h1>
+      <h1 class="text-center">Inward List Without Racking</h1>
+      <h3 class="text-left">
+        InWard Date: <b><span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%></span>
+         <span><%=@time.strftime("at %I:%M%p")%></span></b>
+      </h3>
       <p class="border-bottom"></p>
       <p class="text-center">Report by: <%=current_user.name%></p>
     </div>
     <div>
       <table>
         <thead class="lite-gray">
-          <th class="text-center">Type</th>
-          <th class="text-center">Name</th>
-          <th class="text-center">Amount</th>
-          <th class="text-center">status</th>
+          <th class="text-center">Gate Pass No</th>
+          <th class="text-center">Party Name</th>
+          <th class="text-center">Marka No</th>
+          <th class="text-center">Challan No</th>
+          <th class="text-center">Vehicle No</th>
+          <th class="text-center">Product Name</th>
+          <th class="text-center">InWard Qty</th>
         </thead>
         <tbody>
           <% data.each_with_index do |order, index| %>
-            <tr>
-              <td class="text-center"><%= order['type'] %></td>
-              <td class="text-center"><%= order['name'] %></td>
-              <th class="text-center"><%= order['amount'] %></th>
-              <th class="text-center"><%= order['status'] %></th>
-            </tr>
-            <tr>
-              <th class="text-center">Product</th>
-              <th class="text-center">Marka</th>
-              <th class="text-center">Builty No</th>
-              <th class="text-center">Vehicle</th>
-              <th class="text-center">Challan No</th>
-              <th class="text-center">Quantity</th>
-            </tr>
             <% order['items'].each_with_index do |item, index| %>
             <tr>
-              <td class="text-center"><%= item['product'] %></td>
+              <td class="text-center"><%= order['id'] %></td>
+              <td class="text-center"><%= order['name'] %></td>
               <td class="text-center"><%= item['marka'] %></td>
-              <th class="text-center"><%= item['builty_no'] %></th>
-              <th class="text-center"><%= item['vehicle_no'] %></th>
-              <th class="text-center"><%= item['challan_no'] %></th>
-              <th class="text-center"><%= item['quantity'] %></th>
+              <td class="text-center"><%= item['challan_no'] %></td>
+              <td class="text-center"><%= item['vehicle_no'] %></td>
+              <td class="text-center"><%= item['product'] %></td>
+              <td class="text-center"><%= item['quantity'] %></td>
               <% end %>
             </tr>
+          <% end %>
+          <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th>Sub Total: </th>
+            <th><%= @pdf_orders_total %></th>
+          </tr>
+          <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th>Grand Total: </th>
+            <th><%= @pdf_orders_total %></th>
+          </tr>
+          <thead class="lite-gray">
+            <tr>
+              <th colspan="6" class='text-left' style="padding-left: 40px;">Party Name</th>
+              <th> InWard Qty </th>
+            </tr>
+          </thead>
+          <% if @pdf_inward_total.present? %>
+            <% @pdf_inward_total.each do |order| %>
+              <tr>
+                <td colspan="6" class='text-left' style="padding-left: 40px;"><%= SysUser.find_by(id: order.first).name %></td>
+                <td class="text-center"><%= order.second&.to_f %></td>
+              </tr>
+            <% end %>
           <% end %>
         </tbody>
       </table>

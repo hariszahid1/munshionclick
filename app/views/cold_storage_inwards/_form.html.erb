@@ -105,7 +105,7 @@
               <div class="form-group">
                 <%= search_field_tag :room_count, {}, class:'add-inward-room', style:"width: 50px;" %>
               </div>
-               <div class="col-lg-1 form-group float-left">
+              <div class="col-lg-1 form-group float-left">
                 <h5>Rack No.</h5>
               </div>
               <div class="form-group">
@@ -121,6 +121,17 @@
                 <i class="fa fa-plus"></i> Add Product (<span id="total_product_quantity"></span>)
               <% end %>
             </div>
+            <div class= "row mt-2">
+            <div class="col-lg-6 form-group float-left">
+            </div>
+            <div class="col-lg-2 form-group float-left">
+            <h5 class="float-right"> Total Stock:</h5>
+            </div>
+            <div class="col-lg-4 form-group float-left">
+              
+              <h5 id = "order_inward_total"> <%= params[:order_total] %> </h5>
+            </div>
+            </div>
           </div>
         </div>
       </div>
@@ -135,9 +146,20 @@
               <div class="col-lg-6 form-group float-left font-weight-bold">
                 <%= f.datetime_select :created_at,{},class: "form-control"%>
               </div>
-               <div class="col-lg-6 form-group float-left font-weight-bold">
+              <div class="col-lg-2 form-group float-left font-weight-bold"><%= f.select :staff_id, options_from_collection_for_select(@staffs, 'id', 'name', f.object.staff_id), {prompt: "Select the Loader"},class: "form-control"%></div>
+              <div class="col-lg-2 form-group float-left font-weight-bold">
+                <label class="required" for="purchase_sale_detail_carriage_value">Carriage</label>
+                <input onchange = "inwardCarriageCostUpdate()" onkeyup = "inwardCarriageCostUpdate()" class="form-control valid" type="number" value="0.0" id="inward_purchase_sale_detail_carriage_value" aria-invalid="false">
+                <%= f.number_field :carriage, onchange: "inwardCarriageUpdate()", hide_label:true, onkeyup: "inwardCarriageUpdate()", id: "inward_purchase_sale_detail_carriage", required: true %>
+              </div>
+              <div class="col-lg-2 form-group float-left font-weight-bold">
+                <label class="required" for="purchase_sale_detail_loading_value">Loading</label>
+                <input onchange = "inwardCarriageCostUpdate()" onkeyup = "inwardCarriageCostUpdate()" class="form-control valid" type="number" value="0.0" id="inward_purchase_sale_detail_loading_value" aria-invalid="false">
+                <%= f.number_field :loading, onchange: "inwardCarriageUpdate()", hide_label:true, onkeyup: "inwardCarriageUpdate()", id: "inward_purchase_sale_detail_loading", required: true %>
+              </div>
+              <div class="col-lg-6 form-group float-left font-weight-bold">
                 <%= f.text_area :comment%>
-               </div>
+              </div>
             </div>
             <div class="row">
               <div class="actions col-lg-6 form-group float-left font-weight-bold">

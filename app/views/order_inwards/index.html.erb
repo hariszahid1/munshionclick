@@ -100,7 +100,7 @@
             <td></td>
             <td></td>
             <td>
-            	  <%= link_to order_inwards_path('q[id_eq]':order.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
+            	  <%= link_to order_inward_path(order.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
             	    <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i> |
             	  <%end %>
               <%if order.order_items.present?%>
@@ -160,7 +160,7 @@
           </tr>
           <tr class="table-active">
             <td>
-              <%= link_to new_cold_storage_inward_path(sys_user_id: order.sys_user_id, order_id: order.id), class: "btn btn-success" do %>
+              <%= link_to new_cold_storage_inward_path(sys_user_id: order.sys_user_id, order_id: order.id, order_total: @order_inward_total[order.id]), class: "btn btn-success" do %>
                 <i class="fa fa-plus" aria-hidden="true"></i>
                 Assign Rack
               <% end %>
