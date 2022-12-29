@@ -19,9 +19,14 @@
     <div>
       <p class="border-bottom"></p>
       <h1 class="text-center">Inward List Without Racking</h1>
+      <h2 class="text-left">Inward Date</h1>
       <h3 class="text-left">
-        InWard Date: <b><span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%></span>
-         <span><%=@time.strftime("at %I:%M%p")%></span></b>
+        <b><span>From: <%= @pdf_orders.first&.created_at&.strftime("%d-%b-%y at %I:%M %p") %></span>
+         </b>
+      </h3>
+      <h3 class="text-left">
+        <b> <span>To: <%= @pdf_orders.last&.created_at&.strftime("%d-%b-%y at %I:%M %p") %></span>
+         </b>
       </h3>
       <p class="border-bottom"></p>
       <p class="text-center">Report by: <%=current_user.name%></p>
@@ -40,16 +45,16 @@
         <tbody>
           <% data.each_with_index do |order, index| %>
             <% order['items'].each_with_index do |item, index| %>
-            <tr>
-              <td class="text-center"><%= order['id'] %></td>
-              <td class="text-center"><%= order['name'] %></td>
-              <td class="text-center"><%= item['marka'] %></td>
-              <td class="text-center"><%= item['challan_no'] %></td>
-              <td class="text-center"><%= item['vehicle_no'] %></td>
-              <td class="text-center"><%= item['product'] %></td>
-              <td class="text-center"><%= item['quantity'] %></td>
-              <% end %>
-            </tr>
+              <tr>
+                <td class="text-center"><%= order['id'] %></td>
+                <td class="text-center"><%= order['name'] %></td>
+                <td class="text-center"><%= item['marka'] %></td>
+                <td class="text-center"><%= item['challan_no'] %></td>
+                <td class="text-center"><%= item['vehicle_no'] %></td>
+                <td class="text-center"><%= item['product'] %></td>
+                <td class="text-center"><%= item['quantity'] %></td>
+              </tr>
+            <% end %>
           <% end %>
           <tr>
             <th></th>
@@ -78,7 +83,7 @@
           <% if @pdf_inward_total.present? %>
             <% @pdf_inward_total.each do |order| %>
               <tr>
-                <td colspan="6" class='text-left' style="padding-left: 40px;"><%= SysUser.find_by(id: order.first).name %></td>
+                <td colspan="6" class='text-left' style="padding-left: 40px;"><%= order.first %></td>
                 <td class="text-center"><%= order.second&.to_f %></td>
               </tr>
             <% end %>

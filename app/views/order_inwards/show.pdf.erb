@@ -20,8 +20,7 @@
       <p class="border-bottom"></p>
       <h1 class="text-center">Gate Pass InWard(Wasooli)</h1>
       <h3 class="text-center">
-        InWard Date: <b><span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%></span>
-         <span><%=@time.strftime("at %I:%M%p")%></span></b>
+        InWard Date: <b><span><%= data.first['date'] %></span></b>
       </h3>
       <h2 class= "text-right">Gate Pass No: <%= data.first['id']%></h2>
       <h3>Party: <%= data.first['name']%></h3>
@@ -41,13 +40,18 @@
         <tbody>
           <% data.each_with_index do |order, index| %>
             <% order['items'].each_with_index do |item, index| %>
-            <tr>
-              <td class="text-center"><%= index %></td>
-              <td class="text-center"><%= item['challan_no'] %></td>
-              <td class="text-center"><%= item['quantity'] %></td>
-              <% end %>
-            </tr>
+              <tr>
+                <td class="text-center"><%= index %></td>
+                <td class="text-center"><%= item['challan_no'] %></td>
+                <td class="text-center"><%= item['quantity'] %></td>        
+              </tr>
+            <% end %>
           <% end %>
+          <tr>
+            <th></th>
+            <th>Total: </th>
+            <th><%= data.first['total_quantity'] %></th>
+          </tr>
         </tbody>
       </table>
     </div>

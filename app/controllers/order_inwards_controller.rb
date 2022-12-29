@@ -15,11 +15,13 @@ class OrderInwardsController < ApplicationController
     @q = Order.includes(:sys_user, order_items: :product).where(transaction_type: 'Inward').ransack(params[:q])
     @orders = @q.result.order('orders.created_at desc').page(params[:page])
     @pdf_orders = @q.result
-    @pdf_orders_total = @pdf_orders.includes(:order_items).sum('order_items.quantity')
-    @pdf_inward_total = @pdf_orders.includes(:order_items).group('orders.sys_user_id').sum('order_items.quantity')
     @order_inward_total = Order.joins(:order_items).includes(:order_items).group('orders.id').sum('order_items.quantity')
     @order_inward_purchase_item_total = Order.joins(purchase_sale_details: :purchase_sale_items).includes(purchase_sale_details: :purchase_sale_items).group('orders.id').sum('purchase_sale_items.size_9')
-    download_inwards_pdf_file if params[:pdf].present?
+    if params[:pdf].present?
+      @pdf_orders_total = @pdf_orders.sum('order_items.quantity')
+      @pdf_inward_total = @pdf_orders.group('sys_users.name').sum('order_items.quantity')
+      download_inwards_pdf_file
+    end
   end
 
   # GET /order_inwards/1
