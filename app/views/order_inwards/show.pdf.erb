@@ -1,0 +1,55 @@
+<html>
+  <head>
+    <style>
+      .border-bottom{
+        border-bottom: double 4px;
+      }
+      .text-center{
+        text-align: center;
+      }
+      .text-right{
+        text-align: right;
+      }
+    </style>
+  </head>
+  <body>
+    <% @date = Date.today  %>
+    <% @time = DateTime.now %>
+    <% @time = Time.zone.now %>
+    <div>
+      <p class="border-bottom"></p>
+      <h1 class="text-center">Gate Pass InWard(Wasooli)</h1>
+      <h3 class="text-center">
+        InWard Date: <b><span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%></span>
+         <span><%=@time.strftime("at %I:%M%p")%></span></b>
+      </h3>
+      <h2 class= "text-right">Gate Pass No: <%= data.first['id']%></h2>
+      <h3>Party: <%= data.first['name']%></h3>
+      <h3>Vehicle: <%= data.first['items'].first['vehicle_no']%></h3>
+      <h3>Marka: <%= data.first['items'].first['marka']%></h3>
+      <h3>Product: <%= data.first['items'].first['product']%></h3>
+      <p class="border-bottom"></p>
+      <p class="text-center">Report by: <%=current_user.name%></p>
+    </div>
+    <div>
+      <table>
+        <thead class="lite-gray">
+          <th class="text-center">Serial No</th>
+          <th class="text-center">Challan No</th>
+          <th class="text-center">Product Qty</th>
+        </thead>
+        <tbody>
+          <% data.each_with_index do |order, index| %>
+            <% order['items'].each_with_index do |item, index| %>
+            <tr>
+              <td class="text-center"><%= index %></td>
+              <td class="text-center"><%= item['challan_no'] %></td>
+              <td class="text-center"><%= item['quantity'] %></td>
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

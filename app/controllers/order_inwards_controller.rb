@@ -12,17 +12,21 @@ class OrderInwardsController < ApplicationController
   # GET /order_inwards.json
   def index
     date_search
-    @q = Order.includes(:sys_user, order_items: :product).where(transaction_type: 'Inward').order('created_at desc').ransack(params[:q])
-    @orders = @q.result.page(params[:page])
+    @q = Order.includes(:sys_user, order_items: :product).where(transaction_type: 'Inward').ransack(params[:q])
+    @orders = @q.result.order('orders.created_at desc').page(params[:page])
     @pdf_orders = @q.result
-    download_inwards_pdf_file if params[:pdf].present?
+    @pdf_orders_total = @pdf_orders.includes(:order_items).sum('order_items.quantity')
+    @pdf_inward_total = @pdf_orders.includes(:order_items).group('orders.sys_user_id').sum('order_items.quantity')
     @order_inward_total = Order.joins(:order_items).includes(:order_items).group('orders.id').sum('order_items.quantity')
     @order_inward_purchase_item_total = Order.joins(purchase_sale_details: :purchase_sale_items).includes(purchase_sale_details: :purchase_sale_items).group('orders.id').sum('purchase_sale_items.size_9')
+    download_inwards_pdf_file if params[:pdf].present?
   end
 
   # GET /order_inwards/1
   # GET /order_inwards/1.json
-  def show; end
+  def show
+    download_show_pdf_file if params[:pdf].present?
+  end
 
   # GET /orders/new
   def new
@@ -212,6 +216,11 @@ class OrderInwardsController < ApplicationController
     @sys_users = @q.result
     sorted_data
     generate_pdf(@sorted_data.as_json, 'Inward', 'pdf.html', 'A4', false, 'order_inwards/index.pdf.erb')
+  end
+
+  def download_show_pdf_file
+    sorted_show_data
+    generate_pdf(@sorted_data.as_json, 'Inward', 'pdf.html', 'A4', false, 'order_inwards/show.pdf.erb')
   end
 
   def new_edit_index_data
