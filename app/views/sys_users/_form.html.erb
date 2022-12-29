@@ -61,7 +61,7 @@
   </div>
 
   <div class="col-lg-6 form-group float-left">
-    <%= f.number_field :opening_balance, {required: true, value: f.object.opening_balance.present? ? f.object.opening_balance : 0} %>
+    <%= f.number_field :opening_balance, {required: true, readonly: 'true', value: f.object.opening_balance.present? ? f.object.opening_balance : 0} %>
   </div>
   <div class="col-lg-6 form-group float-left">
     <%= f.number_field :balance, disabled: true %>
