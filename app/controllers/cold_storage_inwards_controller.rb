@@ -24,9 +24,12 @@ class ColdStorageInwardsController < ApplicationController
         @purchase_sale_detail.purchase_sale_items.build(product_id: ord.product_id, size_13: ord.marka, size_12: ord.builty_no, size_11: ord.vehicle_no, size_10: ord.challan_no, size_9: ord.challan_no.split('/').last, quantity: ord.challan_no.split('/').last)
       end
     end
+    @staffs=Staff.all
   end
 
-  def edit; end
+  def edit
+    @staffs=Staff.all
+  end
 
   def create
     PurchaseSaleDetail.maximum(:id).present? ? psd = PurchaseSaleDetail.maximum(:id).next : psd=1
@@ -41,6 +44,16 @@ class ColdStorageInwardsController < ApplicationController
           (purchase_sale_detail_params["created_at(1i)"])+" "+ @time.strftime("at %I:%M%p"),
           purchase_sale_detail_id: @purchase_sale_detail.id,account_id: @purchase_sale_detail.account_id)
         @ledger_book.save!
+        if @purchase_sale_detail.staff_id.present?
+          # @purchase_sale_detail.salary_detail_id=salary_detail.id
+          staff = @purchase_sale_detail.staff
+          staff.wage_debit += @purchase_sale_detail.carriage+@purchase_sale_detail.loading
+          staff.balance += @purchase_sale_detail.carriage+@purchase_sale_detail.loading
+          staff.save!
+          @purchase_sale_detail.salary_details.create(staff_id: @purchase_sale_detail.staff_id, amount: @purchase_sale_detail.carriage, comment: "Carriage", total_balance: staff.balance-@purchase_sale_detail.loading,quantity: @purchase_sale_detail.purchase_sale_items_quantities, created_at: @purchase_sale_detail.created_at)
+          @purchase_sale_detail.salary_details.create(staff_id: @purchase_sale_detail.staff_id, amount: @purchase_sale_detail.loading, comment: "Loading", total_balance: staff.balance,created_at: @purchase_sale_detail.created_at)
+          # @purchase_sale_detail.save!
+        end
         format.html { redirect_to order_inwards_path, notice: 'Cold Storage was successfully created.' }
         format.json { render :show, status: :created, location: @purchase_sale_detail }
       else

@@ -13,12 +13,12 @@
   </div>
   <div id="new_investment">
     <div class="row d-flex mt-4 ml-2 mb-4">
-      <%if (check_can_delete(@module_permission))%>
-	    	<%= link_to new_loan_path, class: "btn btn-success mr-2" do %>
+      <%if (check_can_create(@module_permission))%>
+	    	<%= link_to new_loan_path, class: "btn btn-danger mr-2", remote: true do %>
 	    		<i class="fa fa-plus" aria-hidden="true"></i>
 	    			Debit
 	    	<% end %>
-        <%= link_to new_loan_path(credit:true), class: "btn btn-success" do %>
+        <%= link_to new_loan_path(credit:true), class: "btn btn-success", remote: true do %>
           <i class="fa fa-plus" aria-hidden="true"></i>
             Credit
         <% end %>
@@ -42,21 +42,22 @@
         <a class="nav-link tab-label active investment-search-exp-tab" data-toggle="tab" href="#search" role="tab">Search</a>
       </li>
 
-      <li class="nav-item">
+      <%# <li class="nav-item">
         <a class="nav-link tab-label" data-remote="true" data-toggle="tab" href="#analytics" role="tab">Analytics</a>
-      </li>
+      </li> %>
       <%# <li class="nav-item">
         <a class="nav-link tab-label investment-search-exp-tab" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
       </li> %>
+
       <li class="nav-item">
         <a class="nav-link tab-label investment-logs-tab" data-toggle="tab" href="#logs" role="tab">Logs</a>
       </li>
 	</ul>
 
   <div class="tab-content">
-    <div class="tab-pane active mb-3 card shadow-sm mt-2 p-3" style="border-radius: 20px" id="search" role="tabpanel">
+    <div class="tab-pane active mb-3 card border-radius-1 shadow mt-2 p-3" id="search" role="tabpanel">
       <%= search_form_for @q, url: loans_path, class: "admin-controls", method: "get" do |f| %>
-        <div class="row d-flex">
+        <div class="row d-flex mt-3">
           <div class="col">
             <div class="col-lg-3 form-group float-left">
               <%= f.select :account_id_in, options_from_collection_for_select(@accounts, "id", ->(st){"#{st.title} \u{27F6} #{st.bank_name}"},f.object.account_id_in),{:include_blank => "Select the Account Title"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Account Title"} }%>
@@ -74,13 +75,13 @@
           </div>
         </div>
         <div class="row ml-3">
-          <%if (check_can_update(@module_permission))%>
+          <%if (check_can_download_pdf(@module_permission))%>
             <button class="form-control btn btn-danger mr-2 d-flex float-right justify-content-center" title= "download cities pdf" name="pdf" type="submit" value="pdf" formtarget="_blank" style="width:100px">PDF &nbsp;<i class="fa fa-file-pdf mt-1"></i></button>
           <% end %>
-          <%if (check_can_update(@module_permission))%>
+          <%if (check_can_download_csv(@module_permission))%>
             <button class="form-control btn btn-warning ml-2 mr-2 d-flex float-right justify-content-center mr-2" title= "download cities csv" name="csv" type="submit" value="csv" style="width:100px">CSV &nbsp;<i class="fa fa-file-excel mt-1 ml-1"></i></button>
           <% end %>
-          <%if (check_can_update(@module_permission))%>
+          <%if (check_can_send_email(@module_permission))%>
             <button class="form-control btn btn-info d-flex justify-content-center float-right mr-2" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-1 mt-1"></i>&nbsp;Mail</button>
           <% end %>
           <%if (check_can_update(@module_permission))%>
@@ -145,7 +146,7 @@
     </div>
   </div>
 
-  <div class="investment-book-index-card">
+  <div class="investment-book-index-card card shadow mt-2 border-radius-1 p-3">
     <%= render 'map_columns/map_column_partials' %>
     <table data-toggle="table" data-search="true" id="investment_table">
       <thead>
@@ -176,24 +177,28 @@
       <tbody>
         <%= render partial: 'loan', collection: @loans %>
         <tr>
-          <td></td>
           <td><h5>Total</h5></td>
+          <td></td>
           <td><h5><%=number_with_delimiter(@total_loan&.first&.first) %></h5></td>
           <td><h5><%= number_with_delimiter(@total_loan&.first&.last) %></h5></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
         </tr>
       </tbody>
     </table>
+    <div class="row">
+      <div class="col-lg-4 col-sm-4 investment-book-index-card">
+        <%= page_entries_info @loans %>
+      </div>
+      <div class="col-lg-8 col-sm-8 pagination-left investment-book-index-card">
+        <%= paginate @loans %>
+      </div>
+    </div>
   </div>
 </div>
-  <div class="clearfix"></div>
-  <div class="row">
-    <div class="col-lg-4 col-sm-4 investment-book-index-card">
-      <%= page_entries_info @loans %>
-    </div>
-    <div class="col-lg-8 col-sm-8 pagination-left investment-book-index-card">
-      <%= paginate @loans %>
-    </div>
-  </div>
+  
 
   <%= form_for :bulk_import, url: bulk_import_data_path, method: :post, html: {class: "bulk-import-form"} do |f| %>
     <div class="modal fade" id="importFile" tabindex="-1" role="dialog" aria-labelledby="importFileTitle" aria-hidden="true">

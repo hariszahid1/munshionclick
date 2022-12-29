@@ -220,32 +220,30 @@ class OrdersController < ApplicationController
     @created_at_gteq = DateTime.current.beginning_of_month
     @created_at_lteq = DateTime.now
     if params[:sale].present?
-      @products_sale = OrderItem.joins(:product).where(product_id: @products,
-                                                       created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).group(:title).sum(:total_sale_price)
-      @products_sale_total = OrderItem.joins(:product).where(product_id: @products,
-                                                             created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).sum(:total_sale_price)
-      @products_count = OrderItem.joins(:product).where(product_id: @products,
-                                                        created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day, transaction_type: 'Sale').group(:title).sum(:quantity)
-      # pdf_templates_data_sale
-      @pdf_template = PdfTemplate.includes(:pdf_template_elements).find_by(table_name: 'city', method_name: 'index')
-      @pdf_header = @pdf_template&.pdf_template_elements&.find_by(title: 'sale_header')
-      @pdf_data = @pdf_template&.pdf_template_elements&.find_by(title: 'sale_pdf_data')
-      @pdf_footer = @pdf_template&.pdf_template_elements&.find_by(title: 'sale_footer')
-
+      @products_sale = OrderItem.joins(:product).where(product_id: @products, created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).group(:title).sum(:total_sale_price)
+      @products_sale_total = OrderItem.joins(:product).where(product_id: @products, created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).sum(:total_sale_price)
+      @products_count = OrderItem.joins(:product).where(product_id: @products, created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day,transaction_type: "Sale").group(:title).sum(:quantity)
     else
-      @products_sale = OrderItem.joins(:product).where(product_id: @products,
-                                                       created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).group(:title).sum(:total_cost_price)
-      @products_sale_total = OrderItem.joins(:product).where(product_id: @products,
-                                                             created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).sum(:total_cost_price)
-      @products_count = OrderItem.joins(:product).where(product_id: @products,
-                                                        created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day, transaction_type: 'Purchase').group(:title).sum(:quantity)
-      # pdf_templates_data_purchase
-      @pdf_template = PdfTemplate.includes(:pdf_template_elements).find_by(table_name: 'city', method_name: 'index')
-      @pdf_header = @pdf_template&.pdf_template_elements&.find_by(title: 'purchase_header')
-      @pdf_data = @pdf_template&.pdf_template_elements&.find_by(title: 'purchase_pdf_data')
-      @pdf_footer = @pdf_template&.pdf_template_elements&.find_by(title: 'purchase_footer')
-
+      @products_sale = OrderItem.joins(:product).where(product_id: @products, created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).group(:title).sum(:total_cost_price)
+      @products_sale_total = OrderItem.joins(:product).where(product_id: @products, created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).sum(:total_cost_price)
+      @products_count = OrderItem.joins(:product).where(product_id: @products, created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day,transaction_type: "Purchase").group(:title).sum(:quantity)
     end
+
+    @pdf_template = PdfTemplate.includes(:pdf_template_elements).find_by(table_name: 'order', method_name: 'index')
+    @pdf_header = @pdf_template&.pdf_template_elements&.find_by(title: 'pdf_header')
+    @account_statement = @pdf_template&.pdf_template_elements&.find_by(title: 'account_statement')
+    @property_details = @pdf_template&.pdf_template_elements&.find_by(title: 'property_details')
+    @payment_details = @pdf_template&.pdf_template_elements&.find_by(title: 'payment_details')
+    @property_plans = @pdf_template&.pdf_template_elements&.find_by(title: 'property_plans')
+    @delivery_details = @pdf_template&.pdf_template_elements&.find_by(title: 'delivery_details')
+    @transfer_details = @pdf_template&.pdf_template_elements&.find_by(title: 'transfer_details')
+    @web_links = @pdf_template&.pdf_template_elements&.find_by(title: 'web_links')
+    @booking_qr = @pdf_template&.pdf_template_elements&.find_by(title: 'booking_qr')
+    @account_signature = @pdf_template&.pdf_template_elements&.find_by(title: 'account_signature')
+    @booking_qr_else = @pdf_template&.pdf_template_elements&.find_by(title: 'booking_qr_else')
+    @company_signature = @pdf_template&.pdf_template_elements&.find_by(title: 'company_signature')
+    @pdf_footer = @pdf_template&.pdf_template_elements&.find_by(title: 'pdf_footer')
+
     @pos_setting = PosSetting.first
 
     request.format = 'pdf'
