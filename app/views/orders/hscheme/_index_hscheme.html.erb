@@ -478,9 +478,9 @@
           <td></td>
           <td></td>
           <td></td>
-          <td><%= number_with_delimiter(@orders.sum(:total_bill)) %></td>
-          <td><%= number_with_delimiter(@orders.sum(:amount)+@orders.sum('purchase_sale_details.amount')) %></td>
-          <td><%= number_with_delimiter(@orders.sum('purchase_sale_details.discount_price')) %></td>
+          <td><%= number_with_delimiter(@q.result.sum(:total_bill)) %></td>
+          <td><%= number_with_delimiter(@q.result.sum(:amount)+@q.result.sum('purchase_sale_details.amount')) %></td>
+          <td><%= number_with_delimiter(@q.result.sum('purchase_sale_details.discount_price')) %></td>
           <td></td>
           </tr> 
       </tbody>
