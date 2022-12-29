@@ -13,13 +13,13 @@
   <div id="new_investment">
     <div class="row d-flex mt-4 ml-2 mb-4">
       <%if (check_can_create(@module_permission))%>
-	    		<%= link_to new_investment_path, class: "btn btn-danger mr-2" do %>
+	    		<%= link_to new_investment_path, class: "btn btn-danger mr-2", remote: true do %>
 	    						<i class="fa fa-plus" aria-hidden="true"></i>
 	    						Debit
 	    		<% end %>
       <% end %>
        <%if (check_can_create(@module_permission))%>  
-	    	  <%= link_to new_investment_path(credit:true), class: "btn btn-success" do %>
+	    	  <%= link_to new_investment_path(credit:true), class: "btn btn-success", remote: true do %>
 	    	  				<i class="fa fa-plus" aria-hidden="true"></i>
 	    	  				Credit
 	    	  <% end %>

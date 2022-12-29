@@ -4,6 +4,8 @@
 class ExpenseEntryVouchersController < ApplicationController
   before_action :set_expense_entry_voucher, only: %i[show edit update destroy]
   before_action :set_expense_type, only: %i[show new edit create index]
+  before_action :check_access
+  
   # GET /expense_entry_voucher
   # GET /expense_entries.json
   def index

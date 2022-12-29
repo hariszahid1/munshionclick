@@ -14,30 +14,36 @@
       <div class="my-icon-1 my-view-1">
         <div class="my-tooltip-1">
           <div class="icon-container">
-            <div class="my-icon my-view">
-              <div class="my-tooltip">
-                Edit
+            <%if (check_can_update(@module_permission))%>
+              <div class="my-icon my-view">
+                <div class="my-tooltip">
+                  Edit
+                </div>
+                  <%= link_to edit_expense_entry_voucher_path(expense_entry_voucher), remote: true, class:"icon-div" do %>
+                    <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+                  <%end %>
               </div>
-                <%= link_to edit_expense_entry_voucher_path(expense_entry_voucher), remote: true, class:"icon-div" do %>
-                  <i class="fa fa-edit mt-2" aria-hidden="true"></i>
-                <%end %>
-            </div>
-            <div class="my-icon my-view">
-              <div class="my-tooltip">
-                Delete
+            <% end %>
+            <%if (check_can_delete(@module_permission))%>    
+              <div class="my-icon my-view">
+                <div class="my-tooltip">
+                  Delete
+                </div>
+                  <%= link_to expense_entry_voucher, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+                    <i class="fa fa-trash mt-2" aria-hidden="true"></i>
+                  <%end %>
               </div>
-                <%= link_to expense_entry_voucher, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
-                  <i class="fa fa-trash mt-2" aria-hidden="true"></i>
-                <%end %>
-            </div>
-            <div class="my-icon my-view">
-              <div class="my-tooltip">
-                Show
+            <% end %> 
+            <%if (check_can_read(@module_permission))%>   
+              <div class="my-icon my-view">
+                <div class="my-tooltip">
+                  Show
+                </div>
+                  <%= link_to expense_entry_voucher_path(expense_entry_voucher), remote: true, class:"icon-div" do %>
+                    <i class="fa fa-eye mt-2" aria-hidden="true"></i>
+                  <%end %>
               </div>
-                <%= link_to expense_entry_voucher_path(expense_entry_voucher), remote: true, class:"icon-div" do %>
-                  <i class="fa fa-eye mt-2" aria-hidden="true"></i>
-                <%end %>
-            </div>
+            <% end %>  
           </div>
         </div>
         <span class="icon-div-1">

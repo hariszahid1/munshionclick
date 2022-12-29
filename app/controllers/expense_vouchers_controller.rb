@@ -4,6 +4,7 @@
 class ExpenseVouchersController < ApplicationController
   before_action :new_edit_index, only: %i[new show index edit create]
   before_action :set_expense_voucher, only: %i[show edit update destroy]
+  before_action :check_access
   include PdfCsvGeneralMethod
   include ExpenseVouchersHelper
 
