@@ -17,7 +17,8 @@
     <th></th>
     <th></th>
     <tr>
-      <td>Date Time: <span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%> <%=@time.strftime("at %I:%M%p")%></span> </td>
+      <td><h2 style="text-align: left; margin: 0;">Paid Date:<%= @purchase_sale_detail.created_at&.strftime("%d-%b-%y at %I:%M %p") %></h2></td>
+      <td style="text-align: right; margin: 0;">Date Time: <span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%> <%=@time.strftime("at %I:%M%p")%></span> </td>
     </tr>
   </table>
 </div>
@@ -209,7 +210,8 @@
     <th></th>
     <th></th>
     <tr>
-      <td>Date Time: <span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%> <%=@time.strftime("at %I:%M%p")%></span> </td>
+      <td><h2 style="text-align: left; margin: 0;">Paid Date:<%= @purchase_sale_detail.created_at&.strftime("%d-%b-%y at %I:%M %p") %></h2></td>
+      <td style="text-align: right; margin: 0;">Date Time: <span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%> <%=@time.strftime("at %I:%M%p")%></span> </td>
     </tr>
   </table>
 </div>

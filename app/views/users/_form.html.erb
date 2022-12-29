@@ -1,13 +1,14 @@
 <style>
-	table, th{
-		text-align: center;
-		font-family: Arial;
-	}
-	
-	input[type=checkbox] {
-	cursor: pointer;
-	height: 15px;
-	width: 15px;
+input[type=checkbox] {
+cursor: pointer;
+height: 15px;
+width: 15px;
+}
+.u-perm-scroll {
+text-align: center;
+font-family: Arial;
+height: 500px;
+overflow: auto;
 }
 </style>
 
@@ -46,7 +47,7 @@
 	</ul>
 
 	<div class="tab-content">
-		<div class="tab-pane active mb-3 card shadow mt-2 p-3 border-radius-1" id="type_1" role="tabpanel">
+		<div class="tab-pane active mb-3 card shadow mt-2 p-4 border-radius-1" id="type_1" role="tabpanel">
 			<div class="row">
 				<div class="col">
   		    <%= f.label :name do %>
@@ -92,21 +93,24 @@
 		</div>
 		<div class="tab-pane mb-3 card shadow mt-2 p-3 border-radius-1" id="type_2" role="tabpanel">
 			<%= f.hidden_field :created_by_id %>
+			<div class="u-perm-scroll p-1">
 			<% if @user.user_permissions.present? && current_user.super_admin? %>
 			
-				<table data-search="true" class="sticky-table-headers">
+				<table>
 					<thead>
-						<th class="h5 p-1">Accessed</th>
-						<th class="h5 p-1">Module</th>
-						<th class="h5 p-1"><input type="checkbox" id='select-all-checkbox-of-create'><span class="ml-1">Create</span></th>
-						<th class="h5 p-1"><input type="checkbox" id='select-all-checkbox-of-read'><span class="ml-1">Read</span></th>
-						<th class="h5 p-1"><input type="checkbox" id='select-all-checkbox-of-update'><span class="ml-1">Edit</span></th>
-						<th class="h5 p-1"><input type="checkbox" id='select-all-checkbox-of-delete'><span class="ml-1">Delete</span></th>
-						<th class="h5 p-1"><input type="checkbox" id='select-all-checkbox-of-can-download-pdf'><span class="ml-1">PDF</span></th>
-						<th class="h5 p-1"><input type="checkbox" id='select-all-checkbox-of-can-download-csv'><span class="ml-1">CSV</span></th>
-						<th class="h5 p-1"><input type="checkbox" id='select-all-checkbox-of-can-send-email'><span class="ml-1">Email</span></th>
-						<th class="h5 p-1"><input type="checkbox" id='select-all-checkbox-of-can-import-export'><span class="ml-1">Import/Export</span></th>
+					<tr>
+						<th class="h5 p-1 ">Accessed</th>
+						<th class="h5 p-1 ">Module</th>
+						<th class="h5 p-1 "><input type="checkbox" id='select-all-checkbox-of-create'><span class="ml-1">Create</span></th>
+						<th class="h5 p-1 "><input type="checkbox" id='select-all-checkbox-of-read'><span class="ml-1">Read</span></th>
+						<th class="h5 p-1 "><input type="checkbox" id='select-all-checkbox-of-update'><span class="ml-1">Edit</span></th>
+						<th class="h5 p-1 "><input type="checkbox" id='select-all-checkbox-of-delete'><span class="ml-1">Delete</span></th>
+						<th class="h5 p-1 "><input type="checkbox" id='select-all-checkbox-of-can-download-pdf'><span class="ml-1">PDF</span></th>
+						<th class="h5 p-1 "><input type="checkbox" id='select-all-checkbox-of-can-download-csv'><span class="ml-1">CSV</span></th>
+						<th class="h5 p-1 "><input type="checkbox" id='select-all-checkbox-of-can-send-email'><span class="ml-1">Email</span></th>
+						<th class="h5 p-1 "><input type="checkbox" id='select-all-checkbox-of-can-import-export'><span class="ml-1">Import/Export</span></th>
 						<th class='hidden_column_head h5 p-1'><input type="checkbox" id='select-all-checkbox-of-hidden'><span class="ml-1">Hidden</span></th>
+					</tr>
 					</thead>
 					<tbody>
 							<%= f.fields_for :user_permissions do |perm| %>
@@ -115,6 +119,7 @@
 					</tbody>
 				</table>			
 			<% end %>
+		</div>	
 		</div>
 
 	</div>
@@ -137,7 +142,7 @@
       <% end %>
     <% end %>
   </div>
-
+	<div class="clearfix"></div>
   <div class="modal-footer">
     <%= f.submit @btn_value ,class: "btn btn-primary float-right" %>
   </div>
@@ -359,3 +364,5 @@ if(!(hidden=='true')){
 		}
 	})
 </script>
+
+
