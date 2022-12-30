@@ -42,6 +42,7 @@
       <%= f.datetime_select :created_at, {label: 'Date of Query'}, class: "form-control" %>
     </div>
     <%= f.hidden_field :credit_status, value: current_user.id %>
+    <%= f.hidden_field :for_crms, value: true %>
     <%= f.hidden_field :user_type_id, value: UserType.first.id %>
     <%= f.hidden_field :code, { value: (f.object.code.nil? ? ("AGC-"+"%.4i" % (SysUser.maximum(:id).present? ? SysUser.maximum(:id).next : 1)) : (f.object.code ))} %>
   </div>

@@ -9,10 +9,10 @@ class SysUsersController < ApplicationController
   # GET /sys_users
   # GET /sys_users.json
   def index
-    @q = SysUser.order('name asc').ransack(params[:q])
+    @q = SysUser.order('name asc').where(for_crms: [false, nil]).ransack(params[:q])
     @sys_users = @q.result.page(params[:page])
     @sys_user_balance = @q.result.sum(:balance).to_f.round(2)
-    @all_user = SysUser.all
+    @all_user = SysUser.where(for_crms: [false, nil]).all
     @user_types = UserType.all
 
     download_sys_users_csv_file if params[:csv].present?
@@ -313,6 +313,7 @@ class SysUsersController < ApplicationController
       :nom_father,
       :nom_cnic,
       :nom_relation,
+      :for_crms,
       contact_attributes: %i[
         id
         address

@@ -202,6 +202,7 @@ Rails.application.routes.draw do
   resources :crms do
     collection do
       get :view_history, to: 'crms#view_history'
+      get :convert_to_sys_user
     end
   end
   resources :notes, only: %i[create new]

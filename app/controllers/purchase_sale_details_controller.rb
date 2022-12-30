@@ -1,6 +1,6 @@
 class PurchaseSaleDetailsController < ApplicationController
   before_action :set_purchase_sale_detail, only: [:show, :edit, :update, :destroy]
-
+  before_action :check_access
   # GET /purchase_sale_details
   # GET /purchase_sale_details.json
   def index
