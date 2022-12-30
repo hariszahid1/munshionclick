@@ -6,11 +6,11 @@
   </div>
 
   <div class="col-lg-2 form-group float-left">
-    <%= form.text_field :price_per_marla %>
+    <%= form.number_field :price_per_marla, step: :any %>
   </div>
 
   <div class="col-lg-2 form-group float-left">
-    <%= form.text_field :total_price, disabled: true, id: :order_property_plans_attributes_0_total_price_diabled %>
+    <%= form.number_field :total_price, step: :any, disabled: true, id: :order_property_plans_attributes_0_total_price_diabled %>
     <%= form.hidden_field :total_price %>
   </div>
 
@@ -27,7 +27,7 @@
   </div>
 
   <div class="installments_div col-lg-2 form-group float-left hidden">
-    <%= form.text_field :advance, label: 'Down Payment' %>
+    <%= form.number_field :advance, step: :any, label: 'Down Payment' %>
   </div>
   <div class="installments_div installments_div_cash col-lg-3 form-group float-left hidden">
     <%if form.object.due_date.blank? and @order.id.blank?%>
@@ -56,11 +56,11 @@
   </div>
 
   <div class="unequal_installments_div col-lg-2 col-md-6 col-sm-6 form-group float-left hidden">
-    <%= form.text_field :total_high_amount %>
+    <%= form.number_field :total_high_amount, step: :any %>
   </div>
 
   <div class="col-lg-2 col-md-6 col-sm-6 form-group float-left">
-    <%= form.text_field :last_instalment, label: 'Possession Amount'%>
+    <%= form.number_field :last_instalment, step: :any, label: 'Possession Amount'%>
   </div>
 
   <div class="clearfix"></div>
