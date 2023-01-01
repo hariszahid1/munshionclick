@@ -14,7 +14,7 @@ class CrmsController < ApplicationController
   # GET /crms
   # GET /crms.json
   def index
-    @q = SysUser.order('id desc').ransack(params[:q])
+    @q = SysUser.order('id desc').where(for_crms: [true, nil]).ransack(params[:q])
     @sys_users = @q.result.page(params[:page])
     export_file if params[:export_data].present?
     download_crm_csv_file if params[:csv].present?
@@ -93,6 +93,13 @@ class CrmsController < ApplicationController
     end
   end
 
+  def convert_to_sys_user
+    SysUser.find(params[:crm_id]).update(for_crms: nil)
+    respond_to do |format|
+      format.html { redirect_to request.referrer, notice: 'CRM Data was successfully converted to User Data.' }
+    end
+  end
+
   private
 
   def sys_user_params
@@ -116,6 +123,7 @@ class CrmsController < ApplicationController
       :nom_father,
       :nom_cnic,
       :nom_relation,
+      :for_crms,
       contact_attributes: %i[
         id
         address
@@ -174,7 +182,8 @@ class CrmsController < ApplicationController
     @source = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['source']&.map(&:downcase) : []
     created_by_ids = current_user.created_by_ids_list_to_view
     roles_mask = current_user.allowed_to_view_roles_mask_for
-    @users = User.where(roles_mask: roles_mask).where('company_type=? or created_by_id=?',current_user.company_type,created_by_ids)
+    @users = User.where(roles_mask: roles_mask).where('company_type=? or created_by_id=?', current_user.company_type,
+                                                      created_by_ids)
   end
 
   def download_crm_csv_file
@@ -215,7 +224,7 @@ class CrmsController < ApplicationController
     created_by_ids = current_user.created_by_ids_list_to_view
     @all_agents = User.where('company_type=? or created_by_id=?', current_user.company_type, created_by_ids).pluck(:name,
                                                                                                                    :id)
-    @all_user = SysUser.all
+    @all_user = SysUser.where(for_crms: [true, nil])
     @all_plot_sizes = SysUser.pluck(:ntn).uniq
     @user_types = UserType.all
     @user_groups = UserGroup.all
@@ -258,5 +267,4 @@ def crm_charts
       @in_process_count = a[1]
     end
   end
-  
 end

@@ -1,4 +1,3 @@
-
 <%@total_pro=0%>
 <%@total_discont=0%>
 <div class="hidden" id="purchase_sale_detail_list">
@@ -6,18 +5,20 @@
     <h1>Sale of the Day</h1>
     <div class="row">
       <div class="col-lg-12">
-        <div class="col-lg-3 form-group float-left ">
-          <%= link_to new_purchase_sale_detail_path(transaction_type: :sale,product: true), class: "btn btn-success col-lg-12" do %>
-            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-            Make Voucher / Delivery
-          <% end %>
-        </div>
-        <div class="col-lg-3 form-group float-left">
-          <%= link_to new_purchase_sale_detail_path(transaction_type: :sale), class: "btn btn-success col-lg-12" do %>
-            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-            Make Voucher For Raw Material
-          <% end %>
-        </div>
+        <%if (check_can_create(@module_permission))%>
+          <div class="col-lg-3 form-group float-left ">
+            <%= link_to new_purchase_sale_detail_path(transaction_type: :sale,product: true), class: "btn btn-success col-lg-12" do %>
+              <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+              Make Voucher / Delivery
+            <% end %>
+          </div>
+          <div class="col-lg-3 form-group float-left">
+            <%= link_to new_purchase_sale_detail_path(transaction_type: :sale), class: "btn btn-info col-lg-12" do %>
+              <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+              Make Voucher For Raw Material
+            <% end %>
+          </div>
+        <% end %>  
         <div class="col-lg-3 form-group float-left">
           <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample1" role="button" aria-expanded="false" aria-controls="multiCollapseExample1" id="sec">Search</a>
         </div>
@@ -71,7 +72,7 @@
         <div class="clearfix"></div>
 
         <div class="row">
-          <div class="col-lg-12 collapse show" id="multiCollapseExample1">
+          <div class="col-lg-12 p-3 collapse show" id="multiCollapseExample1">
             <div class="col-lg-3 form-group float-left">
               <%= f.select :purchase_sale_items_product_id_eq, options_from_collection_for_select(@products, 'id', 'title',@title),{:include_blank => "Select product"}, class: "chosen-select"%>
             </div>
@@ -114,43 +115,39 @@
             </div>
           </div>
         </div>
-        <div class="clearfix"></div>
-        <div class="row">
+        
+        <div class="row ml-1">
           <div class="col-lg-12">
-            <div class="col-lg-3 form-group float-left">
-              <% if params[:sale].present?%>
-                <button class="form-control badge badge-pill badge-danger" name="sale_submit" type="submit" value="Total Sale PDF A8" formtarget="_blank"><i class="fa fa-file-pdf"></i> Quantity details</button>
-              <% elsif params[:return].present?%>
-                <button class="form-control badge badge-pill badge-danger" name="sale_submit" type="submit" value="Total Sale Return PDF A8" formtarget="_blank"><i class="fa fa-file-pdf"></i> Quantity details</button>
-              <%else%>
-                <button class="form-control badge badge-pill badge-danger" name="purchase_submit" type="submit" value="Total Purchase PDF A8" formtarget="_blank"><i class="fa fa-file-pdf"></i> Purchase</button>
-              <%end%>
+            <div class="dropdown my-dropdown float-left mr-2">
+              <button type="button" class="form-control bg-danger text-light">PDF List</button>
+              <div class="dropdown-content my-dropdown-content p-2" style="width: 250px;">
+                <% if params[:sale].present?%>
+                  <button class="form-control btn btn-danger mt-2" name="sale_submit" type="submit" value="Total Sale PDF A8" formtarget="_blank"><i class="fa fa-file-pdf"></i> Quantity details A8</button>
+                <% elsif params[:return].present?%>
+                  <button class="form-control btn btn-danger mt-2" name="sale_submit" type="submit" value="Total Sale Return PDF A8" formtarget="_blank"><i class="fa fa-file-pdf"></i> Quantity details A8</button>
+                <%else%>
+                  <button class="form-control btn btn-danger mt-2" name="purchase_submit" type="submit" value="Total Purchase PDF A8" formtarget="_blank"><i class="fa fa-file-pdf"></i> Purchase</button>
+                <%end%>
+
+                <% if params[:sale].present?%>
+                  <button class="form-control btn btn-danger mt-2" name="sale_submit" type="submit" value="Total Sale PDF A4" formtarget="_blank"><i class="fa fa-file-pdf"></i> Quantity details A4</button>
+                <% elsif params[:return].present?%>
+                  <button class="form-control btn btn-danger mt-2" name="sale_submit" type="submit" value="Total Sale Return PDF A4" formtarget="_blank"><i class="fa fa-file-pdf"></i> Quantity details A8</button>
+                <%else%>
+                  <button class="form-control btn btn-danger mt-2" name="purchase_submit" type="submit" value="Total Purchase PDF A4" formtarget="_blank"><i class="fa fa-file-pdf"></i> Purchase</button>
+                <%end%>
+
+                <% if params[:sale].present?%>
+                  <button class="form-control btn btn-danger mt-2" name="submit_pdf_staff_without" type="submit" value="Total Sale PDF A8" formtarget="_blank"><i class="fa fa-file-pdf"></i> Sale list</button>
+                  <button class="form-control btn btn-danger mt-2" name="submit_pdf_staff_without_bulk" type="submit" value="Total Sale PDF A8" formtarget="_blank"><i class="fa fa-file-pdf"></i>bulk invoices</button>
+                <% elsif params[:return].present?%>
+                  <button class="form-control btn btn-danger mt-2" name="submit_pdf_staff_without" type="submit" value="Total Sale PDF A8" formtarget="_blank"><i class="fa fa-file-pdf"></i> Sale Return list</button>
+                  <button class="form-control btn btn-danger mt-2" name="submit_pdf_staff_without_bulk" type="submit" value="Total Sale PDF A8" formtarget="_blank"><i class="fa fa-file-pdf"></i>bulk Return invoices</button>
+                <%end%>
+
+              </div>
             </div>
-            <div class="col-lg-3 form-group float-left">
-              <% if params[:sale].present?%>
-                <button class="form-control badge badge-pill badge-danger" name="sale_submit" type="submit" value="Total Sale PDF A4" formtarget="_blank"><i class="fa fa-file-pdf"></i> Quantity details</button>
-              <% elsif params[:return].present?%>
-                <button class="form-control badge badge-pill badge-danger" name="sale_submit" type="submit" value="Total Sale Return PDF A4" formtarget="_blank"><i class="fa fa-file-pdf"></i> Quantity details</button>
-              <%else%>
-                <button class="form-control badge badge-pill badge-danger" name="purchase_submit" type="submit" value="Total Purchase PDF A4" formtarget="_blank"><i class="fa fa-file-pdf"></i> Purchase</button>
-              <%end%>
-            </div>
-            <% if params[:sale].present?%>
-              <div class="col-lg-3 form-group float-left">
-                  <button class="form-control badge badge-pill badge-danger" name="submit_pdf_staff_without" type="submit" value="Total Sale PDF A8" formtarget="_blank"><i class="fa fa-file-pdf"></i> Sale list</button>
-              </div>
-              <div class="col-lg-3 form-group float-left">
-                  <button class="form-control badge badge-pill badge-danger" name="submit_pdf_staff_without_bulk" type="submit" value="Total Sale PDF A8" formtarget="_blank"><i class="fa fa-file-pdf"></i>bulk invoices</button>
-              </div>
-            <% elsif params[:return].present?%>
-              <div class="col-lg-3 form-group float-left">
-                  <button class="form-control badge badge-pill badge-danger" name="submit_pdf_staff_without" type="submit" value="Total Sale PDF A8" formtarget="_blank"><i class="fa fa-file-pdf"></i> Sale Return list</button>
-              </div>
-              <div class="col-lg-3 form-group float-left">
-                  <button class="form-control badge badge-pill badge-danger" name="submit_pdf_staff_without_bulk" type="submit" value="Total Sale PDF A8" formtarget="_blank"><i class="fa fa-file-pdf"></i>bulk Return invoices</button>
-              </div>
-            <%end%>
-            <div class="col-lg-3 form-group float-left">
+            <div class="form-group float-left">
                 <button class="form-control btn btn-info" name="email" type="submit" value="Email"><i class="fas fa-envelope"></i> email</button>
             </div>
           </div>
@@ -172,10 +169,11 @@
       <div id="show-analytics" class="row"></div>
     </div>
   </div>
-  <div class= "purchase-sale-book-index-card">
+  <div class= "purchase-sale-book-index-card card border-radius-1 shadow mt-3 mr-3 p-3">
     <table data-toggle="table" data-search="true">
       <thead>
         <tr>
+          <th></th>
           <th>#</th>
           <th><%= sort_link(@q, :sys_user_name, 'Customers') %></th>
           <th><%= sort_link(@q, :purchase_sale_item_count, 'Items') %></th>
@@ -191,8 +189,10 @@
       </thead>
 
       <tbody>
-        <% @purchase_sale_details.each do |purchase_sale_detail| %>
-          <tr class="table-success">
+        <% @purchase_sale_details.each_with_index do |purchase_sale_detail, index| %>
+        <% demo_id = "demo#{index}"%>
+          <tr>
+            <td class="accordion-toggle acc-pointer" data-toggle="collapse" data-target="#<%= demo_id %>"><i class="fa fa-plus-circle ml-4"></i></td>
             <td><b><%= purchase_sale_detail.voucher_id.to_s+'#'+purchase_sale_detail.id.to_s %></b></td>
             <td class="urdu-font">
               <b>
@@ -212,7 +212,7 @@
                   Pending
                   <br>
                   </p>
-                  <h5 style="color:#FF0000"><%= (purchase_sale_detail.total_bill.to_i - (purchase_sale_detail.amount.to_f+purchase_sale_detail.discount_price.to_f))%></h5>
+                  <h5 style="color:#FF0000"><%= number_with_delimiter(purchase_sale_detail.total_bill.to_i - (purchase_sale_detail.amount.to_f+purchase_sale_detail.discount_price.to_f))%></h5>
                 <% else %>
                   <p class="text-success">
                     <b><%= purchase_sale_detail.status  %></b>
@@ -222,139 +222,174 @@
             </td>
             <td>
               <%if purchase_sale_detail.created_at.strftime("%d%b%y")!=purchase_sale_detail.updated_at.strftime("%d%b%y")%>
-                <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d%b%y at %I:%M%p") : '' %> | <%= purchase_sale_detail.updated_at.present? ? purchase_sale_detail.updated_at.strftime("%d%b%y at %H:%M%p") : '' %>
+                <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d/%b/%y at %I:%M%p") : '' %> <hr> <%= purchase_sale_detail.updated_at.present? ? purchase_sale_detail.updated_at.strftime("%d/%b/%y at %H:%M%p") : '' %>
               <%else%>
-                <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d%b%y at %I:%M%p") : '' %>
+                <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d/%b/%y at %I:%M%p") : '' %>
               <%end%>
             </td>
             <td><%= purchase_sale_detail.purchase_sale_items.expiry rescue '' %> <%= purchase_sale_detail.bill_no%></td>
             <td><%=purchase_sale_detail.staff_full_name%> | <%= purchase_sale_detail.comment %> <%=purchase_sale_detail.with_gst.present? ? "GST" : ""%></td>
             <td>
-              <%if purchase_sale_detail.with_gst=="true"%>
-                <%= link_to purchase_sale_detail_path(purchase_sale_detail,with_gst: true),target: "_blank" do %>
-                  <i class="fa fa-print" aria-hidden="true"></i> |
-                <% end %>
-              <%else%>
-                <%= link_to purchase_sale_detail,target: "_blank" do %>
-                  <i class="fa fa-print" aria-hidden="true"></i> |
-                <% end %>
-              <%end%>
-              <%if purchase_sale_detail.purchase_sale_items.present?%>
-                <%if purchase_sale_detail.purchase_sale_items.first.product.present? %>
-                  <% if can?(:update, :all) %>
-                    <%if purchase_sale_detail.with_gst=="true"%>
-                      <%= link_to edit_purchase_sale_detail_path(purchase_sale_detail,product: true,with_gst:true) do %>
-                        <i class="fa fa-edit" aria-hidden="true"></i> |
-                      <% end %>
-                    <%else%>
-                      <%= link_to edit_purchase_sale_detail_path(purchase_sale_detail,product: true) do %>
-                        <i class="fa fa-edit" aria-hidden="true"></i> |
-                      <% end %>
-                    <% end %>
-                  <% end %>
-                <%else%>
-                  <% if can?(:update, :all) %>
-                    <%= link_to edit_purchase_sale_detail_path(purchase_sale_detail) do %>
-                      <i class="fa fa-edit" aria-hidden="true"></i> |
-                    <% end %>
-                  <% end %>
-                <%end%>
-              <%end%>
-            <% if can?(:destory, :all) %>
-              <%= link_to purchase_sale_detail, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
-                        <i class="fa fa-trash" aria-hidden="true"></i> |
-              <% end %>
-            <% end %>
-            <%if ['Purchase','Sale'].include? purchase_sale_detail.transaction_type.to_s%>
-              <%= link_to new_purchase_sale_detail_path(purchase_sale_detail_id:purchase_sale_detail.id,product:true,transaction_type:'sale',purchase_sale_type: "SaleReturn") do %>
-                <i class="fa fa-undo"></i> |
-              <% end %>
-            <%end%>
-            <%if purchase_sale_detail.with_gst=="true"%>
-              <%= link_to purchase_sale_detail_path(purchase_sale_detail,pdf: true),target: "_blank"  do %>
-                <i class="fa fa-eye" aria-hidden="true"></i>
-              <% end %>
-            <%else%>
-              <%= link_to purchase_sale_detail_path(purchase_sale_detail,pdf: true),target: "_blank"  do %>
-                <i class="fa fa-eye" aria-hidden="true"></i>
-              <% end %>
-            <%end%>
-
-
-
+              <div class="icon-container-1">
+                <div class="my-icon-1 my-view-1">
+                  <div class="my-tooltip-1">
+                    <div class="icon-container">
+                      <div class="my-icon my-view">
+                        <div class="my-tooltip">
+                          Edit
+                        </div>
+                        <%if (check_can_update(@module_permission))%>
+                          <%if purchase_sale_detail.purchase_sale_items.present?%>
+                            <%if purchase_sale_detail.purchase_sale_items.first.product.present? %>
+                              <%if purchase_sale_detail.with_gst=="true"%>
+                                <%= link_to edit_purchase_sale_detail_path(purchase_sale_detail,product: true,with_gst:true), class:"icon-div" do %>
+                                  <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+                                <% end %>
+                              <%else%>
+                                <%= link_to edit_purchase_sale_detail_path(purchase_sale_detail,product: true), class:"icon-div" do %>
+                                  <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+                                <% end %>
+                              <% end %>
+                            <%else%>
+                              <%= link_to edit_purchase_sale_detail_path(purchase_sale_detail), class:"icon-div" do %>
+                                <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+                              <% end %>
+                            <%end%>
+                          <%end%>
+                        <% end %>
+                      </div>
+                      <div class="my-icon my-view">
+                        <div class="my-tooltip">
+                          Delete
+                        </div>
+                        <%if (check_can_delete(@module_permission))%>
+                          <%= link_to purchase_sale_detail, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+                            <i class="fa fa-trash mt-2" aria-hidden="true"></i>
+                          <% end %>
+                        <% end %> 
+                      </div>
+                      <div class="my-icon my-view">
+                        <div class="my-tooltip">
+                          Undo
+                        </div>
+                        <%if (check_can_delete(@module_permission))%>
+                          <%if ['Purchase','Sale'].include? purchase_sale_detail.transaction_type.to_s%>
+                            <%= link_to new_purchase_sale_detail_path(purchase_sale_detail_id:purchase_sale_detail.id,product:true,transaction_type:'sale',purchase_sale_type: "SaleReturn"), class:"icon-div" do %>
+                              <i class="fa fa-undo mt-2"></i>
+                            <% end %>
+                          <%end%>
+                        <% end %> 
+                      </div>
+                      <div class="my-icon my-view">
+                        <div class="my-tooltip">
+                          Show
+                        </div>
+                        <%if (check_can_read(@module_permission))%>
+                          <%if purchase_sale_detail.with_gst=="true"%>
+                            <%= link_to purchase_sale_detail_path(purchase_sale_detail,pdf: true),target: "_blank", class:"icon-div"  do %>
+                              <i class="fa fa-eye mt-2" aria-hidden="true"></i>
+                            <% end %>
+                          <%else%>
+                            <%= link_to purchase_sale_detail_path(purchase_sale_detail,pdf: true),target: "_blank", class:"icon-div"  do %>
+                              <i class="fa fa-eye mt-2" aria-hidden="true"></i>
+                            <% end %>
+                          <%end%>
+                        <%end%>    
+                      </div>
+                      <div class="my-icon my-view">
+                        <div class="my-tooltip">
+                          PDF
+                        </div>
+                        <%if (check_can_download_pdf(@module_permission))%>
+                          <%if purchase_sale_detail.with_gst=="true"%>
+                            <%= link_to purchase_sale_detail_path(purchase_sale_detail,with_gst: true),target: "_blank", class:"icon-div" do %>
+                              <i class="fa fa-print mt-2" aria-hidden="true"></i>
+                            <% end %>
+                          <%else%>
+                            <%= link_to purchase_sale_detail,target: "_blank", class:"icon-div" do %>
+                              <i class="fa fa-print mt-2" aria-hidden="true"></i>
+                            <% end %>
+                          <%end%> 
+                        <% end %>    
+                      </div>
+                      
+                    </div>
+                  </div>
+                  <span class="icon-div-1">
+                        <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+                  </span>
+                </div>
+              </div>
             </td>
 
           </tr>
-          <%if purchase_sale_detail.purchase_sale_items_names_and_quantity!=0%>
-            <tr >
-              <td></td>
-              <td></td>
-              <td class="table-active"><b>Item type</b></td>
-              <td class="table-active"><b>Quantity</b></td>
-              <td class="table-active"><b>Rate</b></td>
-              <td class="table-active"><b>Amount</b></td>
-              <td></td>
-              <td class="table-active"><b>Date</b></td>
-              <td class="table-active"><b>Profit</b></td>
-              <td class="table-active"><b>GST</b></td>
-              <td></td>
-
-            </tr>
-            <%if purchase_sale_detail.transaction_type=="Sale"%>
-              <%profit=0%>
-              <%gst=0%>
-              <%purchase_sale_detail.purchase_sale_items_names_and_quantity.each do |name_quantity|%>
-                <tr class = <%=name_quantity[9]=='Return_type' ? 'bg-danger text-white' : ''%> >
-                  <td></td>
-                  <td><%=number_with_delimiter name_quantity[9].split('_type')[0]%></td>
-                  <td><%=number_with_delimiter name_quantity.first%></td>
-                  <td><%=number_with_delimiter name_quantity.second%><% @total_pro += name_quantity.second %></td>
-                  <td><%=number_with_delimiter name_quantity.third%></td>
-                  <td><%=number_with_delimiter name_quantity.fourth%><% @total_discont += name_quantity.fourth if name_quantity.fourth.present? %></td>
-                  <td></td>
-                  <td><%=name_quantity.fifth.strftime("%d%b%y") if name_quantity.fifth.present?%></td>
-                  <td>
-                    <% name_quantity[9]=='Return_type' ? profit-=name_quantity[3].to_f-name_quantity[6].to_f : profit+=name_quantity[3].to_f-name_quantity[6].to_f %>
-                    <%=name_quantity[9]=='Return_type' ? -(name_quantity[3].to_f-name_quantity[6].to_f).round(2) : (name_quantity[3].to_f-name_quantity[6].to_f).round(2)%>
-                  </td>
-                  <td>
-                    <% gst+=name_quantity[10].to_f%>
-                    <%= name_quantity[10]%>
-                  </td>
-                  <td></td>
-                </tr>
+          <td colspan="12" class="hiddenRow">
+            <div class="accordian-body collapse p-3 card border-radius-1 shadow m-4"  id="<%= demo_id %>">
+              <%if purchase_sale_detail.purchase_sale_items_names_and_quantity!=0%>
+                <div class="row p-3 mb-2" style="font-size: 1.4em;">
+                  <div class="col"></div>
+                  <div class="col" class="table-active"><b>Item type</b></div>
+                  <div class="col" class="table-active"><b>Quantity</b></div>
+                  <div class="col" class="table-active"><b>Rate</b></div>
+                  <div class="col" class="table-active"><b>Amount</b></div>
+                  <div class="col" class="table-active"><b>Date</b></div>
+                  <div class="col" class="table-active"><b>Profit</b></div>
+                  <div class="col" class="table-active"><b>GST</b></div>
+                </div>
+                <%if purchase_sale_detail.transaction_type=="Sale"%>
+                  <%profit=0%>
+                  <%gst=0%>
+                  <%purchase_sale_detail.purchase_sale_items_names_and_quantity.each do |name_quantity|%>
+                    <div class = <%=name_quantity[9]=='Return_type' ? 'row bg-danger text-white p-3 mb-2' : 'row p-3 mb-2'%> style="font-size: 1.2em;" >
+                      <div class="col"><%=number_with_delimiter name_quantity[9].split('_type')[0]%></div>
+                      <div class="col"><%=number_with_delimiter name_quantity.first%></div>
+                      <div class="col"><%=number_with_delimiter name_quantity.second%><% @total_pro += name_quantity.second %></div>
+                      <div class="col"><%=number_with_delimiter name_quantity.third%></div>
+                      <div class="col"><%=number_with_delimiter name_quantity.fourth%><% @total_discont += name_quantity.fourth if name_quantity.fourth.present? %></div>
+                      <div class="col"><%=name_quantity.fifth.strftime("%d%b%y") if name_quantity.fifth.present?%></div>
+                      <div class="col">
+                        <% name_quantity[9]=='Return_type' ? profit-=name_quantity[3].to_f-name_quantity[6].to_f : profit+=name_quantity[3].to_f-name_quantity[6].to_f %>
+                        <%=name_quantity[9]=='Return_type' ? -(name_quantity[3].to_f-name_quantity[6].to_f).round(2) : (name_quantity[3].to_f-name_quantity[6].to_f).round(2)%>
+                      </div>
+                      <div class="col">
+                        <% gst+=name_quantity[10].to_f%>
+                        <%= name_quantity[10]%>
+                      </div>
+                      
+                      
+                    </div>
+                  <%end%>
+                  <div class="row bg-info text-light p-3 mt-4" style="font-size: 1.2em; font-weight: bold">
+                    <div class="col"></div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+                    <div class="col"><%= number_with_delimiter profit.to_f.round(2)-purchase_sale_detail.discount_price.to_f%></div>
+                    <div class="col"><%=gst.to_f.round(2)%></div>
+                  </div>
+                <%else%>
+                  <%purchase_sale_detail.purchase_sale_items_names_and_quantity.each do |name_quantity|%>
+                    <div class="row p-3 mb-2">
+                      <div class="col"></div>
+                      <div class="col"></div>
+                      <div class="col"><%=name_quantity.first%></div>
+                      <div class="col"><%=name_quantity.second%><% @total_pro += name_quantity.second %></div>
+                      <div class="col"><%=name_quantity[5]%></div>
+                      <div class="col"><%=name_quantity[6]%><% @total_discont += name_quantity[6] if name_quantity.fourth.present? %></div>
+                      <div class="col"></div>
+                      <div class="col"><%=name_quantity.fifth.strftime("%d%b%y") if name_quantity.fifth.present?%></div>
+                      <div class="col"></div>
+                      <div class="col"></div>
+                      <div class="col"></div>
+                    </div>
+                  <%end%>
+                <%end%>
               <%end%>
-              <tr class="table-info">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><%=profit.to_f.round(2)-purchase_sale_detail.discount_price.to_f%></td>
-                <td><%=gst.to_f.round(2)%></td>
-                <td></td>
-              </tr>
-            <%else%>
-              <%purchase_sale_detail.purchase_sale_items_names_and_quantity.each do |name_quantity|%>
-                <tr>
-                  <td></td>
-                  <td></td>
-                  <td><%=name_quantity.first%></td>
-                  <td><%=name_quantity.second%><% @total_pro += name_quantity.second %></td>
-                  <td><%=name_quantity[5]%></td>
-                  <td><%=name_quantity[6]%><% @total_discont += name_quantity[6] if name_quantity.fourth.present? %></td>
-                  <td></td>
-                  <td><%=name_quantity.fifth.strftime("%d%b%y") if name_quantity.fifth.present?%></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-              <%end%>
-            <%end%>
-          <%end%>
+            </div>
+          </td>  
+          
         <% end %>
        <tr>
           <td><h5></h5></td>
@@ -466,4 +501,12 @@
   $(function() {
     setTimeout(function() { $(".my-loader").fadeOut(1500); }, 5000)
   })
+</script>
+<script>
+$('.accordian-body').on('show.bs.collapse', function () {
+    $(this).closest("table")
+        .find(".collapse.in")
+        .not(this)
+        .collapse('toggle')
+})
 </script>

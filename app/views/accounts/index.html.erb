@@ -190,9 +190,9 @@
           <td><%= number_with_delimiter(account.amount.to_f.round(2)) %></td>
           <td>
             <%if account.amount.to_f < 0  %>
-             <b style="font-size:20px;color:blue;">Jama</b>
+             <b style="font-size:20px;color:blue;">Jama/Payable</b>
             <%elsif  account.amount.to_f > 0  %>
-              <b style="font-size:20px;color:red;">Benam</b>
+              <b style="font-size:20px;color:red;">Benam/Recievable</b>
             <%else%>
               <b style="font-size:20px;color: #6cec53 ;">Nill</b>
             <%end%>
