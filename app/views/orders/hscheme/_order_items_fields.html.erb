@@ -36,11 +36,11 @@
           <%= f.hidden_field :quantity,step: :any,class:'quantity-price', hide_label: true,placeholder: :quantity,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()", required: true%>
         </div>
         <div class="col-lg-2 from-group float-left">
-        <%= f.text_field :sale_price,step: :any,class:'cost-price', placeholder: :sale_price,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()", required: true%></div>
+        <%= f.number_field :sale_price,step: :any,class:'cost-price', placeholder: :sale_price,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()", required: true%></div>
         <div class="col-lg-2 from-group float-left">
-        <%= f.text_field :total_sale_price,step: :any,class:'total-cost-price', placeholder: :total_sale,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()", required: true%></div>
+        <%= f.number_field :total_sale_price,step: :any,class:'total-cost-price', placeholder: :total_sale,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()", required: true%></div>
         <div class="col-lg-1 from-group float-left hidden">
-        <%= f.text_field :discount_price,step: :any,class:'discount-price', hide_label: true,placeholder: :discount,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()"%>
+        <%= f.number_field :discount_price,step: :any,class:'discount-price', hide_label: true,placeholder: :discount,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()"%>
         </div>
         <div class="col-lg-1 form-group float-left text-xs font-weight-bold text-uppercase mt-4">
           <%= link_to_remove_association f, class:"btn btn-danger" do %>
@@ -72,16 +72,16 @@
               <%= f.text_field :marla,step: :any,class:'quantity-price', placeholder: :quantity,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()", required: true %>
             </div>
             <div class="col-lg-2 from-group float-left">
-              <%= f.text_field :cost_price,step: :any,class:'cost-price', placeholder: :cost_price,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()"%>
+              <%= f.number_field :cost_price,step: :any,class:'cost-price', placeholder: :cost_price,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()"%>
             </div>
             <div class="col-lg-2 from-group float-left">
-              <%= f.text_field :total_cost_price,step: :any,class:'total-cost-price', placeholder: :total_cost_price,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()"%>
+              <%= f.number_field :total_cost_price,step: :any,class:'total-cost-price', placeholder: :total_cost_price,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()"%>
             </div>
             <div class="col-lg-2 from-group float-left">
-            <%= f.text_field :sale_price,step: :any, placeholder: :sale_price,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()", required: true %>
+            <%= f.number_field :sale_price,step: :any, placeholder: :sale_price,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()", required: true %>
           </div>
             <div class="col-lg-2 from-group float-left">
-            <%= f.text_field :discount_price,step: :any,class:'discount-price', placeholder: :discount,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()"%>
+            <%= f.number_field :discount_price,step: :any,class:'discount-price', placeholder: :discount,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()"%>
             </div>
             <div class="col-lg-2 from-group float-left">
             <%= f.text_field :comment, placeholder: :comment,title: :comment%></div>

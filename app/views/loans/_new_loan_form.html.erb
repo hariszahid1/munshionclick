@@ -14,12 +14,12 @@
   <div class="row mb-4">
     <%if params[:credit].present?%>
       <div class="col">
-        <%= f.text_field :credit, required: true, placeholder: "Enter the Amount", onkeyup:"price_in_words(this.value,'price_in_words');", onchange:"price_in_words(this.value,'price_in_words');" %>
+        <%= f.number_field :credit, step: :any, required: true, placeholder: "Enter the Amount", onkeyup:"price_in_words(this.value,'price_in_words');", onchange:"price_in_words(this.value,'price_in_words');" %>
         <h5>Credit in Words: <span id="price_in_words" style="font-size:20px;color:blue;">0.0</span></h5>
       </div>
     <% else %>  
       <div class="col">
-        <%= f.text_field :debit, required: true, placeholder: "Enter the Amount", onkeyup:"price_in_words(this.value,'price_in_words_1');", onchange:"price_in_words(this.value,'price_in_words_1');" %>
+        <%= f.number_field :debit, step: :any, required: true, placeholder: "Enter the Amount", onkeyup:"price_in_words(this.value,'price_in_words_1');", onchange:"price_in_words(this.value,'price_in_words_1');" %>
         <h5>Debit in Words: <span id="price_in_words_1" style="font-size:20px;color:blue;">0.0</span></h5>
       </div>
     <% end %>  

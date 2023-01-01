@@ -31,6 +31,16 @@
       <div class="my-icon-1 my-view-1">
         <div class="my-tooltip-1">
           <div class="icon-container">
+						<%if (check_can_create(@module_permission))%>
+            	<div class="my-icon my-view">
+            	  <div class="my-tooltip">
+            	    Make it User
+            	  </div>
+            	    <%= link_to convert_to_sys_user_crms_path(crm_id: sys_users.id), class:"icon-div" do %>
+            	      <i class="fa fa-undo mt-2" aria-hidden="true"></i>
+            	    <%end %>
+            	</div>
+						<% end %>
 						<%if (check_can_update(@module_permission))%>
             	<div class="my-icon my-view">
             	  <div class="my-tooltip">

@@ -29,19 +29,19 @@
       <div class="row">
         <% if params[:benam].present?%>
           <div class="col-lg-12">
-            <%= f.text_field :credit,label: "Credit/Udhar", required:true %>
+            <%= f.number_field :credit,  step: :any, label: "Credit/Udhar", required:true %>
            </div>
         <%elsif params[:Sjama].present?%>
           <div class="col-lg-12">
-            <%= f.text_field :credit,label: "Credit", placeholder:"Enter Credit", required:true, class:"credit",onchange:"newBalance('oldBalance','newBalance1');newBalance('oldBalance1','newBalance2');price_in_words(this.value,'price_in_words');", onkeyup:"newBalance('oldBalance','newBalance1');newBalance('oldBalance1','newBalance2');price_in_words(this.value,'price_in_words');", autocomplete: "off"  %>
+            <%= f.number_field :credit, step: :any, label: "Credit", placeholder:"Enter Credit", required:true, class:"credit",onchange:"newBalance('oldBalance','newBalance1');newBalance('oldBalance1','newBalance2');price_in_words(this.value,'price_in_words');", onkeyup:"newBalance('oldBalance','newBalance1');newBalance('oldBalance1','newBalance2');price_in_words(this.value,'price_in_words');", autocomplete: "off"  %>
           </div>
         <%elsif params[:Sbenam].present?%>
           <div class="col-lg-12">
-            <%= f.text_field :debit ,label: "Debit", required:true, placeholder:"Enter Debit",  class:"form-control debit", onchange:"newBalance('oldBalance','newBalance1');newBalance('oldBalance1','newBalance2');price_in_words(this.value,'price_in_words');",onkeyup:"newBalance('oldBalance','newBalance1');newBalance('oldBalance1','newBalance2');price_in_words(this.value,'price_in_words');",  autocomplete: "off" %>
+            <%= f.number_field :debit , step: :any, label: "Debit", required:true, placeholder:"Enter Debit",  class:"form-control debit", onchange:"newBalance('oldBalance','newBalance1');newBalance('oldBalance1','newBalance2');price_in_words(this.value,'price_in_words');",onkeyup:"newBalance('oldBalance','newBalance1');newBalance('oldBalance1','newBalance2');price_in_words(this.value,'price_in_words');",  autocomplete: "off" %>
           </div>
         <%else%>
           <div class=" col-lg-12 ">
-            <%= f.text_field :debit ,label: "Debit/Wasool", placeholder:"Debit/Wasool",class: "form-control", required:true, onchange:"price_in_words(this.value,'price_in_word_id');",onkeyup:"price_in_words(this.value,'price_in_words');", autocomplete: "off"%>
+            <%= f.number_field :debit , step: :any, label: "Debit/Wasool", placeholder:"Debit/Wasool",class: "form-control", required:true, onchange:"price_in_words(this.value,'price_in_word_id');",onkeyup:"price_in_words(this.value,'price_in_words');", autocomplete: "off"%>
           </div>
         <%end%>
       </div>

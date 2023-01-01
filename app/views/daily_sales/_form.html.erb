@@ -63,10 +63,10 @@ th, td{
   </table>
 
   <div class="col-lg-3" style="float:left">
-    <%= f.text_field :sale %>
+    <%= f.number_field :sale, step: :any %>
   </div>
   <div class="col-lg-2" style="float:left">
-    <%= f.text_field :cash_out %>
+    <%= f.number_field :cash_out, step: :any %>
   </div>
   <div class="col-lg-2" style="float:left">
     <%= f.select :shift, DailySale.shifts.map { |key, value| [key.humanize, key] },{class: "form-control", required: true} %>
