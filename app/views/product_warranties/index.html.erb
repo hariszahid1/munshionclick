@@ -1,7 +1,34 @@
-<h1>Product Warranties</h1>
-<div class="clearfix"></div>
-<div class="row">
-    <div class="col-lg-12 col-sm-12">
+<div class="main-content-header">
+  <h1>Product Warranties</h1>
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="<%= root_path %>">Dashboard</a>
+    </li>
+    <li class="breadcrumb-item active">
+      <a href="<%= product_warranties_path %>">Product Warranties</a>
+    </li>
+  </ol>
+</div>
+<div class="float-right">
+  <div class="dropdown ml-auto mr-4">
+   <span class="btn btn-info" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
+    <div class="dropdown-content">
+      <% if @help.present? %>
+      <% @help&.help_links.each do |link| %>
+      <a type="button" class="" target="_blank" href="<%= link[1] %>" >Help in <%= link[0] %></a>
+       <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>
+<ul class="nav nav-pills mb-2" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab">Search</a>
+  </li>
+</ul>
+<div class="tab-content">
+  <div class="tab-pane active card border-radius-1 shadow"  id="search" role="tabpanel">
+    <div class="row mb-3 mr-1 ml-1 p-3 ">
       <%= search_form_for @q, url: product_warranties_path, class: "admin-controls", method: "get" do |f| %>
         <div class="col-lg-2 form-group float-left">
           <%= f.select :product_item_type_id_eq, options_from_collection_for_select(@item_types, "id", ->(st){"#{st.title} \u{27F6} \u{27F6} #{st.code} "},f.object.product_item_type_id_eq),{:include_blank => "Select Item Type"},:class=>"form-control chosen-select" %>
@@ -21,171 +48,173 @@
         <div class="col-lg-2 form-group float-left">
           <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
         </div>
-
-        <div class="col-lg-2 form-group float-right">
-          <button class="form-control btn  badge badge-pill badge-danger" title= "Download General pdf" name="submit_pdf" type="submit" value="Ledger Book PDF A4" formtarget="_blank">General PDF &nbsp;<i class="fa fa-file-pdf"></i></button>
-        </div>
-        <div class="col-lg-2 form-group float-right">
-          <button class="form-control btn  badge badge-pill badge-danger" title= "Download customer pdf" name="submit_pdf_customer" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Customer PDF &nbsp; <i class="fa fa-file-pdf"></i></button>
-        </div>
+        <% if check_can_download_pdf(@module_permission) %>
+          <div class="dropdown my-dropdown float-left mr-2 ml-3">
+            <button type="button" class="form-control bg-danger text-light">PDF List</button>
+            <div class="dropdown-content my-dropdown-content p-3" style="width: 200px;">
+              <button class="form-control btn btn-danger d-flex justify-content-center float-left mt-2" title= "Download General pdf" name="submit_pdf" type="submit" value="Ledger Book PDF A4" formtarget="_blank">General PDF &nbsp;<i class="fa fa-file-pdf"></i></button>
+              <button class="form-control btn btn-danger d-flex justify-content-center float-left mt-2" title= "Download customer pdf" name="submit_pdf_customer" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Customer PDF &nbsp; <i class="fa fa-file-pdf"></i></button>
+            </div>
+          </div>
+        <% end %>
       <% end %>
     </div>
-</div>
 
-<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-  <li class="nav-item" onclick="updatetabs('pills-home')">
-    <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Merged Data</a>
-  </li>
-  <li class="nav-item" onclick="updatetabs('pills-profile')">
-    <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Product Wise</a>
-  </li>
-</ul>
-<div class="tab-content" id="pills-tabContent">
-  <div class= "tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" style="margin:2pc;">
-    <div>
-      <table>
-        <thead>
-          <tr>
-            <th><%= sort_link(@q, :purchase_sale_detail, 'Type') %></th>
-            <th><%= sort_link(@q, :product_id, 'Product') %></th>
-            <th><%= sort_link(@q, :serial, 'Serial') %></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              Sale
-            </td>
-            <td>
-              <%@warranties_sale.pluck('products.title').uniq.each do |purchase| %>
-                <%=purchase.split("\r\n")%>
-              <%end%>
-            </td>
-            <td>
-              <%==@sale_array%>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <b>Total</b>
-            </td>
-            <td><b><%= @warranties_sale.pluck('products.title').uniq.count %></b></td>
-            <td><b><%= @sale_count %></b></td>
-          </tr>
-          <tr>
-            <td>
-              Purchase
-            </td>
-            <td>
-              <%@warranties_purchase.pluck('products.title').uniq.each do |purchase| %>
-                <%=purchase.split("\r\n")%>
-              <%end%>
-            </td>
-            <td>
-              <%==@purchase_array%>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <b>Total</b>
-            </td>
-            <td><b><%= @warranties_purchase.pluck('products.title').uniq.count %></b></td>
-            <td><b><%= @purchase_count %></b></td>
-          </tr>
-          <tr>
-            <td>
-              Remaning
-            </td>
-            <td>
-              <%@warranties_purchase.pluck('products.title').uniq.each do |purchase| %>
-                <%= purchase.split("\r\n")%>
-              <%end%>
-            </td>
-            <td>
-              <%list=''%>
-              <%(@purchase_array-@sale_array).select{|s| list=list+"\r\n"+s}%>
-              <%if params[:q].present?%>
-                <%list.split("\r\n").each do |lis|%>
-                <%==lis%>
-                <br>
-                <%end%>
-              <%else%>
-                <%==list%>
-              <%end%>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <b>Remaning</b>
-            </td>
-            <td><b><%=Product.find(params[:q][:product_id_eq]).stock if params[:q].present? && params[:q][:product_id_eq].present?%></b></td>
-            <td><b><%= (@purchase_array-@sale_array).count %></b></td>
-          </tr>
-        </tbody>
-      </table>
+    <ul class="nav nav-pills mb-3 ml-4" id="pills-tab" role="tablist">
+      <li class="nav-item" onclick="updatetabs('pills-home')">
+        <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Merged Data</a>
+      </li>
+      <li class="nav-item" onclick="updatetabs('pills-profile')">
+        <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Product Wise</a>
+      </li>
+    </ul>
+    <div class="tab-content" id="pills-tabContent">
+      <div class= "tab-pane fade show active card shadow m-3 p-3 border-radius-1" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" style="margin:2pc;">
+        <div>
+          <table>
+            <thead>
+              <tr>
+                <th><%= sort_link(@q, :purchase_sale_detail, 'Type') %></th>
+                <th><%= sort_link(@q, :product_id, 'Product') %></th>
+                <th><%= sort_link(@q, :serial, 'Serial') %></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  Sale
+                </td>
+                <td>
+                  <%@warranties_sale.pluck('products.title').uniq.each do |purchase| %>
+                    <%=purchase.split("\r\n")%>
+                  <%end%>
+                </td>
+                <td>
+                  <%==@sale_array%>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <b>Total</b>
+                </td>
+                <td><b><%= @warranties_sale.pluck('products.title').uniq.count %></b></td>
+                <td><b><%= @sale_count %></b></td>
+              </tr>
+              <tr>
+                <td>
+                  Purchase
+                </td>
+                <td>
+                  <%@warranties_purchase.pluck('products.title').uniq.each do |purchase| %>
+                    <%=purchase.split("\r\n")%>
+                  <%end%>
+                </td>
+                <td>
+                  <%==@purchase_array%>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <b>Total</b>
+                </td>
+                <td><b><%= @warranties_purchase.pluck('products.title').uniq.count %></b></td>
+                <td><b><%= @purchase_count %></b></td>
+              </tr>
+              <tr>
+                <td>
+                  Remaning
+                </td>
+                <td>
+                  <%@warranties_purchase.pluck('products.title').uniq.each do |purchase| %>
+                    <%= purchase.split("\r\n")%>
+                  <%end%>
+                </td>
+                <td>
+                  <%list=''%>
+                  <%(@purchase_array-@sale_array).select{|s| list=list+"\r\n"+s}%>
+                  <%if params[:q].present?%>
+                    <%list.split("\r\n").each do |lis|%>
+                    <%==lis%>
+                    <br>
+                    <%end%>
+                  <%else%>
+                    <%==list%>
+                  <%end%>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <b>Remaning</b>
+                </td>
+                <td><b><%=Product.find(params[:q][:product_id_eq]).stock if params[:q].present? && params[:q][:product_id_eq].present?%></b></td>
+                <td><b><%= (@purchase_array-@sale_array).count %></b></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class= "tab-pane fade card shadow p-3 border-radius-1 m-3" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+        <div class="hidden" id="pruduct_warranty_list">
+          <table data-toggle="table" data-search="true">
+            <thead>
+              <tr>
+                <th><%= sort_link(@q, :purchase_sale_detail_id, 'Voucher') %></th>
+                <th><%= sort_link(@q, :purchase_sale_detail, 'Type') %></th>
+                <th><%= sort_link(@q, :purchase_sale_detail, 'User') %></th>
+                <th><%= sort_link(@q, :product_id, 'Product') %></th>
+                <th><%= sort_link(@q, :serial, 'Serial') %></th>
+                <th><%= sort_link(@q, :serial, 'Create Date') %></th>
+                <th class="border_none">Action</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <% @product_warranties.each do |product_warranty| %>
+                <tr>
+                  <td><%= product_warranty.purchase_sale_detail_id %></td>
+                  <td>
+                    <%= link_to 'Sale',edit_purchase_sale_detail_path(product_warranty.purchase_sale_detail_id,product:true) if product_warranty.purchase_sale_detail.transaction_type=="Sale"%>
+                    <%= link_to 'Purchase',edit_purchase_sale_detail_path(product_warranty.purchase_sale_detail_id,product:true) if product_warranty.purchase_sale_detail.transaction_type=="Purchase"%>
+                  </td>
+                  <td><%=product_warranty.purchase_sale_detail&.sys_user&.name%></td>
+                  <td><%= product_warranty.product.title %></td>
+                  <td><%= product_warranty.serial %></td>
+                  <td><%= product_warranty.created_at.strftime("%d%b%y") %></td>
+                  <td>
+                    <% if can?(:update, :all) %>
+                      <%= link_to edit_product_warranty_path(product_warranty) do %>
+                        <i class="fa fa-edit " aria-hidden="true"></i> |
+                      <%end %>
+                    <% end %>
+                    <% if can?(:delete, :all) %>
+                      <%= link_to product_warranty, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'} do %>
+                        <i class="fa fa-trash " aria-hidden="true"></i> |
+                      <%end %>
+                    <% end %>
+                    <% if can?(:view, :all) %>
+                      <%= link_to product_warranty do %>
+                        <i class="fa fa-eye " aria-hidden="true"></i>
+                      <%end %>
+                    <%end%>
+                  </td>
+                </tr>
+                <% end %>
+            </tbody>
+          </table>
+        </div>
+        <div class="clearfix"></div>
+        <div class="row">
+          <div class="col-lg-4 col-sm-4">
+            <%= page_entries_info @product_warranties %>
+          </div>
+          <div class="col-lg-8 col-sm-8 pagination-left">
+            <%= paginate @product_warranties %>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-  <div class= "tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-    <div class="hidden" id="pruduct_warranty_list">
-      <table data-toggle="table" data-search="true">
-        <thead>
-          <tr>
-            <th><%= sort_link(@q, :purchase_sale_detail_id, 'Voucher') %></th>
-            <th><%= sort_link(@q, :purchase_sale_detail, 'Type') %></th>
-            <th><%= sort_link(@q, :purchase_sale_detail, 'User') %></th>
-            <th><%= sort_link(@q, :product_id, 'Product') %></th>
-            <th><%= sort_link(@q, :serial, 'Serial') %></th>
-            <th><%= sort_link(@q, :serial, 'Create Date') %></th>
-            <th class="border_none">Action</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <% @product_warranties.each do |product_warranty| %>
-            <tr>
-              <td><%= product_warranty.purchase_sale_detail_id %></td>
-              <td>
-                <%= link_to 'Sale',edit_purchase_sale_detail_path(product_warranty.purchase_sale_detail_id,product:true) if product_warranty.purchase_sale_detail.transaction_type=="Sale"%>
-                <%= link_to 'Purchase',edit_purchase_sale_detail_path(product_warranty.purchase_sale_detail_id,product:true) if product_warranty.purchase_sale_detail.transaction_type=="Purchase"%>
-              </td>
-              <td><%=product_warranty.purchase_sale_detail&.sys_user&.name%></td>
-              <td><%= product_warranty.product.title %></td>
-              <td><%= product_warranty.serial %></td>
-              <td><%= product_warranty.created_at.strftime("%d%b%y") %></td>
-              <td>
-                <% if can?(:update, :all) %>
-                  <%= link_to edit_product_warranty_path(product_warranty) do %>
-                    <i class="fa fa-edit " aria-hidden="true"></i> |
-                  <%end %>
-                <% end %>
-                <% if can?(:delete, :all) %>
-                  <%= link_to product_warranty, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'} do %>
-                    <i class="fa fa-trash " aria-hidden="true"></i> |
-                  <%end %>
-                <% end %>
-                <% if can?(:view, :all) %>
-                  <%= link_to product_warranty do %>
-                    <i class="fa fa-eye " aria-hidden="true"></i>
-                  <%end %>
-                <%end%>
-              </td>
-            </tr>
-            <% end %>
-        </tbody>
-      </table>
-    </div>
-    <div class="clearfix"></div>
-    <div class="row">
-      <div class="col-lg-4 col-sm-4">
-        <%= page_entries_info @product_warranties %>
-      </div>
-      <div class="col-lg-8 col-sm-8 pagination-left">
-        <%= paginate @product_warranties %>
-      </div>
-    </div>
-  </div>
-</div>
-
+</div>  
 
 <script>
   $(document).ready(function() {

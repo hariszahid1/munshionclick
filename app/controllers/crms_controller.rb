@@ -14,7 +14,7 @@ class CrmsController < ApplicationController
   # GET /crms
   # GET /crms.json
   def index
-    @q = SysUser.order('id desc').where(for_crms: [true, nil]).ransack(params[:q])
+    @q = SysUser.order('id desc').where(for_crms: [true]).ransack(params[:q])
     @sys_users = @q.result.page(params[:page])
     export_file if params[:export_data].present?
     download_crm_csv_file if params[:csv].present?
@@ -243,7 +243,7 @@ def crm_charts
   @ct_name = @client_count.keys.map { |a| a.gsub(' ', '-') }
   @ct_type = @client_count.values
 
-  @deal_status_count = SysUser.group("cms_data->'$.deal_status'").count.except(nil, '', '""')
+  @deal_status_count = SysUser.group("cms_data->'$.deal_status'").where(for_crms: [true]).count.except(nil, '', '""')
   @deal_status = @deal_status_count.keys.map { |a| a.gsub(' ', '-') }
   @deal_count = @deal_status_count.values
 
