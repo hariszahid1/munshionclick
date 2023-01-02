@@ -218,7 +218,7 @@ Rails.application.routes.draw do
   resources :expense_entry_vouchers
   resources :pdf_templates
   resources :pdf_template_elements
-
+  resources :sale_deals
   resources :db_backup_files
   get 'home/index'
   get :dashboard, to: 'dashboard#index', as: :dashboard

@@ -1,0 +1,54 @@
+<div class="nested-fields">
+  <div class="bg-white nested-fields">
+    <div class="row ">
+      <%= f.hidden_field :purchase_sale_detail_id %>
+      <%= f.hidden_field :id %>
+      <div class="col-lg-6 form-group float-left">
+        <%= f.select :product_id, options_from_collection_for_select(@products, 'id', ->(st){"#{st.title} \u{27F6} #{st.code}"}, f.object.item_id), {label: "Product",prompt: "Select the Product"},required: true %>
+      </div>
+      <div class="col-lg-6 form-group float-left">
+        <%= f.text_field :size_13, placeholder: "Quota",  label: "Quota", value: "#{(f.object.size_13 == '0' ? nil : f.object.size_13)}" %>
+      </div>
+      <div class="col-lg-6 form-group float-left">
+        <%= f.text_field :size_12, placeholder: "Transaction Type:", label: "Transaction Type:", value: "#{(f.object.size_12 == '0' ? nil : f.object.size_12)}" %>
+      </div>
+      <div class="col-lg-6 form-group float-left">
+        <%= f.text_field :size_11, placeholder: "Form No:", label: "Form No:", value: "#{(f.object.size_11 == '0' ? nil : f.object.size_11)}" %>
+      </div>
+      <div class="col-lg-6 form-group float-left">
+        <%= f.text_field :size_10, placeholder: "Plot Quantity:", label: "Plot Quantity:", value: "#{(f.object.size_10 == '0' ? nil : f.object.size_10)}" %>
+      </div>
+      <div class="col-lg-6 form-group float-left">
+        <%= f.text_field :size_9,  placeholder: "Plot Category", label: "Plot Category", value: "#{(f.object.size_9 == '0' ? nil : f.object.size_9)}" %>
+      </div>
+      <div class="col-lg-6 form-group float-left">
+        <%= f.text_field :size_8,  placeholder: "Price per Plot", label: "Price per Plot", value: "#{(f.object.size_8 == '0' ? nil : f.object.size_8)}"%>
+      </div>
+      <div class="col-lg-6 form-group float-left">
+        <%= f.datetime_select :expiry_date,  placeholder: "Deal Date", label: "Deal Date"%>
+      </div>
+      <div class="col-lg-6 form-group float-left">
+        <%= f.text_field :size_7, placeholder: "Payment Type", label: "Payment Type", value: "#{(f.object.size_7 == '0' ? nil : f.object.size_7)}" %>
+      </div>
+      <div class="col-lg-6 form-group float-left">
+        <%= f.text_field :size_6, placeholder: "Down Payment",  label: "Down Payment",  value: "#{(f.object.size_6 == '0' ? nil : f.object.size_6)}" %>
+      </div>
+      <div class="col-lg-6 form-group float-left">
+        <%= f.text_field :size_5,  placeholder: "Rebate", label: "Rebate", value: "#{(f.object.size_5 == '0' ? nil : f.object.size_5)}"%>
+      </div>
+      <div class="col-lg-6 form-group float-left">
+        <%= f.text_field :size_4, placeholder: "Received Amount", label: "Received Amount", value: "#{(f.object.size_4 == '0' ? nil : f.object.size_4)}" %>
+      </div>
+      <div class="col-lg-6 form-group float-left">
+        <%= f.text_field :size_3, placeholder: "Balanced Amount", label: "Balanced Amount", value: "#{(f.object.size_3 == '0' ? nil : f.object.size_3)}" %>
+      </div>
+      <div class="col-lg-6 form-group float-left">
+        <%= f.text_field :size_2, placeholder: "Total Amount", label: "Total Amount", value: "#{(f.object.size_2 == '0' ? nil : f.object.size_2)}" %>
+      </div>
+      <div class="col-lg-6 form-group float-left">
+        <%= f.text_field :size_1, placeholder: "Trx No:", label: "Trx No", value: "#{(f.object.size_1 == '0' ? nil : f.object.size_1)}" %>
+      </div>
+    </div>
+  </div>
+</div>
+

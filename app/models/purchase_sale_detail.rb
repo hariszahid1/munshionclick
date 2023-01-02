@@ -1,7 +1,7 @@
 class PurchaseSaleDetail < ApplicationRecord
   belongs_to :sys_user
   belongs_to :order, optional: true
-  enum transaction_type: %i[Purchase Sale SaleReturn PurchaseReturn InWard OutWard InwardReturn OutWardReturn]
+  enum transaction_type: %i[Purchase Sale SaleReturn PurchaseReturn InWard OutWard InwardReturn OutWardReturn SaleDeal]
   enum status: %i[Clear Order UnClear]
   has_many :payments, as: :paymentable, dependent: :destroy
   has_many_attached :purchase_sale_images
