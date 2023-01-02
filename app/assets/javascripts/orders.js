@@ -173,3 +173,46 @@ $(document).on("click",".return_order.remove_fields.dynamic",function(){
       costUpdateReturnOrder();
     }, 70);
 });
+
+function commissionPercentageUpdateHscheme(){
+  var i;
+  var quantity = 0;
+  var total_quantity = 0;
+  var carriage = $("#purchase_sale_detail_carriage_perc_value").val()!= "" ? parseFloat($("#purchase_sale_detail_carriage_perc_value").val()) : 0
+  var loading = $("#purchase_sale_detail_loading_perc_value").val()!= "" ? parseFloat($("#purchase_sale_detail_loading_perc_value").val()) : 0
+  for (i = 0; i < $(".cost-price").length; i++) {
+    if($("#"+$(".quantity-price")[i].id).parent().parent().parent().css("display")!='none' && !isNaN(parseFloat($(".cost-price")[i].value)) && !isNaN(parseFloat($(".quantity-price")[i].value)) && !isNaN(parseFloat($(".discount-price")[i].value)) && !isNaN(parseFloat($("#purchase_sale_detail_total_bill").val())))
+    {
+      quantity = (parseFloat($(".quantity-price")[i].value)).toFixed(2) != 'NaN' ? (parseFloat($(".quantity-price")[i].value)) : 0;
+      total_quantity += quantity;
+      var cost = (parseFloat($(".cost-price-fixed")[i].value)).toFixed(2) != 'NaN' ? (parseFloat($(".cost-price-fixed")[i].value)) : 0;
+      $(".cost-price")[i].value = (cost-(((carriage*cost)/(100))+((loading*cost)/(100))));
+      $(".total-cost-price")[i].value = (cost-(((carriage*cost)/(100))+((loading*cost)/(100)))).toFixed(2);
+    }
+  }
+
+  var total_cost = $("#purchase_sale_detail_total_bill").val()
+  var commission_perc = (carriage*total_cost)/100
+  var loading_perc = (loading*total_cost)/100
+  $("#purchase_sale_detail_carriage_perc").val(commission_perc)
+  $("#purchase_sale_detail_loading_perc").val(loading_perc)
+}
+
+function commissionPriceUpdateHscheme(){
+
+  var i;
+  var quantity = 0;
+  var total_quantity = 0;
+  var carriage=$("#purchase_sale_detail_carriage_price_value").val()!= "" ? parseFloat($("#purchase_sale_detail_carriage_price_value").val()) : 0
+  var loading=$("#purchase_sale_detail_loading_price_value").val()!= "" ? parseFloat($("#purchase_sale_detail_loading_price_value").val()) : 0
+  for (i = 0; i < $(".cost-price").length; i++) {
+    if($("#"+$(".quantity-price")[i].id).parent().parent().parent().css("display")!='none' && !isNaN(parseFloat($(".cost-price")[i].value)) && !isNaN(parseFloat($(".quantity-price")[i].value)) && !isNaN(parseFloat($(".discount-price")[i].value)) && !isNaN(parseFloat($("#purchase_sale_detail_total_bill").val())))
+    {
+      quantity = (parseFloat($(".quantity-price")[i].value)).toFixed(2) != 'NaN' ? (parseFloat($(".quantity-price")[i].value)) : 0;
+      total_quantity += quantity;
+      var cost = (parseFloat($(".cost-price-fixed")[i].value)).toFixed(2) != 'NaN' ? (parseFloat($(".cost-price-fixed")[i].value)) : 0;
+      $(".cost-price")[i].value = (cost-(carriage+loading));
+      $(".total-cost-price")[i].value = (cost-(carriage+loading)).toFixed(2);
+    }
+  }
+}
