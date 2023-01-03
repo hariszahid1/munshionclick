@@ -16,7 +16,7 @@ class SaleDealsController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf do
-        render pdf: 'order-dynamic-pdf',
+        render pdf: 'sale_deal-pdf',
                template: 'sale_deals/show.pdf.erb',
                page_size: 'A4',
                orientation: 'Portrait',
