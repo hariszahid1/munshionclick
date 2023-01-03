@@ -1,0 +1,29 @@
+<h1 class="mt-2 mb-4 ml-1">Sale Deals</h1>
+<div class="card shadow border-radius-1 p-4">
+<div class="row d-flex mb-4">
+  <%= link_to new_sale_deal_path, class: "btn btn-success" do %>
+    <i class="fa fa-plus" aria-hidden="false"></i>
+    Create
+  <% end %>
+</div>
+  <div class="mt-3">
+    <table  id="pos_table" style="overflow: hidden;">
+      <thead>
+        <tr>
+          <th>Quota</th>
+          <th>Agent</th>
+          <th>Project</th>
+          <th>Plot Type</th>
+          <th>Category</th>
+          <th>Customer</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+      <%= render partial: 'sale_deal', collection: @sale_deals %>
+      </tbody>
+    </table>
+  </div>  
+</div>
+<br>

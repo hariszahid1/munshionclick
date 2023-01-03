@@ -1,6 +1,6 @@
 class WarrantiesController < ApplicationController
   before_action :set_warranty, only: [:show, :edit, :update, :destroy]
-
+  before_action :check_access
   # GET /warranties
   # GET /warranties.json
   def index

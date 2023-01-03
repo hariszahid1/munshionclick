@@ -67,7 +67,9 @@
           <%elsif check_system_type(@pos_setting)=="Factory"%>
             <%= render 'layouts/shared/sidebar_factory' %>
           <%elsif check_system_type(@pos_setting)=="ColdStorage"%>
-            <%= render 'layouts/shared/sidebar_coldstorage' %>
+            <%= render 'layouts/shared/sidebar_coldstorage' %> 
+          <%elsif check_system_type(@pos_setting)=="Dealer"%>
+            <%= render 'layouts/shared/sidebar_dealer' %>
           <%else%>
             <%= render 'layouts/shared/sidebar' %>
           <%end%>

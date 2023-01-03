@@ -1,0 +1,33 @@
+<%= bootstrap_form_with(model: @sale_deal, method: method, url: url, local: true) do |f| %>
+  <% if @sale_deal.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(sale.errors.count, "error") %> prohibited this Sale from being saved:</h2>
+      <ul>
+        <% @sale_deal.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class= 'row'>
+    <%= f.hidden_field :transaction_type, value: 'SaleDeal'%>
+    <div class="col-lg-6 form-group float-left">
+      <%= f.select :sys_user_id, options_from_collection_for_select(@sys_users, 'id', 'name', (f.object&.sys_user_id.nil? ? @sys_users&.first&.id : f&.object&.sys_user_id)), {label:'User'}, required: true,'data-rule-chosen-required':"true",:class=>"form-control chosen-select",onchange:"set_sys_user_balance(this.value,'sys_user_balance')",onkeyup:"set_sys_user_balance(this.value,'sys_user_balance')"%>
+    </div>
+    <div class="col-lg-6 form-group float-left">
+      <%= f.select :account_id , options_from_collection_for_select(@accounts, 'id', 'title', (f.object&.account_id.present? ? f.object&.account_id : @account)),{},class: "form-control"%>
+    </div>
+  </div>
+  <%= f.fields_for :purchase_sale_items do |purchase_sale_item| %>
+    <%= render 'purchase_sale_items_fields_new', f: purchase_sale_item %>
+  <% end %>
+
+  <div class="col-lg-6 form-group">
+    <%= f.text_area :comment,  placeholder: "Remarks", label: "Remarks" %>
+  </div>
+  <div class="clearfix"></div>
+  <div class="modal-footer mt-2">
+    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+    <%=f.object.id.nil? ? (f.submit 'Create sale deal', class: "btn btn-success mr-2", style: "float: right")  :  (f.submit 'Update sale Deal', class: "btn btn-warning mr-2", style: "float: right")%>
+  </div>
+<% end %>

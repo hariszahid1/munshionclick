@@ -1,7 +1,7 @@
 class PurchaseSaleDetail < ApplicationRecord
   belongs_to :sys_user
   belongs_to :order, optional: true
-  enum transaction_type: %i[Purchase Sale SaleReturn PurchaseReturn InWard OutWard InwardReturn OutWardReturn]
+  enum transaction_type: %i[Purchase Sale SaleReturn PurchaseReturn InWard OutWard InwardReturn OutWardReturn SaleDeal]
   enum status: %i[Clear Order UnClear]
   has_many :payments, as: :paymentable, dependent: :destroy
   has_many_attached :purchase_sale_images
@@ -18,7 +18,7 @@ class PurchaseSaleDetail < ApplicationRecord
   enum with_gst: %i[false true]
   has_paper_trail ignore: [:updated_at]
 
-  after_create :modify_account_balance
+  after_create :modify_account_balance, :set_qr_code
   after_update :update_account_balance
   after_destroy :delete_account_balance
   before_create :generate_guid
@@ -199,5 +199,10 @@ class PurchaseSaleDetail < ApplicationRecord
   def generate_guid
     self.guid = SecureRandom.hex(6)
     generate_guid if PurchaseSaleDetail.exists?(guid: guid)
+  end
+
+  def set_qr_code
+    update_column(:qr_code, PosSetting.first.website.to_s +
+      '/purchase_sale_details/' + self.id.to_s + '?' + 'receiveable=')
   end
 end
