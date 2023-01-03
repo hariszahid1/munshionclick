@@ -6,7 +6,7 @@ class SaleDealsController < ApplicationController
   # GET /sale_deals.json
   def index
     @q = PurchaseSaleDetail.ransack(params[:q])
-    @sale_deals = @q.result.where(transaction_type: 'SaleDeal')
+    @sale_deals = @q.result.where(transaction_type: 'SaleDeal').page(params[:page])
   end
 
   # GET /sale_deals/1
@@ -65,7 +65,7 @@ class SaleDealsController < ApplicationController
   # PATCH/PUT /sale_deals/1.json
   def update
     respond_to do |format|
-     
+
       if @sale_deal.update(sale_deal_params)
 
         format.html { redirect_to sale_deals_path, notice: 'Sale Deal was successfully updated.' }

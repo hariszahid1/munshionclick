@@ -1,29 +1,90 @@
-<h1 class="mt-2 mb-4 ml-1">Sale Deals</h1>
-<div class="card shadow border-radius-1 p-4">
-<div class="row d-flex mb-4">
-  <%= link_to new_sale_deal_path, class: "btn btn-success" do %>
-    <i class="fa fa-plus" aria-hidden="false"></i>
-    Create
-  <% end %>
+<div id="custom-alert" class="alert alert-danger d-none">
+  <span class="custom-alert-text"></span>
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">×</span>
+  </button>
 </div>
-  <div class="mt-3">
-    <table  id="pos_table" style="overflow: hidden;">
-      <thead>
-        <tr>
-          <th>Quota</th>
-          <th>Agent</th>
-          <th>Project</th>
-          <th>Plot Type</th>
-          <th>Category</th>
-          <th>Customer</th>
-          <th>Action</th>
-        </tr>
-      </thead>
+<div class='d-flex'>
+  <div>
+    <div class="row mb-1">
+      <h1 class="ml-2 col">Sale Deals</h1>
+    </div>
+    <div class="row mb-2">
+      <div class="col-lg-12 col-sm-12">
+        <div class="main-content-header">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a href="<%= root_path %>">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item active">
+              <a href="<%= sale_deals_path %>">Sale Deal</a>
+            </li>
+          </ol>
+        </div>
+        <div class="row mb-4">
+            <div id="new_city">
+              <%= link_to new_sale_deal_path,class: "btn btn-success mt-3 ml-2" do %>
+                <i class="fa fa-plus" aria-hidden="false"></i>
+                Create
+              <% end %>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="float-right">
+  <div class="dropdown ml-auto mr-4">
+    <span class="btn btn-info " title= "About This page"><i class="fa fa-question-circle"></i>Help</span>
+    <div class="dropdown-content">
+      <% if @help.present? %>
+        <% @help&.help_links.each do |link| %>
+          <a type="button" class="" target="_blank" href="<%= link[1] %>" >Help in <%= link[0] %></a>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>
 
-      <tbody>
+<ul class="nav nav-pills" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link tab-label cms-search-exp-tab active" data-toggle="tab" href="#search" role="tab">Search</a>
+  </li>
+</ul>
+
+<%= search_form_for @q, url: sale_deals_path, class: "admin-controls", method: "get" do |f| %>
+  <div class="tab-content">
+    <div class="tab-pane active mb-3 card shadow-sm mt-2 border-radius-1" id="search" role="tabpanel">
+      <p>
+        <span class="col-lg-12 mt-4">
+           <span class="col-lg-3 form-group float-left">
+              <%= f.select :sys_user_id_eq, options_for_select(@sys_users.map{ |p| [p.name , p.id]}, f.object.sys_user_id_eq),{:include_blank => "Select Name"},:class=>"form-control chosen-select" %>
+            </span>
+          <span class="col-lg-2 form-group float-left">
+            <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+          </span>
+        </span>
+      </p>
+    </div>
+  </div>
+<% end %>
+
+<div class="card shadow mt-4 p-2 border-radius-1">
+  <table data-toggle="table mt-3" data-search="true" class="overflow-hidden border-radius-1">
+    <thead>
+      <tr>
+        <th>Quota</th>
+        <th>Agent</th>
+        <th>Project</th>
+        <th>Plot Type</th>
+        <th>Category</th>
+        <th>Customer</th>
+        <th class="border_none">Action</th>
+      </tr>
+    </thead>
+    <tbody>
       <%= render partial: 'sale_deal', collection: @sale_deals %>
-      </tbody>
-    </table>
-  </div>  
+    </tbody>
+  </table>
 </div>
-<br>
+
