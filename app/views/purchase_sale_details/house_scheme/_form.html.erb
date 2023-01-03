@@ -182,15 +182,15 @@
           </div>
           <div class="font-weight-bold">
             <label class="required" for="purchase_sale_detail_loading_value">Resale Payment/Own</label>
-            <input onchange="saleCostUpdateReturn('commission')" onkeyup="saleCostUpdateReturn('commission')" class="form-control valid" type="number" value="0.0" id="purchase_sale_detail_loading_value" aria-invalid="false">
+            <% loading = f.object.loading.to_f %>
+            <% total_area = (f.object&.purchase_sale_items&.first&.quantity&.to_f).present? ? f.object&.purchase_sale_items&.first&.quantity&.to_f : 1  %>
+            <input onchange="saleCostUpdateReturn('commission')" onkeyup="saleCostUpdateReturn('commission')" class="form-control valid" type="number" value=<%=loading/(total_area) %> id="purchase_sale_detail_loading_value" aria-invalid="false">
           </div>
         </div>
         <div class="tab-pane  card border-radius-1 mt-3" id="com_with_perc" role="tabpanel">
           <div class="font-weight-bold">
             <label class="required" for="purchase_sale_detail_carriage_value">Commission With Percentage</label>
-            <% commition = f.object.carriage.to_f %>
-            <% total_area = (f.object&.purchase_sale_items&.first&.quantity&.to_f).present? ? f.object&.purchase_sale_items&.first&.quantity&.to_f : 1  %>
-            <input onchange="saleCostUpdateReturn('commission with perc')" onkeyup="saleCostUpdateReturn('commission with perc')" class="form-control valid" type="number" value=<%=commition/(total_area) %> id="purchase_sale_detail_carriage_perc_value" aria-invalid="false">
+            <input onchange="saleCostUpdateReturn('commission with perc')" onkeyup="saleCostUpdateReturn('commission with perc')" class="form-control valid" type="number" value="0.0" id="purchase_sale_detail_carriage_perc_value" aria-invalid="false">
           </div>
           <div class="font-weight-bold">
             <label class="required" for="purchase_sale_detail_loading_value">Resale Payment/Own</label>
@@ -200,9 +200,7 @@
         <div class="tab-pane card border-radius-1 mt-3" id="com_by_price" role="tabpanel">
           <div class="font-weight-bold">
             <label class="required" for="purchase_sale_detail_carriage_value">Commission by Price</label>
-            <% commition = f.object.carriage.to_f %>
-            <% total_area = (f.object&.purchase_sale_items&.first&.quantity&.to_f).present? ? f.object&.purchase_sale_items&.first&.quantity&.to_f : 1  %>
-            <%= f.number_field :carriage,onchange:"saleCostUpdateReturn('commission with price')",hide_label:true,onkeyup:"saleCostUpdateReturn('commission with price')", value: commition/(total_area), id: "purchase_sale_detail_carriage_price_value", required: true %>
+            <%= f.number_field :carriage,onchange:"saleCostUpdateReturn('commission with price')",hide_label:true,onkeyup:"saleCostUpdateReturn('commission with price')", id: "purchase_sale_detail_carriage_price_value", required: true %>
           </div>
           <div class="font-weight-bold">
             <label class="required" for="purchase_sale_detail_loading_value">Resale Payment/Own</label>
