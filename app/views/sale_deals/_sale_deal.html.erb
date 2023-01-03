@@ -35,11 +35,11 @@
 						<% if can?(:view, :all) %>
             	<div class="my-icon my-view">
             	  <div class="my-tooltip">
-            	    Show
+            	    PDF
             	  </div>
-            	    <%= link_to sale_deal_path(sale_deal), class:"icon-div" do %>
-            	      <i class="fa fa-eye mt-2" aria-hidden="true"></i>
-            	    <%end %>
+            	   <%= link_to sale_deal_path(sale_deal), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
+                    <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
+                  <%end %>
             	</div>
 						<%end%>
           </div>
