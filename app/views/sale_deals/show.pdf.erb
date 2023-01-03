@@ -1,0 +1,132 @@
+<html>
+  <head>
+    <%= wicked_pdf_stylesheet_link_tag ("pdf") -%>
+    <style>
+      .text-center{
+        text-align: center;
+      }
+      .text-right{
+        text-align: right;
+      }
+      .text-left{
+        text-align: left;
+      }
+      .d-flex{
+        display: flex;
+        display: -webkit-box;
+        margin-bottom: 10px;
+      }
+      .col-3{
+        -webkit-box-flex: 0;
+        flex: 0 0 25%;
+        max-width: 25%;
+        width: 25%;
+      }
+      .border-bottom{
+        border-bottom: 1px solid black;
+      }
+      .px-20{
+        padding: 0px 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <table>
+      <tr>
+        <th class='text-left'>
+          <img src="<%= @pos_setting.logo_images.first.service_url%>" height="100px" width= "100px"/>
+        </th>
+        <th style="vertical-align: bottom;" class='text-center'>
+          <p style='padding-left: 70px;'>Sale Reciept</p>
+        </th>
+        <th style="vertical-align: top;" class='text-right'>
+          <p>Ref: i0943289423i</p>
+          <p>Date: <%= Time.zone.now.strftime('%d-%m-%Y')%></p>
+        </th>
+      </tr>
+    </table>
+    <div class='d-flex '>
+      <div class='col-3 px-20'><b>Quota:</b></div>
+      <div class='col-3 border-bottom'><%= @sale_deal&.purchase_sale_items.first.size_13 %></div>
+      <div class='col-3 px-20'></div>
+      <div class='col-3'></div>
+    </div>
+
+    <div class='d-flex mr-4'>
+      <div class='col-3 px-20'><b>Agent Name:</b></div>
+      <div class='col-3 border-bottom'><%= @all_agents.to_h.invert[@sale_deal&.sys_user&.credit_status].to_s%></div>
+      <div class='col-3 px-20'><b>Transaction Type:</b></div>
+      <div class='col-3 border-bottom'><%= @sale_deal&.purchase_sale_items.first.size_12 %></div>
+    </div>
+
+    <div class='d-flex'>
+      <div class='col-3 px-20'><b>Project Name:</b></div>
+      <div class='col-3 border-bottom'><%= @sale_deal&.sys_user&.cms_data&.try(:[], 'project_name')&.titleize %></div>
+      <div class='col-3 px-20'><b>Form No:</b></div>
+      <div class='col-3 border-bottom'><%= @sale_deal&.purchase_sale_items.first.size_11 %></div>
+    </div>
+
+    <div class='d-flex mr-2'>
+      <div class='col-3 px-20'><b>Plot Size:</b></div>
+      <div class='col-3 border-bottom'><%= @sale_deal&.sys_user&.ntn %></div>
+      <div class='col-3 px-20'><b>Type of plot</b></div>
+      <div class='col-3 border-bottom'><%= @sale_deal&.sys_user&.cms_data&.try(:[], 'category')&.titleize %></div>
+    </div>
+
+    <div class='d-flex'>
+      <div class='col-3 px-20'><b>Plot Quantity:</b></div>
+      <div class='col-3 border-bottom'><%= @sale_deal&.purchase_sale_items&.first&.size_10 %></div>
+      <div class='col-3 px-20'><b>Plot Category</b></div>
+      <div class='col-3  border-bottom'><%= @sale_deal&.purchase_sale_items&.first&.size_9 %></div>
+    </div>
+
+    <div class='d-flex'>
+      <div class='col-3 px-20'><b>Price per Plot:</b></div>
+      <div class='col-3 border-bottom'><%= @sale_deal&.purchase_sale_items&.first&.size_8 %></div>
+      <div class='col-3 px-20'><b>Deal Date:</b></div>
+      <div class='col-3 border-bottom'><%= @sale_deal&.purchase_sale_items&.first&.expiry_date&.strftime('%d-%m-%Y') %></div>
+    </div>
+
+    <div class='d-flex'>
+      <div class='col-3 px-20'><b>Down Payment:</b></div>
+      <div class='col-3 border-bottom'><%= @sale_deal&.purchase_sale_items&.first&.size_6 %></div>
+      <div class='col-3 px-20'><b>Profit/Loss:</b></div>
+      <div class='col-3 border-bottom'><%= @sale_deal&.purchase_sale_items&.first&.size_5 %></div>
+    </div>
+
+    <div class='d-flex'>
+      <div class='col-3 px-20'><b>Receivede Amount:</b></div>
+      <div class='col-3 border-bottom'><%= @sale_deal&.purchase_sale_items&.first&.size_4 %></div>
+      <div class='col-3 px-20'><b>Total Amount</b></div>
+      <div class='col-3 border-bottom'><%= @sale_deal&.purchase_sale_items&.first&.size_2 %></div>
+    </div>
+
+    <div class='d-flex'>
+      <div class='col-3 px-20'><b>Payment Type:</b></div>
+      <div class='col-3 border-bottom'><%= @sale_deal&.purchase_sale_items&.first&.size_7 %></div>
+      <div class='col-3 px-20'><b>Balance Amount</b></div>
+      <div class='col-3 border-bottom'><%= @sale_deal&.purchase_sale_items&.first&.size_3 %></div>
+    </div>
+
+    <div class='d-flex'>
+      <div class='col-3 px-20'><b>Customer Name:</b></div>
+      <div class='col-3 border-bottom'><%= @sale_deal&.sys_user&.name %></div>
+      <div class='col-3 px-20'><b>Trx No:</b></div>
+      <div class='col-3 border-bottom'><%= @sale_deal&.purchase_sale_items&.first&.size_1 %></div>
+    </div>
+
+    <div class='d-flex'>
+      <div class='col-3 px-20'><b>Customer Contact:</b></div>
+      <div class='col-3 border-bottom'><%= @sale_deal&.sys_user&.occupation %></div>
+      <div class='col-3 px-20'><b>Customer CNIC:</b></div>
+      <div class='col-3 border-bottom'></div>
+    </div>
+
+    <div class='d-flex'>
+      <div class='col-3 px-20'></div>
+      <div class='col-3'></div>
+      <div class='col-3 px-20'><b>Customer Signature:</b></div>
+      <div class='col-3 border-bottom'></div>
+    </div>
+  </body>
+</html>
