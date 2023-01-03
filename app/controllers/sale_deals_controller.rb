@@ -6,7 +6,7 @@ class SaleDealsController < ApplicationController
   # GET /sale_deals.json
   def index
     @q = PurchaseSaleDetail.ransack(params[:q])
-    @sale_deals = @q.result.where(transaction_type: 'SaleDeal')
+    @sale_deals = @q.result.where(transaction_type: 'SaleDeal').page(params[:page])
   end
 
   # GET /sale_deals/1
@@ -50,6 +50,7 @@ class SaleDealsController < ApplicationController
     @sale_deal = PurchaseSaleDetail.new(sale_deal_params)
     respond_to do |format|
       if @sale_deal.save
+        modify_salary_details
         format.js
         format.html { redirect_to sale_deals_path, notice: 'Sale Deal was successfully created.' }
         format.json { render :show, status: :created, location: @sale_deal }
@@ -64,7 +65,7 @@ class SaleDealsController < ApplicationController
   # PATCH/PUT /sale_deals/1.json
   def update
     respond_to do |format|
-     
+
       if @sale_deal.update(sale_deal_params)
 
         format.html { redirect_to sale_deals_path, notice: 'Sale Deal was successfully updated.' }
@@ -94,6 +95,7 @@ class SaleDealsController < ApplicationController
   end
 
   def set_data
+    @staffs=Staff.all
     @sys_users = SysUser.all.where(for_crms: [false, nil])
     @accounts = Account.all
     @products = Product.all
@@ -116,5 +118,20 @@ class SaleDealsController < ApplicationController
                                                                                     size_9 size_10 size_11 size_12 size_13
         discount_price purchase_sale_type created_at expiry_date extra_expence extra_quantity gst gst_amount
       ])
+  end
+
+  def modify_salary_details
+    if @sale_deal.staff_id.present?
+      staff = @sale_deal.staff
+      staff.wage_debit += @sale_deal.carriage + @sale_deal.loading
+      staff.balance += @sale_deal.carriage + @sale_deal.loading
+      staff.save!
+      @sale_deal.salary_details.create(staff_id: @sale_deal.staff_id, amount: @sale_deal.carriage,
+                                       comment: 'Carriage', total_balance: staff.balance - @sale_deal.loading,
+                                       created_at: @sale_deal.created_at)
+      @sale_deal.salary_details.create(staff_id: @sale_deal.staff_id, amount: @sale_deal.loading,
+                                       comment: 'Loading', total_balance: staff.balance,
+                                       created_at: @sale_deal.created_at)
+    end
   end
 end

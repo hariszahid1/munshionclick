@@ -868,9 +868,14 @@ function costAtomUpdateReturn(){
   remaingUpdateAmount();
 }
 
-function saleCostUpdateReturn(){
-  if($("#pos_setting_sys_type").val()=="HousingScheme")
+function saleCostUpdateReturn(com_type){
+
+  if(($("#pos_setting_sys_type").val()=="HousingScheme") && (com_type=='commission' || parseFloat($("#purchase_sale_detail_carriage_value").val()) > 0 || parseFloat($("#purchase_sale_detail_loading_value").val()) > 0))
   {carriageCostUpdateHscheme();}
+  else if(($("#pos_setting_sys_type").val()=="HousingScheme") && (com_type=='commission with perc'))
+  {commissionPercentageUpdateHscheme();}
+  else if(($("#pos_setting_sys_type").val()=="HousingScheme") && (com_type=='commission with price'))
+  {commissionPriceUpdateHscheme();}
   else
   {carriageCostUpdate();}
   carriage=$("#purchase_sale_detail_carriage").val()!= "" ? parseFloat($("#purchase_sale_detail_carriage").val()) : 0

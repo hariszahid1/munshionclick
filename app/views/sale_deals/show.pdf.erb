@@ -138,21 +138,21 @@
       Note: This is a system generated reciept therefore sign and stamp are elecronically generated. As soon
       as you receive this reciept please verify the same by calling at this Number: 0321-8437272.
     </p>
-
-    <%
-      require "rqrcode"
-      qrcode = RQRCode::QRCode.new(@sale_deal.qr_code)
-      @svg = qrcode.as_svg(
-          color: "000",
-          shape_rendering: "crispEdges",
-          module_size: 11,
-          standalone: true,
-          use_path: true
-        )
-        @str=Base64.encode64(@svg ).gsub("\n", '')
-    %>
-    <img width="150px" height="115px" class="figure" style=""src=<%="data:image/svg+xml;base64,"+@str%> >
-
+    <% if @sale_deal.qr_code.present?%>
+      <%
+        require "rqrcode"
+        qrcode = RQRCode::QRCode.new(@sale_deal.qr_code)
+        @svg = qrcode.as_svg(
+            color: "000",
+            shape_rendering: "crispEdges",
+            module_size: 11,
+            standalone: true,
+            use_path: true
+          )
+          @str=Base64.encode64(@svg ).gsub("\n", '')
+      %>
+      <img width="150px" height="115px" class="figure" style=""src=<%="data:image/svg+xml;base64,"+@str%> >
+    <% end %>
     <div class='d-flex'>
       <div style='width: 50%; margin-top: 20px'>
         <h3>LAHORE  <img src="<%= image_url('pin-location.svg') %>" height='20px' width='20px'></h3>
