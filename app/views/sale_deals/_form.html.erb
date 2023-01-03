@@ -21,9 +21,21 @@
   <%= f.fields_for :purchase_sale_items do |purchase_sale_item| %>
     <%= render 'purchase_sale_items_fields_new', f: purchase_sale_item %>
   <% end %>
-
-  <div class="col-lg-6 form-group">
-    <%= f.text_area :comment,  placeholder: "Remarks", label: "Remarks" %>
+  <div class= 'row'>
+    <div class="col-lg-6 form-group">
+      <%= f.select :staff_id, options_from_collection_for_select(@staffs, 'id', 'name', f.object&.staff_id), {label: "Dealer",prompt: "Select Dealer"}%>
+    </div>
+    <div class="col-lg-6 form-group">
+      <%= f.number_field :carriage, placeholder: "Commission", label: "Commission"%>
+    </div>
+  </div>
+  <div class= 'row'>
+    <div class="col-lg-6 form-group">
+      <%= f.number_field :loading,  placeholder: "Resale Payment", label: "Resale Payment"%>
+    </div>
+    <div class="col-lg-6 form-group">
+      <%= f.text_area :comment,  placeholder: "External Remarks", label: "External Remarks" %>
+    </div>
   </div>
   <div class="clearfix"></div>
   <div class="modal-footer mt-2">
