@@ -14,7 +14,7 @@ class CrmsController < ApplicationController
   # GET /crms
   # GET /crms.json
   def index
-    @q = SysUser.order('id desc').where(for_crms: [true]).ransack(params[:q])
+    @q = SysUser.order('id desc').where(for_crms: [true, false]).ransack(params[:q])
     @sys_users = @q.result.page(params[:page])
     export_file if params[:export_data].present?
     download_crm_csv_file if params[:csv].present?
@@ -94,7 +94,7 @@ class CrmsController < ApplicationController
   end
 
   def convert_to_sys_user
-    SysUser.find(params[:crm_id]).update(for_crms: nil)
+    SysUser.find(params[:crm_id]).update(for_crms: false)
     respond_to do |format|
       format.html { redirect_to request.referrer, notice: 'CRM Data was successfully converted to User Data.' }
     end
@@ -243,7 +243,7 @@ def crm_charts
   @ct_name = @client_count.keys.map { |a| a.gsub(' ', '-') }
   @ct_type = @client_count.values
 
-  @deal_status_count = SysUser.group("cms_data->'$.deal_status'").where(for_crms: [true]).count.except(nil, '', '""')
+  @deal_status_count = SysUser.group("cms_data->'$.deal_status'").where(for_crms: [true, false]).count.except(nil, '', '""')
   @deal_status = @deal_status_count.keys.map { |a| a.gsub(' ', '-') }
   @deal_count = @deal_status_count.values
 

@@ -139,16 +139,17 @@ class OrdersController < ApplicationController
       request.format = 'pdf'
       print_pdf('Orders Detail', 'pdf.html', 'A4')
     else
-      if params[:purchase_sale_details].present?
-        params[:sale].present? ? @q = Order.includes(:purchase_sale_details).where(transaction_type: 'Sale').ransack(params[:q]) : @q = Order.includes(:purchase_sale_details).where(transaction_type: 'Purchase').ransack(params[:q])
-      else
-        params[:sale].present? ? @q = Order.includes(:purchase_sale_details).where(transaction_type: 'Sale').ransack(params[:q]) : @q = Order.includes(:purchase_sale_details).where(transaction_type: 'Purchase').ransack(params[:q])
-      end
+      params[:sale].present? ? @q = Order.includes(:purchase_sale_details).where(transaction_type: 'Sale').ransack(params[:q]) : @q = Order.includes(:purchase_sale_details).where(transaction_type: 'Purchase').ransack(params[:q])
+      params[:sale].present? ? @q_total = Order.ransack(params[:q]) : @q = Order.where(transaction_type: 'Purchase').ransack(params[:q])
       @q.sorts = 'id desc' if @q.result.count > 0 && @q.sorts.empty?
       @orders = @q.result.page(params[:page])
+      @order_total = @q_total.result
+      @order_purchase_total = @q.result
+      @order_total_bill_count = @order_total.sum(:total_bill)
+      @order_total_received_count = @order_total.sum(:amount) + @order_purchase_total.sum('purchase_sale_details.amount')
+      @order_discount_count = @order_total.sum(:discount_price) + @order_purchase_total.sum('purchase_sale_details.discount_price')
     end
-    @order_total_bill_count = @q.result.where(transaction_type: 'Sale').sum(:total_bill)
-    @order_discount_count = @q.result.where(transaction_type: 'Sale').sum(:discount_price)
+    
     @pdf_template = PdfTemplate.find_by(table_name: 'order', method_name: 'index')
   end
 

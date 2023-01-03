@@ -210,22 +210,16 @@
         </div>
 
  <div class='card border-radius-1 p-3 sys-user-book-index-card'>
+  <%if (check_can_delete(@module_permission))%>
+	  <button class="btn btn-outline-danger delete-selected mt-2" style=" position: absolute;" type='button' value='SysUser'>
+	  	Delete Selected
+	  </button>		
+  <%end%>
   <table data-toggle="table" data-search="true" class="overflow-hidden border-radius-1">
     <%= render 'map_columns/map_column_partials' %>
       <thead>
         <tr>
           <th><input type="checkbox" id="master" class='select-all-checkbox'>
-          <%if (check_can_delete(@module_permission))%>	
-							<div class="icon-container float-center">
-								<span class="ml-2 mt-2">
-									<div class="my-icon my-view">
-										<button class="icon-div btn delete-selected p-2 " type='button' value='SysUser'>
-											<i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i>
-										</button>
-									</div>
-								</span>
-							</div>
-						<%end%>
             </th>
           <th>ID<div class='float-right'><%= sort_link(@q, :id, "", {}, class: 'sorting-button') %></div></th>
           <th>Profile Image</th>
@@ -236,7 +230,6 @@
           <th>Occupation</th>
           <th>Opening Balance</th>
           <th>Balance<div class='float-right'><%= sort_link(@q, :balance, "", {}, class: 'sorting-button') %></div></th>
-          <th>Jama/Benam</th>
           <th>Address</th>
           <th>Action</th>
         </tr>
@@ -244,7 +237,7 @@
     <tbody>
        <% @sys_users.each do |sys_user| %>
         <% date = (sys_user.ledger_books.present? ? sys_user.ledger_books.last.created_at : sys_user.created_at)%>
-        <tr class=<%=((DateTime.now.to_datetime-date.to_datetime).to_i>30 && !sys_user.balance.to_i.zero?) ? 'table-danger' : ''%>>
+        <tr class=<%=((DateTime.now.to_datetime-date.to_datetime).to_i>30 && !sys_user.balance.to_i.zero?) ? '' : ''%>>
           <td><%= check_box_tag 'object_ids[]', sys_user.id %></td>
           <td><%= sys_user.id %></td>
           <td>
@@ -256,24 +249,60 @@
           </td>
           <td><%= sys_user.code %></td>
           <td class="urdu-font">
-            <%= link_to ledger_books_path('q[sys_user_id_eq]':sys_user.id) do%>
-              <i class="fa fa-address-book"></i><%= sys_user.name %>
-            <%end %>
+          <div class="icon-container">
+            <div class="my-icon my-view">
+              <div class="my-tooltip text-dark">
+                <h5><%= sys_user.name %></h5>
+              </div>
+                <%= link_to ledger_books_path('q[sys_user_id_eq]':sys_user.id) do%>
+                  <i class="fa fa-address-book"></i><%= (sys_user.name).truncate(15) %>
+                <%end %>
+            </div>
+          </div>
           </td>
           <td><%= link_to sys_user.user_group, user_groups_path() %></td>
           <td><%= sys_user.status %></td>
           <td><%= sys_user.occupation %></td>
           <td><b><%= number_with_delimiter(sys_user.opening_balance.to_f.round(2)) %></b></td>
-          <td><b><%= number_with_delimiter(sys_user.balance.to_f.round(2)) %></b> </td>
-           <td>
-            <%if (sys_user.balance.to_f > 0 ) %>
-              <b style="font-size:20px;color:blue;">Jama/Payable</b>
-            <%elsif (sys_user.balance.to_f < 0 ) %>
-              <b style="font-size:20px;color:red;">Benam/Receivable</b>
-            <%else%>
-              <b style="font-size:20px;color: #6cec53 ;">Nill</b>
-            <%end%>
-          </td>
+          <td>
+          <div class="icon-container">
+              <span class="mt-2 mr-1"><%= number_with_delimiter(sys_user.balance.to_f.round(2)) %></span>
+              <%if sys_user.balance.to_f > 0  %>
+                <div class="my-icon my-view">
+                  <div class="my-tooltip text-primary">
+                    Jama/Payable
+                  </div>
+                    <%= link_to sys_user_path(sys_user), remote: true, class:"icon-div" do %>
+                      <i class="fa fa-arrow-up mt-2 text-primary" aria-hidden="true"></i>
+                    <%end %>
+                </div>
+              <% end %> 
+              <%if sys_user.balance.to_f < 0  %>
+                <div class="my-icon my-view">
+                  <div class="my-tooltip text-danger">
+                    Benam/Recievable
+                  </div>
+                    <%= link_to sys_user_path(sys_user), remote: true, class:"icon-div" do %>
+                      <i class="fa fa-arrow-down mt-2 text-danger" aria-hidden="true"></i>
+                    <%end %>
+                </div>
+              <% end %> 
+              <%if sys_user.balance.to_f == 0  %>
+                <div class="my-icon my-view">
+                  <div class="my-tooltip text-success">
+                    Nil
+                  </div>
+                    <%= link_to sys_user_path(sys_user), remote: true, class:"icon-div" do %>
+                      <i class="fa fa-check mt-2 text-success" aria-hidden="true"></i>
+                    <%end %>
+                </div>
+              <% end %>  
+            </div>
+          
+          
+          
+           </td>
+           
           <td>
             <%if sys_user.contact.present?%>
             <%=sys_user.contact.city.title if sys_user.contact.city.present?%>

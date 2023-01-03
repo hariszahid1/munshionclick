@@ -241,7 +241,7 @@ class StaffsController < ApplicationController
                                   :monthly_salary, :school_branch_id, :wage_rate, :balance, :staff_department, :department_id, :staff_type, :wage_debit,
                                     :raw_product_quantity, :profile_image, :staff_raw_products_attributes => [:id, :staff_id, :raw_product_id, :_destroy],
                                   contact_attributes: [:country_id, :city_id, :address, :home, :office, :Mobile, :fax,
-                                    :email, :comment, :status, :permanent_address, :contactable_id, :contactable_type])
+                                    :email, :comment, :status, :permanent_address, :contactable_id, :contactable_type, :date_of_birth])
   end
 
   def createCSV(csv_name,csv_data)

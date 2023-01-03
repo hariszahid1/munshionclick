@@ -215,7 +215,6 @@ class SysUsersController < ApplicationController
   # POST /sys_users.json
   def create
     @sys_user = SysUser.new(sys_user_params)
-
     respond_to do |format|
       if @sys_user.save!
         format.html { redirect_to get_request_referrer, notice: 'Sys user was successfully created.' }
@@ -330,6 +329,7 @@ class SysUsersController < ApplicationController
         permanent_address
         contactable_type
         contactable_id
+        date_of_birth
       ],
       notes_attributes: %i[
         id

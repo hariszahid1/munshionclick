@@ -95,6 +95,7 @@
             <th><%= sort_link(@q, :purchase_sale_item_count, 'Plot') %></th>
             <th><%= sort_link(@q, :total_bill, 'Total Bill') %></th>
             <th><%= sort_link(@q, :amount, 'Received') %></th>
+            <th><%= sort_link(@q, :amount, 'Remaining') %></th>
             <th><%= sort_link(@q, :discount, 'Discount') %></th>
             <th><%= sort_link(@q, :created_at, 'Date/Time') %></th>
             <th><%= sort_link(@q, :comment, 'Comment') %></th>
@@ -118,6 +119,7 @@
               <td><%= order.purchase_sale_items.count rescue 0 %></td>
               <td><h6><%= number_with_delimiter(order.total_bill.to_f.round(2)) rescue 0 %></h6></td>
               <td><h6><%= number_with_delimiter(order.amount.to_i+order.purchase_sale_details.sum(:amount).to_i) %></h6></td>
+              <td><h6><%= number_with_delimiter((order.total_bill.to_f.round(2))-(order.amount.to_i+order.purchase_sale_details.sum(:amount).to_i)) %></h6></td>
               <td><h6><%= number_with_delimiter(order.purchase_sale_details.sum(:discount_price).to_f.round(2)) %></h6></td>
               <td>
                 <%if order.created_at.strftime("%d%b%y")!=order.updated_at.strftime("%d%b%y")%>
@@ -231,7 +233,7 @@
               </td>
             </tr>
           <tr>
-            <td colspan="10" class="hiddenRow">
+            <td colspan="11" class="hiddenRow">
               <div class="accordian-body collapse card shadow-lg m-4" style="border-radius: 18px;" id="<%= demo_id %>"> 
                 <% if order.property_plans.present? %> 
                   <div class="row m-3">
@@ -478,9 +480,10 @@
           <td></td>
           <td></td>
           <td></td>
-          <td><%= number_with_delimiter(@q.result.sum(:total_bill)) %></td>
-          <td><%= number_with_delimiter(@q.result.sum(:amount)+@q.result.sum('purchase_sale_details.amount')) %></td>
-          <td><%= number_with_delimiter(@q.result.sum('purchase_sale_details.discount_price')) %></td>
+          <td><%= number_with_delimiter(@order_total_bill_count) %></td>
+          <td><%= number_with_delimiter(@order_total_received_count) %></td>
+          <td><%= number_with_delimiter(@order_total_bill_count-@order_total_received_count) %></td>
+          <td><%= number_with_delimiter(@order_discount_count) %></td>
           <td></td>
           </tr> 
       </tbody>

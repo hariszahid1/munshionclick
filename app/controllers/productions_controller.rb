@@ -1,6 +1,6 @@
 class ProductionsController < ApplicationController
   before_action :set_production, only: [:show, :edit, :update, :destroy]
-
+  before_action :check_access
   # GET /productions
   # GET /productions.json
   def index

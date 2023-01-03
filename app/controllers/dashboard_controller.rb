@@ -3,7 +3,7 @@ class DashboardController < ApplicationController
   def index
     redirect_to orders_path(sale: true) if current_user.salesman?
     @product_count=Product.count
-    @cms_user_count=SysUser.where(for_crms: [true]).count
+    @cms_user_count=SysUser.where(for_crms: [true, false]).count
     @sys_user_count=SysUser.where(for_crms: [false, nil]).count
     @total_sale_slips = PurchaseSaleDetail.where(transaction_type: "Sale").count
     @total_purchase_slips = PurchaseSaleDetail.where(transaction_type: "Purchase").count
