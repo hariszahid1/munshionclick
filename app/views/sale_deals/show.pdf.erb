@@ -70,7 +70,7 @@
       <div class='col-3 px-20'><b>Plot Size:</b></div>
       <div class='col-3 border-bottom'><%= @sale_deal&.sys_user&.ntn %></div>
       <div class='col-3 px-20'><b>Type of plot</b></div>
-      <div class='col-3 border-bottom'><%= @sale_deal&.sys_user&.cms_data&.try(:[], 'client_status')&.titleize %></div>
+      <div class='col-3 border-bottom'><%= @sale_deal&.sys_user&.cms_data&.try(:[], 'category')&.titleize %></div>
     </div>
 
     <div class='d-flex'>

@@ -1,6 +1,6 @@
 class SaleDealsController < ApplicationController
   before_action :set_sale_deal, only: %i[show edit update destroy]
-  before_action :set_data, only: %i[new edit create update show]
+  before_action :set_data, only: %i[new edit create update show index]
 
   # GET /sale_deals
   # GET /sale_deals.json
