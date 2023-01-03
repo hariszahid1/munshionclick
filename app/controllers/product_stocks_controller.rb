@@ -1,6 +1,6 @@
 class ProductStocksController < ApplicationController
   before_action :set_product_stock, only: [:show, :edit, :update, :destroy]
-
+  before_action :check_access
   # GET /product_stocks
   # GET /product_stocks.json
   def index
