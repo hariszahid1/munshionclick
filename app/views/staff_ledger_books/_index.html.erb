@@ -156,20 +156,16 @@
 
 
 <div class="card shadow-sm border-radius-1 p-2 ledger-book-index-card">
+  <%if (check_can_delete(@module_permission))%>
+	  <button class="btn btn-outline-danger delete-selected mt-2" style=" position: absolute;" type='button' value='StaffLedgerBook'>
+	  	Delete Selected
+	  </button>		
+  <%end%>
   <table data-toggle="table" data-search="true" id="ledger_book_table" class=" overflow-hidden border-radius-1">
     <thead>
       <tr>
-      <th>
+        <th>
           <input type="checkbox" id="master" class='select-all-checkbox'>
-          <div class="icon-container float-center">
-            <span class="ml-2 mt-2">
-              <div class="my-icon my-view">
-                <button class="icon-div btn delete-selected p-2 " type='button' value='StaffLedgerBook'>
-                  <i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i> 
-                </button>
-              </div>
-            </span>
-          </div>
         </th>
         <th>ID<div class="float-right"><%= sort_link(@q, :id, "", {}, class: 'sorting-button') %></div></th>
         <th>Staff<div class="float-right"><%= sort_link(@q, :staff, "", {}, class: 'sorting-button') %></div></th>

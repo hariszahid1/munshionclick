@@ -10,6 +10,7 @@
       </ul>
     </div>
   <% end %>
+  <div class="card border-radius-1 shadow p-3 mb-3">
   <table>
     <thead>
       <th>Product</th>
@@ -51,30 +52,29 @@
         <% end %>
       </tbody>
     </table>
+  </div>  
   <%end%>
-  <div class="col-lg-12">
-    <div class="col-lg-6" style="float:left">
-      <div class="links">
-          <%= link_to_add_association 'Add Items', f, :materials, partial: 'materials_fields_item_new', class: "btn btn-info" %>
+  <div class="row">
+    <div class="col">
+      <div class="links" style="float:left">
+          <%= link_to_add_association 'Add Items', f, :materials, partial: 'materials_fields_item_new', class: "btn btn-primary text-light" %>
       </div>
     </div>
-    <div class="col-lg-6" style="float:right">
-      <div class="links " style="float:right">
-          <%= link_to_add_association 'Add products', f, :materials, partial: 'materials_fields_product_new', class: "btn btn-info" %>
+    <div class="col">
+      <div class="links" style="float:right">
+          <%= link_to_add_association 'Add products', f, :materials, partial: 'materials_fields_product_new', class: "btn btn-primary text-light" %>
       </div>
     </div>
   </div>
   <br>
   <div class="clearfix">
-    <br>
+  <hr>
 
   </div>
   <div class="actions">
-    <div class="col-lg-6" style="float:left">
-      <%= link_to 'Production', productions_path, class: "btn btn-info" %>
-    </div>
-    <div class="col-lg-6" style="float:left">
-      <%= f.submit class: "btn btn-primary", style: "float: right" %>
-    </div>
+    <%= link_to productions_path, class:"btn btn-info" do %>
+      <i class="fa fa-arrow-left mr-2" aria-hidden="true"></i>Back to Productions
+    <% end %>    
+    <%= f.submit class: "btn btn-success", style: "float: right" %>
   </div>
 <% end %>

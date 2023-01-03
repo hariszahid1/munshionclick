@@ -29,6 +29,10 @@
 </div>
 
 <div class="col-lg-6" style="float:left">
+  <%= af.date_field :date_of_birth, placeholder:"Enter Date of Birth", class: "form-control" %>
+</div>
+
+<div class="col-lg-6" style="float:left">
   <%= af.text_field :email, placeholder:"Enter Email", class: "form-control" %>
 </div>
 
@@ -41,7 +45,7 @@
   <%= af.text_area :address, hide_label: true , placeholder:"Enter Address",class: 'urdu-font form-control' %>
 </div>
 
-<div class="col-lg-6" style="float:left">
+<div class="col-lg-12" style="float:left">
   <%= af.label :address do %>
     <%= Contact.human_attribute_name :permanent_address
       %>
@@ -50,7 +54,7 @@
   <%= af.text_area :permanent_address, hide_label: true , placeholder:"Enter Permanent Address",class: 'urdu-font form-control' %>
 </div>
 
-<div class="col-lg-6" style="float:left">
+<div class="col-lg-12" style="float:left">
   <%= af.label :comment do %>
     <%= Contact.human_attribute_name :comment
       %>
