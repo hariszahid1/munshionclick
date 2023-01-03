@@ -178,13 +178,11 @@
             <label class="required" for="purchase_sale_detail_carriage_value">Commission</label>
             <% commition = f.object.carriage.to_f %>
             <% total_area = (f.object&.purchase_sale_items&.first&.quantity&.to_f).present? ? f.object&.purchase_sale_items&.first&.quantity&.to_f : 1  %>
-            <input onchange="saleCostUpdateReturn()" onkeyup="saleCostUpdateReturn()" class="form-control valid" type="number" value=<%=commition/(total_area) %> id="purchase_sale_detail_carriage_value" aria-invalid="false">
-            <%= f.number_field :carriage,onchange:"saleCostUpdateReturn()",hide_label:true,onkeyup:"saleCostUpdateReturn()", required: true, readonly:true%>
+            <input onchange="saleCostUpdateReturn('commission')" onkeyup="saleCostUpdateReturn('commission')" class="form-control valid" type="number" value=<%=commition/(total_area) %> id="purchase_sale_detail_carriage_value" aria-invalid="false">
           </div>
           <div class="font-weight-bold">
             <label class="required" for="purchase_sale_detail_loading_value">Resale Payment/Own</label>
-            <input onchange="saleCostUpdateReturn()" onkeyup="saleCostUpdateReturn()" class="form-control valid" type="number" value="0.0" id="purchase_sale_detail_loading_value" aria-invalid="false">
-            <%= f.number_field :loading,onchange:"saleCostUpdateReturn()",hide_label:true,onkeyup:"saleCostUpdateReturn()", required: true, readonly:true%>
+            <input onchange="saleCostUpdateReturn('commission')" onkeyup="saleCostUpdateReturn('commission')" class="form-control valid" type="number" value="0.0" id="purchase_sale_detail_loading_value" aria-invalid="false">
           </div>
         </div>
         <div class="tab-pane  card border-radius-1 mt-3" id="com_with_perc" role="tabpanel">
@@ -192,13 +190,11 @@
             <label class="required" for="purchase_sale_detail_carriage_value">Commission With Percentage</label>
             <% commition = f.object.carriage.to_f %>
             <% total_area = (f.object&.purchase_sale_items&.first&.quantity&.to_f).present? ? f.object&.purchase_sale_items&.first&.quantity&.to_f : 1  %>
-            <input onchange="commissionPercentageUpdateHscheme()" onkeyup="commissionPercentageUpdateHscheme()" class="form-control valid" type="number" value=<%=commition/(total_area) %> id="purchase_sale_detail_carriage_perc_value" aria-invalid="false">
-            <%= f.number_field :carriage,onchange:"commissionPercentageUpdateHscheme()",hide_label:true,onkeyup:"commissionPercentageUpdateHscheme()", id: "purchase_sale_detail_carriage_perc", required: true, readonly:true%>
+            <input onchange="saleCostUpdateReturn('commission with perc')" onkeyup="saleCostUpdateReturn('commission with perc')" class="form-control valid" type="number" value=<%=commition/(total_area) %> id="purchase_sale_detail_carriage_perc_value" aria-invalid="false">
           </div>
           <div class="font-weight-bold">
             <label class="required" for="purchase_sale_detail_loading_value">Resale Payment/Own</label>
-            <input onchange="commissionPercentageUpdateHscheme()" onkeyup="commissionPercentageUpdateHscheme()" class="form-control valid" type="number" value="0.0" id="purchase_sale_detail_loading_perc_value" aria-invalid="false">
-            <%= f.number_field :loading,onchange:"commissionPercentageUpdateHscheme()",hide_label:true,onkeyup:"commissionPercentageUpdateHscheme()", id: "purchase_sale_detail_loading_perc", required: true, readonly:true%>
+            <input onchange="saleCostUpdateReturn('commission with perc')" onkeyup="saleCostUpdateReturn('commission with perc')" class="form-control valid" type="number" value="0.0" id="purchase_sale_detail_loading_perc_value" aria-invalid="false">
           </div>
         </div>
         <div class="tab-pane card border-radius-1 mt-3" id="com_by_price" role="tabpanel">
@@ -206,13 +202,17 @@
             <label class="required" for="purchase_sale_detail_carriage_value">Commission by Price</label>
             <% commition = f.object.carriage.to_f %>
             <% total_area = (f.object&.purchase_sale_items&.first&.quantity&.to_f).present? ? f.object&.purchase_sale_items&.first&.quantity&.to_f : 1  %>
-            <%= f.number_field :carriage,onchange:"commissionPriceUpdateHscheme()",hide_label:true,onkeyup:"commissionPriceUpdateHscheme()", value: commition/(total_area), id: "purchase_sale_detail_carriage_price_value", required: true %>
+            <%= f.number_field :carriage,onchange:"saleCostUpdateReturn('commission with price')",hide_label:true,onkeyup:"saleCostUpdateReturn('commission with price')", value: commition/(total_area), id: "purchase_sale_detail_carriage_price_value", required: true %>
           </div>
           <div class="font-weight-bold">
             <label class="required" for="purchase_sale_detail_loading_value">Resale Payment/Own</label>
-            <%= f.number_field :loading,onchange:"commissionPriceUpdateHscheme()",hide_label:true,onkeyup:"commissionPriceUpdateHscheme()", id: "purchase_sale_detail_loading_price_value", required: true %>
+            <%= f.number_field :loading,onchange:"saleCostUpdateReturn('commission with price')",hide_label:true,onkeyup:"saleCostUpdateReturn('commission with price')", id: "purchase_sale_detail_loading_price_value", required: true %>
           </div>
         </div>
+      </div>
+      <div>
+        <%= f.number_field :carriage,hide_label:true, required: true, readonly:true%>
+        <%= f.number_field :loading,hide_label:true, required: true, readonly:true%>
       </div>
     </div>
     <div class="col card border-radius-1 shadow p-3 m-4">
@@ -246,8 +246,8 @@
       $('#purchase_sale_detail_carriage_price_value').val(0)
       $('#purchase_sale_detail_loading_perc_value').val(0)
       $('#purchase_sale_detail_loading_price_value').val(0)
-      commissionPercentageUpdateHscheme()
-      commissionPriceUpdateHscheme()
+      saleCostUpdateReturn()
+
       $('#purchase_sale_detail_carriage_value').attr('disabled', false)
       $('#purchase_sale_detail_loading_value').attr('disabled', false)
 
@@ -263,7 +263,6 @@
       $('#purchase_sale_detail_loading_value').val(0)
       $('#purchase_sale_detail_loading_price_value').val(0)
       saleCostUpdateReturn()
-      commissionPriceUpdateHscheme()
       $('#purchase_sale_detail_carriage_perc_value').attr('disabled', false)
       $('#purchase_sale_detail_loading_perc_value').attr('disabled', false)
 
@@ -279,8 +278,7 @@
       $('#purchase_sale_detail_carriage_perc_value').val(0)
       $('#purchase_sale_detail_loading_value').val(0)
       $('#purchase_sale_detail_loading_perc_value').val(0)
-      saleCostUpdateReturn()
-      commissionPercentageUpdateHscheme()
+       saleCostUpdateReturn()
       $('#purchase_sale_detail_loading_price_value').attr('disabled', false)
       $('#purchase_sale_detail_carriage_price_value').attr('disabled', false)
 

@@ -187,15 +187,14 @@ function commissionPercentageUpdateHscheme(){
       total_quantity += quantity;
       var cost = (parseFloat($(".cost-price-fixed")[i].value)).toFixed(2) != 'NaN' ? (parseFloat($(".cost-price-fixed")[i].value)) : 0;
       $(".cost-price")[i].value = (cost-(((carriage*cost)/(100))+((loading*cost)/(100))));
-      $(".total-cost-price")[i].value = (cost-(((carriage*cost)/(100))+((loading*cost)/(100)))).toFixed(2);
     }
   }
 
   var total_cost = $("#purchase_sale_detail_total_bill").val()
   var commission_perc = (carriage*total_cost)/100
   var loading_perc = (loading*total_cost)/100
-  $("#purchase_sale_detail_carriage_perc").val(commission_perc)
-  $("#purchase_sale_detail_loading_perc").val(loading_perc)
+  $("#purchase_sale_detail_carriage").val(commission_perc)
+  $("#purchase_sale_detail_loading").val(loading_perc)
 }
 
 function commissionPriceUpdateHscheme(){
@@ -211,8 +210,13 @@ function commissionPriceUpdateHscheme(){
       quantity = (parseFloat($(".quantity-price")[i].value)).toFixed(2) != 'NaN' ? (parseFloat($(".quantity-price")[i].value)) : 0;
       total_quantity += quantity;
       var cost = (parseFloat($(".cost-price-fixed")[i].value)).toFixed(2) != 'NaN' ? (parseFloat($(".cost-price-fixed")[i].value)) : 0;
-      $(".cost-price")[i].value = (cost-(carriage+loading));
-      $(".total-cost-price")[i].value = (cost-(carriage+loading)).toFixed(2);
+      var total_cost = $("#purchase_sale_detail_total_bill").val()
+      $(".total-cost-price")[i].value = (total_cost-(carriage+loading)).toFixed(2);
+      var c_value =  $(".total-cost-price")[i].value
+      $(".cost-price")[i].value = (c_value/quantity).toFixed(2);
     }
   }
+
+  $("#purchase_sale_detail_carriage").val(carriage)
+  $("#purchase_sale_detail_loading").val(loading)
 }
