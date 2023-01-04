@@ -140,7 +140,7 @@ class OrdersController < ApplicationController
       print_pdf('Orders Detail', 'pdf.html', 'A4')
     else
       params[:sale].present? ? @q = Order.includes(:purchase_sale_details).where(transaction_type: 'Sale').ransack(params[:q]) : @q = Order.includes(:purchase_sale_details).where(transaction_type: 'Purchase').ransack(params[:q])
-      params[:sale].present? ? @q_total = Order.ransack(params[:q]) : @q = Order.where(transaction_type: 'Purchase').ransack(params[:q])
+      params[:sale].present? ? @q_total = Order.ransack(params[:q]) : @q_total = Order.where(transaction_type: 'Purchase').ransack(params[:q])
       @q.sorts = 'id desc' if @q.result.count > 0 && @q.sorts.empty?
       @orders = @q.result.page(params[:page])
       @order_total = @q_total.result

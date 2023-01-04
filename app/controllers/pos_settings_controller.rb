@@ -34,8 +34,9 @@ class PosSettingsController < ApplicationController
     pos_setting_params[:sms_templates] = eval(pos_setting_params[:sms_templates])
     pos_setting_params[:qr_links] = eval(pos_setting_params[:qr_links])
     pos_setting_params[:extra_settings] = eval(pos_setting_params[:extra_settings])
-    @pos_setting = PosSetting.new(pos_setting_params)
+    pos_setting_params[:custom_pagination] = eval(pos_setting_params[:custom_pagination])
 
+    @pos_setting = PosSetting.new(pos_setting_params)
     respond_to do |format|
       if @pos_setting.save
         format.js
@@ -55,10 +56,13 @@ class PosSettingsController < ApplicationController
       pos_setting_params[:sms_templates] = eval(pos_setting_params[:sms_templates])
       pos_setting_params[:qr_links] = eval(pos_setting_params[:qr_links])
       pos_setting_params[:extra_settings] = eval(pos_setting_params[:extra_settings])
+      pos_setting_params[:custom_pagination] = eval(pos_setting_params[:custom_pagination])
+
       if @pos_setting.update(pos_setting_params)
         @pos_setting.update(sms_templates: eval(pos_setting_params[:sms_templates]))
         @pos_setting.update(qr_links: eval(pos_setting_params[:qr_links]))
         @pos_setting.update(extra_settings: eval(pos_setting_params[:extra_settings]))
+        @pos_setting.update(custom_pagination: eval(pos_setting_params[:custom_pagination]))
 
         format.html { redirect_to pos_settings_path, notice: 'General Setting was successfully updated.' }
         format.json { render :show, status: :ok, location: @pos_setting }
@@ -127,11 +131,12 @@ class PosSettingsController < ApplicationController
         :company_mask,
         :qr_links,
         :extra_settings,
+        :custom_pagination,
         :email_to,
         :email_cc,
         :email_bcc,
         logo_images: [],
-        images: [],
+        images: []
       )
     end
 end
