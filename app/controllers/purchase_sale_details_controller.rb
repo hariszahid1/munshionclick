@@ -549,12 +549,20 @@ class PurchaseSaleDetailsController < ApplicationController
     @id=PurchaseSaleDetail.where(created_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).count
     request.format = 'pdf'
     if @pos_setting.sys_type=="industry" || @pos_setting.sys_type =="HousingScheme"
-      @profile_image_url = @purchase_sale_detail.order.sys_user.profile_image.url
-      name = @purchase_sale_detail.sys_user.name+' Invoice #'+@purchase_sale_detail.id.to_s
-      respond_to do |format|
-        format.html
-        format.pdf do
-          print_pdf(name,'pdf.html','A4')
+      if @pos_setting.extra_settings['ghouse5'].present?
+        respond_to do |format|
+          format.pdf do
+            print_pdf('installment_payment', nil,'A4')
+          end
+        end
+      else
+        @profile_image_url = @purchase_sale_detail.order.sys_user.profile_image.url
+        name = @purchase_sale_detail.sys_user.name+' Invoice #'+@purchase_sale_detail.id.to_s
+        respond_to do |format|
+          format.html
+          format.pdf do
+            print_pdf(name,'pdf.html','A4')
+          end
         end
       end
     elsif params[:pdf]
@@ -729,16 +737,23 @@ class PurchaseSaleDetailsController < ApplicationController
             # @purchase_sale_detail.save!
           end
           if @pos_setting.sys_type=="industry" || @pos_setting.sys_type =="HousingScheme"
-            if params[:commit]=="Save with Print"
+            if @pos_setting.extra_settings['ghouse5'].present?
               request.format = 'pdf'
               format.pdf do
-                name = @purchase_sale_detail.sys_user.name+' Invoice #'+@purchase_sale_detail.id.to_s
-                print_pdf(name,'pdf.html','A4')
+                print_pdf('installment_payment', nil,'A4',false)
               end
-            end
-            if @pos_setting.sms_templates.present?
-              send_sms(@purchase_sale_detail.sys_user&.contact&.phone_with_comma,@pos_setting.sms_templates["new_invoice"],'','') if @pos_setting.sms_templates["new_invoice"].present? && @purchase_sale_detail.amount.to_f > 0
-              send_sms(@purchase_sale_detail.sys_user&.contact&.phone_with_comma,@pos_setting.sms_templates["new_fine"],'','') if @pos_setting.sms_templates["new_fine"].present? && @purchase_sale_detail.order.present? && @purchase_sale_detail.order.purchase_sale_details.count > 1 && @purchase_sale_detail.purchase_sale_items.count > 0
+            else
+              if params[:commit]=="Save with Print"
+                request.format = 'pdf'
+                format.pdf do
+                  name = @purchase_sale_detail.sys_user.name+' Invoice #'+@purchase_sale_detail.id.to_s
+                  print_pdf(name,'pdf.html','A4')
+                end
+              end
+              if @pos_setting.sms_templates.present?
+                send_sms(@purchase_sale_detail.sys_user&.contact&.phone_with_comma,@pos_setting.sms_templates["new_invoice"],'','') if @pos_setting.sms_templates["new_invoice"].present? && @purchase_sale_detail.amount.to_f > 0
+                send_sms(@purchase_sale_detail.sys_user&.contact&.phone_with_comma,@pos_setting.sms_templates["new_fine"],'','') if @pos_setting.sms_templates["new_fine"].present? && @purchase_sale_detail.order.present? && @purchase_sale_detail.order.purchase_sale_details.count > 1 && @purchase_sale_detail.purchase_sale_items.count > 0
+              end
             end
           else
             if params[:commit]=="Save with Print"
