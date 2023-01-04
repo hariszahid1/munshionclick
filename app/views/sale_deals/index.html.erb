@@ -56,14 +56,24 @@
   <div class="tab-content">
     <div class="tab-pane active mb-3 card shadow-sm mt-2 border-radius-1" id="search" role="tabpanel">
       <p>
-        <span class="col-lg-12 mt-4">
-           <span class="col-lg-3 form-group float-left">
-              <%= f.select :sys_user_id_eq, options_for_select(@sys_users.map{ |p| [p.name , p.id]}, f.object.sys_user_id_eq),{:include_blank => "Select Name"},:class=>"form-control chosen-select" %>
-            </span>
-          <span class="col-lg-2 form-group float-left">
+        <div class="row p-3">
+          <div class="col-lg-3 form-group float-left">
+            <%= f.select :sys_user_id_eq, options_for_select(@sys_users.map{ |p| [p.name , p.id]}, f.object.sys_user_id_eq),{:include_blank => "Select Customer Name"},:class=>"form-control chosen-select" %>
+          </div>
+          <div class="col-lg-3 form-group float-left">
+            <%= f.select :sys_user_credit_status_eq, options_for_select(@all_agents.map{ |key, value| [key , value]}, f.object.sys_user_credit_status_eq),{:include_blank => "Select Agent Name"},:class=>"form-control chosen-select" %>
+          </div>
+          <div class="col-lg-3 form-group float-left">
+            <%= f.search_field :purchase_sale_items_size_13_cont, class: "form-control chosen-select", placeholder: "Search Quota" %>
+          </div>
+          <div class="col-lg-1 form-group float-left">
             <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
-          </span>
-        </span>
+          </div>
+          <div class="col-lg-2 form-group float-left">
+            <button class="btn btn-warning float-right" style="width: 100px;" title= "download expense vouchers csv" name="csv" type="submit" value="csv"><i class="fa fa-file-excel mr-2"></i>CSV</button>
+            <button class="btn btn-danger float-right mr-2" style="width: 100px;" title= "download expense vouchers pdf" name="pdf" type="submit" value="pdf"><i class="fa fa-file-excel mr-2"></i>PDF</button>
+          </div>
+        </div>
       </p>
     </div>
   </div>
