@@ -165,7 +165,8 @@ class LedgerBooksController < ApplicationController
         @ledger_books_csv = @q.result(distinct: true)
         createCSV
       else
-        print_pdf('User LedgerBook -' + @created_at_gteq.to_s + ' to ' + @created_at_lteq.to_s, 'pdf.html', 'A4')
+        pdfName = '[' + LedgerBook.where(id: @ledger_books.ids).joins(:sys_user).pluck('name').uniq.join(' ') + ']'
+        print_pdf("#{pdfName}-LedgerBook -" + @created_at_gteq.to_s + ' to ' + @created_at_lteq.to_s, 'pdf.html', 'A4')
       end
     elsif params[:submit_debit].present? or params[:submit_debit_csv].present?
       @debit = true
