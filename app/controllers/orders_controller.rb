@@ -198,8 +198,6 @@ class OrdersController < ApplicationController
         @accounts = Account.all
       end
       @q.sorts = 'id desc' if @q.result.count > 0 && @q.sorts.empty?
-      if params[:q].present?
-      end
       @orders = @q.result.page(params[:page])
       @suppliers = SysUser.where(user_group: %w[Supplier Both Own])
       @customers = SysUser.where(user_group: %w[Customer Supplier Both Salesman])
@@ -212,6 +210,31 @@ class OrdersController < ApplicationController
       render partial: '/orders/fast_food/create'
     else
       print_pdf(@order&.sys_user&.name.to_s + ' Order-Detail', 'pdf.html', 'A4')
+    end
+  end
+
+  def booking_reciept
+    @order = Order.find(params[:order_id])
+    request.format = 'pdf'
+    respond_to do |format|
+      format.html
+      format.pdf do
+        render pdf: 'booking_reciept',
+               template: 'orders/booking_reciept.pdf.erb',
+               page_size: 'A4',
+               orientation: 'Portrait',
+               margin: {
+                 margin_top: @pos_setting&.pdf_margin_top.to_f,
+                 margin_right: @pos_setting&.pdf_margin_right.to_f,
+                 margin_bottom: @pos_setting&.pdf_margin_bottom.to_f,
+                 margin_left: @pos_setting&.pdf_margin_left.to_f
+               },
+               encoding: 'UTF-8',
+               footer: {
+                 right: '[page] of [topage]'
+               },
+               show_as_html: false
+      end
     end
   end
 

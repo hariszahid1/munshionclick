@@ -12,7 +12,11 @@
 <%elsif pos_setting_sys_type=="batha"%>
  <%= render partial: "order_show_batha", locals: {order: @purchase_sale_detail} %>
 <%elsif pos_setting_sys_type=="HousingScheme"%>
-  <%= render partial: "purchase_sale_details/house_scheme/show", locals: {order: @purchase_sale_detail} %>
+  <% if @pos_setting.extra_settings['ghouse5'].present? %>
+    <%= render partial: "create_show_ghouse", locals: {order: @purchase_sale_detail} %>
+  <% else %>
+    <%= render partial: "purchase_sale_details/house_scheme/show", locals: {order: @purchase_sale_detail} %>
+  <% end %>
 <%elsif pos_setting_sys_type=="CustomClear"%>
   <%= render partial: "order_show_custom_clear", locals: {order: @purchase_sale_detail} %>
 <%elsif params[:with_gst].present? %>

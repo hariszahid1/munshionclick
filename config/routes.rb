@@ -51,6 +51,7 @@ Rails.application.routes.draw do
       get :print_bulk, to: 'orders#print_bulk'
       get :view_history, to: 'orders#view_history'
       get :dynamic_pdf, to: 'orders#dynamic_pdf'
+      get :booking_reciept, to: 'orders#booking_reciept'
     end
     member do
       get :transfer, to: 'orders#transfer'
