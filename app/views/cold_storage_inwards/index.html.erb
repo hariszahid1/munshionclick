@@ -22,7 +22,7 @@
         <%= f.select :purchase_sale_items_product_id_eq, options_from_collection_for_select(@products, 'id', 'title',@title),{:include_blank => "Select product"}, class: "chosen-select"%>
       </div>
       <div class="col-lg-3 form-group float-left">
-        <%= f.select :sys_user_id_eq, options_from_collection_for_select(@customers, 'id', 'name', @name),{:include_blank => "Select Customer"},class: 'form-control chosen-select'%>
+        <%= f.select :sys_user_id_eq, options_from_collection_for_select(@suppliers, 'id', 'name', @name),{:include_blank => "Select Supplier"},class: 'form-control chosen-select'%>
       </div>
       <div class="col-lg-3 form-group float-left">
         <%= f.select :user_name_eq, @users,{:include_blank => "Select Creater"},class: 'form-control chosen-select'%>
@@ -53,6 +53,7 @@
   <table data-toggle="table" data-search="true">
     <thead>
       <tr>
+        <th></th>
         <th>#</th>
         <th><%= sort_link(@q, :sys_user_name, 'Customers') %></th>
         <th><%= sort_link(@q, :purchase_sale_item_count, 'Items') %></th>
@@ -67,8 +68,10 @@
     </thead>
 
     <tbody>
-      <% @purchase_sale_details.each do |purchase_sale_detail| %>
+      <% @purchase_sale_details.each_with_index do |purchase_sale_detail, index| %>
+        <% demo_id = "demo#{index}"%>
         <tr class="table-success">
+          <td class="p-4 accordion-toggle acc-pointer" data-toggle="collapse" data-target="#<%= demo_id %>"><i class="fa fa-plus-circle"></i></td>
           <td><b><%= purchase_sale_detail.voucher_id.to_s+'#'+purchase_sale_detail.id.to_s %></b></td>
           <td class="urdu-font">
             <b>
@@ -105,142 +108,107 @@
           <td><%= purchase_sale_detail.purchase_sale_items.expiry rescue '' %> <%= purchase_sale_detail.bill_no%></td>
           <td><%=purchase_sale_detail.staff_full_name%> | <%= purchase_sale_detail.comment %> <%=purchase_sale_detail.with_gst.present? ? "GST" : ""%></td>
           <td>
-            <%if purchase_sale_detail.with_gst=="true"%>
-              <%= link_to purchase_sale_detail_path(purchase_sale_detail,with_gst: true),target: "_blank" do %>
-                <i class="fa fa-print" aria-hidden="true"></i> |
-              <% end %>
-            <%else%>
-              <%= link_to purchase_sale_detail,target: "_blank" do %>
-                <i class="fa fa-print" aria-hidden="true"></i> |
-              <% end %>
-            <%end%>
-            <%if purchase_sale_detail.purchase_sale_items.present?%>
-              <%if purchase_sale_detail.purchase_sale_items.first.product.present? %>
-                <% if can?(:update, :all) %>
-                  <%= link_to edit_cold_storage_inward_path(purchase_sale_detail) do %>
-                    <i class="fa fa-edit" aria-hidden="true"></i> |
-                  <% end %>
-                <% end %>
-              <%else%>
-                <% if can?(:update, :all) %>
-                  <%= link_to edit_purchase_sale_detail_path(purchase_sale_detail) do %>
-                    <i class="fa fa-edit" aria-hidden="true"></i> |
-                  <% end %>
-                <% end %>
-              <%end%>
-            <%end%>
-          <% if can?(:destory, :all) %>
-            <%= link_to purchase_sale_detail, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
-                      <i class="fa fa-trash" aria-hidden="true"></i>
-            <% end %>
-          <% end %>
+            <div class="icon-container-1">
+              <div class="my-icon-1 my-view-1">
+                <div class="my-tooltip-1">
+                  <div class="icon-container">
+                    <div class="my-icon my-view">
+                      <div class="my-tooltip">
+                        Edit
+                      </div>
+                      <%if purchase_sale_detail.purchase_sale_items.present?%>
+                        <%if purchase_sale_detail.purchase_sale_items.first.product.present? %>
+                          <% if can?(:update, :all) %>
+                            <%= link_to edit_cold_storage_inward_path(id: purchase_sale_detail.id, order_total: @cold_storage_inward_total[purchase_sale_detail.id]) do %>
+                              <i class="fa fa-edit" aria-hidden="true"></i>
+                            <% end %>
+                          <% end %>
+                        <%else%>
+                          <% if can?(:update, :all) %>
+                            <%= link_to edit_purchase_sale_detail_path(id: purchase_sale_detail.id, order_total: @cold_storage_inward_total[purchase_sale_detail.id]) do %>
+                              <i class="fa fa-edit" aria-hidden="true"></i>
+                            <% end %>
+                          <% end %>
+                        <%end%>
+                      <%end%>
+                    </div>
+                    <div class="my-icon my-view">
+                      <div class="my-tooltip">
+                        Delete
+                      </div>
+                      <% if can?(:destory, :all) %>
+                        <%= link_to purchase_sale_detail, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+                                  <i class="fa fa-trash" aria-hidden="true"></i>
+                        <% end %>
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+                <span class="icon-div-1">
+                      <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+                </span>
+              </div>
+            </div>
           </td>
         </tr>
-        <tr >
-          <td></td>
-          <td></td>
-          <td class="table-active"><b>Item type</b></td>
-          <td class="table-active"><b>Marka</b></td>
-          <td class="table-active"><b>Builty No:</b></td>
-          <td class="table-active"><b>Vehicle</b></td>
-          <td class="table-active"><b>Challan</b></td>
-          <td class="table-active"><b>Stock</b></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-          <%profit=0%>
-          <%gst=0%>
-          <%purchase_sale_detail.purchase_sale_items.each do |item|%>
-            <tr>
-              <td></td>
-              <td></td>
-              <td><%=item&.product&.title %></td>
-              <td><%=item.size_13%></td>
-              <td><%=item.size_12%></td>
-              <td><%=item.size_11%></td>
-              <td><%= item.size_10 %></td>
-              <td><%= item.size_9 %></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-          <%end%>
-            <tr class="table-info">
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td><%=profit.to_f.round(2)-purchase_sale_detail.discount_price.to_f%></td>
-              <td><%=gst.to_f.round(2)%></td>
-              <td></td>
-            </tr>
+        <td colspan="11" class="hiddenRow">
+          <div class="accordian-body collapse card shadow-lg m-4" style="border-radius: 18px;" id="<%= demo_id %>">
+            <table>
+              <tr class="table-active p-4 h5">
+                <th><b>Rack Detail</b></th>
+                <th><b>Item type</b></th>
+                <th><b>Marka</b></th>
+                <th><b>Builty No:</b></th>
+                <th><b>Vehicle</b></th>
+                <th><b>Challan</b></th>
+                <th><b>Stock</b></th>
+                <th><b>Room No.</b></th>
+                <th><b>Rack No.</b></th>
+              </tr>
+              <tbody>
+                <%profit=0%>
+                <%gst=0%>
+                <%purchase_sale_detail.purchase_sale_items.each do |item|%>
+                  <tr>
+                    <td></td>
+                    <td class= "urdu-font"><%=item&.product&.title %></td>
+                    <td><%=item.size_13%></td>
+                    <td><%=item.size_12%></td>
+                    <td><%=item.size_11%></td>
+                    <td><%= item.size_10 %></td>
+                    <td><%= item.size_9 %></td>
+                    <td><%= item.size_8 %></td>
+                    <td><%= item.size_7 %></td>
+                  </tr>
+                <%end%>
+                <tr class="table-info">
+                  <td class="h5"><b>Total</b></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td class="h6"><b><%= @cold_storage_inward_total[purchase_sale_detail.id] %></b></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </td>
       <% end %>
       <tr>
-        <td><h5></h5><td
+        <td class="table-active"><h5>Total Stock</h5><td>
         <td></td>
         <td></td>
-        <td class="table-active"><h5>Total Stock</h5></td>
-        <td class="table-active"><h5>Total Paid</h5></td>
-        <td class="table-active"><h5>Total Discount</h5></td>
-        <td class="table-active"><h5>Pending</h5></td>
-        <td></td>
-        <td  class="table-active"><h5>Profit</h5></td>
         <td></td>
         <td></td>
-
-
+        <td></td>
+        <td></td>
+        <td><h5><%=@total_stock.to_f.round(2)%></h5></td>
+        <td></td>
+        <td></td>
       </tr>
-      <tr>
-        <td class="table-active"><h5>Total</h5><td>
-        <td></td>
-        <td><h5><%=@total_stock.to_f.round(2)%></h5></td>
-        <td><h5><%=@total_am.to_f.round(2)%></h5></td>
-        <td><h5><%=@total_dis.to_f.round(2)%></h5></td>
-        <td></td>
-        <td><h5><%=@total_profit.to_f.round(2)%></h5></td>
-        <td></td>
-        <td></td>
-
-
-
-      </tr>
-      <tr>
-        <td><h5></h5><td>
-        <td></td>
-        <td class="table-active"><h5>Total Quantity</h5></td>
-        <td></td>
-        <td><h4></h4></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-
-
-
-      </tr>
-      <tr>
-        <td class="table-active"><h5>Product Sold</h5><td>
-        <td></td>
-        <td><h5><%=@total_pro%></h5></td>
-        <td></td>
-        <td><h4></h4></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-
-
-
-      </tr>
-
-
     </tbody>
   </table>
 </div>
@@ -271,4 +239,11 @@
 });
     }, 50);
   });
+
+  $('.accordian-body').on('show.bs.collapse', function () {
+    $(this).closest("table")
+        .find(".collapse.in")
+        .not(this)
+        .collapse('toggle')
+})
 </script>

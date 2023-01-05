@@ -81,9 +81,9 @@ class PurchaseSaleDetail < ApplicationRecord
     if self.ledger_book
       discount=self.discount_price.present? ? self.discount_price : 0
       if self.sys_user.user_group!='Supplier' && (self.transaction_type=="Sale" || self.transaction_type=="OutWard")
-        self.ledger_book.update(sys_user_id: self.sys_user_id,debit:self.total_bill-discount,credit:self.amount.to_f,account_id: self.account_id)
+        self.ledger_book.update(sys_user_id: self.sys_user_id,debit:self.total_bill.to_f-discount,credit:self.amount.to_f,account_id: self.account_id)
       elsif self.sys_user.user_group=='Both'
-        self.ledger_book.update(sys_user_id: self.sys_user_id,debit:self.amount.to_f,credit:self.total_bill-discount,account_id: self.account_id)
+        self.ledger_book.update(sys_user_id: self.sys_user_id,debit:self.amount.to_f,credit:self.total_bill.to_f-discount,account_id: self.account_id)
       else
         self.ledger_book.update(sys_user_id: self.sys_user_id,debit:self.amount.to_f,credit:self.total_bill.to_f-discount,account_id: self.account_id)
       end

@@ -32,6 +32,7 @@ class StaffLedgerBooksController < ApplicationController
                                       :salary_detail).ransack(params[:q]).result.sum(:quantity) + StaffLedgerBook.joins(:staff,
                                                                                                                         :salary_detail).ransack(params[:q]).result.sum(:khakar_remaning)
     @staff_ledger_books = staff_list.page(params[:page]).per(50)
+    pdfName = '[' + StaffLedgerBook.where(id: staff_list.ids).joins(:staff).pluck('name').uniq.join(' ') + ']'
     if params[:bulk].present?
       @staff_ledger_books_pdf_debit = @q.result.group(:name).sum(:debit)
       @staff_ledger_books_pdf_credit = @q.result.group(:name).sum(:credit)
@@ -41,7 +42,7 @@ class StaffLedgerBooksController < ApplicationController
       respond_to do |format|
         format.html
         format.pdf do
-          render pdf: 'index_staff_wise',
+          render pdf: "#{pdfName}-StaffLedgerBook -" + @created_at_gteq.to_s + ' to ' + @created_at_lteq.to_s,
                  layout: 'pdf.html',
                  page_size: 'A4',
                  margin_top: '0',
@@ -66,7 +67,7 @@ class StaffLedgerBooksController < ApplicationController
         respond_to do |format|
           format.html
           format.pdf do
-            render pdf: 'index_staff_wise',
+            render pdf: "#{pdfName}-StaffLedgerBook -" + @created_at_gteq.to_s + ' to ' + @created_at_lteq.to_s,
                    layout: 'pdf.html',
                    page_size: 'A4',
                    margin_top: '0',
@@ -92,7 +93,7 @@ class StaffLedgerBooksController < ApplicationController
         respond_to do |format|
           format.html
           format.pdf do
-            render pdf: 'index_staff_wise',
+            render pdf: "#{pdfName}-StaffLedgerBook -" + @created_at_gteq.to_s + ' to ' + @created_at_lteq.to_s,
                    layout: 'pdf.html',
                    page_size: 'A4',
                    margin_top: '0',

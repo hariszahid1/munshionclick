@@ -25,7 +25,7 @@
           <%= f.text_field :size_8, hide_label: true, label: "Room", value: "#{(f.object.size_8 == '0' ? nil : f.object.size_8)}", class:'inward-room-num'%>
         </div>
         <div class="col-lg-1 form-group float-left">
-          <%= f.text_field :size_7, hide_label: true, label: "Rack",  value: "#{(f.object.size_7 == '0' ? nil : f.object.size_8)}", class:'inward-rack-num'%>
+          <%= f.text_field :size_7, hide_label: true, label: "Rack",  value: "#{(f.object.size_7 == '0' ? nil : f.object.size_7)}", class:'inward-rack-num'%>
         </div>
         <%= f.hidden_field :quantity, class: "stock-value" %>
         <%= f.hidden_field :transaction_type, value: PurchaseSaleItem.transaction_types.first.first%>
