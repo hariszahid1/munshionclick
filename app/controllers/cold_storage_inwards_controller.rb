@@ -11,7 +11,8 @@ class ColdStorageInwardsController < ApplicationController
     @q = PurchaseSaleDetail.includes(:order, :account, :sys_user,
                                      purchase_sale_items: :product).ransack(params[:q])
     purchase_sale_detail = @q.result.where(transaction_type: 'InWard')
-    @purchase_sale_details = purchase_sale_detail.page(params[:page]).per(100)
+    @purchase_sale_details = purchase_sale_detail.order('purchase_sale_details.created_at desc').page(params[:page]).per(100)
+    @cold_storage_inward_total = purchase_sale_detail.group('purchase_sale_details.id').sum('purchase_sale_items.size_9')
   end
 
   def new
