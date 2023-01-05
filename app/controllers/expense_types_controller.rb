@@ -1,8 +1,8 @@
 class ExpenseTypesController < ApplicationController
   include PdfCsvGeneralMethod
   include ExpenseTypesHelper
-	before_action :check_access
-  before_action :set_expense_type, only: [:show, :edit, :update, :destroy]
+  before_action :check_access
+  before_action :set_expense_type, only: %i[show edit update destroy]
 
   # GET /expense_types
   # GET /expense_types.json
@@ -10,7 +10,7 @@ class ExpenseTypesController < ApplicationController
     @q = ExpenseType.ransack(params[:q])
     @q.sorts = 'id asc' if @q.sorts.empty? && @q.result.count.positive?
     @options_for_select = ExpenseType.all
-    @expense_types = @q.result.page(params[:page])
+    @expense_types = @q.result.page(params[:page]).per(params[:limit])
     download_expense_types_csv_file if params[:csv].present?
     download_expense_types_pdf_file if params[:pdf].present?
     send_email_file if params[:email].present?
@@ -19,8 +19,7 @@ class ExpenseTypesController < ApplicationController
 
   # GET /expense_types/1
   # GET /expense_types/1.json
-  def show
-  end
+  def show; end
 
   # GET /expense_types/new
   def new
@@ -28,8 +27,7 @@ class ExpenseTypesController < ApplicationController
   end
 
   # GET /expense_types/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /expense_types
   # POST /expense_types.json
@@ -71,6 +69,7 @@ class ExpenseTypesController < ApplicationController
   end
 
   private
+
   # Use callbacks to share common setup or constraints between actions.
   def set_expense_type
     @expense_type = ExpenseType.find(params[:id])
@@ -80,28 +79,30 @@ class ExpenseTypesController < ApplicationController
   def expense_type_params
     params.require(:expense_type).permit(:title, :comment)
   end
+
   def download_expense_types_csv_file
     @expense_type = @q.result
     header_for_csv = %w[Id Title Comment]
     data_for_csv = get_data_for_expense_types_csv
-    generate_csv(data_for_csv, header_for_csv, "ExpenseTypes-Total-#{@expense_type.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}")
+    generate_csv(data_for_csv, header_for_csv,
+                 "ExpenseTypes-Total-#{@expense_type.count}-#{DateTime.now.strftime('%d-%m-%Y-%H-%M')}")
   end
 
   def download_expense_types_pdf_file
     @expense_type = @q.result
-    generate_pdf(@expense_type.as_json, "ExpenseTypes-Total-#{@expense_type.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}",
+    generate_pdf(@expense_type.as_json, "ExpenseTypes-Total-#{@expense_type.count}-#{DateTime.now.strftime('%d-%m-%Y-%H-%M')}",
                  'pdf.html', 'A4', false, 'expense_types/index.pdf.erb')
   end
 
   def send_email_file
     EmailJob.perform_later(@q.result.as_json, 'expense_types/index.pdf.erb', params[:email_value],
-                            params[:email_choice], params[:subject], params[:body],
-                            current_user, "ExpenseTypes-Total-#{@q.result.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}")
-    if params[:email_value].present?
-      flash[:notice] = "Email has been sent to #{params[:email_value]}"
-    else
-      flash[:notice] = "Email has been sent to #{current_user.email}"
-    end
+                           params[:email_choice], params[:subject], params[:body],
+                           current_user, "ExpenseTypes-Total-#{@q.result.count}-#{DateTime.now.strftime('%d-%m-%Y-%H-%M')}")
+    flash[:notice] = if params[:email_value].present?
+                       "Email has been sent to #{params[:email_value]}"
+                     else
+                       "Email has been sent to #{current_user.email}"
+                     end
     redirect_to expense_types_path
   end
 
