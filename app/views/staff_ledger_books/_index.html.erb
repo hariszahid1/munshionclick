@@ -203,8 +203,7 @@
               <%= link_to 'Salary',edit_salary_detail_path(staff_ledger_book.salary_detail) if staff_ledger_book.salary_detail.present? %>
               <%=staff_ledger_book.salary_detail.wage_rate%> X <%=staff_ledger_book.salary_detail.quantity%>
             <%end%>
-            <% if staff_ledger_book.salary.present? %>
-            <%end%>
+
             <% if staff_ledger_book.salary.present? %>
               <%= staff_ledger_book.salary.comment%>
               <%= link_to 'Salary',edit_salary_path(staff_ledger_book.salary) if staff_ledger_book.salary.present? and staff_ledger_book.salary.paid_salary.present?%>

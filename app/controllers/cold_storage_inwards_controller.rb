@@ -21,7 +21,7 @@ class ColdStorageInwardsController < ApplicationController
     if params[:order_id].present?
       order=Order.find(params[:order_id])
       order.order_items.each do |ord|
-        @purchase_sale_detail.purchase_sale_items.build(product_id: ord.product_id, size_13: ord.marka, size_12: ord.builty_no, size_11: ord.vehicle_no, size_10: ord.challan_no, size_9: ord.challan_no.split('/').last, quantity: ord.challan_no.split('/').last)
+        @purchase_sale_detail.purchase_sale_items.build(product_id: ord.product_id, size_13: ord.marka, size_12: ord.builty_no, size_11: ord.vehicle_no, size_10: ord.challan_no, size_9: ord.quantity, quantity: ord.quantity)
       end
     end
     @staffs=Staff.all

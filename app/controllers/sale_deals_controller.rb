@@ -1,38 +1,22 @@
 class SaleDealsController < ApplicationController
+  include PdfCsvGeneralMethod
+  include SaleDealsHelper
   before_action :set_sale_deal, only: %i[show edit update destroy]
   before_action :set_data, only: %i[new edit create update show index]
 
   # GET /sale_deals
   # GET /sale_deals.json
   def index
-    @q = PurchaseSaleDetail.ransack(params[:q])
+    @q = PurchaseSaleDetail.includes(:sys_user, :purchase_sale_items).ransack(params[:q])
+    download_sale_deals_pdf_file if params[:pdf].present?
+    download_sale_deals_csv_file if params[:csv].present?
     @sale_deals = @q.result.where(transaction_type: 'SaleDeal').page(params[:page])
   end
 
   # GET /sale_deals/1
   # GET /sale_deals/1.json
   def show
-    request.format = 'pdf'
-    respond_to do |format|
-      format.html
-      format.pdf do
-        render pdf: 'sale_deal-pdf',
-               template: 'sale_deals/show.pdf.erb',
-               page_size: 'A4',
-               orientation: 'Portrait',
-               margin: {
-                 margin_top: @pos_setting&.pdf_margin_top.to_f,
-                 margin_right: @pos_setting&.pdf_margin_right.to_f,
-                 margin_bottom: @pos_setting&.pdf_margin_bottom.to_f,
-                 margin_left: @pos_setting&.pdf_margin_left.to_f
-               },
-               encoding: 'UTF-8',
-               footer: {
-                 right: '[page] of [topage]'
-               },
-               show_as_html: false
-      end
-    end
+    return show_sale_pdf if params[:pdf].present?
   end
 
   # GET /sale_deals/new
@@ -50,7 +34,8 @@ class SaleDealsController < ApplicationController
     @sale_deal = PurchaseSaleDetail.new(sale_deal_params)
     respond_to do |format|
       if @sale_deal.save
-        modify_salary_details
+        modify_salary_details if @sale_deal.staff_id.present?
+
         format.js
         format.html { redirect_to sale_deals_path, notice: 'Sale Deal was successfully created.' }
         format.json { render :show, status: :created, location: @sale_deal }
@@ -65,9 +50,10 @@ class SaleDealsController < ApplicationController
   # PATCH/PUT /sale_deals/1.json
   def update
     respond_to do |format|
-
+      @before_update_carriage_loading = @sale_deal.carriage + @sale_deal.loading
       if @sale_deal.update(sale_deal_params)
 
+        modify_update_salary_details if @sale_deal.staff_id.present?
         format.html { redirect_to sale_deals_path, notice: 'Sale Deal was successfully updated.' }
         format.json { render :show, status: :ok, location: @sale_deal }
       else
@@ -84,18 +70,19 @@ class SaleDealsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to sale_deals_url, notice: 'Sale Deal was successfully destroyed.' }
       format.json { head :no_content }
-      format.js   { render :layout => false }
+      format.js   { render layout: false }
     end
   end
 
   private
+
   # Use callbacks to share common setup or constraints between actions.
   def set_sale_deal
     @sale_deal = PurchaseSaleDetail.find(params[:id])
   end
 
   def set_data
-    @staffs=Staff.all
+    @staffs = Staff.all
     @sys_users = SysUser.all.where(for_crms: [false, nil])
     @accounts = Account.all
     @products = Product.all
@@ -120,18 +107,41 @@ class SaleDealsController < ApplicationController
       ])
   end
 
-  def modify_salary_details
-    if @sale_deal.staff_id.present?
-      staff = @sale_deal.staff
-      staff.wage_debit += @sale_deal.carriage + @sale_deal.loading
-      staff.balance += @sale_deal.carriage + @sale_deal.loading
-      staff.save!
-      @sale_deal.salary_details.create(staff_id: @sale_deal.staff_id, amount: @sale_deal.carriage,
-                                       comment: 'Carriage', total_balance: staff.balance - @sale_deal.loading,
-                                       created_at: @sale_deal.created_at)
-      @sale_deal.salary_details.create(staff_id: @sale_deal.staff_id, amount: @sale_deal.loading,
-                                       comment: 'Loading', total_balance: staff.balance,
-                                       created_at: @sale_deal.created_at)
+  def download_sale_deals_pdf_file
+    @sale_deals = @q.result.where(transaction_type: 'SaleDeal')
+    sorted_data
+    generate_pdf(@sorted_data.as_json, 'Sale Deal', 'pdf.html', 'A4', false, 'sale_deals/index.pdf.erb')
+  end
+
+  def download_sale_deals_csv_file
+    @sale_deals = @q.result.where(transaction_type: 'SaleDeal')
+    header_for_csv = %w[agent_name name contact quota transaction_type project_name type_of_plot form_no
+                        plot_size plot_quantity plot_category price_per_plot deal_date payment_type trx_no]
+    data_for_csv = get_data_for_sale_deals_csv
+    generate_csv(data_for_csv, header_for_csv, 'SaleDeals')
+  end
+
+  def show_sale_pdf
+    request.format = 'pdf'
+    respond_to do |format|
+      format.html
+      format.pdf do
+        render pdf: 'sale_deal-pdf',
+               template: 'sale_deals/show.pdf.erb',
+               page_size: 'A4',
+               orientation: 'Portrait',
+               margin: {
+                 margin_top: @pos_setting&.pdf_margin_top.to_f,
+                 margin_right: @pos_setting&.pdf_margin_right.to_f,
+                 margin_bottom: @pos_setting&.pdf_margin_bottom.to_f,
+                 margin_left: @pos_setting&.pdf_margin_left.to_f
+               },
+               encoding: 'UTF-8',
+               footer: {
+                 right: '[page] of [topage]'
+               },
+               show_as_html: false
+      end
     end
   end
 end

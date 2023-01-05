@@ -38,7 +38,12 @@
           </td>
           <td>
             <%= staff_ledger_book.comment %>
+            <% if staff_ledger_book.salary.present? %>
+              <p> Casher: <%= staff_ledger_book.salary&.account&.title %></p>
+              <p><%= staff_ledger_book.salary&.comment %></p>
+            <% end %>
             <%if staff_ledger_book.salary_detail.present? %>
+              <p><%=staff_ledger_book.salary_detail&.comment%></p>
               <%if staff_ledger_book.salary_detail.staff.department.present?%>
                 <%if staff_ledger_book.salary_detail.quantity.to_i>0%>
                   <p>
