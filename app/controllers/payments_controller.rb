@@ -42,10 +42,11 @@ class PaymentsController < ApplicationController
     end
 
     @t_dabit=@payment_all.select('SUM(debit) as sum_debit','SUM(credit) as sum_credit','SUM(credit)-SUM(debit) as mean_sum')
+    pdfName = '[' + Account.where(id: @q.result.pluck(:account_id)).pluck(:title).join(' ') + ']'
     respond_to do |format|
       format.html
       format.pdf do
-        render pdf: "DayBook+Payment-History",
+        render pdf: "#{pdfName}-DayBook+Payment-History -" + @created_at_gteq.to_s + ' to ' + @created_at_lteq.to_s,
         layout: 'pdf.html',
         page_size: 'A4',
         margin_top: '0',

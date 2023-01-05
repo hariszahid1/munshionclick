@@ -33,7 +33,7 @@
             </div>
 
             <div class="col-lg-3 form-group float-left">
-              <%= f.select :sys_user_id_eq, options_from_collection_for_select(@suppliers, 'id', 'name', f.object.sys_user_id), {class: 'form-control',hide_label:true,title: "Select the Supplier" ,prompt: "Select the Customer"},class: 'form-control chosen-select'%>
+              <%= f.select :sys_user_id_eq, options_from_collection_for_select(@suppliers, 'id', 'name', f.object.sys_user_id), {class: 'form-control',hide_label:true,title: "Select the Supplier" ,prompt: "Select the Supplier"},class: 'form-control chosen-select'%>
             </div>
 
             <div class="col-lg-3 form-group float-left">
@@ -45,7 +45,7 @@
             </div>
 
             <div class="col-lg-3 form-group float-left">
-              <%= f.text_field :id_eq, class: "form-control",placeholder: "Voucher Number"%>
+              <%= f.text_field :id_eq, class: "form-control",placeholder: "Search by id"%>
             </div>
 
             <div class="col-lg-2 form-group float-left">
