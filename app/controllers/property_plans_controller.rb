@@ -34,7 +34,9 @@ class PropertyPlansController < ApplicationController
     @mobile = @sys_users.pluck('mobile').uniq
     @phone  = (@mobile + @office + @home).uniq.compact.reject(&:empty?).join(',')
     @options_for_select = PropertyPlan.all
-    @custom_pagination = params[:limit].present? ? params[:limit] : PosSetting.last.custom_pagination['property_plans']
+    if @pos_setting&.custom_pagination.present?
+      @custom_pagination = params[:limit].present? ? params[:limit] : @pos_setting.custom_pagination['property_plans']
+    end
     @property_plans = @property_plans.page(params[:page]).per(@custom_pagination)
   end
 

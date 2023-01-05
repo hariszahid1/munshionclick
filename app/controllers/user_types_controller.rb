@@ -9,7 +9,9 @@ class UserTypesController < ApplicationController
   def index
     @q = UserType.ransack(params[:q])
     @options_for_select = UserType.all
-    @custom_pagination = params[:limit].present? ? params[:limit] : PosSetting.last.custom_pagination['user_types']
+    if @pos_setting&.custom_pagination.present?
+      @custom_pagination = params[:limit].present? ? params[:limit] : @pos_setting.custom_pagination['user_types']
+    end
     @user_types = @q.result.page(params[:page]).per(@custom_pagination)
     download_user_types_csv_file if params[:csv].present?
     download_user_types_pdf_file if params[:pdf].present?
