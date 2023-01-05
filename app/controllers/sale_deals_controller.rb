@@ -50,9 +50,10 @@ class SaleDealsController < ApplicationController
   # PATCH/PUT /sale_deals/1.json
   def update
     respond_to do |format|
-
+      @before_update_carriage_loading = @sale_deal.carriage + @sale_deal.loading
       if @sale_deal.update(sale_deal_params)
 
+        modify_update_salary_details if @sale_deal.staff_id.present?
         format.html { redirect_to sale_deals_path, notice: 'Sale Deal was successfully updated.' }
         format.json { render :show, status: :ok, location: @sale_deal }
       else
@@ -104,19 +105,6 @@ class SaleDealsController < ApplicationController
                                                                                     size_9 size_10 size_11 size_12 size_13
         discount_price purchase_sale_type created_at expiry_date extra_expence extra_quantity gst gst_amount
       ])
-  end
-
-  def modify_salary_details
-      staff = @sale_deal.staff
-      staff.wage_debit += @sale_deal.carriage + @sale_deal.loading
-      staff.balance += @sale_deal.carriage + @sale_deal.loading
-      staff.save!
-      @sale_deal.salary_details.create(staff_id: @sale_deal.staff_id, amount: @sale_deal.carriage,
-                                       comment: 'Carriage', total_balance: staff.balance - @sale_deal.loading,
-                                       created_at: @sale_deal.created_at)
-      @sale_deal.salary_details.create(staff_id: @sale_deal.staff_id, amount: @sale_deal.loading,
-                                       comment: 'Loading', total_balance: staff.balance,
-                                       created_at: @sale_deal.created_at)
   end
 
   def download_sale_deals_pdf_file

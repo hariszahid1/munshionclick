@@ -54,4 +54,36 @@ module SaleDealsHelper
 		end
 		return temp
 	end
+
+  def modify_update_salary_details
+    staff = @sale_deal.staff
+    staff.wage_debit = ((@sale_deal.carriage + @sale_deal.loading) - @before_update_carriage_loading + staff.wage_debit)
+    staff.balance = ((@sale_deal.carriage + @sale_deal.loading) - @before_update_carriage_loading + staff.balance)
+    staff.save!
+    if @sale_deal.salary_details.present?
+      @sale_deal.salary_details.first.update(staff_id: @sale_deal.staff_id, amount: @sale_deal.carriage, comment:
+                                            'Carriage', total_balance: staff.balance - @sale_deal.loading,
+                                             created_at: @sale_deal.created_at)
+      @sale_deal.salary_details.last.update(staff_id: @sale_deal.staff_id, amount: @sale_deal.loading, comment:
+                                          'Loading', total_balance: staff.balance, created_at: @sale_deal.created_at)
+    else
+      @sale_deal.salary_details.create(staff_id: @sale_deal.staff_id, amount: @sale_deal.carriage, comment: 'Carriage',
+                                       total_balance: staff.balance - @sale_deal.loading, created_at: @sale_deal.created_at)
+      @sale_deal.salary_details.create(staff_id: @sale_deal.staff_id, amount: @sale_deal.loading, comment: 'Loading',
+                                       total_balance: staff.balance, created_at: @sale_deal.created_at)
+    end
+  end
+
+  def modify_salary_details
+    staff = @sale_deal.staff
+    staff.wage_debit += @sale_deal.carriage + @sale_deal.loading
+    staff.balance += @sale_deal.carriage + @sale_deal.loading
+    staff.save!
+    @sale_deal.salary_details.create(staff_id: @sale_deal.staff_id, amount: @sale_deal.carriage,
+                                     comment: 'Carriage', total_balance: staff.balance - @sale_deal.loading,
+                                     created_at: @sale_deal.created_at)
+    @sale_deal.salary_details.create(staff_id: @sale_deal.staff_id, amount: @sale_deal.loading,
+                                     comment: 'Loading', total_balance: staff.balance,
+                                     created_at: @sale_deal.created_at)
+  end
 end
