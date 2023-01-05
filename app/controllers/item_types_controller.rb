@@ -10,7 +10,9 @@ class ItemTypesController < ApplicationController
     @q = ItemType.ransack(params[:q])
     @q.sorts = 'id asc' if @q.sorts.empty? && @q.result.count.positive?
     @options_for_select = ItemType.all
-    @custom_pagination = params[:limit].present? ? params[:limit] : PosSetting.last.custom_pagination['item_types']
+    if @pos_setting&.custom_pagination.present?
+      @custom_pagination = params[:limit].present? ? params[:limit] : @pos_setting.custom_pagination['item_types']
+    end
     @item_types = @q.result.page(params[:page]).per(@custom_pagination)
     download_item_types_csv_file if params[:csv].present?
     download_item_types_pdf_file if params[:pdf].present?

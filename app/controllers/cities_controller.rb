@@ -15,7 +15,9 @@ class CitiesController < ApplicationController
     @q = City.ransack(params[:q])
     @q.sorts = 'id asc' if @q.sorts.empty? && @q.result.count.positive?
     @options_for_select = City.all
-    @custom_pagination = params[:limit].present? ? params[:limit] : PosSetting.last.custom_pagination['cities']
+    if @pos_setting&.custom_pagination.present?
+      @custom_pagination = params[:limit].present? ? params[:limit] : @pos_setting.custom_pagination['cities']
+    end
     @cities = @q.result.page(params[:page]).per(@custom_pagination)
 
     if params[:csv].present?
