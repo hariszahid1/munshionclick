@@ -45,7 +45,7 @@
             </div>
 
             <div class="col-lg-3 form-group float-left">
-              <%= f.text_field :id_eq, class: "form-control",placeholder: "Search by id"%>
+              <%= f.text_field :id_in, class: "form-control",placeholder: "Search by id"%>
             </div>
 
             <div class="col-lg-2 form-group float-left">
@@ -220,7 +220,19 @@
                       </tr>
                     <% end %>
                     <tr>
+                      <th class="h5"><b>Action</b></th>
                       <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <%= link_to edit_cold_storage_inward_path(id: purchase_sale_detail.id, order_total: @order_inward_purchase_item_total[order.id]) do %>
+                          <i class="fa fa-edit" aria-hidden="true"></i>
+                        <% end %>
+                      </td>
                     </tr>
                   <% end %>
                   <tr>
