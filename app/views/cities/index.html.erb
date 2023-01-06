@@ -59,7 +59,7 @@
   <%= hidden_field_tag "cityUser1", @city_user, { :id => "cityUser1" } %>
   <%= search_form_for @q, url: cities_path, class: "admin-controls", method: "get" do |f| %>
     <div class="tab-content">
-      <div class="tab-pane active mb-3 card shadow-sm mt-2 p-3 border-radius-1" id="search" role="tabpanel">
+      <div class="tab-pane active mb-3 card shadow mt-2 p-3 border-radius-1" id="search" role="tabpanel">
         <div class="row d-flex">
           <div class="col">
             <div class="col-lg-4 form-group float-left">
@@ -122,7 +122,7 @@
           </div>
         </div>
       </div>
-      <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1 p-1" id="analytics" role="tabpanel">
+      <div class="tab-pane mb-3 card shadow mt-2 border-radius-1 p-1" id="analytics" role="tabpanel">
         <div class="row d-flex border-radius-1">
           <div class="col-lg-6">
             <div class="my-chart-Container">
@@ -140,7 +140,7 @@
           </div>  
         </div>  
       </div>
-      <div class="tab-pane card shadow-sm mt-2 border-radius-1 mb-3" id="import-export" role="tabpanel">
+      <div class="tab-pane card shadow mt-2 border-radius-1 mb-3" id="import-export" role="tabpanel">
         <p>
           <div class="d-flex">
           <button class="btn btn-danger ml-4" name="export_data" type="submit" value="export_data">Export Data</button>
@@ -153,8 +153,7 @@
   </div>
 <div>
 
-
-  <div class="card shadow-sm border-radius-1 p-2">
+  <div class="card shadow border-radius-1 p-2 content">
   <%# <button class='btn btn-outline-danger float-right delete-selected' type='button' style="width:163px"value='City' >Delete Selected</button> %>
     <%= render 'map_columns/map_column_partials' %>
     <div class="row d-flex" style="position: absolute;">
@@ -167,9 +166,8 @@
       <%end%>
     </div>  
     <%= search_form_for @q, url: cities_path, class: "admin-controls ml-4", method: "get" do |f| %>
-      <div class="d-flex mt-4" style="width: 150%;">
-        <i class="fa fa-filter fa-2x mt-1 mr-1 text-primary"></i>
-        <%= select_tag :limit, options_for_select(['Show Entries',5, 10, 15, 20, 25], selected: @custom_pagination), id: 'pagination-limit', title:'Show Entries', style:'cursor: pointer;' %>
+      <div class="d-flex mt-4" style="width: 120%;">    
+        <%= select_tag :limit, options_for_select(['Show Entries',5, 10, 15, 20, 25], selected: 'Show Entries'), id: 'pagination-limit', title:'Show Entries', style:'cursor: pointer;' %>
       </div>
     <% end %>
     
@@ -178,9 +176,7 @@
     <table data-toggle="table" data-search="true" id="city_table" class=" overflow-hidden border-radius-1">
       <thead>
         <tr>
-
          <th><input type="checkbox" id="master" class='select-all-checkbox' style="cursor: pointer;">
-
 			</th>
          <th>ID<div class="float-right"><%= sort_link(@q, :id,"", {}, class: 'sorting-button') %></div></th>
           <th>Title<div class="float-right"><%= sort_link(@q, :title, "", {},  class: 'sorting-button') %></div></th>
@@ -194,15 +190,15 @@
       </tbody>
    </table>
   </div>
-  <div class="row mt-2">
-    <div class="col-lg-4 col-sm-4">
+  <div class="col-lg-12 digg_pagination">
+    <div class="float-left page_info">
       <%= page_entries_info @cities %>
     </div>
-    <div class="col-lg-8 col-sm-8 pagination-left">
-      <%= paginate @cities %>
+    <div class="float-right">
+    <%= paginate @cities, :container => false %>
     </div>
   </div>
-  </div>
+</div>
 
 <%= form_for :bulk_import, url: bulk_import_data_path, method: :post, html: {class: "bulk-import-form"} do |f| %>
   <div class="modal fade" id="importFile" tabindex="-1" role="dialog" aria-labelledby="importFileTitle" aria-hidden="true">
@@ -254,4 +250,5 @@
   $('#pagination-limit').on('change', function(){
   $(this).closest('form').submit();
  })
+ 
 </script>

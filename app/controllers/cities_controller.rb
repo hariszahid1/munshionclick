@@ -3,6 +3,7 @@
 # Cities Controller
 class CitiesController < ApplicationController
   include PdfCsvGeneralMethod
+  include DateRangeMethods
   include CitiesHelper
 
   before_action :check_access
@@ -12,12 +13,12 @@ class CitiesController < ApplicationController
   # GET /cities
   # GET /cities.json
   def index
-    @q = City.ransack(params[:q])
+    set_date_range if params[:q].present?
+    @q = City.where(created_at: @start_date&.to_date&.beginning_of_day..@end_date&.to_date&.end_of_day).ransack(params[:q])
     @q.sorts = 'id asc' if @q.sorts.empty? && @q.result.count.positive?
     @options_for_select = City.all
-    if @pos_setting&.custom_pagination.present?
-      @custom_pagination = params[:limit].present? ? params[:limit] : @pos_setting.custom_pagination['cities']
-    end
+    @custom_pagination = params[:limit].present? ? params[:limit] : 25
+    @custom_pagination = @pos_setting.custom_pagination['cities'] if @pos_setting&.custom_pagination.present? && @pos_setting&.custom_pagination['cities'].present?
     @cities = @q.result.page(params[:page]).per(@custom_pagination)
 
     if params[:csv].present?
