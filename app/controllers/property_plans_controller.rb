@@ -4,21 +4,22 @@ class PropertyPlansController < ApplicationController
   before_action :set_property_installment, only: [:show]
   before_action :set_property_installment_edit, only: %i[edit_property_installment update_installment]
   include PdfCsvGeneralMethod
+  include DateRangeMethods
   include PropertyPlansHelper
 
   # GET /property_plans
   # GET /property_plans.json
   def index
+    set_date_range if params[:q].present?
     @customers = SysUser.where(user_group: %w[Customer Supplier Both Salesman])
-
     @q = if params[:short_advance].present?
            PropertyPlan.joins(:order).where(due_status: [nil, PropertyPlan.due_statuses['Unpaid']]).where(
              'due_date <= ?', Date.today
-           ).ransack(params[:q])
+           ).where(created_at: @start_date&.to_date&.beginning_of_day..@end_date&.to_date&.end_of_day).ransack(params[:q])
          else
            PropertyPlan.joins(:order).where(due_status: [nil, PropertyPlan.due_statuses['Unpaid']]).where(
              'due_date <= ?', Date.today
-           ).ransack(params[:q])
+           ).where(created_at: @start_date&.to_date&.beginning_of_day..@end_date&.to_date&.end_of_day).ransack(params[:q])
          end
     @property_plans = @q.result
     @total_advance = @property_plans.sum(:advance)
@@ -34,9 +35,8 @@ class PropertyPlansController < ApplicationController
     @mobile = @sys_users.pluck('mobile').uniq
     @phone  = (@mobile + @office + @home).uniq.compact.reject(&:empty?).join(',')
     @options_for_select = PropertyPlan.all
-    if @pos_setting&.custom_pagination.present?
-      @custom_pagination = params[:limit].present? ? params[:limit] : @pos_setting.custom_pagination['property_plans']
-    end
+    @custom_pagination = params[:limit].present? ? params[:limit] : 25
+    @custom_pagination = @pos_setting.custom_pagination['property_plans'] if @pos_setting&.custom_pagination.present? && @pos_setting&.custom_pagination['property_plans'].present?
     @property_plans = @property_plans.page(params[:page]).per(@custom_pagination)
   end
 

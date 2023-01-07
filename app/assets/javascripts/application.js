@@ -30,4 +30,5 @@
 //= require_tree .
 //= require loader
 //= require data-confirm-modal
-
+//= require moment
+//= require daterangepicker

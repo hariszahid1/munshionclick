@@ -10,7 +10,9 @@ class ExpenseTypesController < ApplicationController
     @q = ExpenseType.ransack(params[:q])
     @q.sorts = 'id asc' if @q.sorts.empty? && @q.result.count.positive?
     @options_for_select = ExpenseType.all
-    @expense_types = @q.result.page(params[:page]).per(params[:limit])
+    @custom_pagination = params[:limit].present? ? params[:limit] : 25
+    @custom_pagination = @pos_setting.custom_pagination['expense_types'] if @pos_setting&.custom_pagination.present? && @pos_setting&.custom_pagination['expense_types'].present?
+    @expense_types = @q.result.page(params[:page]).per(@custom_pagination)
     download_expense_types_csv_file if params[:csv].present?
     download_expense_types_pdf_file if params[:pdf].present?
     send_email_file if params[:email].present?

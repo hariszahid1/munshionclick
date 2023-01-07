@@ -137,9 +137,8 @@
       <%end%>
     </div>  
     <%= search_form_for @q, url: expense_types_path, class: "admin-controls ml-4", method: "get" do |f| %>
-      <div class="d-flex mt-4" style="width: 200%;">
-        <i class="fa fa-filter fa-2x mt-1 mr-1 text-primary"></i>
-        <%= select_tag :limit, options_for_select([5, 10, 15, 20, 25], selected: params[:limit] || 25), id: 'pagination-limit', title:'Show Entries', style:'cursor: pointer;' %>
+      <div class="d-flex mt-4" style="width: 120%;">
+        <%= select_tag :limit, options_for_select(['Show Entries',5, 10, 15, 20, 25], selected: 'Show Entries'), id: 'pagination-limit', title:'Show Entries', style:'cursor: pointer;' %>
       </div>
     <% end %>
     

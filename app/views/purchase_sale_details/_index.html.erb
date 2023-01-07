@@ -412,7 +412,7 @@
           <td><h5><%=number_with_delimiter @total_bil.to_f.round(2)%></h5></td>
           <td><h5><%=number_with_delimiter @total_am.to_f.round(2)%></h5></td>
           <td><h5><%=number_with_delimiter @total_dis.to_f.round(2)%></h5></td>
-          <td><h5><%=number_with_delimiter(@total_bil.to_f-(@total_am+@total_dis)).to_f.round(2)%></h5></td>
+          <td><h5><%=number_with_delimiter((@total_bil.to_f-(@total_am+@total_dis).to_f).round(2))%></h5></td>
           <td></td>
           <td><h5><%=number_with_delimiter@total_profit.to_f.round(2)%></h5></td>
           <td></td>

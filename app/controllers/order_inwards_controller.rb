@@ -241,5 +241,12 @@ class OrderInwardsController < ApplicationController
       @created_at_lteq = params[:q][:created_at_lteq] if params[:q][:created_at_lteq].present?
       params[:q][:created_at_lteq] = params[:q][:created_at_lteq].to_date.end_of_day if params[:q][:created_at_lteq].present?
     end
+    if params[:q].try(:[], :id_in).present?
+      params[:q][:id_in] = if params[:q][:id_in].include?(',')
+                            params[:q][:id_in].split(',')
+                           else
+                            params[:q][:id_in].split(' ')
+                           end
+    end
   end
 end
