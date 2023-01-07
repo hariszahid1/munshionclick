@@ -9,9 +9,8 @@ class DepartmentsController < ApplicationController
     @q = Department.ransack(params[:q])
     @q.sorts = 'id asc' if @q.sorts.empty? && @q.result.count.positive?
     @options_for_select = Department.all
-    if @pos_setting&.custom_pagination.present?
-      @custom_pagination = params[:limit].present? ? params[:limit] : @pos_setting.custom_pagination['departments']
-    end  
+    @custom_pagination = params[:limit].present? ? params[:limit] : 25
+    @custom_pagination = @pos_setting.custom_pagination['departments'] if @pos_setting&.custom_pagination.present? && @pos_setting&.custom_pagination['departments'].present?
     @departments = @q.result(distinct: true).page(params[:page]).per(@custom_pagination)
     download_departments_csv_file if params[:csv].present?
     download_departments_pdf_file if params[:pdf].present?

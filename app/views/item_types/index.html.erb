@@ -128,7 +128,7 @@
 
 
   <%= render 'map_columns/map_column_partials' %>
-<div class='card p-3'>
+<div class='card border-radius-1 shadow p-3'>
   <div class="row d-flex" style="position: absolute;">
     <div>
       <%if (check_can_delete(@module_permission))%>
@@ -138,8 +138,7 @@
       <%end%>
     </div>  
     <%= search_form_for @q, url: item_types_path, class: "admin-controls ml-4", method: "get" do |f| %>
-      <div class="d-flex mt-4" style="width: 150%;">
-        <i class="fa fa-filter fa-2x mt-1 mr-1 text-primary"></i>
+      <div class="d-flex mt-4" style="width: 120%;">
         <%= select_tag :limit, options_for_select(['Show Entries',5, 10, 15, 20, 25], selected: @custom_pagination), id: 'pagination-limit', title:'Show Entries', style:'cursor: pointer;' %>
       </div>
     <% end %>
