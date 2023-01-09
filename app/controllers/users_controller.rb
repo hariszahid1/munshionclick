@@ -10,8 +10,10 @@ class UsersController < ApplicationController
   def index
     ransack_search
     @q.sorts = 'id asc' if @q.sorts.empty? && @q.result.count.positive?
-    @options_for_select = City.all
-    @users = @q.result.page(params[:page])
+    @options_for_select = User.all
+    @custom_pagination = params[:limit].present? ? params[:limit] : 25
+    @custom_pagination = @pos_setting.custom_pagination['users'] if @pos_setting&.custom_pagination.present? && @pos_setting&.custom_pagination['users'].present?
+    @users = @q.result.page(params[:page]).per(@custom_pagination)
     download_users_csv_file if params[:csv].present?
     download_users_pdf_file if params[:pdf].present?
     send_email_file if params[:email].present?
