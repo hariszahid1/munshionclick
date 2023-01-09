@@ -467,6 +467,16 @@ class ApplicationController < ActionController::Base
   def read_follow_up
     follow_up = FollowUp.find(params[:follow_up_id])
     follow_up.update(is_read: true)
-    redirect_to crm_path(follow_up.followable.id)
+    type = follow_up&.followable_type
+    case type
+    when 'SysUser'
+      redirect_to crm_path(follow_up.followable.id)
+    when 'Order'
+      redirect_to orders_path
+    when 'ExpenseVoucher'
+      redirect_to expense_vouchers_path
+    else
+      redirect_to purchase_sale_details_path
+    end
   end
 end
