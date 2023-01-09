@@ -31,6 +31,7 @@ class ExpenseVouchersController < ApplicationController
   def new
     @expense_voucher = ExpenseVoucher.new
     @expense_voucher.expense_entry_vouchers.build
+    @expense_voucher.follow_ups.build
   end
 
   # GET /expense_vouchers/1/edit
@@ -86,7 +87,10 @@ class ExpenseVouchersController < ApplicationController
   def expense_voucher_params
     params.require(:expense_voucher).permit(:amount, :comment, :expense_type_id, :created_at,
                                             expense_entry_vouchers_attributes: %i[id expense_id amount comment
-                                                                                  status expense_type_id _destroy])
+                                                                                  status expense_type_id _destroy],
+                                            follow_ups_attributes: %i[id reminder_ty task_type priority created_by
+                                                                      assigned_to_id date comment followable_id
+                                                                      followable_type])
   end
 
   def download_expenses_csv_file
@@ -104,6 +108,10 @@ class ExpenseVouchersController < ApplicationController
   def new_edit_index
     @expense_types = ExpenseType.all
     @accounts = Account.all
+    created_by_ids = current_user&.created_by_ids_list_to_view
+    roles_mask = current_user&.allowed_to_view_roles_mask_for
+    @users = User.where(roles_mask: roles_mask).where('company_type=? or created_by_id=?', current_user&.company_type,
+                                                      created_by_ids)
   end
 
   def show_voucher_pdf

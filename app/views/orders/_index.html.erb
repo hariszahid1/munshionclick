@@ -17,6 +17,9 @@
         Create
       <% end %>
     <% end %>
+    <%= link_to follow_ups_path('q[followable_type_eq]': 'Order'), class: "btn btn-info mb-3 ml-2" do %>
+      Follow Up
+    <% end %>
   <% else %>
     <h1>Purchases</h1>
     <div class="row">

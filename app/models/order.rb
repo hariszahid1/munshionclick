@@ -20,7 +20,8 @@ class Order < ApplicationRecord
   has_many :remarks, as: :remarkable
   accepts_nested_attributes_for :remarks, allow_destroy: true
   before_create :generate_guid
-
+  has_many :follow_ups, as: :followable, dependent: :destroy
+  accepts_nested_attributes_for :follow_ups
 
   has_paper_trail ignore: [:updated_at]
 

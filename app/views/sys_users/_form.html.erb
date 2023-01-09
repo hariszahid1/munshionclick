@@ -71,8 +71,10 @@
     <%= f.file_field :profile_image %>
   </div>
   <div class="col-lg-6 form-group float-left">
-    <% if  sys_user.profile_image.attached? %>
+    <% if sys_user.profile_image.attached? %>
       <%= image_tag sys_user.profile_image.service_url, width: 300 %>
+      <%= link_to 'Remove', delete_image_attachment_application_path(sys_user.profile_image.signed_id), method: :delete,
+        class: 'btn btn-danger', data: { confirm: 'Are you sure?' }  %>
     <% end %>
   </div>
 

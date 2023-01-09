@@ -25,11 +25,17 @@ class ApplicationController < ActionController::Base
   end
 
   def get_request_referrer
-    @follow_up_unread_count = FollowUp.where(is_read: false).count
-    @follow_up_all = FollowUp.order('id desc')
-    @follow_up_unread = FollowUp.order('id desc').where(is_read: false)
-
-    @total_follow_ups = FollowUp.count
+    if current_user&.super_admin?
+      @follow_up_unread_count = FollowUp.where(is_read: false).count
+      @follow_up_all = FollowUp.preload(:followable).order('id desc')
+      @follow_up_unread = FollowUp.preload(:followable).order('id desc').where(is_read: false)
+      @total_follow_ups = FollowUp.count
+    else
+      @follow_up_unread_count = FollowUp.where(is_read: false, assigned_to_id: current_user&.id).count
+      @follow_up_all = FollowUp.preload(:followable).order('id desc').where(assigned_to_id: current_user&.id)
+      @follow_up_unread = FollowUp.preload(:followable).order('id desc').where(is_read: false, assigned_to_id: current_user&.id)
+      @total_follow_ups = FollowUp.where(assigned_to_id: current_user&.id).count
+    end
     unless (request.referrer.to_s.include? 'edit') || (request.referrer.to_s.include? 'new')
       return session[:referrer].to_s
     end
