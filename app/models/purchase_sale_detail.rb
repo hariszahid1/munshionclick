@@ -17,6 +17,8 @@ class PurchaseSaleDetail < ApplicationRecord
   accepts_nested_attributes_for :product_warranties,reject_if: :all_blank, allow_destroy: true
   enum with_gst: %i[false true]
   has_paper_trail ignore: [:updated_at]
+  has_many :follow_ups, as: :followable, dependent: :destroy
+  accepts_nested_attributes_for :follow_ups
 
   after_create :modify_account_balance, :set_qr_code
   after_update :update_account_balance

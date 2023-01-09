@@ -105,6 +105,8 @@
   <div class="col-lg-6 form-group float-left">
     <% if  staff.profile_image.attached? %>
       <%= image_tag staff.profile_image, width: 300 %>
+        <%= link_to 'Remove', delete_image_attachment_application_path(staff.profile_image.signed_id), method: :delete,
+          class: 'btn btn-danger', data: { confirm: 'Are you sure?' }  %>
     <% end %>
   </div>
 

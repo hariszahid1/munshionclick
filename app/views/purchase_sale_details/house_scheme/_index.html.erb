@@ -39,6 +39,11 @@
               Place Purchase
             <% end %>
           </div>
+          <div class="col-lg-3 form-group float-left">
+            <%= link_to follow_ups_path('q[followable_type_eq]': 'PurchaseSaleDetail'), class: "btn btn-info" do %>
+              Follow Up
+            <% end %>
+          </div>
         </div>
       </div>
     <%end%>

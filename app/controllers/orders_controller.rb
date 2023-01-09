@@ -2,7 +2,7 @@ class OrdersController < ApplicationController
   before_action :set_order, only: %i[show edit update destroy transfer booking_print booking_cancel]
   skip_before_action :authenticate_user!, only: [:show]
   before_action :check_access
-
+  before_action :set_user, only: %i[new edit]
   # GET /orders
   # GET /orders.json
   def biller
@@ -366,6 +366,7 @@ class OrdersController < ApplicationController
     @item_types = ItemType.all
     @order.order_items.build
     @order.property_plans.build
+    @order.follow_ups.build
 
     @suppliers = SysUser.where(user_group: %w[Supplier Both Own])
     @customers = SysUser.where(user_group: %w[Customer Both Salesman])
@@ -583,6 +584,13 @@ class OrdersController < ApplicationController
     @order = Order.find(params[:id])
   end
 
+  def set_user
+    created_by_ids = current_user&.created_by_ids_list_to_view
+    roles_mask = current_user&.allowed_to_view_roles_mask_for
+    @users = User.where(roles_mask: roles_mask).where('company_type=? or created_by_id=?', current_user&.company_type,
+                                                      created_by_ids)
+  end
+
   # Only allow a list of trusted parameters through.
   def order_params
     params.require(:order).permit(
@@ -680,6 +688,18 @@ class OrdersController < ApplicationController
           bank_detail
           _destroy
         ] }
+      ],
+      follow_ups_attributes: [
+        :id,
+        :reminder_type,
+        :task_type,
+        :priority,
+        :created_by,
+        :assigned_to_id,
+        :date,
+        :comment,
+        :followable_id,
+        :followable_type
       ]
     )
   end

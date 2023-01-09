@@ -26,7 +26,7 @@
           <%= f.hidden_field :id %>
           <%= f.hidden_field :transaction_type, value: PurchaseSaleItem.transaction_types.first.first%>
           <tr>
-            <td class="w-25" ><%= f.select :product_id, options_from_collection_for_select(@products, 'id', ->(st){"#{st.code} \u{27F6} #{st.name}"},f.object.product_id), {hide_label: true,prompt: "Select the Product"},onchange: 'set_cost(this.value,this.id); return false;',class: "chosen-select",required: true%></td>
+            <td class="w-25" ><%= f.select :product_id, options_from_collection_for_select(@products, 'id', ->(st){"#{st.code} \u{27F6} #{st.title}"},f.object.product_id), {hide_label: true,prompt: "Select the Product"},onchange: 'set_cost(this.value,this.id); return false;',class: "chosen-select",required: true%></td>
             <td class="w-25" ><%= f.number_field :cost_price,step: :any,class:'cost-price',hide_label: true, placeholder: :cost_price,onchange:"costUpdate()",onkeyup:"costUpdate()"%></td>
             <td class="w-25" ><%= f.number_field :total_cost_price,step: :any,class:'total-cost-price', hide_label: true,placeholder: :total_cost_price,onchange:"costUpdate()",onkeyup:"costUpdate()"%></td>
             <td class="w-25" ><%= f.number_field :sale_price,step: :any,hide_label: true, placeholder: :sale_price,onchange:"costUpdate()",onkeyup:"costUpdate()"%></td>

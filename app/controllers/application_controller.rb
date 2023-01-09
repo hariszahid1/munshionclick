@@ -25,11 +25,17 @@ class ApplicationController < ActionController::Base
   end
 
   def get_request_referrer
-    @follow_up_unread_count = FollowUp.where(is_read: false).count
-    @follow_up_all = FollowUp.order('id desc')
-    @follow_up_unread = FollowUp.order('id desc').where(is_read: false)
-
-    @total_follow_ups = FollowUp.count
+    if current_user&.super_admin?
+      @follow_up_unread_count = FollowUp.where(is_read: false).count
+      @follow_up_all = FollowUp.preload(:followable).order('id desc')
+      @follow_up_unread = FollowUp.preload(:followable).order('id desc').where(is_read: false)
+      @total_follow_ups = FollowUp.count
+    else
+      @follow_up_unread_count = FollowUp.where(is_read: false, assigned_to_id: current_user&.id).count
+      @follow_up_all = FollowUp.preload(:followable).order('id desc').where(assigned_to_id: current_user&.id)
+      @follow_up_unread = FollowUp.preload(:followable).order('id desc').where(is_read: false, assigned_to_id: current_user&.id)
+      @total_follow_ups = FollowUp.where(assigned_to_id: current_user&.id).count
+    end
     unless (request.referrer.to_s.include? 'edit') || (request.referrer.to_s.include? 'new')
       return session[:referrer].to_s
     end
@@ -461,6 +467,16 @@ class ApplicationController < ActionController::Base
   def read_follow_up
     follow_up = FollowUp.find(params[:follow_up_id])
     follow_up.update(is_read: true)
-    redirect_to crm_path(follow_up.followable.id)
+    type = follow_up&.followable_type
+    case type
+    when 'SysUser'
+      redirect_to crm_path(follow_up.followable.id)
+    when 'Order'
+      redirect_to orders_path
+    when 'ExpenseVoucher'
+      redirect_to expense_vouchers_path
+    else
+      redirect_to purchase_sale_details_path
+    end
   end
 end

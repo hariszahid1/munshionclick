@@ -19,6 +19,11 @@
           <% end %>
         </div>
         <div class="col-lg-3 form-group float-left">
+          <%= link_to follow_ups_path('q[followable_type_eq]': 'PurchaseSaleDetail'), class: "btn btn-info" do %>
+            Follow Up
+          <% end %>
+        </div>
+        <div class="col-lg-3 form-group float-left">
           <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample1" role="button" aria-expanded="false" aria-controls="multiCollapseExample1" id="sec">Search</a>
         </div>
       </div>
@@ -41,6 +46,11 @@
             <%= link_to new_purchase_sale_detail_path(product: true), class: "btn btn-success col-lg-12" do %>
               <i class="fa fa-shopping-cart" aria-hidden="true"></i>
               Product Purchase
+            <% end %>
+          </div>
+          <div class="col-lg-3 form-group float-left">
+            <%= link_to follow_ups_path('q[followable_type_eq]': 'PurchaseSaleDetail'), class: "btn btn-info" do %>
+              Follow Up
             <% end %>
           </div>
         </div>

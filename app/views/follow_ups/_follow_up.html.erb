@@ -1,6 +1,6 @@
 <tr class= <%= (DateTime.now.strftime('%d, %b %Y') == follow_up&.date&.strftime('%d, %b %Y')) ? "cms-table-row2" : "follow_up_color"%>>
   <td><%= check_box_tag 'object_ids[]', follow_up.id %></td>
-  <td><%= follow_up&.followable&.name %></td>
+  <td><%= follow_up&.followable_type == 'SysUser' ? follow_up&.followable&.name : follow_up.followable_type %></td>
   <td><%= follow_up.task_type %></td>
   <td><%= follow_up.priority%></td>
   <td><%= follow_up.comment%></td>
