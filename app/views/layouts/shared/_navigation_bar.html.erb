@@ -105,11 +105,12 @@ ul li a.active{
                 <%= link_to read_follow_up_path(follow_up_id: follow_up.id) do %>
                   <div class="text-decoration-none text-left pl-2 py-3 d-flex border-bottom <%= follow_up.is_read? ? '' : 'bg-unread-color'%>">
                     <div class='col-3 mt-2'>
+                      <span class="badge badge-info p-2 mb-2"><%= (follow_up&.followable_type == 'SysUser') ? 'CRM' : follow_up&.followable_type %></span><br>
                       <span class="badge badge-danger p-2 mb-2"><%= follow_up.priority %></span><br>
                       <span class="badge badge-primary p-2"><%= follow_up.task_type %></span>
                     </div>
                     <div class='col-9'>
-                      <span class="h6"><%= follow_up&.followable&.name %></span><br>
+                      <span class="h6"><%= follow_up&.followable.name if follow_up.followable_type == 'SysUser' %></span><br>
                       <%= follow_up.comment %><br>
                       <span><%= follow_up.date.strftime('%d/%m/%Y %H:%M %p')%></span>
                     </div>
@@ -123,11 +124,12 @@ ul li a.active{
                 <%= link_to read_follow_up_path(follow_up_id: follow_up.id) do %>
                   <div class="text-decoration-none text-left pl-2 py-3 d-flex border-bottom bg-unread-color unread-data-container">
                     <div class='col-3 mt-2'>
+                      <span class="badge badge-info p-2 mb-2"><%= follow_up.followable_type %></span><br>
                       <span class="badge badge-danger p-2 mb-2"><%= follow_up.priority %></span><br>
                       <span class="badge badge-primary p-2"><%= follow_up.task_type %></span>
                     </div>
                     <div class='col-9'>
-                      <span class="h6"><%= follow_up&.followable&.name %></span><br>
+                      <span class="h6"><%= follow_up&.followable&.name if follow_up.followable_type == 'SysUser' %></span><br>
                       <%= follow_up.comment %><br>
                       <span><%= follow_up.date.strftime('%d/%m/%Y %H:%M %p')%></span>
                     </div>

@@ -1,6 +1,7 @@
 class PurchaseSaleDetailsController < ApplicationController
   before_action :set_purchase_sale_detail, only: [:show, :edit, :update, :destroy]
   before_action :check_access
+  before_action :set_user, only: %i[new edit]
   # GET /purchase_sale_details
   # GET /purchase_sale_details.json
   def index
@@ -625,6 +626,7 @@ class PurchaseSaleDetailsController < ApplicationController
     else
       @purchase_sale_detail.purchase_sale_items.build
     end
+    @purchase_sale_detail.follow_ups.build
     @suppliers=SysUser.where(:user_group=>['Supplier','Both','Own'])
     @customers=SysUser.where(:user_group=>['Customer','Both','Salesman'])
     @items=Item.all
@@ -1165,6 +1167,14 @@ class PurchaseSaleDetailsController < ApplicationController
       SysUser.find(id).user_group
     end
 
+    def set_user
+      created_by_ids = current_user&.created_by_ids_list_to_view
+      roles_mask = current_user&.allowed_to_view_roles_mask_for
+      @users = User.where(roles_mask: roles_mask).where('company_type=? or created_by_id=?', current_user&.company_type,
+                                                        created_by_ids)
+    end
+  
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def purchase_sale_detail_params
         params.require(:purchase_sale_detail).permit(
@@ -1240,6 +1250,18 @@ class PurchaseSaleDetailsController < ApplicationController
             :serial,
             :created_at,
             :_destroy
+          ],
+          follow_ups_attributes: [
+            :id,
+            :reminder_type,
+            :task_type,
+            :priority,
+            :created_by,
+            :assigned_to_id,
+            :date,
+            :comment,
+            :followable_id,
+            :followable_type
           ]
         )
     end

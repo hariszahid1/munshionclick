@@ -12,10 +12,13 @@
     </ol>
   </div>
     <%if (check_can_create(@module_permission))%>
-    <%= link_to new_order_path(transaction_type: :sale,product: true), class: "btn btn-success mt-2 ml-3" do %>
-      <i class="fa fa-plus" aria-hidden="true"></i>
-      Create
+      <%= link_to new_order_path(transaction_type: :sale,product: true), class: "btn btn-success mt-2 ml-3" do %>
+        <i class="fa fa-plus" aria-hidden="true"></i>
+        Create
+      <% end %>
     <% end %>
+    <%= link_to follow_ups_path('q[followable_type_eq]': 'Order'), class: "btn btn-info mt-2" do %>
+      Follow Up
     <% end %>
   <% end %>
   <ul class="nav nav-pills ml-1 mt-4 ml-3" role="tablist">
