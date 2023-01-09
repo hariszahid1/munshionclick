@@ -28,6 +28,12 @@
       .px-20{
         padding: 0px 20px;
       }
+      .watermark{
+        position: fixed;
+        top: 38%;
+        left: 48%;
+        opacity: 0.3;
+      }
     </style>
   </head>
   <body>
@@ -35,6 +41,7 @@
       <tr>
         <th class='text-left'>
           <img src="<%= @pos_setting&.logo_images&.first&.service_url%>" height="100px" width= "100px"/>
+          <img src="<%= @pos_setting&.images&.first&.service_url%>" class='watermark' height="150px" width= "150px"/>
         </th>
         <th style="vertical-align: bottom;" class='text-center'>
           <p style='padding-left: 70px;'>Sale Reciept</p>
@@ -136,7 +143,7 @@
     </div>
     <p>
       Note: This is a system generated reciept therefore sign and stamp are elecronically generated. As soon
-      as you receive this reciept please verify the same by calling at this Number: 0321-8437272.
+      as you receive this reciept please verify the same by calling at this Number: <b>0321-8437272</b>.
     </p>
     <% if @sale_deal.qr_code.present?%>
       <%
@@ -155,29 +162,24 @@
     <% end %>
     <div class='d-flex'>
       <div style='width: 50%; margin-top: 20px'>
-        <h3>LAHORE  <img src="<%= image_url('pin-location.svg') %>" height='20px' width='20px'></h3>
-        <p>240-C , Broadway Commercial Phase,8</p>
-        <p>DHA Lahore.</p>
-        <p>Contact- 0320-8412049, 0321-4225689</p>
+        <h3><%= @pos_setting&.extra_settings.try(:[], "address_1").try(:[], 0) %><img src="<%= image_url('pin-location.svg') %>" height='20px' width='20px'></h3>
+        <p><%= @pos_setting&.extra_settings.try(:[], "address_1").try(:[], 1)%></p>
+        <p><%= @pos_setting&.extra_settings.try(:[], "address_1").try(:[], 2) %></p>
       </div>
       <div style='width: 50%; margin-top: 20px'>
-        <h3>ISLAMABAD <img src="<%= image_url('pin-location.svg') %>" height='20px' width='20px'></h3>
-        <p>F-11 Markaz, Bizzon Plaza, Near Deplix</p>
-        <p>shop # 15 Isalamabad.</p>
-        <p>Contact- 0300-4672774, 0311-1739111</p>
+        <h3><%= @pos_setting&.extra_settings.try(:[], "address_2").try(:[], 0) %> <img src="<%= image_url('pin-location.svg') %>" height='20px' width='20px'></h3>
+        <p><%= @pos_setting&.extra_settings.try(:[], "address_2").try(:[], 1) %></p>
+        <p><%= @pos_setting&.extra_settings.try(:[], "address_2").try(:[], 2) %></p>
       </div>
     </div>
 
     <p style="border-bottom: 2px solid black"></p>
     <div class='d-flex'>
-      <div style='width: 33%; margin-top: 10px'>
-        <b class='d-flex'><img src="<%= image_url('youtube.svg') %>" height='20px' width='20px'><div>Property Studio</div></b>
+      <div style='width: 50%; margin-top: 10px'>
+        <b class='d-flex' style='width: 100%;'><img src="<%= image_url('fb.svg') %>" height='20px' width='20px'><div><%= @pos_setting&.extra_settings.try(:[], "jr_pdf_footer").try(:[], 0) %></div></b>
       </div>
-      <div style='width: 33%; margin-top: 10px'>
-        <b class='d-flex' style='width: 100%;'><img src="<%= image_url('fb.svg') %>" height='20px' width='20px'><div>JR Property Network</div></b>
-      </div>
-      <div style='width: 33%; margin-top: 10px'>
-        <b class='d-flex'><img src="<%= image_url('world.svg') %>" height='20px' width='20px'><div>www.propertystudio.pk</div></b>
+      <div style='width: 50%; margin-top: 10px'>
+        <b class='d-flex'><img src="<%= image_url('world.svg') %>" height='20px' width='20px'><div><%= @pos_setting&.extra_settings.try(:[], "jr_pdf_footer").try(:[], 1) %></div></b>
       </div>
     </div>
   </body>
