@@ -88,7 +88,7 @@ class ExpenseVouchersController < ApplicationController
     params.require(:expense_voucher).permit(:amount, :comment, :expense_type_id, :created_at,
                                             expense_entry_vouchers_attributes: %i[id expense_id amount comment
                                                                                   status expense_type_id _destroy],
-                                            follow_ups_attributes: %i[id reminder_ty task_type priority created_by
+                                            follow_ups_attributes: %i[id reminder_type task_type priority created_by
                                                                       assigned_to_id date comment followable_id
                                                                       followable_type])
   end

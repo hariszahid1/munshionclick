@@ -22,13 +22,42 @@
           </ol>
         </div>
         <div class="row mb-4">
-            <div id="new_city">
-              <%= link_to new_sale_deal_path,class: "btn btn-success mt-3 ml-2" do %>
-                <i class="fa fa-plus" aria-hidden="false"></i>
-                Create
-              <% end %>
-            </div>
+          <div id="new_city">
+            <%= link_to new_sale_deal_path,class: "btn btn-success mt-3 ml-2" do %>
+              <i class="fa fa-plus" aria-hidden="false"></i>
+              Create
+            <% end %>
+          </div>
+          <%= link_to 'Follow Ups', follow_ups_path('q[reminder_type_eq]': 'sale_deals'), class: "btn btn-primary mt-3 ml-2" %>
         </div>
+      </div>
+    </div>
+  </div>
+    <div class="d-flex ml-auto">
+      <div class="card shadow text-dark mr-3 p-1 close-card" style="border: 10px solid rgba(102, 255, 51, 0.3); border-radius: 50%;">
+        <%= link_to sale_deals_path('q[purchase_sale_items_size_7_eq]': 'Total Paid') do %>
+          <span><h2 class="mt-2"><b><%=  @payment_status_count['Total Paid'] %></b></h2><p>Total Paid</p></span>
+        <% end %>
+      </div>
+      <div class="card shadow text-dark mr-3 p-1 close-card" style="border: 10px solid rgba(255, 51, 0, 0.3); border-radius: 50%;">
+        <%= link_to sale_deals_path('q[purchase_sale_items_size_7_eq]': 'Pending') do %>
+          <span><h2 class="mt-2"><b><%=  @payment_status_count['Pending'] %></b></h2><p>Pending</p></span>
+        <% end %>
+      </div>
+      <div class="card shadow text-dark mr-3 p-1 close-card" style="border: 10px solid rgba(255, 255, 0, 0.3); border-radius: 50%;">
+        <%= link_to sale_deals_path('q[purchase_sale_items_size_4_eq]': 'Transfer') do %>
+          <span><h2 class="mt-2"><b><%= @deal_count['Transfer'] %></b></h2><p>Transfer</p></span>
+        <% end %>
+      </div>
+      <div class="card shadow text-dark mr-3 p-1 close-card" style="border: 10px solid rgba(128, 229, 255, 0.3); border-radius: 50%;">
+        <%= link_to sale_deals_path('q[purchase_sale_items_size_4_eq]': 'Saler Free') do %>
+          <span><h2 class="mt-2"><b><%= @deal_count['Saler Free'] %></b></h2><p>Saler Free</p></span>
+        <% end %>
+      </div>
+      <div class="card shadow text-dark mr-3 p-1 close-card" style="border: 10px solid rgba(255, 179, 217, 0.74); border-radius: 50%;">
+        <%= link_to sale_deals_path('q[purchase_sale_items_size_4_eq]': 'Fresh Booking') do %>
+          <span><h2 class="mt-2"><b><%= @deal_count['Fresh Booking'] %></b></h2><p style='font-size: 15px;'>Fresh Booking</p></span>
+        <% end %>
       </div>
     </div>
   </div>
@@ -57,13 +86,32 @@
     <div class="tab-pane active mb-3 card shadow-sm mt-2 border-radius-1" id="search" role="tabpanel">
       <p>
         <div class="row p-3">
-          <div class="col-lg-3 form-group float-left">
+          <div class="col-lg-2 form-group float-left">
             <%= f.select :sys_user_id_eq, options_for_select(@sys_users.map{ |p| [p.name , p.id]}, f.object.sys_user_id_eq),{:include_blank => "Select Customer Name"},:class=>"form-control chosen-select" %>
           </div>
-          <div class="col-lg-3 form-group float-left">
+          <div class="col-lg-2 form-group float-left">
             <%= f.select :sys_user_credit_status_eq, options_for_select(@all_agents.map{ |key, value| [key , value]}, f.object.sys_user_credit_status_eq),{:include_blank => "Select Agent Name"},:class=>"form-control chosen-select" %>
           </div>
-          <div class="col-lg-3 form-group float-left">
+          <div class="col-lg-2 form-group float-left">
+            <%= f.select :purchase_sale_items_size_12_eq, options_for_select(@transaction_type, f.object.purchase_sale_items_size_12_eq),  {:include_blank => "Select Transaction Type"}, class: "form-control chosen-select" %>
+          </div>
+          <div class="col-lg-2 form-group float-left">
+            <%= f.select :purchase_sale_items_size_7_eq, options_for_select(@payment_status, f.object.purchase_sale_items_size_7_eq),  {:include_blank => "Select Payment Status"}, class: "form-control chosen-select" %>
+          </div>
+          <div class="col-lg-2 form-group float-left">
+            <%= f.select :purchase_sale_items_size_4_eq, options_for_select(@deal, f.object.purchase_sale_items_size_4_eq),  {:include_blank => "Select Deal"}, class: "form-control chosen-select" %>
+          </div>
+          <div class="col-lg-2 form-group float-left">
+            <%= f.search_field :purchase_sale_items_size_11_cont, class: "form-control chosen-select", placeholder: "Search MS/Form No" %>
+          </div>
+          <div class="col-lg-2 form-group float-left">
+            <%= f.search_field :created_at_gteq, value:@start_date, class: 'form-control input-sm datepicker',title: "Select date from",  placeholder: "YYYY-MM-DD" %>
+          </div>
+
+          <div class="col-lg-2 form-group float-left">
+            <%= f.search_field :created_at_lteq, value:@end_date,class: 'form-control input-sm datepicker' ,title: "Select date to", placeholder: "YYYY-MM-DD"%>
+          </div>
+          <div class="col-lg-2 form-group float-left">
             <%= f.search_field :purchase_sale_items_size_13_cont, class: "form-control chosen-select", placeholder: "Search Quota" %>
           </div>
           <div class="col-lg-1 form-group float-left">
@@ -96,5 +144,14 @@
       <%= render partial: 'sale_deal', collection: @sale_deals %>
     </tbody>
   </table>
+
+    <div class="row">
+      <div class="col-lg-4 col-sm-4">
+        <%= page_entries_info @sale_deals %>
+      </div>
+      <div class="col-lg-8 col-sm-8 pagination-left text-dark">
+        <%= paginate @sale_deals %>
+      </div>
+    </div>
 </div>
 
