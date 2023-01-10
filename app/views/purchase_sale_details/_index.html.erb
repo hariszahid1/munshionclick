@@ -327,7 +327,7 @@
                           Invoice
                         </div>
                         <%if (check_can_download_pdf(@module_permission))%>
-                          <% if @pos_setting.sys_type == 'POS' || @pos_setting.sys_type == 'industry' || @pos_setting.sys_type == 'Factory' %>
+                          <% if @pos_setting.sys_type == 'POS' || @pos_setting.sys_type == 'industry' || @pos_setting.sys_type == 'Factory' || @pos_setting.sys_type == 'MobileShop' %>
                             <%= link_to dynamic_pdf_purchase_sale_details_path(purchase_sale_detail_id: purchase_sale_detail.id),target: "_blank", class:"icon-div" do %>
                               <i class="fa fa-print mt-2" aria-hidden="true"></i>
                             <% end %>
