@@ -4,7 +4,7 @@
     <span aria-hidden="true">×</span>
   </button>
 </div>
-<div class="hidden" id="product_sub_category_list">
+<div class="hidden m-4" id="product_sub_category_list">
     <div class="main-content-header">
       <h1 class="ml-2 mt-2">Unit Sub Categories</h1>
       <ol class="breadcrumb mt-2 mb-4">
@@ -56,7 +56,7 @@
 <%= link_to '', analytics_product_sub_categories_path, id: 'analytics-path', class: 'd-none', remote: true %>
 <%= search_form_for @q, url: product_sub_categories_path, class: "admin-controls", method: "get" do |f| %>
   <div class="tab-content">
-      <div class="tab-pane active mb-3 card shadow-sm mt-2 border-radius-1" id="search" role="tabpanel">
+      <div class="tab-pane active mb-3 card shadow p-3 mt-2 border-radius-1" id="search" role="tabpanel">
         <div class="row d-flex mt-3 mr-2">
           <div class="col">
             <div class='col-lg-3 form-group float-left'>
@@ -119,10 +119,10 @@
           </div>
         </div>
     </div>
-    <div class="tab-pane mb-3 card shadow-sm mt-2 p-3 border-radius-1" id="analytics" role="tabpanel">
+    <div class="tab-pane mb-3 card shadow mt-2 p-3 border-radius-1" id="analytics" role="tabpanel">
       <div id="show-analytics" class="row p-3"></div>
     </div>
-    <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="import-export" role="tabpanel">
+    <div class="tab-pane mb-3 card shadow p-3 mt-2 border-radius-1" id="import-export" role="tabpanel">
       <p>
         <div class="d-flex ml-2">
         <button class="btn btn-danger ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
@@ -134,21 +134,27 @@
 <% end %>
 
   <%= render 'map_columns/map_column_partials' %>
-<div class='card p-3 border-radius-1'>
-  <table data-toggle="table" data-search="true" id="product_sub_category_table" class=" overflow-hidden border-radius-1">
+<div class='card shadow p-3 border-radius-1'>
+  <div class="row d-flex" style="position: absolute;">
+    
+    <div>
+      <%if (check_can_delete(@module_permission))%>
+	      <button class="btn btn-outline-danger delete-selected mt-4 ml-3" type='button' value='ProductSubCategory'>
+	      	Delete Selected
+	      </button>		
+      <%end%>
+    </div>  
+    <%= search_form_for @q, url: product_sub_categories_path, class: "admin-controls ml-4", method: "get" do |f| %>
+      <div class="d-flex mt-4" style="width: 120%;">    
+        <%= select_tag :limit, options_for_select(['Show Entries',5, 10, 15, 20, 25], selected: 'Show Entries'), id: 'pagination-limit', title:'Show Entries', style:'cursor: pointer;' %>
+      </div>
+    <% end %>
+  </div>
+  <div class="mt-3">
+  <table data-toggle="table" data-search="true" id="product_sub_category_table" class="content-table">
     <thead>
       <tr>
         <th><input type="checkbox" id="master" class='select-all-checkbox'>
-            <div class="icon-container float-center">
-            <span class="ml-2 mt-2">
-            <div class="my-icon my-view">
-
-                        <button class="icon-div btn delete-selected p-2 " type='button' value='ProductSubCategory'>
-                                  <i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i>
-                        </button>
-                    </div>
-                    </span>
-              </div>
         </th>
          <th>ID<div class='float-right'><%= sort_link(@q, :id, '', {}, class: 'sorting-button') %></div></th>
         <th>Category<div class='float-right'><%= sort_link(@q, :product_category, '', {}, class: 'sorting-button') %></div></th>
@@ -164,15 +170,16 @@
       <%= render partial: 'product_sub_category', collection: @product_sub_categories %>
     </tbody>
   </table>
+  </div>
 
-<div class="row">
-  <div class="col-lg-4 col-sm-4">
-    <%= page_entries_info @product_sub_categories %>
+  <div class="col-lg-12 digg_pagination">
+    <div class="float-left page_info">
+      <%= page_entries_info @product_sub_categories %>
+    </div>
+    <div class="float-right">
+    <%= paginate @product_sub_categories, :container => false %>
+    </div>
   </div>
-  <div class="col-lg-8 col-sm-8 pagination-left">
-    <%= paginate @product_sub_categories %>
-  </div>
-</div>
 </div>
 <div class="show-data"></div>
 <%= form_for :bulk_import, url: bulk_import_data_path, method: :post, html: {class: "bulk-import-form"} do |f| %>
@@ -213,6 +220,9 @@
   $('.analytics-tab').on('click', function(){
       $('#analytics-path').click();
     })
+  $('#pagination-limit').on('change', function(){
+  $(this).closest('form').submit();
+ })
 </script>
 
 

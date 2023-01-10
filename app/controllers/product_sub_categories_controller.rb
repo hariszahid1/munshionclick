@@ -13,7 +13,9 @@ class ProductSubCategoriesController < ApplicationController
     @q.sorts = 'id asc' if @q.sorts.empty? && @q.result.count.positive?
     @options_for_select = ProductSubCategory.all
     @options_for_select_cat = ProductCategory.all
-    @product_sub_categories = @q.result(distinct: true).page(params[:page])
+    @custom_pagination = params[:limit].present? ? params[:limit] : 25
+    @custom_pagination = @pos_setting.custom_pagination['product_sub_categories'] if @pos_setting&.custom_pagination.present? && @pos_setting&.custom_pagination['product_sub_categories'].present?
+    @product_sub_categories = @q.result(distinct: true).page(params[:page]).per(@custom_pagination)
     if params[:csv].present?
       request.format = 'csv'
       download_product_sub_categories_csv_file
