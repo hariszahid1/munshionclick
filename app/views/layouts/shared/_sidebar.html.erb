@@ -17,12 +17,21 @@
           </li>
         <% end %>  
         <% if check_is_hidden_by_module('orders') %>
-          <li class="activ-link">
-            <a href="<%=orders_path(sale: true)%>", class="activ-link">
-              <i class="fas fa fa-cart-arrow-down"></i>
-              <span class="link-text">Order</span>
-            </a>
-          </li>
+          <% if pos_setting_sys_type == "POS" %>
+            <li class="activ-link">
+              <a href="<%=order_sales_path(sale: true)%>", class="activ-link">
+                <i class="fas fa fa-cart-arrow-down"></i>
+                <span class="link-text">Order</span>
+              </a>
+            </li>
+          <% else %>
+            <li class="activ-link">
+              <a href="<%=orders_path(sale: true)%>", class="activ-link">
+                <i class="fas fa fa-cart-arrow-down"></i>
+                <span class="link-text">Order</span>
+              </a>
+            </li>
+          <% end %>
         <% end %>  
         <li>
           <a href="#SaleSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
