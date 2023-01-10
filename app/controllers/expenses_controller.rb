@@ -3,10 +3,12 @@ class ExpensesController < ApplicationController
   before_action :set_expense, only: %i[show edit update destroy]
   include PdfCsvGeneralMethod
   include ExpensesHelper
+  include DateRangeMethods
 
   # GET /expenses
   # GET /expenses.json
   def index
+    set_date_range if params[:q].present?
     @expense_types = ExpenseType.all
     @accounts = Account.all
     @start_date = DateTime.current.beginning_of_month
@@ -26,9 +28,13 @@ class ExpensesController < ApplicationController
       end
       @q = Expense.order('id desc').ransack(params[:q])
     else
-      @q = Expense.order('id desc').where(created_at: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day).ransack(params[:q])
+      @q = Expense.order('id desc').where(created_at: @start_date&.to_date.beginning_of_day..@end_date&.to_date&.end_of_day).ransack(params[:q])
     end
-    @expenses = @q.result.page(params[:page])
+
+    @options_for_select = Expense.all
+    @custom_pagination = params[:limit].present? ? params[:limit] : 25
+    @custom_pagination = @pos_setting.custom_pagination['expenses'] if @pos_setting&.custom_pagination.present? && @pos_setting&.custom_pagination['expenses'].present?
+    @expenses = @q.result.page(params[:page]).per(@custom_pagination)
     @expense_total = @expenses.sum(:expense)
     @expense_payment = Expense.joins(expense_entries: :payment).where('expenses.id': @expenses.pluck(:id)).group(:id).sum(:debit)
     @expense_payment_total = Expense.joins(expense_entries: :payment).where('expenses.id': @expenses.pluck(:id)).sum(:debit)
