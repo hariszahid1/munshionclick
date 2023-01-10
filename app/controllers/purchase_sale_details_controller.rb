@@ -831,6 +831,16 @@ class PurchaseSaleDetailsController < ApplicationController
     end
   end
 
+  def dynamic_pdf
+    @purchase_sale_detail = PurchaseSaleDetail.find(params[:purchase_sale_detail_id])
+    request.format = 'pdf'
+    respond_to do |format|
+      format.pdf do
+        print_pdf('invoice', nil,'A4')
+      end
+    end
+  end
+
   def day_out
     @products_sale =  PurchaseSaleItem.joins(:product).where(created_at:Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).group(:title).sum(:total_sale_price).round(2)
     @products_sale_total =  PurchaseSaleItem.joins(:product).where(created_at:Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).sum(:total_sale_price).round(2)

@@ -69,7 +69,7 @@
     <div class='d-flex'>
       <div class='col-3 px-20'><b>Project Name:</b></div>
       <div class='col-3 border-bottom'><%= @sale_deal&.sys_user&.cms_data&.try(:[], 'project_name')&.titleize %></div>
-      <div class='col-3 px-20'><b>Form No:</b></div>
+      <div class='col-3 px-20'><b>MS/Form No:</b></div>
       <div class='col-3 border-bottom'><%= @sale_deal&.purchase_sale_items.first.size_11 %></div>
     </div>
 
@@ -97,29 +97,36 @@
     <div class='d-flex'>
       <div class='col-3 px-20'><b>Down Payment:</b></div>
       <div class='col-3 border-bottom'><%= @sale_deal&.purchase_sale_items&.first&.size_6 %></div>
-      <div class='col-3 px-20'><b>Profit/Loss:</b></div>
+      <div class='col-3 px-20'><b>Rebate/Profit/Loss:</b></div>
       <div class='col-3 border-bottom'><%= @sale_deal&.purchase_sale_items&.first&.size_5 %></div>
     </div>
 
     <div class='d-flex'>
-      <div class='col-3 px-20'><b>Receivede Amount:</b></div>
-      <div class='col-3 border-bottom'><%= @sale_deal&.purchase_sale_items&.first&.size_4 %></div>
-      <div class='col-3 px-20'><b>Total Amount</b></div>
-      <div class='col-3 border-bottom'><%= @sale_deal&.purchase_sale_items&.first&.size_2 %></div>
-    </div>
-
-    <div class='d-flex'>
-      <div class='col-3 px-20'><b>Payment Type:</b></div>
+      <div class='col-3 px-20'><b>Payment Status:</b></div>
       <div class='col-3 border-bottom'><%= @sale_deal&.purchase_sale_items&.first&.size_7 %></div>
-      <div class='col-3 px-20'><b>Balance Amount</b></div>
-      <div class='col-3 border-bottom'><%= @sale_deal&.purchase_sale_items&.first&.size_3 %></div>
+      <div class='col-3 px-20'><b>Deal:</b></div>
+      <div class='col-3 border-bottom'><%= @sale_deal&.purchase_sale_items&.first&.size_4 %></div>
     </div>
 
     <div class='d-flex'>
+      <div class='col-3 px-20'><b>Receivede Amount:</b></div>
+      <div class='col-3 border-bottom'><%= @sale_deal&.amount %></div>
+      <div class='col-3 px-20'><b>Total Amount</b></div>
+      <div class='col-3 border-bottom'><%= @sale_deal&.total_bill %></div>
+    </div>
+
+    <div class='d-flex'>
+      <div class='col-3 px-20'><b>Balance Amount</b></div>
+      <div class='col-3 border-bottom'><%= @sale_deal&.remaining_balance %></div>
+      <div class='col-3 px-20'><b>Discounted Price:</b></div>
+      <div class='col-3 border-bottom'><%= @sale_deal&.discount_price %></div>
+    </div>
+
+    <div class='d-flex'>
+       <div class='col-3 px-20'><b>Inst./PO/CHq/Trx No:</b></div>
+      <div class='col-3 border-bottom'><%= @sale_deal&.purchase_sale_items&.first&.size_1 %></div>
       <div class='col-3 px-20'><b>Customer Name:</b></div>
       <div class='col-3 border-bottom'><%= @sale_deal&.sys_user&.name %></div>
-      <div class='col-3 px-20'><b>Trx No:</b></div>
-      <div class='col-3 border-bottom'><%= @sale_deal&.purchase_sale_items&.first&.size_1 %></div>
     </div>
 
     <div class='d-flex'>
@@ -145,6 +152,7 @@
       Note: This is a system generated reciept therefore sign and stamp are elecronically generated. As soon
       as you receive this reciept please verify the same by calling at this Number: <b>0321-8437272</b>.
     </p>
+    <p>Please call at this number for the verification of your receipt &nbsp; <b>0321-8437272<b></p>
     <% if @sale_deal.qr_code.present?%>
       <%
         require "rqrcode"
@@ -175,11 +183,14 @@
 
     <p style="border-bottom: 2px solid black"></p>
     <div class='d-flex'>
-      <div style='width: 50%; margin-top: 10px'>
-        <b class='d-flex' style='width: 100%;'><img src="<%= image_url('fb.svg') %>" height='20px' width='20px'><div><%= @pos_setting&.extra_settings.try(:[], "jr_pdf_footer").try(:[], 0) %></div></b>
+      <div style='width: 33%; margin-top: 10px'>
+        <b class='d-flex' style='width: 100%;'><img src="<%= image_url('youtube.svg') %>" height='20px' width='20px'><div><%= @pos_setting&.extra_settings.try(:[], "jr_pdf_footer").try(:[], 0) %></div></b>
       </div>
-      <div style='width: 50%; margin-top: 10px'>
-        <b class='d-flex'><img src="<%= image_url('world.svg') %>" height='20px' width='20px'><div><%= @pos_setting&.extra_settings.try(:[], "jr_pdf_footer").try(:[], 1) %></div></b>
+      <div style='width: 33%; margin-top: 10px'>
+        <b class='d-flex' style='width: 100%;'><img src="<%= image_url('fb.svg') %>" height='20px' width='20px'><div><%= @pos_setting&.extra_settings.try(:[], "jr_pdf_footer").try(:[], 1) %></div></b>
+      </div>
+      <div style='width: 33%; margin-top: 10px'>
+        <b class='d-flex'><img src="<%= image_url('world.svg') %>" height='20px' width='20px'><div><%= @pos_setting&.extra_settings.try(:[], "jr_pdf_footer").try(:[], 2) %></div></b>
       </div>
     </div>
   </body>
