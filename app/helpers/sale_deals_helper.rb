@@ -17,12 +17,13 @@ module SaleDealsHelper
                       category: d.purchase_sale_items&.first&.size_9,
                       price: d.purchase_sale_items&.first&.size_8,
                       deal_date: d.purchase_sale_items&.first&.expiry_date&.strftime('%d-%m-%Y'),
-                      payment_type: d.purchase_sale_items&.first&.size_7,
+                      payment_status: d.purchase_sale_items&.first&.size_7,
+                      deal: d.purchase_sale_items&.first&.size_4,
                       profit: d.purchase_sale_items&.first&.size_6,
                       down_payment: d.purchase_sale_items&.first&.size_5,
-                      received: d.purchase_sale_items&.first&.size_4,
-                      balance: d.purchase_sale_items&.first&.size_3,
-                      total: d.purchase_sale_items&.first&.size_2,
+                      received: d.amount,
+                      balance: d.remaining_balance,
+                      total: d.total_bill,
                       trx: d.purchase_sale_items&.first&.size_1,
                       internal: d.purchase_sale_items&.first&.comment,
                       external: d.comment
@@ -48,8 +49,9 @@ module SaleDealsHelper
       thirteen = d.purchase_sale_items&.first&.expiry_date&.strftime('%d-%m-%Y')
       fourteen = d.purchase_sale_items&.first&.size_7
       fifteen = d.purchase_sale_items&.first&.size_1
+      sixteen = d.purchase_sale_items&.first&.size_4
 			temp.push([first, second, third, four, fifth, six, seven, eight, nine, ten, eleven, tweleve, thirteen,
-                  fourteen, fifteen
+                  fourteen, fifteen, sixteen
                 ])
 		end
 		return temp

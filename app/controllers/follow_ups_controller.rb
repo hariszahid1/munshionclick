@@ -83,6 +83,7 @@ class FollowUpsController < ApplicationController
 
   def set_follow_up_users
     created_by_ids = current_user.created_by_ids_list_to_view
+    @follow_up_gadets = FollowUp.group(:reminder_type).count
     roles_mask = current_user.allowed_to_view_roles_mask_for
     @users = User.where(roles_mask: roles_mask).where('company_type=? or created_by_id=?',current_user.company_type,created_by_ids)
   end

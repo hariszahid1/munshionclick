@@ -19,8 +19,10 @@ class FollowUp < ApplicationRecord
   }, _prefix: true
 
   enum reminder_type: {
-    due_time: 'Due Time',
-    thirty_minutes: '30 minutes Ago',
-    one_day: '1 day ago'
+    crms: 'CRM',
+    expense_vouchers: 'ExpenseVoucher',
+    orders: 'Order',
+    purchase_sale_details: 'PurchaseSaleDetail',
+    sale_deals: 'SaleDeal'
   }, _prefix: true
 end
