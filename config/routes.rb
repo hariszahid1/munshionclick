@@ -171,6 +171,7 @@ Rails.application.routes.draw do
       get "purchase_sale_details_return"
       get :view_history, to: 'purchase_sale_details#view_history'
       get :analytics
+      get :dynamic_pdf, to: 'purchase_sale_details#dynamic_pdf'
     end
   end
 

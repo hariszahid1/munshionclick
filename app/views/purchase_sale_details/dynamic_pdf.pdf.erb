@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Invoice</title>
+    <%= wicked_pdf_stylesheet_link_tag ("pdf") -%>
+    <style>
+      .text-center{
+        text-align: center;
+      }
+      .text-right{
+        text-align: right;
+      }
+      .text-left{
+        text-align: left;
+      }
+      .d-flex{
+        display: flex;
+        display: -webkit-box;
+      }
+      .col-6{
+        width: 50%;
+      }
+      td{
+        border: none;
+      }
+      .table-head-black{
+        background-color: black;
+        color: white;
+      }
+      th, td{
+        padding: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class='d-flex'>
+      <div class='col-6'>
+        <table>
+          <tr class='py-3'>
+            <th class='text-left table-head-black' colspan='2'>Bill To</th>
+          </tr>
+          <tr class='py-3'>
+            <th class='text-left'>Customer:</th>
+            <td><%= @purchase_sale_detail.sys_user&.name%></td>
+          </tr>
+          <tr class='py-3'>
+            <th class='text-left'>Address:</th>
+            <td><%= @purchase_sale_detail.sys_user&.contact&.address %></td>
+          </tr>
+          <tr class='py-3'>
+            <th class='text-left'>Mobile#</th>
+            <td><%= @purchase_sale_detail.sys_user&.contact&.mobile %></td>
+          </tr>
+        </table>
+      </div>
+      <div class='col-6'>
+        <table>
+          <tr class='py-3'>
+            <th class='text-center' colspan='2'>Invoice</th>
+          </tr>
+          <tr class='py-3'>
+            <th class='text-right'>Date:</th>
+            <td class='text-right'><%= @purchase_sale_detail.created_at.strftime('%d/%m/%Y') %></td>
+          </tr>
+          <tr class='py-3'>
+            <th class='text-right'>Invoice No:</th>
+            <td class='text-right'><%= @purchase_sale_detail.voucher_id.to_s+'#'+@purchase_sale_detail.id.to_s %></td>
+          </tr>
+          <tr class='py-3'>
+            <td class='text-right'></td>
+            <td class='text-right'></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <table style='border-collapse: collapse; border: 1px solid black;'>
+      <tr class='py-3'>
+        <th class='text-left table-head-black'>Product</th>
+        <th class='text-left table-head-black'>Quantity</th>
+        <th class='text-left table-head-black'>Rate</th>
+        <th class='text-left table-head-black'>Amount</th>
+      </tr>
+      <% @purchase_sale_detail.purchase_sale_items.each do |psi| %>
+        <tr class='py-3'>
+          <td style='border: 1px solid black;'><%= psi.product&.title %></td>
+          <td style='border: 1px solid black;'><%= psi.quantity %></td>
+          <td style='border: 1px solid black;'><%= number_with_delimiter psi.sale_price %></td>
+          <td style='border: 1px solid black;'><%= number_with_delimiter psi.total_sale_price %></td>
+        </tr>
+      <% end %>
+      <tr class='py-3'>
+        <th class='text-left table-head-black' colspan='4'></th>
+      </tr>
+    </table>
+    <div class='d-flex' style='margin-top: 50px;'>
+      <div class='col-6'>
+        <table style='border-collapse: collapse; border: 1px solid black;'>
+          <tr>
+            <th class='text-center table-head-black'>SIGNATURE</th>
+          </tr>
+          <tr>
+            <td rowspan='4' style='padding: 60px 0px;'></td>
+          </tr>
+        </table>
+      </div>
+      <div style='width: 40%; margin-left: 80px;'>
+        <table style='border-collapse: collapse; border: 1px solid black;'>
+          <tr>
+            <th class='text-center table-head-black' colspan='2'>TOTAL</th>
+          </tr>
+          <tr>
+            <th class='text-left' style='padding: 20px;'>QUANTITY:</th>
+            <td class='text-right' style='padding: 20px;'><%= @purchase_sale_detail&.purchase_sale_items&.count %></td>
+          </tr>
+          <tr>
+            <th class='text-left' style='padding: 20px;'>AMOUNT:</th>
+            <td class='text-right' style='padding: 20px;'><%= number_with_delimiter(@purchase_sale_detail&.purchase_sale_items&.sum(:total_sale_price).to_f.round(2)) %></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>
