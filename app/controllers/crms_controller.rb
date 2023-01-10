@@ -7,6 +7,7 @@ class CrmsController < ApplicationController
   before_action :set_sys_user, only: %i[show edit update destroy]
   before_action :new_edit_data, only: %i[new edit create index]
   include PdfCsvGeneralMethod
+  include DateRangeMethods
   include CrmHelper
 
   require 'tempfile'
@@ -14,8 +15,12 @@ class CrmsController < ApplicationController
   # GET /crms
   # GET /crms.json
   def index
-    @q = SysUser.order('id desc').where(for_crms: [true, false]).ransack(params[:q])
-    @sys_users = @q.result.page(params[:page])
+    set_date_range if params[:q].present?
+    @q = SysUser.order('id desc').where(for_crms: [true, false]).where(created_at: @start_date&.to_date&.beginning_of_day..@end_date&.to_date&.end_of_day).ransack(params[:q])
+    @options_for_select = SysUser.all
+    @custom_pagination = params[:limit].present? ? params[:limit] : 25
+    @custom_pagination = @pos_setting.custom_pagination['sys_users'] if @pos_setting&.custom_pagination.present? && @pos_setting&.custom_pagination['sys_users'].present?
+    @sys_users = @q.result.page(params[:page]).per(@custom_pagination)
     export_file if params[:export_data].present?
     download_crm_csv_file if params[:csv].present?
     download_crm_pdf_file if params[:pdf].present?

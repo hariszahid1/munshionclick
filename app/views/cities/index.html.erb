@@ -5,7 +5,7 @@
   </button>
 </div>
 
-<div class="hidden" id="city_list">
+<div class="hidden m-4" id="city_list">
   <div class="main-content-header">
     <h1>Cities</h1>
     <ol class="breadcrumb">
@@ -59,7 +59,7 @@
   <%= hidden_field_tag "cityUser1", @city_user, { :id => "cityUser1" } %>
   <%= search_form_for @q, url: cities_path, class: "admin-controls", method: "get" do |f| %>
     <div class="tab-content">
-      <div class="tab-pane active mb-3 card shadow mt-2 p-3 border-radius-1" id="search" role="tabpanel">
+      <div class="tab-pane active mb-3 card shadow mt-2 p-4 border-radius-1" id="search" role="tabpanel">
         <div class="row d-flex">
           <div class="col">
             <div class="col-lg-4 form-group float-left">
@@ -122,7 +122,7 @@
           </div>
         </div>
       </div>
-      <div class="tab-pane mb-3 card shadow mt-2 border-radius-1 p-1" id="analytics" role="tabpanel">
+      <div class="tab-pane mb-3 card shadow mt-2 border-radius-1 p-3" id="analytics" role="tabpanel">
         <div class="row d-flex border-radius-1">
           <div class="col-lg-6">
             <div class="my-chart-Container">
@@ -140,7 +140,7 @@
           </div>  
         </div>  
       </div>
-      <div class="tab-pane card shadow mt-2 border-radius-1 mb-3" id="import-export" role="tabpanel">
+      <div class="tab-pane card shadow mt-2 border-radius-1 mb-3 p-3" id="import-export" role="tabpanel">
         <p>
           <div class="d-flex">
           <button class="btn btn-danger ml-4" name="export_data" type="submit" value="export_data">Export Data</button>
@@ -153,10 +153,10 @@
   </div>
 <div>
 
-  <div class="card shadow border-radius-1 p-2 content">
+  <div class="card shadow border-radius-1 p-4 content m-4">
   <%# <button class='btn btn-outline-danger float-right delete-selected' type='button' style="width:163px"value='City' >Delete Selected</button> %>
     <%= render 'map_columns/map_column_partials' %>
-    <div class="row d-flex" style="position: absolute;">
+  <div class="row d-flex" style="position: absolute;">
     
     <div>
       <%if (check_can_delete(@module_permission))%>
@@ -170,10 +170,9 @@
         <%= select_tag :limit, options_for_select(['Show Entries',5, 10, 15, 20, 25], selected: 'Show Entries'), id: 'pagination-limit', title:'Show Entries', style:'cursor: pointer;' %>
       </div>
     <% end %>
-    
   </div>
   <div class="mt-3">
-    <table data-toggle="table" data-search="true" id="city_table" class=" overflow-hidden border-radius-1">
+    <table data-toggle="table" data-search="true" id="city_table" class=" content-table">
       <thead>
         <tr>
          <th><input type="checkbox" id="master" class='select-all-checkbox' style="cursor: pointer;">
@@ -190,7 +189,7 @@
       </tbody>
    </table>
   </div>
-  <div class="col-lg-12 digg_pagination">
+  <div class="col-lg-12 digg_pagination mt-3">
     <div class="float-left page_info">
       <%= page_entries_info @cities %>
     </div>

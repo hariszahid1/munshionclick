@@ -310,6 +310,9 @@ function serail_number_validation(e,value){
 }
 function save_sale()
 {
+  var value = $('.serial_no').val();
+  value = $.trim(value);
+  $('.serial_no').val(value);
   return_type=true;
   if($("#pos_setting_sys_type").val()!="HousingScheme")
   {

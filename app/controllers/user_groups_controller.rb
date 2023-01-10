@@ -28,7 +28,7 @@ class UserGroupsController < ApplicationController
     end
     
     @count_sys_user = SysUser.all.group(:user_group).count
-    @user_group_title = @count_sys_user.keys.map { |a| a.gsub(' ', '-') }
+    @user_group_title = @count_sys_user.keys.map { |a| a&.gsub(' ', '-') }
     @user_group_count = @count_sys_user.values
     
     respond_to do |format|
