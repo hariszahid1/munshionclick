@@ -2,7 +2,7 @@
 
 # FollowUps Controller
 class FollowUpsController < ApplicationController
-  before_action :set_follow_up, only: %i[show edit update destroy]
+  before_action :set_follow_up, only: %i[show edit update destroy is_completed]
   before_action :set_follow_up_users, only: %i[index new show edit update destroy]
   # GET /follow_ups/1
   # GET /follow_ups/1.json
@@ -71,7 +71,12 @@ class FollowUpsController < ApplicationController
     end
   end
 
-
+  def is_completed
+    @follow_up.update(is_complete: !@follow_up.is_complete)
+    respond_to do |format|
+      format.json { render json: { success: 'Data updated successfully' } }
+    end
+  end
 
   private
 
