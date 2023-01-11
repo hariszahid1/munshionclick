@@ -6,7 +6,6 @@ class LoansController < ApplicationController
   before_action :set_loan, only: %i[show edit update destroy]
   before_action :set_account, only: %i[new edit update index]
   include PdfCsvGeneralMethod
-  include DateRangeMethods
   include LoansHelper
 
   require 'tempfile'
@@ -14,8 +13,7 @@ class LoansController < ApplicationController
   # GET /loans
   # GET /loans.json
   def index
-    set_date_range if params[:q].present?
-    @q = Loan.where(created_at: @start_date&.to_date&.beginning_of_day..@end_date&.to_date&.end_of_day).ransack(params[:q])
+    @q = Loan.ransack(params[:q])
     @total_loan = @q.result.pluck('Sum(debit)', 'Sum(credit)')
     
     @options_for_select = Loan.all

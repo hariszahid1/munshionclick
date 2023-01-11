@@ -91,6 +91,10 @@
               <div class="col-lg-3 form-group float-left">
                 <%= f.select :sys_user_id_eq, options_from_collection_for_select(@ledger_searchs, "id", ->(st){"#{st.name} \u{27F6} \u{27F6} #{st.code} "},@title),{:include_blank => "Select Name/Code"},:class=>"form-control chosen-select" %>
               </div>
+              <div class="d-none">
+                <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker',placeholder: "YYYY-MM-DD" %>
+                <%= f.search_field :created_at_lteq, class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
+              </div>
               <div class="col-lg-3 form-group float-left d-flex">
                 <%= f.search_field :created_at, id: "reportrange", class: 'form-control' %>
               </div>
@@ -527,7 +531,7 @@
     var end = moment();
 
     function cb(start, end) {
-        $('#reportrange span').html(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
+        $('#reportrange span').html(start.format('YYYY-MM-DD') + ' - ' + end.format('YYYY-MM-DD'));
     }
 
     $('#reportrange').daterangepicker({
@@ -547,11 +551,18 @@
            'Last Year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')]
         },
         locale: {
-          format: 'DD/MM/YYYY'
+          format: 'YYYY-MM-DD'
         }
     }, cb);
-
     cb(start, end);
+
+    $('#reportrange').on('change', function(){
+      var value = $(this).val()
+      var greater_eq = value.split(' - ')[0]
+      var less_eq = value.split(' - ')[1]
+      $('#q_created_at_gteq').val(greater_eq)
+      $('#q_created_at_lteq').val(less_eq)
+    })
 
   });
 </script>
