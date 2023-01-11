@@ -43,13 +43,13 @@
           <img src="<%= @pos_setting&.logo_images&.first&.service_url%>" height="100px" width= "100px"/>
           <img
             style=" position: fixed;
-                    top: <%= @pos_setting.extra_settings["jr_image_watermark"][2] %>%;
-                    left: <%= @pos_setting.extra_settings["jr_image_watermark"][3] %>%;
-                    opacity: <%= @pos_setting.extra_settings["jr_image_watermark"][4] %>"
+                    top: <%= @pos_setting.extra_settings.try(:[], "jr_image_watermark").try(:[], 2) %>%;
+                    left: <%= @pos_setting.extra_settings.try(:[], "jr_image_watermark").try(:[], 3) %>%;
+                    opacity: <%= @pos_setting.extra_settings.try(:[], "jr_image_watermark").try(:[], 4) %>"
             src="<%= @pos_setting&.images&.first&.service_url%>"
             class='watermark'
-            height="<%= @pos_setting.extra_settings["jr_image_watermark"][0]%>px"
-            width="<%= @pos_setting.extra_settings["jr_image_watermark"][1]%>px"
+            height="<%= @pos_setting.extra_settings.try(:[], "jr_image_watermark").try(:[], 0)%>px"
+            width="<%= @pos_setting.extra_settings.try(:[], "jr_image_watermark").try(:[], 1) %>px"
           />
         </th>
         <th style="vertical-align: bottom;" class='text-center'>
