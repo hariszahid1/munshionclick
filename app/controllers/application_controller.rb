@@ -436,9 +436,13 @@ class ApplicationController < ActionController::Base
 
   def check_access
     # Current User Current Module Permission
-    @module_permission = @all_permissions.select(:id, :can_create, :can_update, :can_read, :can_delete, :can_accessed,
+    if controller_name.eql?("order_sales")
+      @module_permission = @all_permissions.select(:id, :can_create, :can_update, :can_read, :can_delete, :can_accessed,
+        :is_hidden, :can_download_pdf, :can_download_csv, :can_send_email, :can_import_export).find_by(module: "orders")
+    else
+      @module_permission = @all_permissions.select(:id, :can_create, :can_update, :can_read, :can_delete, :can_accessed,
                                                  :is_hidden, :can_download_pdf, :can_download_csv, :can_send_email, :can_import_export).find_by(module: controller_name)
-
+    end
     if check_is_hidden(@module_permission) # False
       respond_to do |format|
         format.html do

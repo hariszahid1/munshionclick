@@ -23,6 +23,7 @@ class FollowUp < ApplicationRecord
     expense_vouchers: 'ExpenseVoucher',
     orders: 'Order',
     purchase_sale_details: 'PurchaseSaleDetail',
-    sale_deals: 'SaleDeal'
+    sale_deals: 'SaleDeal',
+    order_sales: 'Order'
   }, _prefix: true
 end
