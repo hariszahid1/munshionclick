@@ -23,7 +23,7 @@
   <% end %>
   <div class= 'row'>
     <div class="col-lg-6 form-group">
-      <%= f.select :staff_id, options_from_collection_for_select(@staffs, 'id', 'name', f.object&.staff_id), {label: "Dealer",prompt: "Select Dealer"}%>
+      <%= f.select :staff_id, options_from_collection_for_select(@staffs, 'id', 'name', f.object&.staff_id), {label: "Sale Executive",prompt: "Select Sale Executive"}%>
     </div>
     <div class="col-lg-6 form-group">
       <%= f.number_field :carriage, placeholder: "Commission", label: "Commission"%>

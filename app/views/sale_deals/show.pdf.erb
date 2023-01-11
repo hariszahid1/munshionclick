@@ -106,7 +106,7 @@
     <div class='d-flex'>
       <div class='col-3 px-20'><b>Down Payment:</b></div>
       <div class='col-3 border-bottom'><%= @sale_deal&.purchase_sale_items&.first&.size_6 %></div>
-      <div class='col-3 px-20'><b>Rebate/Profit/Loss:</b></div>
+      <div class='col-3 px-20'><b>Rebate/Profit:</b></div>
       <div class='col-3 border-bottom'><%= @sale_deal&.purchase_sale_items&.first&.size_5 %></div>
     </div>
 
@@ -142,7 +142,7 @@
       <div class='col-3 px-20'><b>Customer Contact:</b></div>
       <div class='col-3 border-bottom'><%= @sale_deal&.sys_user&.occupation %></div>
       <div class='col-3 px-20'><b>Customer CNIC:</b></div>
-      <div class='col-3 border-bottom'></div>
+      <div class='col-3 border-bottom'><%= @sale_deal&.purchase_sale_items&.first&.size_3 %></div>
     </div>
 
     <div class='d-flex'>
