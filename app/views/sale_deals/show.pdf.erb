@@ -41,7 +41,16 @@
       <tr>
         <th class='text-left'>
           <img src="<%= @pos_setting&.logo_images&.first&.service_url%>" height="100px" width= "100px"/>
-          <img src="<%= @pos_setting&.images&.first&.service_url%>" class='watermark' height="150px" width= "150px"/>
+          <img
+            style=" position: fixed;
+                    top: <%= @pos_setting.extra_settings.try(:[], "jr_image_watermark").try(:[], 2) %>%;
+                    left: <%= @pos_setting.extra_settings.try(:[], "jr_image_watermark").try(:[], 3) %>%;
+                    opacity: <%= @pos_setting.extra_settings.try(:[], "jr_image_watermark").try(:[], 4) %>"
+            src="<%= @pos_setting&.images&.first&.service_url%>"
+            class='watermark'
+            height="<%= @pos_setting.extra_settings.try(:[], "jr_image_watermark").try(:[], 0)%>px"
+            width="<%= @pos_setting.extra_settings.try(:[], "jr_image_watermark").try(:[], 1) %>px"
+          />
         </th>
         <th style="vertical-align: bottom;" class='text-center'>
           <p style='padding-left: 70px;'>Sale Reciept</p>
@@ -97,7 +106,7 @@
     <div class='d-flex'>
       <div class='col-3 px-20'><b>Down Payment:</b></div>
       <div class='col-3 border-bottom'><%= @sale_deal&.purchase_sale_items&.first&.size_6 %></div>
-      <div class='col-3 px-20'><b>Rebate/Profit/Loss:</b></div>
+      <div class='col-3 px-20'><b>Rebate/Profit:</b></div>
       <div class='col-3 border-bottom'><%= @sale_deal&.purchase_sale_items&.first&.size_5 %></div>
     </div>
 
@@ -133,7 +142,7 @@
       <div class='col-3 px-20'><b>Customer Contact:</b></div>
       <div class='col-3 border-bottom'><%= @sale_deal&.sys_user&.occupation %></div>
       <div class='col-3 px-20'><b>Customer CNIC:</b></div>
-      <div class='col-3 border-bottom'></div>
+      <div class='col-3 border-bottom'><%= @sale_deal&.purchase_sale_items&.first&.size_3 %></div>
     </div>
 
     <div class='d-flex'>

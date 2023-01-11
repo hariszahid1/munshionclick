@@ -7,14 +7,20 @@ class ExpenseVouchersController < ApplicationController
   before_action :check_access
   include PdfCsvGeneralMethod
   include ExpenseVouchersHelper
+  include DateRangeMethods
+
 
   # GET /expense_vouchers
   # GET /expense_vouchers.json
   def index
-    @q = ExpenseVoucher.includes(:expense_entry_vouchers, expenses: [expense_entries: :account]).ransack(params[:q])
+    set_date_range if params[:q].present?
+    @q = ExpenseVoucher.where(created_at: @start_date&.to_date&.beginning_of_day..@end_date&.to_date&.end_of_day).includes(:expense_entry_vouchers, expenses: [expense_entries: :account]).ransack(params[:q])
     download_expenses_pdf_file if params[:pdf].present?
     download_expenses_csv_file if params[:csv].present?
-    @expense_vouchers = @q.result.page(params[:page])
+    @options_for_select = ExpenseVoucher.all
+    @custom_pagination = params[:limit].present? ? params[:limit] : 25
+    @custom_pagination = @pos_setting.custom_pagination['expense_vouchers'] if @pos_setting&.custom_pagination.present? && @pos_setting&.custom_pagination['expense_vouchers'].present?
+    @expense_vouchers = @q.result.page(params[:page]).per(@custom_pagination)
   end
 
   # GET /expense_vouchers/1

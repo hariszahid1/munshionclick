@@ -269,6 +269,8 @@ Rails.application.routes.draw do
   get 'reports/trial_balance_salary'
 
   post :read_all, to: 'application#read_all'
+  post :is_completed, to: 'follow_ups#is_completed'
+
   get :read_follow_up, to: 'application#read_follow_up'
 
 
@@ -281,6 +283,8 @@ Rails.application.routes.draw do
       get :auto_print, to: 'order_sales#auto_print'
       get :print_bulk, to: 'order_sales#print_bulk'
       get :view_history, to: 'order_sales#view_history'
+      get :dynamic_pdf, to: 'order_sales#dynamic_pdf'
+      get :booking_reciept, to: 'order_sales#booking_reciept'
     end
     member do
       get :transfer, to: 'order_sales#transfer'
@@ -295,6 +299,8 @@ Rails.application.routes.draw do
       get :auto_print, to: 'order_purchases#auto_print'
       get :print_bulk, to: 'order_purchases#print_bulk'
       get :view_history, to: 'order_purchases#view_history'
+      get :dynamic_pdf, to: 'order_purchases#dynamic_pdf'
+      get :booking_reciept, to: 'order_purchases#booking_reciept'
     end
     member do
       get :transfer, to: 'order_purchases#transfer'

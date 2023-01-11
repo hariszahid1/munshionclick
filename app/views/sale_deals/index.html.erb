@@ -104,12 +104,8 @@
           <div class="col-lg-2 form-group float-left">
             <%= f.search_field :purchase_sale_items_size_11_cont, class: "form-control chosen-select", placeholder: "Search MS/Form No" %>
           </div>
-          <div class="col-lg-2 form-group float-left">
-            <%= f.search_field :created_at_gteq, value:@start_date, class: 'form-control input-sm datepicker',title: "Select date from",  placeholder: "YYYY-MM-DD" %>
-          </div>
-
-          <div class="col-lg-2 form-group float-left">
-            <%= f.search_field :created_at_lteq, value:@end_date,class: 'form-control input-sm datepicker' ,title: "Select date to", placeholder: "YYYY-MM-DD"%>
+          <div class="col-lg-3 form-group float-left d-flex">
+            <%= f.search_field :created_at, id: "reportrange", class: 'form-control' %>
           </div>
           <div class="col-lg-2 form-group float-left">
             <%= f.search_field :purchase_sale_items_size_13_cont, class: "form-control chosen-select", placeholder: "Search Quota" %>
@@ -145,13 +141,48 @@
     </tbody>
   </table>
 
-    <div class="row">
-      <div class="col-lg-4 col-sm-4">
-        <%= page_entries_info @sale_deals %>
-      </div>
-      <div class="col-lg-8 col-sm-8 pagination-left text-dark">
-        <%= paginate @sale_deals %>
-      </div>
+  <div class="row">
+    <div class="col-lg-4 col-sm-4">
+      <%= page_entries_info @sale_deals %>
     </div>
+    <div class="col-lg-8 col-sm-8 pagination-left text-dark">
+      <%= paginate @sale_deals %>
+    </div>
+  </div>
 </div>
+<script>
+ $(function() {
+
+    var start = moment().subtract(1, 'years');
+    var end = moment();
+
+    function cb(start, end) {
+        $('#reportrange span').html(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
+    }
+
+    $('#reportrange').daterangepicker({
+        startDate: start,
+        endDate: end,
+      ranges: {
+          'Select Date Range':[],
+           'Today': [moment(), moment()],
+           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+           'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+           'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+           '1 Year': [moment().subtract(1, 'years')],
+           'This Month': [moment().startOf('month'), moment().endOf('month')],
+           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+           'This Month Last Year': [moment().subtract(1, 'years').startOf('month'), moment().subtract(1, 'years').endOf('month')],
+           'This Year': [moment().startOf('year'), moment().endOf('year')],
+           'Last Year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')]
+        },
+        locale: {
+          format: 'DD/MM/YYYY'
+        }
+    }, cb);
+
+    cb(start, end);
+
+});
+</script>
 

@@ -1,11 +1,13 @@
 class LedgerBooksController < ApplicationController
   before_action :check_access
   include LedgerBooksCsvMethods
+  include DateRangeMethods
   before_action :set_ledger_book, only: %i[show edit update destroy]
 
   # GET /ledger_books
   # GET /ledger_books.json
   def index
+    set_date_range if params[:q].present?
     @pos_setting = PosSetting.last
     @created_at_gteq = Date.today.beginning_of_year
     @created_at_lteq = DateTime.now
@@ -26,7 +28,7 @@ class LedgerBooksController < ApplicationController
       end
       @title = params[:q][:sys_user_id_eq]
       @code = params[:q][:credit_eq]
-      @q = LedgerBook.ransack(params[:q])
+      @q = LedgerBook.where(created_at: @start_date&.to_date&.beginning_of_day..@end_date&.to_date&.end_of_day).ransack(params[:q])
     else
       @sys_user = SysUser.new(opening_balance: 0)
       @q = LedgerBook.where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).ransack
@@ -34,7 +36,10 @@ class LedgerBooksController < ApplicationController
 
     @ledger_searchs = SysUser.all
     # @purchase_sale_details = @p.result
-    @ledger_books = @q.result.page(params[:page])
+    @options_for_select = LedgerBook.all
+    @custom_pagination = params[:limit].present? ? params[:limit] : 25
+    @custom_pagination = @pos_setting.custom_pagination['ledger_books'] if @pos_setting&.custom_pagination.present? && @pos_setting&.custom_pagination['ledger_books'].present?
+    @ledger_books = @q.result.page(params[:page]).per(@custom_pagination)
     @ledger_books_all = @ledger_books.select('SUM(debit) as sum_debit', 'SUM(credit) as sum_credit',
                                              'SUM(credit)-SUM(debit) as mean_sum')
     @customers = SysUser.all

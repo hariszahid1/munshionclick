@@ -26,31 +26,27 @@
       </div>
     </div>
     <div class="d-flex ml-auto">
-      <div class="card shadow text-dark mr-3 p-1 close-card" style="border: 10px solid rgba(102, 255, 51, 0.3); border-radius: 50%;">
-        <%= link_to follow_ups_path('q[reminder_type_eq]': 'crms') do %>
-          <span><h2 class="mt-2"><b><%=  @follow_up_gadets['crms'] %></b></h2><p>CRM</p></span>
+     <% follow_up_types = {
+          'crms' => { color: 'rgba(102, 255, 51, 0.3)', text: 'CRM' },
+          'sale_deals' => { color: 'rgba(255, 51, 0, 0.3)', text: 'Sale Deal' },
+          'purchase_sale_details' => { color: 'rgba(255, 255, 0, 0.3)', text: 'Purchase Sale Detail' },
+          'orders' => { color: 'rgba(128, 229, 255, 0.3)', text: 'Order' },
+          'expense_vouchers' => { color: 'rgba(255, 179, 217, 0.74)', text: 'Expense Voucher' }
+      } %>
+      <% follow_up_types.each do |type, details| %>
+        <% if @follow_up_gadets[type].present? %>
+          <div class="card shadow text-dark mr-3 p-1 close-card" style="border: 10px solid <%= details[:color] %>; border-radius: 50%;">
+            <%= link_to follow_ups_path(q: { reminder_type_eq: type }) do %>
+              <span>
+                <h2 class="mt-2">
+                  <b><%= @follow_up_gadets[type] %></b>
+                </h2>
+                <p><%= details[:text] %></p>
+              </span>
+            <% end %>
+          </div>
         <% end %>
-      </div>
-      <div class="card shadow text-dark mr-3 p-1 close-card" style="border: 10px solid rgba(255, 51, 0, 0.3); border-radius: 50%;">
-        <%= link_to follow_ups_path('q[reminder_type_eq]': 'sale_deals') do %>
-          <span><h2 class="mt-2"><b><%=  @follow_up_gadets['sale_deals'] %></b></h2><p>Sale Deal</p></span>
-        <% end %>
-      </div>
-      <div class="card shadow text-dark mr-3 p-1 close-card" style="border: 10px solid rgba(255, 255, 0, 0.3); border-radius: 50%;">
-        <%= link_to follow_ups_path('q[reminder_type_eq]': 'purchase_sale_details') do %>
-          <span><h2 class="mt-2"><b><%= @follow_up_gadets['purchase_sale_details'] %></b></h2><p>Order</p></span>
-        <% end %>
-      </div>
-      <div class="card shadow text-dark mr-3 p-1 close-card" style="border: 10px solid rgba(128, 229, 255, 0.3); border-radius: 50%;">
-        <%= link_to follow_ups_path('q[reminder_type_eq]': 'orders') do %>
-          <span><h2 class="mt-2"><b><%= @follow_up_gadets['orders'] %></b></h2><p>Expense Voucher</p></span>
-        <% end %>
-      </div>
-      <div class="card shadow text-dark mr-3 p-1 close-card" style="border: 10px solid rgba(255, 179, 217, 0.74); border-radius: 50%;">
-        <%= link_to follow_ups_path('q[reminder_type_eq]': 'expense_vouchers') do %>
-          <span><h2 class="mt-2"><b><%= @follow_up_gadets['expense_vouchers'] %></b></h2><p style='font-size: 15px;'>Purchase Sale Detail</p></span>
-        <% end %>
-      </div>
+      <% end %>
     </div>
   </div>
 </div>
