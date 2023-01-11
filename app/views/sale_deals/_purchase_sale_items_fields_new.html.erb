@@ -7,7 +7,7 @@
         <%= f.select :product_id, options_from_collection_for_select(@products, 'id', ->(st){"#{st.title}"}, f.object.item_id), {label: "Product",prompt: "Select the Product"},required: true %>
       </div>
       <div class="col-lg-6 form-group float-left">
-        <%= f.select :size_12, options_for_select(@transaction_type, f.object.size_12.try(:[], 'transaction_type')), {:include_blank => "Select Transaction Type", label: "Transaction Type"}, class: "form-control chosen-select" %>
+        <%= f.select :size_12, options_for_select(@transaction_type, f.object.size_12), {:include_blank => "Select Transaction Type", label: "Transaction Type"}, class: "form-control chosen-select" %>
       </div>
       <div class="col-lg-6 form-group float-left">
         <%= f.text_field :size_13, placeholder: "Quota",  label: "Quota", value: "#{(f.object.size_13 == '0' ? nil : f.object.size_13)}" %>
@@ -22,10 +22,10 @@
         <%= f.text_field :size_9,  placeholder: "Plot Category", label: "Plot Category", value: "#{(f.object.size_9 == '0' ? nil : f.object.size_9)}" %>
       </div>
       <div class="col-lg-6 form-group float-left">
-        <%= f.select :size_7, options_for_select(@payment_status, f.object.size_7.try(:[], 'payment_status')), {:include_blank => "Select Payment Status", label: "Payment Status"}, class: "form-control chosen-select" %>
+        <%= f.select :size_7, options_for_select(@payment_status, f.object.size_7), {:include_blank => "Select Payment Status", label: "Payment Status"}, class: "form-control chosen-select" %>
       </div>
       <div class="col-lg-6 form-group float-left">
-        <%= f.select :size_4, options_for_select(@deal, f.object.size_4.try(:[], 'deal')), {:include_blank => "Select Deal", label: "Deal"}, class: "form-control chosen-select" %>
+        <%= f.select :size_4, options_for_select(@deal, f.object.size_4), {:include_blank => "Select Deal", label: "Deal"}, class: "form-control chosen-select" %>
       </div>
       <div class="col-lg-6 form-group float-left">
         <%= f.text_field :size_8,  placeholder: "Price per Plot", label: "Price per Plot", value: "#{(f.object.size_8 == '0' ? nil : f.object.size_8)}"%>
