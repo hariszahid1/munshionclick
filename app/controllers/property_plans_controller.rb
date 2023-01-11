@@ -4,22 +4,20 @@ class PropertyPlansController < ApplicationController
   before_action :set_property_installment, only: [:show]
   before_action :set_property_installment_edit, only: %i[edit_property_installment update_installment]
   include PdfCsvGeneralMethod
-  include DateRangeMethods
   include PropertyPlansHelper
 
   # GET /property_plans
   # GET /property_plans.json
   def index
-    set_date_range if params[:q].present?
     @customers = SysUser.where(user_group: %w[Customer Supplier Both Salesman])
     @q = if params[:short_advance].present?
            PropertyPlan.joins(:order).where(due_status: [nil, PropertyPlan.due_statuses['Unpaid']]).where(
              'due_date <= ?', Date.today
-           ).where(created_at: @start_date&.to_date&.beginning_of_day..@end_date&.to_date&.end_of_day).ransack(params[:q])
+           ).ransack(params[:q])
          else
            PropertyPlan.joins(:order).where(due_status: [nil, PropertyPlan.due_statuses['Unpaid']]).where(
              'due_date <= ?', Date.today
-           ).where(created_at: @start_date&.to_date&.beginning_of_day..@end_date&.to_date&.end_of_day).ransack(params[:q])
+           ).ransack(params[:q])
          end
     @property_plans = @q.result
     @total_advance = @property_plans.sum(:advance)
