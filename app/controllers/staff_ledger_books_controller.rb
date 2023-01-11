@@ -2,9 +2,12 @@ class StaffLedgerBooksController < ApplicationController
   before_action :check_access
   before_action :set_staff_ledger_book, only: %i[show edit update destroy]
   skip_before_action :authenticate_user!, only: [:index]
+  include DateRangeMethods
+
   # GET /staff_ledger_books
   # GET /staff_ledger_books.json
   def index
+    set_date_range if params[:q].present?
     @pos_setting = PosSetting.last
     @departments = Department.all
     @created_at_gteq = Date.today.prev_occurring(:thursday)
@@ -20,9 +23,9 @@ class StaffLedgerBooksController < ApplicationController
       end
     end
     if params[:q].present?
-      @q = StaffLedgerBook.joins(:staff).where('credit>0 or debit>0 or credit<0 or debit<0').ransack(params[:q])
+      @q = StaffLedgerBook.joins(:staff).where('credit>0 or debit>0 or credit<0 or debit<0').where(created_at: @start_date&.to_date&.beginning_of_day..@end_date&.to_date&.end_of_day).ransack(params[:q])
     else
-      @q = StaffLedgerBook.joins(:staff).where('credit>0 or debit>0 or credit<0 or debit<0').where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).ransack
+      @q = StaffLedgerBook.joins(:staff).where('credit>0 or debit>0 or credit<0 or debit<0').where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).where(created_at: @start_date&.to_date&.beginning_of_day..@end_date&.to_date&.end_of_day).ransack
     end
     @staff = Staff.all
     @debit = @q.result.sum(:debit)
@@ -31,7 +34,11 @@ class StaffLedgerBooksController < ApplicationController
     @quantity = StaffLedgerBook.joins(:staff,
                                       :salary_detail).ransack(params[:q]).result.sum(:quantity) + StaffLedgerBook.joins(:staff,
                                                                                                                         :salary_detail).ransack(params[:q]).result.sum(:khakar_remaning)
-    @staff_ledger_books = staff_list.page(params[:page]).per(50)
+
+    @options_for_select = StaffLedgerBook.all
+    @custom_pagination = params[:limit].present? ? params[:limit] : 25
+    @custom_pagination = @pos_setting.custom_pagination['staff_ledger_books'] if @pos_setting&.custom_pagination.present? && @pos_setting&.custom_pagination['staff_ledger_books'].present?
+    @staff_ledger_books = staff_list.page(params[:page]).per(@custom_pagination)
     pdfName = '[' + StaffLedgerBook.where(id: staff_list.ids).joins(:staff).pluck('name').uniq.join(' ') + ']'
     if params[:bulk].present?
       @staff_ledger_books_pdf_debit = @q.result.group(:name).sum(:debit)

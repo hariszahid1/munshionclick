@@ -6,6 +6,7 @@ class LoansController < ApplicationController
   before_action :set_loan, only: %i[show edit update destroy]
   before_action :set_account, only: %i[new edit update index]
   include PdfCsvGeneralMethod
+  include DateRangeMethods
   include LoansHelper
 
   require 'tempfile'
@@ -13,9 +14,14 @@ class LoansController < ApplicationController
   # GET /loans
   # GET /loans.json
   def index
-    @q = Loan.ransack(params[:q])
+    set_date_range if params[:q].present?
+    @q = Loan.where(created_at: @start_date&.to_date&.beginning_of_day..@end_date&.to_date&.end_of_day).ransack(params[:q])
     @total_loan = @q.result.pluck('Sum(debit)', 'Sum(credit)')
-    @loans = @q.result(distinct: true).page(params[:page])
+    
+    @options_for_select = Loan.all
+    @custom_pagination = params[:limit].present? ? params[:limit] : 25
+    @custom_pagination = @pos_setting.custom_pagination['loans'] if @pos_setting&.custom_pagination.present? && @pos_setting&.custom_pagination['loans'].present?
+    @loans = @q.result(distinct: true).page(params[:page]).per(@custom_pagination)
     download_loans_pdf_file if params[:pdf].present?
     download_loans_csv_file if params[:csv].present?
   end
