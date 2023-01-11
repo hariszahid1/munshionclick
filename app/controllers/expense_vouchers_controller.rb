@@ -7,14 +7,12 @@ class ExpenseVouchersController < ApplicationController
   before_action :check_access
   include PdfCsvGeneralMethod
   include ExpenseVouchersHelper
-  include DateRangeMethods
 
 
   # GET /expense_vouchers
   # GET /expense_vouchers.json
   def index
-    set_date_range if params[:q].present?
-    @q = ExpenseVoucher.where(created_at: @start_date&.to_date&.beginning_of_day..@end_date&.to_date&.end_of_day).includes(:expense_entry_vouchers, expenses: [expense_entries: :account]).ransack(params[:q])
+    @q = ExpenseVoucher.includes(:expense_entry_vouchers, expenses: [expense_entries: :account]).ransack(params[:q])
     download_expenses_pdf_file if params[:pdf].present?
     download_expenses_csv_file if params[:csv].present?
     @options_for_select = ExpenseVoucher.all

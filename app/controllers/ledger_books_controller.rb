@@ -1,13 +1,11 @@
 class LedgerBooksController < ApplicationController
   before_action :check_access
   include LedgerBooksCsvMethods
-  include DateRangeMethods
   before_action :set_ledger_book, only: %i[show edit update destroy]
 
   # GET /ledger_books
   # GET /ledger_books.json
   def index
-    set_date_range if params[:q].present?
     @pos_setting = PosSetting.last
     @created_at_gteq = Date.today.beginning_of_year
     @created_at_lteq = DateTime.now
@@ -28,7 +26,7 @@ class LedgerBooksController < ApplicationController
       end
       @title = params[:q][:sys_user_id_eq]
       @code = params[:q][:credit_eq]
-      @q = LedgerBook.where(created_at: @start_date&.to_date&.beginning_of_day..@end_date&.to_date&.end_of_day).ransack(params[:q])
+      @q = LedgerBook.ransack(params[:q])
     else
       @sys_user = SysUser.new(opening_balance: 0)
       @q = LedgerBook.where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).ransack

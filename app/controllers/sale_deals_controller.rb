@@ -1,7 +1,6 @@
 class SaleDealsController < ApplicationController
   include PdfCsvGeneralMethod
   include SaleDealsHelper
-  include DateRangeMethods
 
   before_action :set_sale_deal, only: %i[show edit update destroy]
   before_action :set_data, only: %i[new edit create update show index]
@@ -10,8 +9,7 @@ class SaleDealsController < ApplicationController
   # GET /sale_deals.json
   def index
     set_date_range if params[:q].present?
-    @q = PurchaseSaleDetail.includes(:sys_user, :purchase_sale_items).where(created_at:
-      @start_date&.to_date&.beginning_of_day..@end_date&.to_date&.end_of_day).ransack(params[:q])
+    @q = PurchaseSaleDetail.includes(:sys_user, :purchase_sale_items).ransack(params[:q])
     download_sale_deals_pdf_file if params[:pdf].present?
     download_sale_deals_csv_file if params[:csv].present?
     @sale_deals = @q.result.where(transaction_type: 'SaleDeal').page(params[:page])

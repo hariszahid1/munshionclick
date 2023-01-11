@@ -117,14 +117,20 @@
               <div class="col-lg-2 form-group float-left">
                 <%= f.select :cms_data_i_cont, options_for_select(@deal_stat, f.object.cms_data_i_cont_any), {:include_blank => "Select Deal Status"}, class: "form-control chosen-select" %>
               </div>
+              <div class="col-lg-2 form-group float-left">
+                <%= f.search_field :nom_name_cont, class: "form-control chosen-select", placeholder: "Search Block" %>
+              </div>
               <div class="col-lg-3 form-group float-left d-flex">
                 <%= f.search_field :created_at, id: "reportrange", class: 'form-control' %>
+              </div>
+              <div class="d-none">
+                <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker',placeholder: "YYYY-MM-DD" %>
+                <%= f.search_field :created_at_lteq, class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
               </div>
               <div class="col-lg-1 form-group float-left">
                 <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search"><i class="fa fa-search"></i></button>
               </div>
 
-              
               <%if (check_can_send_email(@module_permission))%>
                 <button class="form-control btn btn-info float-right mr-3 mb-2" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope"></i>&nbsp;Mail</button>
                   <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -367,7 +373,7 @@
     var end = moment();
 
     function cb(start, end) {
-        $('#reportrange span').html(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
+        $('#reportrange span').html(start.format('MM/DD/YYYY') + ' - ' + end.format('MM/DD/YYYY'));
     }
 
     $('#reportrange').daterangepicker({
@@ -387,11 +393,19 @@
            'Last Year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')]
         },
         locale: {
-          format: 'DD/MM/YYYY'
+          format: 'MM/DD/YYYY'
         }
     }, cb);
 
     cb(start, end);
+
+    $('#reportrange').on('change', function(){
+      var value = $(this).val()
+      var greater_eq = value.split(' - ')[0]
+      var less_eq = value.split(' - ')[1]
+      $('#q_created_at_gteq').val(greater_eq)
+      $('#q_created_at_lteq').val(less_eq)
+    })
 
 });
 </script>

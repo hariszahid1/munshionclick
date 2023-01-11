@@ -1,13 +1,11 @@
 class DailySalesController < ApplicationController
 	before_action :check_access
   before_action :set_daily_sale, only: [:show, :edit, :update, :destroy]
-  include DateRangeMethods
 
   # GET /daily_sales
   # GET /daily_sales.json
   def index
-    set_date_range if params[:q].present?
-      @q = DailySale.where(created_at: @start_date&.to_date&.beginning_of_day..@end_date&.to_date&.end_of_day).ransack(params[:q])
+      @q = DailySale.ransack(params[:q])
 
     if @q.result.count > 0
       @q.sorts = 'id desc' if @q.sorts.empty?

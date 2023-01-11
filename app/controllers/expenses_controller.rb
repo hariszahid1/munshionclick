@@ -3,12 +3,10 @@ class ExpensesController < ApplicationController
   before_action :set_expense, only: %i[show edit update destroy]
   include PdfCsvGeneralMethod
   include ExpensesHelper
-  include DateRangeMethods
 
   # GET /expenses
   # GET /expenses.json
   def index
-    set_date_range if params[:q].present?
     @expense_types = ExpenseType.all
     @accounts = Account.all
     @start_date = DateTime.current.beginning_of_month
