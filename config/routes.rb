@@ -269,6 +269,8 @@ Rails.application.routes.draw do
   get 'reports/trial_balance_salary'
 
   post :read_all, to: 'application#read_all'
+  post :is_completed, to: 'follow_ups#is_completed'
+
   get :read_follow_up, to: 'application#read_follow_up'
 
 
