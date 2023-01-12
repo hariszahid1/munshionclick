@@ -53,10 +53,10 @@
           />
         </th>
         <th style="vertical-align: bottom;" class='text-center'>
-          <p style='padding-left: 70px;'>Sale Reciept</p>
+          <h1 style='padding-left: 70px;'>Sale Reciept</h1>
         </th>
         <th style="vertical-align: top;" class='text-right'>
-          <p>Ref: i0943289423i</p>
+          <p>Ref: <%= @sale_deal&.id%></p>
           <p>Date: <%= Time.zone.now.strftime('%d-%m-%Y')%></p>
         </th>
       </tr>
@@ -157,11 +157,7 @@
         <textarea rows='5' style='width: 100%; padding: 5px;'><%= @sale_deal&.comment %></textarea>
       </div>
     </div>
-    <p>
-      Note: This is a system generated reciept therefore sign and stamp are elecronically generated. As soon
-      as you receive this reciept please verify the same by calling at this Number: <b>0321-8437272</b>.
-    </p>
-    <p>Please call at this number for the verification of your receipt &nbsp; <b>0321-8437272<b></p>
+    <h2>Important: You must call at this number for the verification of your receipt 0321-8437272.</h2>
     <% if @sale_deal.qr_code.present?%>
       <%
         require "rqrcode"

@@ -86,7 +86,7 @@ class SaleDealsController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_sale_deal
-    @sale_deal = PurchaseSaleDetail.find(params[:id])
+    @sale_deal = PurchaseSaleDetail.includes(:sys_user, :purchase_sale_items).find(params[:id])
   end
 
   def set_data
