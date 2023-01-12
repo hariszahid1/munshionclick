@@ -1,0 +1,51 @@
+.sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 40;
+  top: 0;
+  right: 0;
+  background-color: #FFFFFF;
+  color: rgb(0, 0, 0);
+  overflow-x: hidden;
+  transition: 0.5s;
+  margin-top: 76px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.sidenav .sideclose {
+  text-decoration: none;
+  font-size: 16px;
+  display: block;
+  transition: 0.3s
+}
+
+
+@media screen and (max-height: 450px) {
+  .sidenav {
+    padding-top: 15px;
+  }
+
+  .sidenav .sideclose {
+    font-size: 18px;
+  }
+}
+
+.follow-nav>li>a.active {
+  background-color: rgb(4, 10, 59) !important;
+  border-radius: 30px;
+}
+.notification-dot {
+  height: 15px;
+  width: 15px;
+  background-color: #c01600;
+  border-radius: 50%;
+  border: 1px solid white;
+  position: fixed;
+  top: 3;
+  left: 20;
+  z-index: 999;
+}
+.follow-icon{
+  color:rgb(14, 27, 126);
+}
