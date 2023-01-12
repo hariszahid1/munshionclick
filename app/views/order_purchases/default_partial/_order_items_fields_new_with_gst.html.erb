@@ -12,24 +12,24 @@
             <%= f.select :item_id, options_from_collection_for_select(@items, 'id', 'title', f.object.item_id), {hide_label: true,prompt: "Select the Items"},onchange: 'set_raw_cost(this.value,this.id); return false;', class: "chosen-select",required: true %>
           </div>
           <%end%>
-            <div class="col-lg-2 from-group float-left">
+          <div class="col-lg-2 from-group float-left">
             <%= f.text_field :quantity,step: :any,class:'quantity-price', hide_label: true,placeholder: :quantity,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()", required: true %>
           </div>
-            <div class="col-lg-1 from-group float-left">
+          <div class="col-lg-1 from-group float-left">
             <%= f.text_field :cost_price,step: :any,class:'cost-price',hide_label: true, placeholder: :cost_price,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()"%>
+            <%= f.number_field :gst,step: :any,class:'gst-per',hide_label: true, placeholder: :sale_price,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()", required: true,min: 0 %>
           </div>
-            <div class="col-lg-2 from-group float-left">
+          <div class="col-lg-2 from-group float-left">
             <%= f.text_field :total_cost_price,step: :any,class:'total-cost-price', hide_label: true,placeholder: :total_cost_price,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()"%>
+            <%= f.number_field :gst_amount,step: :any,class:'gst-total',hide_label: true, placeholder: "Total GST",onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()", required: true,min: 0 %>
            </div>
-            <div class="col-lg-1 from-group float-left">
+          <div class="col-lg-2 from-group float-left">
             <%= f.text_field :sale_price,step: :any,hide_label: true, placeholder: :sale_price,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()", required: true %>
           </div>
-            <div class="col-lg-1 from-group float-left">
+          <div class="col-lg-1 from-group float-left">
             <%= f.text_field :discount_price,step: :any,class:'discount-price', hide_label: true,placeholder: :discount,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()"%>
-            </div>
-            <div class="col-lg-2 from-group float-left">
-            <%= f.text_field :comment, hide_label: true,placeholder: :comment,title: :comment%></div>
-            <div class="col-lg-2 from-group float-left">
+          </div>
+          <div class="col-lg-2 from-group float-left">
             <%= f.text_field :extra_expence,step: :any,class:'', hide_label: true,placeholder: "Extra/Dute"%>
           </div>
             <div class="col-lg-1 from-group float-left">

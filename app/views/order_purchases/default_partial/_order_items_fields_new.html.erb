@@ -32,6 +32,9 @@
         <%= f.text_field :cost_price, step: :any, class:'cost-price',hide_label: true, placeholder: :cost_price,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()", required: true%></div>
         <div class="col-lg-2 from-group float-left">
         <%= f.text_field :total_cost_price, step: :any, class:'total-cost-price', hide_label: true,placeholder: :total_cost,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()", required: true%></div>
+        <div class="col-lg-1 from-group float-left">
+          <%= f.text_field :sale_price,step: :any,hide_label: true, placeholder: :sale_price,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()", required: true %>
+        </div>
         <div class="col-lg-1 from-group float-left hidden">
         <%= f.text_field :discount_price,step: :any, class:'discount-price', hide_label: true,placeholder: :discount,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()"%>
         </div>

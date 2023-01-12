@@ -436,7 +436,7 @@ class ApplicationController < ActionController::Base
 
   def check_access
     # Current User Current Module Permission
-    if controller_name.eql?("order_sales")
+    if controller_name.eql?("order_sales") || controller_name.eql?("order_purchases")
       @module_permission = @all_permissions.select(:id, :can_create, :can_update, :can_read, :can_delete, :can_accessed,
         :is_hidden, :can_download_pdf, :can_download_csv, :can_send_email, :can_import_export).find_by(module: "orders")
     else
