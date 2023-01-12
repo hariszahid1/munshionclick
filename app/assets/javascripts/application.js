@@ -32,3 +32,4 @@
 //= require data-confirm-modal
 //= require moment
 //= require daterangepicker
+//= require jquery-ui
