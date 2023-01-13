@@ -1,7 +1,89 @@
 // Place all the styles related to the StickyNotes controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
-.sticky-back {
-  background-image: url("sticky_background.jpg");
-  background-size: cover;
+.sticky-note{
+  width: 20%;
+  height: 150px;
+  display: inline-block;
+  border-radius: 8px;
+	border: 1px solid gray;
+  text-align: center;
+  cursor: grab;
+  position: absolute;
+}
+.sticky-note:active{
+  cursor: grabbing;
+}
+
+.add-button {
+  width: 150px;
+  z-index: 2;
+  cursor: pointer;
+
+}
+.add-button:active {
+  transform: translate(0, -20px);
+}
+.titleInput{
+  text-align: center;
+  font-size: 20px;
+  height: 46px;
+  width: 100%;
+  border: 0;
+  background: transparent;
+}
+.contentInput{
+  resize: none;
+  border: 0;
+  border-bottom: 1px solid gray;
+  background: transparent;
+  width: 100%;
+}
+.options-icon{
+  background-color: white;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  border: 1px solid #d9d9d9;
+}
+
+.pop-over-colors{
+  position: absolute;
+  height: 100px;
+  width: 200px;
+  background-color: white;
+  right: -187px;
+  bottom: -83px;
+  border: 1px solid #d9d9d9;
+  display: none;
+  button{
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    border: none;
+  }
+}
+
+.options-icon:hover{
+  .pop-over-colors{
+    display: block;
+  }
+}
+.first-color{
+  background-color: #ff8080;
+}
+.second-color{
+  background-color: #80ff80;
+}
+.third-color{
+  background-color: #7afcff;
+}
+.forth-color{
+  background-color: #feff9c;
+}
+.fifth-color{
+  background-color: #fff980;
+}
+.sixth-color{
+  background-color: #8080ff;
 }
