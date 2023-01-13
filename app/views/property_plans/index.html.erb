@@ -314,11 +314,20 @@
 
   $(function() {
 
-    var start = moment().subtract(1, 'years');
+    var start = moment();
     var end = moment();
 
     function cb(start, end) {
-        $('#reportrange span').html(start.format('MM/DD/YYYY') + ' - ' + end.format('MM/DD/YYYY'));
+        $('#reportrange span').html(start.format('YYYY/MM/DD') + ' - ' + end.format('YYYY/MM/DD'));
+    }
+
+    var gteq = $('#q_created_at_gteq').val()
+    var lteq = $('#q_created_at_lteq').val()
+    if (gteq !== ''){
+      start = moment(new Date(gteq))
+    }
+    if(lteq !== ''){
+      end = moment(new Date(lteq))
     }
 
     $('#reportrange').daterangepicker({
@@ -338,7 +347,7 @@
            'Last Year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')]
         },
         locale: {
-          format: 'MM/DD/YYYY'
+          format: 'YYYY/MM/DD'
         }
     }, cb);
 
