@@ -1,0 +1,97 @@
+<%= bootstrap_form_with(model: @sys_user, method: method, url: url, local: true) do |f| %>
+  <% if sys_user.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(sys_user.errors.count, "error") %> prohibited this sys_user from being saved:</h2>
+      <ul>
+        <% sys_user.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="col-lg-12 row">
+    <div class="col-lg-6 form-group">
+      <%= f.text_field :occupation , placeholder:"Enter Client Number", label: "Client Number" %>
+    </div>
+
+    <div class="col-lg-6 form-group">
+      <%= f.label :name do %>
+            <%= SysUser.human_attribute_name :name %>
+            <i class="cdas fa-language"></i>
+          <% end %>
+      <%= f.text_field :name, placeholder: "Client Name", hide_label: true  %>
+    </div>
+  </div>
+  <div>
+    <%= f.fields :cms_data do |cd| %>
+        <%= render 'cms_data', {cd: cd, f: f} %>
+    <% end %>
+  </div>
+
+  <div class="col-lg-12 row">
+    <div class="col-lg-6 form-group">
+      <%= f.text_field :ntn, placeholder: "Plot Size", label: "Plot Size" %>
+    </div>
+    <div class="col-lg-6 form-group">
+      <%= f.text_field :nom_name, placeholder: "Block", label: "Block" %>
+    </div>
+  </div>
+
+  <div class="col-lg-12 row">
+    <div class="col-lg-6 form-group">
+      <%= f.text_area :gst,  placeholder: "Short Details", label: "Short Details" %>
+    </div>
+    <div class="col-lg-6 form-group float-left">
+      <%= f.datetime_select :created_at, {label: 'Date of Query'}, class: "form-control" %>
+    </div>
+    <%= f.hidden_field :credit_status, value: current_user.id %>
+    <%= f.hidden_field :for_crms, value: true %>
+    <%= f.hidden_field :user_type_id, value: UserType.first.id %>
+    <%= f.hidden_field :code, { value: (f.object.code.nil? ? ("AGC-"+"%.4i" % (SysUser.maximum(:id).present? ? SysUser.maximum(:id).next : 1)) : (f.object.code ))} %>
+  </div>
+
+  <div>
+    <h4 class="card-header mb-4">
+        Contact Details
+    </h4>
+    <%= f.fields_for :contact do |af| %>
+        <%= render 'contact', af: af %>
+    <% end %>
+  </div>
+  <div  class="col-lg-12 mt-2 row">
+    <h4 class="card-header col-lg-12 mb-4">
+        Notes
+    </h4>
+  </div>
+  <div  class="col-lg-12 row">
+    <%= f.fields_for :notes do |note| %>
+    <%= render 'notes_new', f: note %>
+    <% end %>
+  </div>
+  <div id="new_links">
+    <div class="links">
+      <%= link_to_add_association 'Add More', f, :notes, partial: 'notes_new', class: "btn btn-info float-right mr-4 mt-2" %>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+  <div  class="col-lg-12 mt-4 row">
+    <h4 class="card-header col-lg-12 mb-4">
+        Follow Up
+    </h4>
+  </div>
+  <div  class="col-lg-12 row">
+    <%= f.fields_for :follow_ups do |follow_up| %>
+      <%= render 'follow_ups_new', f: follow_up %>
+    <% end %>
+  </div>
+  <div id="new_links">
+    <div class="links">
+      <%= link_to_add_association 'Add More', f, :follow_ups, partial: 'follow_ups_new', class: "btn btn-info float-right mr-4 mt-2" %>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+  <div class="modal-footer mt-2">
+    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+    <%=f.object.id.nil? ? (f.submit 'Create CMS User', class: "btn btn-success mr-2", style: "float: right")  :  (f.submit 'Update CMS User', class: "btn btn-warning mr-2", style: "float: right")%>
+  </div>
+<% end %>

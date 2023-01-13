@@ -7,6 +7,9 @@ class NotesController < ApplicationController
   def new
     @note = Note.new
     @staff = Staff.all
+    created_by_ids = current_user.created_by_ids_list_to_view
+    roles_mask = current_user.allowed_to_view_roles_mask_for
+    @users = User.where(roles_mask: roles_mask).where('company_type=? or created_by_id=?',current_user.company_type,created_by_ids)
   end
 
   def create
@@ -14,7 +17,7 @@ class NotesController < ApplicationController
     respond_to do |format|
       if @note.save
         format.js
-        format.html { redirect_to customer_management_system_path(params[:note][:notable_id].to_i), notice: 'Note was successfully created.' }
+        format.html { redirect_to crms_path(params[:note][:notable_id].to_i), notice: 'Note was successfully created.' }
         format.json { render :show, status: :created, location: @note }
       else
         format.html { render :new }

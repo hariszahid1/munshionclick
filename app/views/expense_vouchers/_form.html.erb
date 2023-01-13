@@ -1,0 +1,67 @@
+
+<%= bootstrap_form_for(expense_voucher) do |f| %>
+  <% if expense_voucher.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(expense_voucher.errors.count, "error") %> prohibited this expense from being saved:</h2>
+      <ul>
+      <% expense_voucher.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="card border-radius-1 shadow p-4">
+    <div class="row">
+      <div class="col">
+         <%= f.date_select :created_at,{}, hide_label: true,class: "form-control" %>
+         <%= f.label :comment do %>
+        <%= ExpenseVoucher.human_attribute_name :comment %>
+        <i class="fas fa-language"></i>
+        <% end %>
+        <%= f.text_area :comment, placeholder:"Enter Summary" , hide_label: true ,class: 'urdu-font' %>
+      </div>
+
+      <div class="col">
+        <div class="row">
+        </div>
+        <div class="row p-5 ml-5">
+          <h2 style="font-size: 50px">Total Expense:</h2>
+          <%= f.hidden_field :amount%>
+          <h2 class="expense_voucher_total_bill ml-3" style="font-size: 50px">0.00</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%= f.fields_for :expense_entry_vouchers, class: "mt-2" do |expense_entry_voucher| %>
+    <%= render 'expense_entry_vouchers_new', f: expense_entry_voucher %>
+  <% end %>
+  <div id="new_links">
+    <div class="links mt-5">
+      <%= link_to_add_association 'Add More', f, :expense_entry_vouchers, partial: 'expense_entry_vouchers_new', class: "btn btn-info" %>
+    </div>
+  </div>
+  <div  class="col-lg-12 mt-4 row">
+    <h4 class="card-header col-lg-12 mb-4">
+        Follow Up
+    </h4>
+  </div>
+  <div  class="col-lg-12 row">
+    <%= f.fields_for :follow_ups do |follow_up| %>
+      <%= render 'crms/follow_ups_new', f: follow_up %>
+    <% end %>
+  </div>
+  <div id="new_links">
+    <div class="links">
+      <%= link_to_add_association 'Add More', f, :follow_ups, partial: 'crms/follow_ups_new', class: "btn btn-info float-right mr-4 mt-2" %>
+    </div>
+  </div>
+  <br>
+  <div class="clearfix"></div>
+    <div class="modal-footer">
+      <%=f.object.id.nil? ? (f.submit class: "btn btn-success mr-4", style: "float: right")  :  (f.submit class: "btn btn-warning mr-4", style: "float: right")%>
+    </div>
+
+<% end %>
+
+<%= javascript_include_tag 'hover', 'data-turbolinks-track': 'reload' %>

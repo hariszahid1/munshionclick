@@ -83,7 +83,7 @@ class PurchaseSaleItem < ApplicationRecord
       end
     elsif self.product_id?
       self.cost_price = product.cost.to_f
-      self.total_cost_price = product.cost.to_f*self.quantity
+      self.total_cost_price = product.cost.to_f*self.quantity.to_f
       self.save!
       already_stock = product.stock.present? ? product.stock : 0
       total_stock = already_stock-self.quantity.to_f

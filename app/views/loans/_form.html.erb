@@ -1,0 +1,47 @@
+<%= bootstrap_form_for(loan ,remote: true) do |f| %>
+  <% if loan.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(loan.errors.count, "error") %> prohibited this expense from being saved:</h2>
+      <ul>
+        <% loan.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+<div class="card border-radius-1 shadow p-4">
+  <div class="row mb-4">
+    <div class="col">
+      <%= f.number_field :debit,  step: :any, required: true, placeholder: "Enter the Amount", onkeyup:"price_in_words(this.value,'price_in_words_1');", onchange:"price_in_words(this.value,'price_in_words_1');" %>
+      <h5>Debit in Words: <span id="price_in_words_1" style="font-size:20px;color:blue;">0.0</span></h5>
+    </div>
+    <div class="col">
+      <%= f.number_field :credit, step: :any,  required: true, placeholder: "Enter the Amount", onkeyup:"price_in_words(this.value,'price_in_words');", onchange:"price_in_words(this.value,'price_in_words');" %>
+      <h5>Credit in Words: <span id="price_in_words" style="font-size:20px;color:blue;">0.0</span></h5>
+    </div>
+  </div>
+  <div class="row mb-4">
+    <div class="col">
+      <%= f.select :account_id , options_from_collection_for_select(@accounts, 'id', 'title', f.object.account_id), {prompt: "Select the Account"}, required: true%>
+    </div>
+    <div class="col">
+      <%= f.date_select :created_at %>
+    </div>
+  </div>
+  <div class="row-lg-12">
+    <%= f.label :comment do %>
+      <%= Loan.human_attribute_name :comment %>
+        <i class="fas fa-language"></i>
+      <% end %>
+    <%= f.text_area :comment, placeholder:"Enter Comment", hide_label: true ,class: 'urdu-font'%>
+  </div>
+  <hr>
+  <div class="col-lg-12">
+    <%= link_to loans_path, class:"btn btn-info float-left" do %>
+      <i class="fa fa-arrow-left mr-2" aria-hidden="true"></i>Back to Loan
+    <% end %>
+    <%=f.object.id.nil? ? (f.submit class: "btn btn-success", style: "float: right")  :  (f.submit class: "btn btn-warning", style: "float: right")%>
+  </div>
+</div>
+<% end %>

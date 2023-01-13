@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
   before_action :get_request_referrer
 
   include PublicActivity::StoreController
-
+  
   rescue_from CanCan::AccessDenied do |exception|
     respond_to do |format|
       format.json { head :forbidden, content_type: 'text/html' }
@@ -25,6 +25,17 @@ class ApplicationController < ActionController::Base
   end
 
   def get_request_referrer
+    if current_user&.super_admin?
+      @follow_up_unread_count = FollowUp.where(is_read: false).count
+      @follow_up_all = FollowUp.preload(:followable).order('id desc')
+      @follow_up_unread = FollowUp.preload(:followable).order('id desc').where(is_read: false)
+      @total_follow_ups = FollowUp.count
+    else
+      @follow_up_unread_count = FollowUp.where(is_read: false, assigned_to_id: current_user&.id).count
+      @follow_up_all = FollowUp.preload(:followable).order('id desc').where(assigned_to_id: current_user&.id)
+      @follow_up_unread = FollowUp.preload(:followable).order('id desc').where(is_read: false, assigned_to_id: current_user&.id)
+      @total_follow_ups = FollowUp.where(assigned_to_id: current_user&.id).count
+    end
     unless (request.referrer.to_s.include? 'edit') || (request.referrer.to_s.include? 'new')
       return session[:referrer].to_s
     end
@@ -56,6 +67,7 @@ class ApplicationController < ActionController::Base
     elsif current_user.staff?
       User.find_by(id: current_user.created_by_id).name
     end
+    
   end
 
   def check_display_name_for_nav(pos_setting)
@@ -330,6 +342,10 @@ class ApplicationController < ActionController::Base
   helper_method :check_can_send_email
   helper_method :check_is_hidden_by_module
 
+  
+    
+
+
   def set_company_type
     if current_user.present?
       RequestStore.store[:company_type] = current_user.superAdmin.company_type if current_user.superAdmin.present?
@@ -420,9 +436,13 @@ class ApplicationController < ActionController::Base
 
   def check_access
     # Current User Current Module Permission
-    @module_permission = @all_permissions.select(:id, :can_create, :can_update, :can_read, :can_delete, :can_accessed,
+    if controller_name.eql?("order_sales")
+      @module_permission = @all_permissions.select(:id, :can_create, :can_update, :can_read, :can_delete, :can_accessed,
+        :is_hidden, :can_download_pdf, :can_download_csv, :can_send_email, :can_import_export).find_by(module: "orders")
+    else
+      @module_permission = @all_permissions.select(:id, :can_create, :can_update, :can_read, :can_delete, :can_accessed,
                                                  :is_hidden, :can_download_pdf, :can_download_csv, :can_send_email, :can_import_export).find_by(module: controller_name)
-
+    end
     if check_is_hidden(@module_permission) # False
       respond_to do |format|
         format.html do
@@ -439,5 +459,28 @@ class ApplicationController < ActionController::Base
     # @all_permissions = User.eager_load(:user_permissions).find(current_user.id).user_permissions
     # Current User Current Module Permission
     (@all_permissions.pluck(:module,:is_hidden).include? [temp_module,false])
+  end
+
+  def read_all
+    FollowUp.where(id: JSON.parse(params[:ids])).update_all(is_read: true)
+    respond_to do |format|
+      format.json { render json: { success: 'Data updated successfully' } }
+    end
+  end
+
+  def read_follow_up
+    follow_up = FollowUp.find(params[:follow_up_id])
+    follow_up.update(is_read: true)
+    type = follow_up&.followable_type
+    case type
+    when 'SysUser'
+      redirect_to crm_path(follow_up.followable.id)
+    when 'Order'
+      redirect_to orders_path
+    when 'ExpenseVoucher'
+      redirect_to expense_vouchers_path
+    else
+      redirect_to purchase_sale_details_path
+    end
   end
 end

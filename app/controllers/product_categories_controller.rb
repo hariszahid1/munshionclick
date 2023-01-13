@@ -13,7 +13,9 @@ class ProductCategoriesController < ApplicationController
     @q = ProductCategory.ransack(params[:q])
     @q.sorts = 'id asc' if @q.sorts.empty? && @q.result.count.positive?
     @options_for_select = ProductCategory.all
-    @product_categories = @q.result.page(params[:page])
+    @custom_pagination = params[:limit].present? ? params[:limit] : 25
+    @custom_pagination = @pos_setting.custom_pagination['product_categories'] if @pos_setting&.custom_pagination.present? && @pos_setting&.custom_pagination['product_categories'].present?
+    @product_categories = @q.result.page(params[:page]).per(@custom_pagination)
 
     if params[:csv].present?
       request.format = 'csv'

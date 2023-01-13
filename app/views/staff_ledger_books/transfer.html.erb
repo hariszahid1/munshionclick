@@ -1,56 +1,82 @@
 <%= bootstrap_form_for(@staff_ledger_book) do |f| %>
-<% if @staff_ledger_book.errors.any? %>
-  <div id="error_explanation">
-    <h2><%= pluralize(@staff_ledger_book.errors.count, "error") %> prohibited this payment from being saved:</h2>
+  <% if @staff_ledger_book.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@staff_ledger_book.errors.count, "error") %> prohibited this payment from being saved:</h2>
 
-    <ul>
-    <% @staff_ledger_book.errors.full_messages.each do |message| %>
-      <li><%= message %></li>
-    <% end %>
-    </ul>
-  </div>
-<% end %>
-<div class="card">
+      <ul>
+      <% @staff_ledger_book.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
   <div class="card-header">
-    <h3>Transfer From / Balance: <span class="oldBalance" id="sys_user_balance_1">0.0</span> Transfer To / Balance: <span class="oldBalance" id="sys_user_balance_2">0.0</span> </h3>
+    <h3>Payment Transfer</h3>
   </div>
-  <div class="card-body">
-    <div class="col-lg-6" style="float:left">
-      <%= f.select :status, options_from_collection_for_select(@staffs, "id", ->(st){"#{st.name} \u{27F6} \u{27F6} #{st.code} "}, f.object.status),{:include_blank => "Select Name/Code", label: "From"},:class=>"form-control chosen-select",onchange:"set_staff_advance_info(this.value,'sys_user_balance_1')",onkeyup:"set_staff_advance_info(this.value,'sys_user_balance_1')" %>
+  <div class="card p-3">
+    <div class="row">
+      <div class="col card border-radius-1 shadow p-4 m-2">
+        <div class="row">
+          <div class="col-lg-6" style="float:left">
+            <%= f.select :status, options_from_collection_for_select(@staffs, "id", ->(st){"#{st.name} \u{27F6} \u{27F6} #{st.code} "}, f.object.status),{:include_blank => "Select Name/Code", label: "From"},:class=>"form-control chosen-select",onchange:"set_staff_advance_info(this.value,'sys_user_balance_1')",onkeyup:"set_staff_advance_info(this.value,'sys_user_balance_1')" %>
+          </div>
+          <div class="col-lg-6" style="float:left">
+            <%= f.select :staff_id, options_from_collection_for_select(@staffs, "id", ->(st){"#{st.name} \u{27F6} \u{27F6} #{st.code} "}, f.object.staff_id),{:include_blank => "Select Name/Code", label: "To"},:class=>"form-control chosen-select",onchange:"set_staff_advance_info(this.value,'sys_user_balance_2')",onkeyup:"set_staff_advance_info(this.value,'sys_user_balance_2')" %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12" style="float:left">
+            <%= f.text_field :credit,class: "credit", required:true, onchange:"newBalancePayment('sys_user_balance_1','sys_user_balance_2','sys_user_balance_new_1','sys_user_balance_new_2'),price_in_words(this.value,'price_in_words');",onkeyup:"newBalancePayment('sys_user_balance_1','sys_user_balance_2','sys_user_balance_new_1','sys_user_balance_new_2'),price_in_words(this.value,'price_in_words');"%>
+          </div>
+        </div>
+        <div class="row mb-4">
+          <div  class="col-lg-12 float-left">
+            <h5>Payment in Words: <span id="price_in_words" style="font-size:20px;color:blue;">0.0</span></h5>
+          </div>
+        </div>
+        <div class="row">
+          <div class="field col-lg-12" style="float:left">
+            <%= f.datetime_select :created_at,{},class:"form-control" %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12" style="float:left">
+            <%= f.text_area :comment %>
+          </div>
+        </div>
+
+      </div>
+      <div class="col card border-radius-1 shadow p-4 m-2">
+        <div class="row mb-5 ml-1">
+          <h3>Transfer From / Balance: <span class="oldBalance" id="sys_user_balance_1">0.0</span><br> Transfer To / Balance: <span class="oldBalance" id="sys_user_balance_2">0.0</span> </h3>
+        </div>
+        <hr>
+
+        <div class="row mb-5 ml-1">
+          <h3>
+            Transfer From / New Balance:
+            <span class="oldBalance" id="sys_user_balance_new_1">0.0</span>
+            <br>
+            Transfer To / New Balance:
+            <span class="oldBalance" id="sys_user_balance_new_2">0.0</span>
+          </h3>
+        </div>
+      </div>
+
     </div>
-    <div class="col-lg-6" style="float:left">
-      <%= f.select :staff_id, options_from_collection_for_select(@staffs, "id", ->(st){"#{st.name} \u{27F6} \u{27F6} #{st.code} "}, f.object.staff_id),{:include_blank => "Select Name/Code", label: "To"},:class=>"form-control chosen-select",onchange:"set_staff_advance_info(this.value,'sys_user_balance_2')",onkeyup:"set_staff_advance_info(this.value,'sys_user_balance_2')" %>
+    <div class="clearfix">
+    <div class="row d-flex actions">
+      <div class="col form-group float-left">
+        <%= link_to staff_ledger_books_path, class:"btn btn-info" do %>
+        <i class="fa fa-arrow-left mr-2" aria-hidden="true"></i>Back to Staff Ledger Book
+        <% end %>
+      </div>
+
+      <div class="col" style="float:right">
+        <%= f.submit class: "btn btn-primary", style: "float: right" %>
+      </div>
     </div>
-    <div class="col-lg-6" style="float:left">
-      <%= f.text_field :credit,class: "credit", required:true, onchange:"newBalancePayment('sys_user_balance_1','sys_user_balance_2','sys_user_balance_new_1','sys_user_balance_new_2')",onkeyup:"newBalancePayment('sys_user_balance_1','sys_user_balance_2','sys_user_balance_new_1','sys_user_balance_new_2')"%>
-    </div>
-    <div class="field col-lg-6" style="float:left">
-      <%= f.datetime_select :created_at,{},class:"form-control" %>
-    </div>
-    <div class="col-lg-6" style="float:left">
-      <%= f.text_area :comment %>
-    </div>
-    <div class="col-lg-6" style="float:left">
-      <h3>
-        Transfer From / New Balance:
-        <span class="oldBalance" id="sys_user_balance_new_1">0.0</span>
-        <br>
-        Transfer To / New Balance:
-        <span class="oldBalance" id="sys_user_balance_new_2">0.0</span>
-      </h3>
-    </div>
+
   </div>
-  <div class="actions col-lg-12 col-sm-12">
-    <div class="col-lg-6" style="float:left">
-      <%= link_to 'User Ledger', ledger_books_path, class: "btn btn-info" %>
-    </div>
-    <div class="col-lg-6" style="float:right">
-      <%= f.submit class: "btn btn-primary", style: "float: right" %>
-    </div>
-  </div>
-</div>
-
-
-
 
 <% end %>

@@ -1,4 +1,4 @@
-<div class="nested-fields">
+<div class="nested-fields card border-radius-1 shadow p-3 mb-3">
   <%= f.hidden_field :production_id %>
   <%= f.hidden_field :id %>
   <%= f.select :item_id, options_from_collection_for_select(@items, 'id', 'title', f.object.item_id), {hide_label: true,prompt: "Select the Items"},onchange: 'set_material_sale(this.value,this.id); return false;', class: "chosen-select",required: true %>

@@ -4,7 +4,7 @@
     <span aria-hidden="true">×</span>
   </button>
 </div>
-<div class="list_content_page">
+<div class="list_content_page m-4">
   <div class="row">
     <div class="col-lg-12 col-sm-12">
       <div class="main-content-header">
@@ -45,7 +45,7 @@
 
       <%= search_form_for @q, url: users_path, class: "admin-controls", method: "get" do |f| %>
         <div class="tab-content">
-          <div class="tab-pane active mb-3 card shadow-sm mt-2 border-radius-1" id="search" role="tabpanel">
+          <div class="tab-pane active mb-3 card shadow p-3 mt-2 border-radius-1" id="search" role="tabpanel">
             
              <div class="row search_form mt-3 mr-2">
                <div class="col">
@@ -100,7 +100,7 @@
         </div>
            
 
-           <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="import-export" role="tabpanel">
+           <div class="tab-pane mb-3 card shadow p-3 mt-2 border-radius-1" id="import-export" role="tabpanel">
             <p>
               <div class="d-flex ml-2">
               <button class="btn btn-danger ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
@@ -111,24 +111,24 @@
       </div>
     <% end %>
 
-  <div class="list_data_table card p-3">
-    <table data-toggle="table" data-search="true" class="overflow-hidden border-radius-1">
+  <div class="list_data_table card border-radius-1 shadow p-4">
+    <div class="row d-flex" style="position: absolute;">
+    <div>
+	      <button class="btn btn-outline-danger delete-selected mt-4 ml-3" type='button' value='User'>
+	      	Delete Selected
+	      </button>		
+    </div>  
+    <%= search_form_for @q, url: users_path, class: "admin-controls ml-4", method: "get" do |f| %>
+      <div class="d-flex mt-4" style="width: 120%;">
+        <%= select_tag :limit, options_for_select(['Show Entries',5, 10, 15, 20, 25], selected: 'Show Entries'), id: 'pagination-limit', title:'Show Entries', style:'cursor: pointer;' %>
+      </div>
+    <% end %>
+  </div>
+  <div class="mt-3">
+    <table data-toggle="table" data-search="true" class="content-table">
       <thead>
         <tr>
           <th><input type="checkbox" id="master" class='select-all-checkbox'>
-          
-
-              <div class="icon-container float-center">
-            <span class="ml-2 mt-2">
-            <div class="my-icon my-view">
-                        <button class="icon-div btn delete-selected p-2 " type='button' value='User'>
-                                  <i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i> 
-                        </button>
-                    </div>
-                    </span>
-              </div>
-
-          
           </th>
           <th>ID<div class='float-right'><%= sort_link(@q, :id, "", {}, class: 'sorting-button') %></div></th>
           <th>Role<div class='float-right'><%= sort_link(@q, :roles_mask, "", {}, class: 'sorting-button') %></div></th>
@@ -164,7 +164,7 @@
                       	  <div class="my-tooltip">
                       	    Edit
                       	  </div>
-                      	    <%= link_to edit_user_path(user), remote: true, class:"icon-div" do %>
+                      	    <%= link_to edit_user_path(user), class:"icon-div" do %>
                       	      <i class="fa fa-edit mt-2" aria-hidden="true"></i>
                       	    <%end %>
                       	</div>
@@ -222,15 +222,15 @@
         <% end %>
       </tbody>
     </table>
-
-    <div class="row">
-      <div class="col-lg-4 col-sm-4">
-        <%= page_entries_info @users %>
-      </div>
-      <div class="col-lg-8 col-sm-8 pagination-left">
-        <%= paginate @users %>
-      </div>
+  </div>
+  <div class="col-lg-12 digg_pagination mt-3">
+    <div class="float-left page_info">
+      <%= page_entries_info @users %>
     </div>
+    <div class="float-right">
+    <%= paginate @users, :container => false %>
+    </div>
+  </div>
   </div>
 </div>
 <div class="show-data"></div>

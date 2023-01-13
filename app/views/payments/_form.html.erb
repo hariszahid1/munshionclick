@@ -10,57 +10,76 @@
       </ul>
     </div>
   <% end %>
-  <div class="col-lg-6 form-group float-left">
-    <%if params.present? && params[:account_id]%>
-      <%= f.select :account_id , options_from_collection_for_select(@accounts, 'id', 'title', params[:account_id]), {prompt: "Select the Account"},class: "form-control", required: true,onchange:"set_account_balance(this.value,'sys_user_balance')",onkeyup:"set_account_balance(this.value,'sys_user_balance')"%>
-    <%else%>
-      <%= f.select :account_id , options_from_collection_for_select(@accounts, 'id', 'title', (f.object.account_id.present? ? f.object.account_id : @account)), {prompt: "Select the Account"},class: "form-control", required: true,onchange:"set_account_balance(this.value,'sys_user_balance')",onkeyup:"set_account_balance(this.value,'sys_user_balance')"%>
-    <%end%>
-  </div>
-  <% if params[:jama].present?%>
-  <div class="col-lg-6 form-group float-left">
-    <%= f.text_field :debit, required:true, class:"debit",onkeyup:"price_in_words(this.value,'price_in_word_id');newBalance('oldBalance','newBalance1')", onchange:"price_in_words(this.value,'price_in_words');", autocomplete: "off" %>
-  </div>
-  <%else%>
-  <div class="col-lg-6 form-group float-left">
-    <%= f.text_field :credit, required:true, class:"credit",onkeyup:"price_in_words(this.value,'price_in_word_id');newBalance('oldBalance','newBalance1')", onchange:"price_in_words(this.value,'price_in_words');", autocomplete: "off" %>
-  </div>
-  <%if request.original_url.include? 'edit'%>
-    <div class="col-lg-6 form-group float-left">
-      <%= f.text_field :debit, required:true, class:"debit",onkeyup:"price_in_words(this.value,'price_in_word_id');newBalance('oldBalance','newBalance1')", onchange:"price_in_words(this.value,'price_in_words');", autocomplete: "off" %>
+
+  
+    <div class="row">
+      <div class="col card border-radius-1 shadow p-4 m-2">
+        <div class="row-lg-12 form-group float-left">
+          <%if params.present? && params[:account_id]%>
+            <%= f.select :account_id , options_from_collection_for_select(@accounts, 'id', 'title', params[:account_id]), {prompt: "Select the Account"},class: "form-control", required: true,onchange:"set_account_balance(this.value,'sys_user_balance')",onkeyup:"set_account_balance(this.value,'sys_user_balance')"%>
+          <%else%>
+            <%= f.select :account_id , options_from_collection_for_select(@accounts, 'id', 'title', (f.object.account_id.present? ? f.object.account_id : @account)), {prompt: "Select the Account"},class: "form-control", required: true,onchange:"set_account_balance(this.value,'sys_user_balance')",onkeyup:"set_account_balance(this.value,'sys_user_balance')"%>
+          <%end%>
+        </div>
+        <% if params[:jama].present?%>
+        <div class="row-lg-12 form-group float-left">
+          <%= f.number_field :debit, step: :any, required:true, class:"debit",onkeyup:"price_in_words(this.value,'price_in_words');newBalance('oldBalance','newBalance1')", onchange:"price_in_words(this.value,'price_in_words');", autocomplete: "off" %>
+        </div>
+        <%else%>
+        <div class="row-lg-12 form-group float-left">
+          <%= f.number_field :credit, step: :any, required:true, class:"credit",onkeyup:"price_in_words(this.value,'price_in_words');newBalance('oldBalance','newBalance1')", onchange:"price_in_words(this.value,'price_in_words');", autocomplete: "off" %>
+        </div>
+        <%if request.original_url.include? 'edit'%>
+          <div class="row-lg-12 form-group float-left">
+            <%= f.number_field :debit, step: :any, required:true, class:"debit",onkeyup:"price_in_words(this.value,'price_in_words');newBalance('oldBalance','newBalance1')", onchange:"price_in_words(this.value,'price_in_words');", autocomplete: "off" %>
+          </div>
+         <%end%>
+        <%end%>
+        <div  class="row-lg-12 float-left mb-3">
+          <h5>Payment in Words: <span id="price_in_words" style="font-size:20px;color:blue;">0.0</span></h5>
+        </div>
+        <div class="row-lg-12 form-group float-left">
+          <%= f.datetime_select :created_at,{},class: "form-control" %>
+        </div>
+        
+        <div class="row-lg-12 form-group float-left">
+          <%= f.label :comment do %>
+              <%= Payment.human_attribute_name :comment %>
+              <i class="fas fa-language"></i>
+          <% end %>
+          <%= f.text_area :comment, hide_label: true ,class: 'urdu-font' %>
+        </div>
+        
+      </div>
+      <div class="col card border-radius-1 shadow p-4 m-2">
+        <div class="row mb-5 ml-1">
+          <%if params[:account_id].present? %>
+          <h1>Balance: <span class="oldBalance" id="sys_user_balance"><%=Account.find(params[:account_id]).amount%></span></h1>
+          <%else%>
+          <h1>Balance: <span class="oldBalance" id="sys_user_balance">0.0</span></h1>
+          <%end%>
+        </div>
+        <hr>
+
+        <div class="row mb-5 ml-1">
+          <h1>New Balance: <span class="newBalance1">0.0</span></h1>
+        </div>
+        
+
+      </div>
+
     </div>
-   <%end%>
-  <%end%>
-  <div class="col-lg-6 form-group float-left">
-    <%= f.datetime_select :created_at,{},class: "form-control" %>
-  </div>
-  <div  class="col-lg-12 col-md-6 col-sm-6 from-group float-left">
-    <h5>Payment in Words: <span id="price_in_words" style="font-size:20px;color:blue;">0.0</span></h5>
-  </div>
-  <div class="col-lg-6 form-group float-left">
-    <%= f.label :comment do %>
-        <%= Payment.human_attribute_name :comment %>
-        <i class="fas fa-language"></i>
-    <% end %>
-    <%= f.text_area :comment, hide_label: true ,class: 'urdu-font' %>
-  </div>
-  <div class="col-lg-6 col-md-6 col-sm-6 from-group float-left">
-  <h1>New Balance: <span class="newBalance1">0.0</span></h1>
+    <div class="clearfix">
+    <div class="row d-flex actions">
+      <div class="col form-group float-left">
+        <%= link_to payments_path, class:"btn btn-info" do %>
+        <i class="fa fa-arrow-left mr-2" aria-hidden="true"></i>Back to Payments
+        <% end %>
+      </div>
 
-  </div>
-  <div class="clearfix">
-    <hr>
-    <div class="col-lg-12 row ">
+      <div class="col" style="float:right">
+        <%=f.object.id.nil? ? (f.submit class: "btn btn-success", style: "float: right")  :  (f.submit class: "btn btn-warning", style: "float: right")%>       
+      </div>
+    </div>
 
-            <div class="col-lg-6 form-group float-left">
-              <%= link_to payments_path do %>
-              <i class="fa fa-arrow-left " aria-hidden="true"></i>
-              <% end %>
-            </div>
-              <div class="col-lg-6 form-group float-left">
-                <div class="col-lg-6 form-group float-left">
-                  <%=f.object.id.nil? ? (f.submit class: "btn btn-success", style: "float: left")  :  (f.submit class: "btn btn-warning", style: "float: left")%>
-                </div>
-              </div>
-            <% end %>
-  </div>
+<% end %>

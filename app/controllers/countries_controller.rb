@@ -10,7 +10,10 @@ class CountriesController < ApplicationController
     @q = Country.ransack(params[:q])
     @q.sorts = 'id asc' if @q.result.count > 0 && @q.sorts.empty?
     @options_for_select = Country.all
-    @countries = @q.result(distinct: true).page(params[:page])
+    @custom_pagination = params[:limit].present? ? params[:limit] : 25
+    @custom_pagination = @pos_setting.custom_pagination['countries'] if @pos_setting&.custom_pagination.present? && @pos_setting&.custom_pagination['countries'].present?
+    @countries = @q.result(distinct: true).page(params[:page]).per(@custom_pagination)
+    
     if params[:csv].present?
       request.format = 'csv'
       download_countries_csv_file

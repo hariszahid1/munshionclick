@@ -8,66 +8,68 @@
             <div class="col-lg-3 form-group float-left">
               <%= f.select :id_eq, options_from_collection_for_select(@staff_names, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code}"},@name),{:include_blank => "Select Staff"},:class=>"form-control chosen-select" %>
             </div>
-            <div class="col-lg-2 form-group float-left">
+            <div class="col-lg-3 form-group float-left">
               <%= f.select :department_id_eq, options_from_collection_for_select(@departments, 'id', 'title', @department), {hide_label:true,title: "Select the Department" ,prompt: "Select the Department"},:class=>"form-control chosen-select"%>
             </div>
-            <div class="col-lg-2 form-group float-left">
+            <div class="col-lg-3 form-group float-left">
               <%= f.select :staff_type_eq, Staff.staff_types.map { |key, value| [key.humanize, value] },{hide_label:true,class: "form-control", required: true},:class=>"form-control" %>
             </div>
             <div class="col-lg-2 form-group float-left">
-              <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+              <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px">Search</button>
             </div>
           <% end %>
         </div>
       </div>
-      <table data-toggle="table" data-search="true">
-        <thead>
-          <tr>
-            <th>Status</th>
-            <th>Code</th>
-            <th>Name</th>
-            <th>Monthly/Wage</th>
-            <th>Department/Raw</th>
-            <th>Debit</th>
-            <th>Credit</th>
-            <th>Balance</th>
-            <th>Check</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @staff_nill.each do |staff| %>
+      <div style="overflow-x:auto;">  
+        <table data-toggle="table" data-search="true" class="trial-b-table">
+          <thead>
             <tr>
-              <td><%= staff.staff_type %></td>
-              <td>
-                <%= link_to staff_ledger_books_path('q[staff_id_eq]':staff.id) do%>
-                  <i class="fa fa-address-book"></i><%= staff.code %>
-                <%end %>
-              </td>
-              <td><%= staff.full_name %></td>
-              <td><%= number_with_delimiter(staff.staff_salary_or_wage.to_f.round(2))%></td>
-              <td><%= staff.department.present? ? staff.department.title : ""%>:<%= staff.staff_raw_products.present? ? staff.staff_raw_products_titles : ""%></td>
-              <td><%= number_with_delimiter(debit_sum  = @staff_nill_ledger_book_debit[staff.id].to_d) %></td>
-              <td><%= number_with_delimiter(credit_sum = @staff_nill_ledger_book_credit[staff.id].to_d) %></td>
-              <td><%= number_with_delimiter(balance = staff.balance.to_f.round(2))%><%credit_debit = credit_sum-debit_sum%></td>
-              <td>
-                <% if balance == credit_debit%>
-                  <i class="fa fa-check"></i>
-                <%else%>
-                  <i class="fa fa-trash"></i> <%=balance-credit_debit%>
-                <%end%>
-              </td>
+              <th>Status</th>
+              <th>Code</th>
+              <th>Name</th>
+              <th>Monthly/Wage</th>
+              <th>Department/Raw</th>
+              <th>Debit</th>
+              <th>Credit</th>
+              <th>Balance</th>
+              <th>Check</th>
             </tr>
-          <% end %>
-          <tr>
-            <td><h4>Total<h4></td>
-            <td><h4><%=@staff_nill.count%></h4></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td><h4><%= number_with_delimiter(@staff_nill.sum(:balance).abs)%><h4></td>
-          </tr>
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            <% @staff_nill.each do |staff| %>
+              <tr>
+                <td><%= staff.staff_type %></td>
+                <td>
+                  <%= link_to staff_ledger_books_path('q[staff_id_eq]':staff.id) do%>
+                    <i class="fa fa-address-book"></i><%= staff.code %>
+                  <%end %>
+                </td>
+                <td><%= staff.full_name %></td>
+                <td><%= number_with_delimiter(staff.staff_salary_or_wage.to_f.round(2))%></td>
+                <td><%= staff.department.present? ? staff.department.title : ""%>:<%= staff.staff_raw_products.present? ? staff.staff_raw_products_titles : ""%></td>
+                <td><%= number_with_delimiter(debit_sum  = @staff_nill_ledger_book_debit[staff.id].to_d) %></td>
+                <td><%= number_with_delimiter(credit_sum = @staff_nill_ledger_book_credit[staff.id].to_d) %></td>
+                <td><%= number_with_delimiter(balance = staff.balance.to_f.round(2))%><%credit_debit = credit_sum-debit_sum%></td>
+                <td>
+                  <% if balance == credit_debit%>
+                    <i class="fa fa-check"></i>
+                  <%else%>
+                    <i class="fa fa-trash"></i> <%=balance-credit_debit%>
+                  <%end%>
+                </td>
+              </tr>
+            <% end %>
+            <tr>
+              <td><h4>Total<h4></td>
+              <td><h4><%=@staff_nill.count%></h4></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td><h4><%= number_with_delimiter(@staff_nill.sum(:balance).abs)%><h4></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>  
     </div>
   </div>
 </div>

@@ -47,8 +47,7 @@
     <div class="tab-content">
       <div class="tab-pane active mb-3 card shadow-sm mt-2 p-3 border-radius-1" id="search" role="tabpanel">
         <%= search_form_for @q, url: products_path, class: "admin-controls", method: "get" do |f| %>
-          <div class="row d-flex mt-2">
-            <div class="col-lg-8">
+          <div class="row">
               <div class="col-lg-2 form-group float-left">
                 <%= f.select :item_type_id_in, options_for_select(@item_types.map {|i| ["#{i.second} \u{27F6} #{i.last}", i.first]}, f.object.item_type_id_in),{:include_blank => "Select the Block"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Block"} }%>
               </div>
@@ -61,14 +60,13 @@
               <div class="col-lg-3 form-group float-left">
                 <%= f.select :product_sub_category_id_in, options_for_select(@product_sub_categories.map {|i| ["#{i.second} \u{27F6} #{i.last}", i.first]}, f.object.product_sub_category_id_in),{:include_blank => "Select Unit sub category"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select Unit Sub-Category"}} %>
               </div>
-              <div class="col-lg-2 form-group float-left">
+              <div class="col-lg-1 form-group float-left">
                 <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px;"><i class="fa fa-search"></i></button>
               </div>
-            </div>
-            <div class="col-lg-4 ">
-              <div class="row d-flex float-right mr-2">
+          </div>  
+            <div class="row">
               <% if check_can_download_pdf(@module_permission)%>
-                <button class="form-control btn btn-danger float-right mr-2" style="width: 100px;" name="submit_pdf_staff_with" type="submit" value="Products PDF A4" formtarget="_blank">PDF &nbsp;<i class="fa fa-file-pdf"></i></button>
+                <button class="form-control btn btn-danger float-right mr-2 ml-3" style="width: 100px;" name="submit_pdf_staff_with" type="submit" value="Products PDF A4" formtarget="_blank">PDF &nbsp;<i class="fa fa-file-pdf"></i></button>
                 <button class="form-control btn btn-danger float-right mr-2" style="width: 120px;" name="submit_pdf_staff_barcode" type="submit" value="Products PDF A4" formtarget="_blank">Barcode </button>
               <% end %>
               <% if check_can_send_email(@module_permission)%>  
@@ -108,9 +106,9 @@
                       </div>
                   </div>
               <% end %>    
-                </div>  
-              </div>
-          </div>
+            </div>  
+          
+          
         <% end %>
       </div>
       <div class="tab-pane card shadow-sm mt-2 border-radius-1 mb-3" id="import-export" role="tabpanel">
@@ -175,9 +173,9 @@
             <%elsif%>
               <td><%= product.stock %></td>
             <%end%>
-            <td><%= product.cost.to_f.round(20) %></td>
-            <td><%= number_with_delimiter(product.sale.to_f.round(20)) %></td>
-            <td><%=(product.cost.to_f*product.stock.to_f).round(2)%></td>
+            <td><%= number_with_delimiter(product.cost.to_f.round(2)) %></td>
+            <td><%= number_with_delimiter(product.sale.to_f.round(2)) %></td>
+            <td><%=number_with_delimiter((product.cost.to_f*product.stock.to_f).round(2)) %></td>
             <td><%= number_with_delimiter((product.sale.to_f*product.stock.to_f).round(2))%></td>
             <%if pos_setting_sys_type=="batha"%>
               <td><%= product.raw_product.present? ? product.raw_product.title : ""%></td>
@@ -251,18 +249,18 @@
         </tr>
         </tbody>
       </table>
+      <div class="row product-book-index-card">
+        <div class="col-lg-4 col-sm-4">
+          <%= page_entries_info @products %>
+        </div>
+        <div class="col-lg-8 col-sm-8 pagination-left">
+          <%= paginate @products %>
+        </div>
+      </div>
     </div>  
 </div>
 
-<div class="clearfix"></div>
-<div class="row product-book-index-card">
-  <div class="col-lg-4 col-sm-4">
-    <%= page_entries_info @products %>
-  </div>
-  <div class="col-lg-8 col-sm-8 pagination-left">
-    <%= paginate @products %>
-  </div>
-</div>
+
 <%= form_for :bulk_import, url: bulk_import_data_path, method: :post, html: {class: "bulk-import-form"} do |f| %>
   <div class="modal fade" id="importFile" tabindex="-1" role="dialog" aria-labelledby="importFileTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">

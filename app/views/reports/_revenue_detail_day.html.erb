@@ -16,14 +16,14 @@
               <tr>
                 <%total=0%>
                 <td><%=ex.first%></td>
-                <td><%=ex.last.first%>  <%@daily=@daily+ex.last.first%></td>
-                <td><%=ex.last.last%>   <%@total=@total+ex.last.last%></td>
+                <td><%=number_with_delimiter ex.last.first%>  <%@daily=@daily+ex.last.first%></td>
+                <td><%=number_with_delimiter ex.last.last%>   <%@total=@total+ex.last.last%></td>
               </tr>
             <%end%>
             <tr>
               <td><h5>Total</h5></td>
-              <td><h5><%=@daily%></h5></td>
-              <td><h5><%=@total%></h5></td>
+              <td><h5><%=number_with_delimiter @daily%></h5></td>
+              <td><h5><%=number_with_delimiter @total%></h5></td>
             </tr>
         </tbody>
       </table>

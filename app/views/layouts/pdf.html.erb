@@ -36,7 +36,18 @@
       </div>
     </div>
   <% end %>
-
+  <% if @pos_setting&.extra_settings.present? && @pos_setting&.extra_settings['pdf_watermark'].present? %>
+    <p style="position: fixed;
+              font-weight: bold;
+              top: <%= @pos_setting&.extra_settings['pdf_watermark'][1]%>%;
+              left: <%= @pos_setting&.extra_settings['pdf_watermark'][2]%>%;
+              font-size: <%= @pos_setting&.extra_settings['pdf_watermark'][3]%>px;
+              opacity: <%= @pos_setting&.extra_settings['pdf_watermark'][4]%>;
+              -webkit-transform: rotate(<%= @pos_setting&.extra_settings['pdf_watermark'][5]%>deg);"
+    >
+      <%= @pos_setting&.extra_settings['pdf_watermark'][0]%>
+    </p>
+  <% end %>
   <%= yield %>
 
   <% if @pos_setting&.footer.present? %>

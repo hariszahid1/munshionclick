@@ -1,0 +1,214 @@
+<div id="custom-alert" class="alert alert-danger d-none">
+  <span class="custom-alert-text"></span>
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">×</span>
+  </button>
+</div>
+<div class='d-flex'>
+  <div>
+    <div class="row mb-1">
+      <h1 class="ml-2 col">Sale Deals</h1>
+    </div>
+    <div class="row mb-2">
+      <div class="col-lg-12 col-sm-12">
+        <div class="main-content-header">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a href="<%= root_path %>">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item active">
+              <a href="<%= sale_deals_path %>">Sale Deal</a>
+            </li>
+          </ol>
+        </div>
+        <div class="row mb-4">
+          <div id="new_city">
+            <%= link_to new_sale_deal_path,class: "btn btn-success mt-3 ml-2" do %>
+              <i class="fa fa-plus" aria-hidden="false"></i>
+              Create
+            <% end %>
+          </div>
+          <%= link_to 'Follow Ups', follow_ups_path('q[reminder_type_eq]': 'sale_deals'), class: "btn btn-primary mt-3 ml-2" %>
+        </div>
+      </div>
+    </div>
+  </div>
+    <div class="d-flex ml-auto">
+      <div class="card shadow text-dark mr-3 p-1 close-card" style="border: 10px solid rgba(102, 255, 51, 0.3); border-radius: 50%;">
+        <%= link_to sale_deals_path('q[purchase_sale_items_size_7_eq]': 'Token Payment') do %>
+          <span><h2 class="mt-2"><b><%=  @payment_status_count['Token Payment'] %></b></h2>Token Payment</span>
+        <% end %>
+      </div>
+      <div class="card shadow text-dark mr-3 p-1 close-card" style="border: 10px solid rgba(255, 51, 0, 0.3); border-radius: 50%;">
+        <%= link_to sale_deals_path('q[purchase_sale_items_size_7_eq]': 'Advance Payment') do %>
+          <span><h2 class="mt-2"><b><%=  @payment_status_count['Advance Payment'] %></b></h2>Advance Payment</span>
+        <% end %>
+      </div>
+      <div class="card shadow text-dark mr-3 p-1 close-card" style="border: 10px solid rgba(162, 162, 118, 0.7); border-radius: 50%;">
+        <%= link_to sale_deals_path('q[purchase_sale_items_size_7_eq]': 'Full Payment') do %>
+          <span><h2 class="mt-2"><b><%=  @payment_status_count['Full Payment'] %></b></h2>Full Payment</span>
+        <% end %>
+      </div>
+      <div class="card shadow text-dark mr-3 p-1 close-card" style="border: 10px solid rgba(255, 255, 0, 0.3); border-radius: 50%;">
+        <%= link_to sale_deals_path('q[purchase_sale_items_size_4_eq]': 'Transfer') do %>
+          <span><h2 class="mt-2"><b><%= @deal_count['Transfer'] %></b></h2>Transfer</span>
+        <% end %>
+      </div>
+      <div class="card shadow text-dark mr-3 p-1 close-card" style="border: 10px solid rgba(128, 229, 255, 0.3); border-radius: 50%;">
+        <%= link_to sale_deals_path('q[purchase_sale_items_size_4_eq]': 'Saler Free') do %>
+          <span><h2 class="mt-2"><b><%= @deal_count['Saler Free'] %></b></h2>Saler Free</span>
+        <% end %>
+      </div>
+      <div class="card shadow text-dark mr-3 p-1 close-card" style="border: 10px solid rgba(255, 179, 217, 0.74); border-radius: 50%;">
+        <%= link_to sale_deals_path('q[purchase_sale_items_size_4_eq]': 'Fresh Booking') do %>
+          <span><h2 class="mt-2"><b><%= @deal_count['Fresh Booking'] %></b></h2>Fresh Booking</span>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="float-right">
+  <div class="dropdown ml-auto mr-4">
+    <span class="btn btn-info " title= "About This page"><i class="fa fa-question-circle"></i>Help</span>
+    <div class="dropdown-content">
+      <% if @help.present? %>
+        <% @help&.help_links.each do |link| %>
+          <a type="button" class="" target="_blank" href="<%= link[1] %>" >Help in <%= link[0] %></a>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<ul class="nav nav-pills" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link tab-label cms-search-exp-tab active" data-toggle="tab" href="#search" role="tab">Search</a>
+  </li>
+</ul>
+
+<%= search_form_for @q, url: sale_deals_path, class: "admin-controls", method: "get" do |f| %>
+  <div class="tab-content">
+    <div class="tab-pane active mb-3 card shadow-sm mt-2 border-radius-1" id="search" role="tabpanel">
+      <p>
+        <div class="row p-3">
+          <div class="col-lg-2 form-group float-left">
+            <%= f.select :sys_user_id_eq, options_for_select(@sys_users.map{ |p| [p.name , p.id]}, f.object.sys_user_id_eq),{:include_blank => "Select Customer Name"},:class=>"form-control chosen-select" %>
+          </div>
+          <div class="col-lg-2 form-group float-left">
+            <%= f.select :sys_user_credit_status_eq, options_for_select(@all_agents.map{ |key, value| [key , value]}, f.object.sys_user_credit_status_eq),{:include_blank => "Select Agent Name"},:class=>"form-control chosen-select" %>
+          </div>
+          <div class="col-lg-2 form-group float-left">
+            <%= f.select :purchase_sale_items_size_12_eq, options_for_select(@transaction_type, f.object.purchase_sale_items_size_12_eq),  {:include_blank => "Select Transaction Type"}, class: "form-control chosen-select" %>
+          </div>
+          <div class="col-lg-2 form-group float-left">
+            <%= f.select :purchase_sale_items_size_7_eq, options_for_select(@payment_status, f.object.purchase_sale_items_size_7_eq),  {:include_blank => "Select Payment Status"}, class: "form-control chosen-select" %>
+          </div>
+          <div class="col-lg-2 form-group float-left">
+            <%= f.select :purchase_sale_items_size_4_eq, options_for_select(@deal, f.object.purchase_sale_items_size_4_eq),  {:include_blank => "Select Deal"}, class: "form-control chosen-select" %>
+          </div>
+          <div class="col-lg-2 form-group float-left">
+            <%= f.search_field :purchase_sale_items_size_11_cont, class: "form-control chosen-select", placeholder: "Search MS/Form No" %>
+          </div>
+          <div class="col-lg-3 form-group float-left d-flex">
+            <%= f.search_field :created_at, id: "reportrange", class: 'form-control' %>
+          </div>
+          <div class="d-none">
+            <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker',placeholder: "YYYY-MM-DD" %>
+            <%= f.search_field :created_at_lteq, class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
+          </div>
+          <div class="col-lg-2 form-group float-left">
+            <%= f.search_field :purchase_sale_items_size_13_cont, class: "form-control chosen-select", placeholder: "Search Quota" %>
+          </div>
+          <div class="col-lg-1 form-group float-left">
+            <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+          </div>
+          <div class="col-lg-2 form-group float-left">
+            <button class="btn btn-warning float-right" style="width: 100px;" title= "download expense vouchers csv" name="csv" type="submit" value="csv"><i class="fa fa-file-excel mr-2"></i>CSV</button>
+            <button class="btn btn-danger float-right mr-2" style="width: 100px;" title= "download expense vouchers pdf" name="pdf" type="submit" value="pdf"><i class="fa fa-file-excel mr-2"></i>PDF</button>
+          </div>
+        </div>
+      </p>
+    </div>
+  </div>
+<% end %>
+
+<div class="card shadow mt-4 p-2 border-radius-1">
+  <table data-toggle="table mt-3" data-search="true" class="overflow-hidden border-radius-1">
+    <thead>
+      <tr>
+        <th>Quota</th>
+        <th>Agent</th>
+        <th>Project</th>
+        <th>Plot Type</th>
+        <th>Category</th>
+        <th>Customer</th>
+        <th class="border_none">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render partial: 'sale_deal', collection: @sale_deals %>
+    </tbody>
+  </table>
+
+  <div class="row">
+    <div class="col-lg-4 col-sm-4">
+      <%= page_entries_info @sale_deals %>
+    </div>
+    <div class="col-lg-8 col-sm-8 pagination-left text-dark">
+      <%= paginate @sale_deals %>
+    </div>
+  </div>
+</div>
+<script>
+ $(function() {
+
+    var start = moment();
+    var end = moment();
+
+    function cb(start, end) {
+        $('#reportrange span').html(start.format('YYYY/MM/DD') + ' - ' + end.format('YYYY/MM/DD'));
+    }
+
+    var gteq = $('#q_created_at_gteq').val()
+    var lteq = $('#q_created_at_lteq').val()
+    if (gteq !== ''){
+      start = moment(new Date(gteq))
+    }
+    if(lteq !== ''){
+      end = moment(new Date(lteq))
+    }
+
+    $('#reportrange').daterangepicker({
+        startDate: start,
+        endDate: end,
+      ranges: {
+          'Select Date Range':[],
+           'Today': [moment(), moment()],
+           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+           'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+           'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+           '1 Year': [moment().subtract(1, 'years')],
+           'This Month': [moment().startOf('month'), moment().endOf('month')],
+           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+           'This Month Last Year': [moment().subtract(1, 'years').startOf('month'), moment().subtract(1, 'years').endOf('month')],
+           'This Year': [moment().startOf('year'), moment().endOf('year')],
+           'Last Year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')]
+        },
+        locale: {
+          format: 'YYYY/MM/DD'
+        }
+    }, cb);
+
+    cb(start, end);
+
+    $('#reportrange').on('change', function(){
+	      var value = $(this).val()
+	      var greater_eq = value.split(' - ')[0]
+	      var less_eq = value.split(' - ')[1]
+	      $('#q_created_at_gteq').val(greater_eq)
+	      $('#q_created_at_lteq').val(less_eq)
+	    })
+
+});
+</script>
+

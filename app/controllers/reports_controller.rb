@@ -120,6 +120,9 @@ class ReportsController < ApplicationController
         format.csv { send_data csv_data, filename: "Chart of Account - #{Date.today}.csv" }
       end
     end
+    
+    chart_of_account_analytics
+    
   end
 
   def trial_balance
@@ -1114,17 +1117,17 @@ class ReportsController < ApplicationController
     @cities = @q.result
     @reports = @q.result.page(params[:page]).per(100)
 
-    @sale     = PurchaseSaleDetail.where(transaction_type: "Sale",created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day ).group("DATE(created_at)").sum(:total_bill)
-    @sale_discount     = PurchaseSaleDetail.where(transaction_type: "Sale",created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day ).group("DATE(created_at)").sum(:discount_price)
+    @sale = PurchaseSaleDetail.where(transaction_type: "Sale",created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day ).group("DATE(created_at)").sum(:total_bill)
+    @sale_discount = PurchaseSaleDetail.where(transaction_type: "Sale",created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day ).group("DATE(created_at)").sum(:discount_price)
     @purchase = PurchaseSaleDetail.where(transaction_type: "Purchase",created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).group("DATE(created_at)").sum(:total_bill)
     @purchase_discount = PurchaseSaleDetail.where(transaction_type: "Purchase",created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).group("DATE(created_at)").sum(:discount_price)
-    @salary   = Salary.where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).group("DATE(created_at)").sum(:paid_salary)
+    @salary = Salary.where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).group("DATE(created_at)").sum(:paid_salary)
     @advance = Salary.where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).group("DATE(created_at)").sum(:advance)
-    @expense  = ExpenseEntry.where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).group("DATE(created_at)").sum(:amount)
-    @investment  = Investment.where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).group("DATE(created_at)").sum(:debit)
+    @expense = ExpenseEntry.where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).group("DATE(created_at)").sum(:amount)
+    @investment = Investment.where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).group("DATE(created_at)").sum(:debit)
 
-    @sale_total     = PurchaseSaleDetail.where(transaction_type: "Sale",created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day ).sum(:total_bill)
-    @sale_discount_total     = PurchaseSaleDetail.where(transaction_type: "Sale",created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day ).sum(:discount_price)
+    @sale_total = PurchaseSaleDetail.where(transaction_type: "Sale",created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day ).sum(:total_bill)
+    @sale_discount_total = PurchaseSaleDetail.where(transaction_type: "Sale",created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day ).sum(:discount_price)
     @purchase_total = PurchaseSaleDetail.where(transaction_type: "Purchase",created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).sum(:total_bill)
     @purchase_discount_total = PurchaseSaleDetail.where(transaction_type: "Purchase",created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).sum(:discount_price)
     @salary_total   = Salary.where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).sum(:paid_salary)
@@ -1155,6 +1158,43 @@ class ReportsController < ApplicationController
       end
     end
 
+  end
+
+  def sale_report_analytics
+    type = params[:type]
+    case type
+    when 'daily'
+      date_limit = DateTime.current.all_day
+    when 'weekly'
+      date_limit = DateTime.current.all_week
+    when 'monthly'
+      date_limit = DateTime.current.all_month
+    when 'yearly'
+      date_limit = DateTime.current.all_year
+    else
+      date_limit = DateTime.current.all_day
+    end
+
+    @sale_total = PurchaseSaleDetail.where(transaction_type: "Sale",created_at: date_limit ).sum(:total_bill)
+    @sale_discount_total = PurchaseSaleDetail.where(transaction_type: "Sale",created_at: date_limit ).sum(:discount_price)
+    @purchase_total = PurchaseSaleDetail.where(transaction_type: "Purchase",created_at: date_limit).sum(:total_bill)
+    @purchase_discount_total = PurchaseSaleDetail.where(transaction_type: "Purchase",created_at: date_limit).sum(:discount_price)
+    @investment_total  = Investment.where(created_at: date_limit).sum(:debit)
+
+    @salary_total   = Salary.where(created_at: date_limit).sum(:paid_salary)
+    @advance_total = Salary.where(created_at: date_limit).sum(:advance)
+    @expense_total  = ExpenseEntry.where(created_at: date_limit).sum(:amount)
+    @total_profit = (@sale_total.to_f-@sale_discount_total.to_f)-
+                   ((@purchase_total.to_f- @purchase_discount_total.to_f)+(@investment_total.to_f)+
+                     (@salary_total.to_f+@advance_total.to_f)+(@expense_total.to_f))
+
+    @values_arr = [@investment_total.to_f, @purchase_total.to_f- @purchase_discount_total.to_f,
+                   @expense_total.to_f, @sale_total.to_f-@sale_discount_total.to_f, @total_profit
+                   ]
+    @keys_arr = ['Investments', 'Purchase', 'Expense', 'Sale', 'Total-Profit']
+    respond_to do |format|
+      format.js
+    end
   end
 
   def sale_report_0
@@ -1314,4 +1354,25 @@ class ReportsController < ApplicationController
       @q = model_name.constantize.where(terminated: true).ransack(params[:q])
       @q.result
     end
+end
+
+def chart_of_account_analytics
+  
+  @user_group_count = SysUser.where('balance > 0').group('user_group').count
+  @u_group_keys = @user_group_count.keys.map { |a| a.gsub(' ', '-') }
+  @u_group_count = @user_group_count.values
+
+  @user_group_balance = SysUser.where('balance > 0').group('user_group').sum(:balance)
+  @u_balance_keys = @user_group_balance.keys.map { |a| a.gsub(' ', '-') }
+  @u_balance_count = @user_group_balance.values
+
+  @staff_dep_count = Staff.joins(:department).where('balance > 0').group('departments.title').count
+  @dep_keys = @staff_dep_count.keys.map { |a| a.gsub(' ', '-') }
+  @dep_values = @staff_dep_count.values
+
+  @staff_dep_balance = Staff.joins(:department).where('balance > 0').group('departments.title').sum(:balance)
+  @staff_dep_sorted = @staff_dep_balance.map { |a| [a.first, a.last.to_f] }.to_h
+  @staff_balance_keys = @staff_dep_sorted.keys.map { |a| a.gsub(' ', '-') }
+  @staff_balance_values = @staff_dep_sorted.values
+
 end

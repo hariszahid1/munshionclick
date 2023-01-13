@@ -10,7 +10,6 @@ class PropertyPlansController < ApplicationController
   # GET /property_plans.json
   def index
     @customers = SysUser.where(user_group: %w[Customer Supplier Both Salesman])
-
     @q = if params[:short_advance].present?
            PropertyPlan.joins(:order).where(due_status: [nil, PropertyPlan.due_statuses['Unpaid']]).where(
              'due_date <= ?', Date.today
@@ -33,7 +32,10 @@ class PropertyPlansController < ApplicationController
     @office = @sys_users.pluck('office').uniq
     @mobile = @sys_users.pluck('mobile').uniq
     @phone  = (@mobile + @office + @home).uniq.compact.reject(&:empty?).join(',')
-    @property_plans = @property_plans.page(params[:page])
+    @options_for_select = PropertyPlan.all
+    @custom_pagination = params[:limit].present? ? params[:limit] : 25
+    @custom_pagination = @pos_setting.custom_pagination['property_plans'] if @pos_setting&.custom_pagination.present? && @pos_setting&.custom_pagination['property_plans'].present?
+    @property_plans = @property_plans.page(params[:page]).per(@custom_pagination)
   end
 
   def property_installment

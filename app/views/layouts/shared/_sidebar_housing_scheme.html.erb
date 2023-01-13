@@ -8,11 +8,11 @@
               <span class="link-text">Dashboard</span>
           <% end %>
         </li>
-        <% if check_is_hidden_by_module('customer_management_systems') %>
+        <% if check_is_hidden_by_module('crms') %>
             <li class="activ-link">
-              <a href="<%=customer_management_systems_path%>" class="activ-link">
+              <a href="<%=crms_path%>" class="activ-link">
                 <i class="fas fa-users"></i>
-                <span class="link-text">CMS</span>
+                <span class="link-text">CRM</span>
               </a>
             </li>
         <% end %>
@@ -49,15 +49,30 @@
                 </li>
             <% end %>    
             </ul>
-        </li>
-        <% if check_is_hidden_by_module('expenses') %>
-            <li class="activ-link">
-                <%= link_to expenses_path, class:"activ-link" do %>
-                    <i class="fas fa-money-bill"></i>
-                    <span class="link-text">Expense</span>
+        <li>
+          <a href="#OrderSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+              <i class="fas fa-money-bill"></i>
+              <span class="link-text">Expense</span>
+          </a>
+          <ul class="collapse list-unstyled" id="OrderSubmenu">
+            <% if check_is_hidden_by_module('expense_vouchers') %>
+              <li class="activ-link">
+                <%= link_to expense_vouchers_path, class:"activ-link" do %>
+                  <i class="fas fa-money-bill"></i>
+                  <span class="link-text">Expense Voucher</span>
                 <% end %>
-            </li>
-        <% end %>
+              </li>
+            <% end %>
+            <% if check_is_hidden_by_module('expenses') %>
+              <li class="activ-link">
+                <%= link_to expenses_path, class:"activ-link" do %>
+                  <i class="fas fa-money-bill"></i>
+                  <span class="link-text">Expense Bill</span>
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+        </li>
         <% if check_is_hidden_by_module('payments') %>    
             <li class="activ-link">
                 <%= link_to payments_path, class:"activ-link" do %>
@@ -231,7 +246,15 @@
                   <span class="link-text">Investment</span>
               <%end%>
             </li>
-        <% end %>    
+        <% end %>
+        <% if check_is_hidden_by_module('loans') %>  
+            <li class="activ-link">
+            <%= link_to loans_path, class:"activ-link" do %>
+              <i class="fas fa-tasks"></i>
+              <span class="link-text">Loan</span>
+            <% end %>
+          </li>
+        <% end %>
         <% if can?(:view, :purchase_sale_detail) %>
           <li>
               <a href="#InventorySubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
@@ -267,16 +290,16 @@
                 <span class="link-text">System Settings</span>
             </a>
             <ul class="collapse list-unstyled" id="SystemSubmenu">
-                
+                <% if check_is_hidden_by_module('pos_settings') %>
                   <% if can?(:delete, :all) %>
                     <li>
-                      <%= link_to pos_settings_path do %>
+                      <%= link_to edit_pos_setting_path(@pos_setting) do %>
                         <i class="fas fa-cogs" aria-hidden="true"></i>
                           <span class="link-text">General Setting</span>
                       <% end %>
                     </li>
                   <% end %>
-                
+                <% end %>
                 <% if check_is_hidden_by_module('product_categories') %>
                     <li>
                         <%= link_to product_categories_path do %>

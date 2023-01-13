@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class FollowUp < ApplicationRecord
-  belongs_to :staff, optional: true, foreign_key: :assigned_to_id
+  belongs_to :assigned_user, class_name: :User, optional: true, foreign_key: :assigned_to_id
   belongs_to :user, optional: true, foreign_key: :created_by
   belongs_to :followable, polymorphic: true
   enum task_type: {
@@ -19,8 +19,11 @@ class FollowUp < ApplicationRecord
   }, _prefix: true
 
   enum reminder_type: {
-    due_time: 'Due Time',
-    thirty_minutes: '30 minutes Ago',
-    one_day: '1 day ago'
+    crms: 'CRM',
+    expense_vouchers: 'ExpenseVoucher',
+    orders: 'Order',
+    purchase_sale_details: 'PurchaseSaleDetail',
+    sale_deals: 'SaleDeal',
+    order_sales: 'Order'
   }, _prefix: true
 end

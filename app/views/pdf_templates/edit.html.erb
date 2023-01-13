@@ -1,0 +1,20 @@
+<div class="main-content-header">
+  <h1>PDF Templates</h1>
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="<%= root_path %>">Dashboard</a>
+    </li>
+    <li class="breadcrumb-item active">
+      <a href="<%= pdf_templates_path %>">PDF Templates</a>
+    </li>
+    <li class="breadcrumb-item active">
+      <a href="#">Edit</a>
+    </li>
+  </ol>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <%= render 'form', pdf_template: @pdf_template %>
+  </div>
+</div>

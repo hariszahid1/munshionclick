@@ -1,35 +1,35 @@
-<div class="nested-fields">
+<div class="nested-fields" style="border: none;">
   <div class="hidden col-lg-1 col-md-6 col-sm-6 form-group float-left">
     <%= form.hidden_field :order_id %>
     <%= form.hidden_field :id %>
     <%= form.hidden_field :area_in_marla, label: "Marla" %>
   </div>
 
-  <div class="col-lg-2 col-md-3 col-sm-6 form-group float-left">
-    <%= form.text_field :price_per_marla %>
+  <div class="col-lg-2 form-group float-left">
+    <%= form.number_field :price_per_marla, step: :any %>
   </div>
 
-  <div class="col-lg-2 col-md-6 col-sm-6 form-group float-left">
-    <%= form.text_field :total_price, disabled: true, id: :order_property_plans_attributes_0_total_price_diabled %>
+  <div class="col-lg-2 form-group float-left">
+    <%= form.number_field :total_price, step: :any, disabled: true, id: :order_property_plans_attributes_0_total_price_diabled %>
     <%= form.hidden_field :total_price %>
   </div>
 
-  <div class="col-lg-2 col-md-6 col-sm-6 form-group float-left">
+  <div class="col-lg-3 form-group float-left">
     <%= form.select :payment_type, options_for_select(PropertyPlan.payment_types.map { |key, value| [key.humanize, key] }, form.object.payment_type), { required: true, prompt: 'Select Payment Type' },class:"form-control"%>
   </div>
 
-  <div class="installments_div col-lg-3 col-md-6 col-sm-6 form-group float-left hidden">
+  <div class="installments_div col-lg-3 form-group float-left hidden">
     <%= form.select :payment_plan, options_for_select(PropertyPlan.payment_plans.map { |key, value| [key.humanize, key] }, form.object.payment_plan), { prompt: 'Select Payment Plan' },class:"form-control"%>
   </div>
 
-  <div class="installments_div col-lg-2 col-md-6 col-sm-6 form-group float-left hidden">
+  <div class="installments_div col-lg-2 form-group float-left hidden">
     <%= form.number_field :no_of_installments%>
   </div>
 
-  <div class="installments_div col-lg-2 col-md-6 col-sm-6 form-group float-left hidden">
-    <%= form.text_field :advance, label: 'Down Payment' %>
+  <div class="installments_div col-lg-2 form-group float-left hidden">
+    <%= form.number_field :advance, step: :any, label: 'Down Payment' %>
   </div>
-  <div class="installments_div installments_div_cash col-lg-3 col-md-3 col-sm-3 form-group float-left hidden">
+  <div class="installments_div installments_div_cash col-lg-3 form-group float-left hidden">
     <%if form.object.due_date.blank? and @order.id.blank?%>
       <%@next_month=Date.today.at_beginning_of_month.next_month%>
       <%form.object.due_date=@next_month%>
@@ -56,11 +56,11 @@
   </div>
 
   <div class="unequal_installments_div col-lg-2 col-md-6 col-sm-6 form-group float-left hidden">
-    <%= form.text_field :total_high_amount %>
+    <%= form.number_field :total_high_amount, step: :any %>
   </div>
 
   <div class="col-lg-2 col-md-6 col-sm-6 form-group float-left">
-    <%= form.text_field :last_instalment, label: 'Possession Amount'%>
+    <%= form.number_field :last_instalment, step: :any, label: 'Possession Amount'%>
   </div>
 
   <div class="clearfix"></div>

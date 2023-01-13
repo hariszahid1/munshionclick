@@ -1,255 +1,188 @@
 $( document ).ready(function() {
-
-rails_label = '<%=@exp_date_join%>'
-var ExpenseType = $('#ExpenseType').val().split(' ')
-var theType = $('#theType').val().split(' ')
-var rails_type  = '<%=@the_type_join%>'
-
-const data = {  
-  labels: rails_label.split('&amp;'),
-  datasets: [
-    {
-      label: 'Total Expense',
-      data: ExpenseType,      
-      yAxisID: 'y',
-
-    }
-  ]
-};
-
-
-// config
-
-  const config = {
-  type: 'pie',
-  data: data,
-  options: {
-    
-    stacked: false,
-    plugins: {
-            title: {
-                display: true,
-                text: 'Pie Chart by Expense Date',
-                font: {
-                  size: 20
-                },
-            }
-          
-
-        },
-    
-  },
-};
-
-// chart render
-const myChart = new Chart(
-      document.getElementById('myChart'),
-      config
-    );
-
-})
-
-$( document ).ready(function() {
-
-rails_label = '<%=@the_type_join%>'
-var ExpenseType = $('#ExpenseType').val().split(' ')
-var theType = $('#theType').val().split(' ')
-var rails_type  = '<%=@the_type_join%>'
-
-const data = {  
-  labels: rails_label.split('&amp;'),
-  datasets: [
-    {
-      label: 'Total Expense',
-      data: ExpenseType,   
-      backgroundColor: '#FF5C5C',   
-      yAxisID: 'y',
-
-    }
-  ]
-};
-
-
-// config
-
-  const config = {
-  type: 'bar',
-  data: data,
-  options: {
-    
-    stacked: false,
-    plugins: {
-            title: {
-                display: true,
-                text: 'Bar Chart by Expense Type',
-                font: {
-                  size: 20
-                }
-            }
-          
-
-        },
-    
-  },
-};
-
-// chart render
-const myChart = new Chart(
-      document.getElementById('myChart1'),
-      config
-    );
-
-})
-
-$( document ).ready(function() {
-
-rails_label = '<%=@exp_date_join%>'
-var ExpenseType = $('#ExpenseType').val().split(' ')
-var theType = $('#theType').val().split(' ')
-var rails_type  = '<%=@the_type_join%>'
-
-const data = {  
-  labels: rails_label.split('&amp;'),
-  datasets: [
-    {
-      label: 'Total Expense',
-      data: ExpenseType,      
-      yAxisID: 'y',
-
-    },
-    
-  ]
-};
-
-
-// config
-
-  const config = {
-  type: 'line',
-  data: data,
-  options: {
-    
-    stacked: false,
-    plugins: {
-            title: {
-                display: true,
-                text: 'Line Chart by Expense Date',
-                font: {
-                  size: 20
-                },
-            }
-          
-
-        },
-    
-  },
-};
-
-// chart render
-const myChart = new Chart(
-      document.getElementById('myChart2'),
-      config
-    );
-
-})
-
-$( document ).ready(function() {
-
-rails_label = '<%=@the_type_join%>'
-var ExpenseType = $('#ExpenseType').val().split(' ')
-var theType = $('#theType').val().split(' ')
-var rails_type  = '<%=@the_type_join%>'
-
-const data = {  
-  labels: rails_label.split('&amp;'),
-  datasets: [
-    {
-      label: 'Total Expense',
-      data: ExpenseType,   
-      backgroundColor: '#FF5C5C',   
-      yAxisID: 'y',
-
-    }
-  ]
-};
-
-
-// config
-
-  const config = {
-  type: 'line',
-  data: data,
-  options: {
-    
-    stacked: false,
-    plugins: {
-            title: {
-                display: true,
-                text: 'Line Chart by Expense Type',
-                font: {
-                  size: 20
-                }
-            }
-          
-
-        },
-    
-  },
-};
-
-// chart render
-const myChart = new Chart(
-      document.getElementById('myChart3'),
-      config
-    );
-
-})
-
-$( document ).ready(function() {
-
 rails_exp= '<%=@expenses_g%>'
 rails_label = '<%=@exp_date_join%>'
 rails_type  = '<%=@the_type_join%>'
-console.log(rails_type.split('&amp;'));
-const data = {
-  labels: rails_label.split('&amp;'),
-  datasets: [
-    <%@the_type.each do |expense|%>
-    {
-      label: '<%=expense%>',
-      data:  [
-              <%if @exp_types[expense].present?%>
-                <%@exp_types[expense].each do |i|%>
-                  '<%=i%>',
-                <%end%>
-              <%end%>
-            ]
-    },
-    <%end%>
-  ]
-};
-// config
-  const config = {
-  type: 'line',
-  data: data,
-  options: {
-    stacked: false,
-    plugins: {
-      title: {
-        display: true,
-        text: 'Expense Types Line Chart',
-        font: {
+        
+var ctx = document.getElementById("myChart5").getContext("2d");
+
+        var chart = {
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            title: {
+                display: true,
+                text: 'Multiple Expense Types Date Wise Line Chart by their Expense Amount',
+                font: {
                   size: 20
-                },
-      }
-    },
-  },
-};
-// chart render
-const myChart = new Chart(
-      document.getElementById('myChart5'),
-      config
-    );
+                }
+            }
+        }
+      },
+        type: 'line',
+        data: {
+                 labels: rails_label.split('&amp;'),
+        labels: rails_label.split('&amp;'),
+        datasets: [
+          <%@the_type.each do |expense|%>
+          {
+            label: '<%=expense%>',
+            data:  [
+                    <%if @exp_types[expense].present?%>
+                      <%@exp_types[expense].each do |i|%>
+                        '<%=i%>',
+                      <%end%>
+                    <%end%>
+                  ]
+          },
+          <%end%>
+        ]
+        }
+        };
+
+
+  var newwidth = (rails_label.length * 10) + 100
+  if (newwidth > 1000){
+    $('.chartAreaWrapper2').width(newwidth);
+  }
+   var myLiveChart = new Chart(ctx, chart);
+
 })
 
 
+
+$( document ).ready(function() {
+rails_label = '<%=@the_type_join%>'
+var ExpenseType = $('#ExpenseType').val().split(' ')
+var theType = $('#theType').val().split(' ')
+var rails_type  = '<%=@the_type_join%>'
+        
+var ctx = document.getElementById("myChart1").getContext("2d");
+
+        var chart = {
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            title: {
+                display: true,
+                text: 'Expense Types Bar Chart by Expense Amount',
+                font: {
+                  size: 20
+                }
+            }
+        }
+          
+         
+      },
+        type: 'bar',
+        data: {
+                 labels: rails_label.split('&amp;'),
+        datasets: [{
+            label: 'Total Expense',
+      data: ExpenseType,   
+      backgroundColor: '#FF5C5C' }]
+        }
+        };
+
+
+
+  var newwidth = (rails_label.length * 2) + 100
+  if (newwidth > 1000){
+    $('.chartAreaWrapper2').width(newwidth);
+  }
+  var myLiveChart = new Chart(ctx, chart);
+
+})
+
+
+
+
+
+$( document ).ready(function() {
+rails_label = '<%=@exp_date_join%>'
+var ExpenseType = $('#ExpenseType').val().split(' ')
+var theType = $('#theType').val().split(' ')
+var rails_type  = '<%=@the_type_join%>'
+        
+var ctx = document.getElementById("myChart2").getContext("2d");
+
+        var chart = {
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            title: {
+                display: true,
+                text: 'Expense Amount Date Wise Line Chart',
+                font: {
+                  size: 20
+                }
+            }
+        }
+          
+         
+      },
+        type: 'line',
+        data: {
+                 labels: rails_label.split('&amp;'),
+        datasets: [{
+            label: 'Total Expense',
+      data: ExpenseType, }]
+        }
+        };
+
+
+
+  var newwidth = (rails_label.length * 2) + 100
+  if (newwidth > 1000){
+    $('.chartAreaWrapper2').width(newwidth);
+  }
+  var myLiveChart = new Chart(ctx, chart);
+
+})
+
+
+$( document ).ready(function() {
+rails_label = '<%=@the_type_join%>'
+var ExpenseType = $('#ExpenseType').val().split(' ')
+var theType = $('#theType').val().split(' ')
+var rails_type  = '<%=@the_type_join%>'
+
+        
+var ctx = document.getElementById("myChart3").getContext("2d");
+
+        var chart = {
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            title: {
+                display: true,
+                text: 'Expense Types Line Chart by Expense Amount',
+                font: {
+                  size: 20
+                }
+            }
+        }
+          
+         
+      },
+        type: 'line',
+        data: {
+                 labels: rails_label.split('&amp;'),
+        datasets: [{
+            label: 'Total Expense',
+      data: ExpenseType, }]
+        }
+        };
+
+
+
+  var newwidth = (rails_label.length * 2) + 100
+  if (newwidth > 1000){
+    $('.chartAreaWrapper2').width(newwidth);
+  }
+  var myLiveChart = new Chart(ctx, chart);
+
+})

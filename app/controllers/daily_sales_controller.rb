@@ -5,13 +5,15 @@ class DailySalesController < ApplicationController
   # GET /daily_sales
   # GET /daily_sales.json
   def index
-
       @q = DailySale.ransack(params[:q])
 
     if @q.result.count > 0
       @q.sorts = 'id desc' if @q.sorts.empty?
     end
-    @daily_sales = @q.result(distinct: true).page(params[:page])
+    @options_for_select = DailySale.all
+    @custom_pagination = params[:limit].present? ? params[:limit] : 25
+    @custom_pagination = @pos_setting.custom_pagination['daily_sales'] if @pos_setting&.custom_pagination.present? && @pos_setting&.custom_pagination['daily_sales'].present?
+    @daily_sales = @q.result(distinct: true).page(params[:page]).per(@custom_pagination)
     if params[:submit_pdf_staff_with].present?
       if @q.result.count > 0
         @q.sorts = 'created_at desc' if @q.sorts.empty?

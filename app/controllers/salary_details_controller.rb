@@ -1,5 +1,6 @@
 class SalaryDetailsController < ApplicationController
   before_action :set_salary_detail, only: [:show, :edit, :update, :destroy]
+  before_action :check_access
 
   # GET /salary_details
   # GET /salary_details.json
@@ -1098,6 +1099,36 @@ class SalaryDetailsController < ApplicationController
       @salary_details[i]=SalaryDetail.new(staff_id: @staff[i])
     end
     puts @salary_details
+  end
+
+  def analytics
+    type = params[:type]
+    case type
+    when 'daily'
+      date_limit = DateTime.current.all_day
+    when 'weekly'
+      date_limit = DateTime.current.all_week
+    when 'monthly'
+      date_limit = DateTime.current.all_month
+    when 'yearly'
+      date_limit = DateTime.current.all_year
+    else
+      date_limit = DateTime.current.all_day
+    end
+
+    if params[:q].present?
+      params[:q][:created_at_gteq] = params[:q][:created_at_gteq].to_date.beginning_of_day if params[:q][:created_at_gteq].present?
+      params[:q][:created_at_lteq] = params[:q][:created_at_lteq].to_date.end_of_day if params[:q][:created_at_lteq].present?
+      @q = SalaryDetail.joins(staff: :department).includes(staff: :department).ransack(params[:q])
+    else
+      @q = SalaryDetail.joins(staff: :department).includes(staff: :department).where(created_at: date_limit).ransack(params[:q])
+    end
+    @salaries = @q.result.group('staffs.name').sum(:amount)
+    @with_department = @q.result.group('departments.title').sum(:amount)
+    @salaries_date = @q.result.group("date(salary_details.created_at)").sum(:amount)
+    respond_to do |format|
+      format.js
+    end
   end
 
   private

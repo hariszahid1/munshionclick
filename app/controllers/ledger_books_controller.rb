@@ -34,7 +34,10 @@ class LedgerBooksController < ApplicationController
 
     @ledger_searchs = SysUser.all
     # @purchase_sale_details = @p.result
-    @ledger_books = @q.result.page(params[:page])
+    @options_for_select = LedgerBook.all
+    @custom_pagination = params[:limit].present? ? params[:limit] : 25
+    @custom_pagination = @pos_setting.custom_pagination['ledger_books'] if @pos_setting&.custom_pagination.present? && @pos_setting&.custom_pagination['ledger_books'].present?
+    @ledger_books = @q.result.page(params[:page]).per(@custom_pagination)
     @ledger_books_all = @ledger_books.select('SUM(debit) as sum_debit', 'SUM(credit) as sum_credit',
                                              'SUM(credit)-SUM(debit) as mean_sum')
     @customers = SysUser.all
@@ -165,7 +168,8 @@ class LedgerBooksController < ApplicationController
         @ledger_books_csv = @q.result(distinct: true)
         createCSV
       else
-        print_pdf('User LedgerBook -' + @created_at_gteq.to_s + ' to ' + @created_at_lteq.to_s, 'pdf.html', 'A4')
+        pdfName = '[' + LedgerBook.where(id: @ledger_books.ids).joins(:sys_user).pluck('name').uniq.join(' ') + ']'
+        print_pdf("#{pdfName}-LedgerBook -" + @created_at_gteq.to_s + ' to ' + @created_at_lteq.to_s, 'pdf.html', 'A4')
       end
     elsif params[:submit_debit].present? or params[:submit_debit_csv].present?
       @debit = true
@@ -344,9 +348,9 @@ class LedgerBooksController < ApplicationController
 
     end
 
-    # if @q.result.count > 0
-    #   @q.sorts = ['created_at desc', 'id desc'] if @q.sorts.empty?
-    # end
+    if @q.result.count > 0
+      @q.sorts = ['created_at desc', 'id desc'] if @q.sorts.empty?
+    end
     @ledger_books = @q.result.page(params[:page])
 
     if params[:desc_email].present? or params[:asc_email].present?
@@ -358,9 +362,7 @@ class LedgerBooksController < ApplicationController
       return redirect_to ledger_books_path
     end
 
-    @ledger_books_credit = @q.result.sum(:credit)
-    @ledger_books_debit = @q.result.sum(:debit)
-
+    ledger_book_analytics
 
   end
 
@@ -565,4 +567,30 @@ class LedgerBooksController < ApplicationController
       format.csv { send_data csv_data, filename: "Users - #{Date.today}.csv" }
     end
   end
+end
+
+def ledger_book_analytics
+  @ledger_books_credit = LedgerBook.sum(:credit)
+  @ledger_books_debit = LedgerBook.sum(:debit)
+  @user_count = []
+  @user_count.push(LedgerBook.where('balance > 0').count)
+  @user_count.push(LedgerBook.where('balance < 0').count)
+  @user_count.push(LedgerBook.where('balance = 0').count)
+  @balance_sum = []
+  @balance_sum.push(LedgerBook.where('balance > 0').sum(:balance).to_f)
+  @balance_sum.push(LedgerBook.where('balance < 0').sum(:balance).to_f)
+  @jama_by_date = LedgerBook.group('date(created_at)').where('balance > 0').count(:balance)
+  @benam_by_date = LedgerBook.group('date(created_at)').where('balance < 0').count(:balance)
+  @nil_by_date = LedgerBook.group('date(created_at)').where('balance = 0').count(:balance)
+  @jama_keys = @jama_by_date.keys
+  @jama_total = @jama_by_date.values
+  @benam_total = @benam_by_date.values
+  @nil_total = @nil_by_date.values
+  @debit_by_date = LedgerBook.group('date(created_at)').sum(:debit)
+  @debit_by_date_sorted = @debit_by_date.map { |a| [a.first, a.last.to_f] }.to_h
+  @credit_by_date = LedgerBook.group('date(created_at)').sum(:credit)
+  @credit_by_date_sorted = @credit_by_date.map { |a| [a.first, a.last.to_f] }.to_h
+  @debit_keys = @debit_by_date_sorted.keys
+  @debit_values = @debit_by_date_sorted.values
+  @credit_values = @credit_by_date_sorted.values
 end

@@ -6,7 +6,7 @@ class Order < ApplicationRecord
   has_many_attached :order_images
   has_many :links, as: :linkable
   accepts_nested_attributes_for :links, reject_if: :all_blank, allow_destroy: true
-  enum transaction_type: %i[Purchase Sale]
+  enum transaction_type: %i[Purchase Sale Inward Outward]
   enum status: %i[Clear Order UnClear UnPrint Printed Cancel]
   has_many :payment, as: :paymentable, dependent: :destroy
   has_one :ledger_book, dependent: :destroy
@@ -20,7 +20,8 @@ class Order < ApplicationRecord
   has_many :remarks, as: :remarkable
   accepts_nested_attributes_for :remarks, allow_destroy: true
   before_create :generate_guid
-
+  has_many :follow_ups, as: :followable, dependent: :destroy
+  accepts_nested_attributes_for :follow_ups
 
   has_paper_trail ignore: [:updated_at]
 
@@ -56,7 +57,7 @@ class Order < ApplicationRecord
       self.links.create(qrcode: PosSetting.first.website.to_s+"/orders/"+self.id.to_s+"?"+"receivable="+PosSetting.first.company_mask.to_s)
     end
 
-    if self.transaction_type=="Purchase"
+    if self.transaction_type=="Purchase" || self.transaction_type=="Inward"
       if self.account_id?
         self.payment.update_all(account_id: self.account_id,debit:self.amount.to_f,comment: "Edit Purchase Order")
 

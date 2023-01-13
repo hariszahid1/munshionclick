@@ -1,0 +1,117 @@
+<div class="hidden" id="investment_list">
+  <div class="main-content-header">
+    <h1>Expense Entry Vouchers</h1>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<%= root_path %>">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active">
+        <a href="<%= expense_entries_path %>">Expense Entry Vouchers</a>
+      </li>
+    </ol>
+  </div>
+  <%= link_to new_expense_voucher_path, class: "btn btn-success mr-2" do %>
+    <i class="fa fa-plus" aria-hidden="true"></i>
+    Create
+  <% end %>
+  <%= link_to expense_vouchers_path, class: "btn btn-primary" do %>
+    <i class="fa fa-tasks" aria-hidden="true"></i>
+    Expense
+  <% end %>
+  <ul class="nav nav-pills mt-3" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link tab-label active expense-search-exp-tab" data-toggle="tab" href="#search" role="tab">Search</a>
+    </li>
+  </ul>
+  <div class="clearfix"></div>
+  <div class="tab-content">
+      <div class="tab-pane active mb-3 card border-radius-1 shadow mt-2" id="search" role="tabpanel">
+        <p>
+          <%= search_form_for @q, url: expense_entry_vouchers_path, class: "admin-controls", method: "get" do |f| %>
+            <div class="row ml-2 mt-4 mr-2">
+              <div class="col-lg-2 form-group float-left">
+              <%= f.select :expense_type_id_eq, options_from_collection_for_select(@expense_types, "id", ->(st){"#{st.id} \u{27F6} #{st.title} "},@expense_type),{:include_blank => "Select expense type"},:class=>"form-control chosen-select" %>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <%= f.search_field :created_at_gteq,value:@start_date, class: 'form-control input-sm datepicker',placeholder: "YYYY-MM-DD" %>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <%= f.search_field :created_at_lteq,value:@end_date,class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
+              </div>
+              <div class="col-lg-1 form-group float-left">
+                <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search"><i class="fa fa-search"></i></button>
+              </div>
+            </div>
+          <% end %>
+        </p>
+      </div>
+  </div>
+  
+  <div class="card border-radius-1 shadow p-3">
+    <div class = "expense-book-index-card">
+      <table data-toggle="table" data-search="true" id="investment_table">
+        <thead>
+          <tr>
+            <th><%= sort_link(@q, :expense_type_id, 'Type Wise') %></th>
+            <th><%= sort_link(@q, :amount) %></th>
+            <th><%= sort_link(@q, :comment, 'Comment') %></th>
+            <th><%= sort_link(@q, :created_at, 'Date') %></th>
+            <th class="border_none">Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <%= render partial: 'expense_entry_voucher', collection: @expense_entry_vouchers%>
+          <tr>
+            <td><h5>Total</h5></td>
+            <td><h5><%=number_with_delimiter(@expense_payment_total)%></h5></td>
+            <td><h5><%=number_with_delimiter(@expense_total)%></h5></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="clearfix"></div>
+    <div class="row expense-book-index-card">
+      <div class="col-lg-4 col-sm-4">
+        <%= page_entries_info @expense_entry_vouchers %>
+      </div>
+      <div class="col-lg-8 col-sm-8 pagination-left expense-book-index-card">
+        <%= paginate @expense_entry_vouchers %>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="show-data"></div>
+ 
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#investment_list").removeClass('hidden');
+    FontAwesome.dom.i2svg();
+
+    $('.expense-logs-tab').on('click', function(){
+      $('#expense-logs').click();
+      $('.expense-book-index-card').addClass('d-none')
+    })
+
+
+    $('.expense-search-exp-tab').on('click', function(){
+      $('.expense-book-index-card').removeClass('d-none')
+    })
+  });
+  $(document).ready(function() {
+    setTimeout(function(){
+      $(".chosen-select").chosen({
+  allow_single_deselect: true,
+  width: '100%'
+});
+    }, 50);
+  });
+
+  $(function() {
+    setTimeout(function() { $(".my-loader").fadeOut(1500); }, 5000)
+  })
+
+</script>

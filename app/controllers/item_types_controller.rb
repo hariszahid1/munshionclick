@@ -1,8 +1,8 @@
 class ItemTypesController < ApplicationController
   include PdfCsvGeneralMethod
   include ItemTypesHelper
-	before_action :check_access
-  before_action :set_item_type, only: [:show, :edit, :update, :destroy, :get_item_type_products]
+  before_action :check_access
+  before_action :set_item_type, only: %i[show edit update destroy get_item_type_products]
 
   # GET /item_types
   # GET /item_types.json
@@ -10,7 +10,9 @@ class ItemTypesController < ApplicationController
     @q = ItemType.ransack(params[:q])
     @q.sorts = 'id asc' if @q.sorts.empty? && @q.result.count.positive?
     @options_for_select = ItemType.all
-    @item_types = @q.result.page(params[:page])
+    @custom_pagination = params[:limit].present? ? params[:limit] : 25
+    @custom_pagination = @pos_setting.custom_pagination['item_types'] if @pos_setting&.custom_pagination.present? && @pos_setting&.custom_pagination['item_types'].present?
+    @item_types = @q.result.page(params[:page]).per(@custom_pagination)
     download_item_types_csv_file if params[:csv].present?
     download_item_types_pdf_file if params[:pdf].present?
     send_email_file if params[:email].present?
@@ -31,6 +33,7 @@ class ItemTypesController < ApplicationController
       format.js
     end
   end
+
   # GET /item_types/new
   def new
     @item_type = ItemType.new
@@ -40,8 +43,7 @@ class ItemTypesController < ApplicationController
   end
 
   # GET /item_types/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /item_types
   # POST /item_types.json
@@ -83,6 +85,7 @@ class ItemTypesController < ApplicationController
   end
 
   private
+
   # Use callbacks to share common setup or constraints between actions.
   def set_item_type
     @item_type = ItemType.find(params[:id])
@@ -92,28 +95,30 @@ class ItemTypesController < ApplicationController
   def item_type_params
     params.require(:item_type).permit(:title, :code, :comment)
   end
+
   def download_item_types_csv_file
     @item_type = @q.result
     header_for_csv = %w[Id Title Code Comment]
     data_for_csv = get_data_for_item_types_csv
-    generate_csv(data_for_csv, header_for_csv, "ItemTypes-Total-#{@item_type.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}")
+    generate_csv(data_for_csv, header_for_csv,
+                 "ItemTypes-Total-#{@item_type.count}-#{DateTime.now.strftime('%d-%m-%Y-%H-%M')}")
   end
 
   def download_item_types_pdf_file
     @item_type = @q.result
-    generate_pdf(@item_type.as_json, "ItemTypes-Total-#{@item_type.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}",
+    generate_pdf(@item_type.as_json, "ItemTypes-Total-#{@item_type.count}-#{DateTime.now.strftime('%d-%m-%Y-%H-%M')}",
                  'pdf.html', 'A4', false, 'item_types/index.pdf.erb')
   end
 
   def send_email_file
     EmailJob.perform_later(@q.result.as_json, 'item_types/index.pdf.erb', params[:email_value],
-                            params[:email_choice], params[:subject], params[:body],
-                            current_user, "ItemTypes-Total-#{@q.result.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}")
-    if params[:email_value].present?
-      flash[:notice] = "Email has been sent to #{params[:email_value]}"
-    else
-      flash[:notice] = "Email has been sent to #{current_user.email}"
-    end
+                           params[:email_choice], params[:subject], params[:body],
+                           current_user, "ItemTypes-Total-#{@q.result.count}-#{DateTime.now.strftime('%d-%m-%Y-%H-%M')}")
+    flash[:notice] = if params[:email_value].present?
+                       "Email has been sent to #{params[:email_value]}"
+                     else
+                       "Email has been sent to #{current_user.email}"
+                     end
     redirect_to item_types_path
   end
 

@@ -1,150 +1,130 @@
 <div class="hidden" id="products_list">
-  <h1>Income Statement</h1>
-  <div class="clearfix"></div>
-  <div class="row">
-    <div class="col-lg-12 col-sm-12">
-      <%= search_form_for @q, url: reports_sale_report_path, class: "admin-controls", method: "get" do |f| %>
-        <div class="col-lg-3 form-group float-left">
-          <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker',value: @created_at_gteq, 'datepicker' => true,placeholder: "YYYY-MM-DD" %>
-        </div>
-        <div class="col-lg-3 form-group float-left">
-          <%= f.search_field :created_at_lteq, class: 'form-control input-sm datepicker',value: @created_at_lteq, 'datepicker' => true ,placeholder: "YYYY-MM-DD"%>
-        </div>
-        <div class="col-lg-3 form-group float-left">
-          <input class="form-control btn btn-primary" name="search_submit" type="submit" value="Search"></input>
-        </div>
-        <div class="col-lg-4 form-group float-left">
-          <input class="form-control btn  badge badge-pill badge-danger" name="submit_pdf" type="submit" value="Income Statement PDF A4" formtarget="_blank"></input>
-        </div>
-      <% end %>
-
-    </div>
-
+  <div class="main-content-header">
+    <h1 class="ml-2">Income Statement</h1>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<%= root_path %>">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active">
+        <a href="<%= reports_sale_report_path %>">Income Statement</a>
+      </li>
+    </ol>
   </div>
+  <ul class="nav nav-pills mb-2 ml-2" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab">Search</a>
+    </li>
+    <li class="nav-item">
+     <a class="nav-link tab-label analytics-tab" data-toggle="tab" href="#analytics" role="tab">Analytics</a>
+    </li>
+	</ul>
+  <div class="tab-content">
+      <div class="tab-pane active" id="search" style="border: none;" role="tabpanel">
+        <div class="row card border-radius-1 shadow p-2 mb-2 m-2">
+          <%= search_form_for @q, url: reports_sale_report_path, class: "admin-controls mt-3", method: "get" do |f| %>
+            <div class="col-lg-3 form-group float-left">
+              <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker',value: @created_at_gteq, 'datepicker' => true,placeholder: "YYYY-MM-DD" %>
+            </div>
+            <div class="col-lg-3 form-group float-left">
+              <%= f.search_field :created_at_lteq, class: 'form-control input-sm datepicker',value: @created_at_lteq, 'datepicker' => true ,placeholder: "YYYY-MM-DD"%>
+            </div>
+            <div class="col-lg-1 form-group float-left">
+              <input class="form-control btn btn-primary" name="search_submit" type="submit" value="Search">
+            </div>
+            <button class="form-control btn btn-danger float-right mr-2" style="width: 100px;" name="submit_pdf" type="submit" value="Income Statement PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mr-2"></i>PDF</button>
+          <% end %>
+        </div>
+        <div class="card border-radius-1 shadow p-2 m-2">
+          <table data-toggle="table" data-search="true">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Investment</th>
+                <th>Purchase</th>
+                <th>Salary</th>
+                <th>Expense</th>
+                <th>Sale</th>
+                <th>Stock</th>
+                <th>Profit</th>
+                <th>Profit (Sale-{I+P+S+E})</th>
+                <th>Profit (Sale-{P+S+E})</th>
 
-  <table data-toggle="table" data-search="true">
-    <thead>
-      <tr>
-        <th>Date</th>
-        <th>Investment</th>
-        <th>Purchase</th>
-        <th>Salary</th>
-        <th>Expense</th>
-        <th>Sale</th>
-        <th>Stock</th>
-        <th>Profit</th>
-        <th>Profit (Sale-{I+P+S+E})</th>
-        <th>Profit (Sale-{P+S+E})</th>
+              </tr>
+            </thead>
 
-      </tr>
-    </thead>
+            <tbody>
+              <%(@created_at_gteq..@created_at_lteq).to_a.each do |date|%>
+              <tr>
+                <td><%=date.strftime(" %d %b %Y : %a")%></td>
+                <td><%=investment=@investment[date.to_date]%></td>
+                <td>
+                  <%purchase=@purchase[date.to_date].to_f-@purchase_discount[date.to_date].to_f.to_f%>
+                  <%= number_with_delimiter(purchase) if purchase>0%>
+                </td>
+                <td>
+                  <%salary = @salary[date.to_date].to_f+@advance[date.to_date].to_f%>
+                  <%= number_with_delimiter(salary) if salary> 0%>
+                </td>
+                <td><%= number_with_delimiter(expense=@expense[date.to_date])%></td>
+                <td>
+                  <%sale=@sale[date.to_date].to_f-@sale_discount[date.to_date].to_f%>
+                  <%= number_with_delimiter(sale) if sale>0%>
+                </td>
+                <td>
+                  <%= number_with_delimiter(purchase.to_i-sale) %>
+                </td>
+                <td>
+                  <%=number_with_delimiter((purchase.to_i-sale)+(@sale[date.to_date].to_f-@sale_discount[date.to_date].to_f))%>
+                </td>
+                <td>
+                  <%= number_with_delimiter((sale-(expense.to_i+salary.to_i+purchase.to_i+investment.to_i)).round(2))%>
+                </td>
+                <td>
+                  <%=number_with_delimiter(sale-(expense.to_i+salary.to_i+purchase.to_i))%>
+                </td>
 
-    <tbody>
-      <%(@created_at_gteq..@created_at_lteq).to_a.each do |date|%>
-      <tr>
-        <td><%=date.strftime(" %d %b %Y : %a")%></td>
-        <td><%=investment=@investment[date.to_date]%></td>
-        <td>
-          <%purchase=@purchase[date.to_date].to_f-@purchase_discount[date.to_date].to_f.to_f%>
-          <%= number_with_delimiter(purchase) if purchase>0%>
-        </td>
-        <td>
-          <%salary = @salary[date.to_date].to_f+@advance[date.to_date].to_f%>
-          <%= number_with_delimiter(salary) if salary> 0%>
-        </td>
-        <td><%= number_with_delimiter(expense=@expense[date.to_date])%></td>
-        <td>
-          <%sale=@sale[date.to_date].to_f-@sale_discount[date.to_date].to_f%>
-          <%= number_with_delimiter(sale) if sale>0%>
-        </td>
-        <td>
-          <%= number_with_delimiter(purchase.to_i-sale) %>
-        </td>
-        <td>
-          <%=number_with_delimiter((purchase.to_i-sale)+(@sale[date.to_date].to_f-@sale_discount[date.to_date].to_f))%>
-        </td>
-        <td>
-          <%= number_with_delimiter((sale-(expense.to_i+salary.to_i+purchase.to_i+investment.to_i)).round(2))%>
-        </td>
-        <td>
-          <%=number_with_delimiter(sale-(expense.to_i+salary.to_i+purchase.to_i))%>
-        </td>
+              </tr>
+              <%end%>
+              <tr>
+                <td><h5>Total</h5></td>
+                <td><h5><%=number_with_delimiter((@investment_total).round(2))%></h5></td>
+                <td><h5><%=number_with_delimiter((@purchase_total-@purchase_discount_total).round(2))%></h5></td>
+                <td><h5><%=number_with_delimiter((@salary_total+@advance_total).round(2))%></h5></td>
+                <td><h5><%=number_with_delimiter((@expense_total).round(2))%></h5></td>
+                <td><h5><%= number_with_delimiter((@sale_total-@sale_discount_total).round(2)) %></h5></td>
+                <td><h5><%=number_with_delimiter(((@purchase_total-@purchase_discount_total)-(@sale_total-@sale_discount_total)).round(2))%></h5></td>
+                <td><h5><%= number_with_delimiter(@total_profit_s=((((@purchase_total-@purchase_discount_total)-(@sale_total-@sale_discount_total)).round(2))+((@sale_total-@sale_discount_total).round(2))))%>
+                  <%if current_user.superAdmin.company_type=="as_traders"%>
+                  | <%=number_with_delimiter((@total_profit_s*0.6).round(2))%> | <%=number_with_delimiter((@total_profit_s*0.3).round(2))%> | <%= number_with_delimiter((@total_profit_s*0.1).round(2)) %>
+                  <%end%>
+                </h5></td>
+                <td><h5>
+                  <%= number_with_delimiter((@total_profit=(@sale_total-@sale_discount_total)-(@investment_total+(@purchase_total-@purchase_discount_total)+(@salary_total+@advance_total)+@expense_total)).round(2))%>
+                  <%if current_user.superAdmin.company_type=="as_traders"%>
+                  | <%= number_with_delimiter((@total_profit*0.6).round(2))%> | <%= number_with_delimiter((@total_profit*0.3).round(2))%> | <%= number_with_delimiter((@total_profit*0.1).round(2))%>
+                  <%end%>
 
-      </tr>
-      <%end%>
-      <tr>
-        <td><h5>Total</h5></td>
-        <td><h5><%=number_with_delimiter((@investment_total).round(2))%></h5></td>
-        <td><h5><%=number_with_delimiter((@purchase_total-@purchase_discount_total).round(2))%></h5></td>
-        <td><h5><%=number_with_delimiter((@salary_total+@advance_total).round(2))%></h5></td>
-        <td><h5><%=number_with_delimiter((@expense_total).round(2))%></h5></td>
-        <td><h5><%= number_with_delimiter((@sale_total-@sale_discount_total).round(2)) %></h5></td>
-        <td><h5><%=number_with_delimiter(((@purchase_total-@purchase_discount_total)-(@sale_total-@sale_discount_total)).round(2))%></h5></td>
-        <td><h5><%= number_with_delimiter(@total_profit_s=((((@purchase_total-@purchase_discount_total)-(@sale_total-@sale_discount_total)).round(2))+((@sale_total-@sale_discount_total).round(2))))%>
-          <%if current_user.superAdmin.company_type=="as_traders"%>
-          | <%=number_with_delimiter((@total_profit_s*0.6).round(2))%> | <%=number_with_delimiter((@total_profit_s*0.3).round(2))%> | <%= number_with_delimiter((@total_profit_s*0.1).round(2)) %>
-          <%end%>
-        </h5></td>
-        <td><h5>
-          <%= number_with_delimiter((@total_profit=(@sale_total-@sale_discount_total)-(@investment_total+(@purchase_total-@purchase_discount_total)+(@salary_total+@advance_total)+@expense_total)).round(2))%>
-          <%if current_user.superAdmin.company_type=="as_traders"%>
-          | <%= number_with_delimiter((@total_profit*0.6).round(2))%> | <%= number_with_delimiter((@total_profit*0.3).round(2))%> | <%= number_with_delimiter((@total_profit*0.1).round(2))%>
-          <%end%>
+                </h5></td>
+                <td><h5>
+                  <%= number_with_delimiter(@total_profit_without_invesment=(@sale_total-@sale_discount_total)-((@purchase_total-@purchase_discount_total)+(@salary_total+@advance_total)+@expense_total))%>
+                  <%if current_user.superAdmin.company_type=="as_traders"%>
+                  | <%= number_with_delimiter((@total_profit_without_invesment*0.6).round(2))%> | <%= number_with_delimiter((@total_profit_without_invesment*0.3).round(2))%> | <%= number_with_delimiter((@total_profit_without_invesment*0.1).round(2))%>
+                  <%end%>
 
-        </h5></td>
-        <td><h5>
-          <%= number_with_delimiter(@total_profit_without_invesment=(@sale_total-@sale_discount_total)-((@purchase_total-@purchase_discount_total)+(@salary_total+@advance_total)+@expense_total))%>
-          <%if current_user.superAdmin.company_type=="as_traders"%>
-          | <%= number_with_delimiter((@total_profit_without_invesment*0.6).round(2))%> | <%= number_with_delimiter((@total_profit_without_invesment*0.3).round(2))%> | <%= number_with_delimiter((@total_profit_without_invesment*0.1).round(2))%>
-          <%end%>
+                </h5></td>
+              </tr>
 
-        </h5></td>
-      </tr>
-
-    </tbody>
-  </table>
-
-
-  <script type="text/javascript">
-    google.charts.load("current", {packages:["corechart"]});
-    google.charts.setOnLoadCallback(drawChart);
-    function drawChart() {
-      var data = google.visualization.arrayToDataTable([
-      ["Element", "Quantity", { role: "style" } ],
-      ["Investment", <%=@investment_total%>, " #b1bf22 "],
-      ["Purchase", <%=(@purchase_total-@purchase_discount_total)%>, "#3ac6d6"],
-      ["Salary", <%=(@salary_total+@advance_total).round(2) %>, "silver"],
-      ["Expense", <%=(@expense_total).round(2)%>, "gold"],
-      ["Sale", <%=(@sale_total-@sale_discount_total)%>, " #4f52e2 "],
-      ["Stock", <%=((@purchase_total-@purchase_discount_total)-(@sale_total-@sale_discount_total)).round(2)%>, "red"],
-      ["Profit", <%=@total_profit_s%>, " #12aaa1 "],
-      ["Profit 1", <%=@total_profit%>, " #53c43d "],
-
-      ["Profilt 2", <%=@total_profit_without_invesment%>, "color: #d6783a"]
-      ]);
-
-      var view = new google.visualization.DataView(data);
-      view.setColumns([0, 1,
-      { calc: "stringify",
-      sourceColumn: 1,
-      type: "string",
-      role: "annotation" },
-      2]);
-
-      var options = {
-        title: "Income Statement",
-        width: 800,
-        height: 600,
-        bar: {groupWidth: "95%"},
-        legend: { position: "none" },
-      };
-      var chart = new google.visualization.BarChart(document.getElementById("barchart_values"));
-      chart.draw(view, options);
-    }
-  </script>
-  <div id="barchart_values" style="width: 1200px; height: 450px;"></div>
-
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="tab-pane card shadow-sm border-radius-1 p-3" id="analytics" role="tabpanel">
+        <%# <div id="barchart_values"></div> %>
+        <div id="show-analytics"></div>
+      </div>
+  </div>
 </div>
+<%= link_to 'test', reports_sale_report_analytics_path, id: 'analytics-path', class: 'd-none', remote: true %>
 <script>
   $(document).ready(function() {
     if ($(".bootstrap-table").length == 0){
@@ -163,8 +143,6 @@
   });
 </script>
 
-
-
 <script>
   $(document).ready(function() {
     if ($(".bootstrap-table").length == 0){
@@ -176,9 +154,14 @@
   $(document).ready(function() {
     setTimeout(function(){
       $(".chosen-select").chosen({
-  allow_single_deselect: true,
-  width: '100%'
-});
+      allow_single_deselect: true,
+      width: '100%'
+    });
     }, 50);
+
+    $('.analytics-tab').on('click', function(){
+      $('#analytics-path').click();
+    })
+
   });
 </script>

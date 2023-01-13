@@ -86,6 +86,9 @@ class ProductsController < ApplicationController
       @products = @q.result
       print_pdf('index_bar', 'index_bar.pdf', 'A4')
     end
+    
+    product_charts
+    
     return unless params[:csv_staff].present? || params[:csv_staff_with].present?
 
     @products = @q.result
@@ -95,6 +98,7 @@ class ProductsController < ApplicationController
       format.html
       format.csv { send_data csv_data, filename: "Unit/Inventory Detail - #{Date.today}.csv" }
     end
+    
   end
 
   # GET /products/1
@@ -337,3 +341,22 @@ class ProductsController < ApplicationController
       )
     end
 end
+
+def product_charts
+  @block_item = Product.joins(:item_type).group('item_types.title').sum(:sale)
+  @block_keys = @block_item.keys.map { |a| a.gsub(' ', '-') }
+  @block_count = @block_item.values
+
+  @block_occurence = Product.joins(:item_type).group('item_types.title').count
+  @b_title = @block_occurence.keys.map { |a| a.gsub(' ', '-') }
+  @b_count = @block_occurence.values
+
+  @category_revenue = Product.joins(:product_category).group('product_categories.title').sum(:sale)
+  @cat_keys = @category_revenue.keys.map { |a| a.gsub(' ', '-') }
+  @cat_sum = @category_revenue.values
+
+  @sub_category_revenue = Product.joins(:product_sub_category).group('product_sub_categories.title').sum(:sale)
+  @sub_cat_keys = @sub_category_revenue.keys.map { |a| a.gsub(' ', '-') }
+  @sub_cat_sum = @sub_category_revenue.values
+  
+end 

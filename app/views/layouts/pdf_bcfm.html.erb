@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>POS</title>
+    <%= wicked_pdf_stylesheet_link_tag ("pdf") -%>
+</head>
+<%@pos_setting=PosSetting.first %>
+<%if @pos_setting&.multi_language.present?%>
+<style media="screen">
+  @font-face {
+    font-family:"Jameel Noori Nastaleeq";
+    src: url("<%= ApplicationHelper.asset_data_base64('JameelNooriNastaleeqKasheeda.ttf') %>") format('truetype');
+  }
+
+  .urdu-font {
+    font-family: 'Jameel Noori Nastaleeq';
+    font-style: normal;
+    font-weight: 300;
+    font-weight: bold;
+    font-size:18px;
+  }
+</style>
+<%end%>
+
+<body class="bond_pos_pdf">
+  <% if @pos_setting&.footer.present? %>
+    <div class="<%= @pos_setting&.footer_address_placement%> footer" style="<%=@pos_setting.footer_style%>" >
+      <p style="margin: 0; font-size: 10px !important;"><span><%=@pos_setting.address if @pos_setting.present?%></span></p>
+      <p style="margin: 0; font-size: 10px !important;"><span><%=@pos_setting.phone if @pos_setting.present?%></span></p>
+    </div>
+  <% end %>
+
+  <% if @pos_setting&.header.present? %>
+    <div class="header" style="height: <%=@pos_setting.header_hieght%>px; <%=@pos_setting.header_style%> ">
+      <div class="<%= @pos_setting.header_logo_placement%>_text">
+        <h1 style="padding-top: <%=@pos_setting.title_padding%>px; <%=@pos_setting.title_style%>" > <%=admin_name_on_nav if admin_name_on_nav.present?%></h1>
+      </div>
+    </div>
+  <% end %>
+
+  <%= yield %>
+</body>
+</html>

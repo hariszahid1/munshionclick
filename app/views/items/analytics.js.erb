@@ -1,0 +1,233 @@
+$("#show-analytics").html("<%= escape_javascript(render(:partial => "analytics"))%>");
+
+$( document ).ready(function() {
+
+  const ctx = document.getElementById('myChart');
+  var typeKeys=$('#typeKeys').val().split(' ')
+  var typeCount=$('#typeCount').val().split(' ')
+  Chart.defaults.font.size = 20;
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: typeKeys,
+      datasets: [{
+        label: 'Total Items',
+        data: typeCount,
+        borderWidth: 1,
+        
+      }],
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Total Items by Item Types Chart',
+                
+            }
+        }
+    }
+  });
+});
+
+$( document ).ready(function() {
+var itemKeys=$('#itemKeys').val().split(' ')
+var itemCount=$('#itemCount').val().split(' ')
+var saleCount=$('#saleCount').val().split(' ')
+
+
+const data = {
+  labels: itemKeys,
+  datasets: [
+    
+    {
+      label: 'Total Cost',
+      data:  itemCount,
+      
+    },
+     {
+      label: 'Total Sale',
+      data: saleCount,
+    },
+    
+  ]
+  
+};
+// config
+  const config = {
+  type: 'line',
+  data: data,
+  options: {
+    stacked: false,
+    plugins: {
+      title: {
+        display: true,
+        text: 'Total Cost and Sale per Item Type Chart',
+        font: {
+                  size: 22
+                },
+      }
+    },
+  },
+};
+// chart render
+const myChart = new Chart(
+      document.getElementById('myChart1'),
+      config
+    );
+})
+
+
+$( document ).ready(function() {
+var itemCostKeys=$('#itemCostKeys').val().split(' ')
+var itemCostCount=$('#itemCostCount').val().split(' ')
+var itemSaleCount=$('#itemSaleCount').val().split(' ')
+
+
+const data = {
+  labels: itemCostKeys,
+  datasets: [
+    
+    {
+      label: 'Total Cost',
+      data:  itemCostCount,
+    },
+     {
+      label: 'Total Sale',
+      data: itemSaleCount,
+    },
+    
+  ]
+  
+};
+// config
+  const config = {
+  type: 'line',
+  data: data,
+  options: {
+    stacked: false,
+    plugins: {
+      title: {
+        display: true,
+        text: 'Total Cost and Sale per Item Chart',
+        font: {
+                  size: 20
+                },
+      }
+    },
+  },
+};
+// chart render
+const myChart = new Chart(
+      document.getElementById('myChart2'),
+      config
+    );
+})
+
+$( document ).ready(function() {
+
+  const ctx = document.getElementById('myChart3');
+  var purchaseKeys=$('#purchaseKeys').val().split(' ')
+  var purchaseCount=$('#purchaseCount').val().split(' ')
+  Chart.defaults.font.size = 20;
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: purchaseKeys,
+      datasets: [{
+        label: 'Total Items',
+        data: purchaseCount,
+        borderWidth: 1,
+        backgroundColor: ['#D85252','#8ACD68']
+        
+      }],
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Purchase Types by Item Chart',
+                
+            }
+        }
+    }
+  });
+});
+
+$( document ).ready(function() {
+var costDate=$('#costDate').val().split(' ')
+var costDateV=$('#costDateV').val().split(' ')
+var saleDateV=$('#saleDateV').val().split(' ')
+
+
+const data = {
+  labels: costDate,
+  datasets: [
+    
+    {
+      label: 'Total Cost',
+      data:  costDateV,
+    },
+     {
+      label: 'Total Sale',
+      data: saleDateV,
+    },
+    
+  ]
+  
+};
+// config
+  const config = {
+  type: 'line',
+  data: data,
+  options: {
+    stacked: false,
+    plugins: {
+      title: {
+        display: true,
+        text: 'Total Cost and Sale Date Wise Chart',
+        font: {
+                  size: 20
+                },
+      }
+    },
+  },
+};
+// chart render
+const myChart = new Chart(
+      document.getElementById('myChart4'),
+      config
+    );
+})
+
+$( document ).ready(function() {
+
+  const ctx = document.getElementById('myChart5');
+  var itemDate=$('#itemDate').val().split(' ')
+  var itemDateV=$('#itemDateV').val().split(' ')
+  Chart.defaults.font.size = 20;
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: itemDate,
+      datasets: [{
+        label: 'Total Items Created',
+        data: itemDateV,
+        borderWidth: 1,
+        backgroundColor: '#528DD8'
+        
+      }],
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Total Items Date Wise Chart',
+                
+            }
+        }
+    }
+  });
+});

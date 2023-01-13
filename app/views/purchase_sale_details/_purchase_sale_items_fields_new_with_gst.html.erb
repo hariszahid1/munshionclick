@@ -6,12 +6,12 @@
       <div class="row font-weight-bold">
         <%if params[:product].present? %>
           <%if f.object.product_id%>
-            <div class="col-lg-4 form-group float-left"><%= f.select :product_id, options_from_collection_for_select(@products, 'id', ->(st){"#{st.title} \u{27F6} #{st.code}"},f.object.product_id), {hide_label: true,prompt: "Select the Product"},onchange: 'set_sale(this.value,this.id); return false;',class: "product",required: true, readonly: true%></div>
+            <div class="col-lg-3 form-group float-left"><%= f.select :product_id, options_from_collection_for_select(@products, 'id', ->(st){"#{st.title} \u{27F6} #{st.code}"},f.object.product_id), {prompt: "Select the Product"},onchange: 'set_sale(this.value,this.id); return false;',class: "product",required: true, readonly: true%></div>
           <%else%>
-            <div class="col-lg-4 form-group float-left"><%= f.select :product_id, options_from_collection_for_select(@products, 'id', ->(st){"#{st.title} \u{27F6} #{st.code}"},f.object.product_id), {hide_label: true,prompt: "Select the Product"},onchange: 'set_sale(this.value,this.id); return false;',class: "chosen-select product",required: true%></div>
+            <div class="col-lg-3 form-group float-left"><%= f.select :product_id, options_from_collection_for_select(@products, 'id', ->(st){"#{st.title} \u{27F6} #{st.code}"},f.object.product_id), {prompt: "Select the Product"},onchange: 'set_sale(this.value,this.id); return false;',class: "chosen-select product",required: true%></div>
           <%end%>
         <%else%>
-            <div class="col-lg-4 form-group float-left"><%= f.select :item_id, options_from_collection_for_select(@items, 'id', ->(st){"#{st.title} \u{27F6} #{st.code}"}, f.object.item_id), {hide_label: true,prompt: "Select the Items"},onchange: 'set_raw_cost(this.value,this.id); return false;', class: "chosen-select product",required: true %></div>
+            <div class="col-lg-3 form-group float-left"><%= f.select :item_id, options_from_collection_for_select(@items, 'id', ->(st){"#{st.title} \u{27F6} #{st.code}"}, f.object.item_id), {prompt: "Select the Items"},onchange: 'set_raw_cost(this.value,this.id); return false;', class: "chosen-select product",required: true %></div>
         <%end%>
         <div class="col-lg-1 form-group float-left">
           <div class="hidden">
@@ -21,23 +21,24 @@
           <br>
           <span class="span-cost-price text-secondary">asd</span>
         </div>
-        <div class="col-lg-2 form-group float-left"><%= f.number_field :quantity,step: :any,class:'quantity-price', hide_label: true,placeholder: :quantity,onchange:"costUpdateReturn()",onkeyup:"costUpdateReturn()", required: true%>    </div>
+        <div class="col-lg-2 form-group float-left"><%= f.number_field :quantity,step: :any,class:'quantity-price', placeholder: :quantity,onchange:"costUpdateReturn()",onkeyup:"costUpdateReturn()", required: true%>    </div>
         <div class="col-lg-2 form-group float-left">
-          <%= f.number_field :sale_price,step: :any,class:'cost-price',hide_label: true, placeholder: :sale_price,onchange:"costUpdateReturn()",onkeyup:"costUpdateReturn()", required: true,min: 0 %>
+          <%= f.number_field :sale_price,step: :any,class:'cost-price',placeholder: :sale_price,onchange:"costUpdateReturn()",onkeyup:"costUpdateReturn()", required: true,min: 0 %>
           <%= f.number_field :gst,step: :any,class:'gst-per',hide_label: true, placeholder: "GST %",onchange:"costUpdateReturn()",onkeyup:"costUpdateReturn()", required: true,min: 0 %>
         </div>
         <div class="col-lg-2 form-group float-left">
-          <%= f.number_field :total_sale_price,step: :any,class:'total-cost-price', hide_label: true,placeholder: :total_sale,onchange:"costUpdateReturn()",onkeyup:"costUpdateReturn()", required: true%>
+          <%= f.number_field :total_sale_price,step: :any,class:'total-cost-price',placeholder: :total_sale,onchange:"costUpdateReturn()",onkeyup:"costUpdateReturn()", required: true%>
           <%= f.number_field :gst_amount,step: :any,class:'gst-total',hide_label: true, placeholder: "Total GST",onchange:"costUpdateReturn()",onkeyup:"costUpdateReturn()", required: true,min: 0 %>
         </div>
         <div class="hidden"><%= f.number_field :discount_price,step: :any,class:'discount-price', hide_label: true,placeholder: :discount,onchange:"costUpdateReturn()",onkeyup:"costUpdateReturn()"%></div>
         <div class="hidden"><%=f.number_field :extra_quantity,value:0,step: :any,class:'extra-quantity', hide_label: true,placeholder: :extra%></div>
         <div ><%#= f.text_area :comment, hide_label: true,placeholder: :comment,title: :comment%></div>
-        <div class="col-lg-1 form-group float-left text-xs font-weight-bold text-danger text-uppercase",onclick="costUpdateReturn()",onkeyup="costUpdateReturn()">
-          <%= link_to_remove_association f, class: "return",onclick:"costUpdateReturn()",onkeydown:"costUpdateReturn()", onkeyup:"costUpdateReturn()" do %>
+        
+        <div class="form-group float-left text-xs font-weight-bold text-uppercase m-4",onclick="costUpdateReturn()",onkeyup="costUpdateReturn()">
+          <%= link_to_remove_association f, class: "return btn btn-danger",onclick:"costUpdateReturn()",onkeydown:"costUpdateReturn()", onkeyup:"costUpdateReturn()" do %>
             <i class="fa fa-minus-circle"></i> Drop
+            <span class="span-line">1</span>
           <% end %>
-          <span class="span-line text-danger">1</span>
         </div>
       </div>
     </div>
@@ -48,31 +49,32 @@
       <%= f.hidden_field :transaction_type, value: PurchaseSaleItem.transaction_types.first.first%>
       <div class="row font-weight-bold">
         <%if params[:product].present? %>
-            <div class="col-lg-3 form-group float-left"><%= f.select :product_id, options_from_collection_for_select(@products, 'id', ->(st){"#{st.title} \u{27F6} #{st.code}"},f.object.product_id), {hide_label: true,prompt: "Select the Product"},onchange: 'set_cost(this.value,this.id); return false;',class: "chosen-select product",required: true%></div>
+            <div class="col-lg-3 form-group float-left"><%= f.select :product_id, options_from_collection_for_select(@products, 'id', ->(st){"#{st.title} \u{27F6} #{st.code}"},f.object.product_id), {prompt: "Select the Product"},onchange: 'set_cost(this.value,this.id); return false;',class: "chosen-select product",required: true%></div>
         <%else%>
-            <div class="col-lg-3 form-group float-left"><%= f.select :item_id, options_from_collection_for_select(@items, 'id', ->(st){"#{st.title} \u{27F6} #{st.code}"}, f.object.item_id), {hide_label: true,prompt: "Select the Items"},onchange: 'set_raw_cost(this.value,this.id); return false;', class: "chosen-select product",required: true %></div>
+            <div class="col-lg-3 form-group float-left"><%= f.select :item_id, options_from_collection_for_select(@items, 'id', ->(st){"#{st.title} \u{27F6} #{st.code}"}, f.object.item_id), {prompt: "Select the Items"},onchange: 'set_raw_cost(this.value,this.id); return false;', class: "chosen-select product",required: true %></div>
         <%end%>
-        <div class="col-lg-2 form-group float-left"><%= f.number_field :quantity,step: :any,class:'quantity-price', hide_label: true,placeholder: :quantity,onchange:"costUpdateReturn()",onkeyup:"costUpdateReturn()", required: true %>    </div>
+        <div class="col-lg-2 form-group float-left"><%= f.number_field :quantity,step: :any,class:'quantity-price', placeholder: :quantity,onchange:"costUpdateReturn()",onkeyup:"costUpdateReturn()", required: true %>    </div>
         <div class="col-lg-2 form-group float-left">
-          <%= f.number_field :cost_price,step: :any,class:'cost-price',hide_label: true, placeholder: :cost_price,onchange:"costUpdateReturn()",onkeyup:"costUpdateReturn()"%>
+          <%= f.number_field :cost_price,step: :any,class:'cost-price',placeholder: :cost_price,onchange:"costUpdateReturn()",onkeyup:"costUpdateReturn()"%>
           <%= f.number_field :gst,step: :any,class:'gst-per',hide_label: true, placeholder: :sale_price,onchange:"costUpdateReturn()",onkeyup:"costUpdateReturn()", required: true,min: 0 %>
         </div>
         <div class="col-lg-2 form-group float-left">
-          <%= f.number_field :total_cost_price,step: :any,class:'total-cost-price', hide_label: true,placeholder: :total_cost_price,onchange:"costUpdateReturn()",onkeyup:"costUpdateReturn()"%>
+          <%= f.number_field :total_cost_price,step: :any,class:'total-cost-price', placeholder: :total_cost_price,onchange:"costUpdateReturn()",onkeyup:"costUpdateReturn()"%>
           <%= f.number_field :gst_amount,step: :any,class:'gst-total',hide_label: true, placeholder: "Total GST",onchange:"costUpdateReturn()",onkeyup:"costUpdateReturn()", required: true,min: 0 %>
         </div>
         <div class="hidden"><%=f.number_field :extra_quantity,value:0,step: :any,class:'extra-quantity', hide_label: true,placeholder: :extra%></div>
         <div class="col-lg-2 form-group float-left">
-          <%= f.number_field :sale_price,step: :any,hide_label: true, placeholder: :sale_price,onchange:"costUpdateReturn()",onkeyup:"costUpdateReturn()", required: true %>
+          <%= f.number_field :sale_price,step: :any, placeholder: :sale_price,onchange:"costUpdateReturn()",onkeyup:"costUpdateReturn()", required: true %>
           <%= f.number_field :extra_expence,step: :any,class:'', hide_label: true,placeholder: "Extra/Dute"%>
         </div>
         <div class="hidden"><%= f.number_field :discount_price,step: :any,class:'discount-price', hide_label: true,placeholder: :discount,onchange:"costUpdateReturn()",onkeyup:"costUpdateReturn()"%></div>
         <div class="hidden"><%= f.text_area :comment, hide_label: true,placeholder: :comment,title: :comment%></div>
-        <div class="col-lg-1 form-group float-left text-xs font-weight-bold text-danger text-uppercase">
-          <%= link_to_remove_association f, class: "return",onclick:"costUpdateReturn()",onkeyup:"costUpdateReturn()" do %>
+        <div class="form-group float-left text-xs font-weight-bold text-uppercase mt-4 ml-3">
+          <%= link_to_remove_association f, class: "return btn btn-danger",onclick:"costUpdateReturn()",onkeyup:"costUpdateReturn()" do %>
             <i class="fa fa-minus-circle"></i> Drop
+            <span class="span-line">1</span>
           <% end %>
-          <span class="span-line text-danger">1</span>
+          
         </div>
       </div>
     </div>

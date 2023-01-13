@@ -1,7 +1,7 @@
 class PurchaseSaleDetail < ApplicationRecord
   belongs_to :sys_user
   belongs_to :order, optional: true
-  enum transaction_type: %i[Purchase Sale SaleReturn PurchaseReturn]
+  enum transaction_type: %i[Purchase Sale SaleReturn PurchaseReturn InWard OutWard InwardReturn OutWardReturn SaleDeal]
   enum status: %i[Clear Order UnClear]
   has_many :payments, as: :paymentable, dependent: :destroy
   has_many_attached :purchase_sale_images
@@ -17,8 +17,10 @@ class PurchaseSaleDetail < ApplicationRecord
   accepts_nested_attributes_for :product_warranties,reject_if: :all_blank, allow_destroy: true
   enum with_gst: %i[false true]
   has_paper_trail ignore: [:updated_at]
+  has_many :follow_ups, as: :followable, dependent: :destroy
+  accepts_nested_attributes_for :follow_ups
 
-  after_create :modify_account_balance
+  after_create :modify_account_balance, :set_qr_code
   after_update :update_account_balance
   after_destroy :delete_account_balance
   before_create :generate_guid
@@ -40,7 +42,7 @@ class PurchaseSaleDetail < ApplicationRecord
   end
 
   def update_account_balance
-    if self.transaction_type=="Purchase"
+    if self.transaction_type=="Purchase" || self.transaction_type == 'InWard'
       if self.account_id?
 
         self.payments.update_all(account_id: self.account_id,debit:self.amount.to_f,comment: "Edit Purchase Voucher #"+self.id.to_s+"  ||  "+self.updated_at.strftime("%d/%b/%y at %I:%M%p"))
@@ -80,12 +82,12 @@ class PurchaseSaleDetail < ApplicationRecord
 
     if self.ledger_book
       discount=self.discount_price.present? ? self.discount_price : 0
-      if self.sys_user.user_group!='Supplier' && self.transaction_type=="Sale"
-        self.ledger_book.update(sys_user_id: self.sys_user_id,debit:self.total_bill-discount,credit:self.amount.to_f,account_id: self.account_id)
+      if self.sys_user.user_group!='Supplier' && (self.transaction_type=="Sale" || self.transaction_type=="OutWard")
+        self.ledger_book.update(sys_user_id: self.sys_user_id,debit:self.total_bill.to_f-discount,credit:self.amount.to_f,account_id: self.account_id)
       elsif self.sys_user.user_group=='Both'
-        self.ledger_book.update(sys_user_id: self.sys_user_id,debit:self.amount.to_f,credit:self.total_bill-discount,account_id: self.account_id)
+        self.ledger_book.update(sys_user_id: self.sys_user_id,debit:self.amount.to_f,credit:self.total_bill.to_f-discount,account_id: self.account_id)
       else
-        self.ledger_book.update(sys_user_id: self.sys_user_id,debit:self.amount.to_f,credit:self.total_bill-discount,account_id: self.account_id)
+        self.ledger_book.update(sys_user_id: self.sys_user_id,debit:self.amount.to_f,credit:self.total_bill.to_f-discount,account_id: self.account_id)
       end
 
       # balance = self&.sys_user&.opening_balance.to_f+(self&.sys_user&.ledger_books.sum(:credit)-self&.sys_user&.ledger_books.sum(:debit))
@@ -108,6 +110,14 @@ class PurchaseSaleDetail < ApplicationRecord
     if self.transaction_type=="Purchase"
       if self.account_id?
         self.payments.create(account_id: self.account_id,debit:self.amount.to_f,comment: "Purchase Voucher #"+self.id.to_s+"  ||  "+self.created_at.strftime("%d/%b/%y at %I:%M%p"))
+      end
+    elsif self.transaction_type == 'InWard'
+      if self.account_id?
+        self.payments.create(account_id: self.account_id,debit:self.amount.to_f,comment: "Inward Voucher #"+self.id.to_s+"  ||  "+self.created_at.strftime("%d/%b/%y at %I:%M%p"))
+      end
+    elsif self.transaction_type == 'OutWard'
+      if self.account_id?
+        self.payments.create(account_id: self.account_id,credit:self.amount.to_f,comment:"Outward Voucher #"+self.id.to_s+"  ||  "+self.created_at.strftime("%d/%b/%y at %I:%M%p"))
       end
     else
       if self.account_id?
@@ -191,5 +201,10 @@ class PurchaseSaleDetail < ApplicationRecord
   def generate_guid
     self.guid = SecureRandom.hex(6)
     generate_guid if PurchaseSaleDetail.exists?(guid: guid)
+  end
+
+  def set_qr_code
+    update_column(:qr_code, PosSetting.first.website.to_s +
+      '/purchase_sale_details/' + self.id.to_s + '?' + 'receiveable=')
   end
 end

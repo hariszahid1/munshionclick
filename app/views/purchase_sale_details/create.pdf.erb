@@ -5,17 +5,25 @@
 <%elsif pos_setting_sys_type=="batha"%>
   <%= render partial: "create_show_batha", locals: {order: @purchase_sale_detail} %>
 <%elsif pos_setting_sys_type=="HousingScheme"%>
-  <%= render partial: "create_show_batha", locals: {order: @purchase_sale_detail} %>
+  <% if @pos_setting&.extra_settings.present? && @pos_setting&.extra_settings['ghouse5'].present? %>
+    <%= render partial: "create_show_ghouse", locals: {order: @purchase_sale_detail} %>
+  <% else %>
+    <%= render partial: "create_show_batha", locals: {order: @purchase_sale_detail} %>
+  <% end %>
 <%elsif pos_setting_sys_type=="CustomClear"%>
   <%= render partial: "order_show_custom_clear", locals: {order: @purchase_sale_detail} %>
 <%elsif @purchase_sale_detail.with_gst.present? %>
   <%= render partial: "order_show_with_gst", locals: {purchase_sale_detail: @purchase_sale_detail} %>
 <%else%>
-  <%= render partial: "create_order_show", locals: {purchase_sale_detail: @purchase_sale_detail} %>
+  <% if current_user&.company_type == 'bcfm'%>
+    <%= render partial: "create_order_show_bcfm", locals: {purchase_sale_detail: @purchase_sale_detail} %>
+  <%else%>
+    <%= render partial: "create_order_show", locals: {purchase_sale_detail: @purchase_sale_detail} %>
+  <%end%>
 <%end%>
-<%if @pos_setting&.is_qr.present? && @pos_setting&.website.present? %>
+<%if @pos_setting&.is_qr.present? && @pos_setting&.website.present? && @pos_setting&.extra_settings.nil? && @pos_setting&.extra_settings['ghouse5'].nil? %>
   <p style="text-align: center; margin: 0;">
-    <img width="150px" height="115px" class="figure" style=""src=<%="data:image/svg+xml;base64,"+@str%> ></img>
+    <img width="150px" height="115px" class="figure" style=""src=<%="data:image/svg+xml;base64,"+@str%> />
   </p>
 <%end%>
 

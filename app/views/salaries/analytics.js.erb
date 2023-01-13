@@ -1,0 +1,191 @@
+$("#show-analytics").html("<%= escape_javascript(render(:partial => "analytics"))%>");
+
+$( document ).ready(function() {
+
+  const ctx = document.getElementById('myChart');
+  var salaries_to_staffs=$('#salaries_to_staffs').val().split(' ')
+  var salary_paid_amount=$('#salary_paid_amount').val().split(' ')
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: salaries_to_staffs,
+      datasets: [{
+        label: 'Total Outstanding Balance',
+        data: salary_paid_amount,
+        borderWidth: 1,
+
+      }],
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Total Outstanding Balance Staffs Wise',
+                font: {
+                  size: 16
+                }
+            }
+        }
+    }
+  });
+});
+
+$( document ).ready(function() {
+
+  const ctx = document.getElementById('myChart1');
+  var advance_to_staffs=$('#advance_to_staffs').val().split(' ')
+  var advance_paid_amount=$('#advance_paid_amount').val().split(' ')
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: advance_to_staffs,
+      datasets: [{
+        label: 'Total Amount',
+        data: advance_paid_amount,
+        borderWidth: 1,
+        backgroundColor: 'green'
+      }],
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Total Advance Paid to Staffs.',
+                font: {
+                  size: 16
+                }
+            }
+        }
+    }
+  });
+});
+
+$( document ).ready(function() {
+
+  const ctx = document.getElementById('myChart2');
+  var salaries_to_departments=$('#salaries_to_departments').val().split(' ')
+  var salary_paid_amount_departments=$('#salary_paid_amount_departments').val().split(' ')
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: salaries_to_departments,
+      datasets: [{
+        label: 'Total Outstanding Balance',
+        data: salary_paid_amount_departments,
+        borderWidth: 1,
+      }],
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Total Outstanding Balance Departments Wise',
+                font: {
+                  size: 16
+                }
+            }
+        }
+    }
+  });
+});
+
+$( document ).ready(function() {
+
+  const ctx = document.getElementById('myChart3');
+  var advance_to_departments=$('#advance_to_departments').val().split(' ')
+  var advance_paid_amount_departments=$('#advance_paid_amount_departments').val().split(' ')
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: advance_to_departments,
+      datasets: [{
+        label: 'Total Amount',
+        data: advance_paid_amount_departments,
+        borderWidth: 1,
+        backgroundColor: 'red'
+      }],
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Total Advance Paid to Departments.',
+                font: {
+                  size: 16
+                }
+            }
+        }
+    }
+  });
+});
+
+$( document ).ready(function() {
+
+  const ctx = document.getElementById('myChart4');
+  var salaries_by_date=$('#salaries_by_date').val().split(' ')
+  var salary_paid_amount_date=$('#salary_paid_amount_date').val().split(' ')
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: salaries_by_date,
+      datasets: [{
+        label: 'Total Amount',
+        data: salary_paid_amount_date,
+        borderWidth: 1,
+        backgroundColor: 'green'
+      }],
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Total Outstanding Balance Chart by Date.',
+                font: {
+                  size: 16
+                }
+            }
+        }
+    }
+  });
+});
+
+$( document ).ready(function() {
+
+  const ctx = document.getElementById('myChart5');
+  var avdance_by_date=$('#avdance_by_date').val().split(' ')
+  var advance_paid_amount_date=$('#advance_paid_amount_date').val().split(' ')
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: avdance_by_date,
+      datasets: [{
+        label: 'Total Amount',
+        data: advance_paid_amount_date,
+        borderWidth: 1,
+      }],
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Total Advance Paid Chart by Date.',
+                font: {
+                  size: 16
+                }
+            }
+        }
+    }
+  });
+});

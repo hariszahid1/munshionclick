@@ -1,7 +1,7 @@
  class InvestmentsController < ApplicationController
   before_action :check_access
   before_action :set_investment, only: [:show, :edit, :update, :destroy]
-
+  
   # GET /investments
   # GET /investments.json
   def index
@@ -9,7 +9,11 @@
     if @q.result.count > 0
       @q.sorts = 'id desc' if @q.sorts.empty?
     end
-    @investments = @q.result(distinct: true).page(params[:page])
+
+    @options_for_select = Investment.all
+    @custom_pagination = params[:limit].present? ? params[:limit] : 25
+    @custom_pagination = @pos_setting.custom_pagination['investments'] if @pos_setting&.custom_pagination.present? && @pos_setting&.custom_pagination['investments'].present?
+    @investments = @q.result(distinct: true).page(params[:page]).per(@custom_pagination)
     @investment = @q.result(distinct: true)
     @total_investment=@investment.pluck('Sum(debit)','Sum(credit)')
     @accounts=Account.all

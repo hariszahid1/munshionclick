@@ -29,16 +29,16 @@
                   <%advance=ex.last.last[rev].present? ? ex.last.last[rev] : 0%>
                   <%total=expense+expense_entry+invest+purchase+salary+advance%>
                   <%total_final=total_final+expense+expense_entry+invest+purchase+salary+advance%>
-                  <%=(expense+expense_entry)!=0 ? (expense+expense_entry).to_s : '0'%>
-                  <%=invest!=0 ? ' : '+invest.to_s : ' : 0'%>
-                  <%=purchase!=0 ? ' : '+purchase.to_s : ' : 0'%>
-                  <%=salary!=0 ? ' : '+salary.to_s : ' : 0'%>
-                  <%=advance!=0 ? ' : '+advance.to_s : ' : 0'%>
+                  <%=(expense+expense_entry)!=0 ? number_with_delimiter((expense+expense_entry).to_s) : '0'%>
+                  <%=invest!=0 ? ' : '+ number_with_delimiter(invest.to_s) : ' : 0'%>
+                  <%=purchase!=0 ? ' : '+ number_with_delimiter(purchase.to_s) : ' : 0'%>
+                  <%=salary!=0 ? ' : '+ number_with_delimiter(salary.to_s) : ' : 0'%>
+                  <%=advance!=0 ? ' : '+ number_with_delimiter(advance.to_s) : ' : 0'%>
                   =
-                  <%=total%>
+                  <%= number_with_delimiter(total) %>
                 </td>
               <%end%>
-              <td><%=total_final%> || <%=total_final-total%></td>
+              <td><%= number_with_delimiter(total_final)%> || <%= number_with_delimiter(total_final-total)%></td>
             </tr>
           <%end%>
         </tbody>

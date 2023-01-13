@@ -1,0 +1,292 @@
+<div class="nested-fields">
+  <div class="hidden col-lg-1 col-md-6 col-sm-6 form-group float-left">
+    <%= form.hidden_field :order_id %>
+    <%= form.hidden_field :id %>
+    <%= form.hidden_field :area_in_marla, label: "Marla" %>
+  </div>
+
+  <div class="col-lg-2 col-md-3 col-sm-6 form-group float-left">
+    <%= form.text_field :price_per_marla %>
+  </div>
+
+  <div class="col-lg-2 col-md-6 col-sm-6 form-group float-left">
+    <%= form.text_field :total_price, disabled: true, id: :order_property_plans_attributes_0_total_price_diabled %>
+    <%= form.hidden_field :total_price %>
+  </div>
+
+  <div class="col-lg-2 col-md-6 col-sm-6 form-group float-left">
+    <%= form.select :payment_type, options_for_select(PropertyPlan.payment_types.map { |key, value| [key.humanize, key] }, form.object.payment_type), { required: true, prompt: 'Select Payment Type' },class:"form-control"%>
+  </div>
+
+  <div class="installments_div col-lg-3 col-md-6 col-sm-6 form-group float-left hidden">
+    <%= form.select :payment_plan, options_for_select(PropertyPlan.payment_plans.map { |key, value| [key.humanize, key] }, form.object.payment_plan), { prompt: 'Select Payment Plan' },class:"form-control"%>
+  </div>
+
+  <div class="installments_div col-lg-2 col-md-6 col-sm-6 form-group float-left hidden">
+    <%= form.number_field :no_of_installments%>
+  </div>
+
+  <div class="installments_div col-lg-2 col-md-6 col-sm-6 form-group float-left hidden">
+    <%= form.text_field :advance, label: 'Down Payment' %>
+  </div>
+  <div class="installments_div installments_div_cash col-lg-3 col-md-3 col-sm-3 form-group float-left hidden">
+    <%if form.object.due_date.blank? and @order.id.blank?%>
+      <%@next_month=Date.today.at_beginning_of_month.next_month%>
+      <%form.object.due_date=@next_month%>
+    <%elsif form.object.due_date.blank?%>
+      <%@next_month=@order.created_at.at_beginning_of_month.next_month%>
+      <%form.object.due_date=@next_month%>
+    <%elsif form.object.due_date.present?%>
+    <%@next_month=form.object.due_date%>
+    <%end%>
+
+    <%= form.date_select :due_date,{},class:"form-control" %>
+  </div>
+  <div class="installments_div installments_div_cash col-lg-2 col-md-3 col-sm-3 form-group float-left hidden">
+    <%= form.select :due_status, options_for_select(PropertyPlan.due_statuses.map { |key, value| [key.humanize, key] }, form.object.due_status), { class: "form-control", prompt: 'Select Paid Status' },class:"form-control"%>
+  </div>
+  <div class="col-lg-2 col-md-3 col-sm-3 form-group float-left">
+    <%= form.select :payment_method, options_for_select(PropertyPlan.payment_methods.map { |key, value| [key, key] }, form.object.payment_method), { class: "form-control", prompt: 'Select Payment method' },class:"form-control"%>
+  </div>
+  <div class="col-lg-3 col-md-3 col-sm-3 form-group float-left">
+    <%= form.text_field :bank_detail %>
+  </div>
+  <div class="unequal_installments_div col-lg-2 col-md-6 col-sm-6 form-group float-left hidden">
+    <%= form.number_field :high_amount_installments%>
+  </div>
+
+  <div class="unequal_installments_div col-lg-2 col-md-6 col-sm-6 form-group float-left hidden">
+    <%= form.text_field :total_high_amount %>
+  </div>
+
+  <div class="col-lg-2 col-md-6 col-sm-6 form-group float-left">
+    <%= form.text_field :last_instalment, label: 'Possession Amount'%>
+  </div>
+
+  <div class="clearfix"></div>
+  <div id="installments_detailed_list_outer" class="<%= form.object.persisted? ? '' : 'hidden'%>">
+    <hr />
+    <div class="clearfix"></div>
+    <div id="installments_detailed_list">
+      <% if form.object.persisted? %>
+        <%= form.fields_for :property_installments do |property_installment| %>
+          <%= render 'property_installment', f: property_installment%>
+        <% end %>
+      <% end %>
+    </div>
+    <div class="clearfix"></div>
+    <hr />
+  </div>
+
+  <div class="clearfix"></div>
+  <div class="actions">
+    <div class="col-lg-6">
+      <%= button_tag 'Check Installments', type: 'button', id: "list_installments", class: "btn btn-primary"%>
+    </div>
+  </div>
+
+  <script>
+  document.addEventListener("turbolinks:load", function() {
+    payment_type = $("#order_property_plans_attributes_0_payment_type").val();
+    installment_show_hide(payment_type);
+
+    $("#order_property_plans_attributes_0_area_in_marla").keyup(function(){
+      calculate_total_price();
+    });
+    $("#order_property_plans_attributes_0_price_per_marla").keyup(function(){
+      calculate_total_price();
+    });
+
+    $("#order_property_plans_attributes_0_payment_type").on('change', function(){
+      payment_type = $(this).val();
+      installment_show_hide(payment_type);
+    })
+
+    $("#order_property_plans_attributes_0_payment_plan").on('change', function(){
+      payment_plan = $(this).val();
+      if(payment_plan.toLowerCase() == 'unequal_installments'){
+        $('.unequal_installments_div').removeClass('hidden');
+      }else{
+        $('.unequal_installments_div').addClass('hidden');
+      }
+    });
+
+    $("#list_installments").click(function(){
+      list_installments();
+    });
+  });
+
+  function calculate_total_price(){
+    area = parseFloat($("#order_property_plans_attributes_0_area_in_marla").val());
+    marla_price = parseFloat($("#order_property_plans_attributes_0_price_per_marla").val());
+    if (area > 0 && marla_price > 0){
+      total_price = (area * marla_price).toFixed(3);
+      $("#order_property_plans_attributes_0_total_price_diabled").val(total_price);
+      $("#order_property_plans_attributes_0_total_price").val(total_price);
+    }else{
+      $("#order_property_plans_attributes_0_total_price_diabled").val('');
+      $("#order_property_plans_attributes_0_total_price").val('');
+    }
+  }
+
+  function installment_show_hide(payment_type) {
+    if(payment_type.toLowerCase() == 'installments'){
+      $('.installments_div').removeClass('hidden');
+      if($("#order_property_plans_attributes_0_payment_plan").val().toLowerCase() == 'unequal_installments'){
+        $('.unequal_installments_div').removeClass('hidden');
+      }
+    }else{
+      $('.installments_div').addClass('hidden');
+      $('.installments_div_cash').removeClass('hidden');
+      $('.unequal_installments_div').addClass('hidden');
+    }
+  }
+
+  function list_installments() {
+   high_amount_per_installment=0;
+   last_installment = parseInt($("#order_property_plans_attributes_0_last_instalment").val());
+   if (last_installment>0)
+   {
+     no_of_installments = parseInt($("#order_property_plans_attributes_0_no_of_installments").val());
+   }
+   else {
+    no_of_installments = parseInt($("#order_property_plans_attributes_0_no_of_installments").val());
+   }
+   total_price = parseFloat($("#order_property_plans_attributes_0_total_price").val());
+   advance = parseFloat($("#order_property_plans_attributes_0_advance").val());
+   remaining_price = total_price - advance-last_installment;
+   high_amount_installments = parseInt($("#order_property_plans_attributes_0_high_amount_installments").val());
+   total_high_amount = parseFloat($("#order_property_plans_attributes_0_total_high_amount").val());
+   payment_plan = $("#order_property_plans_attributes_0_payment_plan").val().toLowerCase();
+   nth_high_installment = 0;
+   if(total_high_amount > 0 && payment_plan == 'unequal_installments'){
+     remaining_price = remaining_price - total_high_amount;
+     high_amount_per_installment = (total_high_amount/parseFloat(high_amount_installments)).toFixed(2);
+     nth_high_installment = Math.floor(no_of_installments/high_amount_installments);
+   }
+
+   price_per_installment = (parseFloat(remaining_price)/parseFloat(no_of_installments)).toFixed(2);
+   installments = "<h1>Installments Detail:</h1>";
+   if (total_high_amount > 0 && payment_plan == 'unequal_installments'){
+    installments += "<h4>Every "+nth_high_installment+"th Installment will be high:</h4>";
+   }
+   var n = 1;
+   start_year = parseInt($("#order_property_plans_attributes_0_due_date_1i").val());
+   start_month = parseInt($("#order_property_plans_attributes_0_due_date_2i").val());
+   var month_count = start_month;
+   if (month_count!=12)
+   {var year_count = start_year;}
+   else
+   {var year_count = start_year+1;
+    month_count=0;
+    start_month=0;}
+   const monthNames = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+   ];
+   for (n = 1; n <= no_of_installments; n++ ){
+    if (payment_plan == 'unequal_installments' && n%nth_high_installment == 0){
+      price_perInstallment = parseFloat(high_amount_per_installment)+parseFloat(price_per_installment);
+    }else{
+      price_perInstallment = price_per_installment;
+    }
+    installments += '<div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">';
+    installments += '<div class="form-group">';
+    installments += '<label>Installment#'+n+'</label><input class="form-control hidden" type="text" value="'+n+'" name="order[property_plans_attributes][0][property_installments_attributes]['+n+'][installment_no]"><input class="form-control" type="text" value="'+price_perInstallment+'" name="order[property_plans_attributes][0][property_installments_attributes]['+n+'][installment_price]"><input class="form-control" type="hidden" value="'+high_amount_per_installment+'" name="order[property_plans_attributes][0][property_installments_attributes]['+n+'][high_price]"><input class="form-control" type="hidden" value="'+price_per_installment+'" name="order[property_plans_attributes][0][property_installments_attributes]['+n+'][normal_price]"></div>';
+    installments += '</div>';
+
+    installments += '<div class="installments_div installments_div_cash col-lg-3 col-md-3 col-sm-3 form-group float-left">';
+    installments += '<div class="form-group"><label for="order_property_plans_attributes_0_property_installments_attributes_'+n+'_due_date">Due date</label><div class="rails-bootstrap-forms-date-select">';
+    installments += '<select id="order_property_plans_attributes_0_property_installments_attributes_0_due_date_1i" name="order[property_plans_attributes][0][property_installments_attributes]['+n+'][due_date(1i)]" class="form-control valid" aria-invalid="false">';
+    for(i=start_year-5;i < start_year+5;i++)
+    {
+      if (year_count==i){
+        installments += '<option value='+i+' selected="selected">'+i+'</option>';
+      }else {
+        installments += '<option value='+i+'>'+i+'</option>';
+      }
+    }
+    installments += '</select>';
+
+    installments += '<select id="order_property_plans_attributes_0_property_installments_attributes_'+n+'_due_date_2i" name="order[property_plans_attributes][0][property_installments_attributes]['+n+'][due_date(2i)]" class="form-control">';
+    for(i=1;i < 13;i++)
+    {
+      if (month_count==(i-1)){
+        installments += '<option value='+i+' selected="selected">'+monthNames[i-1]+'</option>';
+      }else {
+        installments += '<option value='+i+'>'+monthNames[i-1]+'</option>';
+      }
+    }
+    installments += '</select>';
+    month_count=month_count+1;
+    if(month_count>=12)
+    {
+      month_count=0;
+      year_count=year_count+1;
+    }
+    installments += '<select id="order_property_plans_attributes_0_property_installments_attributes_'+n+'_due_date_3i" name="order[property_plans_attributes][0][property_installments_attributes]['+n+'][due_date(3i)]" class="form-control">';
+    for(i=1;i < 32;i++)
+    {
+      installments += '<option value='+i+'>'+i+'</option>';
+    }
+    installments += '</select>';
+    installments += '</div></div>';
+    installments += '</div>';
+
+    installments += '<div class="installments_div installments_div_cash col-lg-3 col-md-3 col-sm-3 form-group float-left">';
+    installments += '<div class="form-group"><label for="order_property_plans_attributes_0_property_installments_attributes_0_due_status">Due status</label><select class="form-control" name="order[property_plans_attributes][0][property_installments_attributes]['+n+'][due_status]" id="order_property_plans_attributes_0_property_installments_attributes_'+n+'_due_status"><option value="">Select Paid Status</option>';
+    installments += '<option value="Unpaid">Unpaid</option>';
+    installments += '<option value="Paid">Paid</option></select></div>';
+    installments += '</div>';
+   }
+   if (last_installment>0)
+   {
+     installments += '<div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">';
+     installments += '<div class="form-group">';
+     installments += '<label>Installment#'+n+'</label><input class="form-control hidden" type="text" value="'+n+'" name="order[property_plans_attributes][0][property_installments_attributes]['+n+'][installment_no]"><input class="form-control" type="text" value="'+last_installment+'" name="order[property_plans_attributes][0][property_installments_attributes]['+n+'][installment_price]"><input class="form-control" type="hidden" value="'+(last_installment-price_per_installment)+'" name="order[property_plans_attributes][0][property_installments_attributes]['+n+'][high_price]"><input class="form-control" type="hidden" value="'+price_per_installment+'" name="order[property_plans_attributes][0][property_installments_attributes]['+n+'][normal_price]"></div>';
+     installments += '</div>';
+
+     installments += '<div class="installments_div installments_div_cashcol-lg-3 col-md-3 col-sm-3 form-group float-left">';
+     installments += '<div class="form-group"><label for="order_property_plans_attributes_0_property_installments_attributes_'+n+'_due_date">Due date</label><div class="rails-bootstrap-forms-date-select">';
+     installments += '<select id="order_property_plans_attributes_0_property_installments_attributes_0_due_date_1i" name="order[property_plans_attributes][0][property_installments_attributes]['+n+'][due_date(1i)]" class="form-control valid" aria-invalid="false">';
+     for(i=start_year-5;i < start_year+5;i++)
+     {
+       if (year_count==i){
+         installments += '<option value='+i+' selected="selected">'+i+'</option>';
+       }else {
+         installments += '<option value='+i+'>'+i+'</option>';
+       }
+     }
+     installments += '</select>';
+     installments += '<select id="order_property_plans_attributes_0_property_installments_attributes_'+n+'_due_date_2i" name="order[property_plans_attributes][0][property_installments_attributes]['+n+'][due_date(2i)]" class="form-control">';
+     for(i=1;i < 13;i++)
+     {
+       if (month_count==(i-1)){
+         installments += '<option value='+i+' selected="selected">'+monthNames[i-1]+'</option>';
+       }else {
+         installments += '<option value='+i+'>'+monthNames[i-1]+'</option>';
+       }
+     }
+     installments += '</select>';
+
+     installments += '<select id="order_property_plans_attributes_0_property_installments_attributes_'+n+'_due_date_3i" name="order[property_plans_attributes][0][property_installments_attributes]['+n+'][due_date(3i)]" class="form-control">';
+     for(i=1;i < 32;i++)
+     {
+       installments += '<option value='+i+'>'+i+'</option>';
+     }
+     installments += '</select>';
+     installments += '</div></div>';
+     installments += '</div>';
+     installments += '<div class="installments_div installments_div_cash col-lg-3 col-md-3 col-sm-3 form-group float-left">';
+     installments += '<div class="form-group"><label for="order_property_plans_attributes_0_property_installments_attributes_0_due_status">Due status</label><select class="form-control" name="order[property_plans_attributes][0][property_installments_attributes]['+n+'][due_status]" id="order_property_plans_attributes_0_property_installments_attributes_'+n+'_due_status"><option value="">Select Paid Status</option>';
+     installments += '<option value="Unpaid">Unpaid</option>';
+     installments += '<option value="Paid">Paid</option></select></div>';
+     installments += '</div>';
+
+   }
+
+   $("#installments_detailed_list").html(installments);
+   $("#installments_detailed_list_outer").removeClass('hidden');
+   return false;
+  }
+  </script>
+</div>

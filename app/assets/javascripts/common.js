@@ -310,6 +310,11 @@ function serail_number_validation(e,value){
 }
 function save_sale()
 {
+  var serial_fields = $('.serial_no');
+  for(var i = 0; i < serial_fields.length; i++){
+    var value = $.trim($(serial_fields[i]).val());
+    $(serial_fields[i]).val(value);
+  }
   return_type=true;
   if($("#pos_setting_sys_type").val()!="HousingScheme")
   {
@@ -475,7 +480,7 @@ function newBalancePayment(value_1,value_2,position_1,position_2){
 }
 
 function newBalancePurchaseSaleDetails(){
-  if($("#purchase_sale_detail_transaction_type").val()=="Purchase")
+  if(($("#purchase_sale_detail_transaction_type").val()=="Purchase") || ($(".inward-outward-field").val()=="InWard") || ($(".inward-outward-field").val()=="OutWard"))  
   { var oldBalance =$('#sys_user_balance').text();
     var remaining=$('.purchase_sale_detail_amount').text();
     oldBalance=parseFloat(oldBalance);
@@ -868,9 +873,14 @@ function costAtomUpdateReturn(){
   remaingUpdateAmount();
 }
 
-function saleCostUpdateReturn(){
-  if($("#pos_setting_sys_type").val()=="HousingScheme")
+function saleCostUpdateReturn(com_type){
+
+  if(($("#pos_setting_sys_type").val()=="HousingScheme") && (com_type=='commission' || parseFloat($("#purchase_sale_detail_carriage_value").val()) > 0 || parseFloat($("#purchase_sale_detail_loading_value").val()) > 0))
   {carriageCostUpdateHscheme();}
+  else if(($("#pos_setting_sys_type").val()=="HousingScheme") && (com_type=='commission with perc'))
+  {commissionPercentageUpdateHscheme();}
+  else if(($("#pos_setting_sys_type").val()=="HousingScheme") && (com_type=='commission with price'))
+  {commissionPriceUpdateHscheme();}
   else
   {carriageCostUpdate();}
   carriage=$("#purchase_sale_detail_carriage").val()!= "" ? parseFloat($("#purchase_sale_detail_carriage").val()) : 0

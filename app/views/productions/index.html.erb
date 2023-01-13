@@ -1,86 +1,167 @@
 <div class="hidden" id="production_list">
-
-  <h1>Product Production Formulas</h1>
-  <% if can?(:add, :all) %>
-        <%= link_to new_production_path, class: "btn btn-success" do %>
-           <i class="fa fa-plus" aria-hidden="true"></i>
-           Production Formula
-        <% end %>
-        <% end %>
-  <div class="clearfix"></div>
-  <div class="row">
-    <div class="col-lg-12 col-sm-12">
-      <%= search_form_for @q, url: productions_path, class: "admin-controls", method: "get" do |f| %>
-        <div class="col-lg-3 form-group float-left">
-          <%= f.search_field :title_cont, value: @title, placeholder: "Title", title: "Title" ,:class=>"form-control" %>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
-        </div>
+  <div class="main-content-header">
+    <h1>Product Production Formulas</h1>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<%= root_path %>">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active">
+        <a href="<%= productions_path %>">Product Production Formulas</a>
+      </li>
+    </ol>
+  </div>
+  <% if check_can_create(@module_permission) %>
+    <div class="row mb-3 ml-1">
+      <%= link_to new_production_path, class: "btn btn-success" do %>
+         <i class="fa fa-plus" aria-hidden="true"></i>
+         Create
       <% end %>
+    </div>  
+  <% end %>
+  <ul class="nav nav-pills" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab">Search</a>
+    </li>
+		<%if (check_can_import_export(@module_permission))%>
+			<li class="nav-item">
+				<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
+			</li>
+		<%end%>
+	</ul>
+  <div class="clearfix"></div>
+  <div class="tab-content">
+    <div class="tab-pane active mb-3" style="border: none !important;" id="search" role="tabpanel">
+      <div class="row card shadow mt-2 p-2 mb-3 border-radius-1 m-1">
+        <%= search_form_for @q, url: productions_path, class: "admin-controls mt-3", method: "get" do |f| %>
+          <div class="col-lg-3 form-group float-left">
+            <%= f.search_field :title_cont, value: @title, placeholder: "Title", title: "Title" ,:class=>"form-control" %>
+          </div>
+          <div class="col-lg-2 form-group float-left">
+            <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+          </div>
+        <% end %>
+      </div>
+    
+    <div class="card border-radius-1 shadow p-3">
+      <%= render 'map_columns/map_column_partials' %>
+      <table data-toggle="table" data-search="true" style="overflow: hidden;">
+        <%if (check_can_delete(@module_permission))%>
+	        <button class="btn btn-outline-danger delete-selected mt-2" style=" position: absolute;" type='button' value='Production'>
+	        	Delete Selected
+	        </button>		
+        <%end%>
+        <thead>
+          <tr>
+            <th><input type="checkbox" id="master" class='select-all-checkbox' style="cursor: pointer;"></th>
+            <th>Product</th>
+            <th>Operation cost</th>
+            <th>Cost price</th>
+            <th>Sale price</th>
+            <th>Comment</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+  
+        <tbody>
+          <% @productions.each do |production| %>
+            <tr>
+              <td><%= check_box_tag 'object_ids[]', production.id %></td>
+              <td><%= production.product.title %> - <%= production.product&.product_category&.title %> </td>
+              <td><%= number_with_delimiter production.operation_cost %></td>
+              <td><%= number_with_delimiter production.cost_price %></td>
+              <td><%= number_with_delimiter production.sale_price %></td>
+              <td><%= production.comment %></td>
+              <td><%= production.status %></td>
+              <td>
+                <div class="icon-container-1">
+                  <div class="my-icon-1 my-view-1">
+                    <div class="my-tooltip-1">
+                      <div class="icon-container">
+                        <div class="my-icon my-view">
+                          <div class="my-tooltip">
+                            Edit
+                          </div>
+                          <%if (check_can_update(@module_permission))%>
+                            <%= link_to edit_production_path(production), class:"icon-div" do %>
+                              <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+                            <%end %>
+                          <% end %>
+                        </div>
+                        <div class="my-icon my-view">
+                          <div class="my-tooltip">
+                            Delete
+                          </div>
+                          <%if (check_can_delete(@module_permission))%>
+                            <%= link_to production, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+                              <i class="fa fa-trash mt-2" aria-hidden="true"></i>
+                            <%end %>
+                          <% end %> 
+                        </div>
+                        <div class="my-icon my-view">
+                          <div class="my-tooltip">
+                            Show
+                          </div>
+                          <%if (check_can_read(@module_permission))%>
+                            <%= link_to production_path(production), class:"icon-div" do %>
+                              <i class="fa fa-eye mt-2" aria-hidden="true"></i>
+                            <%end %>
+                          <%end%>    
+                        </div>
+                      </div>
+                    </div>
+                    <span class="icon-div-1">
+                          <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+                    </span>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <div class="row">
+        <div class="col-lg-4 col-sm-4">
+          <%= page_entries_info @productions %>
+        </div>
+        <div class="col-lg-8 col-sm-8 pagination-left">
+          <%= paginate @productions %>
+        </div>
+      </div>
     </div>
   </div>
-
-  <table data-toggle="table" data-search="true">
-    <thead>
-      <tr>
-        <th>Product</th>
-        <th>Operation cost</th>
-        <th>Cost price</th>
-        <th>Sale price</th>
-        <th>Comment</th>
-        <th>Status</th>
-
-        <th class="border_none"></th>
-        <th class="border_none">Action</th>
-        <th class="border_none"></th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <% @productions.each do |production| %>
-        <tr>
-          <td><%= production.product.title %> - <%= production.product&.product_category&.title %> </td>
-          <td><%= production.operation_cost %></td>
-          <td><%= production.cost_price %></td>
-          <td><%= production.sale_price %></td>
-          <td><%= production.comment %></td>
-          <td><%= production.status %></td>
-
-
-          <td>
-            <% if can?(:update, :all) %>
-              <%= link_to edit_production_path(production) do %>
-                <i class="fa fa-edit " aria-hidden="true"></i> |
-              <%end %>
-            <% end %>
-            <% if can?(:delete, :all) %>
-              <%= link_to production, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
-                <i class="fa fa-trash " aria-hidden="true"></i> |
-              <%end %>
-            <% end %>
-            <% if can?(:view, :all) %>
-              <%= link_to production do %>
-                <i class="fa fa-eye " aria-hidden="true"></i>
-              <%end %>
-            <%end%>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-</div>
-
-<div class="clearfix"></div>
-<div class="row">
-  <div class="col-lg-4 col-sm-4">
-    <%= page_entries_info @productions %>
+  <div class="tab-pane card shadow mt-2 border-radius-1 mb-3" id="import-export" role="tabpanel">
+    <p>
+      <div class="d-flex">
+      <button class="btn btn-danger ml-4" name="export_data" type="submit" value="export_data">Export Data</button>
+      <button class="btn btn-info ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
+      </div>
+    </p>
   </div>
-  <div class="col-lg-8 col-sm-8 pagination-left">
-    <%= paginate @productions %>
   </div>
 </div>
-
+<%= form_for :bulk_import, url: bulk_import_data_path, method: :post, html: {class: "bulk-import-form"} do |f| %>
+  <div class="modal fade" id="importFile" tabindex="-1" role="dialog" aria-labelledby="importFileTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Import file</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <%= f.file_field :file, required: true, accept: '.csv' %>
+          <%= f.hidden_field :table_name, value: 'Production' %>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <%= f.submit 'Import', class: 'btn btn-primary' %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
 <script>
   $(document).ready(function() {
     if ($(".bootstrap-table").length == 0){

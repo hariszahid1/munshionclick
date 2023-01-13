@@ -29,14 +29,14 @@
     <% end %>
     <%if (check_can_create(@module_permission))%>
       <% if can?(:delete, :all) %>
-          <%= link_to new_payment_path(jama: true), class: "btn btn-success mr-3" do %>
+          <%= link_to new_payment_path(jama: true), class: "btn btn-danger mr-3" do %>
          <i class="fa fa-plus" aria-hidden="true"></i>
           Benam/Debit
         <% end %>
       <% end %>
     <% end %>
     <%if (check_can_create(@module_permission))%>
-      <%= link_to transfer_payments_path, class: "btn btn-danger mr-3" do %>
+      <%= link_to transfer_payments_path, class: "btn btn-info mr-3" do %>
         <i class="fa fa-credit-card" aria-hidden="true"></i>
         Payment Transfer
       <% end %>
@@ -101,73 +101,69 @@
             <button class="btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px;"><i class="fa fa-search"></i></button>
           </div>
         </div>
-        <div class="row d-flex ml-1 mr-1 mb-4 mt-3">
-          <%if (check_can_download_csv(@module_permission))%>
-            <div>
-              <button class="btn btn-warning ml-3 form-control float-left d-flex justify-content-center" style="width:100px;" title= "download payments csv" name="csv" type="submit" value="csv">CSV &nbsp;<i class="fa fa-file-excel"></i></button>
-            </div>
-          <% end %>
-          <%if (check_can_download_pdf(@module_permission))%>
-            <div class="icon-container-3 mb-2 ml-3">
-                <div class="my-icon-3 my-view-3">
-                  <div class="my-tooltip-3 d-flex">
-                    <button class="btn btn-danger d-flex justify-content-center ml-2" style="width: 100px" title="Download payment pdf for all user in descending order " name="submit_pdf" type="submit" value="Payment History PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mt-1 ml-1"></i>Desc </button>
-                    <button class="btn btn-danger d-flex justify-content-center ml-2" style="width: 100px" title="Download payment pdf for all user in ascending order" name="submit_pdf_asc" type="submit" value="Payment History PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mt-1 ml-1"></i>Asc</button>
-                    <button class="btn btn-danger d-flex justify-content-center ml-2" style="width: 100px" title= "Download payment pdf for single user in descending order" name="1_submit_pdf" type="submit" value="Payment History PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mt-1 ml-1"></i>1-Desc</button>
-                    <button class="btn btn-danger d-flex justify-content-center ml-2" style="width: 100px" title= "Download payment pdf for single user in ascending order" name="2_submit_pdf_asc" type="submit" value="Payment History PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mt-1 ml-1"></i>1-Asc</button>
-                  </div>
-                    <span class="btn btn-danger float-left d-flex justify-content-center form-control" style="width:150px;">PDF Types</span>
+        <div class="row d-flex ml-3 mb-3 mt-2">
+            <%if (check_can_download_pdf(@module_permission))%>
+              <div class="dropdown my-dropdown float-right mr-2">
+                <button type="button" class="form-control bg-danger text-light">PDF List</button>
+                <div class="dropdown-content my-dropdown-content p-2">
+                  <button class="btn btn-danger d-flex justify-content-center ml-2 mt-2" style="width: 100px" title="Download payment pdf for all user in descending order " name="submit_pdf" type="submit" value="Payment History PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mt-1 ml-1 mr-1"></i>Desc </button>
+                  <button class="btn btn-danger d-flex justify-content-center ml-2 mt-2" style="width: 100px" title="Download payment pdf for all user in ascending order" name="submit_pdf_asc" type="submit" value="Payment History PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mt-1 ml-1 mr-1"></i>Asc</button>
+                  <button class="btn btn-danger d-flex justify-content-center ml-2 mt-2" style="width: 100px" title= "Download payment pdf for single user in descending order" name="1_submit_pdf" type="submit" value="Payment History PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mt-1 ml-1"></i>1-Desc</button>
+                  <button class="btn btn-danger d-flex justify-content-center ml-2 mt-2" style="width: 100px" title= "Download payment pdf for single user in ascending order" name="2_submit_pdf_asc" type="submit" value="Payment History PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mt-1 ml-1"></i>1-Asc</button>
                 </div>
-            </div>
-          <% end %>
-          <%if (check_can_send_email(@module_permission))%>
-            <div class="icon-container-3 mb-2 ml-3">
-                <div class="my-icon-3 my-view-3">
-                  <div class="my-tooltip-3 d-flex">
-                      <button class="btn btn-info d-flex justify-content-center ml-2" type="button" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-envelope mt-1 ml-1"></i>&nbsp;Mail</button>
-                      <button class="btn btn-info d-flex justify-content-center ml-2" name="asc_email" type="submit" value="Email"><i class="fas fa-envelope mt-1 ml-1"></i> AscEmail</button>
-                      <button class="btn btn-info d-flex justify-content-center ml-2" name="desc_email" type="submit" value="Email"><i class="fas fa-envelope mt-1 ml-1"></i> DescEmail</button>
-                  </div>
-                    <span class="btn btn-info float-left d-flex justify-content-center form-control" style="width:150px;">Mail Types</span>
-                </div>
-            </div>
-            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                  </div>
-                  <div class="modal-body">
-                    <% @pos_setting = PosSetting.first %>
-                    <label>Email:</label>
-                    <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
-                    <br />
-                    <label>Subject:</label>
-                    <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Payment Detail report from MunshiOnClick", class: 'form-control email-fields'%>
-                    <br />
-                    <label>Body:</label><br />
-                    <%= text_area_tag 'body', nil, class: 'form-control'%>
-                    <br />
-
-                    <label>Please select one of them.</label>
-                    <div>
-                      <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
-                      <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
-                      <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
-                    </div>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
-                  </div>
-                  </div>
               </div>
-            </div>
-          <% end %>
-        </div>
+            <% end %>
+            <%if (check_can_download_csv(@module_permission))%>
+              <div>
+                <button class="btn btn-warning form-control float-left d-flex justify-content-center mr-2" style="width:100px;" title= "download payments csv" name="csv" type="submit" value="csv"><i class="fa fa-file-excel mt-1 mr-2"></i>CSV &nbsp;</button>
+              </div>
+            <% end %>
+            <%if (check_can_send_email(@module_permission))%>
+              <div class="dropdown my-dropdown float-right mr-2">
+                <button type="button" class="form-control bg-info text-light">Mail List</button>
+                <div class="dropdown-content my-dropdown-content p-2">
+                  <button class="btn btn-info d-flex justify-content-center ml-2 mt-2" style="width: 120px" type="button" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-envelope mt-1 ml-1"></i>&nbsp;Mail</button>
+                  <button class="btn btn-info d-flex justify-content-center ml-2 mt-2" style="width: 120px" name="asc_email" type="submit" value="Email"><i class="fas fa-envelope mt-1 ml-1"></i> AscEmail</button>
+                  <button class="btn btn-info d-flex justify-content-center ml-2 mt-2" style="width: 120px" name="desc_email" type="submit" value="Email"><i class="fas fa-envelope mt-1 ml-1"></i> DescEmail</button>
+                </div>
+              </div>
+              <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body">
+                      <% @pos_setting = PosSetting.first %>
+                      <label>Email:</label>
+                      <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
+                      <br />
+                      <label>Subject:</label>
+                      <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Payment Detail report from MunshiOnClick", class: 'form-control email-fields'%>
+                      <br />
+                      <label>Body:</label><br />
+                      <%= text_area_tag 'body', nil, class: 'form-control'%>
+                      <br />
+
+                      <label>Please select one of them.</label>
+                      <div>
+                        <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
+                        <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
+                        <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                      <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
+                    </div>
+                    </div>
+                </div>
+              </div>
+            <% end %>
+          </div>  
       <% end %>
     </div>
 
@@ -200,29 +196,21 @@
 
   <div class="card shadow-sm border-radius-1 p-2 mr-4 payment-book-index-card">
     <%= render 'map_columns/map_column_partials' %>
-
+    <%if (check_can_delete(@module_permission))%>
+	    <button class="btn btn-outline-danger delete-selected mt-2" style=" position: absolute;" type='button' value='Payment'>
+	    	Delete Selected
+	    </button>		
+    <%end%>
     <table data-toggle="table" data-search="true" class=" overflow-hidden border-radius-1">
     <thead>
       <tr>
         <th><input type="checkbox" id="master" class='select-all-checkbox' style="cursor: pointer;">
-					<%if (check_can_delete(@module_permission))%>
-						<div class="icon-container float-center">
-							<span class="ml-2 mt-2">
-								<div class="my-icon my-view">
-									<button class="icon-div btn delete-selected p-2 " type='button' value='Payment'>
-										<i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i>
-									</button>
-								</div>
-							</span>
-						</div>
-					<%end%>
 			</th>
         <th><%= sort_link(@q, :id, 'ID') %></th>
         <th><%= sort_link(@q, :account, 'Account') %></th>
         <th><%= sort_link(@q, :debit, 'Debit/Benam') %></th>
         <th><%= sort_link(@q, :credit, 'Credit/Jama') %></th>
         <th><%= sort_link(@q, :amount, 'Balance') %></th>
-        <th>Jama/benam</th>
         <th><%= sort_link(@q, :paymentable, 'Paymentable') %></th>
         <th class ="urdu-font"><%= sort_link(@q, :comment, 'Comment') %></th>
         <th><%= sort_link(@q, :created_at, 'Date') %></th>
@@ -242,28 +230,54 @@
           </td>
           <td><%= number_with_delimiter(payment.debit) %></td>
           <td><%= number_with_delimiter(payment.credit) %></td>
-          <td><%= number_with_delimiter(payment.amount) %></td>
           <td>
-                <%if payment.amount.to_f < 0  %>
-                     <b style="font-size:20px;color:blue;">Jama</b>
-                <%elsif  payment.amount.to_f > 0  %>
-                <b style="font-size:20px;color:red;">Benam</b>
-                <%else%>
-                <b style="font-size:20px;color: #6cec53 ;">Nill</b>
-                <%end%>
+          
+            <div class="icon-container">
+              <span class="mt-2 mr-1"><%= number_with_delimiter(payment.amount) %></span>
+              <%if payment.amount.to_f < 0  %>
+                <div class="my-icon my-view">
+                  <div class="my-tooltip text-primary">
+                    Jama/Payable
+                  </div>
+                    <%= link_to payment_path(payment), remote: true, class:"icon-div" do %>
+                      <i class="fa fa-arrow-up mt-2 text-primary" aria-hidden="true"></i>
+                    <%end %>
+                </div>
+              <% end %> 
+              <%if payment.amount.to_f > 0  %>
+                <div class="my-icon my-view">
+                  <div class="my-tooltip text-danger">
+                    Benam/Recievable
+                  </div>
+                    <%= link_to payment_path(payment), remote: true, class:"icon-div" do %>
+                      <i class="fa fa-arrow-down mt-2 text-danger" aria-hidden="true"></i>
+                    <%end %>
+                </div>
+              <% end %> 
+              <%if payment.amount.to_f == 0  %>
+                <div class="my-icon my-view">
+                  <div class="my-tooltip text-success">
+                    Nil
+                  </div>
+                    <%= link_to payment_path(payment), remote: true, class:"icon-div" do %>
+                      <i class="fa fa-check mt-2 text-success" aria-hidden="true"></i>
+                    <%end %>
+                </div>
+              <% end %>  
+            </div>
           </td>
           <td>
-            <%= link_to 'Sale',edit_purchase_sale_detail_path(payment.paymentable,product:true) if payment.paymentable.present? and payment.paymentable_type=="PurchaseSaleDetail" and payment.paymentable.transaction_type=="Sale"%>
-            <%= link_to 'Purchase',edit_purchase_sale_detail_path(payment.paymentable,product:true) if payment.paymentable.present? and payment.paymentable_type=="PurchaseSaleDetail" and payment.paymentable.transaction_type=="Purchase"%>
-            <%= link_to 'Sale Order',edit_order_path(payment.paymentable,product:true) if payment.paymentable.present? and payment.paymentable_type=="Order" and payment.paymentable.transaction_type=="Sale"%>
-            <%= link_to 'Purchase Order',edit_order_path(payment.paymentable,product:true) if payment.paymentable.present? and payment.paymentable_type=="Order" and payment.paymentable.transaction_type=="Purchase"%>
-            <%= link_to 'Expense',edit_expense_path(payment.paymentable.expense.id) if payment.paymentable.present? and payment.paymentable_type=="ExpenseEntry" and payment.paymentable.expense.present?%>
-            <%= link_to 'P-Expense',edit_purchase_sale_detail_path(payment.paymentable.expenseable) if payment.paymentable.present? and payment.paymentable_type=="ExpenseEntry" and payment.paymentable.expense.blank?%>
-            <%= link_to 'Salary',edit_salary_path(payment.paymentable) if payment.paymentable.present? and payment.paymentable_type=="Salary" and payment.paymentable.paid_salary.present?%>
-            <%= link_to 'Wage Salary',edit_advance_salary_path(payment.paymentable) if payment.paymentable.present? and payment.paymentable_type=="Salary" and payment.paymentable.advance.present?%>
-            <%= link_to 'Investment',edit_investment_path(payment.paymentable) if payment.paymentable.present? and payment.paymentable_type=="Investment"%>
-            <%= link_to 'Ledger Book',edit_ledger_book_path(payment.paymentable) if payment.paymentable.present? and payment.paymentable_type=="LedgerBook"%>
-            <%= link_to 'Staff Credit',edit_salary_detail_path(payment.paymentable) if payment.paymentable.present? and payment.paymentable_type=="SalaryDetail"%>
+            <%= link_to 'Sale',purchase_sale_detail_path(payment.paymentable,pdf:true) if payment&.paymentable.present? and payment&.paymentable_type=="PurchaseSaleDetail" and payment&.paymentable&.transaction_type=="Sale"%>
+            <%= link_to 'Purchase',purchase_sale_detail_path(payment.paymentable,pdf:true) if payment&.paymentable.present? and payment&.paymentable_type=="PurchaseSaleDetail" and payment&.paymentable&.transaction_type=="Purchase"%>
+            <%= link_to 'Sale Order',order_path(payment.paymentable,product:true) if payment&.paymentable.present? and payment&.paymentable_type=="Order" and payment&.paymentable&.transaction_type=="Sale"%>
+            <%= link_to 'Purchase Order',order_path(payment.paymentable,product:true) if payment&.paymentable.present? and payment&.paymentable_type=="Order" and payment&.paymentable&.transaction_type=="Purchase"%>
+            <%= link_to 'Expense',expense_path(payment.paymentable.expense.id) if payment&.paymentable.present? and payment&.paymentable_type=="ExpenseEntry" and payment&.paymentable&.expense.present?%>
+            <%= link_to 'P-Expense',purchase_sale_detail_path(payment.paymentable.expenseable) if payment&.paymentable.present? and payment&.paymentable_type=="ExpenseEntry" and payment&.paymentable&.expenseable.present?%>
+            <%= link_to 'Salary',edit_salary_path(payment.paymentable) if payment&.paymentable&.present? and payment&.paymentable_type=="Salary" and payment&.paymentable&.paid_salary.present?%>
+            <%= link_to 'Wage Salary',show_advance_salary_path(payment.paymentable) if payment&.paymentable.present? and payment&.paymentable_type=="Salary" and payment&.paymentable&.advance.present?%>
+            <%= link_to 'Investment',investment_path(payment.paymentable) if payment&.paymentable.present? and payment&.paymentable_type=="Investment"%>
+            <%= link_to 'Ledger Book',ledger_book_path(payment.paymentable) if payment&.paymentable.present? and payment&.paymentable_type=="LedgerBook"%>
+            <%= link_to 'Staff Credit',salary_detail_path(payment.paymentable) if payment&.paymentable.present? and payment&.paymentable_type=="SalaryDetail"%>
           </td>
           <td>
             <%= payment.comment %>
@@ -285,7 +299,7 @@
               <%end%>
             <%elsif payment.paymentable.present? and payment.paymentable_type=="PurchaseSaleDetail"%>
               <%=payment.paymentable.comment%>
-              <br>
+              
               <%if payment.paymentable.purchase_sale_items_names_and_quantity!=0%>
                 <% payment.paymentable.purchase_sale_items_names_and_quantity.each do |name_quantity|%>
                   <p>
@@ -294,8 +308,9 @@
                   </p>
                 <%end%>
               <%end%>
+              <hr>
               <p>
-                Total: <span><%=payment.paymentable.total_bill%></span>
+                <span class="h4 text-gray">Total:</span> <span class="h4 text-gray font-weight-bold"><%=payment.paymentable.total_bill%></span>
               </p>
             <%elsif payment.paymentable.present? and payment.paymentable_type=="ExpenseEntry"%>
               <%=payment.paymentable.comment%>
@@ -333,148 +348,147 @@
 
           <td>
             <%if payment.created_at.strftime("%d%b%y")!=payment.updated_at.strftime("%d%b%y")%>
-              <%= payment.created_at.present? ? payment.created_at.strftime("%d %b %y at %H:%M %p") : '' %> | <%= payment.updated_at.present? ? payment.updated_at.strftime("%d %b %y at %H:%M %p") : '' %>
+              <%= payment.created_at.present? ? payment.created_at.strftime("%d/%b/%y at %H:%M %p") : '' %> | <%= payment.updated_at.present? ? payment.updated_at.strftime("%d/%b/%y at %H:%M %p") : '' %>
             <%else%>
-              <%= payment.created_at.present? ? payment.created_at.strftime("%d %b %y at %H:%M %p") : '' %>
+              <%= payment.created_at.present? ? payment.created_at.strftime("%d/%b/%y at %H:%M %p") : '' %>
             <%end%>
           </td>
 
           <td class="p-3">
+          <div class="icon-container-1">
+            <div class="my-icon-1 my-view-1">
+            	<div class="my-tooltip-1">
+                <div class="icon-container">
+            			<%if (check_can_update(@module_permission))%>
+            				<div class="my-icon my-view">
+            					<div class="my-tooltip">
+            						Edit
+            					</div>
+            					<% if payment.paymentable.present? and payment.paymentable_type=="PurchaseSaleDetail" and payment.paymentable.transaction_type=="Sale"%>
+            						<%= link_to edit_purchase_sale_detail_path(payment.paymentable,product:true), class:"icon-div" do %>
+            							<i class="fa fa-edit mt-2" aria-hidden="true"></i>
+            						<% end %>
+            					<% elsif payment.paymentable.present? and payment.paymentable_type=="PurchaseSaleDetail" and payment.paymentable.transaction_type=="Purchase"%>
+            						<%= link_to edit_purchase_sale_detail_path(payment.paymentable,product:true), class:"icon-div" do %>
+            								<i class="fa fa-edit mt-2" aria-hidden="true"></i>
+            						<% end %>
+            					<% elsif payment.paymentable.present? and payment.paymentable_type=="Order" and payment.paymentable.transaction_type=="Sale"%>
+            						<%= link_to edit_order_path(payment.paymentable,product:true), class:"icon-div" do %>
+            								<i class="fa fa-edit mt-2" aria-hidden="true"></i>
+            						<% end %>
+            					<% elsif payment.paymentable.present? and payment.paymentable_type=="Order" and payment.paymentable.transaction_type=="Purchase"%>
+            						<%= link_to edit_order_path(payment.paymentable,product:true), class:"icon-div" do %>
+            							<i class="fa fa-edit mt-2" aria-hidden="true"></i>
+            						<% end %>
+            					<% elsif payment.paymentable.present? and payment.paymentable_type=="ExpenseEntry" and payment.paymentable.expense.present?%>
+            						<%= link_to edit_expense_path(payment.paymentable.expense.id), class:"icon-div" do %>
+            							<i class="fa fa-edit mt-2" aria-hidden="true"></i>
+            						<% end %>
+            					<% elsif payment.paymentable.present? and payment.paymentable_type=="ExpenseEntry" and payment.paymentable.expense.present?%>
+            						<%= link_to edit_expense_entry_path(payment.paymentable.expenseable), class:"icon-div" do %>
+            							<i class="fa fa-edit mt-2" aria-hidden="true"></i>
+            						<% end %>
+            					<% elsif payment.paymentable.present? and payment.paymentable_type=="Salary" and payment.paymentable.paid_salary.present?%>
+            						<%= link_to edit_salary_path(payment.paymentable), class:"icon-div" do %>
+            							<i class="fa fa-edit mt-2" aria-hidden="true"></i>
+            						<% end %>
+            					<% elsif payment.paymentable.present? and payment.paymentable_type=="Salary" and payment.paymentable.advance.present?%>
+            						<%= link_to edit_advance_salary_path(payment.paymentable), class:"icon-div" do %>
+            							<i class="fa fa-edit mt-2" aria-hidden="true"></i>
+            						<% end %>
+            					<% elsif payment.paymentable.present? and payment.paymentable_type=="Investment"%>
+            						<%= link_to edit_investment_path(payment.paymentable), class:"icon-div" do %>
+            							<i class="fa fa-edit mt-2" aria-hidden="true"></i>
+            						<% end %>
+            					<% elsif payment.paymentable.present? and payment.paymentable_type=="LedgerBook"%>
+            						<%= link_to edit_ledger_book_path(payment.paymentable), class:"icon-div" do %>
+            							<i class="fa fa-edit mt-2" aria-hidden="true"></i>
+            						<% end %>
+            					<% elsif payment.paymentable.present? and payment.paymentable_type=="SalaryDetail"%>
+            						<%= link_to edit_salary_detail_path(payment.paymentable), class:"icon-div" do %>
+            							<i class="fa fa-edit mt-2" aria-hidden="true"></i>
+            						<% end %>
+            					<% else %>
+            						<%= link_to edit_payment_path(payment,edit: true), class:"icon-div" do %>
+            							<i class="fa fa-edit mt-2" aria-hidden="true"></i>
+            						<%end %>
+            					<% end %>
+            				</div>
+            			<% end %>
 
-<div class="icon-container-1">
-<div class="my-icon-1 my-view-1">
-	<div class="my-tooltip-1">
-    <div class="icon-container">
-			<%if (check_can_update(@module_permission))%>
-				<div class="my-icon my-view">
-					<div class="my-tooltip">
-						Edit
-					</div>
-					<% if payment.paymentable.present? and payment.paymentable_type=="PurchaseSaleDetail" and payment.paymentable.transaction_type=="Sale"%>
-						<%= link_to edit_purchase_sale_detail_path(payment.paymentable,product:true), class:"icon-div" do %>
-							<i class="fa fa-edit mt-2" aria-hidden="true"></i>
-						<% end %>
-					<% elsif payment.paymentable.present? and payment.paymentable_type=="PurchaseSaleDetail" and payment.paymentable.transaction_type=="Purchase"%>
-						<%= link_to edit_purchase_sale_detail_path(payment.paymentable,product:true), class:"icon-div" do %>
-								<i class="fa fa-edit mt-2" aria-hidden="true"></i>
-						<% end %>
-					<% elsif payment.paymentable.present? and payment.paymentable_type=="Order" and payment.paymentable.transaction_type=="Sale"%>
-						<%= link_to edit_order_path(payment.paymentable,product:true), class:"icon-div" do %>
-								<i class="fa fa-edit mt-2" aria-hidden="true"></i>
-						<% end %>
-					<% elsif payment.paymentable.present? and payment.paymentable_type=="Order" and payment.paymentable.transaction_type=="Purchase"%>
-						<%= link_to edit_order_path(payment.paymentable,product:true), class:"icon-div" do %>
-							<i class="fa fa-edit mt-2" aria-hidden="true"></i>
-						<% end %>
-					<% elsif payment.paymentable.present? and payment.paymentable_type=="ExpenseEntry" and payment.paymentable.expense.present?%>
-						<%= link_to edit_expense_path(payment.paymentable.expense.id), class:"icon-div" do %>
-							<i class="fa fa-edit mt-2" aria-hidden="true"></i>
-						<% end %>
-					<% elsif payment.paymentable.present? and payment.paymentable_type=="ExpenseEntry" and payment.paymentable.expense.blank?%>
-						<%= link_to edit_expense_entry_path(payment.paymentable.expenseable), class:"icon-div" do %>
-							<i class="fa fa-edit mt-2" aria-hidden="true"></i>
-						<% end %>
-					<% elsif payment.paymentable.present? and payment.paymentable_type=="Salary" and payment.paymentable.paid_salary.present?%>
-						<%= link_to edit_salary_path(payment.paymentable), class:"icon-div" do %>
-							<i class="fa fa-edit mt-2" aria-hidden="true"></i>
-						<% end %>
-					<% elsif payment.paymentable.present? and payment.paymentable_type=="Salary" and payment.paymentable.advance.present?%>
-						<%= link_to edit_advance_salary_path(payment.paymentable), class:"icon-div" do %>
-							<i class="fa fa-edit mt-2" aria-hidden="true"></i>
-						<% end %>
-					<% elsif payment.paymentable.present? and payment.paymentable_type=="Investment"%>
-						<%= link_to edit_investment_path(payment.paymentable), class:"icon-div" do %>
-							<i class="fa fa-edit mt-2" aria-hidden="true"></i>
-						<% end %>
-					<% elsif payment.paymentable.present? and payment.paymentable_type=="LedgerBook"%>
-						<%= link_to edit_ledger_book_path(payment.paymentable), class:"icon-div" do %>
-							<i class="fa fa-edit mt-2" aria-hidden="true"></i>
-						<% end %>
-					<% elsif payment.paymentable.present? and payment.paymentable_type=="SalaryDetail"%>
-						<%= link_to edit_salary_detail_path(payment.paymentable), class:"icon-div" do %>
-							<i class="fa fa-edit mt-2" aria-hidden="true"></i>
-						<% end %>
-					<% else %>
-						<%= link_to edit_payment_path(payment,edit: true), class:"icon-div" do %>
-							<i class="fa fa-edit mt-2" aria-hidden="true"></i>
-						<%end %>
-					<% end %>
-				</div>
-			<% end %>
+            			<%if (check_can_delete(@module_permission))%>
+            				<div class="my-icon my-view">
+            					<div class="my-tooltip">
+            						Delete
+            					</div>
+            					<% if payment.paymentable.present? and payment.paymentable_type=="PurchaseSaleDetail"  %>
+            						<%= link_to purchase_sale_detail_path(payment.paymentable), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+            							<i class="fa fa-trash mt-2" aria-hidden="true"></i>
+            						<% end %>
+            					<%elsif payment.paymentable.present? and payment.paymentable_type=="Order"  %>
+            						<%= link_to order_path(payment.paymentable), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+            							<i class="fa fa-trash mt-2" aria-hidden="true"></i>
+            						<% end %>
+            					<%elsif payment.paymentable.present? and payment.paymentable_type=="ExpenseEntry"%>
+            						<%= link_to expense_entry_path(payment.paymentable), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+            							<i class="fa fa-trash mt-2" aria-hidden="true"></i>
+            						<% end %>
+            					<%elsif payment.paymentable.present? and payment.paymentable_type=="Salary"%>
+            						<%= link_to salary_path(payment.paymentable), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+            							<i class="fa fa-trash mt-2" aria-hidden="true"></i>
+            						<% end %>
+            					<%elsif payment.paymentable.present? and payment.paymentable_type=="LedgerBook"%>
+            						<%= link_to ledger_book_path(payment.paymentable), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+            							<i class="fa fa-trash mt-2" aria-hidden="true"></i>
+            						<% end %>
+            					<%else%>
+            						<%= link_to payment, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+            							<i class="fa fa-trash mt-2" aria-hidden="true"></i>
+            						<%end%>
+            					<%end %>
+            				</div>
+            			<% end %>
 
-			<%if (check_can_delete(@module_permission))%>
-				<div class="my-icon my-view">
-					<div class="my-tooltip">
-						Delete
-					</div>
-					<% if payment.paymentable.present? and payment.paymentable_type=="PurchaseSaleDetail"  %>
-						<%= link_to purchase_sale_detail_path(payment.paymentable), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
-							<i class="fa fa-trash mt-2" aria-hidden="true"></i>
-						<% end %>
-					<%elsif payment.paymentable.present? and payment.paymentable_type=="Order"  %>
-						<%= link_to order_path(payment.paymentable), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
-							<i class="fa fa-trash mt-2" aria-hidden="true"></i>
-						<% end %>
-					<%elsif payment.paymentable.present? and payment.paymentable_type=="ExpenseEntry"%>
-						<%= link_to expense_entry_path(payment.paymentable), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
-							<i class="fa fa-trash mt-2" aria-hidden="true"></i>
-						<% end %>
-					<%elsif payment.paymentable.present? and payment.paymentable_type=="Salary"%>
-						<%= link_to salary_path(payment.paymentable), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
-							<i class="fa fa-trash mt-2" aria-hidden="true"></i>
-						<% end %>
-					<%elsif payment.paymentable.present? and payment.paymentable_type=="LedgerBook"%>
-						<%= link_to ledger_book_path(payment.paymentable), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
-							<i class="fa fa-trash mt-2" aria-hidden="true"></i>
-						<% end %>
-					<%else%>
-						<%= link_to payment, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
-							<i class="fa fa-trash mt-2" aria-hidden="true"></i>
-						<%end%>
-					<%end %>
-				</div>
-			<% end %>
+            			<%if (check_can_read(@module_permission))%>
+            				<div class="my-icon my-view">
+            					<div class="my-tooltip">
+            						Show
+            					</div>
+            					<%= link_to payment_path(payment), remote: true, class:"icon-div" do %>
+            						<i class="fa fa-eye mt-2" aria-hidden="true"></i>
+            					<%end %>
+            				</div>
+            			<%end%>
 
-			<%if (check_can_read(@module_permission))%>
-				<div class="my-icon my-view">
-					<div class="my-tooltip">
-						Show
-					</div>
-					<%= link_to payment_path(payment), remote: true, class:"icon-div" do %>
-						<i class="fa fa-eye mt-2" aria-hidden="true"></i>
-					<%end %>
-				</div>
-			<%end%>
+            			<%if (check_can_download_pdf(@module_permission))%>
+            				<div class="my-icon my-view">
+            					<div class="my-tooltip">
+            						PDF
+            					</div>
+            					<%= link_to payments_path('q[id_eq]':payment.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
+            						<i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
+            					<%end %>
+            				</div>
+            			<%end%>
 
-			<%if (check_can_download_pdf(@module_permission))%>
-				<div class="my-icon my-view">
-					<div class="my-tooltip">
-						PDF
-					</div>
-					<%= link_to payments_path('q[id_eq]':payment.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
-						<i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
-					<%end %>
-				</div>
-			<%end%>
+            			<%if (check_can_download_csv(@module_permission))%>
+            				<div class="my-icon my-view">
+            					<div class="my-tooltip">
+            						CSV
+            					</div>
+            					<%= link_to payments_path('q[id_eq]':payment.id,'csv':true), title: 'Download CSV', class:"icon-div" do%>
+            						<i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
+            					<%end %>
+            				</div>
+            			<%end %>
 
-			<%if (check_can_download_csv(@module_permission))%>
-				<div class="my-icon my-view">
-					<div class="my-tooltip">
-						CSV
-					</div>
-					<%= link_to payments_path('q[id_eq]':payment.id,'csv':true), title: 'Download CSV', class:"icon-div" do%>
-						<i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
-					<%end %>
-				</div>
-			<%end %>
-
-		</div>
-	</div>
-            <span class="icon-div-1">
-                  <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
-            </span>
+            		</div>
+            	</div>
+              <span class="icon-div-1">
+                    <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+              </span>
+          </div>
         </div>
-      </div>
       </div>
     </div>
 
@@ -482,6 +496,7 @@
         </tr>
       <% end %>
       <tr>
+        <td></td>
         <td><h5>Total</h5></td>
         <td></td>
         <td><h5><%=number_with_delimiter(@t_dabit.first.sum_debit)%></h5></td>

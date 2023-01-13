@@ -1,6 +1,7 @@
 class Expense < ApplicationRecord
   belongs_to :expense_type, optional: true
   belongs_to :account, optional: true
+  belongs_to :expense_voucher, optional: true
   has_many :expense_entries, dependent: :destroy
 
   has_many :payment, as: :paymentable

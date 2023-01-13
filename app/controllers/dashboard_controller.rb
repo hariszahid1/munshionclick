@@ -3,10 +3,14 @@ class DashboardController < ApplicationController
   def index
     redirect_to orders_path(sale: true) if current_user.salesman?
     @product_count=Product.count
-    @sys_user_count=SysUser.count
+    @cms_user_count=SysUser.where(for_crms: [true, false]).count
+    @sys_user_count=SysUser.where(for_crms: [false, nil]).count
     @total_sale_slips = PurchaseSaleDetail.where(transaction_type: "Sale").count
     @total_purchase_slips = PurchaseSaleDetail.where(transaction_type: "Purchase").count
     @total_expense_slips = ExpenseEntry.count
+    @total_follow_ups = FollowUp.count
+    @follow_up_count = FollowUp.where(created_at: Time.current.all_day).count
+    @total_compaigns = Compaign.count
     @total_expense_today = ExpenseEntry.where(created_at: Time.current.all_day).count
     @total_expense_yesterday = ExpenseEntry.where(created_at: 1.day.ago.all_day).count
     @total_exp_today = ExpenseEntry.where(created_at: Time.current.all_day).sum(:amount)

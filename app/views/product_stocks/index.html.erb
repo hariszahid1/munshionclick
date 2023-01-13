@@ -1,74 +1,104 @@
 <div class="hidden" id="city_list">
   <div class="row">
     <div class="col-lg-12 col-sm-12">
-      <h1>Product Stock by Day</h1>
+      <div class="main-content-header ml-2">
+        <h1>Product Stock by Day</h1>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="<%= root_path %>">Dashboard</a>
+          </li>
+          <li class="breadcrumb-item active">
+            <a href="<%= product_stocks_path %>">Product Stock by Day</a>
+          </li>
+        </ol>
+      </div>
       <% if can?(:add, :all) %>
       <div id="new_city">
-        <%= link_to new_product_stock_path,class: "btn btn-success" do %>
+        <%= link_to new_product_stock_path,class: "btn btn-success mb-3 ml-3" do %>
            <i class="fa fa-plus" aria-hidden="true"></i>
-           New Product Stock
+           Create
            <% end %>
       </div>
       <% end %>
     </div>
   </div>
-  <div class="clearfix"></div>
-  <div class="row">
-    <div class="col-lg-12 col-sm-12">
-      <%= search_form_for @q, url: product_stocks_path, class: "admin-controls", method: "get" do |f| %>
-        <div class="col-lg-2 form-group float-left">
-          <%= f.select :product_id_eq, options_from_collection_for_select(@products, 'id', 'title',@title),{:include_blank => "Select product"}, class: "chosen-select"%>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <%= f.search_field :created_at_gteq,value:@start_date, class: 'form-control input-sm datepicker',placeholder: "YYYY-MM-DD" %>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <%= f.search_field :created_at_lteq,value:@end_date,class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
-        </div>
-      <% end %>
+  <div class="float-right">
+    <div class="dropdown ml-auto mr-4">
+     <span class="btn btn-info" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
+      <div class="dropdown-content">
+        <% if @help.present? %>
+        <% @help&.help_links.each do |link| %>
+        <a type="button" class="" target="_blank" href="<%= link[1] %>" >Help in <%= link[0] %></a>
+         <% end %>
+        <% end %>
+      </div>
     </div>
   </div>
-  <table data-toggle="table" data-search="true" id="city_table">
-    <thead>
-      <tr>
-        <th><%= sort_link(@q, :id, 'Product') %></th>
-        <th><%= sort_link(@q, :in_stock, 'In Stock') %></th>
-        <th><%= sort_link(@q, :out_stock, 'Out Stock') %></th>
-        <th><%= sort_link(@q, :stock, 'Stock') %></th>
-        <th><%= sort_link(@q, :cost_price, 'Stock Cost') %></th>
-        <th><%= sort_link(@q, :sale_price, 'Stock Sale') %></th>
-        <th><%= sort_link(@q, :created_at, 'Date') %></th>
-        <th class="border_none">Action</th>
-      </tr>
-    </thead>
+  <ul class="nav nav-pills ml-3" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab">Search</a>
+    </li>
+	</ul>
+  <div class="clearfix"></div>
+  <div class="tab-content">
+    <div class="tab-pane active" style="border: none !important;" id="search" role="tabpanel">
+      <div class="row card border-radius-1 shadow p-3 m-1 mb-3">
+        <div class="col-lg-12 col-sm-12">
+          <%= search_form_for @q, url: product_stocks_path, class: "admin-controls", method: "get" do |f| %>
+            <div class="col-lg-2 form-group float-left">
+              <%= f.select :product_id_eq, options_from_collection_for_select(@products, 'id', 'title',@title),{:include_blank => "Select product"}, class: "chosen-select"%>
+            </div>
+            <div class="col-lg-2 form-group float-left">
+              <%= f.search_field :created_at_gteq,value:@start_date, class: 'form-control input-sm datepicker',placeholder: "YYYY-MM-DD" %>
+            </div>
+            <div class="col-lg-2 form-group float-left">
+              <%= f.search_field :created_at_lteq,value:@end_date,class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
+            </div>
+            <div class="col-lg-2 form-group float-left">
+              <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+            </div>
+          <% end %>
+        </div>
+      </div>
+      <div class="card border-radius-1 shadow p-3">    
+        <table data-toggle="table" data-search="true" id="city_table">
+          <thead>
+            <tr>
+              <th><%= sort_link(@q, :id, 'Product') %></th>
+              <th><%= sort_link(@q, :in_stock, 'In Stock') %></th>
+              <th><%= sort_link(@q, :out_stock, 'Out Stock') %></th>
+              <th><%= sort_link(@q, :stock, 'Stock') %></th>
+              <th><%= sort_link(@q, :cost_price, 'Stock Cost') %></th>
+              <th><%= sort_link(@q, :sale_price, 'Stock Sale') %></th>
+              <th><%= sort_link(@q, :created_at, 'Date') %></th>
+              <th class="border_none">Action</th>
+            </tr>
+              </thead>
 
-    <tbody>
-      <%= render partial: 'product_stock', collection: @product_stocks %>
-      <tr>
-        <td><b>Total</b></td>
-        <td><b><%=@in_stock%></b></td>
-        <td><b><%=@out_stock%></b></td>
-        <td><b><%=@in_stock-@out_stock%></b></td>
-        <td><b></b></td>
-        <td><b></b></td>
-        <td><b></b></td>
-        <td>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-<div class="clearfix"></div>
-<div class="row">
-  <div class="col-lg-4 col-sm-4">
-    <%= page_entries_info @product_stocks %>
-  </div>
-  <div class="col-lg-8 col-sm-8 pagination-left">
-    <%= paginate @product_stocks %>
+              <tbody>
+            <%= render partial: 'product_stock', collection: @product_stocks %>
+            <tr>
+              <td><b>Total</b></td>
+              <td><b><%= number_with_delimiter @in_stock%></b></td>
+              <td><b><%= number_with_delimiter @out_stock%></b></td>
+              <td><b><%= number_with_delimiter @in_stock-@out_stock%></b></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="row mt-2">
+          <div class="col-lg-4 col-sm-4">
+            <%= page_entries_info @product_stocks %>
+          </div>
+          <div class="col-lg-8 col-sm-8 pagination-left">
+            <%= paginate @product_stocks %>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 

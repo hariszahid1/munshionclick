@@ -30,10 +30,12 @@
       <%= form.number_field :stock %>
       </div>
 </div>
-<div class="clearfix">
-    <hr>
-      <div class="col-lg-12">
-        <div class="col-lg-6 form-group float-right">
-          <%=form.object.product_id.nil? ? (form.submit class: "btn btn-success", style: "float: right")  :  (form.submit class: "btn btn-warning", style: "float: right")%>
-            <% end %>
-        </div>
+
+<hr>
+<div class="row-lg-12">
+  <%=form.object.product_id.nil? ? (form.submit class: "btn btn-success", style: "float: right")  :  (form.submit class: "btn btn-warning", style: "float: right")%>
+    <% end %>
+  <%= link_to product_stocks_path, class: "float-left btn btn-info" do %>
+  <i class="fa fa-arrow-left mr-2" aria-hidden="true"></i>Back to Product Stocks
+  <% end %>
+</div>  

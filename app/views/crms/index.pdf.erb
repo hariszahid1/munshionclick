@@ -1,0 +1,55 @@
+<html>
+  <head>
+    <style>
+      .border-bottom{
+        border-bottom: double 4px;
+      }
+      .text-center{
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <% @date = Date.today  %>
+    <% @time = DateTime.now %>
+    <% @time = Time.zone.now %>
+    <div>
+      <p class="border-bottom"></p>
+      <h1 class="text-center">CRM Users</h1>
+      <h1 class="text-center">
+        Date: <b><span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%></span>
+        Time: <span><%=@time.strftime("at %I:%M%p")%></span></b>
+      </h1>
+      <p class="border-bottom"></p>
+      <p class="text-center">Report by: <%=current_user.name%></p>
+    </div>
+    <div>
+      <table>
+        <thead class="lite-gray">
+          <th class="text-center">Client Name</th>
+          <th class="text-center">Agent Name</th>
+          <th class="text-center">Project Name</th>
+          <th class="text-center">Category</th>
+          <th class="text-center">Client Status</th>
+          <th class="text-center">Plot Size</th>
+          <th class="text-center">Short Details</th>
+          <th class="text-center">Created at</th>
+        </thead>
+        <tbody>
+          <% data.each_with_index do |sys_user, index| %>
+            <tr>
+              <td class="text-center"><%= sys_user['name'] %></td>
+              <td class="text-center"><%= sys_user['agent_name'] %></td>
+              <th class="text-center"><%= sys_user['cms_data'].try(:[], 'project_name') %></th>
+              <td class="text-center"><%= sys_user['cms_data'].try(:[], 'category') %></td>
+              <td class="text-center"><%= sys_user['cms_data'].try(:[], 'client_status') %></td>
+              <th class="text-center"><%= sys_user['plot_size'] %></th>
+              <td class="text-center"><%= sys_user['short_details'] %></td>
+              <td class="text-center"><%= Date.parse(sys_user['created_at'])&.strftime('%d-%m-%Y') %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

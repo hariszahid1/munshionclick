@@ -2,16 +2,17 @@
 
 # FollowUps Controller
 class FollowUpsController < ApplicationController
-  before_action :set_follow_up, only: %i[show edit update destroy]
-
+  before_action :set_follow_up, only: %i[show edit update destroy is_completed]
+  before_action :set_follow_up_users, only: %i[index new show edit update destroy]
   # GET /follow_ups/1
   # GET /follow_ups/1.json
   def index
-    @q = FollowUp.includes(:staff).ransack(params[:q])
-    @q.sorts = 'id asc' if @q.sorts.empty? && @q.result.count.positive?
+    @q = FollowUp.includes(:assigned_user).order('id desc').ransack(params[:q])
     @follow_ups = @q.result.page(params[:page])
     @options_for_select = SysUser.all
     @staff = Staff.all
+    @follow_up_count = FollowUp.where(created_at: Time.current.all_day).count
+    @total_follow_ups = FollowUp.count
   end
 
   # GET /follow_ups/1
@@ -37,7 +38,7 @@ class FollowUpsController < ApplicationController
     respond_to do |format|
       if @follow_up.save
         format.js
-        format.html { redirect_to customer_management_system_path(params[:follow_up][:followable_id].to_i), notice: 'Follow Up was successfully created.' }
+        format.html { redirect_to crms_path(params[:follow_up][:followable_id].to_i), notice: 'Follow Up was successfully created.' }
         format.json { render :show, status: :created, location: @follow_up }
       else
         format.html { render :new }
@@ -70,7 +71,12 @@ class FollowUpsController < ApplicationController
     end
   end
 
-
+  def is_completed
+    @follow_up.update(is_complete: !@follow_up.is_complete)
+    respond_to do |format|
+      format.json { render json: { success: 'Data updated successfully' } }
+    end
+  end
 
   private
 
@@ -78,6 +84,13 @@ class FollowUpsController < ApplicationController
   def set_follow_up
     @follow_up = FollowUp.find(params[:id])
     @staff = Staff.all
+  end
+
+  def set_follow_up_users
+    created_by_ids = current_user.created_by_ids_list_to_view
+    @follow_up_gadets = FollowUp.group(:reminder_type).count
+    roles_mask = current_user.allowed_to_view_roles_mask_for
+    @users = User.where(roles_mask: roles_mask).where('company_type=? or created_by_id=?',current_user.company_type,created_by_ids)
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

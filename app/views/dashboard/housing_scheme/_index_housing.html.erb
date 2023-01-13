@@ -1,4 +1,3 @@
-
 <div class="card p-2 dash-back" style=" background-color: #F5F5F5;">
   <div class="row">
     <div class="col">
@@ -228,28 +227,56 @@
   <div class="tab-content">
     <div class="tab-pane active mb-5 mt-4 card mt-2 p-3 text-primary" style="border: none; background-color: #F5F5F5;" id="categories" role="tabpanel">
       <p>
-        <div class="row mb-2 ">
           <div class="col-lg-12 col-sm-12">
-            <% if check_is_hidden_by_module('customer_management_systems') %>
+            <% if check_is_hidden_by_module('crms') %>
               <div class="col-lg-3 col-md-6 mb-4 form-group float-left">
         	  		<div class="card border-left-primary shadow h-100 py-2 border-radius-1">
         	  			<div class="card-body">
         	  				<div class="row no-gutters align-items-center">
         	  					<div class="col mr-2">
         	  						<div class="text-xs font-weight-bold text-success text-uppercase mb-1 d-flex">
-                          <%= link_to customer_management_systems_path do %>
-                            <i class="fas fa-users text-dark fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
+                          <%= link_to crms_path do %>
+                            <i class="fas fa-users logo-back fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
                           <% end %>
-                          <%= link_to customer_management_systems_path, class:"ml-3" do %>
-        	  								<h5  style="text-align: left; color:black;font-weight: bold;">CMS</h5>
-                            <h5 class="text-primary"><%= @sys_user_count %></h5>
+                          <%= link_to crms_path, class:"ml-3" do %>
+        	  								<h5  style="text-align: left; color:black;font-weight: bold;">CRM</h5>
+                            <h5 class="text-primary"><%= @cms_user_count %></h5>
                           <% end %>
                         </div>
                         <hr>
-        	  						<%= link_to customer_management_systems_path do %>
+        	  						<%= link_to crms_path do %>
         	  							<span class="h5 mb-0  text-gray-800 btn btn-outline-info"><i class="fas fa-eye mr-1"></i>List</span>
         	  						<%end%>
-        	  						<%= link_to new_customer_management_system_path do %>
+        	  						<%= link_to new_crm_path do %>
+        	  							<span class="h5 mb-0  text-gray-800 btn btn-outline-danger" style="float: right;"><i class="fas fa-plus mr-1"></i>Add</span>
+        	  						<%end%>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+        	  	</div>
+            <% end %> 
+
+            <% if check_is_hidden_by_module('crms') %>
+              <div class="col-lg-3 col-md-6 mb-4 form-group float-left">
+        	  		<div class="card border-left-primary shadow h-100 py-2 border-radius-1">
+        	  			<div class="card-body">
+        	  				<div class="row no-gutters align-items-center">
+        	  					<div class="col mr-2">
+        	  						<div class="text-xs font-weight-bold text-success text-uppercase mb-1 d-flex">
+                          <%= link_to follow_ups_path do %>
+                            <i class="fas fa-user-check logo-back fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
+                          <% end %>
+                          <%= link_to follow_ups_path, class:"ml-3" do %>
+        	  								<h5  style="text-align: left; color:black;font-weight: bold;">Follow Ups</h5>
+                            <h5 class="text-primary"><%= @total_follow_ups %></h5>
+                          <% end %>
+                        </div>
+                        <hr>
+        	  						<%= link_to follow_ups_path do %>
+        	  							<span class="h5 mb-0  text-gray-800 btn btn-outline-info"><i class="fas fa-eye mr-1"></i>List</span>
+        	  						<%end%>
+        	  						<%= link_to new_crm_path do %>
         	  							<span class="h5 mb-0  text-gray-800 btn btn-outline-danger" style="float: right;"><i class="fas fa-plus mr-1"></i>Add</span>
         	  						<%end%>
                       </div>
@@ -267,7 +294,7 @@
         	  					<div class="col mr-2">
         	  						<div class="text-xs font-weight-bold text-success text-uppercase mb-1 d-flex">
                           <%= link_to products_path do %>
-                            <i class="fas fa-shopping-basket text-dark fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
+                            <i class="fas fa-shopping-basket logo-back fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
                           <% end %>
                           <%= link_to products_path, class:"ml-3" do %>
         	  								<h5  style="text-align: left; color:black;font-weight: bold;">Unit/Inventory</h5>
@@ -296,7 +323,7 @@
         	  				  <div class="col mr-2">
         	  					  <div class="text-xs font-weight-bold text-success text-uppercase mb-1 d-flex">
                           <%= link_to sys_users_path do %>
-                            <i class="fas fa-users text-dark fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
+                            <i class="fas fa-users logo-back fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
                           <% end %>
                           <%= link_to sys_users_path, class:"ml-3" do %>
         	  						    <h5  style="text-align: left; color:black;font-weight: bold;">Users</h5>
@@ -325,7 +352,7 @@
         	  					<div class="col mr-2">
         	  						<div class="text-xs font-weight-bold text-success text-uppercase mb-1 d-flex">
                           <%= link_to staffs_path do %>
-                            <i class="fas fa-users-cog text-dark fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
+                            <i class="fas fa-users-cog logo-back fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
                           <% end %>
                           <%= link_to staffs_path, class:"ml-3" do %>
         	  							  <h5  style="text-align: left; color:black;font-weight: bold;">Staff</h5>
@@ -347,9 +374,9 @@
             <% end %>
 
           </div>
-        </div>  
+         
 
-        <div class="row mb-2 ">
+        
           <div class="col-lg-12 col-sm-12">
 
             <% if check_is_hidden_by_module('orders') %>
@@ -360,7 +387,7 @@
         	  					<div class="col mr-2">
         	  						<div class="text-xs font-weight-bold text-success text-uppercase mb-1 d-flex">
                           <%= link_to orders_path(sale: true) do %>
-                            <i class="fas fa-cart-arrow-down text-dark fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
+                            <i class="fas fa-cart-arrow-down logo-back fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
                           <% end %>
                           <%= link_to orders_path(sale: true), class:"ml-3" do %>
         	  							  <h5  style="text-align: left; color:black;font-weight: bold;">Booking</h5>
@@ -389,7 +416,7 @@
       		  					<div class="col mr-2">
       		  						<div class="text-xs font-weight-bold text-success text-uppercase mb-1 d-flex">
                           <%= link_to purchase_sale_details_path(sale: true) do %>
-                            <i class="fas fa-shopping-cart text-dark fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
+                            <i class="fas fa-shopping-cart logo-back fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
                           <% end %>
                           <%= link_to purchase_sale_details_path(sale: true), class:"ml-3" do %>
       		  							  <h5  style="text-align: left; color:black;font-weight: bold;">Installment</h5>
@@ -418,7 +445,7 @@
       		  				  <div class="col mr-2">
       		  					  <div class="text-xs font-weight-bold text-success text-uppercase mb-1 d-flex">
                           <%= link_to expenses_path do %>
-                            <i class="fas fa-hand-holding-usd text-dark fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
+                            <i class="fas fa-hand-holding-usd logo-back fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
                           <% end %>
                           <%= link_to expenses_path, class:"ml-3" do %>
       		  						    <h5  style="text-align: left; color:black;font-weight: bold;">Expense</h5>
@@ -439,6 +466,36 @@
       		  	</div>
             <% end %>  
 
+            <% if check_is_hidden_by_module('compaigns') %>
+              <div class="col-lg-3 col-md-6 mb-4 form-group float-left">
+      			  	<div class="card border-left-primary shadow h-100 py-2 border-radius-1">
+      			  		<div class="card-body">
+      			  			<div class="row no-gutters align-items-center">
+      			  				<div class="col mr-2">
+      			  					<div class="text-xs font-weight-bold text-success text-uppercase mb-1 d-flex">
+                          <%= link_to compaigns_path do %>
+                            <i class="fas fa-address-card logo-back fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
+                          <% end %>
+                          <%= link_to compaigns_path, class: "ml-2" do %>
+      			  						  <h5  style="text-align: left; color:black;font-weight: bold;">Compaign</h5>
+                            <h5 class="text-primary"><%=@total_compaigns %></h5>
+                          <% end %>
+                        </div>
+                        
+                        <hr>
+                        <%= link_to compaigns_path do %>
+      		  							<span class="h5 mb-0  text-gray-800 btn btn-outline-info"><i class="fas fa-eye mr-1"></i>List</span>
+      		  						<%end%>
+      		  						<%= link_to new_compaign_path do %>
+      		  							<span class="h5 mb-0  text-gray-800 btn btn-outline-danger" style="float: right;"><i class="fas fa-plus mr-1"></i>Add</span>
+      		  						<%end%>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+      			  </div>
+            <% end %>  
+
             <% if check_is_hidden_by_module('ledger_books') %>
               <div class="col-lg-3 col-md-6 mb-4 form-group float-left">
       		  		<div class="card border-left-primary shadow h-100 py-2 border-radius-1">
@@ -446,7 +503,7 @@
       		  				<div class="row no-gutters align-items-center">
       		  					<div class="col mr-2">
       		  						<div class="text-xs font-weight-bold text-success text-uppercase mb-1 d-flex">
-                            <i class="fas fa-book text-dark fa-3x p-2 card mb-3" style="border-radius: 50%;" aria-hidden="true"></i>
+                            <i class="fas fa-book logo-back fa-3x p-2 card mb-3" style="border-radius: 50%;" aria-hidden="true"></i>
       		  							  <h5  style="text-align: left; color:black;font-weight: bold;" class="ml-2">User Ledger</h5>
                         </div>
                         <hr>
@@ -466,9 +523,9 @@
             <% end %>
                 
           </div>
-        </div>  
         
-        <div class="row mb-2 ">
+        
+        
           <div class="col-lg-12 col-sm-12">
             <% if check_is_hidden_by_module('salary_details') %>
               <div class="col-lg-3 col-md-6 mb-4 form-group float-left">
@@ -477,7 +534,7 @@
       		  			  <div class="row no-gutters align-items-center">
       		  				  <div class="col mr-2">
       		  					  <div class="text-xs font-weight-bold text-success text-uppercase mb-1 d-flex">
-                          <i class="fas fa-book text-dark fa-3x p-2 card mb-3" style="border-radius: 50%;" aria-hidden="true"></i>
+                          <i class="fas fa-book logo-back fa-3x p-2 card mb-3" style="border-radius: 50%;" aria-hidden="true"></i>
       		  						  <h5  style="text-align: left; color:black;font-weight: bold;" class="ml-2">Staff Ledger</h5>
                         </div>
                         <hr>
@@ -504,7 +561,7 @@
       		  					<div class="col mr-2">
       		  						<div class="text-xs font-weight-bold text-success text-uppercase mb-1 d-flex">
                           <%= link_to ledger_books_path do %>
-                            <i class="fas fa-address-book text-dark fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
+                            <i class="fas fa-address-book logo-back fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
                           <% end %>
                           <%= link_to ledger_books_path, class:"ml-3" do %>
       		  							  <h5  style="text-align: left; color:black;font-weight: bold;">Ledger</h5>
@@ -536,7 +593,7 @@
       		  					<div class="col mr-2">
       		  						<div class="text-xs font-weight-bold text-success text-uppercase mb-1 d-flex">
                           <%= link_to payments_path do %>
-                            <i class="fas fa-info-circle text-dark fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
+                            <i class="fas fa-info-circle logo-back fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
                           <% end %>
                           <%= link_to payments_path, class:"ml-3" do %>
       		  							  <h5  style="text-align: left; color:black;font-weight: bold;">Details</h5>
@@ -567,7 +624,7 @@
       		  				<div class="row no-gutters align-items-center">
       		  					<div class="col mr-2">
       		  						<div class="text-xs font-weight-bold text-success text-uppercase mb-1 d-flex">
-                          <i class="fas fa-info-circle text-dark fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
+                          <i class="fas fa-info-circle logo-back fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
       		  							<h5  style="text-align: left; color:black;font-weight: bold;" class="ml-2">Unit Detail</h5>
                         </div>
                         <hr>
@@ -600,9 +657,9 @@
             <% end %>  
 
           </div>      
-        </div>
+        
 
-        <div class="row mb-2 ">
+        
           <div class="col-lg-12 col-sm-12">
             <% if check_is_hidden_by_module('products') %>
               <div class="col-lg-3 col-md-6 mb-4 form-group float-left">
@@ -611,7 +668,7 @@
       		  				<div class="row no-gutters align-items-center">
       		  					<div class="col mr-2">
       		  						<div class="text-xs font-weight-bold text-success text-uppercase mb-1 d-flex">
-                          <i class="fas fa-user-shield text-dark fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
+                          <i class="fas fa-user-shield logo-back fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
       		  							<h5  style="text-align: left; color:black;font-weight: bold;" class="ml-2">Secure Unit</h5>
                         </div>
                         <hr>
@@ -650,7 +707,7 @@
       		  				<div class="row no-gutters align-items-center">
       		  					<div class="col mr-2">
       		  						<div class="text-xs font-weight-bold text-success text-uppercase mb-1 d-flex">
-                            <i class="fas fa-credit-card text-dark fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
+                            <i class="fas fa-credit-card logo-back fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
       		  							  <h5  style="text-align: left; color:black;font-weight: bold;">Short Payments</h5>
                         </div>
                         <hr>
@@ -680,7 +737,7 @@
       		  	  				<div class="col mr-2">
       		  	  					<div class="text-xs font-weight-bold text-success text-uppercase mb-1 d-flex">
                             <%= link_to sms_index_path do %>
-                              <i class="fas fa-comment text-dark fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
+                              <i class="fas fa-comment logo-back fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
                             <% end %>
                             <%= link_to sms_index_path, class:"ml-3" do %>
       		  	  						  <h5  style="text-align: left; color:black;font-weight: bold;">SMS</h5>
@@ -712,7 +769,7 @@
       			  				<div class="col mr-2">
       			  					<div class="text-xs font-weight-bold text-success text-uppercase mb-1 d-flex">
                           <%= link_to remarks_path(transfer:true) do %>
-                            <i class="fas fa-exchange-alt text-dark fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
+                            <i class="fas fa-exchange-alt logo-back fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
                           <% end %>
                           <%= link_to remarks_path(transfer:true), class: "ml-2" do %>
       			  						  <h5  style="text-align: left; color:black;font-weight: bold;">Transfer</h5>
@@ -730,15 +787,14 @@
                   </div>
                 </div>
       			  </div>
-            <% end %>  
+            <% end %> 
           </div>      
-        </div>
+        
       </p>
     </div>
 
     <div class="tab-pane card mt-2 p-3 border-radius-1" style="border: none; background-color: #F5F5F5;" id="analytics" role="tabpanel">
       <p>
-        <div class="row">
           <div class="col-lg-12 col-sm-12">
 
             <% if check_is_hidden_by_module('reports') %>
@@ -749,7 +805,7 @@
                       <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                           <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                            <i class="fas fa-chart-line fa-2x" aria-hidden="true"></i>
+                            <i class="fas fa-chart-line logo-back fa-2x" aria-hidden="true"></i>
                           </div>
                           <div class="h5 mb-0  text-gray-800">
                               Chart of Account 
@@ -770,7 +826,7 @@
                       <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                           <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                            <i class="fas fa-info-circle fa-2x" aria-hidden="true"></i>
+                            <i class="fas fa-info-circle logo-back fa-2x" aria-hidden="true"></i>
                           </div>
                           <div class="h5 mb-0  text-gray-800">
                               Profit Info
@@ -791,7 +847,7 @@
                       <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                           <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                              <i class="fas fa-boxes fa-2x" aria-hidden="true"></i>
+                              <i class="fas fa-boxes logo-back fa-2x" aria-hidden="true"></i>
                           </div>
                           <div class="h5 mb-0  text-gray-800">
                               Log Statement
@@ -812,7 +868,7 @@
                       <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                           <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                            <i class="fas fa-industry fa-2x" aria-hidden="true"></i>
+                            <i class="fas fa-industry logo-back fa-2x" aria-hidden="true"></i>
                           </div>
                           <div class="h5 mb-0  text-gray-800">
                             Income Statement
@@ -825,9 +881,9 @@
               </div>
             <% end %>  
           </div>
-        </div>
+        
 
-        <div class="row">
+        
           <div class="col-lg-12 col-sm-12">
             <% if check_is_hidden_by_module('staff_deals') %>
               <div class="col-lg-3 col-md-6 mb-4 form-group float-left">
@@ -837,31 +893,10 @@
                       <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                           <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                            <i class="fas fa-handshake fa-2x" aria-hidden="true"></i>
+                            <i class="fas fa-handshake logo-back fa-2x" aria-hidden="true"></i>
                           </div>
                           <div class="h5 mb-0  text-gray-800">
                             Staff Deals
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                <% end %>
-              </div>
-            <% end %>  
-
-            <% if check_is_hidden_by_module('compaigns') %>  
-              <div class="col-lg-3 col-md-6 mb-4 form-group float-left">
-                <%= link_to compaigns_path do %>
-                  <div class="card border-left-primary shadow h-100 py-2 border-radius-1">
-                    <div class="card-body" >
-                      <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                          <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                            <i class="fa fa-address-card fa-2x" aria-hidden="true"></i>
-                          </div>
-                          <div class="h5 mb-0  text-gray-800">
-                            Compaign
                           </div>
                         </div>
                       </div>
@@ -879,7 +914,7 @@
                       <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                           <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                            <i class="fas fa-balance-scale fa-2x" aria-hidden="true"></i>
+                            <i class="fas fa-balance-scale logo-back fa-2x" aria-hidden="true"></i>
                           </div>
                           <div class="h5 mb-0  text-gray-800">Trial Balance</div>
                         </div>
@@ -891,7 +926,7 @@
             <% end %>
 
           </div>
-        </div>
+        <div class="clearfix"></div>
         <div class="row d-flex">
           <div class="col-lg-6">
             <div class="my-chart-Container">

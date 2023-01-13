@@ -51,7 +51,7 @@
   <div class="col-lg-6 form-group float-left">
     <%= f.text_field :occupation , placeholder:"Enter Occupation"%>
   </div>
-
+  <%= f.hidden_field :for_crms, value: false %>
 
   <div class="col-lg-6 form-group float-left">
     <%= f.number_field :credit_limit %>
@@ -61,7 +61,7 @@
   </div>
 
   <div class="col-lg-6 form-group float-left">
-    <%= f.number_field :opening_balance, {required: true, value: f.object.opening_balance.present? ? f.object.opening_balance : 0} %>
+    <%= f.number_field :opening_balance, {required: true, readonly: 'true', value: f.object.opening_balance.present? ? f.object.opening_balance : 0} %>
   </div>
   <div class="col-lg-6 form-group float-left">
     <%= f.number_field :balance, disabled: true %>
@@ -71,8 +71,10 @@
     <%= f.file_field :profile_image %>
   </div>
   <div class="col-lg-6 form-group float-left">
-    <% if  sys_user.profile_image.attached? %>
+    <% if sys_user.profile_image.attached? %>
       <%= image_tag sys_user.profile_image.service_url, width: 300 %>
+      <%= link_to 'Remove', delete_image_attachment_application_path(sys_user.profile_image.signed_id), method: :delete,
+        class: 'btn btn-danger', data: { confirm: 'Are you sure?' }  %>
     <% end %>
   </div>
 

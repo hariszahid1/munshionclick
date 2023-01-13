@@ -1,0 +1,223 @@
+<div id="custom-alert" class="alert alert-danger d-none">
+  <span class="custom-alert-text"></span>
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">×</span>
+  </button>
+</div>
+
+<div class="hidden m-4" id="expenses_list">
+  <div class="main-content-header">
+    <h1 class="ml-2">Expense Vouchers</h1>
+    <ol class="breadcrumb mb-5">
+      <li class="breadcrumb-item">
+        <a href="<%= root_path %>">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active">
+        <a href="<%= expense_vouchers_path %>">Expense Vouchers</a>
+      </li>
+    </ol>
+  </div>
+
+  <div class="float-right">
+    <div class="dropdown ml-auto mr-4">
+      <span class="btn btn-info" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
+      <div class="dropdown-content">
+        <% if @help.present? %>
+          <% @help&.help_links.each do |link| %>
+            <a type="button" class="" target="_blank" href="<%= link[1] %>" >Help in <%= link[0] %></a>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="row d-flex mb-4">
+    <%= link_to new_expense_voucher_path, remote: true,class: "btn btn-success" do %>
+      <i class="fa fa-plus" aria-hidden="false"></i>
+      Create
+      <% end %>
+    <%= link_to expense_entry_vouchers_path, class: "btn btn-primary ml-2" do %>
+      <i class="fa fa-tasks" aria-hidden="true"></i>
+      Expense Entry Voucher Details
+    <% end %>
+    <%= link_to follow_ups_path('q[followable_type_eq]': 'ExpenseVoucher'), class: "btn btn-info ml-2" do %>
+      Follow Up
+    <% end %>
+  </div>
+
+	<ul class="nav nav-pills" role="tablist">
+		<li class="nav-item">
+			<a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
+		</li>
+    <!--li class="nav-item">
+			<a class="nav-link tab-label" data-toggle="tab" data-remote="true" href="#analytics" role="tab">Analytics</a>
+		</li>
+			<li class="nav-item">
+				<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
+			</li-->
+	</ul>
+
+  <%= search_form_for @q, url: expense_vouchers_path, class: "admin-controls", method: "get" do |f| %>
+    <div class="tab-content">
+      <div class="tab-pane active mb-3 card shadow p-4 mt-2 border-radius-1" id="search" role="tabpanel">
+        <p>
+          <div class="row">
+            <div class="col-lg-3 form-group float-left">
+              <%= f.select :expense_entry_vouchers_expense_type_id_eq, options_from_collection_for_select(@expense_types, "id", ->(st){"#{st.id} \u{27F6} #{st.title} "},@expense_type),{:include_blank => "Select expense type"},:class=>"form-control chosen-select" %>
+            </div>
+
+            <div class="col-lg-3 form-group float-left d-flex">
+              <%= f.search_field :created_at, id: "reportrange", class: 'form-control' %>
+            </div>
+            <div class="d-none">
+              <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker',placeholder: "YYYY-MM-DD" %>
+              <%= f.search_field :created_at_lteq, class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
+            </div>
+
+            <div class="col-lg-1 form-group float-left">
+              <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+            </div>
+            <div class="col-lg-4 form-group float-left">
+              <button class="btn btn-warning float-right mr-4" style="width: 100px;" title= "download expense vouchers csv" name="csv" type="submit" value="csv"><i class="fa fa-file-excel mr-2"></i>CSV</button>
+              <button class="btn btn-danger float-right mr-2" style="width: 100px;" title= "download expense vouchers pdf" name="pdf" type="submit" value="pdf"><i class="fa fa-file-excel mr-2"></i>PDF</button>
+            </div>  
+          </div>
+        </p>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<div>
+  <div class="card shadow mt-2 p-3 border-radius-1 m-4">
+    <%= render 'map_columns/map_column_partials' %>
+    <div class="row d-flex" style="position: absolute;">
+      <div>
+        <%if (check_can_delete(@module_permission))%>
+	        <button class="btn btn-outline-danger delete-selected mt-4 ml-3" type='button' value='ExpenseVoucher'>
+	        	Delete Selected
+	        </button>		
+        <%end%>
+      </div>  
+      <%= search_form_for @q, url: expense_vouchers_path, class: "admin-controls ml-4", method: "get" do |f| %>
+        <div class="d-flex mt-4" style="width: 120%;">
+          <%= select_tag :limit, options_for_select(['Show Entries',5, 10, 15, 20, 25], selected: :limit), id: 'pagination-limit', title:'Show Entries', style:'cursor: pointer;' %>
+        </div>
+      <% end %>
+    </div>
+    <div class="mt-3">  
+    <table data-toggle="table mt-3" data-search="true" class="overflow-hidden border-radius-1">
+      <thead>
+        <tr>
+          <th><input type="checkbox" id="master" class='select-all-checkbox'>
+          </th>
+          <th>ID<div class='float-right'><%= sort_link(@q, :id,"", {}, class: 'sorting-button') %></div></th>
+          <th>Type Wise<div class='float-right'><%= sort_link(@q, :expense, "", {}, class: 'sorting-button') %></div></th>
+          <th>Expense<div class='float-right'><%= sort_link(@q, :expense, "", {}, class: 'sorting-button') %></div></th>
+          <th>Comment<div class='float-right'><%= sort_link(@q, :comment, "", {}, class: 'sorting-button') %></div></th>
+          <th>Date</th>
+          <th>Expense</th>
+          <th class="border_none">Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <%= render partial: 'expense_voucher', collection: @expense_vouchers %>
+
+        <tr>
+          <td><h5>Total</h5></td>
+          <td></td>
+          <td><h5><%=number_with_delimiter(@expense_total.to_f.round(2))%></h5></td>
+          <td><h5><%=number_with_delimiter(@expense_payment_total)%></h5></td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="col-lg-12 digg_pagination mt-3">
+      <div class="float-left page_info">
+        <%= page_entries_info @expense_vouchers %>
+      </div>
+      <div class="float-right">
+      <%= paginate @expense_vouchers, :container => false %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="show-data"></div>
+<script>
+  $(document).ready(function() {
+    var sortingButtons = $('.sorting-button')
+    for(var i=0; i<sortingButtons.length; i++){
+      $(sortingButtons[i]).html("<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='blue' enable-background='new 0 0 512 512' viewBox='0 0 512 512'><path d='M163.919,494.293c-2.83,0-5.496-1.33-7.196-3.593L45.97,343.348c-2.986-3.974-2.187-9.615,1.787-12.602 c3.974-2.986,9.616-2.187,12.602,1.787l103.557,137.777l103.493-137.775c2.986-3.975,8.627-4.775,12.602-1.791 c3.974,2.985,4.775,8.627,1.79,12.602L171.113,490.698C169.414,492.961,166.749,494.293,163.919,494.293z'/><path d='M163.917 494.293c-4.971 0-9-4.029-9-9V26.192c0-4.971 4.029-9 9-9s9 4.029 9 9v459.101C172.917 490.264 168.888 494.293 163.917 494.293zM459.507 182.622c-2.734 0-5.435-1.241-7.203-3.597L348.78 41.18 245.257 179.025c-2.985 3.975-8.626 4.777-12.601 1.792-3.974-2.984-4.777-8.626-1.792-12.601l110.72-147.43c1.699-2.263 4.365-3.595 7.196-3.595s5.497 1.332 7.196 3.595l110.72 147.43c2.985 3.975 2.183 9.616-1.792 12.601C463.285 182.034 461.388 182.621 459.507 182.622z'/><path d='M348.78,494.293c-4.971,0-9-4.029-9-9V26.192c0-4.971,4.029-9,9-9s9,4.029,9,9v459.101 C357.78,490.264,353.751,494.293,348.78,494.293z'/></svg>")
+    }
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#expenses_list").removeClass('hidden');
+    FontAwesome.dom.i2svg();
+  });
+  $(document).ready(function() {
+    setTimeout(function(){
+      $(".chosen-select").chosen({
+        allow_single_deselect: true,
+        width: '100%'
+      });
+    }, 50);
+  });
+
+    $('#pagination-limit').on('change', function(){
+    $(this).closest('form').submit();
+  })
+
+  $(function() {
+
+    var start = moment();
+    var end = moment();
+
+    function cb(start, end) {
+        $('#reportrange span').html(start.format('YYYY/MM/DD') + ' - ' + end.format('YYYY/MM/DD'));
+    }
+
+    var gteq = $('#q_created_at_gteq').val()
+    var lteq = $('#q_created_at_lteq').val()
+    if (gteq !== ''){
+      start = moment(new Date(gteq))
+    }
+    if(lteq !== ''){
+      end = moment(new Date(lteq))
+    }
+
+    $('#reportrange').daterangepicker({
+        startDate: start,
+        endDate: end,
+      ranges: {
+          'Select Date Range':[],
+           'Today': [moment(), moment()],
+           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+           'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+           'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+           '1 Year': [moment().subtract(1, 'years')],
+           'This Month': [moment().startOf('month'), moment().endOf('month')],
+           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+           'This Month Last Year': [moment().subtract(1, 'years').startOf('month'), moment().subtract(1, 'years').endOf('month')],
+           'This Year': [moment().startOf('year'), moment().endOf('year')],
+           'Last Year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')]
+        },
+        locale: {
+          format: 'YYYY/MM/DD'
+        }
+    }, cb);
+
+    cb(start, end);
+
+    $('#reportrange').on('change', function(){
+      var value = $(this).val()
+      var greater_eq = value.split(' - ')[0]
+      var less_eq = value.split(' - ')[1]
+      $('#q_created_at_gteq').val(greater_eq)
+      $('#q_created_at_lteq').val(less_eq)
+    })
+
+  });
+</script>

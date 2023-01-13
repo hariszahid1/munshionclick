@@ -1,0 +1,91 @@
+<% @date = Date.today  %>
+<% @time = DateTime.now %>
+<% @time = Time.zone.now %>
+<html>
+  <head>
+    <style>
+      /* .border-bottom{
+        border-bottom: double 4px;
+      } */
+      .text-center{
+        text-align: center;
+      }
+      /* .table-bordered {
+        border: 1px solid #dee2e6;
+      } */
+      .table-bordered thead td, .table-bordered thead th {
+        border: 1px solid black;
+      }
+      .table-bordered tbody td, .table-bordered tbody th {
+        border: 1px solid black;
+      }
+      table {
+        border-collapse: collapse;
+      }
+
+      td, th{
+        padding: 7px 0px;
+      }
+    </style>
+  </head>
+  <body>
+    <p style="border-bottom: double 4px;  margin: 0;"></p>
+    <h1 class="text-center"> Expense Voucher </h1>
+    <p style="border-bottom: double 4px;  margin: 0;"></p>
+    <p class="text-center" style="margin-top: 30px;">Report by: <%=current_user.name%></p>
+    <div style="margin-bottom: 30px">
+      <table>
+        <th></th>
+        <th></th>
+        <tr>
+          <td>Summary: <span><%= @expense_voucher.comment%></span> </td>
+        </tr>
+        <tr>
+          <td style="width:33vw;">DateTime: <span><%=Time.zone.now%></span> </td>
+          <td style="width:33vw;">Payment by: Cash</td>
+          <td style="width:33vw;">Platform: POS</td>
+        </tr>
+      </table>
+    </div>
+    <div style="margin-bottom: 30px">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Comment</th>
+            <th>Expense Type</th>
+            <th>amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @expense_voucher.expense_entry_vouchers.each do |entry|%>
+            <tr>
+              <td class='text-center'><%= entry.id%></td>
+              <td class='text-center'><%= entry.comment%></td>
+              <td class='text-center'><%= entry.expense_type.title%></td>
+              <td class='text-center'><%= entry.amount%></td>
+            </tr>
+          <% end %>
+          <tr>
+            <td></td>
+            <td></td>
+            <td class='text-center'>Total Expense</td>
+            <td class='text-center'><%= @expense_voucher.amount%></td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+    <div style="margin-bottom: 30px">
+      <table>
+        <th></th>
+        <th></th>
+        <tr>
+          <td style="width:67vw;">Signature: <span>-------------------</span> </td>
+          <td style="width:33vw;">Signature: <span>-------------------</span>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

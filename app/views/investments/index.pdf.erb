@@ -9,8 +9,9 @@
   <table>
     <thead>
       <tr class="lite-gray" >
-        <th>ID)</th>
-        <th>Investment</th>
+        <th>ID</th>
+        <th>Credit</th>
+        <th>Debit</th>
         <th>Paid By</th>
         <th>Comment</th>
         <th>Date</th>
@@ -21,7 +22,8 @@
       <% @investments.each do |investment| %>
         <tr>
           <td><%= investment.id %></td>
-          <td><%= investment.invest.to_f.round(2) %><%# @total_investment += investment.invest.to_f.round(2) %></td>
+          <td><%= investment.credit.to_f.round(2) %></td>
+          <td><%= investment.debit.to_f.round(2) %></td>
           <td><%= investment.account_id.present? ? investment.account.title : ''%></td>
           <td><%= investment.comment %></td>
           <td>
@@ -35,8 +37,8 @@
       <% end %>
       <tr class="lite-gray">
         <td><h4>Total</h4></td>
-        <td><h4><%= @total_investment.first %></h4></td>
-        <td></td>
+        <td><h4><%= @total_investment.first[1] %></h4></td>
+        <td><h4><%= @total_investment.first[0] %></h4></td>
         <td></td>
         <td></td>
       </tr>

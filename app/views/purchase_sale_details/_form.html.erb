@@ -40,42 +40,36 @@
     </div>
   </div>
 <%end%>
-<div class="col-xl-12 col-md-12 mb-12">
-    <div class="card border-left-primary shadow h-100 py-2">
-      <div class="card-body">
-        <div class="row no-gutters align-items-center">
-          <div class="col mr-2">
-            <div class="row">
-                <div class="col-lg-4 form-group float-left">
-                  <div class="col-lg-3 form-group float-left">
-                    <%= link_to new_purchase_sale_detail_path(transaction_type: :sale, with_gst: true,product: true), class: "btn btn-success col-lg-12" do %>
-                      <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                      with GST
-                    <% end %>
-                  </div>
-                  <h2>
-                    <%if params[:transaction_type].present?%>
-                    <%= (params[:transaction_type].present?) ? "New Sale # "+(PurchaseSaleDetail.maximum(:id).present? ? PurchaseSaleDetail.maximum(:id).next : 1).to_s : "New Purchase # "+(PurchaseSaleDetail.maximum(:id).present? ? PurchaseSaleDetail.maximum(:id).next : 1).to_s%> /
-                    <%elsif @purchase_sale_detail.id%>
-                    <%= (@purchase_sale_detail.transaction_type=='Sale') ? "Edit Sale # "+@purchase_sale_detail.id.to_s : "Purchase # "+@purchase_sale_detail.id.to_s%> /
-                    <%else%>
-                    <%= (@purchase_sale_detail.transaction_type=='Sale') ? "New Sale # "+(PurchaseSaleDetail.maximum(:id).present? ? PurchaseSaleDetail.maximum(:id).next : 1).to_s : "Purchase # "+(PurchaseSaleDetail.maximum(:id).present? ? PurchaseSaleDetail.maximum(:id).next : 1).to_s%> /
-                    <%end%>
-                    <span class="oldBalance" id="sys_user_balance">
-                      0.0
-                    </span>
-                  </h2>
-                </div>
-                <div class="col-lg-2 form-group float-left font-weight-bold">New Balance <h2 class="newBalance1">0.00</h2></div>
-                <div class="col-lg-2 form-group float-left font-weight-bold">Total Bill <h2 class="purchase_sale_detail_total_bill totalBill">0.00</h2></div>
-                <div class="col-lg-2 form-group float-left font-weight-bold">Total <h2 class="purchase_sale_discount_amount">0.00</h2></div>
-                <div class="col-lg-2 form-group float-left font-weight-bold">Remaning <h2 class="purchase_sale_detail_amount">0.00</h2></div>
-            </div>
-          </div>
-        </div>
+<div class="col-xl-12 col-md-12 mb-12">  
+  <div class="row no-gutters align-items-center">
+    <div class="col mr-2">
+      <div class="row d-flex justify-content-center"> 
+        <%= link_to new_purchase_sale_detail_path(transaction_type: :sale, with_gst: true,product: true), class: "btn btn-info mr-3 p-2", style:"width: 150px;" do %>
+          <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+          with GST
+        <% end %>
+        <h2>
+          <%if params[:transaction_type].present?%>
+          <%= (params[:transaction_type].present?) ? "New Sale # "+(PurchaseSaleDetail.maximum(:id).present? ? PurchaseSaleDetail.maximum(:id).next : 1).to_s : "New Purchase # "+(PurchaseSaleDetail.maximum(:id).present? ? PurchaseSaleDetail.maximum(:id).next : 1).to_s%> /
+          <%elsif @purchase_sale_detail.id%>
+          <%= (@purchase_sale_detail.transaction_type=='Sale') ? "Edit Sale # "+@purchase_sale_detail.id.to_s : "Purchase # "+@purchase_sale_detail.id.to_s%> /
+          <%else%>
+          <%= (@purchase_sale_detail.transaction_type=='Sale') ? "New Sale # "+(PurchaseSaleDetail.maximum(:id).present? ? PurchaseSaleDetail.maximum(:id).next : 1).to_s : "Purchase # "+(PurchaseSaleDetail.maximum(:id).present? ? PurchaseSaleDetail.maximum(:id).next : 1).to_s%> /
+          <%end%>
+          <span class="oldBalance" id="sys_user_balance">
+            0.0
+          </span>
+        </h2>
+      </div>
+      <div class="row d-flex justify-content-center mt-3 mb-3">
+        <div class="float-left font-weight-bold card border-radius-1 align-items-center shadow mr-2" style="width: 200px;">New Balance <h2 class="newBalance1">0.00</h2></div>
+        <div class="float-left font-weight-bold card border-radius-1 align-items-center shadow mr-2" style="width: 200px;">Total Bill <h2 class="purchase_sale_detail_total_bill totalBill">0.00</h2></div>
+        <div class="float-left font-weight-bold card border-radius-1 align-items-center shadow mr-2" style="width: 200px;">Total <h2 class="purchase_sale_discount_amount">0.00</h2></div>
+        <div class="float-left font-weight-bold card border-radius-1 align-items-center shadow mr-2" style="width: 200px;">Remaning <h2 class="purchase_sale_detail_amount">0.00</h2></div>
       </div>
     </div>
   </div>
+</div>
 <div>
 
 <%= bootstrap_form_for(purchase_sale_detail) do |f| %>
@@ -100,8 +94,8 @@
       </div>
     </div>
   <% end %>
-  <div class="col-xl-12 col-md-12 mb-12">
-    <div class="card border-left-primary shadow h-100 py-2">
+  
+    <div class="card border-radius-1 border-left-primary shadow h-100 py-2">
       <div class="card-body">
         <div class="row no-gutters align-items-center">
           <div class="col mr-2">
@@ -141,10 +135,12 @@
               <div class="col-lg-2 form-group float-left font-weight-bold">
                 <label class="form-label" for="purchase_sale_detail_discount_price_per">Discount in %</label>
                 <input step="any" onchange="discountCal()" onkeyup="discountCal()" class="form-control" type="number" name="purchase_sale_detail_discount_price_per" id="purchase_sale_detail_discount_price_per">
+              </div>
+              <div class="col-lg-2 form-group float-left font-weight-bold">
                 <%if f.object.order_id.present? %>
-                <%= f.number_field :discount_price,value:0,step: :any,label:'Discount',onchange:"remaingUpdateAmount()",onkeyup:"remaingUpdateAmount()"%>
+                  <%= f.number_field :discount_price,value:0,step: :any,label:'Discount',onchange:"remaingUpdateAmount()",onkeyup:"remaingUpdateAmount()"%>
                 <%else%>
-                <%= f.number_field :discount_price,step: :any,label:'Discount',onchange:"remaingUpdateAmount()",onkeyup:"remaingUpdateAmount()"%>
+                  <%= f.number_field :discount_price,step: :any,label:'Discount',onchange:"remaingUpdateAmount()",onkeyup:"remaingUpdateAmount()"%>
                 <%end%>
               </div>
             </div>
@@ -152,68 +148,20 @@
         </div>
       </div>
     </div>
-  </div>
+  
 
-  <div class="col-xl-12 col-md-12 mb-12">
-    <div class="card border-left-primary shadow h-100 py-2">
+  
+    <div class="card border-radius-1 shadow mt-2">
       <div class="card-body">
         <div class="row no-gutters align-items-center">
           <div class="col mr-2">
-            <div class="row">
-              <%if @purchase_sale_detail.transaction_type=='Sale' || params[:transaction_type]=='sale'%>
-                <div class="col-lg-4 form-group float-left">
-                  <%if params[:product].present? %>
-                  <h5>Product</h5>
-                  <%else%>
-                  <h5>Item</h5>
-                  <%end%>
-                </div>
-                <div class="col-lg-1 form-group float-left">
-                  <h5>Stock</h5>
-                </div>
-                <div class="col-lg-2 form-group float-left">
-                  <h5>Qty</h5>
-                </div>
-                <div class="col-lg-2 form-group float-left">
-                  <h5>Rate</h5>
-                </div>
-                <div class="col-lg-2 form-group float-left">
-                  <h5>Total</h5>
-                </div>
-                <div class="col-lg-1 form-group float-left hidden">
-                  <h5>%</h5>
-                </div>
-            <%else%>
-              <div class="col-lg-4 form-group float-left">
-                <%if params[:product].present? %>
-                <h5>Product</h5>
-                <%else%>
-                <h5>Item</h5>
-                <%end%>
-              </div>
-              <div class="col-lg-1 form-group float-left">
-                <h5>Qty</h5>
-              </div>
-              <div class="col-lg-2 form-group float-left">
-                <h5>Cost</h5>
-              </div>
-              <div class="col-lg-2 form-group float-left">
-                <h5>Total</h5>
-              </div>
-              <div class="col-lg-2 form-group float-left">
-                <h5>Sale</h5>
-              </div>
-              <div class="col-lg-1 form-group float-left hidden">
-                <h5></h5>
-              </div>
-            <%end%>
-            </div>
+            
             <%= f.fields_for :purchase_sale_items do |purchase_sale_item| %>
             <%= render 'purchase_sale_items_fields_new', f: purchase_sale_item %>
             <% end %>
-            <div class="links font-weight-bold text-success text-uppercase">
+            <div class="links font-weight-bold text-uppercase">
                                                                                                                 <%# //ADD PRODUCT HERE %>
-              <%= link_to_add_association f, :purchase_sale_items, partial: 'purchase_sale_items_fields_new', class: "new_product"  do %>
+              <%= link_to_add_association f, :purchase_sale_items, partial: 'purchase_sale_items_fields_new', class: "new_product btn btn-success mt-2"  do %>
                 <i class="fa fa-plus"></i> Add Product (<span id="total_product_quantity"></span>)
               <% end %>
             </div>
@@ -234,7 +182,7 @@
         </div>
       </div>
     </div>
-  </div>
+  
   <%if pos_setting_sys_type=="MobileShop"%>
     <div class="col-xl-12 col-md-12 mb-12">
       <div class="card border-left-primary shadow h-100 py-2">
@@ -258,22 +206,20 @@
     </div>
   <%end%>
   <%if @purchase_sale_detail.transaction_type!='Sale' || params[:transaction_type]!='sale'%>
-    <div class="col-xl-12 col-md-12 mb-12">
-      <div class="card border-left-primary shadow h-100 py-2">
-        <div class="card-body">
-          <div class="row no-gutters align-items-center">
-            <div class="col mr-2">
-              <div class="row col-lg-12">
-                <%= f.fields_for :expense_entries do |expense_entry| %>
-                  <%= render 'expense_entries_fields', f: expense_entry %>
+    <div class="card border-radius-1 shadow p-2 mt-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="row col-lg-12">
+              <%= f.fields_for :expense_entries do |expense_entry| %>
+                <%= render 'expense_entries_fields', f: expense_entry %>
+              <% end %>
+            </div>
+            <div class="row col-lg-12">
+              <div class="links font-weight-bold text-uppercase">
+                <%= link_to_add_association f, :expense_entries, partial: 'expense_entries_fields', class: 'btn btn-primary'  do %>
+                  <i class="fa fa-plus"></i> Add Expense <span id="expense_total"></span>
                 <% end %>
-              </div>
-              <div class="row col-lg-12">
-                <div class="links font-weight-bold text-success text-uppercase">
-                  <%= link_to_add_association f, :expense_entries, partial: 'expense_entries_fields'  do %>
-                    <i class="fa fa-plus"></i> Add Expense <span id="expense_total"></span>
-                  <% end %>
-                </div>
               </div>
             </div>
           </div>
@@ -338,52 +284,52 @@
       </div>
     </div>
   <%end%>
-  <div class="col-xl-12 col-md-12 mb-12 ">
-    <div class="card border-left-primary shadow h-100 py-2">
-      <div class="card-body">
-        <div class="row no-gutters align-items-center">
-          <div class="col mr-2">
-            <div class="row">
-              <div class="col-lg-6 form-group float-left font-weight-bold"><%= f.datetime_select :created_at,{},class: "form-control"%>
-              </div>
-              <%if @pos_type_batha%>
-                <div class="col-lg-2 form-group float-left font-weight-bold"><%= f.select :staff_id, options_from_collection_for_select(@staffs, 'id', 'name', f.object.staff_id), {prompt: "Select the Loader"},class: "form-control"%></div>
-              <%else%>
-                <div class="col-lg-2 form-group float-left font-weight-bold"><%= f.text_field :bill_no%></div>
-              <%end%>
-              <div class="col-lg-2 form-group float-left font-weight-bold"><%= f.text_field :carriage,onchange:"costUpdateReturn()",onkeyup:"costUpdateReturn()", required: true%></div>
-              <div class="col-lg-2 form-group float-left font-weight-bold"><%= f.number_field :loading,onchange:"costUpdateReturn()",onkeyup:"costUpdateReturn()", required: true%></div>
-            </div>
-            <div class="row">
-              <% if f.object.persisted? && f.object.purchase_sale_images.present? %>
-                <% f.object.purchase_sale_images.each do |image| %>
-                  <%= image_tag image, width: 200, style: 'margin-right:20px;' %>
-                <% end %>
-              <% end %>
-              <div class="col-lg-12 form-group float-left font-weight-bold ">
-              <%= f.file_field :purchase_sale_images, multiple: true,'Filelimit' => 10, accept: 'image/*,.png', placeholder: '100 MB', class: "cursor-pointer upload_field" %>
-              </div>
-              <div class="col-lg-6 form-group float-left font-weight-bold"><%= f.text_area :comment%></div>
-              <div class="actions col-lg-6 form-group float-left font-weight-bold">
-                <div class="form-group">
-                  <div class="actions col-lg-12 form-group float-left font-weight-bold">
-                    <label for="commit">Save/Update</label>
-                  </div>
-                  <div class="actions col-lg-6 form-group float-left font-weight-bold">
-                    <%= f.submit class: "btn btn-success  col-lg-12", style: "float: right",value: "Save with Print", onclick:"return save_sale();" %>
-                  </div>
-                  <div class="actions col-lg-6 form-group float-left font-weight-bold">
-                    <%= f.submit class: "btn btn-success col-lg-12", style: "float: right",value: "Save", onclick:"return save_sale();" %>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+  <div class="row">
+    <div class="col card border-radius-1 shadow p-4 m-3">
+      <%if @pos_type_batha%>
+      <%= f.select :staff_id, options_from_collection_for_select(@staffs, 'id', 'name', f.object.staff_id), {prompt: "Select the Loader"},class: "form-control"%>
+      <%else%>
+        <%= f.text_field :bill_no%>
+      <%end%>
+      <%= f.text_field :carriage,onchange:"costUpdateReturn()",onkeyup:"costUpdateReturn()", required: true%>
+      <%= f.number_field :loading,onchange:"costUpdateReturn()",onkeyup:"costUpdateReturn()", required: true%>
+    </div>
+
+    <div class="col card border-radius-1 shadow mr-3 mb-3 mt-3 p-4">
+      <%= f.datetime_select :created_at,{},class: "form-control"%>
+      <% if f.object.persisted? && f.object.purchase_sale_images.present? %>
+        <% f.object.purchase_sale_images.each do |image| %>
+          <%= image_tag image, width: 200, style: 'margin-right:20px;' %>
+        <% end %>
+      <% end %>
+      <%= f.file_field :purchase_sale_images, multiple: true,'Filelimit' => 10, accept: 'image/*,.png', placeholder: '100 MB', class: "cursor-pointer upload_field" %>
+      <%= f.text_area :comment%>
+    </div>
+  </div>
+
+  <div class= 'row ml-2'>
+      <h4 class="card-header col-lg-12 mb-4">
+          Follow Up
+      </h4>
+    <div  class="col-lg-12 row">
+      <%= f.fields_for :follow_ups do |follow_up| %>
+        <%= render 'crms/follow_ups_new', f: follow_up %>
+      <% end %>
+    </div>
+    <div id="new_links" class='row col-12'>
+      <div class="links ml-auto">
+        <%= link_to_add_association 'Add More', f, :follow_ups, partial: 'crms/follow_ups_new', class: "btn btn-info mb-2" %>
       </div>
     </div>
   </div>
 
+  <hr>
+  <div class="actions col-lg-12 form-group float-left font-weight-bold">
+    <div class="form-group">
+      <%= f.submit class: "btn btn-primary mr-3", style: "float: left; width: 150px;",value: "Save with Print", onclick:"return save_sale();" %>
+      <%= f.submit class: "btn btn-success", style: "float: left; width: 100px;",value: "Save", onclick:"return save_sale();" %>
+    </div>
+  </div>
 <% end %>
 <%= javascript_include_tag 'hover', 'data-turbolinks-track': 'reload' %>
 </div>

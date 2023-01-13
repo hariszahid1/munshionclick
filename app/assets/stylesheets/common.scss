@@ -566,6 +566,7 @@ thead.cust_prizes_list th.th_value {
   pointer-events: none;
   box-shadow: 0px 10px 10px rgba(0,0,0,0.1);
   transition: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  width: max-content;
 }
 
 .icon-container .my-icon:hover .my-tooltip{
@@ -697,7 +698,13 @@ thead.cust_prizes_list th.th_value {
   background-color: #0f1d59;
   color: white;
 }
+.filter-color {
+  color: #1e3494;
+}
 
+.logo-back{
+  color: #0f1d59;
+}
 .icon-container-3 {
   display: inline-flex;
   flex-direction: row;
@@ -801,4 +808,51 @@ thead.cust_prizes_list th.th_value {
 }
 .margin-top-layout{
   margin-top: 75px;
+}
+
+.expense-voucher-bill,.expense-voucher-bill:hover{
+  background-color: rgba(204, 255, 204, 1) !important;
+}
+.custom-tr-height{
+  height: 30px;
+  background-color: rgba(179, 224, 255,1)
+}
+.client-status-width {
+  width: 160px;
+}
+.trial-b-table, th, td {
+  border: 1px solid lightgray;
+  border-collapse: collapse;
+  padding: 10px;
+}
+
+.content-table {
+  border-collapse: collapse;
+  min-width: 400px;
+  border-radius: 5px 5px 0 0;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.content-table thead tr {
+  text-align: left;
+}
+
+.content-table th,
+.content-table td {
+  padding: 12px 15px;
+}
+
+.content-table tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+.content-table tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+
+input[type='checkbox'] {
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
 }

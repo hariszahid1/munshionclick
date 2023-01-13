@@ -1,3 +1,9 @@
+<style>
+th, td{
+  text-align: center;
+}
+</style>
+<div class="card border-radius-1 shadow p-3 m-2">
 <%= bootstrap_form_for(daily_sale) do |f| %>
   <% if daily_sale.errors.any? %>
     <div id="error_explanation">
@@ -10,43 +16,43 @@
       </ul>
     </div>
   <% end %>
-  <table>
-    <th>Currecy</th>
-    <th>Note</th>
-    <th>Total</th>
+  <table class="text-align-center">
+    <th class="h4 font-weight-bold">Currecy</th>
+    <th class="h4 font-weight-bold">Note</th>
+    <th class="h4 font-weight-bold">Total</th>
     <tr>
-      <td><h4>5000</h4></td>
-      <td><%=number_field_tag :c5000,0,onchange:"daily_count()",onkeyup:"daily_count()"%></td>
+      <td><h5>5000</h4></td>
+      <td><%=number_field_tag :c5000,0,onchange:"daily_count()",onkeyup:"daily_count()", style: "padding: 5px; border: lightgray 1px solid; border-radius: 15px; text-align: center;"%></td>
       <td><h4 id="p5000"></h4></td>
     </tr>
     <tr>
       <td><h4>1000</h4></td>
-      <td><%=number_field_tag :c1000,0,onchange:"daily_count()",onkeyup:"daily_count()"%></td>
+      <td><%=number_field_tag :c1000,0,onchange:"daily_count()",onkeyup:"daily_count()", style: "padding: 5px; border: lightgray 1px solid; border-radius: 15px; text-align: center;"%></td>
       <td><h4 id="p1000"></h4></td>
     </tr>
     <tr>
       <td><h4>500</h4></td>
-      <td><%=number_field_tag :c500,0,onchange:"daily_count()",onkeyup:"daily_count()"%></td>
+      <td><%=number_field_tag :c500,0,onchange:"daily_count()",onkeyup:"daily_count()", style: "padding: 5px; border: lightgray 1px solid; border-radius: 15px; text-align: center;"%></td>
       <td><h4 id="p500"></h4></td>
     </tr>
     <tr>
       <td><h4>100</h4></td>
-      <td><%=number_field_tag :c100,0,onchange:"daily_count()",onkeyup:"daily_count()"%></td>
+      <td><%=number_field_tag :c100,0,onchange:"daily_count()",onkeyup:"daily_count()", style: "padding: 5px; border: lightgray 1px solid; border-radius: 15px; text-align: center;"%></td>
       <td><h4 id="p100"></h4></td>
     </tr>
     <tr>
       <td><h4>50</h4></td>
-      <td><%=number_field_tag :c50,0,onchange:"daily_count()",onkeyup:"daily_count()"%></td>
+      <td ><%=number_field_tag :c50,0,onchange:"daily_count()",onkeyup:"daily_count()", style: "padding: 5px; border: lightgray 1px solid; border-radius: 15px; text-align: center;"%></td>
       <td><h4 id="p50"></h4></td>
     </tr>
     <tr>
       <td><h4>20</h4></td>
-      <td><%=number_field_tag :c20,0,onchange:"daily_count()",onkeyup:"daily_count()"%></td>
+      <td><%=number_field_tag :c20,0,onchange:"daily_count()",onkeyup:"daily_count()", style: "padding: 5px; border: lightgray 1px solid; border-radius: 15px; text-align: center;"%></td>
       <td><h4 id="p20"></h4></td>
     </tr>
     <tr>
       <td><h4>10</h4></td>
-      <td><%=number_field_tag :c10,0,onchange:"daily_count()",onkeyup:"daily_count()"%></td>
+      <td><%=number_field_tag :c10,0,onchange:"daily_count()",onkeyup:"daily_count()", style: "padding: 5px; border: lightgray 1px solid; border-radius: 15px; text-align: center;"%></td>
       <td><h4 id="p10"></h4></td>
     </tr>
     <tr>
@@ -56,26 +62,27 @@
     </tr>
   </table>
 
-  <div class="col-lg-2" style="float:left">
-    <%= f.text_field :sale %>
+  <div class="col-lg-3" style="float:left">
+    <%= f.number_field :sale, step: :any %>
   </div>
   <div class="col-lg-2" style="float:left">
-    <%= f.text_field :cash_out %>
+    <%= f.number_field :cash_out, step: :any %>
   </div>
   <div class="col-lg-2" style="float:left">
     <%= f.select :shift, DailySale.shifts.map { |key, value| [key.humanize, key] },{class: "form-control", required: true} %>
   </div>
-  <div class="col-lg-6" style="float:left">
+  <div class="col-lg-4" style="float:left">
     <%= f.date_select :created_at, class: "form-control" %>
   </div>
   <div class="col-lg-12 " style="float:left">
     <%= f.text_area :comment, placeholder:"Enter Comment" %>
   </div>
-
-  <div class="actions">
-    <%= link_to 'Daily', daily_sales_path, class: "btn btn-info" %>
+  
+  <div class="actions m-3">
+    <%= link_to 'Back to Daily Sale', daily_sales_path, class: "btn btn-info" %>
     <%= f.submit class: "btn btn-primary", style: "float: right" %>
   </div>
 
 <% end %>
+</div>
 <%= javascript_include_tag 'hover', 'data-turbolinks-track': 'reload' %>

@@ -5,28 +5,58 @@
   </button>
 </div>
 <div class="hidden" id="city_list">
-  <div class="row">
-    <div class="col-lg-12 col-sm-12">
-      <div class="main-content-header">
-        <h1 class="ml-2">Follow Ups</h1>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item">
-            <a href="<%= root_path %>">Dashboard</a>
-          </li>
-          <li class="breadcrumb-item active">
-            <a href="<%= follow_ups_path %>">follow_ups</a>
-          </li>
-        </ol>
+  <div class='d-flex'>
+    <div>
+      <div class="row mb-1">
+        <h1 class="ml-2 col">Follow Ups</h1>
+      </div>
+      <div class="row mb-2">
+        <div class="col-lg-12 col-sm-12">
+          <div class="main-content-header">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a href="<%= root_path %>">Dashboard</a>
+              </li>
+              <li class="breadcrumb-item active">
+                <a href="<%= follow_ups_path %>">FollowUp</a>
+              </li>
+            </ol>
+          </div>
+        </div>
       </div>
     </div>
+    <div class="d-flex ml-auto">
+     <% follow_up_types = {
+          'crms' => { color: 'rgba(102, 255, 51, 0.3)', text: 'CRM' },
+          'sale_deals' => { color: 'rgba(255, 51, 0, 0.3)', text: 'Sale Deal' },
+          'purchase_sale_details' => { color: 'rgba(255, 255, 0, 0.3)', text: 'Purchase Sale Detail' },
+          'orders' => { color: 'rgba(128, 229, 255, 0.3)', text: 'Order' },
+          'expense_vouchers' => { color: 'rgba(255, 179, 217, 0.74)', text: 'Expense Voucher' }
+      } %>
+      <% follow_up_types.each do |type, details| %>
+        <% if @follow_up_gadets[type].present? %>
+          <div class="card shadow text-dark mr-3 p-1 close-card" style="border: 10px solid <%= details[:color] %>; border-radius: 50%;">
+            <%= link_to follow_ups_path(q: { reminder_type_eq: type }) do %>
+              <span>
+                <h2 class="mt-2">
+                  <b><%= @follow_up_gadets[type] %></b>
+                </h2>
+                <%= details[:text] %>
+              </span>
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
   </div>
+</div>
 
     <ul class="nav nav-pills" role="tablist">
       <li class="nav-item">
         <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link tab-label active ml-3  " href="<%= customer_management_systems_path %>">CMS</a>
+        <a class="nav-link tab-label active ml-3  " href="<%= crms_path %>">CRM</a>
       </li>
     </ul>
   <%= search_form_for @q, url: follow_ups_path, class: "admin-controls", method: "get" do |f| %>
@@ -38,7 +68,7 @@
               <%= f.select :followable_id_eq, options_for_select(@options_for_select.map{ |p| [p.name , p.id]}, f.object.followable_id_eq),{:include_blank => "Select CMS User"},:class=>"form-control chosen-select" %>
             </div>
             <div class="col-lg-3 form-group float-left">
-              <%= f.select :assigned_to_id_eq, options_for_select(@staff.map{ |p| [p.name , p.id]}, f.object.assigned_to_id_eq),{:include_blank => "Select Staff"},:class=>"form-control chosen-select" %>
+              <%= f.select :assigned_to_id_eq, options_for_select(@users.map{ |p| [p.name , p.id]}, f.object.assigned_to_id_eq),{:include_blank => "Select User"},:class=>"form-control chosen-select" %>
             </div>
             <div class="col-lg-3 form-group float-left">
               <%= f.select :task_type_eq, options_for_select(FollowUp.task_types, f.object.task_type_eq), {:include_blank => "Select Task Type"},:class=>"form-control chosen-select" %>
@@ -70,7 +100,7 @@
 							</div>
 						</span>
 					</div>
-        <th>CMS User</th>
+        <th>CRM User</th>
         <th>Task Type<div class='float-right'><%= sort_link(@q, :task_type, "", {}, class: 'sorting-button') %></div></th>
         <th>Priority<div class='float-right'><%= sort_link(@q, :priority, "", {}, class: 'sorting-button') %></div></th>
         <th>Comment<div class='float-right'><%= sort_link(@q, :comment, "", {}, class: 'sorting-button') %></div></th>
@@ -81,7 +111,7 @@
     </thead>
 
     <tbody>
-      <%= render partial: 'follow_up', collection: @follow_ups.sort_by(&:id).reverse %>
+      <%= render partial: 'follow_up', collection: @follow_ups %>
     </tbody>
   </table>
 

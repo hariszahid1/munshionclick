@@ -1,0 +1,167 @@
+
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;">Order Detail</h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<p style="text-align: center;margin: 0;">Report by: <%=current_user.name%></p>
+<div style="width:90vw;">
+  <table>
+    <th></th>
+    <th></th>
+    <tr>
+      <td style="width:67vw;"><b>Date:  <span><%=Time.zone.now.strftime("%A %d %b %y")%><b></span> </td>
+      <td style="width:33vw;"><b>Customer Name: <span> <%=@order.sys_user.name %><b></span></td>
+    </tr>
+  </table>
+</div>
+<div>
+  <table data-toggle="table" data-search="true">
+    <thead>
+      <tr class="lite-gray">
+        <th>#</th>
+        <th>Customers</th>
+        <th>Items</th>
+        <th>Total Bill</th>
+        <th>Paid</th>
+        <th>Discount</th>
+        <th>Status</th>
+        <th></th>
+        <th>Date/Time</th>
+        <th>Comment</th>
+
+      </tr>
+    </thead>
+
+    <tbody>
+        <tr style="text-align:center">
+          <td><%= @order.voucher_id.to_s+'#'+@order.id.to_s %></td>
+          <td><%= @order.sys_user.name rescue '' %></td>
+          <td><%= @order.purchase_sale_items.count rescue 0 %></td>
+          <td><%= number_with_delimiter(@order.total_bill.to_f.round(2)) rescue 0 %></td>
+          <td><%= number_with_delimiter(@order.amount.to_f.round(2)) rescue 0%></td>
+          <td><%= number_with_delimiter(@order.discount_price.to_f.round(2)) rescue 0%></td>
+          <td><%= @order.status %></td>
+          <td></td>
+          <td>
+            <%if @order.created_at.strftime("%d%b%y")!=@order.updated_at.strftime("%d%b%y")%>
+              <%= @order.created_at.present? ? order.created_at.strftime("%d%b%y at %I:%M %p") : '' %> | <%= order.updated_at.present? ? order.updated_at.strftime("%d%b%y at %H:%M%p") : '' %>
+            <%else%>
+              <%= @order.created_at.present? ? @order.created_at.strftime("%d%b%y at %I:%M %p") : '' %>
+            <%end%>
+          </td>
+          <td><%= @order.comment %></td>
+        </tr>
+
+        <tr class="lite-gray">
+          <td ></td>
+          <th>Order Detail</th>
+          <th>Product</th>
+          <th>Quantity</th>
+          <th>Rate</th>
+          <th>Total</th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <td></td>
+
+        </tr>
+        <%if @product_detail!=0%>
+          <% @product_detail.each do |name_quantity|%>
+            <tr style="text-align:center">
+              <td></td>
+              <td></td>
+              <td><%= name_quantity.first %></td>
+              <td><%= name_quantity.second %></td>
+              <td><%= number_with_delimiter(name_quantity.third) %></td>
+              <td><%= number_with_delimiter(name_quantity.fourth) %></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+
+            </tr>
+          <%end%>
+        <%end%>
+        <tr>
+          <td colspan="10">
+          <p style="border-bottom: double 4px;  margin: 0;"></p>
+          <h2 style="text-align: center; margin: 0;">Delivery Detail</h2>
+          <p style="border-bottom: double 4px;  margin: 0;"></p>
+          </td>
+        </tr>
+        <tr class="lite-gray">
+          <td></td>
+          <th>Delivery Detail</th>
+          <th>Items</th>
+          <th>Total Bill</th>
+          <th>Paid</th>
+          <th>Discount</th>
+          <th>Date/Time</th>
+          <th>C/L</th>
+          <th>Loader no</th>
+          <td></td>
+        </tr>
+        <%if @order.purchase_sale_details.present?%>
+        <% @order.purchase_sale_details.each do |purchase_sale_detail| %>
+          <tr style="text-align:center">
+            <td></td>
+            <td><%= purchase_sale_detail.voucher_id.to_s+'#'+purchase_sale_detail.id.to_s %></td>
+            <td><%= purchase_sale_detail.purchase_sale_items.count rescue 0 %></td>
+            <td><%= number_with_delimiter(purchase_sale_detail.total_bill.to_f.round(2)) rescue 0 %></td>
+            <td><%= number_with_delimiter(purchase_sale_detail.amount.to_f.round(2)) rescue 0%></td>
+            <td><%= number_with_delimiter(purchase_sale_detail.discount_price.to_f.round(2)) rescue 0%></td>
+            <td>
+              <%if purchase_sale_detail.created_at.strftime("%d%b%y")!=purchase_sale_detail.updated_at.strftime("%d%b%y")%>
+                <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d%b%y at %I:%M%p") : '' %> | <%= purchase_sale_detail.updated_at.present? ? purchase_sale_detail.updated_at.strftime("%d%b%y at %H:%M%p") : '' %>
+              <%else%>
+                <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d%b%y at %I:%M%p") : '' %>
+              <%end%>
+            </td>
+            <td><%=purchase_sale_detail.carriage%> / <%=purchase_sale_detail.loading%></td>
+            <td><%=purchase_sale_detail.staff.name if purchase_sale_detail.staff.present? %></td>
+            <td><%= purchase_sale_detail.comment %></td>
+          </tr>
+          <%if purchase_sale_detail.purchase_sale_items_names_and_quantity!=0%>
+            <%purchase_sale_detail.purchase_sale_items_names_and_quantity.each do |name_quantity|%>
+              <tr style="text-align:center">
+                <td></td>
+                <td></td>
+                <td><%=name_quantity.first%></td>
+                <td><%=name_quantity.second%></td>
+                <td><%=name_quantity.third%></td>
+                <td><%=name_quantity.fourth%></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            <%end%>
+          <%end%>
+        <% end %>
+        <tr class="lite-gray" style="text-align:center">
+          <td><h4>S-Total</h4></td>
+          <td><h4><%= number_with_delimiter(@order.total_bill) %></h4></td>
+          <td><h4>D-Total</h4></td>
+          <td><h4><%= number_with_delimiter(@order.purchase_sale_details.sum(:total_bill)) %></h4></td>
+          <td></td>
+          <td></td>
+          <td><h4>Remaing</h4></td>
+          <td><h4><%= number_with_delimiter(@order.total_bill.to_i-@order.purchase_sale_details.sum(:total_bill).to_i) %></h4></td>
+          <td></td>
+          <td></td>
+
+        </tr>
+      <% end %>
+      <tr>
+
+      </tr>
+      <tr>
+
+      </tr>
+      <tr>
+        <th style="text-align:left" colspan="5">Admin Sign#</th>
+        <th style="text-align:center" colspan="5">Customer Sign#</th>
+      </tr>
+    </tbody>
+  </table>
+
+</div>

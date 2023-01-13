@@ -1,0 +1,145 @@
+$( document ).ready(function() {
+
+  const ctx = document.getElementById('myChart');
+  var blockKeys=$('#blockKeys').val().split(' ')
+  var blockCount=$('#blockCount').val().split(' ')
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: blockKeys,
+      datasets: [{
+        label: 'Total Revenue ',
+        data: blockCount,
+        borderWidth: 1,
+        backgroundColor: '#FF5C5C'
+      }],
+    },
+    options: {
+      
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Total Revenue generated per Block - Bar Chart',
+                font: {
+                  size: 16
+                }
+            }
+          
+
+        }
+      
+    }
+  });
+  
+});
+
+$( document ).ready(function() {
+
+  const ctx = document.getElementById('myChart1');
+  var bTitle=$('#bTitle').val().split(' ')
+  var bCount=$('#bCount').val().split(' ')
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: bTitle,
+      datasets: [{
+        label: 'Total Entries ',
+        data: bCount,
+        borderWidth: 1,
+      }],
+    },
+    options: {
+      
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Total Entries per Block - Pie Chart',
+                font: {
+                  size: 16
+                }
+            }
+          
+
+        }
+      
+    }
+  });
+  
+});
+
+$( document ).ready(function() {
+
+  const ctx = document.getElementById('myChart2');
+  var catKeys=$('#catKeys').val().split(' ')
+  var catSum=$('#catSum').val().split(' ')
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: catKeys,
+      datasets: [{
+        label: 'Total Revenue ',
+        data: catSum,
+        borderWidth: 1,
+        backgroundColor: 'green'
+      }],
+    },
+    options: {
+      
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Total Revenue generated per Category - Bar Chart',
+                font: {
+                  size: 16
+                }
+            }
+          
+
+        }
+      
+    }
+  });
+  
+});
+$( document ).ready(function() {
+
+  const ctx = document.getElementById('myChart3');
+  var SubcatKeys=$('#SubcatKeys').val().split(' ')
+  var SubcatSum=$('#SubcatSum').val().split(' ')
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: SubcatKeys,
+      datasets: [{
+        label: 'Total Revenue ',
+        data: SubcatSum,
+        borderWidth: 1,
+        backgroundColor: 'blue'
+      }],
+    },
+    options: {
+      
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Total Revenue generated per Sub Category - Bar Chart',
+                font: {
+                  size: 16
+                }
+            }
+          
+
+        }
+      
+    }
+  });
+  
+});

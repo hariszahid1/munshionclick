@@ -1,0 +1,20 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h5> List of Today Follow ups </h5>
+    <% @follow_ups.each_with_index do |follow_up, index|%>
+      <h4 style='color: #28a745;'><%= index %>.</h4>
+      <ul>
+        <li><span><b>Task Type:</b> <%= follow_up.task_type %></span></li>
+        <li> <span><b>Priority:</b> <%= follow_up.priority %></span></li>
+        <li> <span><b>Comment:</b> <%= follow_up.comment %></span></li>
+        <li> <span><b>Assigned to:</b> <%= follow_up&.staff&.name %></span></li>
+        <li> <span><b>By:</b> <%= follow_up&.user&.name %></span></li>
+      </ul>
+    <% end %>
+  </body>
+</html>

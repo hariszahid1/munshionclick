@@ -82,6 +82,51 @@ class ItemsController < ApplicationController
     end
   end
 
+  def analytics
+    type = params[:type]
+    date_limit = case type
+                 when 'daily'
+                  DateTime.current.all_day
+                 when 'weekly'
+                   DateTime.current.all_week
+                 when 'monthly'
+                   DateTime.current.all_month
+                 when 'yearly'
+                   DateTime.current.all_year
+                 else
+                   DateTime.current.all_day
+                 end
+
+    if params[:q].present?
+      if params[:q][:created_at_gteq].present?
+        params[:q][:created_at_gteq] =
+          params[:q][:created_at_gteq].to_date.beginning_of_day
+      end
+      if params[:q][:created_at_lteq].present?
+        params[:q][:created_at_lteq] =
+          params[:q][:created_at_lteq].to_date.end_of_day
+      end
+     
+      @q = Item.joins(:item_type).ransack(params[:q])
+    else
+      @q = Item.joins(:item_type).where(created_at: date_limit).ransack
+    end
+
+    @item_type_count = @q.result.group('item_types.title').count
+    @the_item_cost = @q.result.group('item_types.title').sum(:cost)
+    @the_item_sale = @q.result.group('item_types.title').sum(:sale)
+    @single_item_cost = @q.result.group('items.title').sum(:cost)
+    @single_item_sale = @q.result.group('items.title').sum(:sale)
+    @purchase_type_count = @q.result.group(:purchase_type).count
+    @cost_by_date = @q.result.group('date(items.created_at)').sum(:cost)
+    @sale_by_date = @q.result.group('date(items.created_at)').sum(:sale)
+    @items_by_date = @q.result.group('date(items.created_at)').count
+  
+    respond_to do |format|
+      format.js
+    end
+  end
+  
   def get_item_data
     item = Item.find_by(id: params[:item_id])
     respond_to do |format|
@@ -97,7 +142,7 @@ class ItemsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def item_params
-      params.require(:item).permit(:item_type_id, :title, :code, :minimum, :optimal, :maximun, :comment, :status, :quantity_type, :weight_type, :stock,:cost,:sale, :measurement_quantity)
+      params.require(:item).permit(:item_type_id, :title, :code, :minimum, :optimal, :maximun, :comment, :status, :quantity_type, :weight_type, :stock,:cost,:sale, :measurement_quantity, :purchase_type)
     end
 
     def total_count_for_index

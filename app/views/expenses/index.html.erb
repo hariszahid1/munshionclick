@@ -4,7 +4,7 @@
     <span aria-hidden="true">×</span>
   </button>
 </div>
-<div class="hidden" id="expenses_list">
+<div class="hidden m-4" id="expenses_list">
   <div class="main-content-header">
     <h1 class="ml-2">General Expense</h1>
     <ol class="breadcrumb mb-5">
@@ -44,21 +44,19 @@
 		<li class="nav-item">
 			<a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
 		</li>
-    <li class="nav-item">
-			<a class="nav-link tab-label" data-toggle="tab" data-remote="true" href="#analytics" role="tab">Analytics</a>
-		</li>
+   <li class="nav-item">
+      <a class="nav-link tab-label analytics-tab" data-toggle="tab" href="#analytics" role="tab">Analytics</a>
+    </li>
 		<%if (check_can_import_export(@module_permission))%>
 			<li class="nav-item">
 				<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
 			</li>
 		<%end%>
 	</ul>
-        <%= hidden_field_tag "ExpenseDate", @exp_date, { :id => "ExpenseDate" } %>
-        <%= hidden_field_tag "ExpenseType", @exp_type, { :id => "ExpenseType" } %>
-        <%= hidden_field_tag "theType", @the_type, { :id => "theType" } %>
+   <%= link_to '', analytics_expenses_path, id: 'analytics-path', class: 'd-none', remote: true %>     
   <%= search_form_for @q, url: expenses_path, class: "admin-controls", method: "get" do |f| %>
     <div class="tab-content">
-      <div class="tab-pane active mb-3 card shadow-sm mt-2 border-radius-1" id="search" role="tabpanel">
+      <div class="tab-pane active mb-3 card shadow p-3 mt-2 border-radius-1" id="search" role="tabpanel">
         <p>
           <span class="col-lg-12 mt-4">
             <span class="col-lg-3 form-group float-left">
@@ -67,15 +65,16 @@
             <span class="col-lg-3 form-group float-left">
               <%= f.select :expense_entries_account_id_eq, options_from_collection_for_select(@accounts, "id", "title" ,@account),{:include_blank => "Select Account"},:class=>"form-control chosen-select" %>
             </span>
-            <span class="col-lg-2 form-group float-left">
-              <%= f.search_field :created_at_gteq,value:@start_date, class: 'form-control input-sm datepicker',title: "Select date from",  placeholder: "YYYY-MM-DD" %>
-            </span>
-            <span class="col-lg-2 form-group float-left">
-              <%= f.search_field :created_at_lteq,value:@end_date,class: 'form-control input-sm datepicker' ,title: "Select date to", placeholder: "YYYY-MM-DD"%>
+            <span class="col-lg-3 form-group float-left d-flex">
+              <%= f.search_field :created_at, id: "reportrange", class: 'form-control' %>
             </span>
             <span class="col-lg-2 form-group float-left">
               <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
             </span>
+            <div class="d-none">
+              <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker',placeholder: "YYYY-MM-DD" %>
+              <%= f.search_field :created_at_lteq, class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
+            </div>
           </span>
 
           <div class="row ml-4">
@@ -133,51 +132,10 @@
           </div>
         </p>
       </div>
-      <div class="tab-pane mb-3 shadow-sm mt-2 border-radius-1 p-5" id="analytics" role="tabpanel">
-
-      <div class="row mb-4">
-        <div class="col-lg-10 mx-auto">
-         <div class="my-chart-Container1">
-            <div class="mychartBox1 card border-radius-1 shadow">
-              <canvas id="myChart5"></canvas>
-            </div>
-          </div>
-        </div>  
-      </div>
-        <div class="row d-flex mb-3">
-          <div class="col-lg-6">
-            <div class="my-chart-Container">
-              <div class="mychartBox card border-radius-1 shadow mt-3">
-                <canvas id="myChart" class="ml-5"></canvas>
-              </div> 
-            </div>
-          </div>
-          <div class="col-lg-6">
-            <div class="my-chart-Container">
-              <div class="mychartBox card border-radius-1 shadow mt-3">
-                <canvas id="myChart1" ></canvas>
-              </div> 
-            </div>
-          </div>  
-        </div>  
-        <div class="row d-flex">
-          <div class="col-lg-6">
-            <div class="my-chart-Container">
-              <div class="mychartBox card border-radius-1 shadow mt-3">
-                <canvas id="myChart2"></canvas>
-              </div> 
-            </div>
-          </div>
-          <div class="col-lg-6">
-            <div class="my-chart-Container">
-              <div class="mychartBox card border-radius-1 shadow mt-3">
-                <canvas id="myChart3"></canvas>
-              </div> 
-            </div>
-          </div>  
-        </div> 
-      </div>
-      <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="import-export" role="tabpanel">
+      <div class="tab-pane mb-3 card shadow mt-2 p-3 border-radius-1" id="analytics" role="tabpanel">
+      <div id="show-analytics" class="row p-3"></div>
+    </div>
+      <div class="tab-pane card shadow mt-2 border-radius-1 p-3" id="import-export" role="tabpanel">
         <p>
           <div class="d-flex">
             <button class="btn btn-danger ml-3" name="export_data" type="submit" value="export_data">Export Data</button>
@@ -190,29 +148,34 @@
 </div>
 
 <div>
-  <div class="card shadow mt-4 p-2 border-radius-1">
+  <div class="card shadow mt-4 p-4 border-radius-1 m-4">
     <%= render 'map_columns/map_column_partials' %>
+    <div class="row d-flex" style="position: absolute;">
+      <div>
+        <%if (check_can_delete(@module_permission))%>
+	        <button class="btn btn-outline-danger delete-selected mt-4 ml-3" type='button' value='Expense'>
+	        	Delete Selected
+	        </button>		
+        <%end%>
+      </div>  
+      <%= search_form_for @q, url: expenses_path, class: "admin-controls ml-4", method: "get" do |f| %>
+        <div class="d-flex mt-4" style="width: 120%;">
+          <%= select_tag :limit, options_for_select(['Show Entries',5, 10, 15, 20, 25], selected: :limit), id: 'pagination-limit', title:'Show Entries', style:'cursor: pointer;' %>
+        </div>
+      <% end %>
+    </div>
+    <div class="mt-3">
     <table data-toggle="table mt-3" data-search="true" class="overflow-hidden border-radius-1">
       <thead>
         <tr>
           <th><input type="checkbox" id="master" class='select-all-checkbox'>
-						<%if (check_can_delete(@module_permission))%>	
-							<div class="icon-container float-center">
-								<span class="ml-2 mt-2">
-									<div class="my-icon my-view">
-										<button class="icon-div btn delete-selected p-2 " type='button' value='Expense'>
-											<i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i>
-										</button>
-									</div>
-								</span>
-							</div>
-						<%end%>
+						
           </th>
           <th>ID<div class='float-right'><%= sort_link(@q, :id,"", {}, class: 'sorting-button') %></div></th>
           <th>Type Wise<div class='float-right'><%= sort_link(@q, :expense, "", {}, class: 'sorting-button') %></div></th>
           <th>Expense<div class='float-right'><%= sort_link(@q, :expense, "", {}, class: 'sorting-button') %></div></th>
           <th>Paid By</th>
-          <th>Comment<div class='float-right'><%= sort_link(@q, :comment, "", {}, class: 'sorting-button') %></div></th>
+          <th>Summary<div class='float-right'><%= sort_link(@q, :comment, "", {}, class: 'sorting-button') %></div></th>
           <th>Date</th>
           <th class="border_none">Action</th>
         </tr>
@@ -232,7 +195,7 @@
             <td><%= number_with_delimiter(expense.expense.to_f.round(2)) %></td>
             <td>
               <%=Account.where(id: expense.expense_entries.distinct.pluck(:account_id)).pluck(:title)  %>
-              <%=@expense_payment[expense.id]%>
+              <%=number_with_delimiter(@expense_payment[expense.id])%>
             </td>
             <td class="urdu-font"><%= expense.comment %> <%=expense.expense_entries.distinct.pluck(:comment) %></td>
             <td>
@@ -292,7 +255,7 @@
                           PDF
                         </div>
                         <span class="icon-div mt-3">
-                          <%= link_to expenses_path('q[id_eq]':expense.id,'submit_pdf_a4':true), title: 'Download PDF', target: '_blank' do %>
+                          <%= link_to expense_path(id: expense.id,'pdf':true), title: 'Download PDF', target: '_blank' do %>
                             <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
                           <%end %>
                         </span>
@@ -325,20 +288,20 @@
         <tr>
           <td><h5>Total</h5></td>
           <td></td>
-          <td><h5><%=number_with_delimiter(@expense_total.to_f.round(2))%></h5></td>
           <td><h5><%=number_with_delimiter(@expense_payment_total)%></h5></td>
+          <td><h5><%=number_with_delimiter(@expense_total.to_f.round(2))%></h5></td>
         </tr>
       </tbody>
     </table>
-
-    <div class="row">
-      <div class="col-lg-4 col-sm-4">
-        <%= page_entries_info @expenses %>
-      </div>
-      <div class="col-lg-8 col-sm-8 pagination-left text-dark">
-        <%= paginate @expenses %>
-      </div>
+  </div>
+  <div class="col-lg-12 digg_pagination">
+    <div class="float-left page_info">
+      <%= page_entries_info @expenses %>
     </div>
+    <div class="float-right">
+    <%= paginate @expenses, :container => false %>
+    </div>
+  </div>
   </div>
 </div>
 
@@ -385,5 +348,62 @@
         width: '100%'
       });
     }, 50);
+     $('.analytics-tab').on('click', function(){
+      $('#analytics-path').click();
+    })
+  });
+    $('#pagination-limit').on('change', function(){
+    $(this).closest('form').submit();
+  })
+
+  $(function() {
+
+    var start = moment();
+    var end = moment();
+
+    function cb(start, end) {
+        $('#reportrange span').html(start.format('YYYY/MM/DD') + ' - ' + end.format('YYYY/MM/DD'));
+    }
+
+    var gteq = $('#q_created_at_gteq').val()
+    var lteq = $('#q_created_at_lteq').val()
+    if (gteq !== ''){
+      start = moment(new Date(gteq))
+    }
+    if(lteq !== ''){
+      end = moment(new Date(lteq))
+    }
+
+    $('#reportrange').daterangepicker({
+        startDate: start,
+        endDate: end,
+      ranges: {
+          'Select Date Range':[],
+           'Today': [moment(), moment()],
+           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+           'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+           'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+           '1 Year': [moment().subtract(1, 'years')],
+           'This Month': [moment().startOf('month'), moment().endOf('month')],
+           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+           'This Month Last Year': [moment().subtract(1, 'years').startOf('month'), moment().subtract(1, 'years').endOf('month')],
+           'This Year': [moment().startOf('year'), moment().endOf('year')],
+           'Last Year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')]
+        },
+        locale: {
+          format: 'YYYY/MM/DD'
+        }
+    }, cb);
+
+    cb(start, end);
+
+    $('#reportrange').on('change', function(){
+      var value = $(this).val()
+      var greater_eq = value.split(' - ')[0]
+      var less_eq = value.split(' - ')[1]
+      $('#q_created_at_gteq').val(greater_eq)
+      $('#q_created_at_lteq').val(less_eq)
+    })
+
   });
 </script>

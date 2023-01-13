@@ -4,7 +4,11 @@ Rails.application.routes.draw do
   require 'sidekiq/web'
   mount Sidekiq::Web => '/sidekiq'
 
-  resources :compaigns
+  resources :compaigns do
+    collection do
+      resources :analytics
+    end
+  end
   resources :compaign_entries
   get 'sms/index'
   get 'sms/sms_to_staff'
@@ -24,12 +28,17 @@ Rails.application.routes.draw do
   end
   resources :product_warranties
   resources :warranties
+  resources :cold_storage_inwards
+  resources :cold_storage_outwards
+  resources :order_inwards
+  resources :order_outwards
   resources :product_stocks
   resources :gates
   resources :staff_ledger_books  do
     collection do
       get :transfer, to: 'staff_ledger_books#transfer'
       get :view_history, to: 'staff_ledger_books#view_history'
+      get :analytics
     end
   end
   resources :product_stock_exchanges
@@ -41,6 +50,8 @@ Rails.application.routes.draw do
       get :auto_print, to: 'orders#auto_print'
       get :print_bulk, to: 'orders#print_bulk'
       get :view_history, to: 'orders#view_history'
+      get :dynamic_pdf, to: 'orders#dynamic_pdf'
+      get :booking_reciept, to: 'orders#booking_reciept'
     end
     member do
       get :transfer, to: 'orders#transfer'
@@ -100,6 +111,7 @@ Rails.application.routes.draw do
       get :pather, to: 'salary_details#index_batha'
       get :khakar_full, to: 'salary_details#index_khakar_full'
       get :advance_all
+      get :analytics
     end
   end
   get :salary_detail_edit_salaries, to: 'salary_details#edit_bulk', as: :salary_detail_edit_bulk
@@ -124,6 +136,11 @@ Rails.application.routes.draw do
       get :view_history, to: 'investments#view_history'
     end
   end
+  resources :loans do
+    collection do
+      get :view_history, to: 'loans#view_history'
+    end
+  end
   resources :pos_settings
   resources :ledger_books do
     collection do
@@ -140,7 +157,11 @@ Rails.application.routes.draw do
       get :view_history, to: 'products#view_history'
     end
   end
-  resources :product_sub_categories
+  resources :product_sub_categories do
+    collection do
+      get :analytics
+    end
+  end
   resources :product_categories
   resources :purchase_sale_items
   resources :purchase_sale_details do
@@ -149,12 +170,15 @@ Rails.application.routes.draw do
       get "return"
       get "purchase_sale_details_return"
       get :view_history, to: 'purchase_sale_details#view_history'
+      get :analytics
+      get :dynamic_pdf, to: 'purchase_sale_details#dynamic_pdf'
     end
   end
 
   resources :items do
     collection do
       get "get_item_data"
+      get :analytics
     end
   end
   resources :item_types
@@ -177,16 +201,26 @@ Rails.application.routes.draw do
 
   resources :cities
   resources :user_groups
-  resources :customer_management_systems do
+  resources :crms do
     collection do
-      get :view_history, to: 'customer_management_systems#view_history'
+      get :view_history, to: 'crms#view_history'
+      get :convert_to_sys_user
     end
   end
   resources :notes, only: %i[create new]
   resources :follow_ups
   resources :countries
   resources :expense_types
-  resources :expenses
+  resources :expenses do
+    collection do
+      get :analytics
+    end
+  end
+  resources :expense_vouchers
+  resources :expense_entry_vouchers
+  resources :pdf_templates
+  resources :pdf_template_elements
+  resources :sale_deals
   resources :db_backup_files
   get 'home/index'
   get :dashboard, to: 'dashboard#index', as: :dashboard
@@ -210,13 +244,11 @@ Rails.application.routes.draw do
     end
   end
   get 'reports/index'
-
-
-
   get 'reports/chart'
   get 'reports/day_out_report'
   get 'reports/day_check'
   get 'reports/sale_report'
+  get 'reports/sale_report_analytics'
   get 'reports/stock_report'
   get 'reports/product_report'
 
@@ -236,8 +268,46 @@ Rails.application.routes.draw do
   get 'reports/trial_balance_sale_payable'
   get 'reports/trial_balance_salary'
 
+  post :read_all, to: 'application#read_all'
+  post :is_completed, to: 'follow_ups#is_completed'
+
+  get :read_follow_up, to: 'application#read_follow_up'
+
+
   post :bulk_import_data, to: 'bulk_imports#bulk_import_data'
   post :bulk_delete_data, to: 'bulk_imports#bulk_delete_data'
+
+  resources :order_sales do
+    collection do
+      get :biller, to: 'order_sales#biller'
+      get :auto_print, to: 'order_sales#auto_print'
+      get :print_bulk, to: 'order_sales#print_bulk'
+      get :view_history, to: 'order_sales#view_history'
+      get :dynamic_pdf, to: 'order_sales#dynamic_pdf'
+      get :booking_reciept, to: 'order_sales#booking_reciept'
+    end
+    member do
+      get :transfer, to: 'order_sales#transfer'
+      get :booking_print, to: 'order_sales#booking_print'
+      get :booking_cancel, to: 'order_sales#booking_cancel'
+    end
+  end
+
+  resources :order_purchases do
+    collection do
+      get :biller, to: 'order_purchases#biller'
+      get :auto_print, to: 'order_purchases#auto_print'
+      get :print_bulk, to: 'order_purchases#print_bulk'
+      get :view_history, to: 'order_purchases#view_history'
+      get :dynamic_pdf, to: 'order_purchases#dynamic_pdf'
+      get :booking_reciept, to: 'order_purchases#booking_reciept'
+    end
+    member do
+      get :transfer, to: 'order_purchases#transfer'
+      get :booking_print, to: 'order_purchases#booking_print'
+      get :booking_cancel, to: 'order_purchases#booking_cancel'
+    end
+  end
 
   resources :application do
     member do
@@ -245,6 +315,7 @@ Rails.application.routes.draw do
     end
   end
   resources :reports, only: [:index, :chart, :sale_report, :stock_report, :product_report]
+    
   resources :staffs do
     collection do
       get :payable, to: 'staffs#payable', as: :payable
@@ -270,6 +341,7 @@ Rails.application.routes.draw do
       get :loan
       get :advance
       get :advance_all
+      get :analytics
     end
   end
 

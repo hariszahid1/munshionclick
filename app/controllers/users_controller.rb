@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   load_and_authorize_resource
   # skip_authorize_resource :only => :new
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :set_user, only: %i[show edit update destroy]
   include PdfCsvGeneralMethod
   include UsersHelper
 
@@ -10,8 +10,10 @@ class UsersController < ApplicationController
   def index
     ransack_search
     @q.sorts = 'id asc' if @q.sorts.empty? && @q.result.count.positive?
-    @options_for_select = City.all
-    @users = @q.result.page(params[:page])
+    @options_for_select = User.all
+    @custom_pagination = params[:limit].present? ? params[:limit] : 25
+    @custom_pagination = @pos_setting.custom_pagination['users'] if @pos_setting&.custom_pagination.present? && @pos_setting&.custom_pagination['users'].present?
+    @users = @q.result.page(params[:page]).per(@custom_pagination)
     download_users_csv_file if params[:csv].present?
     download_users_pdf_file if params[:pdf].present?
     send_email_file if params[:email].present?
@@ -34,6 +36,7 @@ class UsersController < ApplicationController
   # GET /users/1/edit
   def edit
     respond_to do |format|
+      format.html
       format.js
     end
   end
@@ -43,7 +46,9 @@ class UsersController < ApplicationController
     respond_to do |format|
       if @user.save
         save_user_ability
-        format.html { redirect_to @user, notice: "#{current_user.allowed_valid_roles.to_s.titleize} was successfully created." }
+        format.html do
+          redirect_to @user, notice: "#{current_user.allowed_valid_roles.to_s.titleize} was successfully created."
+        end
         format.json { render :show, status: :created, location: @user }
       else
         set_part_list
@@ -54,14 +59,15 @@ class UsersController < ApplicationController
   end
 
   def update
-    if params[:user][:password].blank?
-      params[:user].delete :password
-    end
-		# User.find(params[:id]).update(permission_updated:false)
+    params[:user].delete :password if params[:user][:password].blank?
+    # User.find(params[:id]).update(permission_updated:false)
     respond_to do |format|
       if @user.update(user_params)
-				save_user_ability
-        format.html { redirect_to users_path, notice: "#{current_user.allowed_valid_roles.to_s.titleize} was successfully updated." }
+        save_user_ability
+        format.html do
+          redirect_to users_path,
+                      notice: "#{current_user.allowed_valid_roles.to_s.titleize} was successfully updated."
+        end
         format.json { render :show, status: :ok, location: @user }
       else
         set_part_list
@@ -76,9 +82,11 @@ class UsersController < ApplicationController
   def destroy
     @user.destroy
     respond_to do |format|
-      format.html { redirect_to users_url, notice: "#{current_user.allowed_valid_roles.to_s.titleize} was successfully destroyed." }
+      format.html do
+        redirect_to users_url, notice: "#{current_user.allowed_valid_roles.to_s.titleize} was successfully destroyed."
+      end
       format.json { head :no_content }
-      format.js   { render :layout => false }
+      format.js   { render layout: false }
     end
   end
 
@@ -87,10 +95,9 @@ class UsersController < ApplicationController
   def ransack_search
     created_by_ids = current_user.created_by_ids_list_to_view
     roles_mask = current_user.allowed_to_view_roles_mask_for
-    @q = User.where(roles_mask: roles_mask).where('company_type=? or created_by_id=?',current_user.company_type,created_by_ids).ransack(params[:q])
-    if @q.result.count > 0
-      @q.sorts = 'name asc' if @q.sorts.empty?
-    end
+    @q = User.where(roles_mask: roles_mask).where('company_type=? or created_by_id=?', current_user.company_type,
+                                                  created_by_ids).ransack(params[:q])
+    @q.sorts = 'name asc' if @q.result.count > 0 && @q.sorts.empty?
   end
 
   def save_user_ability
@@ -102,6 +109,7 @@ class UsersController < ApplicationController
     end
     userAbility.save!
   end
+
   # Use callbacks to share common setup or constraints between actions.
   def set_user
     @user = User.find(params[:id])
@@ -109,47 +117,48 @@ class UsersController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def user_params
-    params.require(:user).permit(:name, :user_name, :email, :father_name, :city, :phone, :fax, :address, :roles, :password, :confirm_password, :user_ability_roles, :created_by_id, :email_to,:email_cc,:email_bcc,:roles_mask)
+    params.require(:user).permit(:name, :user_name, :email, :father_name, :city, :phone, :fax, :address, :roles,
+                                 :password, :confirm_password, :user_ability_roles, :created_by_id, :email_to, :email_cc, :email_bcc, :roles_mask)
   end
 
   def download_users_csv_file
     @users = @q.result
     header_for_csv = %w[Id Role Name User_Name System_Email Email_on Father_Name Phone]
     data_for_csv = get_data_for_users_csv
-    generate_csv(data_for_csv, header_for_csv, "Admins-Total-#{@users.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}")
+    generate_csv(data_for_csv, header_for_csv,
+                 "Admins-Total-#{@users.count}-#{DateTime.now.strftime('%d-%m-%Y-%H-%M')}")
   end
 
   def download_users_pdf_file
     @users = @q.result
-    generate_pdf(@users.as_json, "Admins-Total-#{@users.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}",
+    generate_pdf(@users.as_json, "Admins-Total-#{@users.count}-#{DateTime.now.strftime('%d-%m-%Y-%H-%M')}",
                  'pdf.html', 'A4', false, 'users/index.pdf.erb')
   end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-	def user_params
-		params.require(:user).permit(
-			:name, :user_name, :email, :father_name, :city, :phone, :fax,
-			:address, :roles, :password, :confirm_password, :user_ability_roles,
-			:created_by_id, :email_to,:email_cc,:email_bcc,:roles_mask,:permission_updated,
-			user_permissions_attributes: %i[id can_accessed can_create can_read can_update can_delete can_download_pdf
-				can_download_csv can_send_email can_import_export is_hidden]
-		)
-	end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def user_params
+    params.require(:user).permit(
+      :name, :user_name, :email, :father_name, :city, :phone, :fax,
+      :address, :roles, :password, :confirm_password, :user_ability_roles,
+      :created_by_id, :email_to, :email_cc, :email_bcc, :roles_mask, :permission_updated,
+      user_permissions_attributes: %i[id can_accessed can_create can_read can_update can_delete can_download_pdf
+                                      can_download_csv can_send_email can_import_export is_hidden]
+    )
+  end
 
   def send_email_file
     EmailJob.perform_later(@q.result.as_json, 'users/index.pdf.erb', params[:email_value],
-                            params[:email_choice], params[:subject], params[:body],
-                            current_user, "Admins-Total-#{@q.result.count}-#{DateTime.now.strftime("%d-%m-%Y-%H-%M")}")
-    if params[:email_value].present?
-      flash[:notice] = "Email has been sent to #{params[:email_value]}"
-    else
-      flash[:notice] = "Email has been sent to #{current_user.email}"
-    end
+                           params[:email_choice], params[:subject], params[:body],
+                           current_user, "Admins-Total-#{@q.result.count}-#{DateTime.now.strftime('%d-%m-%Y-%H-%M')}")
+    flash[:notice] = if params[:email_value].present?
+                       "Email has been sent to #{params[:email_value]}"
+                     else
+                       "Email has been sent to #{current_user.email}"
+                     end
     redirect_to users_path
   end
 
   def export_file
     export_data('User')
   end
-
 end

@@ -1,6 +1,7 @@
 class PurchaseSaleDetailsController < ApplicationController
   before_action :set_purchase_sale_detail, only: [:show, :edit, :update, :destroy]
-
+  before_action :check_access
+  before_action :set_user, only: %i[new edit]
   # GET /purchase_sale_details
   # GET /purchase_sale_details.json
   def index
@@ -549,12 +550,20 @@ class PurchaseSaleDetailsController < ApplicationController
     @id=PurchaseSaleDetail.where(created_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).count
     request.format = 'pdf'
     if @pos_setting.sys_type=="industry" || @pos_setting.sys_type =="HousingScheme"
-      @profile_image_url = @purchase_sale_detail.order.sys_user.profile_image.url
-      name = @purchase_sale_detail.sys_user.name+' Invoice #'+@purchase_sale_detail.id.to_s
-      respond_to do |format|
-        format.html
-        format.pdf do
-          print_pdf(name,'pdf.html','A4')
+      if @pos_setting&.extra_settings.present? && @pos_setting&.extra_settings['ghouse5'].present?
+        respond_to do |format|
+          format.pdf do
+            print_pdf('installment_payment', nil,'A4')
+          end
+        end
+      else
+        @profile_image_url = @purchase_sale_detail.order.sys_user.profile_image.url
+        name = @purchase_sale_detail.sys_user.name+' Invoice #'+@purchase_sale_detail.id.to_s
+        respond_to do |format|
+          format.html
+          format.pdf do
+            print_pdf(name,'pdf.html','A4')
+          end
         end
       end
     elsif params[:pdf]
@@ -600,7 +609,7 @@ class PurchaseSaleDetailsController < ApplicationController
       unless order.purchase_sale_details.present?
         order.order_items.each do |oi|
           @purchase_sale_detail.purchase_sale_items.build(product_id: oi.product_id,item_id: oi.item_id,quantity:oi.quantity,cost_price:oi.cost_price,sale_price:oi.sale_price)
-          @purchase_sale_detail.product_warranties.build(product_id: oi.product_id) if oi.product.with_serial
+          @purchase_sale_detail.product_warranties.build(product_id: oi.product_id) if oi.product&.with_serial
         end
       end
     elsif params[:purchase_sale_detail_id].present? && params[:purchase_sale_type]=="SaleReturn"
@@ -617,6 +626,7 @@ class PurchaseSaleDetailsController < ApplicationController
     else
       @purchase_sale_detail.purchase_sale_items.build
     end
+    @purchase_sale_detail.follow_ups.build
     @suppliers=SysUser.where(:user_group=>['Supplier','Both','Own'])
     @customers=SysUser.where(:user_group=>['Customer','Both','Salesman'])
     @items=Item.all
@@ -649,7 +659,7 @@ class PurchaseSaleDetailsController < ApplicationController
       @purchase_sale_detail.purchase_sale_items.destroy_all
       order.order_items.each do |oi|
         @purchase_sale_detail.purchase_sale_items.build(product_id: oi.product_id,item_id: oi.item_id,quantity:oi.quantity,cost_price:oi.cost_price,sale_price:oi.sale_price)
-        @purchase_sale_detail.product_warranties.build(product_id: oi.product_id) if oi.product.with_serial
+        @purchase_sale_detail.product_warranties.build(product_id: oi.product_id) if oi.product&.with_serial
       end
     end
   end
@@ -729,16 +739,23 @@ class PurchaseSaleDetailsController < ApplicationController
             # @purchase_sale_detail.save!
           end
           if @pos_setting.sys_type=="industry" || @pos_setting.sys_type =="HousingScheme"
-            if params[:commit]=="Save with Print"
+            if @pos_setting&.extra_settings.present? && @pos_setting&.extra_settings['ghouse5'].present?
               request.format = 'pdf'
               format.pdf do
-                name = @purchase_sale_detail.sys_user.name+' Invoice #'+@purchase_sale_detail.id.to_s
-                print_pdf(name,'pdf.html','A4')
+                print_pdf('installment_payment', nil,'A4',false)
               end
-            end
-            if @pos_setting.sms_templates.present?
-              send_sms(@purchase_sale_detail.sys_user&.contact&.phone_with_comma,@pos_setting.sms_templates["new_invoice"],'','') if @pos_setting.sms_templates["new_invoice"].present? && @purchase_sale_detail.amount.to_f > 0
-              send_sms(@purchase_sale_detail.sys_user&.contact&.phone_with_comma,@pos_setting.sms_templates["new_fine"],'','') if @pos_setting.sms_templates["new_fine"].present? && @purchase_sale_detail.order.present? && @purchase_sale_detail.order.purchase_sale_details.count > 1 && @purchase_sale_detail.purchase_sale_items.count > 0
+            else
+              if params[:commit]=="Save with Print"
+                request.format = 'pdf'
+                format.pdf do
+                  name = @purchase_sale_detail.sys_user.name+' Invoice #'+@purchase_sale_detail.id.to_s
+                  print_pdf(name,'pdf.html','A4')
+                end
+              end
+              if @pos_setting.sms_templates.present?
+                send_sms(@purchase_sale_detail.sys_user&.contact&.phone_with_comma,@pos_setting.sms_templates["new_invoice"],'','') if @pos_setting.sms_templates["new_invoice"].present? && @purchase_sale_detail.amount.to_f > 0
+                send_sms(@purchase_sale_detail.sys_user&.contact&.phone_with_comma,@pos_setting.sms_templates["new_fine"],'','') if @pos_setting.sms_templates["new_fine"].present? && @purchase_sale_detail.order.present? && @purchase_sale_detail.order.purchase_sale_details.count > 1 && @purchase_sale_detail.purchase_sale_items.count > 0
+              end
             end
           else
             if params[:commit]=="Save with Print"
@@ -746,9 +763,16 @@ class PurchaseSaleDetailsController < ApplicationController
                 format.html {render :partial => "/purchase_sale_details/fast_food/create"}
               else
                 request.format = 'pdf'
-                format.pdf do
-                  name = @purchase_sale_detail.sys_user.name+' Invoice #'+@purchase_sale_detail.id.to_s
-                  print_pdf(name,'pdf.html','A4',true)
+                if current_user.company_type == 'bcfm'
+                  format.pdf do
+                    name = @purchase_sale_detail.sys_user.name+' Invoice #'+@purchase_sale_detail.id.to_s
+                    print_pdf(name,'pdf_bcfm.html','A4',true)
+                  end
+                else
+                  format.pdf do
+                    name = @purchase_sale_detail.sys_user.name+' Invoice #'+@purchase_sale_detail.id.to_s
+                    print_pdf(name,'pdf.html','A4',true)
+                  end
                 end
               end
             end
@@ -803,6 +827,16 @@ class PurchaseSaleDetailsController < ApplicationController
         @accounts=Account.all
         format.html { render :new }
         format.json { render json: @purchase_sale_detail.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def dynamic_pdf
+    @purchase_sale_detail = PurchaseSaleDetail.find(params[:purchase_sale_detail_id])
+    request.format = 'pdf'
+    respond_to do |format|
+      format.pdf do
+        print_pdf('invoice', nil,'A4')
       end
     end
   end
@@ -1086,6 +1120,48 @@ class PurchaseSaleDetailsController < ApplicationController
     @event = %w[create update destroy]
     @q = PaperTrail::Version.where(item_id:PurchaseSaleDetail.where(transaction_type: params[:type]),item_type:'PurchaseSaleDetail').order('created_at desc').ransack(params[:q])
     @purchase_sale_logs = @q.result.page(params[:page])
+    if @purchase_sale_logs.blank?
+      @q = PaperTrail::Version.where(item_type:'PurchaseSaleDetail').order('created_at desc').ransack(params[:q])
+      @purchase_sale_logs = @q.result.page(params[:page])
+    end
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def analytics
+    type = params[:type]
+    case type
+    when 'weekly'
+      date_limit = DateTime.current.all_week
+    when 'monthly'
+      date_limit = DateTime.current.all_month
+    when 'yearly'
+      date_limit = DateTime.current.all_year
+    else
+      date_limit = DateTime.current.all_day
+    end
+
+    if params[:q].present?
+      params[:q][:created_at_gteq] = params[:q][:created_at_gteq].to_date.beginning_of_day if params[:q][:created_at_gteq].present?
+      params[:q][:created_at_lteq] = params[:q][:created_at_lteq].to_date.end_of_day if params[:q][:created_at_lteq].present?
+      @q = PurchaseSaleDetail.joins(:sys_user, purchase_sale_items: :product)
+                              .includes(:sys_user, purchase_sale_items: :product)
+                              .where(transaction_type: params[:transaction_type])
+                              .ransack(params[:q])
+    else
+      @q = PurchaseSaleDetail.joins(:sys_user, purchase_sale_items: :product)
+                              .includes(:sys_user, purchase_sale_items: :product)
+                              .where(created_at: date_limit, transaction_type: params[:transaction_type])
+                              .ransack(params[:q])
+    end
+    @total_purchase_customer = @q.result.group('sys_users.name').sum(:total_bill)
+    @total_paid_customer = @q.result.group('sys_users.name').sum(:amount)
+    @total_purchase_products = @q.result.group('products.title').sum('purchase_sale_items.quantity')
+    @total_purchase_customer_date = @q.result.group("date(purchase_sale_details.created_at)").sum(:total_bill)
+    @total_paid_customer_date = @q.result.group("date(purchase_sale_details.created_at)").sum(:amount)
+    @total_purchase_product_date = @q.result.group("date(purchase_sale_details.created_at)").sum('purchase_sale_items.quantity')
+
     respond_to do |format|
       format.js
     end
@@ -1100,6 +1176,14 @@ class PurchaseSaleDetailsController < ApplicationController
     def user_type(id)
       SysUser.find(id).user_group
     end
+
+    def set_user
+      created_by_ids = current_user&.created_by_ids_list_to_view
+      roles_mask = current_user&.allowed_to_view_roles_mask_for
+      @users = User.where(roles_mask: roles_mask).where('company_type=? or created_by_id=?', current_user&.company_type,
+                                                        created_by_ids)
+    end
+  
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def purchase_sale_detail_params
@@ -1176,6 +1260,18 @@ class PurchaseSaleDetailsController < ApplicationController
             :serial,
             :created_at,
             :_destroy
+          ],
+          follow_ups_attributes: [
+            :id,
+            :reminder_type,
+            :task_type,
+            :priority,
+            :created_by,
+            :assigned_to_id,
+            :date,
+            :comment,
+            :followable_id,
+            :followable_type
           ]
         )
     end

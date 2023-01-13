@@ -1,0 +1,41 @@
+<% @date = Date.today  %>
+<% @time = DateTime.now %>
+<% @time = Time.zone.now %>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;"><%="Total Unit Purchase Booking"%> => <%= number_with_delimiter(@products_sale_total.to_f.round(2))%></h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<p style="text-align: center;margin: 0;">Report by: <%=current_user.name%></p>
+<div style="width:90vw;">
+  <table>
+    <th></th>
+    <th></th>
+    <tr>
+      <td style="width:67vw;">DateTime: <span><%=Time.zone.now%></span> </td>
+      <td style="width:33vw;">Customer Type: <span> </span></td>
+    </tr>
+  </table>
+</div>
+<p style="border-bottom: dotted 3px;  margin: 0;"></p>
+<div style="width:90vw;">
+  <table>
+    <th style="width:40vw;">Unit</th>
+    <th style="width:20vw;">Marla</th>
+    <th style="width:20vw;">Total</th>
+    <% @products_count.each_with_index do |item,i|%>
+      <tr>
+        <td style="border-bottom: 1px solid #000; "><%=item.first %></td>
+        <td style="border-bottom: 1px solid #000; "><%= number_with_delimiter(item.last.to_f.round(2)) %></td>
+        <td style="border-bottom: 1px solid #000; "><%= number_with_delimiter(@products_sale[item.first].round(2)) %></td>
+      </tr>
+    <% end %>
+    <tr>
+      <td></td>
+      <td></td>
+      <td><%="Total Purchase"%> : <%= number_with_delimiter(@products_sale_total.to_f.round(2))%></td>
+    </tr>
+  </table>
+</div>
+<p style="border-bottom: dotted 3px;  margin: 0;"></p>
+<p style="text-align: center;margin: 0;"><span><%=@pos_setting.address if @pos_setting.present?%></span></p>
+<p style="text-align: center;margin: 0;"><span><%=@pos_setting.phone if @pos_setting.present?%></span></p>
+<p style="border-bottom: dotted 3px;  margin: 0;"></p>

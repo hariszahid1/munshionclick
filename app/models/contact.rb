@@ -1,7 +1,7 @@
 class Contact < ApplicationRecord
   belongs_to :country
   belongs_to :city
-  belongs_to :sys_user, optional: true
+  belongs_to :contactable, polymorphic: true
   enum status: %i[Permanent Current]
   has_paper_trail ignore: [:updated_at]
   def phone

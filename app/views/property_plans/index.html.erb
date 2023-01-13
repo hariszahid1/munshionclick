@@ -4,7 +4,7 @@
     <span aria-hidden="true">×</span>
   </button>
 </div>
-<div class="hidden" id="city_list">
+<div class="hidden m-3" id="city_list">
   
       <div class="main-content-header">
             <h1 class="ml-2">Property Plan</h1>
@@ -45,17 +45,18 @@
 
       <%= search_form_for @q, url: property_plans_path, class: "admin-controls", method: "get" do |f| %>
       <div class="tab-content">
-        <div class="tab-pane active mb-3 card shadow-sm mt-2 border-radius-1" id="search" role="tabpanel">
+        <div class="tab-pane active mb-3 card shadow mt-2 border-radius-1 p-3"  id="search" role="tabpanel">
         <div class="row d-flex mt-3 mr-2">
           <div class="col">
             <div class="col-lg-4 form-group float-left">
               <%= f.select :order_sys_user_id_eq, options_from_collection_for_select(@customers, 'id', 'name', f.object.order_sys_user_id_eq),{:include_blank => "Select Customer"},class: 'form-control chosen-select'%>
             </div>
-            <div class="col-lg-3 form-group float-left"">
-              <%= f.search_field :due_date_gteq,class: 'form-control input-sm datepicker' ,placeholder: "From: YYYY-MM-DD"%>
+            <div class="col-lg-6 form-group float-left d-flex">
+              <%= f.search_field :created_at, id: "reportrange", class: 'form-control' %>
             </div>
-            <div class="col-lg-3 form-group float-left">
-              <%= f.search_field :due_date_lteq,class: 'form-control input-sm datepicker' ,placeholder: "To: YYYY-MM-DD"%>
+            <div class="d-none">
+              <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker',placeholder: "YYYY-MM-DD" %>
+              <%= f.search_field :created_at_lteq, class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
             </div>
             <div class="col-lg-2 form-group float-left">
               <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
@@ -124,11 +125,7 @@
             </p>
           </div-->
 
-       
-
-        
-
-        <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="import-export" role="tabpanel">
+        <div class="tab-pane mb-3 card shadow mt-2 border-radius-1" id="import-export" role="tabpanel">
          <p>
            <div class="d-flex ml-2">
            <button class="btn btn-danger ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
@@ -138,27 +135,27 @@
        </div>
        </div>
       <% end %>
-   <div class='card p-3'>
+   <div class='card border-radius-1 shadow p-4'>
     <%= render 'map_columns/map_column_partials' %>
-      <table data-toggle="table" data-search="true" class="overflow-hidden border-radius-1">
-      
+    <div class="row d-flex" style="position: absolute;">
+      <div>
+        <%if (check_can_delete(@module_permission))%>
+	        <button class="btn btn-outline-danger delete-selected mt-4 ml-3" type='button' value='PropertyPlan'>
+	        	Delete Selected
+	        </button>		
+        <%end%>
+      </div>  
+      <%= search_form_for @q, url: property_plans_path, class: "admin-controls ml-4", method: "get" do |f| %>
+        <div class="d-flex mt-4" style="width: 120%;">
+          <%= select_tag :limit, options_for_select(['Show Entries',5, 10, 15, 20, 25], selected: :limit), id: 'pagination-limit', title:'Show Entries', style:'cursor: pointer;' %>
+        </div>
+      <% end %>
+    </div>
+    <div class="mt-3">  
+      <table data-toggle="table" data-search="true" class="overflow-hidden border-radius-1 content-table">
         <thead>
           <tr>
-          <%if (check_can_delete(@module_permission))%>
-            <th><input type="checkbox" id="master" class='select-all-checkbox'>
-                <div class="icon-container float-center">
-            <span class="ml-2 mt-2">
-            <div class="my-icon my-view">
-            
-                        <button class="icon-div btn delete-selected p-2 " type='button' value='PropertyPlan'>
-                                  <i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i> 
-                        </button>
-                    </div>
-                    </span>
-              </div>
-          <% end %>
-            
-            
+            <th class="p-2"><input type="checkbox" id="master" class='select-all-checkbox'>
             </th>
             <th><div class="d-flex">ID<%= sort_link(@q, :id,"", {}, class: 'sorting-button ml-auto') %></div></th>
             <th><div class="d-flex">User<%= sort_link(@q, :property_type, 'User',  {}, class: 'sorting-button ml-auto') %></div></th>
@@ -264,12 +261,13 @@
           </tr>
         </tbody>
       </table>
-        <div class="row">
-          <div class="col-lg-4 col-sm-4">
+    </div>  
+        <div class="col-lg-12 digg_pagination">
+          <div class="float-left page_info">
             <%= page_entries_info @property_plans %>
           </div>
-          <div class="col-lg-8 col-sm-8 pagination-left">
-            <%= paginate @property_plans %>
+          <div class="float-right">
+          <%= paginate @property_plans, :container => false %>
           </div>
         </div>
         <%= form_for :bulk_import, url: bulk_import_data_path, method: :post, html: {class: "bulk-import-form"} do |f| %>
@@ -309,5 +307,59 @@
     }
     $("#city_list").removeClass('hidden');
     FontAwesome.dom.i2svg();
+  });
+  $('#pagination-limit').on('change', function(){
+    $(this).closest('form').submit();
+  })
+
+  $(function() {
+
+    var start = moment();
+    var end = moment();
+
+    function cb(start, end) {
+        $('#reportrange span').html(start.format('YYYY/MM/DD') + ' - ' + end.format('YYYY/MM/DD'));
+    }
+
+    var gteq = $('#q_created_at_gteq').val()
+    var lteq = $('#q_created_at_lteq').val()
+    if (gteq !== ''){
+      start = moment(new Date(gteq))
+    }
+    if(lteq !== ''){
+      end = moment(new Date(lteq))
+    }
+
+    $('#reportrange').daterangepicker({
+        startDate: start,
+        endDate: end,
+      ranges: {
+          'Select Date Range':[],
+           'Today': [moment(), moment()],
+           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+           'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+           'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+           '1 Year': [moment().subtract(1, 'years')],
+           'This Month': [moment().startOf('month'), moment().endOf('month')],
+           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+           'This Month Last Year': [moment().subtract(1, 'years').startOf('month'), moment().subtract(1, 'years').endOf('month')],
+           'This Year': [moment().startOf('year'), moment().endOf('year')],
+           'Last Year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')]
+        },
+        locale: {
+          format: 'YYYY/MM/DD'
+        }
+    }, cb);
+
+    cb(start, end);
+
+    $('#reportrange').on('change', function(){
+	      var value = $(this).val()
+	      var greater_eq = value.split(' - ')[0]
+	      var less_eq = value.split(' - ')[1]
+	      $('#q_created_at_gteq').val(greater_eq)
+	      $('#q_created_at_lteq').val(less_eq)
+	    })
+
   });
 </script>

@@ -1,0 +1,54 @@
+<div class="nested-fields">
+  <div class="bg-white nested-fields">
+    <div class="row ">
+      <%= f.hidden_field :purchase_sale_detail_id %>
+      <%= f.hidden_field :id %>
+      <div class="col-lg-6 form-group float-left">
+        <%= f.select :product_id, options_from_collection_for_select(@products, 'id', ->(st){"#{st.title}"}, f.object.item_id), {label: "Product",prompt: "Select the Product"},required: true %>
+      </div>
+      <div class="col-lg-6 form-group float-left">
+        <%= f.select :size_12, options_for_select(@transaction_type, f.object.size_12), {:include_blank => "Select Transaction Type", label: "Transaction Type"}, class: "form-control chosen-select" %>
+      </div>
+      <div class="col-lg-6 form-group float-left">
+        <%= f.text_field :size_13, placeholder: "Quota",  label: "Quota", value: "#{(f.object.size_13 == '0' ? nil : f.object.size_13)}" %>
+      </div>
+      <div class="col-lg-6 form-group float-left">
+        <%= f.text_field :size_11, placeholder: "MS/Form No:", label: "MS/Form No:", value: "#{(f.object.size_11 == '0' ? nil : f.object.size_11)}" %>
+      </div>
+      <div class="col-lg-6 form-group float-left">
+        <%= f.text_field :size_10, placeholder: "Plot Quantity:", label: "Plot Quantity:", value: "#{(f.object.size_10 == '0' ? nil : f.object.size_10)}" %>
+      </div>
+      <div class="col-lg-6 form-group float-left">
+        <%= f.text_field :size_9,  placeholder: "Plot Category", label: "Plot Category", value: "#{(f.object.size_9 == '0' ? nil : f.object.size_9)}" %>
+      </div>
+      <div class="col-lg-6 form-group float-left">
+        <%= f.select :size_7, options_for_select(@payment_status, f.object.size_7), {:include_blank => "Select Payment Status", label: "Payment Status"}, class: "form-control chosen-select" %>
+      </div>
+      <div class="col-lg-6 form-group float-left">
+        <%= f.select :size_4, options_for_select(@deal, f.object.size_4), {:include_blank => "Select Deal", label: "Deal"}, class: "form-control chosen-select" %>
+      </div>
+      <div class="col-lg-6 form-group float-left">
+        <%= f.text_field :size_8,  placeholder: "Price per Plot", label: "Price per Plot", value: "#{(f.object.size_8 == '0' ? nil : f.object.size_8)}"%>
+      </div>
+      <div class="col-lg-6 form-group float-left">
+        <%= f.datetime_select :expiry_date,  placeholder: "Deal Date", label: "Deal Date"%>
+      </div>
+      <div class="col-lg-6 form-group float-left">
+        <%= f.text_field :size_6, placeholder: "Down Payment",  label: "Down Payment",  value: "#{(f.object.size_6 == '0' ? nil : f.object.size_6)}" %>
+      </div>
+      <div class="col-lg-6 form-group float-left">
+        <%= f.text_field :size_5,  placeholder: "Rebate/Profit", label: "Rebate/Profit", value: "#{(f.object.size_5 == '0' ? nil : f.object.size_5)}"%>
+      </div>
+      <div class="col-lg-6 form-group float-left">
+        <%= f.text_field :size_1, placeholder: "Inst./PO/CHq/Trx No:", label: "Inst./PO/CHq/Trx No:", value: "#{(f.object.size_1 == '0' ? nil : f.object.size_1)}" %>
+      </div>
+      <div class="col-lg-6 form-group float-left">
+        <%= f.text_field :size_3, placeholder: "Customer CNIC", label: "Customer CNIC", value: "#{(f.object.size_3 == '0' ? nil : f.object.size_3)}" %>
+      </div>
+      <div class="col-lg-6 form-group float-left">
+        <%= f.text_area :comment, placeholder: "Internal Remarks:", label: "Internal Remarks" %>
+      </div>
+    </div>
+  </div>
+</div>
+
