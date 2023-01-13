@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-
   resources :remarks
   require 'sidekiq/web'
   mount Sidekiq::Web => '/sidekiq'
@@ -34,7 +33,7 @@ Rails.application.routes.draw do
   resources :order_outwards
   resources :product_stocks
   resources :gates
-  resources :staff_ledger_books  do
+  resources :staff_ledger_books do
     collection do
       get :transfer, to: 'staff_ledger_books#transfer'
       get :view_history, to: 'staff_ledger_books#view_history'
@@ -151,9 +150,9 @@ Rails.application.routes.draw do
   resources :materials
   resources :productions
   resources :daily_sales
-  resources :products  do
+  resources :products do
     collection do
-      get "get_product_data"
+      get 'get_product_data'
       get :view_history, to: 'products#view_history'
     end
   end
@@ -166,9 +165,9 @@ Rails.application.routes.draw do
   resources :purchase_sale_items
   resources :purchase_sale_details do
     collection do
-      get "day_out"
-      get "return"
-      get "purchase_sale_details_return"
+      get 'day_out'
+      get 'return'
+      get 'purchase_sale_details_return'
       get :view_history, to: 'purchase_sale_details#view_history'
       get :analytics
       get :dynamic_pdf, to: 'purchase_sale_details#dynamic_pdf'
@@ -177,12 +176,13 @@ Rails.application.routes.draw do
 
   resources :items do
     collection do
-      get "get_item_data"
+      get 'get_item_data'
       get :analytics
     end
   end
   resources :item_types
-  match 'get_item_type_products/:id', to: 'item_types#get_item_type_products', as: :item_type_products, via: [:get, :post]
+  match 'get_item_type_products/:id', to: 'item_types#get_item_type_products', as: :item_type_products,
+                                      via: %i[get post]
   resources :contacts
   resources :sys_users do
     collection do
@@ -198,6 +198,7 @@ Rails.application.routes.draw do
   end
 
   resources :user_types
+  resources :sticky_notes
 
   resources :cities
   resources :user_groups
@@ -228,7 +229,7 @@ Rails.application.routes.draw do
   get :raw_material, to: 'dashboard#raw_material', as: :raw_material
   get :stock_by_category, to: 'dashboard#stock_by_category', as: :stock_by_category
 
-    resources :bd_backups, only: [:index] do
+  resources :bd_backups, only: [:index] do
     collection do
       post :import, as: :import
       get :export, as: :export
@@ -273,7 +274,6 @@ Rails.application.routes.draw do
 
   get :read_follow_up, to: 'application#read_follow_up'
 
-
   post :bulk_import_data, to: 'bulk_imports#bulk_import_data'
   post :bulk_delete_data, to: 'bulk_imports#bulk_delete_data'
 
@@ -314,8 +314,8 @@ Rails.application.routes.draw do
       delete :delete_image_attachment
     end
   end
-  resources :reports, only: [:index, :chart, :sale_report, :stock_report, :product_report]
-    
+  resources :reports, only: %i[index chart sale_report stock_report product_report]
+
   resources :staffs do
     collection do
       get :payable, to: 'staffs#payable', as: :payable
@@ -346,5 +346,5 @@ Rails.application.routes.draw do
   end
 
   resources :dashboard, only: :index
-  root to: "home#index"
+  root to: 'home#index'
 end
