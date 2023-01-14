@@ -8,7 +8,6 @@ class SaleDealsController < ApplicationController
   # GET /sale_deals
   # GET /sale_deals.json
   def index
-    set_date_range if params[:q].present?
     @q = PurchaseSaleDetail.includes(:sys_user, :purchase_sale_items).ransack(params[:q])
     download_sale_deals_pdf_file if params[:pdf].present?
     download_sale_deals_csv_file if params[:csv].present?
@@ -86,7 +85,7 @@ class SaleDealsController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_sale_deal
-    @sale_deal = PurchaseSaleDetail.find(params[:id])
+    @sale_deal = PurchaseSaleDetail.includes(:sys_user, :purchase_sale_items).find(params[:id])
   end
 
   def set_data

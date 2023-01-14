@@ -43,9 +43,11 @@
         <%= f.number_field :discount_price,step: :any,class:'discount-price', hide_label: true,placeholder: :discount,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()"%>
         </div>
         <div class="col-lg-1 form-group float-left text-xs font-weight-bold text-uppercase mt-4">
-          <%= link_to_remove_association f, class:"btn btn-danger" do %>
-            <i class="fa fa-minus-circle"></i> Drop
-          <% end %>
+          <% if check_can_delete(@module_permission) %>
+            <%= link_to_remove_association f, class:"btn btn-danger" do %>
+              <i class="fa fa-minus-circle"></i> Drop
+            <% end %>
+          <% end %>  
         </div>
 
 
