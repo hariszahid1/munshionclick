@@ -3,6 +3,8 @@ class OrderPurchasesController < ApplicationController
   before_action :show_purchase_order, only: [:show, :booking_print]
   before_action :load_data, only: %i[index new edit transfer]
   skip_before_action :authenticate_user!, only: [:show]
+  before_action :check_access
+  before_action :set_user, only: %i[new edit]
   # GET /orders
   # GET /orders.json
   def index
@@ -21,9 +23,7 @@ class OrderPurchasesController < ApplicationController
       else
         @q = Order.where(transaction_type:"Purchase").joins(order_items: :item).includes(order_items: :item).ransack(params[:q])
       end
-      if @q.result.count > 0
-        @q.sorts = 'id desc' if @q.sorts.empty?
-      end
+      @q.sorts = 'id desc' if @q.result.count > 0 && @q.sorts.empty?
       @orders = @q.result.page(params[:page])
     end
   end
@@ -37,6 +37,7 @@ class OrderPurchasesController < ApplicationController
     end
     @item_types = ItemType.all
     @order.order_items.build
+    @order.follow_ups.build
     @order.property_plans.build
 
     @items = Item.all
@@ -85,7 +86,7 @@ class OrderPurchasesController < ApplicationController
         else
           @ledger_book = LedgerBook.new(sys_user_id: @sysuser.id,debit:0,credit:order_params[:amount].to_i,balance:fullbalance,comment:"Booking #"+psd.to_s+"  ||  "+(order_params["created_at(3i)"])+"/"+(order_params["created_at(2i)"])+"/"+(order_params["created_at(1i)"])+" "+@time.strftime("at %I:%M%p"),order_id: @order.id,account_id: @order.account_id)
           @ledger_book.save!
-          format.html { redirect_to order_purchases_path, notice: 'Purchase Order was successfully created.' }
+          format.html { redirect_to order_purchases_path(product: true), notice: 'Purchase Order was successfully created.' }
         end
         format.json { render :show, status: :created, location: @order }
         if @pos_setting.sms_templates.present?
@@ -201,6 +202,168 @@ class OrderPurchasesController < ApplicationController
 
   end
 
+  # GET /orders
+  # GET /orders.json
+  def auto_print
+    @user_types = UserType.all
+    @users = SysUser.where(user_group: %w[Customer Salesman])
+    @user_list = {}
+    @user_active = {}
+    @user_types.each do |user_type|
+      @user_list[user_type.id] = @users.where(user_type_id: user_type.id)
+    end
+    @unprint = Order.where(status: 'UnPrint')
+    @users.each do |user|
+      @user_active[user.id] = if user.orders.present?
+                                if user.orders&.last&.purchase_sale_details.present?
+                                  0
+                                elsif user.orders&.last.status != 'UnPrint'
+                                  2
+                                else
+                                  1
+                                end
+                              else
+                                0
+                              end
+    end
+
+    @q = Order.where(transaction_type: 'Sale').ransack(params[:q])
+  end
+
+  def print_bulk
+    @user_types = UserType.all
+    @users = SysUser.where(user_group: %w[Customer Salesman])
+    @user_list = {}
+    @user_active = {}
+    @user_types.each do |user_type|
+      @user_list[user_type.id] = @users.where(user_type_id: user_type.id)
+    end
+    @orders = Order.where(status: 'UnPrint')
+    @users.each do |user|
+      if user.orders.present?
+        if user.orders&.last&.purchase_sale_details.present?
+          @user_active[user.id] = 0
+        elsif user.orders&.last.status != 'UnPrint'
+          @user_active[user.id] = 2
+          order = user.orders&.last
+          order.update(status: 'UnClear') if order.present?
+        else
+          @user_active[user.id] = 1
+        end
+      else
+        @user_active[user.id] = 0
+      end
+    end
+
+    if @orders.present?
+      print_pdf('Order Detail', 'order_bulk.pdf.erb', 'A8', true)
+    else
+      redirect_to auto_print_orders_path
+    end
+  end
+
+  def booking_reciept
+    @order = Order.find(params[:order_id])
+    request.format = 'pdf'
+    respond_to do |format|
+      format.html
+      format.pdf do
+        render pdf: 'booking_reciept',
+               template: 'orders/booking_reciept.pdf.erb',
+               page_size: 'A4',
+               orientation: 'Portrait',
+               margin: {
+                 margin_top: @pos_setting&.pdf_margin_top.to_f,
+                 margin_right: @pos_setting&.pdf_margin_right.to_f,
+                 margin_bottom: @pos_setting&.pdf_margin_bottom.to_f,
+                 margin_left: @pos_setting&.pdf_margin_left.to_f
+               },
+               encoding: 'UTF-8',
+               footer: {
+                 right: '[page] of [topage]'
+               },
+               show_as_html: false
+      end
+    end
+  end
+
+  def dynamic_pdf
+    @order = Order.find(params[:order_id])
+    @products = Product.all
+    @created_at_gteq = DateTime.current.beginning_of_month
+    @created_at_lteq = DateTime.now
+    if params[:sale].present?
+      @products_sale = OrderItem.joins(:product).where(product_id: @products, created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).group(:title).sum(:total_sale_price)
+      @products_sale_total = OrderItem.joins(:product).where(product_id: @products, created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).sum(:total_sale_price)
+      @products_count = OrderItem.joins(:product).where(product_id: @products, created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day,transaction_type: "Sale").group(:title).sum(:quantity)
+    else
+      @products_sale = OrderItem.joins(:product).where(product_id: @products, created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).group(:title).sum(:total_cost_price)
+      @products_sale_total = OrderItem.joins(:product).where(product_id: @products, created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).sum(:total_cost_price)
+      @products_count = OrderItem.joins(:product).where(product_id: @products, created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day,transaction_type: "Purchase").group(:title).sum(:quantity)
+    end
+
+    @pdf_template = PdfTemplate.includes(:pdf_template_elements).find_by(table_name: 'order', method_name: 'index')
+    @pdf_header = @pdf_template&.pdf_template_elements&.find_by(title: 'pdf_header')
+    @account_statement = @pdf_template&.pdf_template_elements&.find_by(title: 'account_statement')
+    @property_details = @pdf_template&.pdf_template_elements&.find_by(title: 'property_details')
+    @payment_details = @pdf_template&.pdf_template_elements&.find_by(title: 'payment_details')
+    @property_plans = @pdf_template&.pdf_template_elements&.find_by(title: 'property_plans')
+    @delivery_details = @pdf_template&.pdf_template_elements&.find_by(title: 'delivery_details')
+    @transfer_details = @pdf_template&.pdf_template_elements&.find_by(title: 'transfer_details')
+    @web_links = @pdf_template&.pdf_template_elements&.find_by(title: 'web_links')
+    @booking_qr = @pdf_template&.pdf_template_elements&.find_by(title: 'booking_qr')
+    @account_signature = @pdf_template&.pdf_template_elements&.find_by(title: 'account_signature')
+    @booking_qr_else = @pdf_template&.pdf_template_elements&.find_by(title: 'booking_qr_else')
+    @company_signature = @pdf_template&.pdf_template_elements&.find_by(title: 'company_signature')
+    @pdf_footer = @pdf_template&.pdf_template_elements&.find_by(title: 'pdf_footer')
+
+    @pos_setting = PosSetting.first
+
+    request.format = 'pdf'
+    respond_to do |format|
+      format.html
+      format.pdf do
+        render pdf: 'order-dynamic-pdf',
+               template: 'orders/dynamic_pdf.pdf.erb',
+               page_size: 'A4',
+               orientation: 'Portrait',
+               margin: {
+                 margin_top: @pos_setting&.pdf_margin_top.to_f,
+                 margin_right: @pos_setting&.pdf_margin_right.to_f,
+                 margin_bottom: @pos_setting&.pdf_margin_bottom.to_f,
+                 margin_left: @pos_setting&.pdf_margin_left.to_f
+               },
+               encoding: 'UTF-8',
+               footer: {
+                 right: '[page] of [topage]'
+               },
+               show_as_html: false
+      end
+    end
+  end
+
+  def view_history
+    @start_date = Date.today.beginning_of_month
+    @end_date = Date.today.end_of_month
+    if params[:q].present?
+      @start_date = params[:q][:created_at_gteq] if params[:q][:created_at_gteq].present?
+      @end_date = params[:q][:created_at_lteq] if params[:q][:created_at_lteq].present?
+      @item_id = params[:q][:item_id_eq] if params[:q][:item_id_eq].present?
+      if params[:q][:created_at_lteq].present?
+        params[:q][:created_at_lteq] =
+          params[:q][:created_at_lteq].to_date.end_of_day
+      end
+    end
+    @event = %w[create update destroy]
+    @q = PaperTrail::Version.where(item_id: Order.where(transaction_type: 'Purchase'),
+                                   item_type: 'Order').order('created_at desc').ransack(params[:q])
+                                                                  
+    @order_logs = @q.result.page(params[:page])
+    respond_to do |format|
+      format.js
+    end
+  end
+
   def user_type(id)
     SysUser.find(id).user_group
   end
@@ -213,6 +376,7 @@ class OrderPurchasesController < ApplicationController
     end
 
     def load_data
+      @items = Item.all
       @products = Product.all
       @accounts = Account.all
       @suppliers = SysUser.where(user_group: %w[Supplier Both Own])
@@ -240,12 +404,10 @@ class OrderPurchasesController < ApplicationController
           @q = Order.where(:transaction_type=>"Purchase").ransack(params[:q])
           @accounts=Account.all
         end
-        if @q.result.count > 0
-          @q.sorts = 'id desc' if @q.sorts.empty?
-        end
-      @orders = @q.result.page(params[:page])
-      @suppliers = SysUser.where(user_group: %w[Supplier Both Own])
-      @customers = SysUser.where(user_group: %w[Customer Supplier Both Salesman])
+        @q.sorts = 'id desc' if @q.result.count > 0 && @q.sorts.empty?
+        @orders = @q.result.page(params[:page])
+        @suppliers = SysUser.where(user_group: %w[Supplier Both Own])
+        @customers = SysUser.where(user_group: %w[Customer Supplier Both Salesman])
       end
     end
 
@@ -283,6 +445,13 @@ class OrderPurchasesController < ApplicationController
       print_pdf("Orders Detail",'pdf.html','A4')
     end
 
+    def set_user
+      created_by_ids = current_user&.created_by_ids_list_to_view
+      roles_mask = current_user&.allowed_to_view_roles_mask_for
+      @users = User.where(roles_mask: roles_mask).where('company_type=? or created_by_id=?', current_user&.company_type,
+                                                        created_by_ids)
+    end
+
     # Only allow a list of trusted parameters through.
     def order_params
       params.require(:order).permit(
@@ -302,49 +471,49 @@ class OrderPurchasesController < ApplicationController
         :payment_method,
         :bank_detail,
         order_images: [],
-        :remarks_attributes => [
-          :id,
-          :user,
-          :body,
-          :message,
-          :comment,
-          :remark_type,
-          :remarkable_type,
-          :remarkable_id
+        remarks_attributes: %i[
+          id
+          user
+          body
+          message
+          comment
+          remark_type
+          remarkable_type
+          remarkable_id
         ],
-        :order_items_attributes => [
-          :id,
-          :gst,
-          :gst_amount,
-          :purchase_sale_detail_id,
-          :item_id,
-          :product_id,
-          :quantity,
-          :cost_price,
-          :sale_price,
-          :status,
-          :comment,
-          :total_cost_price,
-          :total_sale_price,
-          :transaction_type,
-          :discount_price,
-          :purchase_sale_type,
-          :created_at,
-          :expiry_date,
-          :extra_expence,
-          :marla,
-          :square_feet,
-          :_destroy
+        order_items_attributes: %i[
+          id
+          gst
+          gst_amount
+          purchase_sale_detail_id
+          item_id
+          product_id
+          quantity
+          cost_price
+          sale_price
+          status
+          comment
+          total_cost_price
+          total_sale_price
+          transaction_type
+          discount_price
+          purchase_sale_type
+          created_at
+          expiry_date
+          extra_expence
+          marla
+          square_feet
+          _destroy
         ],
-        :links_attributes => [
-          :id,
-          :qrcode,
-          :brcode,
-          :herf,
-          :title,
-          :_destroy
+        links_attributes: %i[
+          id
+          qrcode
+          brcode
+          herf
+          title
+          _destroy
         ],
-        :property_plans_attributes => [
+        property_plans_attributes: [
           :id,
           :property_type,
           :area_in_marla,
@@ -365,21 +534,33 @@ class OrderPurchasesController < ApplicationController
           :payment_method,
           :bank_detail,
           :_destroy,
-          :property_installments_attributes => [
-            :id,
-            :property_plan_id,
-            :installment_no,
-            :installment_price,
-            :high_price,
-            :normal_price,
-            :created_at,
-            :updated_at,
-            :due_date,
-            :due_status,
-            :payment_method,
-            :bank_detail,
-            :_destroy
-          ]
+          { property_installments_attributes: %i[
+            id
+            property_plan_id
+            installment_no
+            installment_price
+            high_price
+            normal_price
+            created_at
+            updated_at
+            due_date
+            due_status
+            payment_method
+            bank_detail
+            _destroy
+          ] }
+        ],
+        follow_ups_attributes: [
+          :id,
+          :reminder_type,
+          :task_type,
+          :priority,
+          :created_by,
+          :assigned_to_id,
+          :date,
+          :comment,
+          :followable_id,
+          :followable_type
         ]
       )
     end

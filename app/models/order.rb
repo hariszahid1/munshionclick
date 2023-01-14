@@ -196,8 +196,8 @@ class Order < ApplicationRecord
           product = Product.find(item.product_id)
           product_detail << [product.title, item.quantity, item.sale_price, item.total_sale_price, item.expiry_date,item.product&.category_title,product.item_type&.title,product.code,product.marla,product.square_feet]
         else
-          item = Item.find(item.item_id)
-          product_detail << [item.title, item.quantity, item.sale_price, item.total_sale_price, item.expiry_date,item.item_type.title]
+          custom_item = Item.find(item.item_id)
+          product_detail << [custom_item.title, item.quantity, item.sale_price, item.total_sale_price, item.expiry_date,custom_item.item_type.title]
         end
       end
       # product_quantity=purchase_sale_items.group(:product_id).sum(:quantity)
