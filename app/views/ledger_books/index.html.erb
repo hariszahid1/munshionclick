@@ -360,7 +360,7 @@
                 <p><span>PO#: </span> <%=ledger_book&.purchase_sale_detail&.bill_no%></p>
               <%end%>
             </td>
-            <td><%=ledger_book.created_at.strftime("%A,  %d-%b-%y")%></td>
+            <td><%=ledger_book.created_at.strftime("%A,  %d-%b-%Y")%></td>
             <td>
               <div class="icon-container-1">
                   <div class="my-icon-1 my-view-1">
@@ -442,9 +442,9 @@
           <td></td>
           <td><h5>Total</h5></td>
           <td></td>
-          <td><h5><%=number_with_delimiter(@ledger_books_debit)%></h5></td>
-          <td><h5><%=number_with_delimiter(@ledger_books_credit.to_f+@sys_user.opening_balance.to_f)%></h5></td>
-          <td><h5><%=number_with_delimiter(@sys_user.opening_balance.to_i+@ledger_books_credit-@ledger_books_debit.to_i) if @ledger_books.present?%> <%=@sys_user.balance.to_i if @sys_user.present? and  @ledger_books.blank?%></h5></td>
+          <td><h5><%=number_with_delimiter(@ledger_books_all&.first&.sum_debit)%></h5></td>
+          <td><h5><%=number_with_delimiter(@ledger_books_all&.first&.sum_credit)%></h5></td>
+          <td><h5><%=number_with_delimiter(@ledger_books_all&.first&.mean_sum)%></h5></td>
           <td></td>
           <td></td>
           <td></td>
@@ -566,8 +566,3 @@
 
   });
 </script>
-
-
-
-
-
