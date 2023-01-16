@@ -20,7 +20,10 @@ class SalaryDetailsController < ApplicationController
     if @q.result.count > 0
       @q.sorts = ['id desc', 'created_at desc'] if @q.sorts.empty?
     end
-    @salary_details = @q.result(distinct: true).page(params[:page]).per(100)
+    @options_for_select = SalaryDetail.all
+    @custom_pagination = params[:limit].present? ? params[:limit] : 25
+    @custom_pagination = @pos_setting.custom_pagination['salary_details'] if @pos_setting&.custom_pagination.present? && @pos_setting&.custom_pagination['salary_details'].present?
+    @salary_details = @q.result(distinct: true).page(params[:page]).per(@custom_pagination)
     if params[:submit_pdf].present?
       if @q.result.count > 0
         @q.sorts = 'created_at desc' if @q.sorts.empty?
