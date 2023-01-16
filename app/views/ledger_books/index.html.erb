@@ -5,56 +5,106 @@
   </button>
 </div>
 <div class="m-4">
-<div class="main-content-header">
-  <h1 class="ml-2">Ledger Book</h1>
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item">
-      <a href="<%= root_path %>">Dashboard</a>
-    </li>
-    <li class="breadcrumb-item active">
-      <a href="<%= ledger_books_path %>">Ledger Book</a>
-    </li>
-  </ol>
-</div>
-
-<div class="row d-flex mb-5 mt-2 ml-1">
-  <%if (check_can_create(@module_permission))%>
-    <div>
-        <%= link_to new_ledger_book_path(Sjama: true), class: "btn btn-primary mr-2" do %>
-          <i class="fa fa-plus" aria-hidden="true"></i>
-          Jama/Credit
-        <% end %>
-          <%= link_to new_ledger_book_path(Sbenam: true), class: "btn btn-danger" do %>
-            <i class="fa fa-plus" aria-hidden="true"></i>
-              Benam/Debit
-          <% end %>
-    </div>
-  <% end %>
-  <%if (check_can_create(@module_permission))%>
-    <div class='ml-2'>
-       <%= link_to transfer_ledger_books_path, class: "btn btn-warning" do %>
-          <i class="fa fa-credit-card" aria-hidden="true"></i>
-          Payment Transfer
-        <% end %>
-    </div>
-  <% end %>
-</div>
-<div class="float-right">
-  <div class="dropdown ml-auto mr-4">
-    <span class="btn btn-info" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
-      <div class="dropdown-content">
-          <% if @help.present? %>
-          <% @help&.help_links.each do |link| %>
-          <a type="button" class="" target="_blank" href="<%= link[1] %>" >Help in <%= link[0] %></a>
-          <% end %>
-          <% end %>
-          </div>
+      <div class="d-flex">
+        <div class="main-content-header">
+          <h1 class="ml-2">Ledger Book</h1>
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a href="<%= root_path %>">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item active">
+              <a href="<%= ledger_books_path %>">Ledger Book</a>
+            </li>
+          </ol>
+        </div>
       </div>
- </div>
-<div class="hidden m-4" id="item_types_list">
 
-</div>
-      <ul class="nav nav-pills mt-3 mb-2" role="tablist">
+      <div class="row mb-5">
+        <div class="col border-radius-1 shadow p-4 m-2 " style="background:radial-gradient(circle at 81.9% 53.5%, #009FFD 16.3%, #2A2A72 100.2%); color: white;">
+          <p class="mb-3 mt-3 text-light">Today's Credit/Jama</p>
+          <div class="row d-flex">
+            <div class="col float-left">
+              <div>
+                <i class="mr-1" aria-hidden="true">Rs.</i>
+                <i class="h3 mb-0 font-weight-bold text-gray-800 "><%= number_with_delimiter(@today_credit_total) %></i>
+                <h5 class="text-light mt-5">
+                  <% if @today_credit_total > @yesterday_credit_total%>
+                    + <%= @percentage_credit %> %
+                  <% else %>
+                    - <%= @percentage_credit %> %
+                  <% end %>
+                </h5>
+              </div>
+            </div>
+            <div class="col float-right">
+            <%if (check_can_create(@module_permission))%>
+              <%= link_to new_ledger_book_path(Sjama: true), class: "card shadow p-3 float-right", style:"width: 80px; height: 80px; border-radius: 100%;" do %>
+                <i class="fa fa-plus text-dark m-3" aria-hidden="true"></i>
+              <% end %> 
+            <% end %>        
+            </div>
+          </div>
+        </div>
+        <div class="col border-radius-1 shadow p-4 m-2" style="background: radial-gradient(circle at 81.9% 53.5%, rgb(240, 60, 60) 16.3%, rgb(175, 53, 53) 100.2%);
+          color: white;">
+          <p class="mb-3 mt-3 text-light">Today's Debit/Benam</p>
+          <div class="row d-flex">
+            <div class="col float-left h5">
+              <div>
+                <i class="mr-1" aria-hidden="true">Rs.</i>
+                <i class="h3 mb-0 font-weight-bold text-gray-800 "><%= number_with_delimiter(@today_debit_total) %></i>
+                <h5 class="text-light mt-5">
+                  <% if @today_debit_total > @yesterday_debit_total%>
+                    + <%= @percentage_debit %> %
+                  <% else %>
+                    - <%= @percentage_debit %> %
+                  <% end %>
+                </h5>
+              </div>       
+            </div>
+            <div class="col float-right">
+            <%if (check_can_create(@module_permission))%>
+              <%= link_to new_ledger_book_path(Sbenam: true), class: "card shadow p-3 float-right", style:"width: 80px; height: 80px; border-radius: 100%;" do %>
+                <i class="fa fa-plus text-dark m-3" aria-hidden="true"></i>
+              <% end %> 
+            <% end %>       
+            </div>
+          </div>
+        </div>
+        <div class="col border-radius-1 shadow p-4 m-2 mr-3" style="background: radial-gradient(circle at 81.9% 53.5%, #FFCC00 16.3%, #F6BE00 100.2%); color: black;">
+          <h4 class="mb-3 mt-4 text-dark">Payment Transfer</h4>
+          <div class="row d-flex">
+            <div class="col float-left">
+              <div class="d-flex">
+                <i class="fas fa-exchange-alt text-muted fa-3x"></i>
+              </div>       
+            </div>
+            <div class="col float-right">
+            <%if (check_can_create(@module_permission))%>
+               <%= link_to transfer_ledger_books_path, class: "card shadow p-3 float-right", style:"width: 80px; height: 80px; border-radius: 100%;" do %>
+                <i class="fa fa-plus text-dark m-3" aria-hidden="true"></i>
+              <% end %> 
+            <% end %>       
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="clearfix"></div>
+      <div class="float-right">
+        <div class="dropdown ml-auto mr-4">
+          <span class="btn btn-info" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
+            <div class="dropdown-content">
+                <% if @help.present? %>
+                <% @help&.help_links.each do |link| %>
+                <a type="button" class="" target="_blank" href="<%= link[1] %>" >Help in <%= link[0] %></a>
+                <% end %>
+                <% end %>
+                </div>
+            </div>
+       </div>
+
+      <ul class="nav nav-pills mb-2 mt-3" role="tablist">
         <li class="nav-item">
           <a class="nav-link tab-label ledger-search-exp-tab active" data-toggle="tab" href="#search" role="tab">Search</a>
         </li>
@@ -78,11 +128,10 @@
       <%= hidden_field_tag "debitKeys", @debit_keys, { :id => "debitKeys" } %>
       <%= hidden_field_tag "debitValues", @debit_values, { :id => "debitValues" } %>
       <%= hidden_field_tag "creditValues", @credit_values, { :id => "creditValues" } %>
-      
 
       <div class="tab-content mb-2">
-        <div class="tab-pane active mb-3 card shadow mt-2 p-4 border-radius-1" id="search" role="tabpanel">
-          <%= search_form_for @q, url: ledger_books_path, class: "admin-controls", method: "get" do |f| %>
+        <div class="tab-pane active mb-4 card shadow mt-2 p-4 border-radius-1" style="border-left: 12px solid #1e3494" id="search" role="tabpanel">
+          <%= search_form_for @q, url: ledger_books_path, class: "admin-controls mt-3", method: "get" do |f| %>
           <div class="row d-flex">
             <div class="col-lg-9">
               <div class="col-lg-2 form-group float-left">
@@ -224,8 +273,8 @@
       <div class="my-loader mx-auto"></div>
     </div>
   </div>
-  
-  <div class='card border-radius-1 shadow p-4 ledger-book-index-card'>
+ 
+  <div class='card border-radius-1 shadow p-4 ledger-book-index-card' style="border-left: 12px solid #1e3494">
   <div class="row d-flex" style="position: absolute;">
       <div>
         <%if (check_can_delete(@module_permission))%>
@@ -565,4 +614,39 @@
     })
 
   });
+
+  $( document ).ready(function() {
+  var userCount=$('#userCount').val().split(' ')
+  const ctx = document.getElementById('stats-chart');
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Today Debit','Today Credit'],
+      datasets: [{
+        label: 'Total Balance',
+        data: ['<%= @today_debit_total %>', '<%= @today_credit_total %>'],
+        borderWidth: 1,
+        backgroundColor: ["red", "blue"],
+      }],
+    },
+    options: {
+      
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Today Total Balance',
+                font: {
+                  size: 16
+                }
+            }
+          
+
+        }
+      
+    }
+  });
+  
+});
 </script>
