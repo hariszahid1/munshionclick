@@ -172,7 +172,7 @@ class SaleDealsController < ApplicationController
 
   def approve_requested_deal
     @sale_deal.update(status: 'Clear')
-    redirect_to request.referrer, notice: 'Sale Deal was apprsuccessfully created.'
+    redirect_to request.referrer, notice: 'Sale Deal was approved successfully.'
   end
   
 end
