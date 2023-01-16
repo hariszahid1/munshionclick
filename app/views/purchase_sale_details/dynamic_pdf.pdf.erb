@@ -33,6 +33,9 @@
     </style>
   </head>
   <body>
+    <div class='text-center' style='margin-bottom: 30px;'>
+      <h1> <%=admin_name_on_nav if admin_name_on_nav.present?%></h1>
+    </div>
     <div class='d-flex'>
       <div class='col-6'>
         <table>
@@ -50,6 +53,10 @@
           <tr class='py-3'>
             <th class='text-left'>Mobile#</th>
             <td><%= @purchase_sale_detail.sys_user&.contact&.mobile %></td>
+          </tr>
+          <tr class='py-3'>
+            <th class='text-left'>CNIC</th>
+            <td><%= @purchase_sale_detail.sys_user&.cnic %></td>
           </tr>
         </table>
       </div>
@@ -110,7 +117,7 @@
           </tr>
           <tr>
             <th class='text-left' style='padding: 20px;'>QUANTITY:</th>
-            <td class='text-right' style='padding: 20px;'><%= @purchase_sale_detail&.purchase_sale_items&.count %></td>
+            <td class='text-right' style='padding: 20px;'><%= @purchase_sale_detail&.purchase_sale_items&.sum(:quantity) %></td>
           </tr>
           <tr>
             <th class='text-left' style='padding: 20px;'>AMOUNT:</th>
