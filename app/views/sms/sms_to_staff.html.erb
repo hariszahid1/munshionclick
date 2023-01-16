@@ -1,11 +1,17 @@
-<div class="hidden" id="city_list">
-  <div class="row">
-    <div class="col-lg-12 col-sm-12">
+<div class="hidden m-4 " id="city_list">
+  <div class="row card border-radius-1 shadow p-3 m-1">
       <h1>SMS To Any One</h1>
-    </div>
+      <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<%= root_path %>">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active">
+        <a href="<%=  sms_sms_to_staff_path %>">SMS To Any One</a>
+      </li>
+    </ol>
   </div>
   <div class="clearfix"></div>
-  <div class="row">
+  <div class="row card border-radius-1 shadow p-4 m-2 mb-3">
     <div class="col-lg-12 col-sm-12">
       <div class="col-lg-12 form-group float-left">
         <textarea name="sms_msg" class="form-control" ><%=@phone%></textarea>
@@ -30,47 +36,47 @@
           <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
         </div>
         <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn btn-primary" name="sms_submit" type="submit" value="SMS"><i class="fas fa-comment-alt"></i> English</button>
+          <button class="form-control btn btn-danger" name="sms_submit" type="submit" value="SMS"><i class="fas fa-comment-alt"></i> English</button>
         </div>
         <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn btn-primary" name="sms_submit_urdu" type="submit" value="SMS" ><i class="fas fa-comment-alt"></i> Urdu</button>
+          <button class="form-control btn btn-info" name="sms_submit_urdu" type="submit" value="SMS" ><i class="fas fa-comment-alt"></i> Urdu</button>
         </div>
       <% end %>
     </div>
   </div>
-
-  <table data-toggle="table" data-search="true">
-    <thead>
-      <tr>
-        <th><%= sort_link(@q, :property_type, 'Name') %></th>
-        <th><%= sort_link(@q, :property_type, 'Type') %></th>
-        <th><%= sort_link(@q, :area_in_marla, 'Phone') %></th>
-        <th>Action</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <% @sys_users.each do |sys_user| %>
+  <div class="card border-radius-1 shadow p-4 m-2">
+    <table data-toggle="table" data-search="true" class="content-table">
+      <thead>
         <tr>
-          <td><%= link_to sys_user&.name, edit_sys_user_path(sys_user)%></td>
-          <td><%= sys_user.department&.title %></td>
-          <td><%= sys_user&.phone %></td>
-          <td></td>
+          <th><%= sort_link(@q, :property_type, 'Name') %></th>
+          <th><%= sort_link(@q, :property_type, 'Type') %></th>
+          <th><%= sort_link(@q, :area_in_marla, 'Phone') %></th>
+          <th>Action</th>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
+      </thead>
+
+      <tbody>
+        <% @sys_users.each do |sys_user| %>
+          <tr>
+            <td><%= link_to sys_user&.name, edit_sys_user_path(sys_user)%></td>
+            <td><%= sys_user.department&.title %></td>
+            <td><%= sys_user&.phone %></td>
+            <td></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <div class="row">
+      <div class="col-lg-4 col-sm-4">
+        <%= page_entries_info @sys_users %>
+      </div>
+      <div class="col-lg-8 col-sm-8 pagination-left">
+        <%= paginate @sys_users %>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div class="clearfix"></div>
-<div class="row">
-  <div class="col-lg-4 col-sm-4">
-    <%= page_entries_info @sys_users %>
-  </div>
-  <div class="col-lg-8 col-sm-8 pagination-left">
-    <%= paginate @sys_users %>
-  </div>
-</div>
 
 <script>
   $(document).ready(function() {
