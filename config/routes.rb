@@ -221,13 +221,18 @@ Rails.application.routes.draw do
   resources :expense_entry_vouchers
   resources :pdf_templates
   resources :pdf_template_elements
-  resources :sale_deals
+  resources :sale_deals do
+    collection do
+      get :requested
+    end
+  end
   resources :db_backup_files
   get 'home/index'
   get :dashboard, to: 'dashboard#index', as: :dashboard
   get :export, to: 'dashboard#export', as: :export
   get :raw_material, to: 'dashboard#raw_material', as: :raw_material
   get :stock_by_category, to: 'dashboard#stock_by_category', as: :stock_by_category
+  get :pdf_download_for_psd, to: 'purchase_sale_details#pdf_download_for_psd'
 
   resources :bd_backups, only: [:index] do
     collection do

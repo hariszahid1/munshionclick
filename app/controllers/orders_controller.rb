@@ -366,8 +366,6 @@ class OrdersController < ApplicationController
     @item_types = ItemType.all
     @order.order_items.build
     @order.property_plans.build
-    @order.follow_ups.build
-
     @suppliers = SysUser.where(user_group: %w[Supplier Both Own])
     @customers = SysUser.where(user_group: %w[Customer Both Salesman])
     @items = Item.all

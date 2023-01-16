@@ -29,6 +29,9 @@
             <% end %>
           </div>
           <%= link_to 'Follow Ups', follow_ups_path('q[reminder_type_eq]': 'sale_deals'), class: "btn btn-primary mt-3 ml-2" %>
+        <% if current_user&.super_admin? %>
+          <%= link_to 'Requested', requested_sale_deals_path, class: "btn btn-info mt-3 ml-2" %>
+        <% end %>
         </div>
       </div>
     </div>
@@ -95,8 +98,7 @@
             <%= f.select :sys_user_id_eq, options_for_select(@sys_users.map{ |p| [p.name , p.id]}, f.object.sys_user_id_eq),{:include_blank => "Select Customer Name"},:class=>"form-control chosen-select" %>
           </div>
           <div class="col-lg-2 form-group float-left">
-            <%= f.select :sys_user_credit_status_eq, options_for_select(@all_agents.map{ |key, value| [key , value]}, f.object.sys_user_credit_status_eq),{:include_blank => "Select Agent Name"},:class=>"form-control chosen-select" %>
-          </div>
+            <%= f.select :user_name_eq, options_for_select(@all_agents.map{ |key, value| [key , value]}, f.object.user_name_eq),{:include_blank => "Select Agent Name"},:class=>"form-control chosen-select" %>          </div>
           <div class="col-lg-2 form-group float-left">
             <%= f.select :purchase_sale_items_size_12_eq, options_for_select(@transaction_type, f.object.purchase_sale_items_size_12_eq),  {:include_blank => "Select Transaction Type"}, class: "form-control chosen-select" %>
           </div>
@@ -124,7 +126,6 @@
             <button class="btn btn-danger mr-2" style="width: 100px;" title= "download expense vouchers pdf" name="pdf" type="submit" value="pdf"><i class="fa fa-file-excel mr-2"></i>PDF</button>
             <button class="btn btn-warning" style="width: 100px;" title= "download expense vouchers csv" name="csv" type="submit" value="csv"><i class="fa fa-file-excel mr-2"></i>CSV</button>
           </div>
-          
         </div>
       </p>
     </div>
@@ -135,6 +136,7 @@
   <table data-toggle="table mt-3" data-search="true" class="overflow-hidden border-radius-1">
     <thead>
       <tr>
+        <th>Date</th>
         <th>Quota</th>
         <th>Agent</th>
         <th>Project</th>

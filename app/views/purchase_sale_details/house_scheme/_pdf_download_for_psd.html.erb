@@ -1,0 +1,31 @@
+<div class="modal fade" id="showdData" tabindex="-1" role="dialog" aria-labelledby="showdDataLabel">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <!-- Card Header - Accordion -->
+        <h2 class="modal-title" id="myModalLabel">Pdfs for Purchase Slae Detail</h2>
+          <!-- Card Content - Collapse -->
+        <div class='card mt-3'>
+          <table class='table table-bordered table-shadow'>
+            <thead class='thead-color'>
+              <th>Url for pdfs</th>
+            </thead>
+            <%@purchase_sale_detail.purchase_sale_images.each_with_index do |image, index|%>
+              <tbody>
+                <tr>
+                  <td><a href="<%= image.url%>" target='blank'><%= (index +1).ordinalize %> PDF Link</a></td>
+                </tr>
+              </tbody>
+            <% end%>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger float-right" data-dismiss="modal" aria-label="Close">
+            <span class="text-light p-2">Close</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
