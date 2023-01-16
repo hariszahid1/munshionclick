@@ -65,6 +65,12 @@ class LedgerBooksController < ApplicationController
     @debit_keys = @debit_by_date_sorted.keys
     @debit_values = @debit_by_date_sorted.values
     @credit_values = @credit_by_date_sorted.values
+    @today_debit_total = @q.result.where(created_at: Time.current.all_day).sum(:debit).to_f
+    @today_credit_total = @q.result.where(created_at: Time.current.all_day).sum(:credit).to_f
+    @yesterday_debit_total = @q.result.where(created_at: 1.day.ago.all_day).sum(:debit).to_f
+    @yesterday_credit_total = @q.result.where(created_at: 1.day.ago.all_day).sum(:credit).to_f
+    @percentage_debit = ((@today_debit_total - @yesterday_debit_total) / @yesterday_debit_total.to_f ).round(2)
+    @percentage_credit = ((@today_credit_total - @yesterday_credit_total) / @yesterday_credit_total.to_f).round(2)
 
 
     if params[:submit_pdf].present? or params[:submit_pdf_without].present? or params[:desc_email].present? or params[:submit_pdf_short].present? or params[:submit_csv_without].present? or params[:submit_csv].present? or params[:submit_csv_short].present?
