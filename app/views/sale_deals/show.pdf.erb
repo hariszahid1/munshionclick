@@ -157,21 +157,32 @@
       </div>
     </div>
     <h2>Important: You must call at this number for the verification of your receipt 0321-8437272.</h2>
-    <% if @sale_deal.qr_code.present?%>
-      <%
-        require "rqrcode"
-        qrcode = RQRCode::QRCode.new(@sale_deal.qr_code)
-        @svg = qrcode.as_svg(
-            color: "000",
-            shape_rendering: "crispEdges",
-            module_size: 11,
-            standalone: true,
-            use_path: true
-          )
-          @str=Base64.encode64(@svg ).gsub("\n", '')
-      %>
-      <img width="150px" height="115px" class="figure" style=""src=<%="data:image/svg+xml;base64,"+@str%> >
-    <% end %>
+   <div class='d-flex'>
+      <div style='width: 30%; margin-top: 20px'>
+        <% if @sale_deal.qr_code.present?%>
+          <%
+            require "rqrcode"
+            qrcode = RQRCode::QRCode.new(@sale_deal.qr_code)
+            @svg = qrcode.as_svg(
+                color: "000",
+                shape_rendering: "crispEdges",
+                module_size: 11,
+                standalone: true,
+                use_path: true
+              )
+              @str=Base64.encode64(@svg ).gsub("\n", '')
+          %>
+          <img width="180px" height="150px" class="figure" style=""src=<%="data:image/svg+xml;base64,"+@str%> >
+        <% end %>
+      </div>
+      <div style='width: 50%; margin-top: 20px'>
+        <h4>For verification of your Unit booking:</h4>
+        <p> 1) Open Camrea/QRScaner app on your phone.</p>
+        <p> 2) Point your phone to this QRCODE to capture the code.</p>
+        <p> 3) After capturing you will redirect to our Sale Deal Invoice.</p>
+      </div>
+    </div>
+
     <div class='d-flex'>
       <div style='width: 50%; margin-top: 20px'>
         <h3><%= @pos_setting&.extra_settings.try(:[], "address_1").try(:[], 0) %><img src="<%= image_url('pin-location.svg') %>" height='20px' width='20px'></h3>

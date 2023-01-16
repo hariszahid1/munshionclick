@@ -132,6 +132,10 @@
   <div class="tab-content mb-3" >
     <div class="tab-pane active" style="outline: none !important; border: none;" id="all" role="tabpanel">
       <% @follow_up_all.each do |follow_up|%>
+        <div class= 'float-right'>
+          <%= check_box_tag 'object_id', follow_up.id, false, class: 'testclass mx-2', checked: follow_up.is_complete %>
+          <%= label_tag nil, 'Is Completed ', class:"font-bold" %>
+        </div>
         <%= link_to read_follow_up_path(follow_up_id: follow_up.id) do %>
           <div class="text-decoration-none text-left pl-2 py-3 d-flex border-bottom <%= follow_up.is_read? ? '' : 'bg-unread-color'%>">
             <div class='col-3 mt-2'>
@@ -150,6 +154,10 @@
     </div>
     <div class="tab-pane" style="outline: none !important; border: none;" id="unread" role="tabpanel">
       <% @follow_up_unread.each do |follow_up|%>
+        <div class= 'float-right'>
+          <%= check_box_tag 'object_id', follow_up.id, false, class: 'testclass mx-2', checked: follow_up.is_complete %>
+          <%= label_tag nil, 'Is Completed ', class:"font-bold" %>
+        </div>
         <%= link_to read_follow_up_path(follow_up_id: follow_up.id) do %>
           <div class="text-decoration-none text-left pl-2 py-3 d-flex border-bottom bg-unread-color unread-data-container">
             <div class='col-3 mt-2'>
