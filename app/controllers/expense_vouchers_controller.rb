@@ -35,7 +35,6 @@ class ExpenseVouchersController < ApplicationController
   def new
     @expense_voucher = ExpenseVoucher.new
     @expense_voucher.expense_entry_vouchers.build
-    @expense_voucher.follow_ups.build
   end
 
   # GET /expense_vouchers/1/edit

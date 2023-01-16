@@ -70,8 +70,7 @@
 
     <div class='d-flex mr-4'>
       <div class='col-3 px-20'><b>Agent Name:</b></div>
-      <div class='col-3 border-bottom'><%= @all_agents.to_h.invert[@sale_deal&.sys_user&.credit_status].to_s%></div>
-      <div class='col-3 px-20'><b>Transaction Type:</b></div>
+      <div class='col-3 border-bottom'><%= @all_agents.to_h.invert[@sale_deal&.user_name.to_i].to_s%></div>      <div class='col-3 px-20'><b>Transaction Type:</b></div>
       <div class='col-3 border-bottom'><%= @sale_deal&.purchase_sale_items.first.size_12 %></div>
     </div>
 

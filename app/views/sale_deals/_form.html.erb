@@ -10,7 +10,9 @@
     </div>
   <% end %>
   <div class= 'row'>
-    <%= f.hidden_field :transaction_type, value: 'SaleDeal'%>
+    <%= f.hidden_field :transaction_type, value: 'SaleDeal' %>
+    <%= f.hidden_field :user_name, value: current_user.id %>
+    <%= f.hidden_field :status, value: 'UnClear' if params[:action] == 'new'%>
     <div class="col-lg-6 form-group float-left">
       <%= f.select :sys_user_id, options_from_collection_for_select(@sys_users, 'id', 'name', (f.object&.sys_user_id.nil? ? @sys_users&.first&.id : f&.object&.sys_user_id)), {label:'User'}, required: true, :class=>"form-control chosen-select"%>
     </div>

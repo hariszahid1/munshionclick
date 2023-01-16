@@ -225,6 +225,23 @@
         </div>
       </div>
     </div>
+    <div class="col-xl-12 col-md-12 mb-12">
+      <div class="card border-radius-1 border-left-primary shadow h-100 py-2 mb-3">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="row col-lg-12">
+                <div class="links font-weight-bold text-uppercase">
+                  <div class="links ml-auto">
+                    <%= link_to_add_association 'Add Follow Up', f, :follow_ups, partial: 'crms/follow_ups_new', class: "btn btn-info mb-2" %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   <%end%>
   <%if @purchase_sale_detail.versions.present?%>
     <div class="col-xl-12 col-md-12 mb-12">
