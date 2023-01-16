@@ -1,0 +1,49 @@
+
+<div class='d-flex'>
+  <div>
+    <div class="row mb-1">
+      <h1 class="ml-2 col">Requested Sale Deals</h1>
+    </div>
+  </div>
+</div>
+
+<div class="card shadow mt-4 p-2 border-radius-1">
+  <table data-toggle="table mt-3" data-search="true" class="overflow-hidden border-radius-1">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Quota</th>
+        <th>Agent</th>
+        <th>Project</th>
+        <th>Plot Type</th>
+        <th>Category</th>
+        <th>Customer</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @requested.each do |sale_deal| %>
+        <tr>
+          <td><%= sale_deal.created_at.strftime('%d/%m/%y at %I:%M%p')%></td>
+          <td><%= sale_deal&.purchase_sale_items&.first&.size_13 %></td>
+          <td>
+            <%= @all_agents.to_h.invert[sale_deal&.sys_user&.credit_status].to_s%>
+          </td>
+          <td><%= sale_deal&.sys_user&.cms_data&.try(:[], 'project_name')&.titleize %></td>
+          <td><%= sale_deal&.sys_user&.cms_data&.try(:[], 'category')&.titleize %></td>
+          <td><%= sale_deal&.purchase_sale_items&.first&.size_9 %></td>
+          <td><%= sale_deal.sys_user.name %></td>
+          <td> <%= link_to sale_deal_path(id: sale_deal.id, 'approve': true), method: :put, class: "btn btn-success mt-3 ml-2" do %>
+              Approve
+            <% end %>
+          </td>
+          <td> <%= link_to edit_sale_deal_path(sale_deal),class: "btn btn-info mt-3 ml-2" do %>
+              Edit
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

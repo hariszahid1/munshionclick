@@ -133,24 +133,24 @@
             </div>
             <%end%>
 
-          <!-- follow _ups -->
-          <div class= 'row'>
-            <div  class="col-lg-12 mt-4 row">
-              <h4 class="card-header col-lg-12 mb-4">
-                  Follow Up
-              </h4>
-            </div>
-            <div  class="col-lg-12 row">
-              <%= f.fields_for :follow_ups do |follow_up| %>
-                <%= render 'crms/follow_ups_new', f: follow_up %>
-              <% end %>
-            </div>
-            <div id="new_links" class='row col-12'>
-              <div class="links ml-auto">
-                <%= link_to_add_association 'Add More', f, :follow_ups, partial: 'crms/follow_ups_new', class: "btn btn-info mb-2" %>
-              </div>
-            </div>
           </div>
+        </div>
+          <!-- follow _ups -->
+        <div class= 'row'>
+          <div  class="col-lg-12 mt-4 ml-2 row">
+            <h4 class="card-header col-lg-12 mb-4">
+                Follow Up
+            </h4>
+          </div>
+          <div  class="col-lg-12 row">
+            <%= f.fields_for :follow_ups do |follow_up| %>
+              <%= render 'crms/follow_ups_new', f: follow_up %>
+            <% end %>
+          </div>
+          <div id="new_links" class='row col-12'>
+            <div class="links ml-auto">
+              <%= link_to_add_association 'Add Follow Up', f, :follow_ups, partial: 'crms/follow_ups_new', class: "btn btn-info mb-2" %>
+            </div>
           </div>
         </div>
       </div>

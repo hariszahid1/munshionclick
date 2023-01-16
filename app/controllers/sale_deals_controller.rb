@@ -2,13 +2,13 @@ class SaleDealsController < ApplicationController
   include PdfCsvGeneralMethod
   include SaleDealsHelper
 
-  before_action :set_sale_deal, only: %i[show edit update destroy]
+  before_action :set_sale_deal, only: %i[show edit update destroy approve_requested_deal]
   before_action :set_data, only: %i[new edit create update show index]
 
   # GET /sale_deals
   # GET /sale_deals.json
   def index
-    @q = PurchaseSaleDetail.includes(:sys_user, :purchase_sale_items).ransack(params[:q])
+    @q = PurchaseSaleDetail.includes(:sys_user, :purchase_sale_items).order('id desc').ransack(params[:q])
     download_sale_deals_pdf_file if params[:pdf].present?
     download_sale_deals_csv_file if params[:csv].present?
     @sale_deals = @q.result.where(transaction_type: 'SaleDeal').page(params[:page])
@@ -44,7 +44,7 @@ class SaleDealsController < ApplicationController
                                       purchase_sale_detail_id: @sale_deal.id, account_id: @sale_deal&.account_id)
         @ledger_book.save!
         format.js
-        format.html { redirect_to sale_deals_path, notice: 'Sale Deal was successfully created.' }
+        format.html { redirect_to sale_deals_path, notice: 'Please Take Approval from admin.' }
         format.json { render :show, status: :created, location: @sale_deal }
       else
         format.html { render :new }
@@ -56,6 +56,8 @@ class SaleDealsController < ApplicationController
   # PATCH/PUT /sale_deals/1
   # PATCH/PUT /sale_deals/1.json
   def update
+    return approve_requested_deal if params[:approve].present?
+
     respond_to do |format|
       @before_update_carriage_loading = @sale_deal.carriage + @sale_deal.loading
       if @sale_deal.update(sale_deal_params)
@@ -79,6 +81,10 @@ class SaleDealsController < ApplicationController
       format.json { head :no_content }
       format.js   { render layout: false }
     end
+  end
+
+  def requested
+    @requested = PurchaseSaleDetail.includes(:sys_user, :purchase_sale_items).where(transaction_type: 'SaleDeal', status: 'UnClear')
   end
 
   private
@@ -163,4 +169,10 @@ class SaleDealsController < ApplicationController
       end
     end
   end
+
+  def approve_requested_deal
+    @sale_deal.update(status: 'Clear')
+    redirect_to request.referrer, notice: 'Sale Deal was approved successfully.'
+  end
+  
 end

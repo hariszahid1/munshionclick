@@ -9,7 +9,7 @@
       <div class="row">
         <div class="col-lg-12 col-sm-12">
           <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Agent Name:<h5 class='urdu-font'> <%= @all_agents.to_h.invert[@sale_deal&.sys_user&.credit_status].to_s %></h5></h3>
+            <h3>Agent Name:<h5 class='urdu-font'> <%= @all_agents.to_h.invert[@sale_deal&.user_name.to_i].to_s %></h5></h3>
           </div>
           <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
             <h3>Name:<h5 class='urdu-font'><%= @sale_deal&.sys_user&.name %></h5></h3>
