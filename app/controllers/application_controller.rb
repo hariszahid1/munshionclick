@@ -385,7 +385,8 @@ class ApplicationController < ActionController::Base
   end
 
   def check_can_delete(temp_module)
-    return true if temp_module.can_delete == true
+  
+    return true if temp_module.can_delete == true || (params[:controller].eql?("orders") && params[:action].eql?("new"))
 
     false
   end
