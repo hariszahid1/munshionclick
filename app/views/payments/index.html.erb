@@ -5,49 +5,59 @@
   </button>
 </div>
 
-<div class="hidden" id="city_list">
-  <div class="main-content-header">
-    <h1 class="ml-2">Payments</h1>
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a href="<%= root_path %>">Dashboard</a>
-      </li>
-      <li class="breadcrumb-item active">
-        <a href="<%= payments_path %>">Payments</a>
-      </li>
-    </ol>
-  </div>
+<div class="hidden m-4" id="city_list">
+  <div class="d-flex">
+        <div class="main-content-header">
+          <h1 class="ml-2">Payments</h1>
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a href="<%= root_path %>">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item active">
+              <a href="<%= payments_path %>">Payments</a>
+            </li>
+          </ol>
+        </div>
+      </div>
 
-  <div class="row d-flex mb-4 ml-1">
-    <%if (check_can_create(@module_permission))%>
-      <% if can?(:delete, :all) %>
-          <%= link_to new_payment_path, class: "btn btn-success mr-3" do %>
-         <i class="fa fa-plus" aria-hidden="true"></i>
-          Jama/Credit
-        <% end %>
-      <% end %>
-    <% end %>
-    <%if (check_can_create(@module_permission))%>
-      <% if can?(:delete, :all) %>
-          <%= link_to new_payment_path(jama: true), class: "btn btn-danger mr-3" do %>
-         <i class="fa fa-plus" aria-hidden="true"></i>
-          Benam/Debit
-        <% end %>
-      <% end %>
-    <% end %>
-    <%if (check_can_create(@module_permission))%>
-      <%= link_to transfer_payments_path, class: "btn btn-info mr-3" do %>
-        <i class="fa fa-credit-card" aria-hidden="true"></i>
-        Payment Transfer
-      <% end %>
-    <% end %>
-    <%if (check_can_create(@module_permission))%>
-      <%= link_to accounts_url, class: "btn btn-warning" do %>
-        <i class="fa fa-credit-card" aria-hidden="true"></i>
-        Accounts
-      <% end %>
-    <% end %>
-  </div>
+      <div class="row mb-5 ml-1 mr-1" style="font-family: arial">
+        <div class="col stats-cards border-radius-1 shadow p-4 mr-3" style="background:linear-gradient(176deg, #0f1d59 26.5%, lightgray 28%, white 10%,  white 30%, white);">
+          <%if (check_can_create(@module_permission))%>
+            <%= link_to new_payment_path, class: "card shadow p-3 ml-5 float-right", style:"width: 80px; height: 80px; border-radius: 100%;" do %>
+              <i class="fa fa-plus text-dark mt-3 ml-3" aria-hidden="true"></i>
+            <% end %> 
+          <% end %> 
+          <div class="mt-5">
+            <span class="mt-4"><i>Rs.</i><i class="h1 mb-0 font-weight-bold text-gray-800 mr-1"><%= number_with_delimiter(@today_credit_payment) %></i></span>
+            <% if @today_credit_payment > @yesterday_credit_payment%>
+              <span class="bg-success border-radius-1 px-1 text-light font-weight-bold">+ <%= @percentage_credit_payment %> %</span>
+            <% else %>
+              <span class="bg-danger border-radius-1 px-2 text-light font-weight-bold"> <%= @percentage_credit_payment %> %</span>
+            <% end %>
+            <p class="mt-1">Today's Credit<i class="fas fa-user text-dark ml-3 mr-2"></i><%= @payment_credit_count%> </p>
+            <h4 class="font-weight-bold">Credit/Jama</h4>
+          </div>
+        </div>
+        <div class="col stats-cards border-radius-1 shadow p-4 ml-2 mr-4" style="background:linear-gradient(176deg, darkred 26.5%, lightgray 28%, white 10%,  white 30%, white); ">
+          <%if (check_can_create(@module_permission))%>
+            <%= link_to new_payment_path(Sjama: true), class: "card shadow p-3 ml-5 float-right", style:"width: 80px; height: 80px; border-radius: 100%;" do %>
+              <i class="fa fa-plus text-dark mt-3 ml-3" aria-hidden="true"></i>
+            <% end %> 
+          <% end %> 
+          <div class="mt-5">
+            <span class="mt-4"><i>Rs.</i><i class="h1 mb-0 font-weight-bold text-gray-800 mr-1"><%= number_with_delimiter(@today_debit_payment) %></i></span>
+            <% if @today_debit_payment > @yesterday_debit_payment%>
+              <span class="bg-success border-radius-1 px-1 text-light font-weight-bold">+ <%= @percentage_debit_payment %> %</span>
+            <% else %>
+              <span class="bg-danger border-radius-1 px-2 text-light font-weight-bold"> <%= @percentage_debit_payment %> %</span>
+            <% end %>
+            <p class="mt-1">Today's Debit<i class="fas fa-user text-dark ml-3 mr-2"></i><%= @payment_debit_count%> </p>
+            <h4 class="font-weight-bold">Debit/Benam</h4>
+          </div>
+        </div>
+      </div>
+
+
    <div class="float-right">
     <div class="dropdown ml-auto mr-4">
      <span class="btn btn-info" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
@@ -59,6 +69,16 @@
         <% end %>
       </div>
     </div>
+  </div>
+  <div class="float-right">
+    <%if (check_can_create(@module_permission))%>
+      <%= link_to transfer_payments_path, class: "btn btn-warning form-group mr-3" do %>
+        <i class="fa fa-exchange-alt text-dark mr-2" aria-hidden="true"></i>Payment Transfer
+      <% end %> 
+      <%= link_to accounts_url, class: "btn btn-danger form-group mr-3" do %>
+        <i class="fa fa-plus mr-2" aria-hidden="true"></i>Accounts
+      <% end %> 
+    <% end %> 
   </div>
 	<ul class="nav nav-pills ml-1" role="tablist">
 		<li class="nav-item">
@@ -76,10 +96,10 @@
 	</ul>
 
   <div class="tab-content">
-    <div class="tab-pane active mb-3 card shadow-sm mt-2 border-radius-1 mr-4" id="search" role="tabpanel">
+    <div class="tab-pane active mb-3 card card-border-left-side shadow p-3 mt-2 border-radius-1 mr-4" id="search" role="tabpanel">
       <%= search_form_for @q, url: payments_path, class: "admin-controls", method: "get" do |f| %>
         <div class="row d-flex ml-1 mr-1 mt-4">
-          <div class="col-lg-2 form-group float-left">
+          <div class="col-lg-3 form-group float-left">
             <%= f.select :account_id_in, options_from_collection_for_select(@accounts, "id", ->(st){"#{st.title} \u{27F6} #{st.bank_name}"},f.object.account_id_in),{:include_blank => "Select the Account Title"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Account Title"} }%>
           </div>
           <div class="col-lg-2 form-group float-left">
@@ -167,7 +187,7 @@
       <% end %>
     </div>
 
-    <div class="tab-pane card mb-3 shadow-sm mt-2 border-radius-1" id="import-export" role="tabpanel">
+    <div class="tab-pane card card-border-left-side mb-3 shadow p-3 mt-2 border-radius-1" id="import-export" role="tabpanel">
       <p>
         <%= search_form_for @q, url: payments_path, class: "admin-controls", method: "get" do |f| %>
           <div class="d-flex ml-2">
@@ -178,7 +198,7 @@
       </p>
     </div>
 
-    <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="logs" role="tabpanel">
+    <div class="tab-pane card card-border-left-side shadow p-3 mt-2 border-radius-1" id="logs" role="tabpanel">
       <p>
         <div class="d-flex">
           <%= link_to view_history_payments_path, class: "btn btn-success d-none", id: "payment-logs", remote:true do %>
@@ -194,7 +214,7 @@
   <div>
 
 
-  <div class="card shadow-sm border-radius-1 p-2 mr-4 payment-book-index-card">
+  <div class="card card-border-left-side shadow border-radius-1 p-4 ml-4 mr-5 payment-book-index-card">
     <%= render 'map_columns/map_column_partials' %>
     <%if (check_can_delete(@module_permission))%>
 	    <button class="btn btn-outline-danger delete-selected mt-2" style=" position: absolute;" type='button' value='Payment'>
