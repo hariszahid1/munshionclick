@@ -110,7 +110,7 @@ class ColdStorageInwardsController < ApplicationController
   def index_edit_new_data
     @orders = Order.all
     @customers = SysUser.where(:user_group=>['Customer','Both','Salesman'])
-    @suppliers = SysUser.where(:user_group=>['Supplier','Both','Own'])
+    @suppliers = SysUser.all
     @accounts = Account.all
     @products = Product.all
   end
