@@ -174,10 +174,15 @@
                 <button class="btn btn-warning float-right mr-2 mb-2" style="width:100px" title= "download crm csv" name="csv" type="submit" value="csv">CSV &nbsp;<i class="fa fa-file-excel"></i></button>
               <% end %>
               <%if (check_can_download_pdf(@module_permission))%>
-                <button class="form-control btn btn-danger float-right mr-2 ml-3 mb-2" style="width:100px" title= "download crm pdf" name="pdf" type="submit" value="pdf" formtarget="_blank" style="width:160px">PDF &nbsp;<i class="fa fa-file-pdf"></i></button>
+                <div class="dropdown my-dropdown float-right mr-2">
+                  <button type="button" class="form-control bg-danger text-light">PDF List</button>
+                  <div class="dropdown-content my-dropdown-content p-1">
+                    <button class="form-control btn btn-danger float-right mr-2 ml-3 mb-2 mt-2" style="width:150px" title= "download crm pdf" name="pdf" type="submit" value="pdf" formtarget="_blank" style="width:160px">PDF &nbsp;<i class="fa fa-file-pdf"></i></button>
+                    <button class="form-control btn btn-danger float-right mr-2 ml-3 mb-2" style="width:150px" title= "pdf with follow_ups" name="pdf_associated_data" type="submit" value="pdf_with_follow_ups" formtarget="_blank" style="width:160px">With Follow Ups</button>
+                    <button class="form-control btn btn-danger float-right mr-2 ml-3 mb-2" style="width:150px" title= "pdf with notes" name="pdf_associated_data" type="submit" value="pdf_with_notes" formtarget="_blank" style="width:160px">With Notes</button>
+                  </div>
+                </div>
               <% end %>
-             
-
             </div>
           </div>
         <% end %>
