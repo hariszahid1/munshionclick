@@ -1,0 +1,33 @@
+.follow-check-input[type="checkbox"] {
+  position: relative;
+  width: 60px;
+  height: 30px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: red;
+  outline: none;
+  border-radius: 2rem;
+  cursor: pointer;
+}
+
+.follow-check-input[type="checkbox"]::before {
+  content: "";
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #fff;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: 0.5s;
+}
+
+.follow-check-input[type="checkbox"]:checked::before {
+  transform: translateX(100%);
+  background: #fff;
+}
+
+.follow-check-input[type="checkbox"]:checked {
+  background: #00ed64;
+}
+

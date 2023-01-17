@@ -132,10 +132,6 @@
   <div class="tab-content mb-3" >
     <div class="tab-pane active" style="outline: none !important; border: none;" id="all" role="tabpanel">
       <% @follow_up_all.each do |follow_up|%>
-        <div class= 'float-right'>
-          <%= check_box_tag 'object_id', follow_up.id, false, class: 'testclass mx-2', checked: follow_up.is_complete %>
-          <%= label_tag nil, 'Is Completed ', class:"font-bold" %>
-        </div>
         <%= link_to read_follow_up_path(follow_up_id: follow_up.id) do %>
           <div class="text-decoration-none text-left pl-2 py-3 d-flex border-bottom <%= follow_up.is_read? ? '' : 'bg-unread-color'%>">
             <div class='col-3 mt-2'>
@@ -143,21 +139,23 @@
               <span class="badge badge-danger p-2 mb-2"><%= follow_up.priority %></span><br>
               <span class="badge badge-primary p-2"><%= follow_up.task_type %></span>
             </div>
-            <div class='col-9'>
+            <div class='col-5'>
               <span class="h6"><%= follow_up&.followable.name if follow_up.followable_type == 'SysUser' %></span><br>
               <%= follow_up.comment %><br>
               <span><%= follow_up.date.strftime('%d/%m/%Y %H:%M %p')%></span>
-            </div>
-          </div>
         <% end %>
+              
+            </div>
+            <div class= 'col-4'>
+                <%= check_box_tag 'object_id', follow_up.id, false, class: 'testclass mx-2 follow-check-input ml-auto', checked: follow_up.is_complete %>
+                <br>
+                <%= label_tag nil, 'Is Completed ', class:"font-bold ml-auto" %>
+              </div>
+          </div>
       <% end %>
     </div>
     <div class="tab-pane" style="outline: none !important; border: none;" id="unread" role="tabpanel">
       <% @follow_up_unread.each do |follow_up|%>
-        <div class= 'float-right'>
-          <%= check_box_tag 'object_id', follow_up.id, false, class: 'testclass mx-2', checked: follow_up.is_complete %>
-          <%= label_tag nil, 'Is Completed ', class:"font-bold" %>
-        </div>
         <%= link_to read_follow_up_path(follow_up_id: follow_up.id) do %>
           <div class="text-decoration-none text-left pl-2 py-3 d-flex border-bottom bg-unread-color unread-data-container">
             <div class='col-3 mt-2'>
@@ -165,13 +163,19 @@
               <span class="badge badge-danger p-2 mb-2"><%= follow_up.priority %></span><br>
               <span class="badge badge-primary p-2"><%= follow_up.task_type %></span>
             </div>
-            <div class='col-9'>
+            <div class='col-5'>
               <span class="h6"><%= follow_up&.followable&.name if follow_up.followable_type == 'SysUser' %></span><br>
               <%= follow_up.comment %><br>
               <span><%= follow_up.date.strftime('%d/%m/%Y %H:%M %p')%></span>
-            </div>
-          </div>
         <% end %>
+            
+            </div>
+              <div class= 'col-4 float-right'>
+                <%= check_box_tag 'object_id', follow_up.id, false, class: 'testclass mx-2 follow-check-input float-right', checked: follow_up.is_complete %>
+                <br>
+                <%= label_tag nil, 'Is Completed ', class:"font-bold float-right" %>
+              </div>
+          </div>
       <% end %>
       <% unless @follow_up_unread.present? %>
         <h4 class='text-danger mt-3 ml-2'><i class="fa fa-exclamation-circle mr-1" aria-hidden="true"></i>No unread follow ups exists.</h4>
@@ -205,5 +209,22 @@
   function closeNav() {
     document.getElementById("mySidenav_sc").style.width = "0";
   }
+
+  $(document).ready(function(){
+    $('.testclass').on('change', function(){
+      var id = $(this).val();
+      $.ajax({
+        type: "post",
+        url: `/is_completed`,
+        data: {'id': id },
+        success: function (result) {
+        },
+        error: function (error){
+          console.error(error)
+        }
+      });
+    })
+  })
+
 </script>
 
