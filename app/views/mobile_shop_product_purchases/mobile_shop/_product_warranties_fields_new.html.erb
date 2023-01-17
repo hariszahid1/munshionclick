@@ -1,0 +1,55 @@
+<!-- warrenty protion here -->
+<div class="nested-fields col-lg-12 row" data-turbolinks="false">
+  <div class="col-lg-1  float-left">
+    <%= f.check_box :status, class: "form",hide_label: true, checked: f.object.status%>
+  </div>
+  <div class="col-lg-5 float-left font-weight-bold">
+    <%= f.hidden_field :purchase_sale_detail_id %>
+    <%= f.hidden_field :id %>
+    <%= f.hidden_field :product_id %>
+    <%= f.object&.product&.code.to_s+" - "+f.object&.product&.title.to_s%>
+  </div>
+  <div class="col-lg-4 float-left">
+    <%= f.text_field :serial,hide_label: true,placeholder: "Past Serial Number",onchange:"mobile_serail_number_validation(event,this)",onkeyup:"mobile_serail_number_validation(event,this)",:class=>"serial_no", required: true%>
+  </div>
+  <div class="col-lg-1  float-left text-xs font-weight-bold text-danger text-uppercase">
+    <%= link_to_remove_association f do %>
+      <i class="fa fa-minus-circle"></i>
+    <% end %>
+  </div>
+</div>
+<script>
+  $(document).ready(function() {
+    FontAwesome.dom.i2svg();
+    if($(".product.chosen-select").length>0)
+    {
+      if ($("#"+$(".product.chosen-select")[$(".product.chosen-select").length-1].id).val()=="")
+      {
+        var $mySelectProduct= $("#"+$(".product.chosen-select")[$(".product.chosen-select").length-2].id);
+      }
+      else {
+        var $mySelectProduct= $("#"+$(".product.chosen-select")[$(".product.chosen-select").length-1].id);
+      }
+      var $myquantity= $("#"+$(".quantity-price")[$(".quantity-price").length-1].id);
+
+      var $mySelect= $("#"+$(".product-warranty.chosen-select")[$(".product-warranty.chosen-select").length-1].id);
+      var $myquantity= $("#"+$(".serial_no")[$(".serial_no").length-1].id);
+      var enableChosen = setTimeout(function() {
+        $mySelect.chosen();
+        if ($mySelect.val()=="")
+        {
+          $mySelect.val($mySelectProduct.val());
+        }
+        $mySelect.trigger("chosen:updated");
+        // $mySelect.trigger('chosen:activate');
+      }, 50);
+      setTimeout(function(){
+        $(".chosen-select").chosen({
+  allow_single_deselect: true,
+  width: '100%'
+});
+      }, 60);
+      $("#total_product_warranty").text($(".product-warranty.chosen-select").length);
+    }
+  });
+</script>
