@@ -22,6 +22,16 @@ class LoansController < ApplicationController
     @loans = @q.result(distinct: true).page(params[:page]).per(@custom_pagination)
     download_loans_pdf_file if params[:pdf].present?
     download_loans_csv_file if params[:csv].present?
+
+    @today_debit_loan = @q.result.where(created_at: Time.current.all_day).sum(:debit).to_f
+    @today_credit_loan = @q.result.where(created_at: Time.current.all_day).sum(:credit).to_f
+    @yesterday_debit_loan = @q.result.where(created_at: 1.day.ago.all_day).sum(:debit).to_f
+    @yesterday_credit_loan = @q.result.where(created_at: 1.day.ago.all_day).sum(:credit).to_f
+    @percentage_debit_loan = ((@today_debit_loan - @yesterday_debit_loan) / @yesterday_debit_loan.to_f ).round(2)
+    @percentage_credit_loan = ((@today_credit_loan - @yesterday_credit_loan) / @yesterday_credit_loan.to_f).round(2)
+    @loan_debit_count = @q.result.where(created_at: Time.current.all_day).count(:debit)
+    @loan_credit_count = @q.result.where(created_at: Time.current.all_day).count(:credit)
+
   end
 
   # GET /loans/1
