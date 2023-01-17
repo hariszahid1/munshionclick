@@ -1,0 +1,82 @@
+<%= hidden_field_tag "total_purchase_customer_name", @total_purchase_customer.keys.map{ |a| a.gsub(' ', '-')}, { id: "total_purchase_customer_name" } %>
+<%= hidden_field_tag "total_purchase_customer_amount", @total_purchase_customer.values, { id: "total_purchase_customer_amount" } %>
+
+<%= hidden_field_tag "total_paid_customer_name", @total_paid_customer.keys.map{ |a| a.gsub(' ', '-')}, { id: "total_paid_customer_name" } %>
+<%= hidden_field_tag "total_paid_customer_amount", @total_paid_customer.values, { id: "total_paid_customer_amount" } %>
+
+<%= hidden_field_tag "total_purchase_products_name", @total_purchase_products.keys.map{ |a| a.gsub(' ', '-')}, { id: "total_purchase_products_name" } %>
+<%= hidden_field_tag "total_purchase_products_amount", @total_purchase_products.values, { id: "total_purchase_products_amount" } %>
+
+<%= hidden_field_tag "total_purchase_customer_date", @total_purchase_customer_date.keys, { id: "total_purchase_customer_date" } %>
+<%= hidden_field_tag "total_purchase_customer_date_amount", @total_purchase_customer_date.values, { id: "total_purchase_customer_date_amount" } %>
+
+<%= hidden_field_tag "total_paid_customer_date", @total_paid_customer_date.keys, { id: "total_paid_customer_date" } %>
+<%= hidden_field_tag "total_paid_customer_date_amount", @total_paid_customer_date.values, { id: "total_paid_customer_date_amount" } %>
+
+<%= hidden_field_tag "total_purchase_product_date", @total_purchase_product_date.keys, { id: "total_purchase_product_date" } %>
+<%= hidden_field_tag "total_purchase_product_date_amount", @total_purchase_product_date.values, { id: "total_purchase_product_date_amount" } %>
+
+<%= search_form_for @q, url: analytics_mobile_shop_product_purchases_path(transaction_type: params[:transaction_type]), class: "admin-controls col-12 row", remote: true, method: "get" do |f| %>
+  <%= link_to 'Weekly', analytics_mobile_shop_product_purchases_path(transaction_type: params[:transaction_type], type: 'weekly'), class: 'btn btn-danger ml-2', remote: true %>
+  <%= link_to 'Monthly', analytics_mobile_shop_product_purchases_path(transaction_type: params[:transaction_type], type: 'monthly'), class: 'btn btn-success ml-2', remote: true %>
+  <%= link_to 'Yearly', analytics_mobile_shop_product_purchases_path(transaction_type: params[:transaction_type], type: 'yearly'), class: 'btn btn-warning ml-2', remote: true %>
+
+  <div class="col-lg-2 ml-5">
+    <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker', datepicker: true, placeholder: "YYYY-MM-DD" %>
+  </div>
+
+  <div class="col-lg-2">
+    <%= f.search_field :created_at_lteq, class: 'form-control button-sm datepicker', datepicker: true , placeholder: "YYYY-MM-DD" %>
+  </div>
+  <button class="btn btn-primary" name="search_submit" type="submit" value="Search"><i class="fa fa-search"></i></button>
+<% end %>
+
+<div class="col-lg-6">
+  <div class="my-chart-Container">
+    <div class="mychartBox">
+      <canvas id="myChart"></canvas>
+    </div>
+  </div>
+</div>
+<div class="col-lg-6">
+  <div class="my-chart-Container">
+    <div class="mychartBox">
+      <canvas id="myChart1"></canvas>
+    </div>
+  </div>
+</div>
+<div class="col-lg-6">
+  <div class="my-chart-Container">
+    <div class="mychartBox">
+      <canvas id="myChart2"></canvas>
+    </div>
+  </div>
+</div>
+<div class="col-lg-6">
+  <div class="my-chart-Container">
+    <div class="mychartBox">
+      <canvas id="myChart3"></canvas>
+    </div>
+  </div>
+</div>
+<div class="col-lg-6">
+  <div class="my-chart-Container">
+    <div class="mychartBox">
+      <canvas id="myChart4"></canvas>
+    </div>
+  </div>
+</div>
+<div class="col-lg-6">
+  <div class="my-chart-Container">
+    <div class="mychartBox">
+      <canvas id="myChart5"></canvas>
+    </div>
+  </div>
+</div>
+<script>
+  $(document).ready(function() {
+    $('.datepicker').datetimepicker({
+      format: "YYYY-MM-DD"
+    });
+  });
+</script>

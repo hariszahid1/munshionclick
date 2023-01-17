@@ -1,0 +1,64 @@
+<%@total=0%>
+<% @date = Date.today  %>
+<% @time = DateTime.now %>
+<% @time = Time.zone.now %>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h1 style="text-align: center; margin: 0;"><%= type %> History </h1>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<p style="text-align: center;margin: 0;">Report by: Server</p>
+<div style="width:90vw;">
+  <table>
+    <th></th>
+    <th></th>
+    <tr>
+      <td style="width:67vw;">Printing On: <span><%= Time.zone.now.strftime("%d %b %y") %></span> </td>
+    </tr>
+  </table>
+</div>
+<p style="border-bottom: dotted 3px;  margin: 0;"></p>
+<div >
+  <table>
+    <thead class="bg-dark text-light border-radius-1">
+      <tr>
+        <th height="50">Event</th>
+        <th height="50">Who Done it</th>
+        <th height="50">Date</th>
+        <th height="50">ID/P</th>
+        <th height="50">Customers</th>
+        <th height="50" colspan="2" class="make-center">Total Bill</th>
+        <th height="50" colspan="2" class="make-center">
+          <% @pos_setting = PosSetting&.first&.sys_type %>
+          <%= (@pos_setting.present? && @pos_setting.eql?('HousingScheme')) ? 'Received' : 'Paid'%>
+        </th>
+        <th height="50" colspan="2" class="make-center">Discount</th>
+        <% if @pos_setting.present? && @pos_setting != 'HousingScheme' %>
+          <th height="50" colspan="2" class="make-center">Status</th>
+        <% end %>
+        <th height="50">Comment</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% logs_data.each do |log| %>
+        <tr class=<%= (log.event == 'destroy') ? 'follow_up_color' :  (log.event == 'update') ? 'cms-table-row1' : 'bg-light' %>>
+          <td class="urdu-font"><%= log&.event  %></td>
+          <td class="urdu-font"><%=User.find_by(id:log&.whodunnit)&.name %></td>
+          <td class="urdu-font" ><%=log&.created_at.strftime("%d%b%y at %I:%M %p")%></td>
+          <td class="urdu-font"><%= log&.item_id.to_s %></td>
+          <td class="urdu-font"><%=PurchaseSaleDetail.find_by(id:log&.item_id)&.sys_user&.name %></td>
+          <td class="urdu-font"><%= number_with_delimiter(log&.changeset&.try(:[], 'total_bill')&.first.to_i) %></td>
+          <td class="urdu-font"><%= number_with_delimiter(log&.changeset&.try(:[], 'total_bill')&.last.to_i)  %></td>
+          <td class="urdu-font"><%= number_with_delimiter(log&.changeset&.try(:[], 'amount')&.first.to_i) %></td>
+          <td class="urdu-font"><%= number_with_delimiter(log&.changeset&.try(:[], 'amount')&.last.to_i)  %></td>
+          <td class="urdu-font"><%= number_with_delimiter(log&.changeset&.try(:[], 'discount_price')&.first.to_i) %></td>
+          <td class="urdu-font"><%= number_with_delimiter(log&.changeset&.try(:[], 'discount_price')&.last.to_i)  %></td>
+          <% if @pos_setting.present? && @pos_setting != 'HousingScheme' %>
+            <td class="urdu-font"><%= log&.changeset&.try(:[], 'status')&.first %></td>
+            <td class="urdu-font"><%= log&.changeset&.try(:[], 'status')&.last  %></td>
+          <% end %>
+          <td class="urdu-font"><%=log&.changeset&.try(:[], 'comment')&.first %><%=log&.changeset&.try(:[], 'comment')&.last %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

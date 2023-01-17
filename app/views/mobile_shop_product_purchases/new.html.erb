@@ -1,0 +1,60 @@
+<input class="hidden" value=<%=pos_setting_sys_type%> id="pos_setting_sys_type">
+<input class="hidden" value=<%=@purchase_sale_detail.id%> id="purchase_sale_detail_id">
+<%if pos_setting_sys_type=="batamega"%>
+  <%= render 'form_bata', purchase_sale_detail: @purchase_sale_detail %>
+<%elsif pos_setting_sys_type=="atom"%>
+  <%= render 'form_atom', purchase_sale_detail: @purchase_sale_detail %>
+<%elsif pos_setting_sys_type=="FastFood"%>
+  <%= render 'purchase_sale_details/fast_food/form', purchase_sale_detail: @purchase_sale_detail %>
+<%elsif @pos_type_batha and (params[:transaction_type].present? or @purchase_sale_detail.transaction_type=='Sale')%>
+  <%= render 'form_batha', purchase_sale_detail: @purchase_sale_detail %>
+<%elsif pos_setting_sys_type=="HousingScheme" and params[:service].present? %>
+  <%= render 'purchase_sale_details/house_scheme/form_service', purchase_sale_detail: @purchase_sale_detail %>
+<%elsif pos_setting_sys_type=="HousingScheme" and (params[:transaction_type].present? or @purchase_sale_detail.transaction_type=='Sale')%>
+  <%= render 'purchase_sale_details/house_scheme/form', purchase_sale_detail: @purchase_sale_detail %>
+<%elsif pos_setting_sys_type=="Draw" and (params[:transaction_type].present? or @purchase_sale_detail.transaction_type=='Sale')%>
+  <%= render 'form_draw', purchase_sale_detail: @purchase_sale_detail %>
+<%elsif pos_setting_sys_type=="CustomClear" and (params[:transaction_type].present? or @purchase_sale_detail.transaction_type=='Sale')%>
+  <%= render 'purchase_sale_details/custom_clear/form', purchase_sale_detail: @purchase_sale_detail %>
+<%elsif params[:with_gst].present? %>
+  <%= render 'form_with_gst', purchase_sale_detail: @purchase_sale_detail %>
+<%elsif pos_setting_sys_type=="MobileShop"%>
+  <%if params[:purchase_sale_type]=="SaleReturn" || @purchase_sale_detail.transaction_type == "SaleReturn"%>
+    <%= render 'mobile_shop_product_purchases/mobile_shop/form_return', purchase_sale_detail: @purchase_sale_detail %>
+  <%else%>
+    <%= render 'mobile_shop_product_purchases/mobile_shop/form', purchase_sale_detail: @purchase_sale_detail %>
+  <%end%>
+<%else%>
+  <%= render 'form', purchase_sale_detail: @purchase_sale_detail %>
+<%end%>
+<%if current_user.superAdmin.company_type=="batamega" or current_user.superAdmin.company_type=="upsi" or current_user.superAdmin.company_type=="atom"%>
+  <script>
+    document.addEventListener("turbolinks:load", function() {
+      costAtomUpdateReturn();
+      $('#return_links').on("cocoon:after-remove", function() {
+        costAtomUpdateReturn();
+      });
+      $('#new_links').on("cocoon:after-remove", function() {
+        costAtomUpdateReturn();
+      });
+      $('#data_list').on("cocoon:after-remove", function() {
+        costAtomUpdateReturn();
+      });
+    });
+  </script>
+<%else%>
+  <script>
+    document.addEventListener("turbolinks:load", function() {
+      costUpdateReturn();
+      $('#return_links').on("cocoon:after-remove", function() {
+        costUpdateReturn();
+      });
+      $('#new_links').on("cocoon:after-remove", function() {
+        costUpdateReturn();
+      });
+      $('#data_list').on("cocoon:after-remove", function() {
+        costUpdateReturn();
+      });
+    });
+  </script>
+<%end%>

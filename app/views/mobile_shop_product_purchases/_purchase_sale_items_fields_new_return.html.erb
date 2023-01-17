@@ -1,0 +1,63 @@
+<%if params[:transaction_type].present? or @purchase_sale_detail.transaction_type=='Sale'%>
+  <div class="nested-fields bg-danger">
+    <div class="row font-weight-bold ">
+      <%= f.hidden_field :purchase_sale_detail_id %>
+      <%= f.hidden_field :id %>
+      <%= f.hidden_field :transaction_type, value: "Sale"%>
+      <%= f.hidden_field :purchase_sale_type, value: "Return_type"%>
+      <div class="col-lg-4 form-group float-left">
+        <%= f.select :product_id, options_from_collection_for_select(@return_products, 'id',->(st){"#{st.title} \u{27F6} #{st.code}"}), {hide_label: true,prompt: "Select the Product"}, onchange: 'set_sale(this.value,this.id); return false;', class: "chosen-select",required: true%>
+      </div>
+      <div class="col-lg-1 form-group float-left">
+        <div class="hidden">
+          <%=f.number_field :comment,step: :any,class:'stock', hide_label: true,placeholder: :Stock,readonly: true%>
+        </div>
+        <span class="product-stock"><%=f.object.comment%></span>
+        <br>
+        <span class="span-cost-price text-secondary"></span>
+      </div>
+      <div class="col-lg-2 form-group float-left">
+        <%= f.number_field :quantity,step: :any,class:'quantity-price-return', hide_label: true,placeholder: :quantity,onchange:"costUpdateReturn()",onkeyup:"costUpdateReturn()"%>
+      </div>
+      <div class="col-lg-2 form-group float-left">
+        <%= f.number_field :sale_price,step: :any,class:'cost-price-return',hide_label: true, placeholder: :sale_price,readonly: true,onchange:"costUpdateReturn()",onkeyup:"costUpdateReturn()"%>
+      </div>
+      <div class="col-lg-2 form-group float-left">
+        <%= f.number_field :total_sale_price,step: :any,class:'total-cost-price-return', hide_label: true,placeholder: :cost_price,onchange:"costUpdateReturn()",onkeyup:"costUpdateReturn()"%>
+      </div>
+      <div class="hidden"><%= f.number_field :discount_price,step: :any,class:'discount-price-return', hide_label: true,placeholder: :discount,onchange:"costUpdateReturn()",onkeyup:"costUpdateReturn()"%></div>
+      <div class="return_links"><%= link_to_remove_association "Remove", f , class: "btn btn-info"%></div>
+    </div>
+  </div>
+<%else%>
+    <table>
+    <tbody>
+      <%= f.hidden_field :purchase_sale_detail_id %>
+      <%= f.hidden_field :id %>
+      <%= f.hidden_field :transaction_type, value: PurchaseSaleItem.transaction_types.first.first%>
+      <%= f.hidden_field :purchase_sale_type, value: "Return_type"%>
+      <tr class="bg-danger">
+        <%if params[:product].present? %>
+          <td><%= f.select :product_id, options_from_collection_for_select(@products, 'id', ->(st){"#{st.title} \u{27F6} #{st.code}"},f.object.product_id), {hide_label: true,prompt: "Select the Product"},onchange: 'set_cost(this.value,this.id); return false;',class: "chosen-select",required: true%></td>
+        <%else%>
+          <td><%= f.select :item_id, options_from_collection_for_select(@items, 'id', ->(st){"#{st.title} \u{27F6} #{st.code}"}, f.object.item_id), {hide_label: true,prompt: "Select the Items"},onchange: 'set_raw_cost(this.value,this.id); return false;', class: "chosen-select",required: true %></td>
+        <%end%>
+        <td><%= f.number_field :quantity,step: :any,class:'quantity-price-return', hide_label: true,placeholder: :quantity,onchange:"costUpdateReturn()",onkeyup:"costUpdateReturn()"%>    </td>
+        <td><%= f.number_field :cost_price,step: :any,class:'cost-price-return',hide_label: true, placeholder: :cost_price,onchange:"costUpdateReturn()",onkeyup:"costUpdateReturn()"%></td>
+        <td><%= f.number_field :total_cost_price,step: :any,class:'total-cost-price-return', hide_label: true,placeholder: :total_cost_price,onchange:"costUpdateReturn()",onkeyup:"costUpdateReturn()"%></td>
+        <td><%= f.number_field :sale_price,step: :any,hide_label: true, placeholder: :sale_price,onchange:"costUpdateReturn()",onkeyup:"costUpdateReturn()"%></td>
+        <td><%= f.number_field :discount_price,step: :any,class:'discount-price-return', hide_label: true,placeholder: :discount,onchange:"costUpdateReturn()",onkeyup:"costUpdateReturn()"%></td>
+        <td><%= f.text_area :comment, hide_label: true,placeholder: :comment,title: :comment%></td>
+        <td class="return_links"><%= link_to_remove_association "Remove", f , class: "btn btn-info" %></td>
+      </tr>
+    </tbody>
+    </table>
+<%end%>
+<script>
+  setTimeout(function(){
+    $(".chosen-select").chosen({
+  allow_single_deselect: true,
+  width: '100%'
+});
+  }, 50);
+</script>

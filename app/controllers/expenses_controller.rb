@@ -134,7 +134,8 @@ class ExpensesController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to expenses_path, notice: 'Expense was successfully Deleted.' }
-      format.json { render :show, status: :ok, location: @expense }
+      format.json { head :no_content }
+      format.js   { render layout: false }
     end
   end
 

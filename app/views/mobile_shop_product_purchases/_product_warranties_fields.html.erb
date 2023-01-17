@@ -1,0 +1,76 @@
+<!-- warrenty protion here -->
+<div class="nested-fields col-lg-12 row" data-turbolinks="false">
+  <%if params[:transaction_type]!="sale"%>
+  <div class="col-lg-4 form-group float-left">
+    <div class="form-group">
+      <input step="any" class="form-control warranty-serail" placeholder="Serial" type="text">
+    </div>
+  </div>
+  <div class="col-lg-3 form-group float-left">
+    <div class="form-group">
+      <input step="any" class="form-control warranty-from" placeholder="From" type="text" >
+    </div>
+  </div>
+  <div class="col-lg-3 form-group float-left">
+    <div class="form-group">
+      <input step="any" class="form-control warranty-to" placeholder="To" type="text" >
+    </div>
+  </div>
+  <div class="col-lg-2 form-group float-left text-xs font-weight-bold text-uppercase">
+    <a onclick="warranty_generat(this); return false;" class="href-generate">
+      <i class="fa fa-plus-circle"></i> Generate
+    </a>
+  </div>
+  <%end%>
+  <div class="col-lg-4 form-group float-left font-weight-bold">
+    <%= f.hidden_field :purchase_sale_detail_id %>
+    <%= f.hidden_field :id %>
+    <%= f.select :product_id, options_from_collection_for_select(@products, 'id', ->(st){"#{st.title} \u{27F6} #{st.code}"},f.object.product_id), {hide_label: true,prompt: "Select the Product"},required: true,:class=>"product-warranty chosen-select"%>
+  </div>
+  <div class="col-lg-6 form-group float-left font-weight-bold">
+    <%= f.text_area :serial,hide_label: true,placeholder: "Past Serial Number",onchange:"mobile_serail_number_validation(event,this)",onkeyup:"mobile_serail_number_validation(event,this)",:class=>"serial_no", required: true%>
+    <span class="col-lg-2 form-group float-left text-xs font-weight-bold text-danger text-uppercase">0</span>
+    <span class="col-lg-2 form-group float-left text-xs font-weight-bold text-success text-uppercase">0</span>
+    <textarea placeholder="Past Serial Number" class="form-control product_serial_no hidden"><%=(f.object&.serial&.split("\r\n").to_a+f.object&.product&.warranty_list&.split("\r\n").to_a).uniq.join("\r\n")%></textarea>
+  </div>
+  <div class="col-lg-2 form-group float-left text-xs font-weight-bold text-danger text-uppercase">
+    <%= link_to_remove_association f do %>
+      <i class="fa fa-minus-circle"></i> Drop
+    <% end %>
+  </div>
+</div>
+<script>
+  $(document).ready(function() {
+    FontAwesome.dom.i2svg();
+    if($(".product.chosen-select").length>0)
+    {
+      if ($("#"+$(".product.chosen-select")[$(".product.chosen-select").length-1].id).val()=="")
+      {
+        var $mySelectProduct= $("#"+$(".product.chosen-select")[$(".product.chosen-select").length-2].id);
+      }
+      else {
+        var $mySelectProduct= $("#"+$(".product.chosen-select")[$(".product.chosen-select").length-1].id);
+      }
+      var $myquantity= $("#"+$(".quantity-price")[$(".quantity-price").length-1].id);
+
+      var $mySelect= $("#"+$(".product-warranty.chosen-select")[$(".product-warranty.chosen-select").length-1].id);
+      var $myquantity= $("#"+$(".serial_no")[$(".serial_no").length-1].id);
+      var enableChosen = setTimeout(function() {
+        $mySelect.chosen();
+        if ($mySelect.val()=="")
+        {
+          $mySelect.val($mySelectProduct.val());
+        }
+        $mySelect.trigger("chosen:updated");
+        // $mySelect.trigger('chosen:activate');
+      }, 50);
+      setTimeout(function(){
+        $(".chosen-select").chosen({
+  allow_single_deselect: true,
+  width: '100%'
+});
+      }, 60);
+      $("#total_product_warranty").text($(".product-warranty.chosen-select").length);
+    }
+  });
+</script>

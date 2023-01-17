@@ -174,6 +174,28 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :mobile_shop_product_purchases do
+    collection do
+      get "day_out"
+      get "return"
+      get "purchase_sale_details_return"
+      get :view_history, to: 'mobile_shop_product_purchases#view_history'
+      get :analytics
+      get :dynamic_pdf, to: 'mobile_shop_product_purchases#dynamic_pdf'
+    end
+  end
+
+  resources :mobile_shop_product_sales do
+    collection do
+      get "day_out"
+      get "return"
+      get "purchase_sale_details_return"
+      get :view_history, to: 'mobile_shop_product_sales#view_history'
+      get :analytics
+      get :dynamic_pdf, to: 'mobile_shop_product_sales#dynamic_pdf'
+    end
+  end
+
   resources :items do
     collection do
       get 'get_item_data'
