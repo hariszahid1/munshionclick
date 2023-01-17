@@ -20,42 +20,40 @@
         </div>
       </div>
 
-      <div class="row mb-5 ml-1 mr-1" style="font-family: arial">
-        <div class="col stats-cards border-radius-1 shadow p-4 mr-3" style="background:linear-gradient(176deg, #0f1d59 26.5%, lightgray 28%, white 10%,  white 30%, white);">
-          <%if (check_can_create(@module_permission))%>
-            <%= link_to new_payment_path, class: "card shadow p-3 ml-5 float-right", style:"width: 80px; height: 80px; border-radius: 100%;" do %>
-              <i class="fa fa-plus text-dark mt-3 ml-3" aria-hidden="true"></i>
-            <% end %> 
-          <% end %> 
-          <div class="mt-5">
-            <span class="mt-4"><i>Rs.</i><i class="h1 mb-0 font-weight-bold text-gray-800 mr-1"><%= number_with_delimiter(@today_credit_payment) %></i></span>
-            <% if @today_credit_payment > @yesterday_credit_payment%>
-              <span class="bg-success border-radius-1 px-1 text-light font-weight-bold">+ <%= @percentage_credit_payment %> %</span>
-            <% else %>
-              <span class="bg-danger border-radius-1 px-2 text-light font-weight-bold"> <%= @percentage_credit_payment %> %</span>
-            <% end %>
-            <p class="mt-1">Today's Credit<i class="fas fa-user text-dark ml-3 mr-2"></i><%= @payment_credit_count%> </p>
-            <h4 class="font-weight-bold">Credit/Jama</h4>
+      <%if (check_can_create(@module_permission))%>
+        <div class="row mb-5 ml-1 mr-1" style="font-family: arial">
+          <div class="col stats-cards border-radius-1 shadow p-4 mr-3" style="background:linear-gradient(176deg, #0f1d59 26.5%, lightgray 28%, white 10%,  white 30%, white);">
+              <%= link_to new_payment_path, class: "card shadow p-3 ml-5 float-right", style:"width: 80px; height: 80px; border-radius: 100%;" do %>
+                <i class="fa fa-plus text-dark mt-3 ml-3" aria-hidden="true"></i>
+              <% end %> 
+            <div class="mt-5">
+              <span class="mt-4"><i>Rs.</i><i class="h1 mb-0 font-weight-bold text-gray-800 mr-1"><%= number_with_delimiter(@today_credit_payment) %></i></span>
+              <% if @today_credit_payment > @yesterday_credit_payment%>
+                <span class="bg-success border-radius-1 px-1 text-light font-weight-bold">+ <%= @percentage_credit_payment %> %</span>
+              <% else %>
+                <span class="bg-danger border-radius-1 px-2 text-light font-weight-bold"> <%= @percentage_credit_payment %> %</span>
+              <% end %>
+              <p class="mt-1">Today's Credit<i class="fas fa-user text-dark ml-3 mr-2"></i><%= @payment_credit_count%> </p>
+              <h4 class="font-weight-bold">Credit/Jama</h4>
+            </div>
+          </div>
+          <div class="col stats-cards border-radius-1 shadow p-4 ml-2 mr-4" style="background:linear-gradient(176deg, darkred 26.5%, lightgray 28%, white 10%,  white 30%, white); ">
+              <%= link_to new_payment_path(Sjama: true), class: "card shadow p-3 ml-5 float-right", style:"width: 80px; height: 80px; border-radius: 100%;" do %>
+                <i class="fa fa-plus text-dark mt-3 ml-3" aria-hidden="true"></i>
+              <% end %> 
+            <div class="mt-5">
+              <span class="mt-4"><i>Rs.</i><i class="h1 mb-0 font-weight-bold text-gray-800 mr-1"><%= number_with_delimiter(@today_debit_payment) %></i></span>
+              <% if @today_debit_payment > @yesterday_debit_payment%>
+                <span class="bg-success border-radius-1 px-1 text-light font-weight-bold">+ <%= @percentage_debit_payment %> %</span>
+              <% else %>
+                <span class="bg-danger border-radius-1 px-2 text-light font-weight-bold"> <%= @percentage_debit_payment %> %</span>
+              <% end %>
+              <p class="mt-1">Today's Debit<i class="fas fa-user text-dark ml-3 mr-2"></i><%= @payment_debit_count%> </p>
+              <h4 class="font-weight-bold">Debit/Benam</h4>
+            </div>
           </div>
         </div>
-        <div class="col stats-cards border-radius-1 shadow p-4 ml-2 mr-4" style="background:linear-gradient(176deg, darkred 26.5%, lightgray 28%, white 10%,  white 30%, white); ">
-          <%if (check_can_create(@module_permission))%>
-            <%= link_to new_payment_path(Sjama: true), class: "card shadow p-3 ml-5 float-right", style:"width: 80px; height: 80px; border-radius: 100%;" do %>
-              <i class="fa fa-plus text-dark mt-3 ml-3" aria-hidden="true"></i>
-            <% end %> 
-          <% end %> 
-          <div class="mt-5">
-            <span class="mt-4"><i>Rs.</i><i class="h1 mb-0 font-weight-bold text-gray-800 mr-1"><%= number_with_delimiter(@today_debit_payment) %></i></span>
-            <% if @today_debit_payment > @yesterday_debit_payment%>
-              <span class="bg-success border-radius-1 px-1 text-light font-weight-bold">+ <%= @percentage_debit_payment %> %</span>
-            <% else %>
-              <span class="bg-danger border-radius-1 px-2 text-light font-weight-bold"> <%= @percentage_debit_payment %> %</span>
-            <% end %>
-            <p class="mt-1">Today's Debit<i class="fas fa-user text-dark ml-3 mr-2"></i><%= @payment_debit_count%> </p>
-            <h4 class="font-weight-bold">Debit/Benam</h4>
-          </div>
-        </div>
-      </div>
+      <% end %>
 
 
    <div class="float-right">
