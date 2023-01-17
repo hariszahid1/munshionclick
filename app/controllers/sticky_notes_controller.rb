@@ -27,6 +27,6 @@ class StickyNotesController < ApplicationController
   private
 
   def sticky_note_params
-    params.permit(:title, :content, :x_pos, :y_pos, :color_code)
+    params.permit(:title, :content, :x_pos, :y_pos, :color_code, :height, :width)
   end
 end
