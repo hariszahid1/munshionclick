@@ -1,0 +1,160 @@
+  <h1>Product Return</h1>
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <%= search_form_for @q, url: return_mobile_shop_product_purchases_path, class: "admin-controls", method: "get" do |f| %>
+      <div class="col-lg-3 form-group float-left">
+        <%= f.select :sys_user_id_eq, options_from_collection_for_select(@sys_users, 'id', 'name', f.object.sys_user_id_eq),{:include_blank => "Select Customer"},class: 'form-control chosen-select'%>
+      </div>
+      <div class="col-lg-3 form-group float-left">
+        <%= f.select :purchase_sale_items_product_item_type_id_eq, options_from_collection_for_select(@item_types, 'id', 'title',f.object.purchase_sale_items_product_item_type_id_eq),{:include_blank => "Select Item"}, class: "chosen-select"%>
+      </div>
+      <div class="col-lg-3 form-group float-left">
+        <%= f.select :purchase_sale_items_product_id_eq, options_from_collection_for_select(@products, 'id', 'title',f.object.purchase_sale_items_product_id_eq),{:include_blank => "Select product"}, class: "chosen-select"%>
+      </div>
+      <div class="col-lg-3 form-group float-left">
+        <%= f.select(:product_warranties_serial_i_cont_any, (@list_warranties).uniq.collect {|u| [u, u]},{ selected: f.object.product_warranties_serial_i_cont_any, :prompt => "Please select"},{ :multiple => true, class: 'form-control chosen-select' }) %>
+      </div>
+        <div class="col-lg-3 form-group float-left">
+          <%= f.search_field :created_at_gteq, value: f.object.created_at_gteq, class: 'form-control input-sm datepicker',placeholder: "YYYY-MM-DD" %>
+        </div>
+        <div class="col-lg-3 form-group float-left">
+          <%= f.search_field :created_at_lteq, value: f.object.created_at_lteq, class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
+        </div>
+        <div class="col-lg-3 form-group float-left">
+          <%= f.text_field :id_eq, class: "form-control",placeholder: "Voucher Number"%>
+        </div>
+        <div class="col-lg-2 form-group float-left">
+          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+        </div>
+
+        <div class="col-lg-2 form-group float-right">
+          <button class="form-control btn  badge badge-pill badge-danger" name="submit_pdf" type="submit" value="Ledger Book PDF A4" formtarget="_blank">General PDF <i class="fa fa-file-pdf"></i></button>
+        </div>
+        <div class="col-lg-2 form-group float-right">
+          <button class="form-control btn  badge badge-pill badge-danger" name="submit_pdf_customer" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Customer PDF <i class="fa fa-file-pdf"></i></button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="hidden" id="pruduct_warranty_list">
+    <table data-toggle="table" data-search="true">
+      <thead>
+        <tr>
+          <th><%= sort_link(@q, :purchase_sale_detail_id, 'Voucher') %></th>
+          <th><%= sort_link(@q, :purchase_sale_detail, 'Type') %></th>
+          <th><%= sort_link(@q, :purchase_sale_detail, 'User') %></th>
+          <th><%= sort_link(@q, :product_id, 'Product') %></th>
+          <th><%= sort_link(@q, :serial, 'Serial') %></th>
+          <th><%= sort_link(@q, :serial, 'Create Date') %></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <%@purchase_sale_details.each do |purchase_sale_detail|%>
+        <tr>
+          <td><%=purchase_sale_detail.id%></td>
+          <td>
+            <%=purchase_sale_detail.transaction_type%>
+            <br>
+            <%=purchase_sale_detail.total_bill%>
+          </td>
+          <td><%=purchase_sale_detail&.sys_user&.name%></td>
+          <td>
+            <%purchase_sale_detail.purchase_sale_items.purchase_sale_types_sale_only.each do |product| %>
+              <p><%=product&.product&.title%>: <span class="bold"><%=product&.quantity%></span></p>
+              <br>
+            <%end%>
+          </td>
+          <td>
+            <%if purchase_sale_detail.product_warranties.count.to_i.zero?%>
+              <% action = params[:action].eql?("edit") ? ["update", 'put'] : ["create", 'post'] %>
+              <%= bootstrap_form_for(purchase_sale_detail, :url => {:controller => "mobile_shop_product_purchases", :action => action.first} , method: action.last.to_sym) do |f| %>
+                <%= f.hidden_field :sys_user_id %>
+                <%= f.hidden_field :account_id %>
+                <%= f.hidden_field :transaction_type%>
+                <div class="col-lg-12 float-left">
+                  <div class="col-lg-6 float-left">
+                  <%= f.number_field :total_bill%>
+                  </div>
+                  <div class="col-lg-6 float-left">
+                    <%= f.number_field :amount%>
+                  </div>
+                </div>
+                <%= f.fields_for :purchase_sale_items do |purchase_sale_item| %>
+                  <%if purchase_sale_item.object.purchase_sale_type=="Sale_type" %>
+                    <%= render 'return_fields', f: purchase_sale_item %>
+                  <%end%>
+                <% end %>
+                <div class="col-lg-6 float-left">
+                  <%= button_tag( :class => "btn btn-primary") do %>
+                    <i class="fa fa-undo"></i>
+                  <% end %>
+                </div>
+              <%end%>
+            <%end%>
+
+            <%purchase_sale_detail.product_warranties.each do |product_warranty|%>
+                <span><%=product_warranty&.product&.title%></span>
+                <br>
+                <%product_warranty&.serial.split("\r\n").each do |serial|%>
+                    <%= link_to edit_product_warranty_path(product_warranty) do %>
+                      <i class="fa fa-undo " aria-hidden="true"></i>
+                    <%end %>
+                    <%if params[:q]
+                    .present? and params[:q][:product_warranties_serial_i_cont_any].compact.uniq.map(&:upcase).include? serial %>
+                      <span class='gray'><%=serial%></span>
+                    <%else%>
+                      <%=serial%>
+                    <%end%>
+                    <br>
+                <%end%>
+            <%end%>
+          </td>
+          <td>
+            <%if purchase_sale_detail.created_at.strftime("%d%b%y")!=purchase_sale_detail.updated_at.strftime("%d%b%y")%>
+              <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d%b%y at %I:%M%p") : '' %> | <%= purchase_sale_detail.updated_at.present? ? purchase_sale_detail.updated_at.strftime("%d%b%y at %H:%M%p") : '' %>
+            <%else%>
+              <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d%b%y at %I:%M%p") : '' %>
+            <%end%>
+          </td>
+        </tr>
+        <%end%>
+      </tbody>
+    </table>
+  </div>
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-lg-4 col-sm-4">
+    </div>
+    <div class="col-lg-8 col-sm-8 pagination-left">
+    </div>
+  </div>
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-lg-4 col-sm-4">
+      <%= page_entries_info @purchase_sale_details %>
+    </div>
+    <div class="col-lg-8 col-sm-8 pagination-left">
+      <%= paginate @purchase_sale_details %>
+    </div>
+  </div>
+
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#pruduct_warranty_list").removeClass('hidden');
+    FontAwesome.dom.i2svg();
+  });
+  $(document).ready(function() {
+    setTimeout(function(){
+      $(".chosen-select").chosen({
+  allow_single_deselect: true,
+  width: '100%'
+});
+    }, 50);
+  });
+</script>
