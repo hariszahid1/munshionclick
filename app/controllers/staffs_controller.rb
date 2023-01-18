@@ -135,9 +135,7 @@ class StaffsController < ApplicationController
     @departments=Department.all
     @raw_products = RawProduct.all
 
-    respond_to do |format|
-      format.js
-    end
+    
   end
 
   # GET /staffs/new
@@ -148,9 +146,7 @@ class StaffsController < ApplicationController
 
   # GET /staffs/1/edit
   def edit
-    respond_to do |format|
-      format.js
-    end
+    
   end
 
   # POST /staffs

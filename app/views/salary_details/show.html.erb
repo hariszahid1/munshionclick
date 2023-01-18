@@ -2,43 +2,21 @@
     <div class="card shadow mb-4">
         <!-- Card Header - Accordion -->
         <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
-          <h6 class="m-0 font-weight-bold text-primary"><h1>ledger book Detail</h1></h6>
+          <h6 class="m-0 font-weight-bold text-primary"><h1>Ledger Book Detail</h1></h6>
         </a>
         <!-- Card Content - Collapse -->
         <div class="collapse show" id="collapseCardExample" style="">
           <div class="card-body">
-
-    <div class="row">
-            <div class="col-lg-12 col-sm-12">
-              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-                <h3>Staff:<h5> <%= @salary_detail.staff.name %> <%= @salary_detail.staff.father %></h5></h3>
-              </div>
-              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-                <h3>Total Amount:<h5><%= @salary_detail.amount.to_f.round(2) %></h5></h3>
-              </div>
-              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-                <h3>Remarks:<h5><%=@salary_detail.remarks.to_f.round(2) %></h5> </h3>
-              </div>
-              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-                <h3>Comment:<h5><%=@salary_detail.comment %></h5></h3>
-              </div>
-            </div>
-    </div>
-    <div class="row">
-            <div class="col-lg-12 col-sm-12">
-              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-                <h3>Quantity:<h5> <%= @salary_detail.quantity.to_f.round(2) %></h5></h3>
-              </div>
-
-              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-                <h3>Wage rate:<h5><%= @salary_detail.wage_rate.to_f.round(2) %></h5></h3>
-              </div>
-
-    </div>
-
-
-
-
+          <div class="card">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item mb-2"><span class="float-left h5">Staff:</span><span class="float-right"><%= @salary_detail.staff.name %> <%= @salary_detail.staff.father %></span></li>
+              <li class="list-group-item mb-2"><span class="float-left h5">Total Amount:</span><span class="float-right"><%= @salary_detail.amount.to_f.round(2) %></span></li>
+              <li class="list-group-item mb-2"><span class="float-left h5">Remarks:</span><span class="float-right"><%=@salary_detail.remarks.to_f.round(2) %></span></li>
+              <li class="list-group-item mb-2"><span class="float-left h5">Comment:</span><span class="float-right"><%=@salary_detail.comment %></span></li>
+              <li class="list-group-item mb-2"><span class="float-left h5">Quantity:</span><span class="float-right"><%= @salary_detail.quantity.to_f.round(2) %></span></li>
+              <li class="list-group-item mb-2"><span class="float-left h5">Wage Rate:</span><span class="float-right"><%= @salary_detail.wage_rate.to_f.round(2) %></span></li>
+            </ul>
+          </div>
     <br>
 
             <div class="row">
