@@ -73,6 +73,8 @@ class LedgerBooksController < ApplicationController
     @percentage_credit = ((@today_credit_total - @yesterday_credit_total) / @yesterday_credit_total.to_f).round(2)
     @ledger_debit_count = @q.result.where(created_at: Time.current.all_day).count(:debit)
     @ledger_credit_count = @q.result.where(created_at: Time.current.all_day).count(:credit)
+    @monthly_debit_ledger = @q.result.where(created_at: Time.current.all_month).sum(:debit).to_f
+    @monthly_credit_ledger = @q.result.where(created_at: Time.current.all_month).sum(:credit).to_f
 
 
     if params[:submit_pdf].present? or params[:submit_pdf_without].present? or params[:desc_email].present? or params[:submit_pdf_short].present? or params[:submit_csv_without].present? or params[:submit_csv].present? or params[:submit_csv_short].present?

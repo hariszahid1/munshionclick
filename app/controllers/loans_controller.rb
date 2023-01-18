@@ -31,6 +31,9 @@ class LoansController < ApplicationController
     @percentage_credit_loan = ((@today_credit_loan - @yesterday_credit_loan) / @yesterday_credit_loan.to_f).round(2)
     @loan_debit_count = @q.result.where(created_at: Time.current.all_day).count(:debit)
     @loan_credit_count = @q.result.where(created_at: Time.current.all_day).count(:credit)
+    @monthly_debit_loan = @q.result.where(created_at: Time.current.all_month).sum(:debit).to_f
+    @monthly_credit_loan = @q.result.where(created_at: Time.current.all_month).sum(:credit).to_f
+
 
   end
 

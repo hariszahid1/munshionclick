@@ -30,6 +30,7 @@
           <th class="text-center">Short Details</th>
           <th class="text-center">Project Name</th>
           <th class="text-center">Client Number</th>
+          <th class="text-center">Follow Ups</th>
           <th class="text-center">Notes</th>
         </thead>
         <tbody>
@@ -39,6 +40,20 @@
               <td class="text-center"><%= sys_user.gst %></td>
               <td class="text-center"><%= sys_user.cms_data.try(:[], 'project_name') %></td>
               <td class="text-center"><%= sys_user.occupation %></td>
+              <td>
+                <table>
+                  <thead>
+                    <th>task type</th>
+                    <th>comment</th>
+                  </thead>
+                  <% sys_user.follow_ups.each_with_index do |fw, index| %>
+                    <tr>
+                      <td class="text-center"><%= fw&.task_type %></td>
+                      <td class="text-center"><%= fw&.comment %></td>
+                    </tr>
+                  <%end%>
+                </table>
+              </td>
               <td>
                 <table>
                   <thead>

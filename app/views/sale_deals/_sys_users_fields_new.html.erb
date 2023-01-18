@@ -1,0 +1,18 @@
+<div class="nested-fields">
+  <div class="bg-white nested-fields">
+    <div class="row ">
+      <div class="col-lg-6 form-group">
+        <%= f.text_field :occupation , placeholder:"Enter Client Number", label: "Client Number", class: 'disable-sys-users' %>
+      </div>
+      <div class="col-lg-6 form-group float-left">
+        <%= f.text_field :name, placeholder: "Name", class: 'disable-sys-users' %>
+      </div>
+      <div class="col-lg-6 form-group float-left">
+        <%= f.text_field :ntn, placeholder: "Plot Size", label: 'Plot Size', class: 'disable-sys-users' %>
+      </div>
+      <%= f.fields :cms_data do |cd| %>
+        <%= render 'cms_data', {cd: cd, f: f} %>
+      <% end %>
+    </div>
+  </div>
+</div>

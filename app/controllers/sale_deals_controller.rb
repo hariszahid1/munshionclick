@@ -34,6 +34,8 @@ class SaleDealsController < ApplicationController
   # POST /sale_deals.json
   def create
     @sale_deal = PurchaseSaleDetail.new(sale_deal_params)
+    create_sys_user if params[:purchase_sale_detail][:sys_user_id].blank? &&
+                       params[:purchase_sale_detail][:sys_users].present?
 
     respond_to do |format|
       if @sale_deal.save
@@ -94,7 +96,17 @@ class SaleDealsController < ApplicationController
     @sale_deal = PurchaseSaleDetail.includes(:sys_user, :purchase_sale_items).find(params[:id])
   end
 
+  def create_sys_user
+    code = 'AGC-' + '%.4i' % (SysUser.maximum(:id).present? ? SysUser.maximum(:id).next : 1)
+    user = params[:purchase_sale_detail][:sys_users]
+    user_id = SysUser.create(name: user[:name], code: code, user_type_id: UserType.first.id, ntn: user[:ntn],
+                             for_crms: false, occupation: user[:occupation], cms_data: user[:cms_data])
+    @sale_deal[:sys_user_id] = user_id.id
+  end
+
   def set_data
+    @project_name = @pos_setting.extra_settings.present? ? PosSetting.last.extra_settings['project_name']&.map(&:downcase) : []
+    @category = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['category']&.map(&:downcase) : []
     @staffs = Staff.all
     @sys_users = SysUser.all.where(for_crms: [false, nil])
     @accounts = Account.all
@@ -174,5 +186,5 @@ class SaleDealsController < ApplicationController
     @sale_deal.update(status: 'Clear')
     redirect_to request.referrer, notice: 'Sale Deal was approved successfully.'
   end
-  
+
 end

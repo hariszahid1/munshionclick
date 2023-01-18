@@ -85,9 +85,15 @@
           <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
         </div>
         </div>
-        <div class="col">
+        <div class="d-flex">
         <%if (check_can_download_pdf(@module_permission))%>
-          <button class="form-control d-flex justify-content-center btn btn-danger ml-3 float-right" name="pdf" style="width:100px" type="submit" value="Accounts PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mr-2"></i>PDF</button>
+          <div class="dropdown my-dropdown mr-2 ml-auto">
+            <button type="button" class="form-control bg-danger text-light"><i class="fa fa-file-pdf mr-2"></i>PDF List</button>
+            <div class="dropdown-content my-dropdown-content p-1">
+              <button class="form-control btn btn-danger float-right mr-2 ml-3 mb-2 mt-2" style="width:150px" title= "download crm pdf" name="pdf_asc" type="submit" value="pdf_asc" formtarget="_blank" style="width:160px">PDF ASC</button>
+              <button class="form-control btn btn-danger float-right mr-2 ml-3 mb-2 mt-2" style="width:150px" title= "download crm pdf" name="pdf_desc" type="submit" value="pdf_desc" formtarget="_blank" style="width:160px">PDF DESC</button>
+            </div>
+          </div>
         <% end %>
         <%if (check_can_download_csv(@module_permission))%>
           <button class="form-control d-flex justify-content-center btn btn-warning ml-3 float-right" name="csv" style="width:100px" type="submit" value="Accounts CSV"><i class="fa fa-file-excel mr-2"></i>CSV</button>

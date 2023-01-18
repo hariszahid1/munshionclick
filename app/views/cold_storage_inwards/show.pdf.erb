@@ -1,0 +1,78 @@
+<html>
+  <head>
+    <style>
+      .border-bottom{
+        border-bottom: double 4px;
+      }
+      .text-center{
+        text-align: center;
+      }
+      .text-right{
+        text-align: right;
+      }
+      .col-3{
+        -webkit-box-flex: 0;
+        flex: 0 0 25%;
+        max-width: 25%;
+        width: 25%;
+      }
+      .sig-bottom{
+        border-bottom: 1px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    <% @date = Date.today  %>
+    <% @time = DateTime.now %>
+    <% @time = Time.zone.now %>
+    <div>
+      <p class="border-bottom"></p>
+      <h1 class="text-center">Gate Pass InWard with racking(Wasooli)</h1>
+      <h3 class="text-center">
+        InWard Date: <b><span><%= data.first['date'] %></span></b>
+      </h3>
+      <h2 class= "text-right">Gate Pass No: <%= data.first['id']%></h2>
+      <h3>Party: <%= data.first['name']%></h3>
+      <h3>Vehicle: <%= data.first['items'].first['vehicle_no']%></h3>
+      <h3>Marka: <%= data.first['items'].first['marka']%></h3>
+      <h3>Product: <%= data.first['items'].first['product']%></h3>
+      <p class="border-bottom"></p>
+      <p class="text-center">Report by: <%=current_user.name%></p>
+    </div>
+    <div>
+      <table>
+        <thead class="lite-gray">
+          <th class="text-center">Serial No</th>
+          <th class="text-center">Challan No</th>
+          <th class="text-center">Room No</th>
+          <th class="text-center">Rack No</th>
+          <th class="text-center">Product Qty</th>
+        </thead>
+        <tbody>
+          <% data.each_with_index do |order, index| %>
+            <% order['items'].each_with_index do |item, index| %>
+              <tr>
+                <td class="text-center"><%= index %></td>
+                <td class="text-center"><%= item['challan_no'] %></td>
+                <td class="text-center"><%= item['room_num'] %></td>
+                <td class="text-center"><%= item['rack_num'] %></td>
+                <td class="text-center"><%= item['quantity'] %></td>
+              </tr>
+            <% end %>
+          <% end %>
+          <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th>Total: </th>
+            <th><%= data.first['total_quantity'] %></th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class='d-flex' style='margin-top: 100px;'>
+      <div class='col-3 sig-bottom'></div>
+      <div class='col-3 px-20'><h3>Manager</h3></div>
+    </div>
+  </body>
+</html>

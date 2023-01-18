@@ -4,7 +4,7 @@
       <% readonly_param = params[:order_id].present? ? true : false %>
       <div class="row font-weight-bold challan-stock-container">
         <div class="col-lg-2 form-group float-left">
-          <%= f.select :product_id, options_from_collection_for_select(@products, 'id', ->(st){"#{st.title} \u{27F6} #{st.code}"}, f.object.item_id), {hide_label: true,prompt: "Select the Items"}, class: "chosen-select product",required: true %>
+          <%= f.select :product_id, options_from_collection_for_select(@products, 'id', ->(st){"#{st.title} \u{27F6} #{st.code}"}, f.object.product_id), {hide_label: true,prompt: "Select the Items"}, class: "chosen-select product",required: true %>
         </div>
         <div class="col-lg-1 form-group float-left">
           <%= f.text_field :size_13, hide_label: true, placeholder: "Marka", value: "#{(f.object.size_13 == '0' ? nil : f.object.size_13)}", readonly: readonly_param %>

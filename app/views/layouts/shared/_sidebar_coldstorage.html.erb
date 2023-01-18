@@ -16,15 +16,32 @@
             </a>
           </li>
         <% end %>
-         <% if check_is_hidden_by_module('orders') %>
-          <li class="activ-link">
-            <%= link_to order_inwards_path, class:"activ-link" do %>
-              <i class="fas fa-plus"></i>
-              <i class="fas fa-shopping-cart"></i>
-              <span class="link-text">Inward</span>
+        <li>
+          <a href="#OrderinwardSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+            <i class="fas fa-money-bill"></i>
+            <span class="link-text">Inward</span>
+          </a>
+          <ul class="collapse list-unstyled" id="OrderinwardSubmenu">
+            <% if check_is_hidden_by_module('orders') %>
+              <li class="activ-link">
+                <%= link_to order_inwards_path, class:"activ-link" do %>
+                  <i class="fas fa-plus"></i>
+                  <i class="fas fa-shopping-cart"></i>
+                  <span class="link-text">Inward without Racking</span>
+                <% end %>
+              </li>
             <% end %>
-          </li>
-        <% end %>
+            <% if check_is_hidden_by_module('orders') %>
+              <li class="activ-link">
+                <%= link_to cold_storage_inwards_path, class:"activ-link" do %>
+                  <i class="fas fa-plus"></i>
+                  <i class="fas fa-shopping-cart"></i>
+                  <span class="link-text">Inward with Racking</span>
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+        </li>
         <li>
           <a href="#OrderSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
             <i class="fas fa-money-bill"></i>
