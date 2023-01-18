@@ -64,6 +64,9 @@
     @percentage_credit_investment = ((@today_credit_investment - @yesterday_credit_investment) / @yesterday_credit_investment.to_f).round(2)
     @investment_debit_count = @q.result.where(created_at: Time.current.all_day).count(:debit)
     @investment_credit_count = @q.result.where(created_at: Time.current.all_day).count(:credit)
+    @monthly_debit_investment = @q.result.where(created_at: Time.current.all_month).sum(:debit).to_f
+    @monthly_credit_investment = @q.result.where(created_at: Time.current.all_month).sum(:credit).to_f
+
 
   end
 
