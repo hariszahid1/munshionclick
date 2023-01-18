@@ -17,7 +17,7 @@ class AccountsController < ApplicationController
       request.format = 'csv'
       download_accounts_csv_file
     end
-    download_accounts_pdf_file if params[:pdf].present?
+    download_accounts_pdf_file if params[:pdf_asc].present? || params[:pdf_desc].present?
     send_email_file if params[:email].present?
     if params[:export_data].present?
       request.format = 'csv'
@@ -152,7 +152,10 @@ class AccountsController < ApplicationController
 
   def sort_data_according
     @sorted_data = []
-      @q.result.reorder('created_at desc').each do |d|
+      sorting_type = 'created_at asc'
+      sorting_type = 'created_at desc' if params[:pdf_desc].present?
+
+      @q.result.reorder(sorting_type).each do |d|
         @sorted_data << {
                           id: d.id,
                           title: d.title,
