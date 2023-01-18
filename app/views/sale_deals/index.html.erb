@@ -109,9 +109,12 @@
             <%= f.select :purchase_sale_items_size_4_eq, options_for_select(@deal, f.object.purchase_sale_items_size_4_eq),  {:include_blank => "Select Deal"}, class: "form-control chosen-select" %>
           </div>
           <div class="col-lg-2 form-group float-left">
-            <%= f.search_field :purchase_sale_items_size_11_cont, class: "form-control chosen-select", placeholder: "Search MS/Form No" %>
+            <%= f.search_field :purchase_sale_items_size_11_cont, class: "form-control chosen-select", placeholder: "Search Form No" %>
           </div>
-          <div class="col-lg-3 form-group float-left d-flex">
+          <div class="col-lg-2 form-group float-left">
+            <%= f.search_field :purchase_sale_items_size_2_cont, class: "form-control chosen-select", placeholder: "Search MS No" %>
+          </div>
+          <div class="col-lg-2 form-group float-left d-flex">
             <%= f.search_field :created_at, id: "reportrange", class: 'form-control' %>
           </div>
           <div class="d-none">

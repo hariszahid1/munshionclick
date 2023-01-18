@@ -21,7 +21,7 @@ class Order < ApplicationRecord
   accepts_nested_attributes_for :remarks, allow_destroy: true
   before_create :generate_guid
   has_many :follow_ups, as: :followable, dependent: :destroy
-  accepts_nested_attributes_for :follow_ups
+  accepts_nested_attributes_for :follow_ups, allow_destroy: true
 
   has_paper_trail ignore: [:updated_at]
 

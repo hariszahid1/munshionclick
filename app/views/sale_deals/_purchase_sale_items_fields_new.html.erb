@@ -13,7 +13,10 @@
         <%= f.text_field :size_13, placeholder: "Quota",  label: "Quota", value: "#{(f.object.size_13 == '0' ? nil : f.object.size_13)}" %>
       </div>
       <div class="col-lg-6 form-group float-left">
-        <%= f.text_field :size_11, placeholder: "MS/Form No:", label: "MS/Form No:", value: "#{(f.object.size_11 == '0' ? nil : f.object.size_11)}" %>
+        <%= f.text_field :size_11, placeholder: "Form No:", label: "Form No:", value: "#{(f.object.size_11 == '0' ? nil : f.object.size_11)}" %>
+      </div>
+      <div class="col-lg-6 form-group float-left">
+        <%= f.text_field :size_2, placeholder: "MS No:", label: "MS No:", value: "#{(f.object.size_2 == '0' ? nil : f.object.size_2)}" %>
       </div>
       <div class="col-lg-6 form-group float-left">
         <%= f.text_field :size_10, placeholder: "Plot Quantity:", label: "Plot Quantity:", value: "#{(f.object.size_10 == '0' ? nil : f.object.size_10)}" %>

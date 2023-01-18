@@ -150,6 +150,7 @@ class CrmsController < ApplicationController
         created_by
         notable_id
         notable_type
+        _destroy
       ],
       follow_ups_attributes: %i[
         id
@@ -162,6 +163,7 @@ class CrmsController < ApplicationController
         comment
         followable_id
         followable_type
+        _destroy
       ],
       cms_data: {}
     )
