@@ -14,7 +14,7 @@
     <%= f.hidden_field :user_name, value: current_user.id %>
     <%= f.hidden_field :status, value: 'UnClear' if params[:action] == 'new'%>
     <div class="col-lg-6 form-group float-left">
-      <%= f.select :sys_user_id, options_from_collection_for_select(@sys_users, 'id', 'name', (f.object&.sys_user_id.nil? ? @sys_users&.first&.id : f&.object&.sys_user_id)), {label:'User'}, required: true, :class=>"form-control chosen-select"%>
+      <%= f.select :sys_user_id, options_from_collection_for_select(@sys_users, 'id', 'name', f.object.sys_user_id), {Prompt: 'Please Select User'}, required: true,  :class=>"form-control chosen-select user-select-in-sale-deal"%>
     </div>
     <div class="col-lg-6 form-group float-left">
       <%= f.select :account_id , options_from_collection_for_select(@accounts, 'id', 'title', (f.object&.account_id.present? ? f.object&.account_id : @account)),{prompt: "Select Account"},class: "form-control", required: true%>
@@ -22,6 +22,11 @@
   </div>
   <%= f.fields_for :purchase_sale_items do |purchase_sale_item| %>
     <%= render 'purchase_sale_items_fields_new', f: purchase_sale_item %>
+  <% end %>
+  <%  if params[:action] == 'new' %>
+    <%= f.fields_for :sys_users do |sys_user| %>
+      <%= render 'sys_users_fields_new', f: sys_user %>
+    <% end %>
   <% end %>
   <div class= 'row'>
     <div class="col-lg-6 form-group">
@@ -81,3 +86,12 @@
     <%=f.object.id.nil? ? (f.submit 'Create sale deal', class: "btn btn-success mr-2", style: "float: right")  :  (f.submit 'Update sale Deal', class: "btn btn-warning mr-2", style: "float: right")%>
   </div>
 <% end %>
+
+<script>
+  $(document).ready(function(){
+    $('.user-select-in-sale-deal').on('change', function(){
+      $('.disable-sys-users').attr('disabled', true)
+      $('.cms-data-fields-container').addClass('d-none')
+    })
+  })
+</script>

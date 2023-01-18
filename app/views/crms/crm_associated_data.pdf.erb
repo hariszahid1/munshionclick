@@ -1,7 +1,9 @@
 <%=
   if params[:pdf_associated_data] == 'pdf_with_follow_ups'
     render 'crm_follow_ups'
-  else
+  elsif params[:pdf_associated_data] == 'pdf_with_notes'
     render 'crm_notes'
+  else
+    render 'with_follow_ups_notes'
   end
 %>
