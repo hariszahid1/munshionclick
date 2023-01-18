@@ -3,53 +3,56 @@
 <div class="hidden" id="purchase_sale_detail_list">
   <div class="row">
     <h1 class="ml-2">Cold Storage Inwards</h1>
-    <div class="col-lg-12">
-      <div class="col-lg-3 form-group float-left">
-        <%= link_to new_cold_storage_inward_path(), class: "btn btn-success col-lg-12" do %>
-          <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-          InWard
+  </div>
+  <ul class="nav nav-pills ml-1 mt-2" role="tablist">
+		<li class="nav-item">
+			<a class="nav-link tab-label active order-search-exp-tab" data-toggle="tab" href="#search" role="tab">Search</a>
+		</li>
+	</ul>
+  <div class="clearfix"></div>
+  <div class="tab-content">
+    <div class="tab-pane active mb-3 card shadow-sm mt-2 border-radius-1 mr-4" id="search" role="tabpanel">
+      <div class="row mt-4">
+        <%= search_form_for @q, url: cold_storage_inwards_path, class: "admin-controls", method: "get" do |f| %>
+          <div class="clearfix"></div>
+          <div class="row">
+            <div class="col-lg-12 collapse show" id="multiCollapseExample1">
+              <div class="col-lg-3 form-group float-left">
+                <%= f.select :purchase_sale_items_product_id_eq, options_from_collection_for_select(@products, 'id', 'title',f.object.purchase_sale_items_product_id_eq),{:include_blank => "Select product"}, class: "chosen-select"%>
+              </div>
+              <div class="col-lg-3 form-group float-left">
+                <%= f.select :sys_user_id_eq, options_from_collection_for_select(@suppliers, 'id', 'name',f.object.sys_user_id_eq),{:include_blank => "Select Supplier"},class: 'form-control chosen-select'%>
+              </div>
+              <div class="col-lg-3 form-group float-left">
+                <%= f.select :user_name_eq, @users,{:include_blank => "Select Creater"},class: 'form-control chosen-select'%>
+              </div>
+              <div class="col-lg-3 form-group float-left">
+                <%= f.select :account_id_eq, options_from_collection_for_select(@accounts, 'id', 'title',f.object.account_id_eq),{:include_blank => "Select Account's"},class: 'form-control chosen-select'%>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <%= f.search_field :created_at_gteq,class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <%= f.search_field :created_at_lteq,class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <%= f.text_field :purchase_sale_items_size_13_cont, class: "form-control",placeholder: "Marka"%>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <%= f.text_field :purchase_sale_items_size_12_cont, class: "form-control",placeholder: "Builty No"%>
+              </div>
+              <div class="col-lg-1 form-group float-left">
+                <button class="form-control btn btn-primary" name="search_submit" type="submit" style="width:100px" value="Search"><i class="fa fa-search"></i></button>
+              </div>
+              <button class="form-control btn btn-danger float-left ml-4" style="width:100px" title= "download inwards pdf ASC " name="pdf" type="submit"  value="Total Purchase PDF A8" formtarget="_blank" style="width:160px">ASC &nbsp;<i class="fa fa-file-pdf"></i></button>
+              <button class="form-control btn btn-danger float-left ml-4" style="width:100px" title= "download inwards pdf DESC " name="pdf" type="submit"  value="Total Purchase PDF A8 Desc" formtarget="_blank" style="width:160px">DESC&nbsp;<i class="fa fa-file-pdf"></i></button>
+            </div>
+          </div>
+          <div class="clearfix"></div>
         <% end %>
       </div>
     </div>
   </div>
-  <div class="clearfix"></div>
-  <%= search_form_for @q, url: cold_storage_inwards_path, class: "admin-controls", method: "get" do |f| %>
-  <div class="clearfix"></div>
-
-  <div class="row">
-    <div class="col-lg-12 collapse show" id="multiCollapseExample1">
-      <div class="col-lg-3 form-group float-left">
-        <%= f.select :purchase_sale_items_product_id_eq, options_from_collection_for_select(@products, 'id', 'title',@title),{:include_blank => "Select product"}, class: "chosen-select"%>
-      </div>
-      <div class="col-lg-3 form-group float-left">
-        <%= f.select :sys_user_id_eq, options_from_collection_for_select(@suppliers, 'id', 'name', @name),{:include_blank => "Select Supplier"},class: 'form-control chosen-select'%>
-      </div>
-      <div class="col-lg-3 form-group float-left">
-        <%= f.select :user_name_eq, @users,{:include_blank => "Select Creater"},class: 'form-control chosen-select'%>
-      </div>
-      <div class="col-lg-3 form-group float-left">
-        <%= f.select :account_id_eq, options_from_collection_for_select(@accounts, 'id', 'title',f.object.account_id_eq),{:include_blank => "Select Account's"},class: 'form-control chosen-select'%>
-      </div>
-      <div class="col-lg-2 form-group float-left">
-        <%= f.search_field :created_at_gteq,class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
-      </div>
-      <div class="col-lg-2 form-group float-left">
-        <%= f.search_field :created_at_lteq,class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
-      </div>
-      <div class="col-lg-2 form-group float-left">
-        <%= f.text_field :purchase_sale_items_size_13_cont, class: "form-control",placeholder: "Marka"%>
-      </div>
-      <div class="col-lg-2 form-group float-left">
-        <%= f.text_field :purchase_sale_items_size_12_cont, class: "form-control",placeholder: "Builty No"%>
-      </div>
-      <div class="col-lg-1 form-group float-left">
-        <button class="form-control btn btn-primary" name="search_submit" type="submit" style="width:100px" value="Search"><i class="fa fa-search"></i></button>
-      </div>
-    </div>
-  </div>
-  <div class="clearfix"></div>
-  <% end %>
-
   <table data-toggle="table" data-search="true">
     <thead>
       <tr>
@@ -112,6 +115,14 @@
               <div class="my-icon-1 my-view-1">
                 <div class="my-tooltip-1">
                   <div class="icon-container">
+                    <div class="my-icon my-view">
+                      <div class="my-tooltip">
+                        PDF
+                      </div>
+                      <%= link_to cold_storage_inward_path(purchase_sale_detail.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
+                        <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
+                      <%end %>
+                    </div>
                     <div class="my-icon my-view">
                       <div class="my-tooltip">
                         Edit
