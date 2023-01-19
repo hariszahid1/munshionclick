@@ -43,7 +43,7 @@
                       <tbody>
                         <tr>
                           <% next if version.whodunnit.nil? %>
-                          <td><h6><%= User.find(version.whodunnit).user_name %></h6></td>
+                          <td><h6><%= User.find(version.whodunnit).user_name rescue nil %></h6></td>
                           <td><h6><%= version.changeset.try(:[], 'title') %><h6></td>
                           <td><h6><%= version.changeset.try(:[], 'comment') %><h6></td>
                           <td><%= version.created_at.strftime("%d-%b-%y at %I:%M %p")%></td>
