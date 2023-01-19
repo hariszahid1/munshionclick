@@ -60,7 +60,8 @@ class PropertyPlansController < ApplicationController
     @office     = @sys_users.pluck('office').uniq
     @mobile     = @sys_users.pluck('mobile').uniq
     @phone      = (@mobile + @office + @home).uniq.compact.reject(&:empty?).join(',')
-    return property_installment_pdf if params[:pdf].present?
+    property_installment_pdf if params[:pdf].present?
+    property_installment_csv if params[:csv].present?
 
     @property_installments = @property_installments.page(params[:page])
   end
@@ -291,5 +292,12 @@ class PropertyPlansController < ApplicationController
   def property_installment_pdf
     generate_pdf(@property_installments, "Installment-Plan-#{@property_installments.count}-#{DateTime.now.strftime('%d-%m-%Y-%H-%M')}",
     'pdf.html', 'A4', false, 'property_plans/property_installment.pdf.erb')
+  end
+
+  def property_installment_csv
+    header_for_csv = %w[Id User Phone Plot Size Last_Payment Last_Payment_Date Installment Due_Date Dealer]
+    data = get_data_for_property_installment_csv
+    generate_csv(data, header_for_csv,
+                 "Property-Plan-Total-#{@property_installments.count}-#{DateTime.now.strftime('%d-%m-%Y-%H-%M')}")
   end
 end
