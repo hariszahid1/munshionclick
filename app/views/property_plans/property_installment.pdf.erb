@@ -1,7 +1,8 @@
-<% if params[:submit_pdf_bulk].present?%>
+<% if params[:pdf].eql?('submit_pdf_bulk')%>
   <%= render 'property_installment_bulk'%>
-<% elsif params[:submit_pdf_search].present?%>
+<% elsif params[:pdf].eql?('submit_pdf_search') %>
   <%= render 'property_installment_search'%>
 <% else%>
   <%= render 'property_installment'%>
 <% end%>
+
