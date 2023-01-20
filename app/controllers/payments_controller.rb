@@ -74,8 +74,8 @@ class PaymentsController < ApplicationController
     @today_credit_payment = @q.result.where(created_at: Time.current.all_day).sum(:credit).to_f
     @yesterday_debit_payment = @q.result.where(created_at: 1.day.ago.all_day).sum(:debit).to_f
     @yesterday_credit_payment = @q.result.where(created_at: 1.day.ago.all_day).sum(:credit).to_f
-    @percentage_debit_payment = ((@today_debit_payment - @yesterday_debit_payment) / @yesterday_debit_payment.to_f ).round(2)
-    @percentage_credit_payment = ((@today_credit_payment - @yesterday_credit_payment) / @yesterday_credit_payment.to_f).round(2)
+    @percentage_debit_payment = ((@today_debit_payment - @yesterday_debit_payment) / (@yesterday_debit_payment.to_f.positive? ? @yesterday_debit_payment.to_f : 1 ) ).round(2)
+    @percentage_credit_payment = ((@today_credit_payment - @yesterday_credit_payment) / (@yesterday_credit_payment.to_f.positive? ? @yesterday_credit_payment.to_f : 1 )).round(2)
     @payment_debit_count = @q.result.where(created_at: Time.current.all_day).count(:debit)
     @payment_credit_count = @q.result.where(created_at: Time.current.all_day).count(:credit)
     @monthly_debit_payment = @q.result.where(created_at: Time.current.all_month).sum(:debit).to_f

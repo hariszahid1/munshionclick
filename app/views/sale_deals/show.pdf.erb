@@ -34,6 +34,9 @@
         left: 48%;
         opacity: 0.3;
       }
+      .font-size-custom{
+        font-size: 18px;
+      }
     </style>
   </head>
   <body>
@@ -62,107 +65,107 @@
       </tr>
     </table>
     <div class='d-flex' style='margin-top: 20px;'>
-      <div class='col-3 px-20'><b>Quota:</b></div>
-      <div class='col-3 border-bottom'><%= @sale_deal&.purchase_sale_items.first.size_13 %></div>
-      <div class='col-3 px-20'></div>
+      <div class='col-3 px-20 font-size-custom'><b>Quota:</b></div>
+      <div class='col-3 border-bottom font-size-custom'><%= @sale_deal&.purchase_sale_items.first.size_13 %></div>
+      <div class='col-3 px-20 font-size-custom'></div>
       <div class='col-3'></div>
     </div>
 
     <div class='d-flex mr-4'>
-      <div class='col-3 px-20'><b>Agent Name:</b></div>
-      <div class='col-3 border-bottom'><%= @all_agents.to_h.invert[@sale_deal&.user_name.to_i].to_s%></div>      <div class='col-3 px-20'><b>Transaction Type:</b></div>
-      <div class='col-3 border-bottom'><%= @sale_deal&.purchase_sale_items.first.size_12 %></div>
+      <div class='col-3 px-20 font-size-custom'><b>Agent Name:</b></div>
+      <div class='col-3 border-bottom font-size-custom'><%= @all_agents.to_h.invert[@sale_deal&.user_name.to_i].to_s%></div>      <div class='col-3 px-20 font-size-custom'><b>Transaction Type:</b></div>
+      <div class='col-3 border-bottom font-size-custom'><%= @sale_deal&.purchase_sale_items.first.size_12 %></div>
     </div>
 
     <div class='d-flex'>
-      <div class='col-3 px-20'><b>Project Name:</b></div>
-      <div class='col-3 border-bottom'><%= @sale_deal&.sys_user&.cms_data&.try(:[], 'project_name')&.titleize %></div>
-      <div class='col-3 px-20'><b>Form No:</b></div>
-      <div class='col-3 border-bottom'><%= @sale_deal&.purchase_sale_items.first.size_11 %></div>
+      <div class='col-3 px-20 font-size-custom'><b>Project Name:</b></div>
+      <div class='col-3 border-bottom font-size-custom'><%= @sale_deal&.sys_user&.cms_data&.try(:[], 'project_name')&.titleize %></div>
+      <div class='col-3 px-20 font-size-custom'><b>Form No:</b></div>
+      <div class='col-3 border-bottom font-size-custom'><%= @sale_deal&.purchase_sale_items.first.size_11 %></div>
     </div>
 
     <div class='d-flex mr-2'>
-      <div class='col-3 px-20'><b>Plot Size:</b></div>
-      <div class='col-3 border-bottom'><%= @sale_deal&.sys_user&.ntn %></div>
-      <div class='col-3 px-20'><b>Type of plot</b></div>
-      <div class='col-3 border-bottom'><%= @sale_deal&.sys_user&.cms_data&.try(:[], 'category')&.titleize %></div>
+      <div class='col-3 px-20 font-size-custom'><b>Plot Size:</b></div>
+      <div class='col-3 border-bottom font-size-custom'><%= @sale_deal&.sys_user&.ntn %></div>
+      <div class='col-3 px-20 font-size-custom'><b>Type of plot</b></div>
+      <div class='col-3 border-bottom font-size-custom'><%= @sale_deal&.sys_user&.cms_data&.try(:[], 'category')&.titleize %></div>
     </div>
 
     <div class='d-flex'>
-      <div class='col-3 px-20'><b>Plot Quantity:</b></div>
-      <div class='col-3 border-bottom'><%= @sale_deal&.purchase_sale_items&.first&.size_10 %></div>
-      <div class='col-3 px-20'><b>Plot Category</b></div>
+      <div class='col-3 px-20 font-size-custom'><b>Plot Quantity:</b></div>
+      <div class='col-3 border-bottom font-size-custom'><%= @sale_deal&.purchase_sale_items&.first&.size_10 %></div>
+      <div class='col-3 px-20 font-size-custom'><b>Plot Category</b></div>
       <div class='col-3  border-bottom'><%= @sale_deal&.purchase_sale_items&.first&.size_9 %></div>
     </div>
 
     <div class='d-flex'>
-      <div class='col-3 px-20'><b>Price per Plot:</b></div>
-      <div class='col-3 border-bottom'><%= @sale_deal&.purchase_sale_items&.first&.size_8 %></div>
-      <div class='col-3 px-20'><b>Deal Date:</b></div>
-      <div class='col-3 border-bottom'><%= @sale_deal&.purchase_sale_items&.first&.expiry_date&.strftime('%d-%m-%Y') %></div>
+      <div class='col-3 px-20 font-size-custom'><b>Price per Plot:</b></div>
+      <div class='col-3 border-bottom font-size-custom'><%= @sale_deal&.purchase_sale_items&.first&.size_8 %></div>
+      <div class='col-3 px-20 font-size-custom'><b>Deal Date:</b></div>
+      <div class='col-3 border-bottom font-size-custom'><%= @sale_deal&.purchase_sale_items&.first&.expiry_date&.strftime('%d-%m-%Y') %></div>
     </div>
 
     <div class='d-flex'>
-      <div class='col-3 px-20'><b>Down Payment:</b></div>
-      <div class='col-3 border-bottom'><%= @sale_deal&.purchase_sale_items&.first&.size_6 %></div>
-      <div class='col-3 px-20'><b>Rebate/Profit:</b></div>
-      <div class='col-3 border-bottom'><%= @sale_deal&.purchase_sale_items&.first&.size_5 %></div>
+      <div class='col-3 px-20 font-size-custom'><b>Down Payment:</b></div>
+      <div class='col-3 border-bottom font-size-custom'><%= @sale_deal&.purchase_sale_items&.first&.size_6 %></div>
+      <div class='col-3 px-20 font-size-custom'><b>Rebate/Profit:</b></div>
+      <div class='col-3 border-bottom font-size-custom'><%= @sale_deal&.purchase_sale_items&.first&.size_5 %></div>
     </div>
 
     <div class='d-flex'>
-      <div class='col-3 px-20'><b>Payment Status:</b></div>
-      <div class='col-3 border-bottom'><%= @sale_deal&.purchase_sale_items&.first&.size_7 %></div>
-      <div class='col-3 px-20'><b>Deal:</b></div>
-      <div class='col-3 border-bottom'><%= @sale_deal&.purchase_sale_items&.first&.size_4 %></div>
+      <div class='col-3 px-20 font-size-custom'><b>Payment Status:</b></div>
+      <div class='col-3 border-bottom font-size-custom'><%= @sale_deal&.purchase_sale_items&.first&.size_7 %></div>
+      <div class='col-3 px-20 font-size-custom'><b>Deal:</b></div>
+      <div class='col-3 border-bottom font-size-custom'><%= @sale_deal&.purchase_sale_items&.first&.size_4 %></div>
     </div>
 
     <div class='d-flex'>
-      <div class='col-3 px-20'><b>Receivede Amount:</b></div>
-      <div class='col-3 border-bottom'><%= @sale_deal&.amount %></div>
-      <div class='col-3 px-20'><b>Total Amount</b></div>
-      <div class='col-3 border-bottom'><%= @sale_deal&.total_bill %></div>
+      <div class='col-3 px-20 font-size-custom'><b>Receivede Amount:</b></div>
+      <div class='col-3 border-bottom font-size-custom'><%= @sale_deal&.amount %></div>
+      <div class='col-3 px-20 font-size-custom'><b>Total Amount</b></div>
+      <div class='col-3 border-bottom font-size-custom'><%= @sale_deal&.total_bill %></div>
     </div>
 
     <div class='d-flex'>
-      <div class='col-3 px-20'><b>Balance Amount</b></div>
-      <div class='col-3 border-bottom'><%= @sale_deal&.remaining_balance %></div>
-      <div class='col-3 px-20'><b>Discounted Price:</b></div>
-      <div class='col-3 border-bottom'><%= @sale_deal&.discount_price %></div>
+      <div class='col-3 px-20 font-size-custom'><b>Balance Amount</b></div>
+      <div class='col-3 border-bottom font-size-custom'><%= @sale_deal&.remaining_balance %></div>
+      <div class='col-3 px-20 font-size-custom'><b>Discounted Price:</b></div>
+      <div class='col-3 border-bottom font-size-custom'><%= @sale_deal&.discount_price %></div>
     </div>
 
     <div class='d-flex'>
-       <div class='col-3 px-20'><b>Inst./PO/CHq/Trx No:</b></div>
-      <div class='col-3 border-bottom'><%= @sale_deal&.purchase_sale_items&.first&.size_1 %></div>
-      <div class='col-3 px-20'><b>Customer Name:</b></div>
-      <div class='col-3 border-bottom'><%= @sale_deal&.sys_user&.name %></div>
+       <div class='col-3 px-20 font-size-custom'><b>Inst./PO/CHq/Trx No:</b></div>
+      <div class='col-3 border-bottom font-size-custom'><%= @sale_deal&.purchase_sale_items&.first&.size_1 %></div>
+      <div class='col-3 px-20 font-size-custom'><b>Customer Name:</b></div>
+      <div class='col-3 border-bottom font-size-custom'><%= @sale_deal&.sys_user&.name %></div>
     </div>
 
     <div class='d-flex'>
-      <div class='col-3 px-20'><b>Customer Contact:</b></div>
-      <div class='col-3 border-bottom'><%= @sale_deal&.sys_user&.occupation %></div>
-      <div class='col-3 px-20'><b>Customer CNIC:</b></div>
-      <div class='col-3 border-bottom'><%= @sale_deal&.purchase_sale_items&.first&.size_3 %></div>
+      <div class='col-3 px-20 font-size-custom'><b>Customer Contact:</b></div>
+      <div class='col-3 border-bottom font-size-custom'><%= @sale_deal&.sys_user&.occupation %></div>
+      <div class='col-3 px-20 font-size-custom'><b>Customer CNIC:</b></div>
+      <div class='col-3 border-bottom font-size-custom'><%= @sale_deal&.purchase_sale_items&.first&.size_3 %></div>
     </div>
 
     <div class='d-flex'>
-      <div class='col-3 px-20'><b>MS No:</b></div>
-      <div class='col-3 border-bottom'><%= @sale_deal&.purchase_sale_items.first.size_2 %></div>
-      <div class='col-3 px-20'><b>Customer Signature:</b></div>
-      <div class='col-3 border-bottom'></div>
+      <div class='col-3 px-20 font-size-custom'><b>MS No:</b></div>
+      <div class='col-3 border-bottom font-size-custom'><%= @sale_deal&.purchase_sale_items.first.size_2 %></div>
+      <div class='col-3 px-20 font-size-custom'><b>Customer Signature:</b></div>
+      <div class='col-3 border-bottom font-size-custom'></div>
     </div>
     <div class='d-flex'>
-      <div style='width: 15%;'><b>Remarks:</b></div>
-      <div style='width: 85%;'>
-        <textarea rows='5' style='width: 100%; padding: 5px;'><%= @sale_deal&.comment %></textarea>
+      <div class='font-size-custom col-3 px-20'><b>Remarks:</b></div>
+      <div style='width: 75%;'>
+        <textarea rows='5' class='font-size-custom' style='width: 100%; padding: 5px;'><%= @sale_deal&.comment %></textarea>
       </div>
     </div>
     <h2 style='color: red;'>Important: You must call at this number for the verification of your receipt 0321-8437272.</h2>
    <div class='d-flex'>
       <div style='width: 60%;'>
-        <h4>For verification of your Unit booking:</h4>
-        <p> 1) Open Camrea/QRScaner app on your phone.</p>
-        <p> 2) Point your phone to this QRCODE to capture the code.</p>
-        <p> 3) After capturing you will redirect to our Sale Deal Invoice.</p>
+        <h4 class='font-size-custom'>For verification of your Unit booking:</h4>
+        <p class='font-size-custom'> 1) Open Camrea/QRScaner app on your phone.</p>
+        <p class='font-size-custom'> 2) Point your phone to this QRCODE to capture the code.</p>
+        <p class='font-size-custom'> 3) After capturing you will redirect to our Sale Deal Invoice.</p>
       </div>
       <div style='width: 30%; margin-left: 150px;'>
         <% if @sale_deal.qr_code.present?%>
@@ -186,26 +189,26 @@
     <div class='d-flex'>
       <div style='width: 50%; margin-top: 20px; color: green'>
         <h3><%= @pos_setting&.extra_settings.try(:[], "address_1").try(:[], 0) %><img src="<%= image_url('pin-location.svg') %>" height='20px' width='20px'></h3>
-        <p><%= @pos_setting&.extra_settings.try(:[], "address_1").try(:[], 1)%></p>
-        <p><%= @pos_setting&.extra_settings.try(:[], "address_1").try(:[], 2) %></p>
+        <p class='font-size-custom'><%= @pos_setting&.extra_settings.try(:[], "address_1").try(:[], 1)%></p>
+        <p class='font-size-custom'><%= @pos_setting&.extra_settings.try(:[], "address_1").try(:[], 2) %></p>
       </div>
       <div style='width: 50%; margin-top: 20px; color: green'>
         <h3><%= @pos_setting&.extra_settings.try(:[], "address_2").try(:[], 0) %> <img src="<%= image_url('pin-location.svg') %>" height='20px' width='20px'></h3>
-        <p><%= @pos_setting&.extra_settings.try(:[], "address_2").try(:[], 1) %></p>
-        <p><%= @pos_setting&.extra_settings.try(:[], "address_2").try(:[], 2) %></p>
+        <p class='font-size-custom'><%= @pos_setting&.extra_settings.try(:[], "address_2").try(:[], 1) %></p>
+        <p class='font-size-custom'><%= @pos_setting&.extra_settings.try(:[], "address_2").try(:[], 2) %></p>
       </div>
     </div>
 
     <p style="border-bottom: 2px solid black"></p>
-    <div class='d-flex'>
-      <div style='width: 33%; margin-top: 10px'>
+    <div class='d-flex' style='text-align: center;'>
+      <!--div style='width: 33%; margin-top: 10px'>
         <b class='d-flex' style='width: 100%;'><img src="<%= image_url('youtube.svg') %>" height='20px' width='20px'><div><%= @pos_setting&.extra_settings.try(:[], "jr_pdf_footer").try(:[], 0) %></div></b>
       </div>
       <div style='width: 33%; margin-top: 10px'>
         <b class='d-flex' style='width: 100%;'><img src="<%= image_url('fb.svg') %>" height='20px' width='20px'><div><%= @pos_setting&.extra_settings.try(:[], "jr_pdf_footer").try(:[], 1) %></div></b>
-      </div>
-      <div style='width: 33%; margin-top: 10px'>
-        <b class='d-flex'><img src="<%= image_url('world.svg') %>" height='20px' width='20px'><div><%= @pos_setting&.extra_settings.try(:[], "jr_pdf_footer").try(:[], 2) %></div></b>
+      </div-->
+      <div style='margin-top: 10px; margin-left: 40%;'>
+        <b class='d-flex font-size-custom'><img src="<%= image_url('world.svg') %>" height='20px' width='20px'><div><%= @pos_setting&.extra_settings.try(:[], "jr_pdf_footer").try(:[], 2) %></div></b>
       </div>
     </div>
   </body>

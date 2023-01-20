@@ -11,10 +11,10 @@
           <ul class="list-group list-group-flush">
             <li class="list-group-item mb-2"><span class="float-left h5">ID:</span><span class="float-right"><%= @product.id %></span></li>
             <li class="list-group-item mb-2"><span class="float-left h5">Title:</span><span class="float-right"><%= @product.title %></span></li>
-            <li class="list-group-item mb-2"><span class="float-left h5">Item Type:</span><span class="float-right"><%= @product.item_type.title %></span></li>
+            <li class="list-group-item mb-2"><span class="float-left h5">Item Type:</span><span class="float-right"><%= @product.item_type&.title %></span></li>
             <li class="list-group-item mb-2"><span class="float-left h5">Code:</span><span class="float-right"><%= @product.code %></span></li>
-            <li class="list-group-item mb-2"><span class="float-left h5">Product Category:</span><span class="float-right"><%= @product.product_category.title rescue 'nil'%></span></li>
-            <li class="list-group-item mb-2"><span class="float-left h5">Product Sub-Category:</span><span class="float-right"><%= @product.product_sub_category.title rescue 'nil' %></span></li>
+            <li class="list-group-item mb-2"><span class="float-left h5">Product Category:</span><span class="float-right"><%= @product.product_category&.title%></span></li>
+            <li class="list-group-item mb-2"><span class="float-left h5">Product Sub-Category:</span><span class="float-right"><%= @product.product_sub_category&.title %></span></li>
             <li class="list-group-item mb-2"><span class="float-left h5">Acquire Type:</span><span class="float-right"><%= @product.acquire_type %></span></li>
             <li class="list-group-item mb-2"><span class="float-left h5">Purchase Factor:</span><span class="float-right"><%= @product.purchase_factor %></span></li>
             <li class="list-group-item mb-2"><span class="float-left h5">Cost:</span><span class="float-right"><%= @product.cost %></span></li>
@@ -36,8 +36,7 @@
             <% end %>
           </div>
         </div>
-        <img width="150px" height="115px" class="figure" style=""src=<%="data:image/svg+xml;base64,"+@str%> ></img>
-
+        <img width="150px" height="115px" class="figure" style=""src=<%="data:image/svg+xml;base64,"+@str%> />
       </div>
     </div>
   </div>

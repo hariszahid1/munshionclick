@@ -60,8 +60,8 @@
     @today_credit_investment = @q.result.where(created_at: Time.current.all_day).sum(:credit).to_f
     @yesterday_debit_investment = @q.result.where(created_at: 1.day.ago.all_day).sum(:debit).to_f
     @yesterday_credit_investment = @q.result.where(created_at: 1.day.ago.all_day).sum(:credit).to_f
-    @percentage_debit_investment = ((@today_debit_investment - @yesterday_debit_investment) / @yesterday_debit_investment.to_f ).round(2)
-    @percentage_credit_investment = ((@today_credit_investment - @yesterday_credit_investment) / @yesterday_credit_investment.to_f).round(2)
+    @percentage_debit_investment = ((@today_debit_investment - @yesterday_debit_investment) / (@yesterday_debit_investment.to_f.positive? ? @yesterday_debit_investment.to_f : 1 ) ).round(2)
+    @percentage_credit_investment = ((@today_credit_investment - @yesterday_credit_investment) / (@yesterday_credit_investment.to_f.positive? ? @yesterday_credit_investment.to_f : 1 ) ).round(2)
     @investment_debit_count = @q.result.where(created_at: Time.current.all_day).count(:debit)
     @investment_credit_count = @q.result.where(created_at: Time.current.all_day).count(:credit)
     @monthly_debit_investment = @q.result.where(created_at: Time.current.all_month).sum(:debit).to_f

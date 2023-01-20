@@ -69,8 +69,8 @@ class LedgerBooksController < ApplicationController
     @today_credit_total = @q.result.where(created_at: Time.current.all_day).sum(:credit).to_f
     @yesterday_debit_total = @q.result.where(created_at: 1.day.ago.all_day).sum(:debit).to_f
     @yesterday_credit_total = @q.result.where(created_at: 1.day.ago.all_day).sum(:credit).to_f
-    @percentage_debit = ((@today_debit_total - @yesterday_debit_total) / @yesterday_debit_total.to_f ).round(2)
-    @percentage_credit = ((@today_credit_total - @yesterday_credit_total) / @yesterday_credit_total.to_f).round(2)
+    @percentage_debit = ((@today_debit_total - @yesterday_debit_total) / (@yesterday_debit_total.to_f.positive? ? @yesterday_debit_total.to_f : 1) ).round(2)
+    @percentage_credit = ((@today_credit_total - @yesterday_credit_total) / (@yesterday_credit_total.to_f.positive? ? @yesterday_credit_total.to_f : 1) ).round(2)
     @ledger_debit_count = @q.result.where(created_at: Time.current.all_day).count(:debit)
     @ledger_credit_count = @q.result.where(created_at: Time.current.all_day).count(:credit)
     @monthly_debit_ledger = @q.result.where(created_at: Time.current.all_month).sum(:debit).to_f
