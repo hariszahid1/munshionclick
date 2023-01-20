@@ -31,11 +31,26 @@
         <td style="border-bottom: 1px solid #000; "><%=@products_sale[item.first].to_f.round(2) %></td>
       </tr>
     <% end %>
+
+    <% if @products_count_items.present? %>
+      <% @products_count_items.each_with_index do |item,i| %>
+        <tr style="text-align :center">
+          <td style="border-bottom: 1px solid #000; "><b><%=item.first %></b></td>
+          <td style="border-bottom: 1px solid #000; "><%=item.last.to_f.round(2) %><%@total += item.last.to_f.round(2) %></td>
+          <td style="border-bottom: 1px solid #000; "><%=@products_sale_price_items[item.first].to_f.round(2) %></td>
+          <td style="border-bottom: 1px solid #000; "><%=@products_sale_items[item.first].to_f.round(2) %></td>
+        </tr>
+      <% end %>
+    <% end %>  
     <tr style="text-align :center">
       <td><b>Total</b></td>
       <td><b><%=@total%></b></td>
       <td></td>
-      <td><b><%=@products_sale_total.to_f.round(2)%></b></td>
+      <% if @products_sale_total_items.present? %>
+        <td><b><%=@products_sale_total.to_f.round(2) + @products_sale_total_items.to_f.round(2)%></b></td>
+      <% else %>
+         <td><b><%=@products_sale_total.to_f.round(2)%></b></td>
+      <% end %>  
     </tr>
     <tr style="text-align :center">
       <td><b>-</b></td>
@@ -59,7 +74,11 @@
       <td><b>Total</b></td>
       <td><b></b></td>
       <td></td>
-      <td><b><%=(@product_loading.to_f+@product_carriage.to_f+@products_sale_total.to_f).round(2)%></b></td>
+      <% if @products_sale_total_items.present? %>
+        <td><b><%=(@product_loading.to_f+@product_carriage.to_f+@products_sale_total.to_f).round(2) + (@products_sale_total_items.to_f).round(2)%></b></td>
+      <% else %>
+        <td><b><%=(@product_loading.to_f+@product_carriage.to_f+@products_sale_total.to_f).round(2)%></b></td>
+      <% end %>  
     </tr>
   </table>
 </div>
