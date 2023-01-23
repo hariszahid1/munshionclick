@@ -1,6 +1,6 @@
 class PurchaseSaleDetailsController < ApplicationController
   before_action :set_purchase_sale_detail, only: [:pdf_download_for_psd, :show, :edit, :update, :destroy]
-  before_action :check_access
+  before_action :check_access, except: [:show]
   before_action :set_user, only: %i[new edit]
   # GET /purchase_sale_details
   # GET /purchase_sale_details.json
