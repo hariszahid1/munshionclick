@@ -22,6 +22,7 @@ class CrmsController < ApplicationController
     export_file if params[:export_data].present?
     download_crm_csv_file if params[:csv].present?
     download_crm_pdf_file if params[:pdf].present?
+    download_associated_pdf if params[:pdf_associated_data].present?
     send_email_file if params[:email].present?
     crm_charts
   end
@@ -149,6 +150,7 @@ class CrmsController < ApplicationController
         created_by
         notable_id
         notable_type
+        _destroy
       ],
       follow_ups_attributes: %i[
         id
@@ -161,6 +163,7 @@ class CrmsController < ApplicationController
         comment
         followable_id
         followable_type
+        _destroy
       ],
       cms_data: {}
     )
@@ -168,6 +171,11 @@ class CrmsController < ApplicationController
 
   def set_sys_user
     @sys_user = SysUser.find(params[:id])
+  end
+
+  def download_associated_pdf
+    @sys_users = @q.result
+    generate_pdf(@sys_users, 'CRM', 'pdf.html', 'A4', false, 'crms/crm_associated_data.pdf.erb')
   end
 
   def new_edit_data

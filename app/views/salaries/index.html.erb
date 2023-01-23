@@ -1,3 +1,4 @@
+<div class="m-4">
 <div class="main-content-header mb-3">
   <h1>Salaries Debit From Staff Balance</h1>
   <ol class="breadcrumb">
@@ -59,43 +60,60 @@
 	</ul>
   <%= link_to '', analytics_salaries_path, id: 'analytics-path', class: 'd-none', remote: true %>
   <div class="tab-content">
-    <div class="tab-pane active mb-3 card shadow-sm mt-2 p-3 border-radius-1" id="search" role="tabpanel">
-      <div class="row d-flex">
-        <div class="row">
-          <div class="col-lg-12 col-sm-12">
-            <%= search_form_for @q, url: salaries_path, class: "admin-controls mt-3 ml-2", method: "get" do |f| %>
-            <div class="col-lg-2 form-group float-left">
-              <%= f.select :staff_id_eq, options_from_collection_for_select(@salary_searchs, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code}"},@id),{:include_blank => "Select Staff"},:class=>"form-control chosen-select" %>
+    <div class="tab-pane active mb-3 card shadow mt-2 p-4 border-radius-1 d-flex" id="search" role="tabpanel">
+      <%= search_form_for @q, url: salaries_path, class: "admin-controls mt-3 ml-2", method: "get" do |f| %>
+        <div class="row d-flex">
+          <div class="col-lg-2 form-group float-left">
+            <%= f.select :staff_id_eq, options_from_collection_for_select(@salary_searchs, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code}"},@id),{:include_blank => "Select Staff"},:class=>"form-control chosen-select" %>
+          </div>
+          <div class="col-lg-2 form-group float-left">
+            <%= f.select :payment_type_eq, options_for_select(Salary.payment_types, @payment_type), {:include_blank => "Select Payment type"},:class=>"form-control chosen-select" %>
+          </div>
+          <div class="col-lg-2 form-group float-left">
+              <%= f.select :staff_department_id_eq, options_from_collection_for_select(@departments, 'id', 'title', @department), {hide_label:true,title: "Select the Department" ,prompt: "Select Department"},:class=>"form-control chosen-select"%>
             </div>
-              <div class="col-lg-2 form-group float-left">
-                <%= f.select :payment_type_eq, options_for_select(Salary.payment_types, @payment_type), {:include_blank => "Select Payment type"},:class=>"form-control chosen-select" %>
-              </div>
-              <div class="col-lg-2 form-group float-left">
-                  <%= f.select :staff_department_id_eq, options_from_collection_for_select(@departments, 'id', 'title', @department), {hide_label:true,title: "Select the Department" ,prompt: "Select the Department"},:class=>"form-control chosen-select"%>
-                </div>
-              <div class="col-lg-2 form-group float-left">
-                <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker',value: @created_at_gteq,placeholder: "YYYY-MM-DD" %>
-              </div>
-              <div class="col-lg-2 form-group float-left">
-                <%= f.search_field :created_at_lteq, class: 'form-control input-sm datepicker' ,value: @created_at_lteq,placeholder: "YYYY-MM-DD"%>
-              </div>
-              <div class="col-lg-2 form-group float-left">
-                <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
-                <button class="form-control btn btn-danger d-flex float-right justify-content-center" title= "download salaries pdf" name="submit_pdf" type="submit" value="Salaries Detail PDF A8" formtarget="_blank" style="width:100px">PDF &nbsp;<i class="fa fa-file-pdf mt-1"></i></button>
-              </div>
-            <% end %>
+            <div class="col-lg-3 form-group float-left d-flex">
+              <%= f.search_field :created_at, id: "reportrange", class: 'form-control' %>
+            </div>
+            <div class="d-none">
+              <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker',placeholder: "YYYY-MM-DD" %>
+              <%= f.search_field :created_at_lteq, class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
+            </div>
+          <div class="col-lg-3 form-group float-left">
+            <button class="form-control btn btn-primary float-left" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+          <div class="float-right">
+            <button class="form-control btn btn-danger d-flex justify-content-center" title= "download salaries pdf" name="submit_pdf" type="submit" value="Salaries Detail PDF A8" formtarget="_blank" style="width:100px">PDF &nbsp;<i class="fa fa-file-pdf mt-1"></i></button>
+          </div>
           </div>
         </div>
-      </div>
+
+      <% end %>
     </div>
-    <div class="tab-pane mb-3 card shadow-sm mt-2 p-3 border-radius-1" id="analytics" role="tabpanel">
+    <div class="tab-pane mb-3 card shadow mt-2 p-4 border-radius-1" id="analytics" role="tabpanel">
       <div id="show-analytics" class="row p-3"></div>
     </div>
   </div>
-<div class="card border-radius-1 shadow p-3">
-  <table data-toggle="table" data-search="true">
+<div class="card border-radius-1 shadow p-4">
+<div class="row d-flex" style="position: absolute;">
+      <div>
+        <%if (check_can_delete(@module_permission))%>
+	        <button class="btn btn-outline-danger delete-selected mt-4 ml-3" type='button' value='Salary'>
+	        	Delete Selected
+	        </button>		
+        <%end%>
+      </div>  
+      <%= search_form_for @q, url: salaries_path, class: "admin-controls ml-4", method: "get" do |f| %>
+        <div class="d-flex mt-4" style="width: 120%;">
+          <%= select_tag :limit, options_for_select(['Show Entries',5, 10, 15, 20, 25], selected: :limit), id: 'pagination-limit', title:'Show Entries', style:'cursor: pointer;' %>
+        </div>
+      <% end %>
+    </div>
+    <div class="mt-3">  
+  <table data-toggle="table" data-search="true" class="content-table">
     <thead>
       <tr>
+        <th class="p-2"><input type="checkbox" id="master" class='select-all-checkbox'>
+        </th>
         <th><%= sort_link(@q, :id, 'ID') %></th>
         <th><%= sort_link(@q, :staff_name, 'Name') %></th>
         <th><%= sort_link(@q, :paid_salary, 'Paid') %></th>
@@ -112,6 +130,7 @@
     <tbody>
       <% @salaries.each do |salary| %>
         <tr>
+          <td><%= check_box_tag 'object_ids[]', salary.id %></td>
           <td><%= salary.id %></td>
           <td><%= salary.staff.full_name %></td>
           <td><%= salary.paid_salary.present? ? number_with_delimiter(salary.paid_salary.to_f.round(2)) : "" %><%= salary.advance.present? ? number_with_delimiter(salary.advance.to_f.round(2)) : "" %> </td>
@@ -190,15 +209,16 @@
       </tr>
     </tbody>
   </table>
-
-  <div class="row">
-    <div class="col-lg-4 col-sm-4">
+  </div>
+  <div class="col-lg-12 digg_pagination">
+    <div class="float-left page_info">
       <%= page_entries_info @salaries %>
     </div>
-    <div class="col-lg-8 col-sm-8 pagination-left">
-      <%= paginate @salaries %>
+    <div class="float-right">
+    <%= paginate @salaries, :container => false %>
     </div>
   </div>
+</div>
 </div>
 <script>
   $(document).ready(function() {
@@ -211,5 +231,52 @@
     $('.analytics-tab').on('click', function(){
       $('#analytics-path').click();
     })
+  });
+
+    $('#pagination-limit').on('change', function(){
+    $(this).closest('form').submit();
+  })
+
+  $(function() {
+
+    var start = moment().subtract(1, 'years');
+    var end = moment();
+
+    function cb(start, end) {
+        $('#reportrange span').html(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
+    }
+
+    $('#reportrange').daterangepicker({
+        startDate: start,
+        endDate: end,
+      ranges: {
+          'Select Date Range':[],
+           'Today': [moment(), moment()],
+           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+           'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+           'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+           '1 Year': [moment().subtract(1, 'years')],
+           '5 Year': [moment().subtract(5, 'years')],
+           'This Month': [moment().startOf('month'), moment().endOf('month')],
+           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+           'This Month Last Year': [moment().subtract(1, 'years').startOf('month'), moment().subtract(1, 'years').endOf('month')],
+           'This Year': [moment().startOf('year'), moment().endOf('year')],
+           'Last Year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')]
+        },
+        locale: {
+          format: 'DD/MM/YYYY'
+        }
+    }, cb);
+
+    cb(start, end);
+
+    $('#reportrange').on('change', function(){
+	      var value = $(this).val()
+	      var greater_eq = value.split(' - ')[0]
+	      var less_eq = value.split(' - ')[1]
+	      $('#q_created_at_gteq').val(greater_eq)
+	      $('#q_created_at_lteq').val(less_eq)
+	    })
+
   });
 </script>

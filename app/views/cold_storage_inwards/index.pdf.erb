@@ -1,0 +1,107 @@
+<html>
+  <head>
+    <style>
+      .border-bottom{
+        border-bottom: double 4px;
+      }
+      .text-center{
+        text-align: center;
+      }
+      .text-left{
+        text-align: left;
+      }
+    </style>
+  </head>
+  <body>
+    <% @date = Date.today  %>
+    <% @time = DateTime.now %>
+    <% @time = Time.zone.now %>
+    <div>
+      <p class="border-bottom"></p>
+      <h1 class="text-center">Inward List With Racking</h1>
+      <h2 class="text-left">Inward Date</h1>
+      <h3 class="text-left">
+        <b><span>From: <%= @pdf_orders.first&.created_at&.strftime("%d-%b-%y at %I:%M %p") %></span>
+         </b>
+      </h3>
+      <h3 class="text-left">
+        <b> <span>To: <%= @pdf_orders.last&.created_at&.strftime("%d-%b-%y at %I:%M %p") %></span>
+         </b>
+      </h3>
+      <p class="border-bottom"></p>
+      <p class="text-center">Report by: <%=current_user.name%></p>
+    </div>
+    <div>
+      <table>
+        <thead class="lite-gray">
+          <th class="text-center">Gate Pass No</th>
+          <th class="text-center">Party Name</th>
+          <th class="text-center">Marka No</th>
+          <th class="text-center">Challan No</th>
+          <th class="text-center">Vehicle No</th>
+          <th class="text-center">Product Name</th>
+          <th class="text-center">Room No</th>
+          <th class="text-center">Rack No</th>
+          <th class="text-center">InWard Qty</th>
+        </thead>
+        <tbody>
+          <% data.each_with_index do |order, index| %>
+            <% order['items'].each_with_index do |item, index| %>
+              <tr>
+                <td class="text-center"><%= order['id'] %></td>
+                <td class="text-center"><%= order['name'] %></td>
+                <td class="text-center"><%= item['marka'] %></td>
+                <td class="text-center"><%= item['challan_no'] %></td>
+                <td class="text-center"><%= item['vehicle_no'] %></td>
+                <td class="text-center"><%= item['product'] %></td>
+                 <td class="text-center"><%= item['room_num'] %></td>
+                <td class="text-center"><%= item['rack_num'] %></td>
+                <td class="text-center"><%= item['quantity'] %></td>
+              </tr>
+            <% end %>
+          <% end %>
+          <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th>Sub Total: </th>
+            <th><%= @pdf_orders_total %></th>
+          </tr>
+          <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th>Grand Total: </th>
+            <th><%= @pdf_orders_total %></th>
+          </tr>
+          <thead class="lite-gray">
+            <tr>
+              <th colspan="6" class='text-left' style="padding-left: 20px;">Party Name</th>
+              <th> InWard Qty </th>
+            </tr>
+          </thead>
+          <% if @pdf_inward_total.present? %>
+            <% @pdf_inward_total.each do |order| %>
+              <tr>
+                <td colspan="6" class='text-left' style="padding-left: 20px;"><%= order.first %></td>
+                <td class="text-center"><%= order.second&.to_f %></td>
+              </tr>
+            <% end %>
+          <% end %>
+            <tr>
+              <th colspan="6" class='text-left' style="padding-left: 20px;">Total</th>
+              <th><%= @pdf_orders_total %></th>
+            </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

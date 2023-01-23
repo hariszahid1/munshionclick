@@ -118,6 +118,9 @@
                 <%= f.select :cms_data_i_cont, options_for_select(@deal_stat, f.object.cms_data_i_cont_any), {:include_blank => "Select Deal Status"}, class: "form-control chosen-select" %>
               </div>
               <div class="col-lg-2 form-group float-left">
+                <%= f.select :cms_data_i_cont, options_for_select(@source, f.object.cms_data_i_cont_any), {:include_blank => "Select Source"}, class: "form-control chosen-select" %>
+              </div>
+              <div class="col-lg-2 form-group float-left">
                 <%= f.search_field :nom_name_cont, class: "form-control chosen-select", placeholder: "Search Block" %>
               </div>
               <div class="col-lg-3 form-group float-left d-flex">
@@ -174,10 +177,16 @@
                 <button class="btn btn-warning float-right mr-2 mb-2" style="width:100px" title= "download crm csv" name="csv" type="submit" value="csv">CSV &nbsp;<i class="fa fa-file-excel"></i></button>
               <% end %>
               <%if (check_can_download_pdf(@module_permission))%>
-                <button class="form-control btn btn-danger float-right mr-2 ml-3 mb-2" style="width:100px" title= "download crm pdf" name="pdf" type="submit" value="pdf" formtarget="_blank" style="width:160px">PDF &nbsp;<i class="fa fa-file-pdf"></i></button>
+                <div class="dropdown my-dropdown float-right mr-2">
+                  <button type="button" class="form-control bg-danger text-light">PDF List</button>
+                  <div class="dropdown-content my-dropdown-content p-1">
+                    <button class="form-control btn btn-danger float-right mr-2 ml-3 mb-2 mt-2" style="width:150px" title= "download crm pdf" name="pdf" type="submit" value="pdf" formtarget="_blank" style="width:160px">PDF &nbsp;<i class="fa fa-file-pdf"></i></button>
+                    <button class="form-control btn btn-danger float-right mr-2 ml-3 mb-2" style="width:150px" title= "With notes and follow ups" name="pdf_associated_data" type="submit" value="pdf_with_both" formtarget="_blank" style="width:160px">Both </button>
+                    <button class="form-control btn btn-danger float-right mr-2 ml-3 mb-2" style="width:150px" title= "With follow_ups" name="pdf_associated_data" type="submit" value="pdf_with_follow_ups" formtarget="_blank" style="width:160px">With Follow Ups</button>
+                    <button class="form-control btn btn-danger float-right mr-2 ml-3 mb-2" style="width:150px" title= "With notes" name="pdf_associated_data" type="submit" value="pdf_with_notes" formtarget="_blank" style="width:160px">With Notes</button>
+                  </div>
+                </div>
               <% end %>
-             
-
             </div>
           </div>
         <% end %>
@@ -394,6 +403,8 @@
            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
            '1 Year': [moment().subtract(1, 'years')],
+           '2 Year': [moment().subtract(2, 'years')],
+           '5 Year': [moment().subtract(5, 'years')],
            'This Month': [moment().startOf('month'), moment().endOf('month')],
            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
            'This Month Last Year': [moment().subtract(1, 'years').startOf('month'), moment().subtract(1, 'years').endOf('month')],

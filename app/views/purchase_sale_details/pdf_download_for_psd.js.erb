@@ -1,0 +1,3 @@
+$('.show-data').children().remove();
+$('.show-data').append("<%= escape_javascript(render partial: 'purchase_sale_details/house_scheme/pdf_download_for_psd', locals: { purchase_sale_detail: @purchase_sale_detail }) %>");
+$("#showdData").modal('show');

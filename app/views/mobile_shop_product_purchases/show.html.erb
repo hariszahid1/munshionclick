@@ -1,0 +1,92 @@
+<%@total_bil=0%>
+<%@total_am=0%>
+<%@total_dis=0%>
+<%@total_pro=0%>
+<%@total_discont=0%>
+
+    <div class="card shadow mb-4">
+        <!-- Card Header - Accordion -->
+        <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+          <h6 class="m-0 font-weight-bold text-primary"><h1> Detail</h1></h6>
+        </a>
+        <!-- Card Content - Collapse -->
+        <div class="collapse show" id="collapseCardExample" style="">
+          <div class="card-body">
+
+    <div class="row">
+            <div class="col-lg-12 col-sm-12">
+
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>order#:<h5><%= @purchase_sale_detail.voucher_id.to_s+'#'+@purchase_sale_detail.id.to_s %></h5></h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Customer:<h5><%= @purchase_sale_detail.sys_user.name rescue '' %></h5> </h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Total bill: <h5><%= @purchase_sale_detail.total_bill.to_f.round(2) rescue 0 %><%@total_bil += @purchase_sale_detail.total_bill.to_f.round(0) %></h5></h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>paid: <h5><%= @purchase_sale_detail.amount.to_f.round(2) rescue 0%><%@total_am += @purchase_sale_detail.amount.to_f.round(0) %></h5></h3>
+              </div>
+            </div>
+    </div>
+
+    <div class="row">
+            <div class="col-lg-12 col-sm-12">
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Items bought:<h5> <%= @purchase_sale_detail.purchase_sale_items.count rescue 0 %></h5></h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Discount: <h5><%= @purchase_sale_detail.discount_price.to_f.round(2) rescue 0%><%@total_dis += @purchase_sale_detail.discount_price.to_f.round(0) %></h5></h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Status: <h5><%= @purchase_sale_detail.status %></h5></h3>
+              </div>
+              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+                <h3>Date/Time: <h5>  <%if @purchase_sale_detail.created_at.strftime("%d%b%y")!=@purchase_sale_detail.updated_at.strftime("%d%b%y")%>
+                    <%= @purchase_sale_detail.created_at.present? ? @purchase_sale_detail.created_at.strftime("%d%b%y at %I:%M%p") : '' %> | <%= @purchase_sale_detail.updated_at.present? ? @purchase_sale_detail.updated_at.strftime("%d%b%y at %H:%M%p") : '' %>
+                  <%else%>
+                    <%= @purchase_sale_detail.created_at.present? ? @purchase_sale_detail.created_at.strftime("%d%b%y at %I:%M%p") : '' %>
+                  <%end%></h5></h3>
+              </div>
+            </div>
+    </div>
+    <br>
+<h3>Sale Details</h3>
+<br>
+    <div class="row">
+      <div class="col-lg-12 col-sm-12">
+          <table>
+            <th><h3>Item type</h3></th>
+            <th><h3>Quantity</h3></th>
+            <th><h3>Rate</h3></th>
+            <th><h3>Ammount</h3></th>
+            <th><h3>Date</h3></th>
+            <tbody>
+              <%if @purchase_sale_detail.purchase_sale_items_names_and_quantity!=0%>
+                <% @purchase_sale_detail.purchase_sale_items_names_and_quantity.each do |name_quantity|%>
+              <tr>
+                <td><%=name_quantity.first%></td>
+                <td><%=name_quantity.second%><% @total_pro += name_quantity.second %></td>
+                <td><%=name_quantity.third%></td>
+                <td><%=name_quantity.fourth%><% @total_discont += name_quantity.fourth if name_quantity.fourth.present? %></td>
+                <td><%=name_quantity.last.strftime("%d%b%y") if name_quantity.last.present?%></td>
+              </tr>
+              <%end%>
+            <%end%>
+            </tbody>
+          </table>
+
+            <div class="row">
+              <div class="col-lg-1 float-left">
+                <%= link_to mobile_shop_product_purchases_path do %>
+                <i class="fa fa-arrow-left " aria-hidden="true"></i>
+                <% end %>
+              </div>
+            </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+      </div>

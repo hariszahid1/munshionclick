@@ -1,0 +1,62 @@
+<html>
+  <head>
+    <style>
+      .border-bottom{
+        border-bottom: double 4px;
+      }
+      .text-center{
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <% @date = Date.today  %>
+    <% @time = DateTime.now %>
+    <% @time = Time.zone.now %>
+    <div>
+      <p class="border-bottom"></p>
+      <h1 class="text-center">CRM Users</h1>
+      <h1 class="text-center">
+        Date: <b><span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%></span>
+        Time: <span><%=@time.strftime("at %I:%M%p")%></span></b>
+      </h1>
+      <p class="border-bottom"></p>
+      <p class="text-center">Report by: <%=current_user.name%></p>
+    </div>
+    <div>
+      <table>
+        <thead class="lite-gray" style='font-size: 15px;'>
+          <th class="text-center">Client Name</th>
+          <th class="text-center">Short Details</th>
+          <th class="text-center">Project Name</th>
+          <th class="text-center">Client Number</th>
+          <th class="text-center">Follow Ups</th>
+        </thead>
+        <tbody>
+          <% @sys_users.each_with_index do |sys_user, index| %>
+            <tr style='font-size: 15px;'>
+              <td class="text-center"><%= sys_user.name %></td>
+              <td class="text-center"><%= sys_user.gst %></td>
+              <td class="text-center"><%= sys_user.cms_data.try(:[], 'project_name') %></td>
+              <td class="text-center"><%= sys_user.occupation %></td>
+              <td>
+                <table>
+                  <thead>
+                    <th>task type</th>
+                    <th>comment</th>
+                  </thead>
+                  <% sys_user.follow_ups.each_with_index do |fw, index| %>
+                    <tr>
+                      <td class="text-center"><%= fw&.task_type %></td>
+                      <td class="text-center"><%= fw&.comment %></td>
+                    </tr>
+                  <%end%>
+                </table>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

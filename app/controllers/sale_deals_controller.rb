@@ -2,14 +2,13 @@ class SaleDealsController < ApplicationController
   include PdfCsvGeneralMethod
   include SaleDealsHelper
 
-  before_action :set_sale_deal, only: %i[show edit update destroy]
+  before_action :set_sale_deal, only: %i[show edit update destroy approve_requested_deal]
   before_action :set_data, only: %i[new edit create update show index]
 
   # GET /sale_deals
   # GET /sale_deals.json
   def index
-    set_date_range if params[:q].present?
-    @q = PurchaseSaleDetail.includes(:sys_user, :purchase_sale_items).ransack(params[:q])
+    @q = PurchaseSaleDetail.includes(:sys_user, :purchase_sale_items).order('id desc').ransack(params[:q])
     download_sale_deals_pdf_file if params[:pdf].present?
     download_sale_deals_csv_file if params[:csv].present?
     @sale_deals = @q.result.where(transaction_type: 'SaleDeal').page(params[:page])
@@ -35,6 +34,8 @@ class SaleDealsController < ApplicationController
   # POST /sale_deals.json
   def create
     @sale_deal = PurchaseSaleDetail.new(sale_deal_params)
+    create_sys_user if params[:purchase_sale_detail][:sys_user_id].blank? &&
+                       params[:purchase_sale_detail][:sys_users].present?
 
     respond_to do |format|
       if @sale_deal.save
@@ -45,7 +46,7 @@ class SaleDealsController < ApplicationController
                                       purchase_sale_detail_id: @sale_deal.id, account_id: @sale_deal&.account_id)
         @ledger_book.save!
         format.js
-        format.html { redirect_to sale_deals_path, notice: 'Sale Deal was successfully created.' }
+        format.html { redirect_to sale_deals_path, notice: 'Please Take Approval from admin.' }
         format.json { render :show, status: :created, location: @sale_deal }
       else
         format.html { render :new }
@@ -57,6 +58,8 @@ class SaleDealsController < ApplicationController
   # PATCH/PUT /sale_deals/1
   # PATCH/PUT /sale_deals/1.json
   def update
+    return approve_requested_deal if params[:approve].present?
+
     respond_to do |format|
       @before_update_carriage_loading = @sale_deal.carriage + @sale_deal.loading
       if @sale_deal.update(sale_deal_params)
@@ -82,14 +85,28 @@ class SaleDealsController < ApplicationController
     end
   end
 
+  def requested
+    @requested = PurchaseSaleDetail.includes(:sys_user, :purchase_sale_items).where(transaction_type: 'SaleDeal', status: 'UnClear')
+  end
+
   private
 
   # Use callbacks to share common setup or constraints between actions.
   def set_sale_deal
-    @sale_deal = PurchaseSaleDetail.find(params[:id])
+    @sale_deal = PurchaseSaleDetail.includes(:sys_user, :purchase_sale_items).find(params[:id])
+  end
+
+  def create_sys_user
+    code = 'AGC-' + '%.4i' % (SysUser.maximum(:id).present? ? SysUser.maximum(:id).next : 1)
+    user = params[:purchase_sale_detail][:sys_users]
+    user_id = SysUser.create(name: user[:name], code: code, user_type_id: UserType.first.id, ntn: user[:ntn],
+                             for_crms: false, occupation: user[:occupation], cms_data: user[:cms_data])
+    @sale_deal[:sys_user_id] = user_id.id
   end
 
   def set_data
+    @project_name = @pos_setting.extra_settings.present? ? PosSetting.last.extra_settings['project_name']&.map(&:downcase) : []
+    @category = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['category']&.map(&:downcase) : []
     @staffs = Staff.all
     @sys_users = SysUser.all.where(for_crms: [false, nil])
     @accounts = Account.all
@@ -164,4 +181,10 @@ class SaleDealsController < ApplicationController
       end
     end
   end
+
+  def approve_requested_deal
+    @sale_deal.update(status: 'Clear')
+    redirect_to request.referrer, notice: 'Sale Deal was approved successfully.'
+  end
+
 end

@@ -1,0 +1,182 @@
+$("#show-analytics").html("<%= escape_javascript(render(:partial => "analytics"))%>");
+
+$( document ).ready(function() {
+  const ctx = document.getElementById('myChart');
+  var total_purchase_customer_name=$('#total_purchase_customer_name').val().split(' ')
+  var total_purchase_customer_amount=$('#total_purchase_customer_amount').val().split(' ')
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: total_purchase_customer_name,
+      datasets: [{
+        label: 'Total Amount',
+        data: total_purchase_customer_amount,
+        borderWidth: 1,
+      }],
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Total amount chart customer purchase/sale amount.',
+                font: {
+                  size: 16
+                }
+            }
+        }
+    }
+  });
+});
+
+$( document ).ready(function() {
+  const ctx = document.getElementById('myChart1');
+  var total_paid_customer_name=$('#total_paid_customer_name').val().split(' ')
+  var total_paid_customer_amount=$('#total_paid_customer_amount').val().split(' ')
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: total_paid_customer_name,
+      datasets: [{
+        label: 'Total Amount',
+        data: total_paid_customer_amount,
+        borderWidth: 1,
+      }],
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Total amount chart customer paid/recieved amounts',
+                font: {
+                  size: 16
+                }
+            }
+        }
+    }
+  });
+});
+
+$( document ).ready(function() {
+  const ctx = document.getElementById('myChart2');
+  var total_purchase_products_name=$('#total_purchase_products_name').val().split(' ')
+  var total_purchase_products_amount=$('#total_purchase_products_amount').val().split(' ')
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: total_purchase_products_name,
+      datasets: [{
+        label: 'Total Amount',
+        data: total_purchase_products_amount,
+        borderWidth: 1,
+      }],
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Total amount chart product purchase/sale amount.',
+                font: {
+                  size: 16
+                }
+            }
+        }
+    }
+  });
+});
+
+$( document ).ready(function() {
+  const ctx = document.getElementById('myChart3');
+  var total_purchase_customer_date=$('#total_purchase_customer_date').val().split(' ')
+  var total_purchase_customer_date_amount=$('#total_purchase_customer_date_amount').val().split(' ')
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: total_purchase_customer_date,
+      datasets: [{
+        label: 'Total Amount',
+        data: total_purchase_customer_date_amount,
+        borderWidth: 1,
+      }],
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Total amount chart product paid/recieved amounts date wise.',
+                font: {
+                  size: 16
+                }
+            }
+        }
+    }
+  });
+});
+
+$( document ).ready(function() {
+  const ctx = document.getElementById('myChart4');
+  var total_paid_customer_date=$('#total_paid_customer_date').val().split(' ')
+  var total_paid_customer_date_amount=$('#total_paid_customer_date_amount').val().split(' ')
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: total_paid_customer_date,
+      datasets: [{
+        label: 'Total Amount',
+        data: total_paid_customer_date_amount,
+        borderWidth: 1,
+      }],
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Total amount chart paid/recieved amount customer date wise.',
+                font: {
+                  size: 16
+                }
+            }
+        }
+    }
+  });
+});
+
+
+$( document ).ready(function() {
+  const ctx = document.getElementById('myChart5');
+  var total_purchase_product_date=$('#total_purchase_product_date').val().split(' ')
+  var total_purchase_product_date_amount=$('#total_purchase_product_date_amount').val().split(' ')
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: total_purchase_product_date,
+      datasets: [{
+        label: 'Total Items',
+        data: total_purchase_product_date_amount,
+        borderWidth: 1,
+      }],
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Total amount chart purchase/sale items date wise.',
+                font: {
+                  size: 16
+                }
+            }
+        }
+    }
+  });
+});

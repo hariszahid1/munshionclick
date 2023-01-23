@@ -8,20 +8,11 @@
         </button>
       </div>
       <div class="modal-body">
-
-        <div class="card">
+        <div class="card shadow">
           <ul class="list-group list-group-flush">
-            <li class="list-group-item">
-              <strong>Staff:</strong>
-              <%= @staff_deal.staff %>
-            </li>
-            <li class="list-group-item"> 
-              <strong>Product:</strong>
-              <%= @staff_deal.product %></li>
-            <li class="list-group-item">
-              <strong>Cost:</strong>
-              <%= @staff_deal.cost %>
-            </li>
+            <li class="list-group-item"><span class="float-left h5">Staff:</span><span class="float-right"><%= @staff_deal.staff %></span></li>
+            <li class="list-group-item"><span class="float-left h5">Products:</span><span class="float-right"><%= @staff_deal.product %></span>
+            <li class="list-group-item"><span class="float-left h5">Cost:</span><span class="float-right"><%= @staff_deal.cost %></span>       
           </ul>
         </div>
       </div>

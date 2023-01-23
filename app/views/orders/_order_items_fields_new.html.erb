@@ -38,11 +38,12 @@
           <%= f.text_field :discount_price,step: :any,class:'discount-price', hide_label: true,placeholder: :discount,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()"%>
           </div>
           <div class="col-lg-2 form-group float-left text-xs font-weight-bold text-danger text-uppercase">
-            <%= link_to_remove_association f do %>
-              <i class="fa fa-minus-circle"></i> Drop
+            <% if check_can_delete(@module_permission) || params[:action].eql?("new")%>
+              <%= link_to_remove_association f do %>
+                <i class="fa fa-minus-circle"></i> Drop
+              <% end %>
+              <span class="span-line text-danger">1</span>
             <% end %>
-            <span class="span-line text-danger">1</span>
-
           </div>
 
 

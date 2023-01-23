@@ -1,0 +1,42 @@
+<% if @purchase_sale_detail.order%>
+  <div class="col-xl-12 col-md-12 mb-12">
+    <div class="card border-left-primary shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="row">
+              <div class="col-lg-6 form-group float-left font-weight-bold ">
+                <h2><%= (params[:transaction_type].present? or  @purchase_sale_detail.order.transaction_type=='Sale') ? "Order/Booking Detail # "+@purchase_sale_detail.order.id.to_s : "Purchase Order/Booking Detail # "+@purchase_sale_detail.order.id.to_s%></h2>
+              </div>
+              <div class="col-lg-2 form-group float-left font-weight-bold ">
+                Total Bill<h2> <%=@purchase_sale_detail.order.total_bill.to_i%></h2>
+              </div>
+              <div class="col-lg-2 form-group float-left font-weight-bold ">Paid <h2> <%=@purchase_sale_detail.order.amount.to_i%></h2></div>
+              <div class="col-lg-2 form-group float-left font-weight-bold ">Customer Balance <h2> <%=@purchase_sale_detail.order.sys_user.balance.to_i%></h2></div>
+              </div>
+              <div class="row">
+                <%if @purchase_sale_detail.order.order_items_names_and_quantity!=0%>
+                    <%@purchase_sale_detail.order.order_items_names_and_quantity.each do |name_quantity|%>
+                    <div class="col-lg-4 form-group float-left font-weight-bold ">
+                    </div>
+                    <div class="col-lg-2 form-group float-left font-weight-bold ">
+                      <%=name_quantity.first%>
+                    </div>
+                    <div class="col-lg-2 form-group float-left font-weight-bold ">
+                      <%=name_quantity.second%>
+                    </div>
+                    <div class="col-lg-2 form-group float-left font-weight-bold ">
+                      <%=name_quantity.third%>
+                    </div>
+                    <div class="col-lg-2 form-group float-left font-weight-bold ">
+                      <%=name_quantity.fourth%>
+                    </div>
+                    <%end%>
+                <%end%>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<%end%>  

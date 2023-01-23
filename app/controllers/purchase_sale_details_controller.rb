@@ -1,5 +1,5 @@
 class PurchaseSaleDetailsController < ApplicationController
-  before_action :set_purchase_sale_detail, only: [:show, :edit, :update, :destroy]
+  before_action :set_purchase_sale_detail, only: [:pdf_download_for_psd, :show, :edit, :update, :destroy]
   before_action :check_access
   before_action :set_user, only: %i[new edit]
   # GET /purchase_sale_details
@@ -626,7 +626,6 @@ class PurchaseSaleDetailsController < ApplicationController
     else
       @purchase_sale_detail.purchase_sale_items.build
     end
-    @purchase_sale_detail.follow_ups.build
     @suppliers=SysUser.where(:user_group=>['Supplier','Both','Own'])
     @customers=SysUser.where(:user_group=>['Customer','Both','Salesman'])
     @items=Item.all
@@ -1162,6 +1161,13 @@ class PurchaseSaleDetailsController < ApplicationController
     @total_paid_customer_date = @q.result.group("date(purchase_sale_details.created_at)").sum(:amount)
     @total_purchase_product_date = @q.result.group("date(purchase_sale_details.created_at)").sum('purchase_sale_items.quantity')
 
+    respond_to do |format|
+      format.js
+    end
+
+  end
+
+  def pdf_download_for_psd
     respond_to do |format|
       format.js
     end

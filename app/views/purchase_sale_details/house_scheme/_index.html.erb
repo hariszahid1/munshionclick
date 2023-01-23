@@ -290,6 +290,17 @@
                           <%end %>
 
                       </div>
+                      <% if purchase_sale_detail.purchase_sale_images.present?%>
+                        <div class="my-icon my-view">
+                          <div class="my-tooltip">
+                            Pdf Download
+                          </div>
+                            <%= link_to pdf_download_for_psd_path(id: purchase_sale_detail.id), class:"icon-div", remote: true do %>
+                              <i class="fa fa-download mt-2" aria-hidden="true"></i>
+                            <%end %>
+
+                        </div>
+                      <%end %>
                       <div class="my-icon my-view">
                         <div class="my-tooltip">
                           PDF
@@ -436,7 +447,7 @@
     <% end %>
   </div>  
 </div>
-
+<div class='show-data'></div>
 
 
 <script>

@@ -20,7 +20,11 @@ class SalariesController < ApplicationController
     if @q.result.count > 0
       @q.sorts = 'id desc' if @q.sorts.empty?
     end
-    @salaries = @q.result.page(params[:page])
+    
+    @options_for_select = PropertyPlan.all
+    @custom_pagination = params[:limit].present? ? params[:limit] : 25
+    @custom_pagination = @pos_setting.custom_pagination['salaries'] if @pos_setting&.custom_pagination.present? && @pos_setting&.custom_pagination['salaries'].present?
+    @salaries = @q.result.page(params[:page]).per(@custom_pagination)
     if params[:submit_pdf].present?
       request.format = 'pdf'
     end

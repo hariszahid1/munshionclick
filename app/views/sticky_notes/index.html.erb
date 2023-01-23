@@ -1,0 +1,181 @@
+<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css"/>
+<div class="card border-radius-1 shadow p-3 mb-3" style='width: 100%; z-index: 1;'>
+  <h3>Sticky Notes</h3>
+  <div class='d-flex'>
+    <button class="btn btn-success addNewNote">
+      <i class="fa fa-plus mr-2"></i>
+      Create
+    </button>
+    <button class='btn btn-warning zoomIn ml-auto mr-3' onclick="zoomin()">+</button>
+    <button class='btn btn-danger zoomOut' onclick="zoomout()">-</button>
+  </div>
+</div>
+<div style=''>
+  <div style='position: relative; height: 100vh;' id ='notesContainer'>
+    <% @sticky_notes.each do |sn| %>
+      <div
+        style="left:<%= sn.x_pos %>px;
+              top: <%= sn.y_pos %>px;
+              background-color: <%= sn.color_code %>;
+              position: absolute;
+              height: <%= sn.height %>px;
+              width: <%= sn.width %>px;"
+        class='sticky-note card shadow p-2'
+        data-id=<%= sn.id %>
+      >
+        <input type='text' class='titleInput' value="<%= sn.title %>">
+        <textarea class='contentInput' rows="<%= (sn.height.to_i / 20).to_i %>"><%= sn.content %></textarea>
+        <div class='text-right mt-2'>
+          <span class="options-icon text-center mr-2 cursor-pointer delete-note">
+            <i class="fa fa-trash mt-1" aria-hidden="true"></i>
+          </span>
+          <span class="options-icon text-center mr-2">
+            <div class='pop-over-colors p-2'>
+              <div class='row'>
+                <div class='col-4'><button value='#ff8080' class='first-color color-update'></button></div>
+                <div class='col-4'><button value='#80ff80' class='second-color color-update'></button></div>
+                <div class='col-4'><button value='#7afcff' class='third-color color-update'></button></div>
+                <div class='col-4'><button value='#feff9c' class='forth-color color-update'></button></div>
+                <div class='col-4'><button value='#fff980' class='fifth-color color-update'></button></div>
+                <div class='col-4'><button value='#8080ff' class='sixth-color color-update'></button></div>
+              </div>
+            </div>
+            <i class="fa fa-ellipsis-v mt-1" aria-hidden="true"></i>
+          </span>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<script>
+var zoom_val = 1
+
+function zoomin(){
+  if (zoom_val < 1.5){
+    zoom_val = zoom_val + 0.1
+    document.getElementById("notesContainer").style.transform = "scale("+zoom_val+")";
+  }
+  else{
+    alert("You can't zoom in more!")
+  }
+}
+
+function zoomout(){
+  if (zoom_val > 0.1){
+    zoom_val = zoom_val - 0.1
+    document.getElementById("notesContainer").style.transform = "scale("+zoom_val+")";
+  }
+  else{
+    alert("You can't zoom out more!")
+  }
+}
+
+  $(document).ready(function(){
+    $(".sticky-note").resizable({
+      stop: function(event, ui) {
+        var height = ui.size.height;
+        var width = ui.size.width;
+        var textAreaRows = Math.round(height / 20);
+        $(this).find(".contentInput").attr("rows", textAreaRows);
+        var noteId = $(this).data("id")
+        var data = {height: height, width: width}
+        update_call(noteId, data)
+      }
+    });
+
+    $(".sticky-note").draggable({
+      containment: $('.selector').parent(), scroll:true,
+      cancel: null,
+      stop: function(event, ui) {
+        var noteId = $(this).data("id");
+        var xPos = ui.position.left;
+        var yPos = ui.position.top;
+        var title = $(this).find('.titleInput').val()
+        var content = $(this).find('.contentInput').val()
+        var data = { x_pos: xPos, y_pos: yPos, title: title, content: content }
+        update_call(noteId, data)
+      }
+    });
+
+    $('#notesContainer').on("dblclick", '.titleInput, .contentInput', function() {
+      $(this).focus();
+    });
+
+    $('#notesContainer').on('focusout', '.titleInput', function(){
+      var noteId = $(this).closest('.sticky-note').data("id")
+      var data = {title: $(this).val()}
+      update_call(noteId, data)
+    })
+
+    $('#notesContainer').on('focusout', '.contentInput', function(){
+      var noteId = $(this).closest('.sticky-note').data("id")
+      var data = {content: $(this).val()}
+      update_call(noteId, data)
+    })
+
+    $('.addNewNote').on('click', async function(){
+        await $.ajax({
+          type: "POST",
+          url: '/sticky_notes',
+          success: function(response) {
+            var new_elem = "<div style='left: 0px; top: 0px; position: absolute; background-color: #feff9c; height: 150px; width: 300px;' class='sticky-note card shadow' data-id="+response.data.id+"><input type='text' class='titleInput' value='Title'><textarea rows='2' class='contentInput'>Content</textarea><div class='text-right mt-2'><span class='options-icon text-center mr-2 cursor-pointer delete-note'><i class='fa fa-trash mt-1' aria-hidden='true'></i></span><span class='options-icon text-center mr-2'><div class='pop-over-colors p-2'><div class='row'><div class='col-4'><button value='#ff8080' class='first-color color-update'></button></div><div class='col-4'><button value='#80ff80' class='second-color color-update'></button></div><div class='col-4'><button value='#7afcff' class='third-color color-update'></button></div><div class='col-4'><button value='#feff9c' class='forth-color color-update'></button></div><div class='col-4'><button value='#fff980' class='fifth-color color-update'></button></div><div class='col-4'><button value='#8080ff' class='sixth-color color-update'></button></div></div></div><i class='fa fa-ellipsis-v mt-1' aria-hidden='true'></i></span></div></div>"
+            $('#notesContainer').append(new_elem)
+            },
+          error: function(error) {
+            console.log(error);
+          }
+        });
+      $(".sticky-note").draggable({
+        containment: $('.selector').parent(), scroll:true,
+        cancel: null,
+        stop: function(event, ui) {
+          var noteId = $(this).data("id");
+          var xPos = ui.position.left;
+          var yPos = ui.position.top;
+          var title = $(this).find('.titleInput').val()
+          var content = $(this).find('.contentInput').val()
+          var data = { x_pos: xPos, y_pos: yPos, title: title, content: content }
+          update_call(noteId, data)
+        }
+      });
+
+      $(".sticky-note").resizable({
+        stop: function(event, ui) {
+          var height = ui.size.height;
+          var width = ui.size.width;
+          var textAreaRows = Math.round(height / 20);
+          $(this).find(".contentInput").attr("rows", textAreaRows);
+          var noteId = $(this).data("id")
+          var data = {height: height, width: width}
+          update_call(noteId, data)
+        }
+      });
+
+    })
+
+    $('#notesContainer').on('click', '.color-update', function(){
+      var noteId = $(this).closest('.sticky-note').data("id")
+      var data = {color_code: $(this).val()}
+      update_call(noteId, data)
+      $(this).closest('.sticky-note').css("background-color", $(this).val());
+    })
+
+    $('#notesContainer').on('click', '.delete-note', function(){
+      var noteId = $(this).closest('.sticky-note').data("id")
+      $.ajax({
+        type: "DELETE",
+        url: "/sticky_notes/" + noteId,
+      });
+      $(this).closest('.sticky-note').addClass('d-none');
+    })
+
+    function update_call(id, data){
+      $.ajax({
+        type: "PATCH",
+        url: "/sticky_notes/" + id,
+        data: data
+      });
+    }
+  })
+</script>

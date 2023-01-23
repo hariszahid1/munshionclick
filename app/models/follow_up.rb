@@ -24,6 +24,7 @@ class FollowUp < ApplicationRecord
     orders: 'Order',
     purchase_sale_details: 'PurchaseSaleDetail',
     sale_deals: 'SaleDeal',
-    order_sales: 'Order'
+    order_sales: 'Order',
+    order_purchases: 'Order'
   }, _prefix: true
 end

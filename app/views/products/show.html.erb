@@ -7,91 +7,28 @@
     <!-- Card Content - Collapse -->
     <div class="collapse show" id="collapseCardExample" style="">
       <div class="card-body">
-
-<div class="row">
-        <div class="col-lg-12 col-sm-12">
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3 class="row no-gutters align-items-center">Id:<h5><%= @product.id %></h5></h3>
-          </div>
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Title:<h5><%= @product.title %></h5></h3>
-          </div>
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Item type:<h5><%= @product.item_type.title %></h5> </h3>
-          </div>
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Code:<h5><%= @product.code %></h5></h3>
-          </div>
+      <div class="card">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item mb-2"><span class="float-left h5">ID:</span><span class="float-right"><%= @product.id %></span></li>
+            <li class="list-group-item mb-2"><span class="float-left h5">Title:</span><span class="float-right"><%= @product.title %></span></li>
+            <li class="list-group-item mb-2"><span class="float-left h5">Item Type:</span><span class="float-right"><%= @product.item_type&.title %></span></li>
+            <li class="list-group-item mb-2"><span class="float-left h5">Code:</span><span class="float-right"><%= @product.code %></span></li>
+            <li class="list-group-item mb-2"><span class="float-left h5">Product Category:</span><span class="float-right"><%= @product.product_category&.title%></span></li>
+            <li class="list-group-item mb-2"><span class="float-left h5">Product Sub-Category:</span><span class="float-right"><%= @product.product_sub_category&.title %></span></li>
+            <li class="list-group-item mb-2"><span class="float-left h5">Acquire Type:</span><span class="float-right"><%= @product.acquire_type %></span></li>
+            <li class="list-group-item mb-2"><span class="float-left h5">Purchase Factor:</span><span class="float-right"><%= @product.purchase_factor %></span></li>
+            <li class="list-group-item mb-2"><span class="float-left h5">Cost:</span><span class="float-right"><%= @product.cost %></span></li>
+            <li class="list-group-item mb-2"><span class="float-left h5">Sale:</span><span class="float-right"><%= @product.sale %></span></li>
+            <li class="list-group-item mb-2"><span class="float-left h5">MIN:</span><span class="float-right"><%= @product.minimum %></span></li>
+            <li class="list-group-item mb-2"><span class="float-left h5">MAX:</span><span class="float-right"></span><%= @product.maximum %></li>
+            <li class="list-group-item mb-2"><span class="float-left h5">Currency:</span><span class="float-right"><%= @product.currency %></span></li>
+            <li class="list-group-item mb-2"><span class="float-left h5">Vat:</span><span class="float-right"><%= @product.vat %></span></li>
+            <li class="list-group-item mb-2"><span class="float-left h5">Gst:</span><span class="float-right"><%= @product.gst %></span></li>
+            <li class="list-group-item mb-2"><span class="float-left h5">Hst:</span><span class="float-right"><%= @product.hst %></span></li>
+            <li class="list-group-item mb-2"><span class="float-left h5">Pst:</span><span class="float-right"><%= @product.pst %></span></li>
+            <li class="list-group-item mb-2"><span class="float-left h5">Qst:</span><span class="float-right"><%= @product.qst %></span></li>
+          </ul>
         </div>
-</div>
-
-<div class="row">
-        <div class="col-lg-12 col-sm-12">
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Product category: <h5><%= @product.product_category.title rescue 'nil'%></h5></h3>
-          </div>
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Product sub-category:<h5><%= @product.product_sub_category.title rescue 'nil' %></h5></h3>
-          </div>
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Acquire Type:<h5><%= @product.acquire_type %></h5> </h3>
-          </div>
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Purchase Factor:<h5><%= @product.purchase_factor %></h5></h3>
-          </div>
-        </div>
-</div>
-
-<div class="row">
-        <div class="col-lg-12 col-sm-12">
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Cost:<h5><%= @product.cost %></h5></h3>
-          </div>
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Sale:<h5><%= @product.sale %></h5></h3>
-          </div>
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>MIN:<h5><%= @product.minimum %></h5> </h3>
-          </div>
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>MAX:<h5><%= @product.maximum %></h5></h3>
-          </div>
-        </div>
-</div>
-
-<div class="row">
-        <div class="col-lg-12 col-sm-12">
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Currency:<h5><%= @product.currency %></h5></h3>
-          </div>
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Code:<h5><%= @product.code %></h5></h3>
-          </div>
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Sale:<h5><%= @product.sale %></h5></h3>
-          </div>
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Vat:<h5><%= @product.vat %></h5></h3>
-          </div>
-        </div>
-</div>
-
-<div class="row ">
-        <div class="col-lg-12 col-sm-12">
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Gst:<h5><%= @product.gst %></h5></h3>
-          </div>
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Hst:<h5><%= @product.hst %></h5></h3>
-          </div>
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Pst:<h5><%= @product.pst %></h5></h3>
-          </div>
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Qst:<h5><%= @product.qst %></h5></h3>
-          </div>
-        </div>
-</div>
         <div class="row">
           <div class="col-lg-1 float-left">
             <%= link_to products_path do %>
@@ -99,8 +36,7 @@
             <% end %>
           </div>
         </div>
-        <img width="150px" height="115px" class="figure" style=""src=<%="data:image/svg+xml;base64,"+@str%> ></img>
-
+        <img width="150px" height="115px" class="figure" style=""src=<%="data:image/svg+xml;base64,"+@str%> />
       </div>
     </div>
   </div>

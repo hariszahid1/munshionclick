@@ -3,76 +3,30 @@
     <div class="card shadow mb-4">
         <!-- Card Header - Accordion -->
         <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
-          <h6 class="m-0 font-weight-bold text-primary"><h1>Raw product Details</h1></h6>
+          <h6 class="m-0 font-weight-bold text-primary"><h1>Raw Product Details</h1></h6>
         </a>
         <!-- Card Content - Collapse -->
         <div class="collapse show" id="collapseCardExample" style="">
           <div class="card-body">
-
-    <div class="row"> 
-            <div class="col-lg-12 col-sm-12">
-              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-                <h3>Id:<h5> <%= @item.id %></h5></h3>
-              </div>
-              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-                <h3>Code:<h5><%= @item.code %></h5></h3>
-              </div>
-              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-                <h3>Item Type:<h5><%= @item.item_type.title %></h5></h3>
-              </div>
-              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-                <h3>Title:<h5><%= @item.title %></h5> </h3>
-              </div>
-            </div>
-    </div>
-
-    <div class="row">
-            <div class="col-lg-12 col-sm-12">
-              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-                <h3>Status: <h5><%= @item.status %></h5></h3>
-              </div>
-              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-                <h3>MIN:<h5><%= @item.minimum %></h5></h3>
-              </div>
-              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-                <h3>Optimal:<h5><%= @item.optimal %></h5> </h3>
-              </div>
-              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-                <h3>MAX:<h5><%= @item.maximun %></h5></h3>
-              </div>
-            </div>
-    </div>
-
-    <div class="row">
-            <div class="col-lg-12 col-sm-12">
-              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-                <h3>Stock:<h5><%= @item.stock %></h5></h3>
-              </div>
-              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-                <h3>Cost:<h5><%= @item.cost %></h5></h3>
-              </div>
-              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-                <h3>Sale:<h5><%= @item.sale %></h5></h3>
-              </div>
-              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-                <h3>Purchase type:<h5><%= @item.purchase_type %></h5></h3>
-              </div>
-            </div>
-    </div>
-
-    <div class="row">
-            <div class="col-lg-12 col-sm-12">
-              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-                <h3>Quantity type:<h5><%= @item.quantity_type %></h5></h3>
-              </div>
-              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-                <h3>Weight type:<h5><%= @item.weight_type %></h5></h3>
-              </div>
-              <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-                <h3>Measurement quantity:<h5><%= @item.measurement_quantity %></h5></h3>
-              </div>
-            </div>
-    </div>
+          <div class="card">
+             <ul class="list-group list-group-flush">
+                <li class="list-group-item mb-2"><span class="float-left h5">ID:</span><span class="float-right"><%= @item.id %></span></li>
+                <li class="list-group-item mb-2"><span class="float-left h5">Code:</span><span class="float-right"><%= @item.code %></span></li>
+                <li class="list-group-item mb-2"><span class="float-left h5">Item Type:</span><span class="float-right"><%= @item.item_type.title %></span></li>
+                <li class="list-group-item mb-2"><span class="float-left h5">Title:</span><span class="float-right"><%= @item.title %></span></li>
+                <li class="list-group-item mb-2"><span class="float-left h5">Status:</span><span class="float-right"><%= @item.status %></span></li>
+                <li class="list-group-item mb-2"><span class="float-left h5">MIN:</span><span class="float-right"><%= @item.minimum %></span></li>
+                <li class="list-group-item mb-2"><span class="float-left h5">Optimal:</span><span class="float-right"><%= @item.optimal %></span></li>
+                <li class="list-group-item mb-2"><span class="float-left h5">MAX:</span><span class="float-right"><%= @item.maximun %></span></li>
+                <li class="list-group-item mb-2"><span class="float-left h5">Stock:</span><span class="float-right"><%= @item.stock %></span></li>
+                <li class="list-group-item mb-2"><span class="float-left h5">Cost:</span><span class="float-right"><%= @item.cost %></span></li>
+                <li class="list-group-item mb-2"><span class="float-left h5">Sale:</span><span class="float-right"><%= @item.sale %></span></li>
+                <li class="list-group-item mb-2"><span class="float-left h5">Purchase Type:</span><span class="float-right"><%= @item.purchase_type %></span></li>
+                <li class="list-group-item mb-2"><span class="float-left h5">Quantity Type:</span><span class="float-right"><%= @item.quantity_type %></span></li>
+                <li class="list-group-item mb-2"><span class="float-left h5">Weight Type:</span><span class="float-right"><%= @item.weight_type %></span></li>
+                <li class="list-group-item "><span class="float-left h5">Measurement Quantity:</span><span class="float-right"><%= @item.measurement_quantity %></span></li>
+             </ul>
+          </div>
             <div class="row">
               <div class="col-lg-1 float-left">
                 <%= link_to products_path do %>

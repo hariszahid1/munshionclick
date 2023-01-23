@@ -2,31 +2,24 @@
 <input class="form-control" type="hidden" value=<%=service_charges%> name="order_extra_charges" id="order_extra_charges">
 <%if pos_setting_sys_type!="FastFood"%>
   <div class="col-xl-12 col-md-12 mb-12">
-    <div class="card border-left-primary shadow h-100 py-2">
-      <div class="card-body">
-        <div class="row no-gutters align-items-center">
-          <div class="col mr-2">
-            <div class="row">
-              <div class="col-lg-4 form-group float-left">
-                <div class="col-lg-3 form-group float-left font-weight-bold ">
-                  <%= link_to new_order_purchase_path(transaction_type: :purchase, with_gst: true,product: true), class: "btn btn-success col-lg-12" do %>
-                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                    with GST
-                  <% end %>
-                </div>
-                <%if pos_setting_sys_type=="HousingScheme"%>
-                  <h1><%="Purchase Booking Detail"%></h1>
-                <% else%>
-                  <h1><%="Purchase Order Detail"%></h1>
-                <% end%>
-              </div><hr>
-              <div class="col-lg-2 form-group float-left font-weight-bold ">Total Bill  <h1 class="purchase_sale_detail_total_bill">0.00</h1></div>
-              <div class="col-lg-2 form-group float-left font-weight-bold ">Total       <h1 class="purchase_sale_discount_amount">0.00</h1></div>
-              <div class="col-lg-2 form-group float-left font-weight-bold ">Remaning    <h1 class="purchase_sale_detail_amount">0.00</h1></div>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="row d-flex justify-content-center"> 
+      <% product = params[:product].present? ? 'true' : '' %>
+      <%= link_to new_order_purchase_path(transaction_type: :purchase, with_gst: true, product: product),class: "btn btn-info mr-3 pt-3", style:"width: 140px;" do %>
+        <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+        with GST
+      <% end %>
+      <h2>
+        <%if pos_setting_sys_type=="HousingScheme"%>
+          <h1><%= params[:transaction_type].present? ? "Booking Detail" : "Purchase Booking Detail"%></h1>
+        <% else%>
+          <h1><%= params[:transaction_type].present? ? "Sale Order Detail" : "Purchase Order Detail"%></h1>
+        <% end%>
+      </h2>
+    </div>
+    <div class="row d-flex justify-content-center mt-4 mb-3">
+      <div class="float-left font-weight-bold card border-radius-1 align-items-center shadow mr-2" style="width: 200px;">Total Bill <h2 class="purchase_sale_detail_total_bill">0.00</h2></div>
+      <div class="float-left font-weight-bold card border-radius-1 align-items-center shadow mr-2" style="width: 200px;">Total <h2 class="purchase_sale_discount_amount">0.00</h2></div>
+      <div class="float-left font-weight-bold card border-radius-1 align-items-center shadow mr-2" style="width: 200px;">Remaning <h2 class="purchase_sale_detail_amount">0.00</h2></div>
     </div>
   </div>
 <%end%>

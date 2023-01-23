@@ -310,11 +310,6 @@ function serail_number_validation(e,value){
 }
 function save_sale()
 {
-  var serial_fields = $('.serial_no');
-  for(var i = 0; i < serial_fields.length; i++){
-    var value = $.trim($(serial_fields[i]).val());
-    $(serial_fields[i]).val(value);
-  }
   return_type=true;
   if($("#pos_setting_sys_type").val()!="HousingScheme")
   {
@@ -1498,13 +1493,13 @@ function adjustmentKhakarUpdate(val){
   for (i = 0; i < $(".rate").length; i++) {
     if(!isNaN(parseFloat($(".rate")[i].value)) )
     {
-      wage_debit = Math.round($('.quantity')[i].value*($('.rate')[i].value/1000)/10)*10;
+      wage_debit = Math.round($('.quantity')[i].value*($('.rate')[i].value/1000)/100)*100;
       $('.wage_debit')[i].value = wage_debit;
       $("span.wage_debit_span")[i].innerText = wage_debit;
       total_wage_detail += wage_debit;
     }
   }
-  $('#total_wage').text(Math.ceil(total_wage_detail/100)*10);
+  $('#total_wage').text(Math.ceil(total_wage_detail/100)*100);
   $('#user_created_at_gteq').val( $('#created_at_gteq').val() );
   $('#user_created_at_lteq').val( $('#created_at_lteq').val() );
 }
@@ -1910,7 +1905,7 @@ function set_return_sale_total(value){
 
 
 function price_in_words(price,position) {
-  price = parseFloat(price);
+  price = parseInt(price);
 
   var sglDigit = ["Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"],
     dblDigit = ["Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"],

@@ -12,8 +12,8 @@ class OrderInwardsController < ApplicationController
   # GET /order_inwards.json
   def index
     date_search
-    @q = Order.joins(:sys_user, order_items: :product).includes(:sys_user, order_items: :product).where(transaction_type: 'Inward').ransack(params[:q])
-    @orders = @q.result.order('orders.created_at desc').page(params[:page])
+    @q = Order.includes(:sys_user, order_items: :product).where(transaction_type: 'Inward').ransack(params[:q])
+    @orders = @q.result.distinct.order('orders.created_at desc').page(params[:page])
     @pdf_orders = @q.result
     @order_inward_total = Order.joins(:order_items).includes(:order_items).group('orders.id').sum('order_items.quantity')
     @order_inward_purchase_item_total = Order.joins(purchase_sale_details: :purchase_sale_items).includes(purchase_sale_details: :purchase_sale_items).group('orders.id').sum('purchase_sale_items.size_9')

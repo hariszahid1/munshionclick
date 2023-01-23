@@ -23,11 +23,11 @@
     <tbody>
       <% @products.each do |product| %>
       <tr>
-        <td><%= product.item_type.title rescue 'nil'%></td>
-        <td><%= product.code rescue 'nil'%></td>
-        <td><%= product.title rescue 'nil'%></td>
-        <td><%= product.product_category.title rescue 'nil'%></td>
-        <td><%= product.product_sub_category.title rescue 'nil'%></td>
+        <td><%= product.item_type&.title%></td>
+        <td><%= product.code%></td>
+        <td><%= product.title%></td>
+        <td><%= product.product_category&.title%></td>
+        <td><%= product.product_sub_category&.title%></td>
         <td><%= product.sale.to_f.round(20) %></td>
         <td><%= (product.sale.to_f/225).round(2) %></td>
         <td><%= (product.sale.to_f.round(2)*(product.marla.to_f+(product.square_feet.to_f/225))).to_f.round(2) %></td>
@@ -42,15 +42,15 @@
               <br>
               <%if booking&.status!='Cancel'%>
                 <b>Name:</b> <%=booking.sys_user.name%>
-                <%=booking.sys_user.ledger_books.pluck('SUM(debit)','SUM(credit)').map { |sys| "<br> <b>Total:</b> "+sys.first.to_s+" <b>Paid:</b> "+sys.second.to_s+" <b>In %</b> "+((sys.second/sys.first)*100).round(2).to_s+" <br><b>Remaning:</b> "+(sys.first.to_i-sys.second.to_i).to_s+" <b>Commission:</b> "+token&.carriage.to_s+"<b> In % </b>"+((token&.carriage.to_f/sys.first)*100).round(2).to_s}.join(',').html_safe%>
+                <%=booking.sys_user&.ledger_books&.pluck('SUM(debit)','SUM(credit)').map { |sys| "<br> <b>Total:</b> "+sys.first.to_s+" <b>Paid:</b> "+sys.second.to_s+" <b>In %</b> "+((sys.second.to_f/sys.first.to_f)*100).round(2).to_s+" <br><b>Remaning:</b> "+(sys.first.to_i-sys.second.to_i).to_s+" <b>Commission:</b> "+token&.carriage.to_s+"<b> In % </b>"+((token&.carriage.to_f/sys.first.to_f)*100).round(2).to_s}.join(',').html_safe%>
                 <%=booking.sys_user.contact.phone_with_comma%>
                 <%= ("<br><b>Last Payment Date: </b>"+booking&.sys_user&.ledger_books&.last&.created_at&.strftime("%d%b%y at %I:%M%p")).html_safe if booking.present?%>
               <%else%>
                 <span>
                   <b>Booking-Canceled</b>
                   <b>Name:</b> <%=booking.sys_user.name%>
-                  <%=booking.sys_user.ledger_books.pluck('SUM(debit)','SUM(credit)').map { |sys| "<br> <b>Total:</b> "+sys.first.to_s+" <b>Paid:</b> "+sys.second.to_s+" <b>In %</b> "+((sys.second/sys.first)*100).round(2).to_s+"<br><b>Remaning:</b> "+(sys.first.to_i-sys.second.to_i).to_s+" <b>Commission:</b> "+token&.carriage.to_s+"<b> In % </b>"+((token&.carriage.to_f/sys.first)*100).round(2).to_s}.join(',').html_safe%>
-                  <%=booking.sys_user.contact.phone_with_comma%>
+                  <%=booking.sys_user&.ledger_books&.pluck('SUM(debit)','SUM(credit)').map { |sys| "<br> <b>Total:</b> "+sys.first.to_s+" <b>Paid:</b> "+sys.second.to_s+" <b>In %</b> "+((sys.second.to_f/sys.first.to_f)*100).round(2).to_s+"<br><b>Remaning:</b> "+(sys.first.to_i-sys.second.to_i).to_s+" <b>Commission:</b> "+token&.carriage.to_s+"<b> In % </b>"+((token&.carriage.to_f/sys.first.to_f)*100).round(2).to_s}.join(',').html_safe%>
+                  <%=booking.sys_user&.contact&.phone_with_comma%>
                   <%= ("<br><b>Last Payment Date: </b>"+booking&.sys_user&.ledger_books&.last&.created_at&.strftime("%d%b%y at %I:%M%p")).html_safe if booking.present?%>
                   <b>Booking-Canceled</b>
                 </span>
@@ -69,7 +69,7 @@
         <td><h5></h5></td>
         <td><h5></h5></td>
         <td><h5></h5></td>
-        <td><h5><%=@product_price.to_f.round(2)%></h5></td>
+        <td><h5><%= number_with_delimiter @product_price.to_f.round(2)%></h5></td>
         <td><h5>Marla: <%=@total_marla%>Square Feet: <%=@total_square_feet%></h5></td>
         <td><h5></h5></td>
 

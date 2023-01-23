@@ -5,56 +5,86 @@
   </button>
 </div>
 <div class="m-4">
-<div class="main-content-header">
-  <h1 class="ml-2">Ledger Book</h1>
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item">
-      <a href="<%= root_path %>">Dashboard</a>
-    </li>
-    <li class="breadcrumb-item active">
-      <a href="<%= ledger_books_path %>">Ledger Book</a>
-    </li>
-  </ol>
-</div>
-
-<div class="row d-flex mb-5 mt-2 ml-1">
-  <%if (check_can_create(@module_permission))%>
-    <div>
-        <%= link_to new_ledger_book_path(Sjama: true), class: "btn btn-primary mr-2" do %>
-          <i class="fa fa-plus" aria-hidden="true"></i>
-          Jama/Credit
-        <% end %>
-          <%= link_to new_ledger_book_path(Sbenam: true), class: "btn btn-danger" do %>
-            <i class="fa fa-plus" aria-hidden="true"></i>
-              Benam/Debit
-          <% end %>
-    </div>
-  <% end %>
-  <%if (check_can_create(@module_permission))%>
-    <div class='ml-2'>
-       <%= link_to transfer_ledger_books_path, class: "btn btn-warning" do %>
-          <i class="fa fa-credit-card" aria-hidden="true"></i>
-          Payment Transfer
-        <% end %>
-    </div>
-  <% end %>
-</div>
-<div class="float-right">
-  <div class="dropdown ml-auto mr-4">
-    <span class="btn btn-info" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
-      <div class="dropdown-content">
-          <% if @help.present? %>
-          <% @help&.help_links.each do |link| %>
-          <a type="button" class="" target="_blank" href="<%= link[1] %>" >Help in <%= link[0] %></a>
-          <% end %>
-          <% end %>
-          </div>
+      <div class="d-flex">
+        <div class="main-content-header">
+          <h1 class="ml-2">Ledger Book</h1>
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a href="<%= root_path %>">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item active">
+              <a href="<%= ledger_books_path %>">Ledger Book</a>
+            </li>
+          </ol>
+        </div>
       </div>
- </div>
-<div class="hidden m-4" id="item_types_list">
 
-</div>
-      <ul class="nav nav-pills mt-3 mb-2" role="tablist">
+      <%if (check_can_create(@module_permission))%>
+        <div class="row ml-1 d-flex mb-5" style="font-family: arial">
+          <div class="col-lg-3 col-sm-3 stats-cards border-radius-1 shadow p-4 mr-4" style="background:linear-gradient(45deg, #0f1d59 73%, white 8%); color:white;">
+              <%= link_to new_ledger_book_path(Sjama: true), class: "card shadow p-3 ml-5 float-right", style:"width: 80px; height: 80px; border-radius: 100%;" do %>
+                <i class="fa fa-plus text-dark mt-3 ml-3" aria-hidden="true"></i>
+              <% end %> 
+            <div>
+              <span class="mt-3"><i>Rs.</i><i class="h4 mb-0 font-weight-bold text-light-800 mr-1"><%= number_with_delimiter(@today_credit_total) %></i></span>
+              <br>
+              <% if @today_credit_total > @yesterday_credit_total%>
+                <span class="bg-success border-radius-1 px-1 text-light font-weight-bold">+ <%= @percentage_credit %> %</span>
+              <% else %>
+                <span class="bg-danger border-radius-1 px-2 text-light font-weight-bold"> <%= @percentage_credit %> %</span>
+              <% end %>
+              <p class="mt-3">Today's Credit<i class="fas fa-user text-light ml-3 mr-2"></i><%= @ledger_credit_count%> </p>
+            </div>
+          </div>
+          <div class="col-lg-3 col-sm-3 stats-cards border-radius-1 shadow p-4 ml-2 mr-4" style="background:linear-gradient(45deg, darkred 73%, white 8%); color:white;">
+              <%= link_to new_ledger_book_path(Sbenam: true), class: "card shadow p-3 ml-5 float-right", style:"width: 80px; height: 80px; border-radius: 100%;" do %>
+                <i class="fa fa-plus text-dark mt-3 ml-3" aria-hidden="true"></i>
+              <% end %> 
+            <div>
+              <span class="mt-3"><i>Rs.</i><i class="h4 mb-0 font-weight-bold text-gray-800 mr-1"><%= number_with_delimiter(@today_debit_total) %></i></span>
+             <br>
+              <% if @today_debit_total > @yesterday_debit_total%>
+                <span class="bg-success border-radius-1 px-1 text-light font-weight-bold">+ <%= @percentage_debit %> %</span>
+              <% else %>
+                <span class="bg-danger border-radius-1 px-2 text-light font-weight-bold"> <%= @percentage_debit %> %</span>
+              <% end %>
+              <p class="mt-3">Today's Debit<i class="fas fa-user text-light ml-3 mr-2"></i><%= @ledger_debit_count%> </p>
+            </div>
+          </div>
+          <div class="col-lg-5 col-sm-5 border-radius-1 shadow ml-1" style="background:linear-gradient(-45deg, darkblue 35%, white 8%);">
+            <div>
+            <p>Monthly Report</p>
+              <div><i class="fa fa-circle text-primary mr-2"></i><i>Rs.</i><i class="h4 mb-0 font-weight-bold text-gray-800 mr-1"><%= number_with_delimiter(@monthly_credit_ledger) %></i><i class="fas fa-signal text-primary ml-2"></i></div>
+              <div class="h6 mb-3">Total Credit/Jama</div>
+              <div><i class="fa fa-circle text-danger mr-2"></i><i>Rs.</i><i class="h4 mb-0 font-weight-bold text-gray-800 mr-1"><%= number_with_delimiter(@monthly_debit_ledger) %></i><i class="fas fa-signal text-danger ml-2"></i></div>
+              <div class="h6">Total Debit/Benam</div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <div class="clearfix"></div>
+      <div class="float-right">
+        <div class="dropdown ml-auto mr-4">
+          <span class="btn btn-info" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
+            <div class="dropdown-content">
+                <% if @help.present? %>
+                <% @help&.help_links.each do |link| %>
+                <a type="button" class="" target="_blank" href="<%= link[1] %>" >Help in <%= link[0] %></a>
+                <% end %>
+                <% end %>
+                </div>
+            </div>
+       </div>
+      <div class="float-right">
+        <%if (check_can_create(@module_permission))%>
+           <%= link_to transfer_ledger_books_path, class: "btn btn-warning form-group mr-3" do %>
+            <i class="fa fa-exchange-alt text-dark mr-2" aria-hidden="true"></i>Payment Transfer
+          <% end %> 
+        <% end %> 
+      </div>
+
+      <ul class="nav nav-pills mb-2 mt-2" role="tablist">
         <li class="nav-item">
           <a class="nav-link tab-label ledger-search-exp-tab active" data-toggle="tab" href="#search" role="tab">Search</a>
         </li>
@@ -78,11 +108,10 @@
       <%= hidden_field_tag "debitKeys", @debit_keys, { :id => "debitKeys" } %>
       <%= hidden_field_tag "debitValues", @debit_values, { :id => "debitValues" } %>
       <%= hidden_field_tag "creditValues", @credit_values, { :id => "creditValues" } %>
-      
 
       <div class="tab-content mb-2">
-        <div class="tab-pane active mb-3 card shadow mt-2 p-4 border-radius-1" id="search" role="tabpanel">
-          <%= search_form_for @q, url: ledger_books_path, class: "admin-controls", method: "get" do |f| %>
+        <div class="tab-pane active mb-4 card shadow mt-2 p-4 border-radius-1" style="border-left: 12px solid #1e3494" id="search" role="tabpanel">
+          <%= search_form_for @q, url: ledger_books_path, class: "admin-controls mt-3", method: "get" do |f| %>
           <div class="row d-flex">
             <div class="col-lg-9">
               <div class="col-lg-2 form-group float-left">
@@ -224,8 +253,8 @@
       <div class="my-loader mx-auto"></div>
     </div>
   </div>
-  
-  <div class='card border-radius-1 shadow p-4 ledger-book-index-card'>
+ 
+  <div class='card border-radius-1 shadow p-4 ledger-book-index-card' style="border-left: 12px solid #1e3494">
   <div class="row d-flex" style="position: absolute;">
       <div>
         <%if (check_can_delete(@module_permission))%>
@@ -360,7 +389,7 @@
                 <p><span>PO#: </span> <%=ledger_book&.purchase_sale_detail&.bill_no%></p>
               <%end%>
             </td>
-            <td><%=ledger_book.created_at.strftime("%A,  %d-%b-%y")%></td>
+            <td><%=ledger_book.created_at.strftime("%A,  %d-%b-%Y")%></td>
             <td>
               <div class="icon-container-1">
                   <div class="my-icon-1 my-view-1">
@@ -442,9 +471,9 @@
           <td></td>
           <td><h5>Total</h5></td>
           <td></td>
-          <td><h5><%=number_with_delimiter(@ledger_books_debit)%></h5></td>
-          <td><h5><%=number_with_delimiter(@ledger_books_credit.to_f+@sys_user.opening_balance.to_f)%></h5></td>
-          <td><h5><%=number_with_delimiter(@sys_user.opening_balance.to_i+@ledger_books_credit-@ledger_books_debit.to_i) if @ledger_books.present?%> <%=@sys_user.balance.to_i if @sys_user.present? and  @ledger_books.blank?%></h5></td>
+          <td><h5><%=number_with_delimiter(@ledger_books_all&.first&.sum_debit)%></h5></td>
+          <td><h5><%=number_with_delimiter(@ledger_books_all&.first&.sum_credit)%></h5></td>
+          <td><h5><%=number_with_delimiter(@ledger_books_all&.first&.mean_sum)%></h5></td>
           <td></td>
           <td></td>
           <td></td>
@@ -527,11 +556,20 @@
 
   $(function() {
 
-    var start = moment().subtract(1, 'years');
+    var start = moment();
     var end = moment();
 
     function cb(start, end) {
-        $('#reportrange span').html(start.format('YYYY-MM-DD') + ' - ' + end.format('YYYY-MM-DD'));
+      $('#reportrange span').html(start.format('YYYY-MM-DD') + ' - ' + end.format('YYYY-MM-DD'));
+    }
+
+    var gteq = $('#q_created_at_gteq').val()
+    var lteq = $('#q_created_at_lteq').val()
+    if (gteq !== ''){
+      start = moment(new Date(gteq))
+    }
+    if(lteq !== ''){
+      end = moment(new Date(lteq))
     }
 
     $('#reportrange').daterangepicker({
@@ -544,6 +582,7 @@
            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
            '1 Year': [moment().subtract(1, 'years')],
+           '5 Year': [moment().subtract(5, 'years')],
            'This Month': [moment().startOf('month'), moment().endOf('month')],
            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
            'This Month Last Year': [moment().subtract(1, 'years').startOf('month'), moment().subtract(1, 'years').endOf('month')],
@@ -565,9 +604,39 @@
     })
 
   });
+
+  $( document ).ready(function() {
+  var userCount=$('#userCount').val().split(' ')
+  const ctx = document.getElementById('stats-chart');
+  Chart.defaults.font.size = 16;
+  new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Today Debit','Today Credit'],
+      datasets: [{
+        label: 'Total Balance',
+        data: ['<%= @today_debit_total %>', '<%= @today_credit_total %>'],
+        borderWidth: 1,
+        backgroundColor: ["red", "blue"],
+      }],
+    },
+    options: {
+      
+      maintainAspectRatio: false,
+      plugins: {
+            title: {
+                display: true,
+                text: 'Today Total Balance',
+                font: {
+                  size: 16
+                }
+            }
+          
+
+        }
+      
+    }
+  });
+  
+});
 </script>
-
-
-
-
-

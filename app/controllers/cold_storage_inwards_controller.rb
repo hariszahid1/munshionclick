@@ -2,17 +2,26 @@
 
 # FollowUps Controller
 class ColdStorageInwardsController < ApplicationController
+  include PdfCsvGeneralMethod
+  include InwardsHelper
 
   before_action :set_cold_storage, only: %i[show edit update]
   before_action :index_edit_new_data, only: %i[new show edit index]
 
   def index
+    date_search
     index_data
     @q = PurchaseSaleDetail.includes(:order, :account, :sys_user,
                                      purchase_sale_items: :product).ransack(params[:q])
-    purchase_sale_detail = @q.result.where(transaction_type: 'InWard')
+    purchase_sale_detail = @q.result.distinct.where(transaction_type: 'InWard')
     @purchase_sale_details = purchase_sale_detail.order('purchase_sale_details.created_at desc').page(params[:page]).per(100)
+    @pdf_orders = @q.result
     @cold_storage_inward_total = purchase_sale_detail.group('purchase_sale_details.id').sum('purchase_sale_items.size_9')
+    if params[:pdf].present?
+      @pdf_orders_total = @pdf_orders.sum('purchase_sale_items.quantity')
+      @pdf_inward_total = @pdf_orders.group('sys_users.name').sum('purchase_sale_items.quantity')
+      download_cold_storage_inwards_pdf_file
+    end
   end
 
   def new
@@ -64,7 +73,9 @@ class ColdStorageInwardsController < ApplicationController
     end
   end
 
-  def show; end
+  def show
+    download_inward_show_pdf_file if params[:pdf].present?
+  end
 
   def update
     @pos_setting=PosSetting.first
@@ -110,7 +121,7 @@ class ColdStorageInwardsController < ApplicationController
   def index_edit_new_data
     @orders = Order.all
     @customers = SysUser.where(:user_group=>['Customer','Both','Salesman'])
-    @suppliers = SysUser.where(:user_group=>['Supplier','Both','Own'])
+    @suppliers = SysUser.all
     @accounts = Account.all
     @products = Product.all
   end
@@ -123,6 +134,16 @@ class ColdStorageInwardsController < ApplicationController
       transaction_type: 'InWard').sum('purchase_sale_items.size_9')
   end
 
+  def date_search
+    @created_at_gteq = DateTime.current.beginning_of_month
+    @created_at_lteq = DateTime.now
+    if params[:q].present?
+      @created_at_gteq = params[:q][:created_at_gteq] if params[:q][:created_at_gteq].present?
+      @created_at_lteq = params[:q][:created_at_lteq] if params[:q][:created_at_lteq].present?
+      params[:q][:created_at_lteq] = params[:q][:created_at_lteq].to_date.end_of_day if params[:q][:created_at_lteq].present?
+    end
+  end
+
   def create_data
     @sysuser = SysUser.find_by_id(purchase_sale_detail_params[:sys_user_id]).present? ? SysUser.find_by_id(purchase_sale_detail_params[:sys_user_id]) : SysUser.first
     @time = Time.zone.now
@@ -130,6 +151,17 @@ class ColdStorageInwardsController < ApplicationController
     @id = PurchaseSaleDetail.where(created_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day)
     @purchase_sale_detail.voucher_id = @id
     @purchase_sale_detail.user_name = current_user.name
+  end
+
+  def download_cold_storage_inwards_pdf_file
+    @sys_users = @q.result
+    sorted_inward_data
+    generate_pdf(@sorted_data.as_json, 'Inward', 'pdf.html', 'A4', false, 'cold_storage_inwards/index.pdf.erb')
+  end
+
+  def download_inward_show_pdf_file
+    sorted_inward_show_data
+    generate_pdf(@sorted_data.as_json, 'Inward', 'pdf.html', 'A4', false, 'cold_storage_inwards/show.pdf.erb')
   end
 
   def purchase_sale_detail_params
