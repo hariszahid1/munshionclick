@@ -64,9 +64,9 @@
     <div class="tab-pane active mb-3 card shadow-sm mt-2 border-radius-1" id="search" role="tabpanel">
       <div class="row d-flex mt-3 mr-2">
         <div class="col">
-            <div class='col-lg-4 form-group float-left'>
-              <%= f.select :id_eq, options_for_select(@options_for_select.map{ |p| [p.title.to_s + '--->' + p.code.to_s, p.id]}, f.object.id_eq),{include_blank: "Select Unit Category"}, class: "form-control chosen-select" %>
-            </div>
+          <div class='col-lg-4 form-group float-left'>
+            <%= f.select :id_in, options_for_select(@options_for_select.map{ |p| [p.title.to_s + '--->' + p.code.to_s, p.id]}, f.object.id_in), {:include_blank => "Select Unit Categories"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select Unit Categories"} } %>
+          </div>
           <div class='col-lg-4 form-group float-left'>
             <%= f.search_field :title_or_code_or_comment_cont, placeholder: "Search in categories", title: "Enter title" ,:class=>"form-control" %>
           </div>

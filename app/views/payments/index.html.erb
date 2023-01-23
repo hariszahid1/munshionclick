@@ -19,46 +19,46 @@
           </ol>
         </div>
       </div>
+
+
       <%if (check_can_create(@module_permission))%>
-        <div class="row d-flex mb-5 ml-1" style="font-family: arial">
-          <div class="col-lg-3 col-sm-3 stats-cards border-radius-1 shadow p-4 mr-4" style="background:linear-gradient(45deg, #0f1d59 73%, white 8%); color:white;">
-              <%= link_to new_payment_path, class: "card shadow p-3 ml-5 float-right", style:"width: 80px; height: 80px; border-radius: 100%;" do %>
+        <div class="row ml-1 d-flex mb-5" style="font-family: arial">
+          <div class="col-lg-3 col-sm-3 stats-cards border-radius-1 shadow-lg p-4 mr-4" style="background:linear-gradient(45deg, #0f1d59 73%, white 8%); color:white;">
+              <%= link_to new_payment_path, class: "card shadow p-3 ml-5 float-right hov-btn", style:"width: 80px; height: 80px; border-radius: 100%;" do %>
                 <i class="fa fa-plus text-dark mt-3 ml-3" aria-hidden="true"></i>
               <% end %> 
             <div>
-              <span class="mt-3"><i>Rs.</i><i class="h4 mb-0 font-weight-bold text-light-800 mr-1"><%= number_with_delimiter(@today_credit_payment) %></i></span>
+              <div class="p font-weight-bold mb-3 mt-1" style="color: #C0C0C0">Today's Credit</div>
+              <span class="mt-1 mb-2"><i>Rs.</i><i class="h4 mb-0 font-weight-bold text-light-800 mr-1"><%= number_with_delimiter(@today_credit_payment) %></i></span>
               <br>
-              <% if @today_credit_payment > @yesterday_credit_payment%>
-                <span class="bg-success border-radius-1 px-1 text-light font-weight-bold">+ <%= @percentage_credit_payment %> %</span>
+              <% if @today_credit_payment > @yesterday_credit_payment %>
+                <span class="bg-success border-radius-1 px-1 text-light font-weight-bold">+ <%= @percentage_credit_payment %> %</span><i class="fas fa-user text-light ml-3 mr-2"></i><%= @payment_credit_count%>
               <% else %>
-                <span class="bg-danger border-radius-1 px-2 text-light font-weight-bold"> <%= @percentage_credit_payment %> %</span>
+                <span class="bg-danger border-radius-1 px-2 text-light font-weight-bold"> <%= @percentage_credit_payment %> %</span><i class="fas fa-user text-light ml-3 mr-2"></i><%= @payment_credit_count%>
               <% end %>
-              <p class="mt-3">Today's Credit<i class="fas fa-user text-light ml-3 mr-2"></i><%= @payment_credit_count%> </p>
             </div>
           </div>
-          <div class="col-lg-3 col-sm-3 stats-cards border-radius-1 shadow p-4 ml-2 mr-4" style="background:linear-gradient(45deg, darkred 73%, white 8%); color:white;">
-              <%= link_to new_payment_path(Sjama: true), class: "card shadow p-3 ml-5 float-right", style:"width: 80px; height: 80px; border-radius: 100%;" do %>
+           <div class="col-lg-3 col-sm-3 stats-cards border-radius-1 shadow-lg p-4 mr-4" style="background:linear-gradient(45deg, darkred 73%, white 8%); color:white;">
+              <%= link_to new_payment_path(Sjama: true), class: "card shadow p-3 ml-5 float-right hov-btn", style:"width: 80px; height: 80px; border-radius: 100%;" do %>
                 <i class="fa fa-plus text-dark mt-3 ml-3" aria-hidden="true"></i>
               <% end %> 
             <div>
-              <span class="mt-3"><i>Rs.</i><i class="h4 mb-0 font-weight-bold text-gray-800 mr-1"><%= number_with_delimiter(@today_debit_payment) %></i></span>
-             <br>
-              <% if @today_debit_payment > @yesterday_debit_payment%>
-                <span class="bg-success border-radius-1 px-1 text-light font-weight-bold">+ <%= @percentage_debit_payment %> %</span>
+              <div class="p font-weight-bold mb-3 mt-1" style="color: #C0C0C0">Today's Debit</div>
+              <span class="mt-1 mb-2"><i>Rs.</i><i class="h4 mb-0 font-weight-bold text-light-800 mr-1"><%= number_with_delimiter(@today_debit_payment) %></i></span>
+              <br>
+              <% if @today_debit_payment > @yesterday_debit_payment %>
+                <span class="bg-success border-radius-1 px-1 text-light font-weight-bold">+ <%= @percentage_debit_payment %> %</span><i class="fas fa-user text-light ml-3 mr-2"></i><%= @payment_debit_count%>
               <% else %>
-                <span class="bg-danger border-radius-1 px-2 text-light font-weight-bold"> <%= @percentage_debit_payment %> %</span>
+                <span class="bg-danger border-radius-1 px-2 text-light font-weight-bold"> <%= @percentage_debit_payment %> %</span><i class="fas fa-user text-light ml-3 mr-2"></i><%= @payment_debit_count%>
               <% end %>
-              <p class="mt-3">Today's Debit<i class="fas fa-user text-light ml-3 mr-2"></i><%= @payment_debit_count%> </p>
             </div>
           </div>
-          <div class="col-lg-5 col-sm-5 border-radius-1 shadow ml-1" style="background:linear-gradient(-45deg, darkblue 35%, white 8%);">
-            <div>
-            <p>Monthly Report</p>
-              <div><i class="fa fa-circle text-primary mr-2"></i><i>Rs.</i><i class="h4 mb-0 font-weight-bold text-gray-800 mr-1"><%= number_with_delimiter(@monthly_credit_payment) %></i><i class="fas fa-signal text-primary ml-2"></i></div>
-              <div class="h6 mb-3">Total Credit/Jama</div>
-              <div><i class="fa fa-circle text-danger mr-2"></i><i>Rs.</i><i class="h4 mb-0 font-weight-bold text-gray-800 mr-1"><%= number_with_delimiter(@monthly_debit_payment) %></i><i class="fas fa-signal text-danger ml-2"></i></div>
-              <div class="h6">Total Debit/Benam</div>
-            </div>
+          <div class="col-lg-5 col-sm-5 border-radius-1 shadow-lg ml-1" style="background:linear-gradient(-45deg, darkblue 40%, white 8%);">
+            <div class="p font-weight-bold text-muted mt-3 py-2" style="color: #C0C0C0">Monthly Report</div>
+              <div><i class="fa fa-circle text-primary mr-2"></i><i>Rs.</i><i class="h5 mb-0 font-weight-bold text-gray-800 mr-1"><%= number_with_delimiter(@monthly_credit_payment) %></i><i class="fas fa-signal text-primary ml-2"></i></div>
+              <div class="p text-muted mb-1">Total Credit/Jama</div>
+              <div><i class="fa fa-circle text-danger mr-2"></i><i>Rs.</i><i class="h5 mb-0 font-weight-bold text-gray-800 mr-1"><%= number_with_delimiter(@monthly_debit_payment) %></i><i class="fas fa-signal text-danger ml-2"></i></div>
+              <div class="p text-muted mb-3">Total Debit/Benam</div>
           </div>
         </div>
       <% end %>
@@ -106,7 +106,7 @@
       <%= search_form_for @q, url: payments_path, class: "admin-controls", method: "get" do |f| %>
         <div class="row d-flex ml-1 mr-1 mt-4">
           <div class="col-lg-3 form-group float-left">
-            <%= f.select :account_id_in, options_from_collection_for_select(@accounts, "id", ->(st){"#{st.title} \u{27F6} #{st.bank_name}"},f.object.account_id_in),{:include_blank => "Select the Account Title"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Account Title"} }%>
+            <%= f.select :account_id_in, options_from_collection_for_select(@accounts, "id", ->(st){"#{st.title} \u{27F6} #{st.bank_name}"},f.object.account_id_in), {:include_blank => "Select the Account Title"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Account Title"} } %>
           </div>
           <div class="col-lg-2 form-group float-left">
             <%= f.search_field :id_eq, class: 'form-control input-sm ', placeholder: "Enter Id" %>

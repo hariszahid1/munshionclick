@@ -95,15 +95,14 @@
       <div class="tab-pane active card border-radius-1 shadow mt-3 p-4" id="search" role="tabpanel">
         <%= search_form_for @q, url: crms_path, class: "admin-controls", method: "get" do |f| %>
           <div class="row d-flex mt-3 mr-2">
-            <div class="col">
               <div class='col-lg-2 form-group float-left'>
-                <%= f.select :id_eq, options_for_select(@all_user.map{ |p| [p.name , p.id]}, f.object.id_eq),{:include_blank => "Select Name"},:class=>"form-control chosen-select" %>
+                <%= f.select :id_in, options_for_select(@all_user.map{ |p| [p.name , p.id]}, f.object.id_in), {:include_blank => "Select Names"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select Names"} }%>
               </div>
               <div class='col-lg-2 form-group float-left'>
-                <%= f.select :credit_status_eq, options_for_select(@all_agents.map{ |key, value| [key , value]}, f.object.credit_status_eq),{:include_blank => "Select Agent Name"},:class=>"form-control chosen-select" %>
+                <%= f.select :credit_status_in, options_for_select(@all_agents.map{ |key, value| [key , value]}, f.object.credit_status_in),{:include_blank => "Select Agent Names"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select Agent Names"} } %>
               </div>
               <div class='col-lg-2 form-group float-left'>
-                <%= f.select :ntn_eq, options_for_select(@all_plot_sizes, f.object.ntn_eq),{:include_blank => "Select Plot Size"},:class=>"form-control chosen-select" %>
+                <%= f.select :ntn_in, options_for_select(@all_plot_sizes, f.object.ntn_in),{:include_blank => "Select Plot Size"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select Plot Size"} } %>
               </div>
               <div class="col-lg-2 form-group float-left">
                 <%= f.select :cms_data_cont, options_for_select(@client_type, f.object.cms_data_cont),  {:include_blank => "Select client type"}, class: "form-control chosen-select" %>
@@ -133,7 +132,7 @@
               <div class="col-lg-1 form-group float-left">
                 <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search"><i class="fa fa-search"></i></button>
               </div>
-
+              <div class="float-right">
               <%if (check_can_send_email(@module_permission))%>
                 <button class="form-control btn btn-info float-right mr-3 mb-2" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope"></i>&nbsp;Mail</button>
                   <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -174,7 +173,7 @@
                   </div>
               <% end %>
                <%if (check_can_download_csv(@module_permission))%>
-                <button class="btn btn-warning float-right mr-2 mb-2" style="width:100px" title= "download crm csv" name="csv" type="submit" value="csv">CSV &nbsp;<i class="fa fa-file-excel"></i></button>
+                <button class="btn btn-warning float-right mr-2 mb-2" title= "download crm csv" name="csv" type="submit" value="csv">CSV &nbsp;<i class="fa fa-file-excel"></i></button>
               <% end %>
               <%if (check_can_download_pdf(@module_permission))%>
                 <div class="dropdown my-dropdown float-right mr-2">
@@ -187,7 +186,7 @@
                   </div>
                 </div>
               <% end %>
-            </div>
+            </div>  
           </div>
         <% end %>
       </div>
