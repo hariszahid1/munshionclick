@@ -121,9 +121,9 @@
     <% @purchase_sale_detail.purchase_sale_items.each do |item|%>
       <tr style="text-align:center">
         <td style="border-bottom: 1px solid #000; "><%=i%><%i=i+1%></td>
-        <td style="border-bottom: 1px solid #000; "><b><%=item.product.present? ? item.product.title+" "+item.product.item_type.title : "" %></b></td>
+        <td style="border-bottom: 1px solid #000; "><b><%=item.product.present? ? item.product.title+" "+item.product.item_type.title : item.item&.title %></b></td>
         <td style="border-bottom: 1px solid #000; "><%=item.sale_price %></td>
-        <td style="border-bottom: 1px solid #000; "><%=item.product.marla%>-M <%=item.product.square_feet%>-Sqr</td>
+        <td style="border-bottom: 1px solid #000; "><%=item.product&.marla%>-M <%=item.product&.square_feet%>-Sqr</td>
         <td style="border-bottom: 1px solid #000; "><%=item.purchase_sale_type=="Sale_type" ? "" : "-"%><%=item.total_sale_price %></td>
       </tr>
     <% end %>
@@ -138,9 +138,9 @@
   <% @purchase_sale_detail&.order&.order_items&.each do |item|%>
     <tr style="text-align:center">
       <td style="border-bottom: 1px solid #000; "><%=i%><%i=i+1%></td>
-      <td style="border-bottom: 1px solid #000; "><%=item.product.present? ? item.product.title+" "+item.product.item_type.title : "" %></td>
+      <td style="border-bottom: 1px solid #000; "><%=item.product.present? ? item.product.title+" "+item.product.item_type.title : item.item&.title  %></td>
       <td style="border-bottom: 1px solid #000; "><%=item.sale_price %></td>
-      <td style="border-bottom: 1px solid #000; "><%=item.product.marla%>-M <%=item.product.square_feet%>-Sqr</td>
+      <td style="border-bottom: 1px solid #000; "><%=item.product&.marla%>-M <%=item.product&.square_feet%>-Sqr</td>
       <td style="border-bottom: 1px solid #000; "><%=item.purchase_sale_type=="Sale_type" ? "" : "-"%><%=item.total_sale_price %></td>
     </tr>
   <% end %>
@@ -314,9 +314,9 @@
     <% @purchase_sale_detail.purchase_sale_items.each do |item|%>
       <tr style="text-align:center">
         <td style="border-bottom: 1px solid #000; "><%=i%><%i=i+1%></td>
-        <td style="border-bottom: 1px solid #000; "><b><%=item.product.present? ? item.product.title+" "+item.product.item_type.title : "" %></b></td>
+        <td style="border-bottom: 1px solid #000; "><b><%=item.product.present? ? item.product.title+" "+item.product.item_type.title : item.item&.title  %></b></td>
         <td style="border-bottom: 1px solid #000; "><%=item.sale_price %></td>
-        <td style="border-bottom: 1px solid #000; "><%=item.product.marla%>-M <%=item.product.square_feet%>-Sqr</td>
+        <td style="border-bottom: 1px solid #000; "><%=item.product&.marla%>-M <%=item.product&.square_feet%>-Sqr</td>
         <td style="border-bottom: 1px solid #000; "><%=item.purchase_sale_type=="Sale_type" ? "" : "-"%><%=item.total_sale_price %></td>
       </tr>
     <% end %>
@@ -331,9 +331,9 @@
   <% @purchase_sale_detail&.order&.order_items&.each do |item|%>
     <tr style="text-align:center">
       <td style="border-bottom: 1px solid #000; "><%=i%><%i=i+1%></td>
-      <td style="border-bottom: 1px solid #000; "><%=item.product.present? ? item.product.title+" "+item.product.item_type.title : "" %></td>
+      <td style="border-bottom: 1px solid #000; "><%=item.product.present? ? item.product.title+" "+item.product.item_type.title : item.item&.title  %></td>
       <td style="border-bottom: 1px solid #000; "><%=item.sale_price %></td>
-      <td style="border-bottom: 1px solid #000; "><%=item.product.marla%>-M <%=item.product.square_feet%>-Sqr</td>
+      <td style="border-bottom: 1px solid #000; "><%=item.product&.marla%>-M <%=item.product&.square_feet%>-Sqr</td>
       <td style="border-bottom: 1px solid #000; "><%=item.purchase_sale_type=="Sale_type" ? "" : "-"%><%=item.total_sale_price %></td>
     </tr>
   <% end %>

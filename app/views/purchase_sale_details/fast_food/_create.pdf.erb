@@ -13,7 +13,7 @@
     <th style="width:20vw;">total</th>
     <% @purchase_sale_detail.purchase_sale_items.each do |item|%>
       <tr>
-        <td style="border-bottom: 1px solid #000; "><%=item.product.title %></td>
+        <td style="border-bottom: 1px solid #000; "><%=item.product&.title %></td>
         <td style="border-bottom: 1px solid #000; "><%=item.sale_price %></td>
         <td style="border-bottom: 1px solid #000; "><%=item.quantity %></td>
         <td style="border-bottom: 1px solid #000; "><%=item.total_sale_price %></td>

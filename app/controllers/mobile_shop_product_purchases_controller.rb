@@ -64,6 +64,7 @@ class MobileShopProductPurchasesController < ApplicationController
   
         if params[:purchase_submit].present? or params[:sale_submit].present?
           product_id= params[:q][:purchase_sale_items_product_product_id].present? ? params[:q][:purchase_sale_items_product_product_id] : @products
+          item_id= params[:q][:purchase_sale_items_item_item_id].present? ? params[:q][:purchase_sale_items_item_item_id] : @items
           @sys_users = SysUser.all
           sys_user_id = params[:q][:sys_user_id_eq].present? ? params[:q][:sys_user_id_eq] : @sys_users
           staff =  params[:q][:staff_id_eq] if params[:q][:staff_id_eq].present?
@@ -120,6 +121,12 @@ class MobileShopProductPurchasesController < ApplicationController
               @products_sale_price = PurchaseSaleDetail.joins(purchase_sale_items: :product).where('purchase_sale_items.product_id':product_id).where(sys_user_id: sys_user_id, created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day,transaction_type: "Purchase",staff_id: staff).group(:title).average(:cost_price)
               @products_sale = PurchaseSaleDetail.joins(purchase_sale_items: :product).where('purchase_sale_items.product_id':product_id).where(sys_user_id: sys_user_id, created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day,transaction_type: "Purchase",staff_id: staff).group(:title).sum(:total_cost_price)
               @products_count = PurchaseSaleDetail.joins(purchase_sale_items: :product).where('purchase_sale_items.product_id':product_id).where(sys_user_id: sys_user_id, created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day,transaction_type: "Purchase",staff_id: staff).group(:title).sum('purchase_sale_items.quantity')
+
+              @products_sale_price_items = PurchaseSaleDetail.joins(purchase_sale_items: :item).where('purchase_sale_items.item_id':item_id).where(sys_user_id: sys_user_id, created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day,transaction_type: "Purchase",staff_id: staff).group(:title).average(:cost_price)
+              @products_sale_items = PurchaseSaleDetail.joins(purchase_sale_items: :item).where('purchase_sale_items.item_id':item_id).where(sys_user_id: sys_user_id, created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day,transaction_type: "Purchase",staff_id: staff).group(:title).sum(:total_cost_price)
+              @products_count_items = PurchaseSaleDetail.joins(purchase_sale_items: :item).where('purchase_sale_items.item_id':item_id).where(sys_user_id: sys_user_id, created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day,transaction_type: "Purchase",staff_id: staff).group(:title).sum('purchase_sale_items.quantity')
+              @products_sale_total_items = PurchaseSaleDetail.joins(purchase_sale_items: :item).where('purchase_sale_items.item_id':item_id).where(sys_user_id: sys_user_id, created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day,transaction_type: "Purchase",staff_id: staff).sum(:total_cost_price)
+
               @products_sale_total = PurchaseSaleDetail.joins(purchase_sale_items: :product).where('purchase_sale_items.product_id':product_id).where(sys_user_id: sys_user_id, created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day,transaction_type: "Purchase",staff_id: staff).sum(:total_cost_price)
               @product_carriage = PurchaseSaleDetail.where(sys_user_id: sys_user_id,created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day,transaction_type: "Purchase",staff_id: staff).sum(:carriage)
               @product_loading = PurchaseSaleDetail.where(sys_user_id: sys_user_id,created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day,transaction_type: "Purchase",staff_id: staff).sum(:loading)
