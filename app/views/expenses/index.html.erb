@@ -60,10 +60,10 @@
         <p>
           <span class="col-lg-12 mt-4">
             <span class="col-lg-3 form-group float-left">
-              <%= f.select :expense_entries_expense_type_id_eq, options_from_collection_for_select(@expense_types, "id", ->(st){"#{st.id} \u{27F6} #{st.title} "},@expense_type),{:include_blank => "Select expense type"},:class=>"form-control chosen-select" %>
+              <%= f.select :expense_entries_expense_type_id_in, options_from_collection_for_select(@expense_types, "id", ->(st){"#{st.id} \u{27F6} #{st.title} "}, f.object.expense_entries_expense_type_id_in),{:include_blank => "Select Expense Type"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select Expense Type"} } %>
             </span>
             <span class="col-lg-3 form-group float-left">
-              <%= f.select :expense_entries_account_id_eq, options_from_collection_for_select(@accounts, "id", "title" ,@account),{:include_blank => "Select Account"},:class=>"form-control chosen-select" %>
+              <%= f.select :expense_entries_account_id_in, options_from_collection_for_select(@accounts, "id", "title" , f.object.expense_entries_account_id_in), {:include_blank => "Select Account"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select Account"} } %>
             </span>
             <span class="col-lg-3 form-group float-left d-flex">
               <%= f.search_field :created_at, id: "reportrange", class: 'form-control' %>
