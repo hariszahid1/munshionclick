@@ -27,8 +27,8 @@ class LoansController < ApplicationController
     @today_credit_loan = @q.result.where(created_at: Time.current.all_day).sum(:credit).to_f
     @yesterday_debit_loan = @q.result.where(created_at: 1.day.ago.all_day).sum(:debit).to_f
     @yesterday_credit_loan = @q.result.where(created_at: 1.day.ago.all_day).sum(:credit).to_f
-    @percentage_debit_loan = ((@today_debit_loan - @yesterday_debit_loan) / @yesterday_debit_loan.to_f ).round(2)
-    @percentage_credit_loan = ((@today_credit_loan - @yesterday_credit_loan) / @yesterday_credit_loan.to_f).round(2)
+    @percentage_debit_loan = ((@today_debit_loan - @yesterday_debit_loan) / (@yesterday_debit_loan.to_f.positive? ? @yesterday_debit_loan.to_f : 1 ) ).round(2)
+    @percentage_credit_loan = ((@today_credit_loan - @yesterday_credit_loan) / (@yesterday_credit_loan.to_f.positive? ? @yesterday_credit_loan.to_f : 1 )).round(2)
     @loan_debit_count = @q.result.where(created_at: Time.current.all_day).count(:debit)
     @loan_credit_count = @q.result.where(created_at: Time.current.all_day).count(:credit)
     @monthly_debit_loan = @q.result.where(created_at: Time.current.all_month).sum(:debit).to_f

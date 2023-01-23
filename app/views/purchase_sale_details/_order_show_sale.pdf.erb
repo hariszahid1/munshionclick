@@ -35,7 +35,7 @@
   <% @purchase_sale_detail.purchase_sale_items.each do |item|%>
     <tr style="text-align:center">
       <td style="border-bottom: 1px solid #000; "><%=i%><%i=i+1%></td>
-      <td style="text-align:left; border-bottom: 1px solid #000; "><b><%=item.purchase_sale_type=="Sale_type" ? "S-" : "R-"%> <%=item.product.present? ? item.product.title : "" %></b></td>
+      <td style="text-align:left; border-bottom: 1px solid #000; "><b><%=item.purchase_sale_type=="Sale_type" ? "S-" : "R-"%> <%=item.product.present? ? item.product.title : item.item&.title  %></b></td>
       <td style="border-bottom: 1px solid #000; "><b><%=item.quantity %></b></td>
       <td style="border-bottom: 1px solid #000; "><b><%=item.sale_price %></b></td>
       <td style="border-bottom: 1px solid #000; "><b><%=item.purchase_sale_type=="Sale_type" ? "" : "-"%><%=item.total_sale_price %></b></td>

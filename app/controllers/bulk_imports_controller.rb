@@ -47,7 +47,9 @@ class BulkImportsController < ApplicationController
         cms_data = data.slice('project_name', 'client_type', 'client_status', 'category', 'deal_status', 'source')
         data = data.excluding('project_name', 'client_type', 'client_status', 'category', 'deal_status', 'source')
         data1 = headers.zip(data.values).to_h
-        data1 = data1.merge('user_type_id' => UserType.first.id, 'code' => row['id'], 'cms_data' => cms_data)
+        code = "AGC-"+"%.4i" % (SysUser.maximum(:id).present? ? SysUser.maximum(:id).next : 1)
+        data1 = data1.merge('user_type_id' => UserType.first.id,
+                            'cms_data' => cms_data, 'for_crms' => true, 'code' => code)
         if row.values_at('id')[0].present?
           object = SysUser.find_by(id: row.values_at('id'))
           object.update(data1) if object.present?

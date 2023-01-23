@@ -48,6 +48,58 @@
         <% end %>
 
         <li>
+            <a href="<%=purchase_sale_details_path%>">
+                <i class="fa fa-shopping-cart"></i>
+                <span class="link-text"> Purchase</span>
+            </a>
+        </li>
+
+         <li>
+              <a href="#labourSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                  <i class="fas fa fa-user-circle"></i>
+                  <span class="link-text">Labour</span>
+              </a>
+              <ul class="collapse list-unstyled" id="labourSubmenu">
+                <li>
+                  <a href="<%=staff_ledger_books_path%>">
+                    <i class="fa fa-address-book"></i>
+                    <span class="link-text">Ledger Book</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="<%=staffs_path%>">
+                    <i class="fa fa-address-book"></i>
+                    <span class="link-text">Labour list</span>
+                  </a>
+                </li>
+                <li>
+                    <%= link_to departments_path do %>
+                      <i class="fas fa-th-list"></i>
+                      <span class="link-text">Department</span>
+                    <% end %>
+                </li>
+                <li>
+                  <%= link_to salary_detail_edit_bulk_path do %>
+                    <i class="fas fa-th-list"></i>
+                    <span class="link-text">Kharcha Jumerat</span>
+                  <% end %>
+                </li>
+                <li>
+                    <a href="<%=salaries_path%>">
+                      <i class="fa fa-envelope-open"></i>
+                      <span class="link-text">  Salary Debit detail</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="<%=salary_details_path%>">
+                      <i class="fa fa-envelope-open"></i>
+                      <span class="link-text">  Salary Credit detail</span>
+                    </a>
+                </li>
+              </ul>
+            </li>
+
+        <li>
             <a href="#LabourWorkmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                 <i class="fas fa fa-barcode"></i>
                 <span class="link-text">Labour Work</span>
@@ -86,14 +138,102 @@
                 <span class="link-text">Expense Bill</span>
               <% end %>
             </li>
+            <li>
+                <%= link_to expense_types_path do %>
+                    <i class="fas fa-plus"></i>
+                    <span class="link-text">Expense Type</span>
+                <% end %>
+            </li>
           </ul>
         </li>
-        <li>
-            <a href="<%=purchase_sale_details_path%>">
-                <i class="fa fa-shopping-cart"></i>
-                <span class="link-text"> Purchase</span>
+
+
+        <% if can?(:add, User) %>
+          <li>
+            <a  href="#UserSubMenu"  data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                <i class="fas fa-user-plus"></i>
+                <span class="link-text">User Details</span>
             </a>
-        </li>
+            <ul class="collapse list-unstyled" id="UserSubMenu">
+              <li>
+                  <%= link_to ledger_books_path do %>
+                      <i class="fas fa-book"></i>
+                      <span class="link-text">Ledger Book</span>
+                  <% end %>
+              </li>
+              
+                <li>
+                    <%= link_to sys_users_path do %>
+                        <i class="fas fa-plus"></i>
+                        <span class="link-text">All Users</span>
+                    <% end %>
+                </li>
+                <li>
+                <li>
+                    <%= link_to user_types_path do %>
+                        <i class="fas fa-plus"></i>
+                        <span class="link-text">User Types</span>
+                    <% end %>
+                </li>
+                <li>
+                    <%= link_to user_groups_path do %>
+                        <i class="fas fa-plus"></i>
+                        <span class="link-text">User Groups</span>
+                    <% end %>
+                </li>
+                  <% SysUser.user_groups.each do |value, index|%>
+                    <%= link_to sys_users_path('q[user_group_eq]': index) do %>
+                      <i class="fas fa-plus"></i>
+                      <span class="link-text"><%= value%></span>
+                    <% end %>
+                  <% end %>
+                </li>
+            </ul>
+          </li>
+        <% end %>
+
+        <% if can?(:view, :product) %>
+          <li>
+            <a href="#ProductSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                <i class="fas fa-cart-arrow-down"></i>
+                <span class="link-text">Product Details</span>
+            </a>
+            <ul class="collapse list-unstyled" id="ProductSubmenu">
+              <li>
+                  <%= link_to products_path do %>
+                      <i class="fas fa-plus"></i>
+                      <span class="link-text">Products</span>
+                  <% end %>
+              </li>
+              <li>
+                  <%= link_to product_categories_path do %>
+                      <i class="fas fa-plus"></i>
+                      <span class="link-text">Product Categories</span>
+                  <% end %>
+              </li>
+              <li>
+                  <%= link_to product_sub_categories_path do %>
+                      <i class="fas fa-plus"></i>
+                      <span class="link-text">Product Sub Categories</span>
+                  <% end %>
+              </li>
+              <li>
+                  <%= link_to raw_products_path do %>
+                      <i class="fas fa-plus"></i>
+                      <span class="link-text">Raw Products</span>
+                  <% end %>
+              </li>
+
+              <li>
+                  <%= link_to items_path do %>
+                      <i class="fas fa-plus"></i>
+                      <span class="link-text">Raw Materials</span>
+                  <% end %>
+              </li>
+              
+            </ul>
+          </li>
+        <% end %>
 
         <li>
             <%= link_to payments_path do %>
@@ -122,44 +262,28 @@
         </li>
 
           <li>
-              <a href="#labourSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                  <i class="fas fa fa-user-circle"></i>
-                  <span class="link-text">Labour</span>
-              </a>
-              <ul class="collapse list-unstyled" id="labourSubmenu">
-                <li>
-                  <a href="<%=staff_ledger_books_path%>">
-                    <i class="fa fa-address-book"></i>
-                    <span class="link-text">Ledger Book</span>
-                  </a>
-                </li>
-                <li>
-                  <a href="<%=staffs_path%>">
-                    <i class="fa fa-address-book"></i>
-                    <span class="link-text">Labour list</span>
-                  </a>
-                </li>
-                <li>
-                  <%= link_to salary_detail_edit_bulk_path do %>
-                    <i class="fas fa-th-list"></i>
-                    <span class="link-text">Kharcha Jumerat</span>
+            <a href="#StockSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                <i class="fas fa-cart-arrow-down"></i>
+                <span class="link-text">Stock Details</span>
+            </a>
+            <ul class="collapse list-unstyled" id="StockSubmenu">
+              <li>
+                  <%= link_to product_stocks_path do %>
+                      <i class="fas fa-plus"></i>
+                      <span class="link-text">Stocks</span>
                   <% end %>
-                </li>
-                <li>
-                    <a href="<%=salaries_path%>">
-                      <i class="fa fa-envelope-open"></i>
-                      <span class="link-text">  Salary Debit detail</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="<%=salary_details_path%>">
-                      <i class="fa fa-envelope-open"></i>
-                      <span class="link-text">  Salary Credit detail</span>
-                    </a>
-                </li>
-              </ul>
+              </li>
+              <li>
+                  <%= link_to product_stock_exchanges_path do %>
+                      <i class="fas fa-plus"></i>
+                      <span class="link-text">Stock Exchange</span>
+                  <% end %>
+              </li>
+              
+            </ul>
           </li>
-
+        
+           
           <% if can?(:add, :all) %>
             <li>
               <a href="<%=gates_path%>">
@@ -231,68 +355,8 @@
                 </li>
             </ul>
         </li>
-        <% if can?(:add, User) %>
-          <li>
-            <a  href="#UserSubMenu"  data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                <i class="fas fa-user-plus"></i>
-                <span class="link-text">User</span>
-            </a>
-            <ul class="collapse list-unstyled" id="UserSubMenu">
-              <li>
-                  <%= link_to ledger_books_path do %>
-                      <i class="fas fa-book"></i>
-                      <span class="link-text">Ledger Book</span>
-                  <% end %>
-              </li>
-                <li>
-                    <%= link_to sys_users_path do %>
-                        <i class="fas fa-plus"></i>
-                        <span class="link-text">All Users</span>
-                    <% end %>
-                </li>
-                <li>
-                  <% SysUser.user_groups.each do |value, index|%>
-                    <%= link_to sys_users_path('q[user_group_eq]': index) do %>
-                      <i class="fas fa-plus"></i>
-                      <span class="link-text"><%= value%></span>
-                    <% end %>
-                  <% end %>
-                </li>
-            </ul>
-          </li>
-        <% end %>
-        <li>
-            <a href="<%=items_path%>">
-                <i class="fa fa-cart-arrow-down"></i>
-                <span class="link-text">Raw Material</span>
-            </a>
-        </li>
-        <li>
-            <a href="<%=raw_products_path%>">
-                <i class="fas fa-cart-arrow-down"></i>
-                <span class="link-text">Raw Product</span>
-            </a>
-        </li>
-               <% if can?(:view, :product) %>
-                  <li>
-                    <%= link_to products_path do %>
-                        <i class="fas fa-th-list"></i>
-                        <span class="link-text">Products</span>
-                    <% end %>
-                  </li>
-                <% end %>
-                <li>
-                    <a href="<%=product_stock_exchanges_path%>">
-                        <i class="fa fa-shopping-cart"></i>
-                        <span class="link-text">Stock Exchange</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="<%=product_stocks_path%>">
-                        <i class="fa fa-shopping-cart"></i>
-                        <span class="link-text">Stock Detail</span>
-                    </a>
-                </li>
+        
+        
             <% if can?(:update, :all) %>
             <li>
 
@@ -307,20 +371,7 @@
                         <span class="link-text">General Setting</span>
                       <% end %>
                     </li>
-                    <li>
-                        <%= link_to product_categories_path do %>
-                            <i class="fas fa-plus"></i>
-                            <i class="fas fa-th-list"></i>
-                            <span class="link-text">Product Category</span>
-                        <% end %>
-                    </li>
-                    <li>
-                        <%= link_to product_sub_categories_path do %>
-                            <i class="fas fa-plus"></i>
-                            <i class="fas fa-th-list"></i>
-                            <span class="link-text">Product Sub Category</span>
-                        <% end %>
-                    </li>
+                    
                     <li>
                         <%= link_to countries_path do %>
                           <i class="fas fa-plus"></i>
@@ -328,13 +379,7 @@
                           <span class="link-text">Country</span>
                         <% end %>
                     </li>
-                    <li>
-                        <%= link_to departments_path do %>
-                          <i class="fas fa-plus"></i>
-                          <i class="fas fa-th-list"></i>
-                          <span class="link-text">Department</span>
-                        <% end %>
-                    </li>
+                    
                     <li>
                         <%= link_to cities_path do %>
                           <i class="fas fa-plus"></i>
@@ -349,20 +394,7 @@
                           <span class="link-text">Line Item Type</span>
                       <% end %>
                     </li>
-                    <li>
-                        <%= link_to user_types_path do %>
-                            <i class="fas fa-plus"></i>
-                            <i class="fas fa-th-list"></i>
-                            <span class="link-text">User Types</span>
-                        <% end %>
-                    </li>
-                    <li>
-                        <%= link_to expense_types_path do %>
-                            <i class="fas fa-plus"></i>
-                            <i class="fas fa-th-list"></i>
-                            <span class="link-text">Expense Type</span>
-                        <% end %>
-                    </li>
+                    
                     <li>
                         <%= link_to production_block_types_path do %>
                             <i class="fas fa-plus"></i>
@@ -375,26 +407,22 @@
                       <%= link_to users_path do %>
                         <i class="fas fa-plus"></i>
                         <i class="fas fa-th-list"></i>
-                        <span class="link-text">Users</span>
+                        <span class="link-text">System Operators</span>
                       <% end %>
                     </li>
-                    <li>
-                      <%= link_to bd_backups_path do %>
-                          <i class="fas fa-question"></i>
-                          <span class="link-text">Import/Export</span>
-                      <% end %>
-                    </li>
+                    
                     <%end%>
                     <li>
-                    <%= link_to user_groups_path do %>
-                        <i class="fas fa-plus"></i>
-                        <i class="fas fa-th-list"></i>
-                        <span class="link-text">User Groups</span>
-                    <% end %>
                 </li>
                 </ul>
             </li>
             <%end%>
+        <li>
+          <%= link_to bd_backups_path do %>
+              <i class="fas fa-question"></i>
+              <span class="link-text">Import/Export</span>
+          <% end %>
+        </li>
         <li>
           <%= link_to helps_path do %>
               <i class="fas fa-question"></i>
