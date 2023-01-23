@@ -62,7 +62,7 @@
       <div class="row d-flex mt-3">
         <div class="col">
           <div class="col-lg-4 form-group float-left ">
-            <%= f.select :staff_id_eq, options_from_collection_for_select(@staff, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code} "},@staff_id),{:include_blank => "Select Name"},:class=>"form-control chosen-select" %>
+            <%= f.select :staff_id_in, options_from_collection_for_select(@staff, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code} "}, f.object.staff_id_in), {:include_blank => "Select Names"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select Names"} } %>
           </div>
           <div class="col-lg-6 form-group float-left d-flex">
             <%= f.search_field :created_at, id: "reportrange", class: 'form-control' %>

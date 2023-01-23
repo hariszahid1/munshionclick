@@ -55,13 +55,13 @@
         <div class="col-lg-12 col-sm-12">
           <%= search_form_for @q, url: orders_path, class: "admin-controls", method: "get" do |f| %>
             <div class="col-lg-3 form-group float-left">
-              <%= f.select :order_items_product_item_type_id_eq, options_from_collection_for_select(ItemType.all, 'id', "title",f.object.order_items_product_item_type_id_eq), {hide_label:true,title: "Select the Line Item" ,prompt: "Select the Line Item"},class: 'form-control chosen-select'%>
+              <%= f.select :order_items_product_item_type_id_in, options_from_collection_for_select(ItemType.all, 'id', "title",f.object.order_items_product_item_type_id_eq), {:include_blank => "Select the Line Item"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Line Item"} } %>
             </div>
             <div class="col-lg-3 form-group float-left">
-              <%= f.select :order_items_product_id_eq, options_from_collection_for_select(@products, 'id', ->(st){"#{st.title} \u{27F6} #{st.code}"}), {hide_label:true,title: "Select the Products" ,prompt: "Select the Pruducts"},class: 'form-control chosen-select'%>
+              <%= f.select :order_items_product_id_in, options_from_collection_for_select(@products, 'id', ->(st){"#{st.title} \u{27F6} #{st.code}"}, f.object.order_items_product_id_in), {:include_blank => "Select the Products"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Products"} } %>
             </div>
             <div class="col-lg-3 form-group float-left">
-              <%= f.select :sys_user_id_eq, options_from_collection_for_select(@customers, 'id', 'name', f.object.sys_user_id), {class: 'form-control',hide_label:true,title: "Select the Customer" ,prompt: "Select the Customer"},class: 'form-control chosen-select'%>
+              <%= f.select :sys_user_id_in, options_from_collection_for_select(@customers, 'id', 'name', f.object.sys_user_id_in), {:include_blank => "Select the Customer"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Customer"} } %>
             </div>
             <% if params[:sale].present?%>
               <%=hidden_field_tag 'sale', 'true'%>
