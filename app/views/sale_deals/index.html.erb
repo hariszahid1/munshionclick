@@ -23,9 +23,16 @@
         </div>
         <div class="row mb-4">
           <div id="new_city">
-            <%= link_to new_sale_deal_path,class: "btn btn-success mt-3 ml-2" do %>
-              <i class="fa fa-plus" aria-hidden="false"></i>
-              Create
+            <% if params['q'].try(:[], 'transaction_type_eq') == 8 %>
+              <%= link_to new_sale_deal_path('type': 'Resale'),class: "btn btn-success mt-3 ml-2" do %>
+                <i class="fa fa-plus" aria-hidden="false"></i>
+                Create Resale Deal
+              <% end %>
+            <% else %>
+              <%= link_to new_sale_deal_path,class: "btn btn-success mt-3 ml-2" do %>
+                <i class="fa fa-plus" aria-hidden="false"></i>
+                Create New Sale Deal
+              <% end %>
             <% end %>
           </div>
           <%= link_to 'Follow Ups', follow_ups_path('q[reminder_type_eq]': 'sale_deals'), class: "btn btn-primary mt-3 ml-2" %>
@@ -39,32 +46,32 @@
     <div class="d-flex ml-auto">
       <div class="card shadow text-dark mr-3 p-1 close-card" style="border: 10px solid rgba(102, 255, 51, 0.3); border-radius: 50%;">
         <%= link_to sale_deals_path('q[purchase_sale_items_size_7_eq]': 'Token Payment') do %>
-          <span><h3 class="mt-2"><b><%=  @payment_status_count['Token Payment'] %></b></h3><h6 style="position: relative;">Token Payment</h6></span>
+          <span><h3 class="mt-2"><b><%=  @payment_status_count['Token Payment'] || 0 %></b></h3><h6 style="position: relative;">Token Payment</h6></span>
         <% end %>
       </div>
       <div class="card shadow text-dark mr-3 p-1 close-card" style="border: 10px solid rgba(255, 51, 0, 0.3); border-radius: 50%;">
         <%= link_to sale_deals_path('q[purchase_sale_items_size_7_eq]': 'Advance Payment') do %>
-          <span><h3 class="mt-2"><b><%=  @payment_status_count['Advance Payment'] %></b></h3><h6 style="position: relative;">Advance<br>Payment</h6></span>
+          <span><h3 class="mt-2"><b><%=  @payment_status_count['Advance Payment'] || 0 %></b></h3><h6 style="position: relative;">Advance<br>Payment</h6></span>
         <% end %>
       </div>
       <div class="card shadow text-dark mr-3 p-1 close-card" style="border: 10px solid rgba(162, 162, 118, 0.7); border-radius: 50%;">
         <%= link_to sale_deals_path('q[purchase_sale_items_size_7_eq]': 'Full Payment') do %>
-          <span><h3 class="mt-2"><b><%=  @payment_status_count['Full Payment'] %></b></h3><h6 style="position: relative;">Full<br>Payment</h6></span>
+          <span><h3 class="mt-2"><b><%=  @payment_status_count['Full Payment'] || 0%></b></h3><h6 style="position: relative;">Full<br>Payment</h6></span>
         <% end %>
       </div>
       <div class="card shadow text-dark mr-3 p-1 close-card" style="border: 10px solid rgba(255, 255, 0, 0.3); border-radius: 50%;">
         <%= link_to sale_deals_path('q[purchase_sale_items_size_4_eq]': 'Transfer') do %>
-          <span><h3 class="mt-2"><b><%= @deal_count['Transfer'] %></b></h3><h6 style="position: relative;">Transfer</h6></span>
+          <span><h3 class="mt-2"><b><%= @deal_count['Transfer'] || 0 %></b></h3><h6 style="position: relative;">Transfer</h6></span>
         <% end %>
       </div>
       <div class="card shadow text-dark mr-3 p-1 close-card" style="border: 10px solid rgba(128, 229, 255, 0.3); border-radius: 50%;">
         <%= link_to sale_deals_path('q[purchase_sale_items_size_4_eq]': 'Saler Free') do %>
-          <span><h3 class="mt-2"><b><%= @deal_count['Saler Free'] %></b></h3><h6 style="position: relative;">Saler<br>Free</h6></span>
+          <span><h3 class="mt-2"><b><%= @deal_count['Saler Free'] || 0 %></b></h3><h6 style="position: relative;">Saler<br>Free</h6></span>
         <% end %>
       </div>
       <div class="card shadow text-dark mr-3 p-1 close-card" style="border: 10px solid rgba(255, 179, 217, 0.74); border-radius: 50%;">
         <%= link_to sale_deals_path('q[purchase_sale_items_size_4_eq]': 'Fresh Booking') do %>
-          <span><h3 class="mt-2"><b><%= @deal_count['Fresh Booking'] %></b></h3><h6 style="position: relative;">Fresh<br>Booking</h6></span>
+          <span><h3 class="mt-2"><b><%= @deal_count['Fresh Booking'] || 0 %></b></h3><h6 style="position: relative;">Fresh<br>Booking</h6></span>
         <% end %>
       </div>
     </div>
@@ -83,7 +90,7 @@
   </div>
 </div>
 
-<ul class="nav nav-pills" role="tablist">
+<ul class="nav nav-pills ml-2" role="tablist">
   <li class="nav-item">
     <a class="nav-link tab-label cms-search-exp-tab active" data-toggle="tab" href="#search" role="tab">Search</a>
   </li>

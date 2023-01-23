@@ -35,7 +35,7 @@
         opacity: 0.3;
       }
       .font-size-custom{
-        font-size: 18px;
+        font-size: 15px;
       }
     </style>
   </head>
@@ -187,29 +187,40 @@
     </div>
 
     <div class='d-flex'>
-      <div style='width: 50%; margin-top: 20px; color: green'>
+      <div style='width: 33%; margin-top: 20px; color: green'>
         <h3><%= @pos_setting&.extra_settings.try(:[], "address_1").try(:[], 0) %><img src="<%= image_url('pin-location.svg') %>" height='20px' width='20px'></h3>
         <p class='font-size-custom'><%= @pos_setting&.extra_settings.try(:[], "address_1").try(:[], 1)%></p>
         <p class='font-size-custom'><%= @pos_setting&.extra_settings.try(:[], "address_1").try(:[], 2) %></p>
       </div>
-      <div style='width: 50%; margin-top: 20px; color: green'>
+      <div style='width: 33%; margin-top: 20px; color: green'>
+        <h3><%= @pos_setting&.extra_settings.try(:[], "address_2").try(:[], 0) %> <img src="<%= image_url('pin-location.svg') %>" height='20px' width='20px'></h3>
+        <p class='font-size-custom'><%= @pos_setting&.extra_settings.try(:[], "address_2").try(:[], 1) %></p>
+        <p class='font-size-custom'><%= @pos_setting&.extra_settings.try(:[], "address_2").try(:[], 2) %></p>
+      </div>
+      <div style='width: 33%; margin-top: 20px; color: green'>
         <h3><%= @pos_setting&.extra_settings.try(:[], "address_2").try(:[], 0) %> <img src="<%= image_url('pin-location.svg') %>" height='20px' width='20px'></h3>
         <p class='font-size-custom'><%= @pos_setting&.extra_settings.try(:[], "address_2").try(:[], 1) %></p>
         <p class='font-size-custom'><%= @pos_setting&.extra_settings.try(:[], "address_2").try(:[], 2) %></p>
       </div>
     </div>
 
+    <% if @pos_setting&.qr_links.try(:[], 'jr_qr').present?%>
+      <%
+        require "rqrcode"
+        qrcode = RQRCode::QRCode.new(@pos_setting.qr_links['jr_qr'])
+        @svg = qrcode.as_svg(
+            color: "000",
+            shape_rendering: "crispEdges",
+            module_size: 11,
+            standalone: true,
+            use_path: true
+          )
+          @str=Base64.encode64(@svg ).gsub("\n", '')
+      %>
+    <% end %>
+
     <p style="border-bottom: 2px solid black"></p>
-    <div class='d-flex' style='text-align: center;'>
-      <!--div style='width: 33%; margin-top: 10px'>
-        <b class='d-flex' style='width: 100%;'><img src="<%= image_url('youtube.svg') %>" height='20px' width='20px'><div><%= @pos_setting&.extra_settings.try(:[], "jr_pdf_footer").try(:[], 0) %></div></b>
-      </div>
-      <div style='width: 33%; margin-top: 10px'>
-        <b class='d-flex' style='width: 100%;'><img src="<%= image_url('fb.svg') %>" height='20px' width='20px'><div><%= @pos_setting&.extra_settings.try(:[], "jr_pdf_footer").try(:[], 1) %></div></b>
-      </div-->
-      <div style='margin-top: 10px; margin-left: 40%;'>
-        <b class='d-flex font-size-custom'><img src="<%= image_url('world.svg') %>" height='20px' width='20px'><div><%= @pos_setting&.extra_settings.try(:[], "jr_pdf_footer").try(:[], 2) %></div></b>
-      </div>
-    </div>
+      <b class='d-flex' style='font-size: 25px; margin-left: 38%;'><img src="<%= image_url('world.svg') %>" height='20px' width='20px'><div><%= @pos_setting&.extra_settings.try(:[], "jr_pdf_footer").try(:[], 2) %></div></b>
+      <img style='margin-left: 38%;' width="180px" height="150px" class="figure" style=""src=<%="data:image/svg+xml;base64,"+@str%> >
   </body>
 </html>

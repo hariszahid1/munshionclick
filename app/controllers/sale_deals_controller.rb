@@ -4,6 +4,7 @@ class SaleDealsController < ApplicationController
 
   before_action :set_sale_deal, only: %i[show edit update destroy approve_requested_deal]
   before_action :set_data, only: %i[new edit create update show index]
+  skip_before_action :authenticate_user!, only: [:show]
 
   # GET /sale_deals
   # GET /sale_deals.json
@@ -11,7 +12,7 @@ class SaleDealsController < ApplicationController
     @q = PurchaseSaleDetail.includes(:sys_user, :purchase_sale_items).order('id desc').ransack(params[:q])
     download_sale_deals_pdf_file if params[:pdf].present?
     download_sale_deals_csv_file if params[:csv].present?
-    @sale_deals = @q.result.where(transaction_type: 'SaleDeal').page(params[:page])
+    @sale_deals = @q.result.where(transaction_type: %w[NewSaleDeal ReSaleDeal]).page(params[:page])
   end
 
   # GET /sale_deals/1
@@ -45,8 +46,9 @@ class SaleDealsController < ApplicationController
                                       comment: 'Voucher #' + @sale_deal&.id.to_s,
                                       purchase_sale_detail_id: @sale_deal.id, account_id: @sale_deal&.account_id)
         @ledger_book.save!
+        type = params[:purchase_sale_detail]['transaction_type'] == 'ReSaleDeal' ? 8 : 9
         format.js
-        format.html { redirect_to sale_deals_path, notice: 'Please Take Approval from admin.' }
+        format.html { redirect_to sale_deals_path('q[transaction_type_eq]': type), notice: 'Please Take Approval from admin.' }
         format.json { render :show, status: :created, location: @sale_deal }
       else
         format.html { render :new }
@@ -63,9 +65,9 @@ class SaleDealsController < ApplicationController
     respond_to do |format|
       @before_update_carriage_loading = @sale_deal.carriage + @sale_deal.loading
       if @sale_deal.update(sale_deal_params)
-
+        type = params[:purchase_sale_detail]['transaction_type'] == 'ReSaleDeal' ? 8 : 9
         modify_update_salary_details if @sale_deal.staff_id.present?
-        format.html { redirect_to sale_deals_path, notice: 'Sale Deal was successfully updated.' }
+        format.html { redirect_to sale_deals_path('q[transaction_type_eq]': type), notice: 'Sale Deal was successfully updated.' }
         format.json { render :show, status: :ok, location: @sale_deal }
       else
         format.html { render :edit }
@@ -86,7 +88,8 @@ class SaleDealsController < ApplicationController
   end
 
   def requested
-    @requested = PurchaseSaleDetail.includes(:sys_user, :purchase_sale_items).where(transaction_type: 'SaleDeal', status: 'UnClear')
+    @requested = PurchaseSaleDetail.includes(:sys_user, :purchase_sale_items).where(transaction_type:
+      %w[ReSaleDeal NewSaleDeal], status: 'UnClear')
   end
 
   private

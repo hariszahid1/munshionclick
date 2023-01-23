@@ -1,7 +1,7 @@
 class PurchaseSaleDetail < ApplicationRecord
   belongs_to :sys_user
   belongs_to :order, optional: true
-  enum transaction_type: %i[Purchase Sale SaleReturn PurchaseReturn InWard OutWard InwardReturn OutWardReturn SaleDeal]
+  enum transaction_type: %i[Purchase Sale SaleReturn PurchaseReturn InWard OutWard InwardReturn OutWardReturn ReSaleDeal NewSaleDeal]
   enum status: %i[Clear Order UnClear]
   has_many :payments, as: :paymentable, dependent: :destroy
   has_many_attached :purchase_sale_images
@@ -205,7 +205,11 @@ class PurchaseSaleDetail < ApplicationRecord
   end
 
   def set_qr_code
-    update_column(:qr_code, PosSetting.first.website.to_s +
-      '/purchase_sale_details/' + self.id.to_s + '?' + 'receiveable=')
+    if transaction_type == 'ReSaleDeal' || transaction_type == 'NewSaleDeal'
+      update_column(:qr_code, PosSetting.first.website.to_s + '/sale_deals/' + self.id.to_s)
+    else
+      update_column(:qr_code, PosSetting.first.website.to_s +
+        '/purchase_sale_details/' + self.id.to_s + '?' + 'receiveable=')
+    end
   end
 end
