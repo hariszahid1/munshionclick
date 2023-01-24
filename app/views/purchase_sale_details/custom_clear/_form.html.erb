@@ -90,14 +90,14 @@
                 <%= f.select :account_id , options_from_collection_for_select(@accounts, 'id', 'title', (f.object.account_id.present? ? f.object.account_id : @account))%>
               </div>
               <div class="col-lg-2 form-group float-left font-weight-bold"> <%= f.hidden_field :total_bill%>
-                <%if f.object.order_id.present?%>
+                <%if f.object.order_id.present? && params[:action] == 'new' %>
                 <%= f.number_field :amount,value:0,step: :any,label:'Paid Amount',onchange:"remaingUpdateAmount()",onkeyup:"remaingUpdateAmount()", required: true, readonly: true%>
                 <%else%>
                 <%= f.number_field :amount,step: :any,label:'Paid Amount',onchange:"remaingUpdateAmount()",onkeyup:"remaingUpdateAmount()", required: true %>
                 <%end%>
               </div>
               <div class="col-lg-2 form-group float-left font-weight-bold">
-                <%if f.object.order_id.present?%>
+                <%if f.object.order_id.present? && params[:action] == 'new' %>
                 <%= f.number_field :discount_price,value:0,step: :any,label:'Discount',onchange:"remaingUpdateAmount()",onkeyup:"remaingUpdateAmount()", readonly: true%>
                 <%else%>
                 <%= f.number_field :discount_price,step: :any,label:'Discount',onchange:"remaingUpdateAmount()",onkeyup:"remaingUpdateAmount()"%>
