@@ -58,7 +58,7 @@
       <div class="d-flex ml-auto">
         <% if check_is_hidden_by_module('crms')%>
           <div onclick="openNav()" style="cursor: pointer;" class="mr-2">
-            <% if @follow_up_unread_count.positive? %>
+            <% if @follow_up_unread_count&.positive? %>
               <span class = "notification-dot my_blinker" ></span>
             <% end %> 
             <i class="fa fa-bell fa-3x p-2 follow-icon bg-light shadow mt-2" style="border-radius: 100px;" aria-hidden="true"></i>
@@ -108,7 +108,7 @@
     <li class="nav-item">
       <a class="nav-link tab-label" data-toggle="tab" href="#unread" role="tab">Unread</a>
     </li>
-    <button class='follow_ups_unread_ids d-none', value="<%= @follow_up_unread.pluck(:id) %>"></button>
+    <button class='follow_ups_unread_ids d-none', value="<%= @follow_up_unread&.pluck(:id) %>"></button>
     <div class="icon-container-1 ml-auto">
       <div class="my-icon-1 my-view-1">
         <div class="my-tooltip-1">
@@ -131,7 +131,7 @@
   </ul>
   <div class="tab-content mb-3" >
     <div class="tab-pane active" style="outline: none !important; border: none;" id="all" role="tabpanel">
-      <% @follow_up_all.each do |follow_up|%>
+      <% @follow_up_all&.each do |follow_up|%>
         <%= link_to read_follow_up_path(follow_up_id: follow_up.id) do %>
           <div class="text-decoration-none text-left pl-2 py-3 d-flex border-bottom <%= follow_up.is_read? ? '' : 'bg-unread-color'%>">
             <div class='col-3 mt-2'>
@@ -155,7 +155,7 @@
       <% end %>
     </div>
     <div class="tab-pane" style="outline: none !important; border: none;" id="unread" role="tabpanel">
-      <% @follow_up_unread.each do |follow_up|%>
+      <% @follow_up_unread&.each do |follow_up|%>
         <%= link_to read_follow_up_path(follow_up_id: follow_up.id) do %>
           <div class="text-decoration-none text-left pl-2 py-3 d-flex border-bottom bg-unread-color unread-data-container">
             <div class='col-3 mt-2'>

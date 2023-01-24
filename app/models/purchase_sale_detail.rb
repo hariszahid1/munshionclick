@@ -206,7 +206,7 @@ class PurchaseSaleDetail < ApplicationRecord
 
   def set_qr_code
     if transaction_type == 'ReSaleDeal' || transaction_type == 'NewSaleDeal'
-      update_column(:qr_code, PosSetting.first.website.to_s + '/sale_deals/' + self.id.to_s)
+      update_column(:qr_code, PosSetting.first.website.to_s + '/sale_deals/' + self.id.to_s + '?' + 'receiveable=')
     else
       update_column(:qr_code, PosSetting.first.website.to_s +
         '/purchase_sale_details/' + self.id.to_s + '?' + 'receiveable=')

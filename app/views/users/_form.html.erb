@@ -68,6 +68,9 @@ overflow: auto;
   		        <i class="fas fa-language"></i>
   		      <% end %>
   		    <%= f.text_area :address, placeholder: "Enter the Address", hide_label: true, class: 'urdu-font' %>
+					<p>Available Tags: all_followups</p>
+					<p>Example: {"all_followups"=> true}</p>
+  		    <%= f.text_area :extra_settings, placeholder: "Enter the Extra Settings" %>
 				</div>
 				<div class="col">
   		  	<%= f.text_field :email, placeholder:"Enter Email", required: true , disabled: true%>
