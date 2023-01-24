@@ -216,9 +216,17 @@
       <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
         <%= f.text_area :qr_links %>
       </div>
+    </div>
+    <div class= 'row'>
       <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
-        <%= f.text_area :extra_settings %>
+        <p><b>Available Tags: pdf_water_mark</b>
+        <p>For Dealer: deal, source, project_name, category, client_type, deal_status, client_status, transaction_type, payment_status, address_1, address2, address3 </p>
+        <p>Example: {"deal"=> ['first', 'second', 'third']}</p>
       </div>
+      <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
+        <%= f.text_area :extra_settings, rows: 10%>
+      </div>
+    </div>
       <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left d-none">
         <%= f.text_area :email_to %>
       </div>

@@ -79,7 +79,7 @@ class SaleDealsController < ApplicationController
   # DELETE /sale_deals/1
   # DELETE /sale_deals/1.json
   def destroy
-    @sale_dealsa.destroy
+    @sale_deal.destroy
     respond_to do |format|
       format.html { redirect_to sale_deals_url, notice: 'Sale Deal was successfully destroyed.' }
       format.json { head :no_content }
@@ -103,7 +103,7 @@ class SaleDealsController < ApplicationController
     code = 'AGC-' + '%.4i' % (SysUser.maximum(:id).present? ? SysUser.maximum(:id).next : 1)
     user = params[:purchase_sale_detail][:sys_users]
     user_id = SysUser.create(name: user[:name], code: code, user_type_id: UserType.first.id, ntn: user[:ntn],
-                             for_crms: false, occupation: user[:occupation], cms_data: user[:cms_data])
+                             occupation: user[:occupation], cms_data: user[:cms_data])
     @sale_deal[:sys_user_id] = user_id.id
   end
 
@@ -123,8 +123,8 @@ class SaleDealsController < ApplicationController
     roles_mask = current_user&.allowed_to_view_roles_mask_for
     @users = User.where(roles_mask: roles_mask).where('company_type=? or created_by_id=?', current_user&.company_type,
                                                       created_by_ids)
-    @deal_count = PurchaseSaleDetail.joins(:purchase_sale_items).where(transaction_type: "SaleDeal").group('purchase_sale_items.size_4').count
-    @payment_status_count = PurchaseSaleDetail.joins(:purchase_sale_items).where(transaction_type: "SaleDeal").group('purchase_sale_items.size_7').count
+    @deal_count = PurchaseSaleDetail.joins(:purchase_sale_items).where(transaction_type: %w[NewSaleDeal ReSaleDeal]).group('purchase_sale_items.size_4').count
+    @payment_status_count = PurchaseSaleDetail.joins(:purchase_sale_items).where(transaction_type: %w[NewSaleDeal ReSaleDeal]).group('purchase_sale_items.size_7').count
 
   end
 

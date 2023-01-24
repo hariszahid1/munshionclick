@@ -42,6 +42,7 @@ class UsersController < ApplicationController
   end
 
   def create_user
+    user_params[:extra_settings] = eval(user_params[:extra_settings])
     @user = User.new(user_params)
     respond_to do |format|
       if @user.save
@@ -63,6 +64,7 @@ class UsersController < ApplicationController
     # User.find(params[:id]).update(permission_updated:false)
     respond_to do |format|
       if @user.update(user_params)
+        @user.update(extra_settings: eval(user_params[:extra_settings]))
         save_user_ability
         format.html do
           redirect_to users_path,
@@ -140,7 +142,7 @@ class UsersController < ApplicationController
     params.require(:user).permit(
       :name, :user_name, :email, :father_name, :city, :phone, :fax,
       :address, :roles, :password, :confirm_password, :user_ability_roles,
-      :created_by_id, :email_to, :email_cc, :email_bcc, :roles_mask, :permission_updated,
+      :created_by_id, :email_to, :email_cc, :email_bcc, :roles_mask, :permission_updated, :extra_settings,
       user_permissions_attributes: %i[id can_accessed can_create can_read can_update can_delete can_download_pdf
                                       can_download_csv can_send_email can_import_export is_hidden]
     )

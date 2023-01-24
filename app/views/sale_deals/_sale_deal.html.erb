@@ -34,7 +34,7 @@
 						<div class="my-tooltip">
 							Delete
 						</div>
-							<%= link_to sale_deal, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+							<%= link_to sale_deal_path(sale_deal), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
 								<i class="fa fa-trash mt-2" aria-hidden="true"></i>
 							<%end %>
 					</div>
