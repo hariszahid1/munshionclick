@@ -38,6 +38,7 @@ class DashboardController < ApplicationController
     @total_only_booked=Product.only_booked_plot.uniq
     @total_transfer=Remark.where(remark_type:'Transfer')
     @total_orders = Order.count
+    @sticky_notes = StickyNote
     @q = Account.ransack(params[:q])
     @accounts=@q.result(distinct: true)
     if pos_type_batha

@@ -23,10 +23,19 @@
             </a>
             <ul class="collapse list-unstyled my-option border-radius-1" id="SaleSubmenu">
                 <li>
-                    <%= link_to sale_deals_path do %>
+                    <%= link_to sale_deals_path(q: {transaction_type_eq: 8}) do %>
                         <i class="fas fa-plus"></i>
                         <i class="fas fa-clipboard-check"></i>
-                        <span class="link-text">Sale Deals</span>
+                        <span class="link-text">Resale Deals</span>
+                    <% end %>
+                </li>
+            </ul>
+            <ul class="collapse list-unstyled my-option border-radius-1" id="SaleSubmenu">
+                <li>
+                    <%= link_to sale_deals_path(q: {transaction_type_eq: 9}) do %>
+                        <i class="fas fa-plus"></i>
+                        <i class="fas fa-clipboard-check"></i>
+                        <span class="link-text">Fresh Sale Deals</span>
                     <% end %>
                 </li>
             </ul>

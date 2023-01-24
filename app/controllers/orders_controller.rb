@@ -1,7 +1,7 @@
 class OrdersController < ApplicationController
   before_action :set_order, only: %i[show edit update destroy transfer booking_print booking_cancel]
   skip_before_action :authenticate_user!, only: [:show]
-  before_action :check_access
+  before_action :check_access, except: [:show]
   before_action :set_user, only: %i[new edit]
   # GET /orders
   # GET /orders.json

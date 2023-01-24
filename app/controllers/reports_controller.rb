@@ -262,6 +262,10 @@ class ReportsController < ApplicationController
     @investments_credit = Investment.sum(:credit)
     @accounts = Account.all
     @root=root_url
+
+    return user_group_pdf if params[:user_group_pdf].present?
+    return user_group_all_pdf if params[:user_group_all_pdf].present?
+
     if params[:email].present?
       @pdf_index=render_to_string(:pdf => "trial balance",:template => 'reports/trial_balance.pdf.erb',:filename => 'trail balance')
     end
@@ -288,6 +292,110 @@ class ReportsController < ApplicationController
         format.csv { send_data csv_data, filename: "Trail Balance - #{Date.today}.csv" }
       end
     end
+  end
+
+  def user_group_pdf
+    @sys_user_payable_customer, @sys_user_payable_customer_ledger_book_debit, @sys_user_payable_customer_ledger_book_credit, @sys_user_payable_customer_ledger_book_debit_total, @sys_user_payable_customer_ledger_book_credit_total = get_payable_data(0)
+    @sys_user_payable_own, @sys_user_payable_own_ledger_book_debit, @sys_user_payable_own_ledger_book_credit, @sys_user_payable_own_ledger_book_debit_total, @sys_user_payable_own_ledger_book_credit_total = get_payable_data(4)
+    @sys_user_payable_supplier, @sys_user_payable_supplier_ledger_book_debit, @sys_user_payable_supplier_ledger_book_credit, @sys_user_payable_supplier_ledger_book_debit_total, @sys_user_payable_supplier_ledger_book_credit_total = get_payable_data(1)
+    @sys_user_payable_salesman, @sys_user_payable_salesman_ledger_book_debit, @sys_user_payable_salesman_ledger_book_credit, @sys_user_payable_salesman_ledger_book_debit_total, @sys_user_payable_salesman_ledger_book_credit_total = get_payable_data(3)
+    @sys_user_payable_both, @sys_user_payable_both_ledger_book_debit, @sys_user_payable_both_ledger_book_credit, @sys_user_payable_both_ledger_book_debit_total, @sys_user_payable_both_ledger_book_credit_total = get_payable_data(2)
+    @sys_user_payable_investor, @sys_user_payable_investor_ledger_book_debit, @sys_user_payable_investor_ledger_book_credit, @sys_user_payable_investor_ledger_book_debit_total, @sys_user_payable_investor_ledger_book_credit_total = get_payable_data(5)
+    @sys_user_payable_investment, @sys_user_payable_investment_ledger_book_debit, @sys_user_payable_investment_ledger_book_credit, @sys_user_payable_investment_ledger_book_debit_total, @sys_user_payable_investment_ledger_book_credit_total = get_payable_data(6)
+    @sys_user_payable_worker, @sys_user_payable_worker_ledger_book_debit, @sys_user_payable_worker_ledger_book_credit, @sys_user_payable_worker_ledger_book_debit_total, @sys_user_payable_worker_ledger_book_credit_total = get_payable_data(7)
+    @sys_user_payable_other, @sys_user_payable_other_ledger_book_debit, @sys_user_payable_other_ledger_book_credit, @sys_user_payable_other_ledger_book_debit_total, @sys_user_payable_other_ledger_book_credit_total = get_payable_data(8)
+    @sys_user_payable_landlord, @sys_user_payable_landlord_ledger_book_debit, @sys_user_payable_landlord_ledger_book_credit, @sys_user_payable_landlord_ledger_book_debit_total, @sys_user_payable_landlord_ledger_book_credit_total = get_payable_data(9)
+    @sys_user_payable_md_investment, @sys_user_payable_md_investment_ledger_book_debit, @sys_user_payable_md_investment_ledger_book_credit, @sys_user_payable_md_investment_ledger_book_debit_total, @sys_user_payable_md_investment_ledger_book_credit_total = get_payable_data(10)
+
+    @sys_user_recievable_customer, @sys_user_recievable_customer_ledger_book_debit, @sys_user_recievable_customer_ledger_book_credit, @sys_user_recievable_customer_ledger_book_debit_total, @sys_user_recievable_customer_ledger_book_credit_total = get_recievable_data(0)
+    @sys_user_recievable_own, @sys_user_recievable_own_ledger_book_debit, @sys_user_recievable_own_ledger_book_credit, @sys_user_recievable_own_ledger_book_debit_total, @sys_user_recievable_own_ledger_book_credit_total = get_recievable_data(4)
+    @sys_user_recievable_supplier, @sys_user_recievable_supplier_ledger_book_debit, @sys_user_recievable_supplier_ledger_book_credit, @sys_user_recievable_supplier_ledger_book_debit_total, @sys_user_recievable_supplier_ledger_book_credit_total = get_recievable_data(1)
+    @sys_user_recievable_salesman, @sys_user_recievable_salesman_ledger_book_debit, @sys_user_recievable_salesman_ledger_book_credit, @sys_user_recievable_salesman_ledger_book_debit_total, @sys_user_recievable_salesman_ledger_book_credit_total = get_recievable_data(3)
+    @sys_user_recievable_both, @sys_user_recievable_both_ledger_book_debit, @sys_user_recievable_both_ledger_book_credit, @sys_user_recievable_both_ledger_book_debit_total, @sys_user_recievable_both_ledger_book_credit_total = get_recievable_data(2)
+    @sys_user_recievable_investor, @sys_user_recievable_investor_ledger_book_debit, @sys_user_recievable_investor_ledger_book_credit, @sys_user_recievable_investor_ledger_book_debit_total, @sys_user_recievable_investor_ledger_book_credit_total = get_recievable_data(5)
+    @sys_user_recievable_investment, @sys_user_recievable_investment_ledger_book_debit, @sys_user_recievable_investment_ledger_book_credit, @sys_user_recievable_investment_ledger_book_debit_total, @sys_user_recievable_investment_ledger_book_credit_total = get_recievable_data(6)
+    @sys_user_recievable_worker, @sys_user_recievable_worker_ledger_book_debit, @sys_user_recievable_worker_ledger_book_credit, @sys_user_recievable_worker_ledger_book_debit_total, @sys_user_recievable_worker_ledger_book_credit_total = get_recievable_data(7)
+    @sys_user_recievable_other, @sys_user_recievable_other_ledger_book_debit, @sys_user_recievable_other_ledger_book_credit, @sys_user_recievable_other_ledger_book_debit_total, @sys_user_recievable_other_ledger_book_credit_total = get_recievable_data(8)
+    @sys_user_recievable_landlord, @sys_user_recievable_landlord_ledger_book_debit, @sys_user_recievable_landlord_ledger_book_credit, @sys_user_recievable_landlord_ledger_book_debit_total, @sys_user_recievable_landlord_ledger_book_credit_total = get_recievable_data(9)
+    @sys_user_recievable_md_investment, @sys_user_recievable_md_investment_ledger_book_debit, @sys_user_recievable_md_investment_ledger_book_credit, @sys_user_recievable_md_investment_ledger_book_debit_total, @sys_user_recievable_md_investment_ledger_book_credit_total = get_recievable_data(10)
+
+    @sys_user_nil_customer, @sys_user_nil_customer_ledger_book_debit, @sys_user_nil_customer_ledger_book_credit, @sys_user_nil_customer_ledger_book_debit_total, @sys_user_nil_customer_ledger_book_credit_total = get_nil_data(0)
+    @sys_user_nil_own, @sys_user_nil_own_ledger_book_debit, @sys_user_nil_own_ledger_book_credit, @sys_user_nil_own_ledger_book_debit_total, @sys_user_nil_own_ledger_book_credit_total = get_nil_data(4)
+    @sys_user_nil_supplier, @sys_user_nil_supplier_ledger_book_debit, @sys_user_nil_supplier_ledger_book_credit, @sys_user_nil_supplier_ledger_book_debit_total, @sys_user_nil_supplier_ledger_book_credit_total = get_nil_data(1)
+    @sys_user_nil_salesman, @sys_user_nil_salesman_ledger_book_debit, @sys_user_nil_salesman_ledger_book_credit, @sys_user_nil_salesman_ledger_book_debit_total, @sys_user_nil_salesman_ledger_book_credit_total = get_nil_data(3)
+    @sys_user_nil_both, @sys_user_nil_both_ledger_book_debit, @sys_user_nil_both_ledger_book_credit, @sys_user_nil_both_ledger_book_debit_total, @sys_user_nil_both_ledger_book_credit_total = get_nil_data(2)
+    @sys_user_nil_investor, @sys_user_nil_investor_ledger_book_debit, @sys_user_nil_investor_ledger_book_credit, @sys_user_nil_investor_ledger_book_debit_total, @sys_user_nil_investor_ledger_book_credit_total = get_nil_data(5)
+    @sys_user_nil_investment, @sys_user_nil_investment_ledger_book_debit, @sys_user_nil_investment_ledger_book_credit, @sys_user_nil_investment_ledger_book_debit_total, @sys_user_nil_investment_ledger_book_credit_total = get_nil_data(6)
+    @sys_user_nil_worker, @sys_user_nil_worker_ledger_book_debit, @sys_user_nil_worker_ledger_book_credit, @sys_user_nil_worker_ledger_book_debit_total, @sys_user_nil_worker_ledger_book_credit_total = get_nil_data(7)
+    @sys_user_nil_other, @sys_user_nil_other_ledger_book_debit, @sys_user_nil_other_ledger_book_credit, @sys_user_nil_other_ledger_book_debit_total, @sys_user_nil_other_ledger_book_credit_total = get_nil_data(8)
+    @sys_user_nil_landlord, @sys_user_nil_landlord_ledger_book_debit, @sys_user_nil_landlord_ledger_book_credit, @sys_user_nil_landlord_ledger_book_debit_total, @sys_user_nil_landlord_ledger_book_credit_total = get_nil_data(9)
+    @sys_user_nil_md_investment, @sys_user_nil_md_investment_ledger_book_debit, @sys_user_nil_md_investment_ledger_book_credit, @sys_user_nil_md_investment_ledger_book_debit_total, @sys_user_nil_md_investment_ledger_book_credit_total = get_nil_data(10)
+
+    request.format = 'pdf'
+    @time = Time.zone.now
+    time = @time.strftime("%d")+' '+@time.strftime("%b")+' '+@time.strftime("%y")+' '+@time.strftime("at %I:%M %p")
+    name = 'Trail Balance # '+time.to_s
+    print_pdf(name,'pdf.html','A4')
+  end
+
+  def user_group_all_pdf
+    @sys_user_customer, @sys_user_customer_ledger_book_debit, @sys_user_customer_ledger_book_credit, @sys_user_customer_ledger_book_debit_total, @sys_user_customer_ledger_book_credit_total = get_all_data(0)
+    @sys_user_own, @sys_user_own_ledger_book_debit, @sys_user_own_ledger_book_credit, @sys_user_own_ledger_book_debit_total, @sys_user_own_ledger_book_credit_total = get_all_data(4)
+    @sys_user_supplier, @sys_user_supplier_ledger_book_debit, @sys_user_supplier_ledger_book_credit, @sys_user_supplier_ledger_book_debit_total, @sys_user_supplier_ledger_book_credit_total = get_all_data(1)
+    @sys_user_salesman, @sys_user_salesman_ledger_book_debit, @sys_user_salesman_ledger_book_credit, @sys_user_salesman_ledger_book_debit_total, @sys_user_salesman_ledger_book_credit_total = get_all_data(3)
+    @sys_user_both, @sys_user_both_ledger_book_debit, @sys_user_both_ledger_book_credit, @sys_user_both_ledger_book_debit_total, @sys_user_both_ledger_book_credit_total = get_all_data(2)
+    @sys_user_investor, @sys_user_investor_ledger_book_debit, @sys_user_investor_ledger_book_credit, @sys_user_investor_ledger_book_debit_total, @sys_user_investor_ledger_book_credit_total = get_all_data(5)
+    @sys_user_investment, @sys_user_investment_ledger_book_debit, @sys_user_investment_ledger_book_credit, @sys_user_investment_ledger_book_debit_total, @sys_user_investment_ledger_book_credit_total = get_all_data(6)
+    @sys_user_worker, @sys_user_worker_ledger_book_debit, @sys_user_worker_ledger_book_credit, @sys_user_worker_ledger_book_debit_total, @sys_user_worker_ledger_book_credit_total = get_all_data(7)
+    @sys_user_other, @sys_user_other_ledger_book_debit, @sys_user_other_ledger_book_credit, @sys_user_other_ledger_book_debit_total, @sys_user_other_ledger_book_credit_total = get_all_data(8)
+    @sys_user_landlord, @sys_user_landlord_ledger_book_debit, @sys_user_landlord_ledger_book_credit, @sys_user_landlord_ledger_book_debit_total, @sys_user_landlord_ledger_book_credit_total = get_all_data(9)
+    @sys_user_md_investment, @sys_user_md_investment_ledger_book_debit, @sys_user_md_investment_ledger_book_credit, @sys_user_md_investment_ledger_book_debit_total, @sys_user_md_investment_ledger_book_credit_total = get_all_data(10)
+
+    request.format = 'pdf'
+    @time = Time.zone.now
+    time = @time.strftime("%d")+' '+@time.strftime("%b")+' '+@time.strftime("%y")+' '+@time.strftime("at %I:%M %p")
+    name = 'Trail Balance # '+time.to_s
+    print_pdf(name,'pdf.html','A4')
+  end
+
+  def get_all_data(user_group)
+    sys_users = SysUser.where(user_group: user_group).order('user_group asc', 'name asc')
+    ledger_book_debit = LedgerBook.group('sys_user_id').sum(:debit)
+    ledger_book_credit = LedgerBook.group('sys_user_id').sum(:credit)
+    ledger_book_debit_total = LedgerBook.where('debit > 0').where(sys_user_id: sys_users.ids).sum(:debit)
+    ledger_book_credit_total = LedgerBook.where('credit > 0').where(sys_user_id: sys_users.ids).sum(:credit)
+
+    return sys_users, ledger_book_debit, ledger_book_credit, ledger_book_debit_total, ledger_book_credit_total
+  end
+
+  def get_recievable_data(user_group)
+    sys_users = SysUser.where('balance < ? && user_group = ?', 0, user_group).order('user_group asc', 'name asc')
+    ledger_book_debit = LedgerBook.group('sys_user_id').sum(:debit)
+    ledger_book_credit = LedgerBook.group('sys_user_id').sum(:credit)
+    ledger_book_debit_total = LedgerBook.where('debit > 0').where(sys_user_id: sys_users.ids).sum(:debit)
+    ledger_book_credit_total = LedgerBook.where('credit > 0').where(sys_user_id: sys_users.ids).sum(:credit)
+
+    return sys_users, ledger_book_debit, ledger_book_credit, ledger_book_debit_total, ledger_book_credit_total
+  end
+
+  def get_payable_data(user_group)
+    sys_users = SysUser.where('balance > ? && user_group = ?', 0, user_group).order('user_group asc', 'name asc')
+    ledger_book_debit = LedgerBook.group('sys_user_id').sum(:debit)
+    ledger_book_credit = LedgerBook.group('sys_user_id').sum(:credit)
+    ledger_book_debit_total = LedgerBook.where('debit > 0').where(sys_user_id: sys_users.ids).sum(:debit)
+    ledger_book_credit_total = LedgerBook.where('credit > 0').where(sys_user_id: sys_users.ids).sum(:credit)
+
+    return sys_users, ledger_book_debit, ledger_book_credit, ledger_book_debit_total, ledger_book_credit_total
+  end
+
+  def get_nil_data(user_group)
+    sys_users = SysUser.where(balance: 0, user_group: user_group).order('user_group asc', 'name asc')
+    ledger_book_debit = LedgerBook.group('sys_user_id').sum(:debit)
+    ledger_book_credit = LedgerBook.group('sys_user_id').sum(:credit)
+    ledger_book_debit_total = LedgerBook.where('debit > 0').where(sys_user_id: sys_users.ids).sum(:debit)
+    ledger_book_credit_total = LedgerBook.where('credit > 0').where(sys_user_id: sys_users.ids).sum(:credit)
+
+    return sys_users, ledger_book_debit, ledger_book_credit, ledger_book_debit_total, ledger_book_credit_total
   end
 
 # trial balance partialy data start
