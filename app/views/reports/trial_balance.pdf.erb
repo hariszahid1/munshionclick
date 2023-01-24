@@ -15,183 +15,406 @@
 <p style="border-bottom: double 4px;  margin: 0;"></p>
 <h2 style="text-align: center; margin: 0;">Users</h2>
 <p style="border-bottom: double 4px;  margin: 0;"></p>
-<h2 style="text-align: center; margin: 0;">User Payable</h2>
-<div >
-  <table>
-    <thead>
-      <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
-        <th>Code</th>
-        <th>Name</th>
-        <th>User Group</th>
-        <th>Status</th>
-        <th>Debit</th>
-        <th>Credit</th>
-        <th>Balance</th>
-        <th>Check</th>
-      </tr>
-    </thead>
+<% if params[:user_group_pdf].present? %>
+  <h2 style="text-align: center; margin: 0;">User Payable</h2>
+  <div>
+    <%= render partial: 'group_by_data', locals: { heading: 'Customer',
+                                        users: @sys_user_payable_customer,
+                                        ledger_book_debit: @sys_user_payable_customer_ledger_book_debit,
+                                        ledger_book_credit: @sys_user_payable_customer_ledger_book_credit,
+                                        ledger_book_credit_total: @sys_user_payable_customer_ledger_book_credit_total,
+                                        ledger_book_debit_total: @sys_user_payable_customer_ledger_book_debit_total,
+                                        } %>
+    <%= render partial: 'group_by_data', locals: { heading: 'Own',
+                                                  users: @sys_user_payable_own,
+                                                  ledger_book_debit: @sys_user_payable_own_ledger_book_debit,
+                                                  ledger_book_credit: @sys_user_payable_own_ledger_book_credit,
+                                                  ledger_book_credit_total: @sys_user_payable_own_ledger_book_credit_total,
+                                                  ledger_book_debit_total: @sys_user_payable_own_ledger_book_debit_total,
+                                                  }
+    %>
 
-    <tbody>
-      <% @sys_user_payable.each do |sys_user| %>
-        <tr class="" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif" >
-          <td><%= sys_user.code %></td>
-          <td>
-              <i class="fa fa-address-book"></i><%= sys_user.name %>
-          </td>
-          <td><%= sys_user.user_group %></td>
-          <td><%= sys_user.status %></td>
-          <td>
-            <% debit_sum  = @sys_user_payable_ledger_book_debit[sys_user.id].to_d%>
-            <%= number_with_delimiter(debit_sum)%>
-          </td>
-          <td>
-            <% credit_sum = @sys_user_payable_ledger_book_credit[sys_user.id].to_d%>
-            <%= number_with_delimiter(credit_sum)%>
-          </td>
-          <td>
-            <% balance = sys_user.balance %> <%credit_debit = credit_sum-debit_sum%>
-            <%= number_with_delimiter(balance)%>
-          </td>
-          <td>
-            <% if balance == credit_debit%>
-              ok
-            <%else%>
-              <%= number_with_delimiter(balance-credit_debit)%>
-            <%end%>
-          </td>
-        </tr>
-      <% end %>
-      <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif" >
-        <td><h5>Total</h5></td>
-        <td><%= %></td>
-        <td><%= %></td>
-        <td><%= %></td>
-        <td><%= number_with_delimiter(@sys_user_payable_ledger_book_debit_total)%></td>
-        <td><%= number_with_delimiter(@sys_user_payable_ledger_book_credit_total)%></td>
-        <td><%= number_with_delimiter(@sys_user_payable.pluck('balance').map(&:abs).sum) %></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-<h2 style="text-align: center; margin: 0;">Users Reciveable</h2>
-<div >
-  <table>
-    <thead>
-      <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
-        <th>Code</th>
-        <th>Name</th>
-        <th>User Group</th>
-        <th>Status</th>
-        <th>Debit</th>
-        <th>Credit</th>
-        <th>Balance</th>
-        <th>Check</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @sys_user_receiveable.each do |sys_user| %>
-        <tr class="" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif" >
-          <td><%= sys_user.code %></td>
-          <td>
-              <i class="fa fa-address-book"></i><%= sys_user.name %>
-          </td>
-          <td><%= sys_user.user_group %></td>
-          <td><%= sys_user.status %></td>
-          <td>
-            <% debit_sum  = @sys_user_receiveable_ledger_book_debit[sys_user.id].to_d%>
-            <%= number_with_delimiter(debit_sum)%>
-          </td>
-          <td>
-            <% credit_sum = @sys_user_receiveable_ledger_book_credit[sys_user.id].to_d%>
-            <%= number_with_delimiter(credit_sum)%>
-          </td>
-          <td>
-            <% balance = sys_user.balance %><%credit_debit = credit_sum-debit_sum%>
-            <%= number_with_delimiter(balance)%>
-          </td>
-          <td>
-            <% if balance == credit_debit%>
-              ok
-            <%else%>
-              <%= number_with_delimiter(balance-credit_debit)%>
-            <%end%>
-          </td>
-        </tr>
-      <% end %>
-      <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif" >
-        <td><h5>Total</h5></td>
-        <td><%= %></td>
-        <td><%= %></td>
-        <td><%= %></td>
-        <td><%= @sys_user_receiveable_ledger_book_debit_total%></td>
-        <td><%= @sys_user_receiveable_ledger_book_credit_total%></td>
-        <td><%=@sys_user_receiveable.pluck('balance').map(&:abs).sum %></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-<h2 style="text-align: center; margin: 0;">Users Nill</h2>
-<div >
-  <table>
-    <thead>
-      <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
-        <th>Code</th>
-        <th>Name</th>
-        <th>User Group</th>
-        <th>Status</th>
-        <th>Debit</th>
-        <th>Credit</th>
-        <th>Balance</th>
-        <th>Check</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @sys_user_nill.each do |sys_user| %>
-        <tr class="" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif" >
-          <td><%= sys_user.code %></td>
-          <td>
-              <i class="fa fa-address-book"></i><%= sys_user.name %>
-          </td>
-          <td><%= sys_user.user_group %></td>
-          <td><%= sys_user.status %></td>
-          <td>
-            <% debit_sum  = @sys_user_nill_ledger_book_debit[sys_user.id].to_d%>
-            <%= number_with_delimiter(debit_sum)%>
-          </td>
-          <td>
-            <% credit_sum = @sys_user_nill_ledger_book_credit[sys_user.id].to_d%>
-            <%= number_with_delimiter(credit_sum)%>
-          </td>
-          <td>
-            <% balance = sys_user.balance %><%credit_debit = credit_sum-debit_sum%>
-            <%= number_with_delimiter(balance)%>
-          </td>
-          <td>
-            <% if balance == credit_debit%>
-              <i class="fa fa-check"></i>
-              ok
-            <%else%>
-              <i class="fa fa-trash"></i>
-              <%=number_with_delimiter(balance-credit_debit)%>
-            <%end%>
-          </td>
-        </tr>
-      <% end %>
-      <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif" >
-        <td><h5>Total</h5></td>
-        <td><%= %></td>
-        <td><%= %></td>
-        <td><%= %></td>
-        <td><%= @sys_user_nill_ledger_book_debit_total%></td>
-        <td><%= @sys_user_nill_ledger_book_credit_total%></td>
-        <td><%=@sys_user_nill.pluck('balance').map(&:abs).sum %></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+    <%= render partial: 'group_by_data', locals: { heading: 'Supplier',
+                                                  users: @sys_user_payable_supplier,
+                                                  ledger_book_debit: @sys_user_payable_supplier_ledger_book_debit,
+                                                  ledger_book_credit: @sys_user_payable_supplier_ledger_book_credit,
+                                                  ledger_book_credit_total: @sys_user_payable_supplier_ledger_book_credit_total,
+                                                  ledger_book_debit_total: @sys_user_payable_supplier_ledger_book_debit_total,
+                                                  }
+    %>
+
+    <%= render partial: 'group_by_data', locals: { heading: 'Both',
+                                                  users: @sys_user_payable_both,
+                                                  ledger_book_debit: @sys_user_payable_both_ledger_book_debit,
+                                                  ledger_book_credit: @sys_user_payable_both_ledger_book_credit,
+                                                  ledger_book_credit_total: @sys_user_payable_both_ledger_book_credit_total,
+                                                  ledger_book_debit_total: @sys_user_payable_both_ledger_book_debit_total,
+                                                  }
+    %>
+
+    <%= render partial: 'group_by_data', locals: { heading: 'MD-Investment',
+                                                  users: @sys_user_payable_md_investment,
+                                                  ledger_book_debit: @sys_user_payable_md_investment_ledger_book_debit,
+                                                  ledger_book_credit: @sys_user_payable_md_investment_ledger_book_credit,
+                                                  ledger_book_credit_total: @sys_user_payable_md_investment_ledger_book_credit_total,
+                                                  ledger_book_debit_total: @sys_user_payable_md_investment_ledger_book_debit_total,
+                                                  }
+    %>
+
+    <%= render partial: 'group_by_data', locals: { heading: 'Salesman',
+                                                  users: @sys_user_payable_sale_man,
+                                                  ledger_book_debit: @sys_user_payable_sale_man_ledger_book_debit,
+                                                  ledger_book_credit: @sys_user_payable_sale_man_ledger_book_credit,
+                                                  ledger_book_credit_total: @sys_user_payable_sale_man_ledger_book_credit_total,
+                                                  ledger_book_debit_total: @sys_user_payable_sale_man_ledger_book_debit_total,
+                                                  }
+    %>
+
+    <%= render partial: 'group_by_data', locals: { heading: 'Investor',
+                                                  users: @sys_user_payable_investor,
+                                                  ledger_book_debit: @sys_user_payable_investor_ledger_book_debit,
+                                                  ledger_book_credit: @sys_user_payable_investor_ledger_book_credit,
+                                                  ledger_book_credit_total: @sys_user_payable_investor_ledger_book_credit_total,
+                                                  ledger_book_debit_total: @sys_user_payable_investor_ledger_book_debit_total,
+                                                  }
+    %>
+
+    <%= render partial: 'group_by_data', locals: { heading: 'LandLord',
+                                                  users: @sys_user_payable_landlord,
+                                                  ledger_book_debit: @sys_user_payable_landlord_ledger_book_debit,
+                                                  ledger_book_credit: @sys_user_payable_landlord_ledger_book_credit,
+                                                  ledger_book_credit_total: @sys_user_payable_landlord_ledger_book_credit_total,
+                                                  ledger_book_debit_total: @sys_user_payable_landlord_ledger_book_debit_total,
+                                                  }
+    %>
+
+    <%= render partial: 'group_by_data', locals: { heading: 'Other',
+                                                  users: @sys_user_payable_other,
+                                                  ledger_book_debit: @sys_user_payable_other_ledger_book_debit,
+                                                  ledger_book_credit: @sys_user_payable_other_ledger_book_credit,
+                                                  ledger_book_credit_total: @sys_user_payable_other_ledger_book_credit_total,
+                                                  ledger_book_debit_total: @sys_user_payable_other_ledger_book_debit_total,
+                                                  }
+    %>
+
+    <%= render partial: 'group_by_data', locals: { heading: 'Worker',
+                                                  users: @sys_user_payable_worker,
+                                                  ledger_book_debit: @sys_user_payable_worker_ledger_book_debit,
+                                                  ledger_book_credit: @sys_user_payable_worker_ledger_book_credit,
+                                                  ledger_book_credit_total: @sys_user_payable_worker_ledger_book_credit_total,
+                                                  ledger_book_debit_total: @sys_user_payable_worker_ledger_book_debit_total,
+                                                  }
+    %>
+
+    <%= render partial: 'group_by_data', locals: { heading: 'Investment',
+                                                  users: @sys_user_payable_investment,
+                                                  ledger_book_debit: @sys_user_payable_investment_ledger_book_debit,
+                                                  ledger_book_credit: @sys_user_payable_investment_ledger_book_credit,
+                                                  ledger_book_credit_total: @sys_user_payable_investment_ledger_book_credit_total,
+                                                  ledger_book_debit_total: @sys_user_payable_investment_ledger_book_debit_total,
+                                                  }
+    %>
+  </div>
+
+  <h2 style="text-align: center; margin: 0;">User Receivable</h2>
+  <div>
+    <%= render partial: 'group_by_data', locals: { heading: 'Customer',
+                                        users: @sys_user_recievable_customer,
+                                        ledger_book_debit: @sys_user_recievable_customer_ledger_book_debit,
+                                        ledger_book_credit: @sys_user_recievable_customer_ledger_book_credit,
+                                        ledger_book_credit_total: @sys_user_recievable_customer_ledger_book_credit_total,
+                                        ledger_book_debit_total: @sys_user_recievable_customer_ledger_book_debit_total,
+                                        } %>
+    <%= render partial: 'group_by_data', locals: { heading: 'Own',
+                                                  users: @sys_user_recievable_own,
+                                                  ledger_book_debit: @sys_user_recievable_own_ledger_book_debit,
+                                                  ledger_book_credit: @sys_user_recievable_own_ledger_book_credit,
+                                                  ledger_book_credit_total: @sys_user_recievable_own_ledger_book_credit_total,
+                                                  ledger_book_debit_total: @sys_user_recievable_own_ledger_book_debit_total,
+                                                  }
+    %>
+
+    <%= render partial: 'group_by_data', locals: { heading: 'Supplier',
+                                                  users: @sys_user_recievable_supplier,
+                                                  ledger_book_debit: @sys_user_recievable_supplier_ledger_book_debit,
+                                                  ledger_book_credit: @sys_user_recievable_supplier_ledger_book_credit,
+                                                  ledger_book_credit_total: @sys_user_recievable_supplier_ledger_book_credit_total,
+                                                  ledger_book_debit_total: @sys_user_recievable_supplier_ledger_book_debit_total,
+                                                  }
+    %>
+
+    <%= render partial: 'group_by_data', locals: { heading: 'Both',
+                                                  users: @sys_user_recievable_both,
+                                                  ledger_book_debit: @sys_user_recievable_both_ledger_book_debit,
+                                                  ledger_book_credit: @sys_user_recievable_both_ledger_book_credit,
+                                                  ledger_book_credit_total: @sys_user_recievable_both_ledger_book_credit_total,
+                                                  ledger_book_debit_total: @sys_user_recievable_both_ledger_book_debit_total,
+                                                  }
+    %>
+
+    <%= render partial: 'group_by_data', locals: { heading: 'MD-Investment',
+                                                  users: @sys_user_recievable_md_investment,
+                                                  ledger_book_debit: @sys_user_recievable_md_investment_ledger_book_debit,
+                                                  ledger_book_credit: @sys_user_recievable_md_investment_ledger_book_credit,
+                                                  ledger_book_credit_total: @sys_user_recievable_md_investment_ledger_book_credit_total,
+                                                  ledger_book_debit_total: @sys_user_recievable_md_investment_ledger_book_debit_total,
+                                                  }
+    %>
+
+    <%= render partial: 'group_by_data', locals: { heading: 'Salesman',
+                                                  users: @sys_user_recievable_sale_man,
+                                                  ledger_book_debit: @sys_user_recievable_sale_man_ledger_book_debit,
+                                                  ledger_book_credit: @sys_user_recievable_sale_man_ledger_book_credit,
+                                                  ledger_book_credit_total: @sys_user_recievable_sale_man_ledger_book_credit_total,
+                                                  ledger_book_debit_total: @sys_user_recievable_sale_man_ledger_book_debit_total,
+                                                  }
+    %>
+
+    <%= render partial: 'group_by_data', locals: { heading: 'Investor',
+                                                  users: @sys_user_recievable_investor,
+                                                  ledger_book_debit: @sys_user_recievable_investor_ledger_book_debit,
+                                                  ledger_book_credit: @sys_user_recievable_investor_ledger_book_credit,
+                                                  ledger_book_credit_total: @sys_user_recievable_investor_ledger_book_credit_total,
+                                                  ledger_book_debit_total: @sys_user_recievable_investor_ledger_book_debit_total,
+                                                  }
+    %>
+
+    <%= render partial: 'group_by_data', locals: { heading: 'LandLord',
+                                                  users: @sys_user_recievable_landlord,
+                                                  ledger_book_debit: @sys_user_recievable_landlord_ledger_book_debit,
+                                                  ledger_book_credit: @sys_user_recievable_landlord_ledger_book_credit,
+                                                  ledger_book_credit_total: @sys_user_recievable_landlord_ledger_book_credit_total,
+                                                  ledger_book_debit_total: @sys_user_recievable_landlord_ledger_book_debit_total,
+                                                  }
+    %>
+
+    <%= render partial: 'group_by_data', locals: { heading: 'Other',
+                                                  users: @sys_user_recievable_other,
+                                                  ledger_book_debit: @sys_user_recievable_other_ledger_book_debit,
+                                                  ledger_book_credit: @sys_user_recievable_other_ledger_book_credit,
+                                                  ledger_book_credit_total: @sys_user_recievable_other_ledger_book_credit_total,
+                                                  ledger_book_debit_total: @sys_user_recievable_other_ledger_book_debit_total,
+                                                  }
+    %>
+
+    <%= render partial: 'group_by_data', locals: { heading: 'Worker',
+                                                  users: @sys_user_recievable_worker,
+                                                  ledger_book_debit: @sys_user_recievable_worker_ledger_book_debit,
+                                                  ledger_book_credit: @sys_user_recievable_worker_ledger_book_credit,
+                                                  ledger_book_credit_total: @sys_user_recievable_worker_ledger_book_credit_total,
+                                                  ledger_book_debit_total: @sys_user_recievable_worker_ledger_book_debit_total,
+                                                  }
+    %>
+
+    <%= render partial: 'group_by_data', locals: { heading: 'Investment',
+                                                  users: @sys_user_recievable_investment,
+                                                  ledger_book_debit: @sys_user_recievable_investment_ledger_book_debit,
+                                                  ledger_book_credit: @sys_user_recievable_investment_ledger_book_credit,
+                                                  ledger_book_credit_total: @sys_user_recievable_investment_ledger_book_credit_total,
+                                                  ledger_book_debit_total: @sys_user_recievable_investment_ledger_book_debit_total,
+                                                  }
+    %>
+  </div>
+
+  <h2 style="text-align: center; margin: 0;">Users Nill</h2>
+  <div>
+    <%= render partial: 'group_by_data', locals: { heading: 'Customer',
+                                        users: @sys_user_nil_customer,
+                                        ledger_book_debit: @sys_user_nil_customer_ledger_book_debit,
+                                        ledger_book_credit: @sys_user_nil_customer_ledger_book_credit,
+                                        ledger_book_credit_total: @sys_user_nil_customer_ledger_book_credit_total,
+                                        ledger_book_debit_total: @sys_user_nil_customer_ledger_book_debit_total,
+                                        } %>
+    <%= render partial: 'group_by_data', locals: { heading: 'Own',
+                                                  users: @sys_user_nil_own,
+                                                  ledger_book_debit: @sys_user_nil_own_ledger_book_debit,
+                                                  ledger_book_credit: @sys_user_nil_own_ledger_book_credit,
+                                                  ledger_book_credit_total: @sys_user_nil_own_ledger_book_credit_total,
+                                                  ledger_book_debit_total: @sys_user_nil_own_ledger_book_debit_total,
+                                                  }
+    %>
+
+    <%= render partial: 'group_by_data', locals: { heading: 'Supplier',
+                                                  users: @sys_user_nil_supplier,
+                                                  ledger_book_debit: @sys_user_nil_supplier_ledger_book_debit,
+                                                  ledger_book_credit: @sys_user_nil_supplier_ledger_book_credit,
+                                                  ledger_book_credit_total: @sys_user_nil_supplier_ledger_book_credit_total,
+                                                  ledger_book_debit_total: @sys_user_nil_supplier_ledger_book_debit_total,
+                                                  }
+    %>
+
+    <%= render partial: 'group_by_data', locals: { heading: 'Both',
+                                                  users: @sys_user_nil_both,
+                                                  ledger_book_debit: @sys_user_nil_both_ledger_book_debit,
+                                                  ledger_book_credit: @sys_user_nil_both_ledger_book_credit,
+                                                  ledger_book_credit_total: @sys_user_nil_both_ledger_book_credit_total,
+                                                  ledger_book_debit_total: @sys_user_nil_both_ledger_book_debit_total,
+                                                  }
+    %>
+
+    <%= render partial: 'group_by_data', locals: { heading: 'MD-Investment',
+                                                  users: @sys_user_nil_md_investment,
+                                                  ledger_book_debit: @sys_user_nil_md_investment_ledger_book_debit,
+                                                  ledger_book_credit: @sys_user_nil_md_investment_ledger_book_credit,
+                                                  ledger_book_credit_total: @sys_user_nil_md_investment_ledger_book_credit_total,
+                                                  ledger_book_debit_total: @sys_user_nil_md_investment_ledger_book_debit_total,
+                                                  }
+    %>
+
+    <%= render partial: 'group_by_data', locals: { heading: 'Salesman',
+                                                  users: @sys_user_nil_sale_man,
+                                                  ledger_book_debit: @sys_user_nil_sale_man_ledger_book_debit,
+                                                  ledger_book_credit: @sys_user_nil_sale_man_ledger_book_credit,
+                                                  ledger_book_credit_total: @sys_user_nil_sale_man_ledger_book_credit_total,
+                                                  ledger_book_debit_total: @sys_user_nil_sale_man_ledger_book_debit_total,
+                                                  }
+    %>
+
+    <%= render partial: 'group_by_data', locals: { heading: 'Investor',
+                                                  users: @sys_user_nil_investor,
+                                                  ledger_book_debit: @sys_user_nil_investor_ledger_book_debit,
+                                                  ledger_book_credit: @sys_user_nil_investor_ledger_book_credit,
+                                                  ledger_book_credit_total: @sys_user_nil_investor_ledger_book_credit_total,
+                                                  ledger_book_debit_total: @sys_user_nil_investor_ledger_book_debit_total,
+                                                  }
+    %>
+
+    <%= render partial: 'group_by_data', locals: { heading: 'LandLord',
+                                                  users: @sys_user_nil_landlord,
+                                                  ledger_book_debit: @sys_user_nil_landlord_ledger_book_debit,
+                                                  ledger_book_credit: @sys_user_nil_landlord_ledger_book_credit,
+                                                  ledger_book_credit_total: @sys_user_nil_landlord_ledger_book_credit_total,
+                                                  ledger_book_debit_total: @sys_user_nil_landlord_ledger_book_debit_total,
+                                                  }
+    %>
+
+    <%= render partial: 'group_by_data', locals: { heading: 'Other',
+                                                  users: @sys_user_nil_other,
+                                                  ledger_book_debit: @sys_user_nil_other_ledger_book_debit,
+                                                  ledger_book_credit: @sys_user_nil_other_ledger_book_credit,
+                                                  ledger_book_credit_total: @sys_user_nil_other_ledger_book_credit_total,
+                                                  ledger_book_debit_total: @sys_user_nil_other_ledger_book_debit_total,
+                                                  }
+    %>
+
+    <%= render partial: 'group_by_data', locals: { heading: 'Worker',
+                                                  users: @sys_user_nil_worker,
+                                                  ledger_book_debit: @sys_user_nil_worker_ledger_book_debit,
+                                                  ledger_book_credit: @sys_user_nil_worker_ledger_book_credit,
+                                                  ledger_book_credit_total: @sys_user_nil_worker_ledger_book_credit_total,
+                                                  ledger_book_debit_total: @sys_user_nil_worker_ledger_book_debit_total,
+                                                  }
+    %>
+
+    <%= render partial: 'group_by_data', locals: { heading: 'Investment',
+                                                  users: @sys_user_nil_investment,
+                                                  ledger_book_debit: @sys_user_nil_investment_ledger_book_debit,
+                                                  ledger_book_credit: @sys_user_nil_investment_ledger_book_credit,
+                                                  ledger_book_credit_total: @sys_user_nil_investment_ledger_book_credit_total,
+                                                  ledger_book_debit_total: @sys_user_nil_investment_ledger_book_debit_total,
+                                                  }
+    %>
+  </div>
+<% else %>
+  <div>
+    <%= render partial: 'group_by_data', locals: { heading: 'Customer',
+                                        users: @sys_user_customer,
+                                        ledger_book_debit: @sys_user_customer_ledger_book_debit,
+                                        ledger_book_credit: @sys_user_customer_ledger_book_credit,
+                                        ledger_book_credit_total: @sys_user_customer_ledger_book_credit_total,
+                                        ledger_book_debit_total: @sys_user_customer_ledger_book_debit_total,
+                                        } %>
+    <%= render partial: 'group_by_data', locals: { heading: 'Own',
+                                                  users: @sys_user_own,
+                                                  ledger_book_debit: @sys_user_own_ledger_book_debit,
+                                                  ledger_book_credit: @sys_user_own_ledger_book_credit,
+                                                  ledger_book_credit_total: @sys_user_own_ledger_book_credit_total,
+                                                  ledger_book_debit_total: @sys_user_own_ledger_book_debit_total,
+                                                  }
+    %>
+
+    <%= render partial: 'group_by_data', locals: { heading: 'Supplier',
+                                                  users: @sys_user_supplier,
+                                                  ledger_book_debit: @sys_user_supplier_ledger_book_debit,
+                                                  ledger_book_credit: @sys_user_supplier_ledger_book_credit,
+                                                  ledger_book_credit_total: @sys_user_supplier_ledger_book_credit_total,
+                                                  ledger_book_debit_total: @sys_user_supplier_ledger_book_debit_total,
+                                                  }
+    %>
+
+    <%= render partial: 'group_by_data', locals: { heading: 'Both',
+                                                  users: @sys_user_both,
+                                                  ledger_book_debit: @sys_user_both_ledger_book_debit,
+                                                  ledger_book_credit: @sys_user_both_ledger_book_credit,
+                                                  ledger_book_credit_total: @sys_user_both_ledger_book_credit_total,
+                                                  ledger_book_debit_total: @sys_user_both_ledger_book_debit_total,
+                                                  }
+    %>
+
+    <%= render partial: 'group_by_data', locals: { heading: 'MD-Investment',
+                                                  users: @sys_user_md_investment,
+                                                  ledger_book_debit: @sys_user_md_investment_ledger_book_debit,
+                                                  ledger_book_credit: @sys_user_md_investment_ledger_book_credit,
+                                                  ledger_book_credit_total: @sys_user_md_investment_ledger_book_credit_total,
+                                                  ledger_book_debit_total: @sys_user_md_investment_ledger_book_debit_total,
+                                                  }
+    %>
+
+    <%= render partial: 'group_by_data', locals: { heading: 'Salesman',
+                                                  users: @sys_user_sale_man,
+                                                  ledger_book_debit: @sys_user_sale_man_ledger_book_debit,
+                                                  ledger_book_credit: @sys_user_sale_man_ledger_book_credit,
+                                                  ledger_book_credit_total: @sys_user_sale_man_ledger_book_credit_total,
+                                                  ledger_book_debit_total: @sys_user_sale_man_ledger_book_debit_total,
+                                                  }
+    %>
+
+    <%= render partial: 'group_by_data', locals: { heading: 'Investor',
+                                                  users: @sys_user_investor,
+                                                  ledger_book_debit: @sys_user_investor_ledger_book_debit,
+                                                  ledger_book_credit: @sys_user_investor_ledger_book_credit,
+                                                  ledger_book_credit_total: @sys_user_investor_ledger_book_credit_total,
+                                                  ledger_book_debit_total: @sys_user_investor_ledger_book_debit_total,
+                                                  }
+    %>
+
+    <%= render partial: 'group_by_data', locals: { heading: 'LandLord',
+                                                  users: @sys_user_landlord,
+                                                  ledger_book_debit: @sys_user_landlord_ledger_book_debit,
+                                                  ledger_book_credit: @sys_user_landlord_ledger_book_credit,
+                                                  ledger_book_credit_total: @sys_user_landlord_ledger_book_credit_total,
+                                                  ledger_book_debit_total: @sys_user_landlord_ledger_book_debit_total,
+                                                  }
+    %>
+
+    <%= render partial: 'group_by_data', locals: { heading: 'Other',
+                                                  users: @sys_user_other,
+                                                  ledger_book_debit: @sys_user_other_ledger_book_debit,
+                                                  ledger_book_credit: @sys_user_other_ledger_book_credit,
+                                                  ledger_book_credit_total: @sys_user_other_ledger_book_credit_total,
+                                                  ledger_book_debit_total: @sys_user_other_ledger_book_debit_total,
+                                                  }
+    %>
+
+    <%= render partial: 'group_by_data', locals: { heading: 'Worker',
+                                                  users: @sys_user_worker,
+                                                  ledger_book_debit: @sys_user_worker_ledger_book_debit,
+                                                  ledger_book_credit: @sys_user_worker_ledger_book_credit,
+                                                  ledger_book_credit_total: @sys_user_worker_ledger_book_credit_total,
+                                                  ledger_book_debit_total: @sys_user_worker_ledger_book_debit_total,
+                                                  }
+    %>
+
+    <%= render partial: 'group_by_data', locals: { heading: 'Investment',
+                                                  users: @sys_user_investment,
+                                                  ledger_book_debit: @sys_user_investment_ledger_book_debit,
+                                                  ledger_book_credit: @sys_user_investment_ledger_book_credit,
+                                                  ledger_book_credit_total: @sys_user_investment_ledger_book_credit_total,
+                                                  ledger_book_debit_total: @sys_user_investment_ledger_book_debit_total,
+                                                  }
+    %>
+  </div>
+<% end %>
 
 <div class="alwaysbreak">
 <p style="border-bottom: double 4px;  margin: 0;"></p>

@@ -1,4 +1,6 @@
 class StickyNotesController < ApplicationController
+  before_action :check_access
+
   def index
     @sticky_notes = StickyNote.all
   end

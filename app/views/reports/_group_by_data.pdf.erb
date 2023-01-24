@@ -1,0 +1,61 @@
+<h2 style="text-align: center; margin: 0;"><%= heading %></h2>
+<div>
+  <table>
+    <thead>
+      <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+        <th>Code</th>
+        <th>Name</th>
+        <th>User Group</th>
+        <th>Status</th>
+        <th>Debit</th>
+        <th>Credit</th>
+        <th>Balance</th>
+        <th>Check</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% if users.present? %>
+        <% users.each do |sys_user| %>
+          <tr class="" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif" >
+            <td><%= sys_user.code %></td>
+            <td>
+                <i class="fa fa-address-book"></i><%= sys_user.name %>
+            </td>
+            <td><%= sys_user.user_group %></td>
+            <td><%= sys_user.status %></td>
+            <td>
+              <% debit_sum  = ledger_book_debit[sys_user.id].to_d%>
+              <%= number_with_delimiter(debit_sum)%>
+            </td>
+            <td>
+              <% credit_sum = ledger_book_credit[sys_user.id].to_d%>
+              <%= number_with_delimiter(credit_sum)%>
+            </td>
+            <td>
+              <% balance = sys_user.balance %> <%credit_debit = credit_sum-debit_sum%>
+              <%= number_with_delimiter(balance)%>
+            </td>
+            <td>
+              <% if balance == credit_debit%>
+                ok
+              <%else%>
+                <%= number_with_delimiter(balance-credit_debit)%>
+              <%end%>
+            </td>
+          </tr>
+        <% end %>
+      <% end %>
+      <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif" >
+        <td><h5>Total</h5></td>
+        <td><%= %></td>
+        <td><%= %></td>
+        <td><%= %></td>
+        <td><%= number_with_delimiter(ledger_book_debit_total)%></td>
+        <td><%= number_with_delimiter(ledger_book_credit_total)%></td>
+        <td><%= number_with_delimiter(users&.pluck('balance')&.map(&:abs)&.sum) %></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

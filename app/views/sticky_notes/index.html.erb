@@ -6,12 +6,13 @@
       <i class="fa fa-plus mr-2"></i>
       Create
     </button>
-    <button class='btn btn-warning zoomIn ml-auto mr-3' onclick="zoomin()">+</button>
-    <button class='btn btn-danger zoomOut' onclick="zoomout()">-</button>
+    <button class='btn btn-info zoomIn ml-auto mr-3' onclick="zoomin()"><i class="fas fa-search-plus fa-2x"></i></button>
+    <button class='btn btn-danger zoomOut' onclick="zoomout()"><i class="fas fa-search-minus fa-2x"></i></button>
+    <button class='btn btn-success zoomOut ml-3' onclick="zoomreset()">Reset</button>
   </div>
 </div>
-<div style=''>
-  <div style='position: relative; height: 100vh;' id ='notesContainer'>
+<div>
+  <div style='position: relative; height: 100vh;' id='notesContainer'>
     <% @sticky_notes.each do |sn| %>
       <div
         style="left:<%= sn.x_pos %>px;
@@ -59,6 +60,11 @@ function zoomin(){
   else{
     alert("You can't zoom in more!")
   }
+}
+
+function zoomreset(){
+  zoom_val = 1
+  document.getElementById("notesContainer").style.transform = "scale("+zoom_val+")";
 }
 
 function zoomout(){
