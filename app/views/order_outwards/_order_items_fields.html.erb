@@ -1,35 +1,38 @@
 <div class="nested-fields">
   <div class="row font-weight-bold challan-stock-container">
-    <div class="col-lg-2 from-group float-left">
+    <div class="col-lg-3 from-group float-left">
       <%= f.hidden_field :order_id %>
       <%= f.hidden_field :id %>
       <%= f.hidden_field :transaction_type, value: "Outward"%>
       <%= f.hidden_field :purchase_sale_type, value: "Outward_type"%>
-      <%= f.select :product_id, options_from_collection_for_select(@products, 'id', ->(st){"#{st.title} \u{27F6} #{st.code}"},f.object.product_id), {hide_label: true,prompt: "Select the Product"},class: "product chosen-select",required: true%>
+      <% if f.object.id.present? %>
+        <%= f.select :product_id, options_from_collection_for_select(@products, 'id', 'title', f.object.product_id), {hide_label:true, prompt: "Select a product."}, onchange: 'markas_call(this.value,this.id); return false;', class:"form-control product-outward", required: true %>
+      <% else %>
+        <%= f.select :product_id, options_for_select([]), {hide_label:true, prompt: "Select a customer first."}, {onchange: 'markas_call(this.value,this.id); return false;', class: "product-outward", required: true} %>
+      <% end %>
     </div>
-        <div class="col-lg-1 from-group float-left hidden">
-          <div class="hidden">
-            <%=f.number_field :comment,step: :any,class:'stock', hide_label: true,placeholder: :Stock,readonly: true%>
+        <% if f.object.product_id.present? %>
+          <div class="col-lg-2 from-group float-left">
+            <%= f.select :marka, options_for_select(@markas, f.object.marka), {hide_label:true, prompt: "Select a marka."}, onchange: 'challans_call(event); return false;', class:"form-control marka-outward", required: true %>
           </div>
-          <span><%=f.object.comment%></span>
-          <br>
-          <span class="span-cost-price text-danger"></span>
-
-        </div>
+        <% else %>
+          <div class="col-lg-2 from-group float-left">
+            <%= f.select :marka, options_for_select([]), {hide_label:true, prompt: "Select a product first."}, {onchange: 'challans_call(event); return false;', class: "marka-outward", required: true} %>
+          </div>
+        <% end %>
+        <% if f.object.product_id.present? %>
+          <div class="col-lg-2 from-group float-left">
+            <%= f.select :challan_no, options_for_select(@challans, f.object.challan_no), {hide_label:true, prompt: "Select a marka."}, onchange: 'remainimg_stocks_call(event); return false;', class:"form-control challan-outward", required: true %>
+          </div>
+        <% else %>
+          <div class="col-lg-2 from-group float-left">
+            <%= f.select :challan_no, options_for_select([]), {hide_label:true,  prompt: "Select a marka first."}, {onchange: 'remainimg_stocks_call(event); return false;', class: "challan-outward", required: true} %>
+          </div>
+        <% end %>
         <div class="col-lg-2 from-group float-left">
-          <%= f.text_field :marka,step: :any,class:'marla', hide_label: true,placeholder: :marka, required: true%>
-        </div>
-        <div class="col-lg-2 from-group float-left">
-          <%= f.text_field :builty_no,step: :any, hide_label: true,placeholder: :builty_no, required: true%>
-        </div>
-        <div class="col-lg-2 from-group float-left">
-          <%= f.text_field :vehicle_no, hide_label: true, placeholder: :vehicle_no,required: true%>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <%= f.text_field :challan_no, hide_label: true, placeholder: "Challan Np", label: "Challan No", class: 'challan-no-value'%>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <%= f.text_field :quantity, hide_label: true, placeholder: "Stock", label: "Stock", class:'stock-value', readonly: true%>
+          <div>
+            <%=f.text_field :comment, class: 'outward-remaining-stock', hide_label: true, readonly: true%>
+          </div>
         </div>
         <div class="col-lg-1 form-group float-left text-xs font-weight-bold text-danger text-uppercase">
           <%= link_to_remove_association f do %>

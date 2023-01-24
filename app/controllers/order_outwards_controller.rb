@@ -1,6 +1,6 @@
 class OrderOutwardsController < ApplicationController
   include PdfCsvGeneralMethod
-  include InwardsHelper
+  include OutwardsHelper
 
   before_action :set_order, only: %i[show edit update destroy]
   skip_before_action :authenticate_user!, only: [:show]
@@ -13,13 +13,20 @@ class OrderOutwardsController < ApplicationController
   def index
     date_search
     @q = Order.includes(:sys_user, order_items: :product).where(transaction_type: 'Outward').ransack(params[:q])
-    @orders = @q.result.page(params[:page])
-    download_outwards_pdf_file if params[:pdf].present?
+    @orders = @q.result.distinct.order('orders.created_at desc').page(params[:page])
+    @pdf_orders = @q.result
+    if params[:pdf].present?
+      @pdf_orders_total = @pdf_orders.sum('order_items.comment')
+      @pdf_outward_total = @pdf_orders.group('sys_users.name').sum('order_items.comment')
+      download_outwards_pdf_file
+    end
   end
 
   # GET /order_inwards/1
   # GET /order_inwards/1.json
-  def show; end
+  def show
+    download_show_pdf_file if params[:pdf].present?
+  end
 
   # GET /orders/new
   def new
@@ -29,7 +36,13 @@ class OrderOutwardsController < ApplicationController
   end
 
   # GET /order_inwards/1/edit
-  def edit; end
+  def edit
+    sys_user_id = @order.sys_user_id
+    product_ids = PurchaseSaleItem.joins(:purchase_sale_detail).where('purchase_sale_details.sys_user_id': sys_user_id, 'purchase_sale_details.transaction_type': "InWard").pluck(:product_id).uniq
+    @products = Product.where(id: product_ids)
+    @markas = PurchaseSaleItem.where('product_id': product_ids, 'transaction_type': "Purchase").pluck(:size_13).uniq
+    @challans = PurchaseSaleItem.where('size_13': @markas, 'transaction_type': "Purchase").pluck(:size_10).uniq
+  end
 
   # POST /order_inwardss
   # POST /order_inwards.json
@@ -90,6 +103,52 @@ class OrderOutwardsController < ApplicationController
       format.html { redirect_to orders_outwards_path, notice: 'Outward Order detail was successfully destroyed.' }
       format.json { head :no_content }
       format.js   { render layout: false }
+    end
+  end
+
+  def get_outward_party_data
+    sys_user_id = params[:id]
+    product_ids = PurchaseSaleItem.joins(:purchase_sale_detail).where('purchase_sale_details.sys_user_id': sys_user_id, 'purchase_sale_details.transaction_type': "InWard").pluck(:product_id).uniq
+    products = Product.where(id: product_ids)
+    respond_to do |format|
+      format.json { render json: products }
+    end
+  end
+
+  def get_outward_marka_data
+    product_id = params[:product_id]
+    sys_user_id = params[:party_id]
+    markas = PurchaseSaleItem.joins(:purchase_sale_detail).where('purchase_sale_details.sys_user_id': sys_user_id, 'purchase_sale_details.transaction_type': "InWard", 'product_id': product_id).pluck(:size_13).uniq
+    respond_to do |format|
+      format.json { render json: markas }
+    end
+  end
+
+  def get_outward_challan_data
+    marka = params[:marka_id]
+    product_id = params[:product_id]
+    sys_user_id = params[:party_id]
+
+    challan_no = PurchaseSaleItem.joins(:purchase_sale_detail).where('purchase_sale_details.sys_user_id': sys_user_id, 'purchase_sale_details.transaction_type': "InWard", 'product_id': product_id,'size_13': marka).pluck(:size_10).uniq
+    respond_to do |format|
+      format.json { render json: challan_no }
+    end
+  end
+
+  def get_outward_stock_data
+    sys_user_id = params[:party_id]
+    marka_no = params[:marka_no]
+    challan_no = params[:challan_no]
+    product_id = params[:product_id]
+
+    rem_stock = PurchaseSaleItem.joins(:purchase_sale_detail).where('purchase_sale_details.sys_user_id': sys_user_id, 'purchase_sale_details.transaction_type': "OutWard", 'product_id': product_id, 'size_13': marka_no, 'size_10': challan_no).first&.remaining_quantity
+    if rem_stock.present?
+      stock = rem_stock
+    else
+      stock = PurchaseSaleItem.joins(:purchase_sale_detail).where('purchase_sale_details.sys_user_id': sys_user_id, 'purchase_sale_details.transaction_type': "InWard", 'product_id': product_id, 'size_13': marka_no, 'size_10': challan_no).pluck(:size_9)
+    end
+    respond_to do |format|
+      format.json { render json: stock }
     end
   end
 
@@ -209,6 +268,12 @@ class OrderOutwardsController < ApplicationController
     @sys_users = @q.result
     sorted_data
     generate_pdf(@sorted_data.as_json, 'Outward', 'pdf.html', 'A4', false, 'order_outwards/index.pdf.erb')
+  end
+
+
+  def download_show_pdf_file
+    sorted_show_data
+    generate_pdf(@sorted_data.as_json, 'Inward', 'pdf.html', 'A4', false, 'order_outwards/show.pdf.erb')
   end
 
   def new_edit_index_data
