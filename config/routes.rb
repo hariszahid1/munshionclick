@@ -30,7 +30,16 @@ Rails.application.routes.draw do
   resources :cold_storage_inwards
   resources :cold_storage_outwards
   resources :order_inwards
-  resources :order_outwards
+
+  resources :order_outwards do
+    collection do
+      get :get_outward_party_data, to: 'order_outwards#get_outward_party_data'
+      get :get_outward_marka_data, to: 'order_outwards#get_outward_marka_data'
+      get :get_outward_challan_data, to: 'order_outwards#get_outward_challan_data'
+      get :get_outward_stock_data, to: 'order_outwards#get_outward_stock_data'
+    end
+  end
+
   resources :product_stocks
   resources :gates
   resources :staff_ledger_books do

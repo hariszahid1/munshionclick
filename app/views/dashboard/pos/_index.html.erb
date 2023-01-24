@@ -655,9 +655,32 @@
                 </div>
       			  </div>
             <% end %>
-          <% end %>  
-          </div>      
-        
+          <% end %>
+
+          <% if check_is_hidden_by_module('sticky_notes') %>
+              <div class="col-lg-3 col-md-6 mb-4 form-group float-left">
+                <%= link_to sticky_notes_path do %>
+                  <div class="card border-left-primary shadow h-100 py-2 border-radius-1">
+                    <div class="card-body">
+                      <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                          <div class="text-xs font-weight-bold text-success text-uppercase mb-1 d-flex">
+                            <i class="fas fa-sticky-note logo-back fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
+                            <h5  style="text-align: left; color:black;font-weight: bold;">Sticky Notes</h5>
+                          </div>
+                          <hr>
+                          <div class="ml-2">
+                            <h5 class="text-dark">Total Sticky Notes</h5>
+                            <span class="h4 mt-2"><%=@sticky_notes.count%></span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
+        </div>
       </p>
     </div>
     <div class="tab-pane card mt-2 p-3 border-radius-1" style="border: none; background-color: #F5F5F5;" id="analytics" role="tabpanel">

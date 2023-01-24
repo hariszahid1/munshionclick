@@ -1,23 +1,29 @@
 <div class="hidden" id="items_list">
   <h1>Raw Material Stock Status</h1>
-  <div class="row">
-    <div class="col-lg-12 col-sm-12">
-      <div class="col-lg-2 form-group float-left">
-        <%= link_to new_purchase_sale_detail_path, class: "btn btn-success" do %>
+  <div class="row m-2 my-4">
+   
+     
+        <%= link_to new_purchase_sale_detail_path, class: "btn btn-success mr-2" do %>
             <i class="fas fa-shopping-cart" aria-hidden="true"> </i>
             Raw Material Purchase
         <% end %>
 
-      </div>
-      <div class="col-lg-2 form-group float-left">
+     
+      
         <%= link_to dashboard_path, class: "btn btn-primary" do %>
             <i class="fas fa-list" aria-hidden="true"> </i>
             Product Status
         <% end %>
-      </div>
-</div></div>
+ 
+ </div>
+ <ul class="nav nav-pills ml-2 my-2" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab">Search</a>
+    </li>		
+ </ul>
+
   <div class="clearfix"></div>
-  <div class="row">
+  <div class="row card border-radius-1 shadow m-2 p-3">
     <div class="col-lg-12 col-sm-12">
       <%= search_form_for @q, url: raw_material_path, class: "admin-controls", method: "get" do |f| %>
         <div class="col-lg-2 form-group float-left">
@@ -38,27 +44,27 @@
       <% end %>
     </div>
   </div>
+   <div class="row card border-radius-1 shadow mx-2 p-3">
+      <table data-toggle="table" data-search="true">
+       <thead>
+          <tr>
+             <th><%= sort_link(@q, :title, 'Title') %></th>
+             <th><%= sort_link(@q, :code, 'Code') %></th>
+             <th><%= sort_link(@q, :minimum, 'Min Limits') %></th>
+             <th><%= sort_link(@q, :stock, 'Stock') %></th>
+             <th><%= sort_link(@q, :cost, 'Cost Price') %></th>
+             <th><%= sort_link(@q, :sale, 'Sale Price') %></th>
 
-  <table data-toggle="table" data-search="true">
-    <thead>
-      <tr>
-        <th><%= sort_link(@q, :title, 'Title') %></th>
-        <th><%= sort_link(@q, :code, 'Code') %></th>
-        <th><%= sort_link(@q, :minimum, 'Min Limits') %></th>
-        <th><%= sort_link(@q, :stock, 'Stock') %></th>
-        <th><%= sort_link(@q, :cost, 'Cost Price') %></th>
-        <th><%= sort_link(@q, :sale, 'Sale Price') %></th>
+             <th class="border_none">Action</th>
+          </tr>
+       </thead>
 
-        <th class="border_none">Action</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <% @items.each do |product| %>
-        <%min=product.minimum.present? ? product.minimum : 0 %>
-        <%stock=product.stock.present? ? product.stock : 0 %>
-        <%if min > stock%>
-          <tr class='table-danger'>
+      <tbody>
+         <% @items.each do |product| %>
+           <%min=product.minimum.present? ? product.minimum : 0 %>
+           <%stock=product.stock.present? ? product.stock : 0 %>
+           <%if min > stock%>
+        <tr class='table-danger'>
             <td><%= product.title %></td>
             <td><%= product.code %></td>
             <td><%= product.minimum %></td>
@@ -95,7 +101,9 @@
         <%end%>
       <% end %>
     </tbody>
-  </table>
+      </table>
+    </div>
+
 </div>
 
 <div class="clearfix"></div>

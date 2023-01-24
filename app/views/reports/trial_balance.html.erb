@@ -11,7 +11,8 @@
         <a href="<%= reports_trial_balance_path %>">Trial Balance</a>
       </li>
       <li class="ml-auto">
-        <%= link_to 'Download PDF', reports_trial_balance_path(submit_pdf_staff_with: true), class: 'btn btn-danger', target: '_blank'%>
+        <%= link_to 'Category Wise PDF', reports_trial_balance_path(user_group_pdf: true), class: 'btn btn-danger', target: '_blank'%>
+        <%= link_to 'Without Category PDF', reports_trial_balance_path(user_group_all_pdf: true), class: 'btn btn-danger', target: '_blank'%>
       </li>
     </ol>
   </div>

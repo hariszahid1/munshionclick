@@ -29,11 +29,11 @@
             </div>
 
             <div class="col-lg-3 form-group float-left">
-              <%= f.select :order_items_product_id_eq, options_from_collection_for_select(@products, 'id', ->(st){"#{st.title} \u{27F6} #{st.code}"}), {hide_label:true,title: "Select the Products" ,prompt: "Select the Pruducts"},class: 'form-control chosen-select'%>
+              <%= f.select :order_items_product_id_eq, options_from_collection_for_select(@products, 'id', ->(st){"#{st.title} \u{27F6} #{st.code}"},f.object.order_items_product_id_eq), {hide_label:true,title: "Select the Products" ,prompt: "Select the Pruducts"},class: 'form-control chosen-select'%>
             </div>
 
             <div class="col-lg-3 form-group float-left">
-              <%= f.select :sys_user_id_eq, options_from_collection_for_select(@suppliers, 'id', 'name', f.object.sys_user_id), {class: 'form-control',hide_label:true,title: "Select the Supplier" ,prompt: "Select the Customer"},class: 'form-control chosen-select'%>
+              <%= f.select :sys_user_id_eq, options_from_collection_for_select(@suppliers, 'id', 'name', f.object.sys_user_id_eq), {class: 'form-control',hide_label:true,title: "Select the Supplier" ,prompt: "Select the Customer"},class: 'form-control chosen-select'%>
             </div>
 
             <div class="col-lg-3 form-group float-left">
@@ -51,7 +51,8 @@
             <div class="col-lg-2 form-group float-left">
               <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
             </div>
-            <button class="form-control btn btn-danger float-left" style="width:100px" title= "download inwards pdf " name="pdf" type="submit"  value="Total Purchase PDF A8" formtarget="_blank" style="width:160px">PDF &nbsp;<i class="fa fa-file-pdf"></i></button>
+            <button class="form-control btn btn-danger float-left" style="width:100px" title= "download outwards pdf ASC " name="pdf" type="submit"  value="Total Sale PDF A8" formtarget="_blank" style="width:160px">ASC &nbsp;<i class="fa fa-file-pdf"></i></button>
+            <button class="form-control btn btn-danger float-left ml-4" style="width:100px" title= "download outwards pdf DESC " name="pdf" type="submit"  value="Total Sale PDF A8 Desc" formtarget="_blank" style="width:160px">DESC&nbsp;<i class="fa fa-file-pdf"></i></button>
           <% end %>
         </div>
       </div>
@@ -61,6 +62,7 @@
     <table data-toggle="table" data-search="true">
       <thead>
         <tr>
+          <th></th>
           <th>#</th>
           <th class= "urdu-font"><%= sort_link(@q, :sys_user_name, 'Customers') %></th>
           <th><%= sort_link(@q, :amount, 'Paid') %></th>
@@ -73,8 +75,10 @@
       </thead>
 
       <tbody>
-        <% @orders.each do |order| %>
+        <% @orders.each_with_index do |order, index| %>
+          <% demo_id = "demo#{index}"%>
           <tr class="table-success">
+            <td class="p-4 accordion-toggle acc-pointer" data-toggle="collapse" data-target="#<%= demo_id %>"><i class="fa fa-plus-circle"></i></td>
             <td><b style="font-size:20px;color:blue;"><%= order.voucher_id.to_s+'#'+order.id.to_s %></b></td>
             <td>
               <b style="font-size:20px;color:blue;">
@@ -96,55 +100,89 @@
             <td><%= order.purchase_sale_items.expiry rescue '' %> </td>
             <td><%= order.comment %></td>
             <td>
-            	  <%= link_to order_outwards_path('q[id_eq]':order.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
-            	    <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i> |
-            	  <%end %>
-              <%if order.order_items.present?%>
-                <%if order.order_items.first.product.present? %>
-                  <% if can?(:update, :all) %>
-                    <%= link_to edit_order_outward_path(order) do %>
-                      <i class="fa fa-edit" aria-hidden="true"></i> |
-                    <% end %>
-                  <% end %>
-                <%end%>
-              <%end%>
-              <% if can?(:delete, :all) %>
-              <%= link_to order, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
-                        <i class="fa fa-trash" aria-hidden="true"></i> |
-              <% end %>
-              <% end %>
-              <%= link_to order_outward_path(order) do %>
-                 <i class="fa fa-eye" aria-hidden="true"></i>
-              <% end %>
+              <div class="icon-container-1">
+                <div class="my-icon-1 my-view-1">
+                  <div class="my-tooltip-1">
+                    <div class="icon-container">
+                      <div class="my-icon my-view">
+                        <div class="my-tooltip">
+                          PDF
+                        </div>
+                        <%= link_to order_outward_path(order.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
+                              <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
+                        <%end %>
+                      </div>
+                      <div class="my-icon my-view">
+                        <div class="my-tooltip">
+                          Edit
+                        </div>
+                        <%if order.order_items.present?%>
+                          <%if order.order_items.first.product.present? %>
+                            <% if can?(:update, :all) %>
+                              <%= link_to edit_order_outward_path(order) do %>
+                                <i class="fa fa-edit" aria-hidden="true"></i>
+                              <% end %>
+                            <% end %>
+                          <%end%>
+                        <%end%>
+                      </div>
+                      <div class="my-icon my-view">
+                        <div class="my-tooltip">
+                          Delete
+                        </div> 
+                        <% if can?(:delete, :all) %>
+                        <%= link_to order, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+                                  <i class="fa fa-trash" aria-hidden="true"></i>
+                        <% end %>
+                        <% end %>
+                      </div>
+                      <div class="my-icon my-view">
+                        <div class="my-tooltip">
+                          Show
+                        </div>
+                        <%= link_to order_outward_path(order) do %>
+                          <i class="fa fa-eye" aria-hidden="true"></i>
+                        <% end %>
+                      </div>
+                    </div>
+                  </div>
+                  <span class="icon-div-1">
+                        <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+                  </span>
+                </div>
+              </div>
             </td>
           </tr>
-          <tr class="table-warning">
-            <td ></td>
-            <td>Order Detail</td>
-            <td>Product</td>
-            <td>Marka</td>
-            <td>Builty No</td>
-            <td>Vehicle</td>
-            <td>Challan No</td>
-            <td>Quantity</td>
-            <td></td>
-            <td></td>
-            <td></td>
-
-          </tr>
-          <%order.order_items.each do |order_item|%>
-            <tr>
-              <td></td>
-              <td></td>
-              <td class= "urdu-font"><%=order_item.product.title%></td>
-              <td><%=order_item.marka%></td>
-              <td><%=order_item.builty_no%></td>
-              <td><%=order_item.vehicle_no%></td>
-              <td><%=order_item.challan_no%></td>
-              <td><%=order_item.quantity%></td>
-              <td></td>
-            </tr>
-          <%end%>
+          <td colspan="11" class="hiddenRow">
+            <div class="accordian-body collapse card shadow-lg m-4" style="border-radius: 18px;" id="<%= demo_id %>">
+              <table>
+                <tr class="table-warning">
+                  <td ></td>
+                  <td>Order Detail</td>
+                  <td>Product</td>
+                  <td>Marka</td>
+                  <td>Challan No.</td>
+                  <td>Stock Remaining</td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tbody>
+                  <%order.order_items.each do |order_item|%>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td class= "urdu-font"><%=order_item.product.title%></td>
+                      <td><%=order_item.marka%></td>
+                      <td><%=order_item.challan_no%></td>
+                      <td><%=order_item.comment%></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                  <%end%>
+                </tbody>
+              </table>
+            </div>
+          </td>
         <% end %>
       </tbody>
     </table>
@@ -191,4 +229,12 @@
   $(function() {
     setTimeout(function() { $(".my-loader").fadeOut(1500); }, 5000)
   })
+
+  $('.accordian-body').on('show.bs.collapse', function () {
+    $(this).closest("table")
+        .find(".collapse.in")
+        .not(this)
+        .collapse('toggle')
+})
+
 </script>
