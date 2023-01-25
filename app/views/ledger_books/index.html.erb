@@ -116,7 +116,7 @@
                 <%= f.search_field :id_eq, placeholder: "Search by id", title: "Search by id" ,:class=>"form-control" %>
               </div>
               <div class="col-lg-3 form-group float-left">
-                <%= f.select :sys_user_id_in, options_from_collection_for_select(@ledger_searchs, "id", ->(st){"#{st.name} \u{27F6} \u{27F6} #{st.code} "}, f.object.sys_user_id_in), {:include_blank => "Select Name/Code"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select Name/Code"} } %>
+                <%= f.select :sys_user_id_eq, options_from_collection_for_select(@ledger_searchs, "id", ->(st){"#{st.name} \u{27F6} \u{27F6} #{st.code} "}, f.object.sys_user_id_eq), {:include_blank => "Select Name/Code"},{:class=>"form-control chosen-select", :data => {:placeholder => "Select Name/Code"} } %>
               </div>
               <div class="d-none">
                 <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker',placeholder: "YYYY-MM-DD" %>
