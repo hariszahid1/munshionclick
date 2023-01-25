@@ -36,7 +36,7 @@
         <%= search_form_for @q, url: staff_ledger_books_path, class: "admin-controls", method: "get" do |f| %>
           <div class="col-lg-12 col-sm-12">
             <div class="col-lg-3 form-group float-left">
-              <%= f.select :staff_id_in, options_from_collection_for_select(@staff, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code} "}, f.object.staff_id_in),  {:include_blank => "Select Names"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select Names"} } %>
+              <%= f.select :staff_id_eq, options_from_collection_for_select(@staff, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code} "}, f.object.staff_id_eq),  {:include_blank => "Select Names"},{:class=>"form-control chosen-select", :data => {:placeholder => "Select Names"} } %>
             </div>
             <div class="col-lg-4 form-group float-left">
               <%= f.search_field :created_at_gteq, value:@created_at_gteq, class: 'form-control input-sm datepicker',placeholder: "YYYY-MM-DD" %>
