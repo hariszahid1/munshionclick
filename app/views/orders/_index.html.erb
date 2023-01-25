@@ -231,7 +231,7 @@
           <td colspan="13" class="hiddenRow">
             <div class="accordian-body collapse"  id="<%= demo_id %>">  
             <div class="card border-radius-1 m-5">
-              <table class="content-table">
+              <table>
                 <tr><h5 class="font-weight-bold mt-4 mb-2 ml-2">Order Details</h5></tr>
                 <tr class="bg-warning" style="font-size: 1.3em;">
                   <th>Product</th>
@@ -240,19 +240,21 @@
                   <th>Total</th>
                   <th>Date</th>
                 </tr>
-                <tr>
                   <%if order.order_items_names_and_quantity!=0%>
                     <%order.order_items_names_and_quantity.each do |name_quantity|%>
+                      <tr>
                         <td class="urdu-font"><%=name_quantity.first%></td>
                         <td><%= number_with_delimiter(name_quantity.second) %></td>
                         <td><%= number_with_delimiter(name_quantity.third) %></td>
                         <td><%= number_with_delimiter(name_quantity.fourth) %></td>
-                        <% if name_quantity.fifth.present? %>
-                          <td><%=name_quantity.fifth.strftime("%d%b%y")%></td>
-                        <% end %>
+                        <td>
+                          <% if name_quantity.fifth.present? %>
+                            <%=name_quantity.fifth.strftime("%d%b%y")%>
+                          <% end %>
+                        </td>
+                      </tr>  
                     <%end%>
                   <%end%>
-                </tr>  
               </table>
 
               <div class="mt-4 ml-2 mr-2">
@@ -376,9 +378,11 @@
                           <td colspan="3"><%=name_quantity.second%></td>
                           <td colspan="3"><%= number_with_delimiter(name_quantity.third) %></td>
                           <td><%= number_with_delimiter(name_quantity.fourth) %></td>
-                          <% if name_quantity.fifth.present? %>
-                            <td><%=name_quantity.fifth.strftime("%d%b%y") %></td>
-                          <% end %>
+                          <td>
+                            <% if name_quantity.fifth.present? %>
+                              <%=name_quantity.fifth.strftime("%d%b%y") %>
+                            <% end %>
+                          </td>
                         </tr>
                       <%end%>
                     <%end%>
