@@ -187,10 +187,6 @@ class ReportsController < ApplicationController
     @staff_payable_ledger_book_debit_total = StaffLedgerBook.where('debit > 0').where(staff_id: @staff_payable.ids).sum(:debit)
     @staff_payable_ledger_book_credit_total = StaffLedgerBook.where('credit > 0').where(staff_id: @staff_payable.ids).sum(:credit)
 
-
-
-
-
     @k = Staff.where('balance<0').where(deleted: false).ransack(params[:k])
     if @k.result.count > 0
       @k.sorts = ['department_id asc','name asc'] if @k.sorts.empty?
@@ -331,6 +327,8 @@ class ReportsController < ApplicationController
     @sys_user_nil_landlord, @sys_user_nil_landlord_ledger_book_debit, @sys_user_nil_landlord_ledger_book_credit, @sys_user_nil_landlord_ledger_book_debit_total, @sys_user_nil_landlord_ledger_book_credit_total = get_nil_data(9)
     @sys_user_nil_md_investment, @sys_user_nil_md_investment_ledger_book_debit, @sys_user_nil_md_investment_ledger_book_credit, @sys_user_nil_md_investment_ledger_book_debit_total, @sys_user_nil_md_investment_ledger_book_credit_total = get_nil_data(10)
 
+    @departments_for_staffs = Department.joins(staffs: :staff_ledger_books).includes(staffs: :staff_ledger_books)
+
     request.format = 'pdf'
     @time = Time.zone.now
     time = @time.strftime("%d")+' '+@time.strftime("%b")+' '+@time.strftime("%y")+' '+@time.strftime("at %I:%M %p")
@@ -350,6 +348,12 @@ class ReportsController < ApplicationController
     @sys_user_other, @sys_user_other_ledger_book_debit, @sys_user_other_ledger_book_credit, @sys_user_other_ledger_book_debit_total, @sys_user_other_ledger_book_credit_total = get_all_data(8)
     @sys_user_landlord, @sys_user_landlord_ledger_book_debit, @sys_user_landlord_ledger_book_credit, @sys_user_landlord_ledger_book_debit_total, @sys_user_landlord_ledger_book_credit_total = get_all_data(9)
     @sys_user_md_investment, @sys_user_md_investment_ledger_book_debit, @sys_user_md_investment_ledger_book_credit, @sys_user_md_investment_ledger_book_debit_total, @sys_user_md_investment_ledger_book_credit_total = get_all_data(10)
+
+    @all_staffs = Staff.where(deleted: false).order('department_id asc', 'name asc')
+    @staff_ledger_book_debit = StaffLedgerBook.group('staff_id').sum(:debit)
+    @staff_ledger_book_credit = StaffLedgerBook.group('staff_id').sum(:credit)
+    @staff_ledger_book_debit_total = StaffLedgerBook.where('debit > 0').where(staff_id: @all_staffs.ids).sum(:debit)
+    @staff_ledger_book_credit_total = StaffLedgerBook.where('credit > 0').where(staff_id: @all_staffs.ids).sum(:credit)
 
     request.format = 'pdf'
     @time = Time.zone.now
