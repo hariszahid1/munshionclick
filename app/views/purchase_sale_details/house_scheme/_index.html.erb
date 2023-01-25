@@ -196,6 +196,7 @@
           <th><%= sort_link(@q, :purchase_sale_item_count, 'Plot') %></th>
           <th><%= sort_link(@q, :total_bill, 'Total Bill') %></th>
           <th><%= sort_link(@q, :amount, 'Received') %></th>
+          <th><%= sort_link(@q, :amount, 'Remaining') %></th>
           <th><%= sort_link(@q, :created_at, 'Status') %></th>
           <th><%= sort_link(@q, :created_at, 'Time') %></th>
           <th><%= sort_link(@q, :comment, 'Comment') %></th>
@@ -205,7 +206,7 @@
       <tbody>
         <% @purchase_sale_details.each_with_index do |purchase_sale_detail, index| %>
           <% demo_id = "demo#{index}"%>
-          <tr class="table-success">
+          <tr>
             <td class="accordion-toggle acc-pointer" data-toggle="collapse" data-target="#<%= demo_id %>"><i class="fa fa-plus-circle ml-4"></i></td>
             <td><b><%= purchase_sale_detail.voucher_id.to_s+'#'+purchase_sale_detail.id.to_s %></b></td>
             <td class="urdu-font">
@@ -218,6 +219,7 @@
             <td><b><%= purchase_sale_detail.purchase_sale_items.count rescue 0 %></b></td>
             <td><b><%= number_with_delimiter(purchase_sale_detail.total_bill.to_f.round(2)) rescue 0 %></b></td>
             <td><b><%= number_with_delimiter(purchase_sale_detail.amount.to_f.round(2)) rescue 0%></b></td>
+            <td><b><%= number_with_delimiter(purchase_sale_detail.total_bill.to_f.round(2) - purchase_sale_detail.amount.to_f.round(2)) rescue 0%></b></td>
             <td>
               <b>
                 <% if (purchase_sale_detail.total_bill.to_i - (purchase_sale_detail.amount.to_f+purchase_sale_detail.discount_price.to_f)) > 0 %>
@@ -321,48 +323,38 @@
             </td>
           </tr>
           <td colspan="10" class="hiddenRow">
-            <div class="accordian-body collapse card shadow m-2 p-3" style="border-radius: 5px;" id="<%= demo_id %>">
+            <div class="accordian-body collapse card shadow m-5 p-4" style="border-radius: 5px;" id="<%= demo_id %>">
               <%if purchase_sale_detail.purchase_sale_items_names_and_quantity!=0%>
-                <div class="row">
-                  <div class="col"></div>
-                  <div class="col"></div>
-                  <div class="col"><b class="h5 ml-auto">Unit</b></div>
-                  <div class="col"><b class="h5 ml-auto">Marla</b></div>
-                  <div class="col"><b class="h5 ml-auto">Rate</b></div>
-                  <div class="col"><b class="h5 ml-auto">Amount</b></div>
-                  <div class="col"></div>
-                  <div class="col"></div>
-                  <div class="col"></div>
-                </div>
+                <table>
+                <tr class="bg-warning">
+                  <th>Unit</th>
+                  <th>Marla</th>
+                  <th>Rate</th>
+                  <th>Amount</th>
+                  <th>Date</th>
+                </tr>
                 <%if purchase_sale_detail.transaction_type=="Sale"%>
                   <%purchase_sale_detail.purchase_sale_items_names_and_quantity.each do |name_quantity|%>
-                    <div class="row">
-                      <div class="col"></div>
-                      <div class="col"></div>
-                      <div class="col"><%=name_quantity.first%> <%=name_quantity[8]%></div>
-                      <div class="col"><%= name_quantity.second%><% @total_pro += name_quantity.second %></div>
-                      <div class="col"><%= number_with_delimiter(name_quantity.third)%></div>
-                      <div class="col"><%= number_with_delimiter(name_quantity.fourth) %><% @total_discont += name_quantity.fourth if name_quantity.fourth.present? %></div>
-                      <div class="col"></div>
-                      <div class="col"><%=name_quantity.fifth.strftime("%d%b%y") if name_quantity.fifth.present?%></div>
-                      <div class="col"></div>
-                    </div>
+                    <tr>
+                      <td><%=name_quantity.first%><%=name_quantity[8]%></td>
+                      <td><%= name_quantity.second%><% @total_pro += name_quantity.second %></td>
+                      <td><%= number_with_delimiter(name_quantity.third)%></td>
+                      <td><%= number_with_delimiter(name_quantity.fourth) %><% @total_discont += name_quantity.fourth if name_quantity.fourth.present? %></td>
+                      <td><%=name_quantity.fifth.strftime("%d%b%y") if name_quantity.fifth.present?%></td>
+                    </tr>
                   <%end%>
                 <%else%>
                   <%purchase_sale_detail.purchase_sale_items_names_and_quantity.each do |name_quantity|%>
-                    <div class="row">
-                      <div class="col"></div>
-                      <div class="col"></div>
-                      <div class="col"><%=name_quantity.first%></div>
-                      <div class="col"><%=name_quantity.second%><% @total_pro += name_quantity.second %></div>
-                      <div class="col"><%=number_with_delimiter(name_quantity[5])%></div>
-                      <div class="col"><%=number_with_delimiter(name_quantity[6])%><% @total_discont += name_quantity[6] if name_quantity.fourth.present? %></div>
-                      <div class="col"></div>
-                      <div class="col"><%=name_quantity.fifth.strftime("%d%b%y") if name_quantity.fifth.present?%></div>
-                      <div class="col"></div>
-                    </div>
+                    <tr>
+                      <td><%=name_quantity.first%></td>
+                      <td><%=name_quantity.second%><% @total_pro += name_quantity.second %></td>
+                      <td><%=number_with_delimiter(name_quantity[5])%></td>
+                      <td><%=number_with_delimiter(name_quantity[6])%><% @total_discont += name_quantity[6] if name_quantity.fourth.present? %></td>
+                      <td><%=name_quantity.fifth.strftime("%d%b%y") if name_quantity.fifth.present?%></td>
+                    </tr>
                   <%end%>
                 <%end%>
+                </table>
               <%end%>
             </div>
           </td> 
