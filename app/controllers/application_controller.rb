@@ -25,6 +25,7 @@ class ApplicationController < ActionController::Base
   end
 
   def get_request_referrer
+    @requested_deals = PurchaseSaleDetail.where(transaction_type: %w[NewSaleDeal ReSaleDeal], status: 'UnClear').count
     if current_user&.extra_settings.try(:[], 'all_followups') == true
       @follow_up_unread_count = FollowUp.where(is_read: false).count
       @follow_up_all = FollowUp.preload(:followable).order('id desc')
