@@ -49,6 +49,11 @@
       <%= f.number_field :discount_price,  placeholder: "Discounted Price", label: "Discounted Price",  value: f.object&.discount_price || 0, class: "text-field", id: "discount", input_html: {value: 0.0}%>
     </div>
   </div>
+  <div class= 'row'>
+    <div class="col-lg-6 form-group">
+      <%= f.number_field :remaining_balance,  placeholder: "Balanced Amount", label: "Balanced Amount", class: "text-field", id: "balance", readonly: true %>
+    </div>
+  </div>
   <!-- follow _ups -->
   <div class= 'row'>
     <div  class="col-lg-12 mt-4 row">
@@ -76,11 +81,3 @@
   </div>
 <% end %>
 
-<script>
-  $(document).ready(function(){
-    $('.user-select-in-sale-deal').on('change', function(){
-      $('.disable-sys-users').attr('disabled', true)
-      $('.cms-data-fields-container').addClass('d-none')
-    })
-  })
-</script>
