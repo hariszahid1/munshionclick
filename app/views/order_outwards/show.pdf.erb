@@ -43,7 +43,6 @@
           <th class="text-center">Serial No</th>
           <th class="text-center">Marka</th>
           <th class="text-center">Challan No</th>
-          <th class="text-center">Remaining Qty</th>
         </thead>
         <tbody>
           <% data.each_with_index do |order, index| %>
@@ -52,11 +51,9 @@
                 <td class="text-center"><%= index %></td>
                 <td class="text-center"><%= item['marka'] %></td>
                 <td class="text-center"><%= item['challan_no'] %></td>
-                <td class="text-center"><%= item['quantity'] %></td>
               </tr>
             <% end %>
           <% end %>
-         
         </tbody>
       </table>
     </div>
@@ -87,7 +84,6 @@
           <th class="text-center">Serial No</th>
           <th class="text-center">Marka</th>
           <th class="text-center">Challan No</th>
-          <th class="text-center">Remaining Qty</th>
         </thead>
         <tbody>
           <% data.each_with_index do |order, index| %>
@@ -96,7 +92,6 @@
                 <td class="text-center"><%= index %></td>
                 <td class="text-center"><%= item['marka'] %></td>
                 <td class="text-center"><%= item['challan_no'] %></td>
-                <td class="text-center"><%= item['quantity'] %></td>
               </tr>
             <% end %>
           <% end %>

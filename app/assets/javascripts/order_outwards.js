@@ -96,3 +96,38 @@ function markas_call(product_id, id){
      }
     });
   }
+
+
+  function set_remainimg_outward_quantity(event){
+    var target = event.currentTarget;
+    var stock_val = target.value;
+    var party_id = $('.outward-party-name').val();
+    var challan_no =  $(target.closest('.challan-stock-container')).find('.challan-storage-outward').val();
+    var marka_no =  $(target.closest('.challan-stock-container')).find('.marka-storage-outward').val();
+    var product_id =  $(target.closest('.challan-stock-container')).find('.product-storage-outward').val();
+    $.ajax({
+      url: '/cold_storage_outwards/get_outward_storage_stock_data',
+      type: 'GET',
+      data: { challan_no: challan_no, marka_no: marka_no, product_id: product_id, party_id: party_id },
+      dataType: 'script',
+      success: function (result) {
+        var result_data = JSON.parse(result).toString()
+        if (parseInt(stock_val) > parseInt(result_data))
+        {
+          window.alert("You cannot enter stock more than remaining!");
+          target.value = '';
+        }
+        else
+        {
+          $(target.closest('.challan-stock-container')).find('.outward-stock-value-quantity').val(stock_val);
+          var rem_out_stock_val = parseInt(result_data) - parseInt(stock_val);
+          $(target.closest('.challan-stock-container')).find('.outward-storage-remaining-stock').html(rem_out_stock_val);
+          $(target.closest('.challan-stock-container')).find('.outward-stock-value-rem-quantity').val(rem_out_stock_val);
+
+        }
+     },
+     error: function (){
+        window.alert("something wrong!");
+     }
+    });
+  }

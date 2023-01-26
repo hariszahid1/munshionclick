@@ -136,7 +136,7 @@
                           <% end %>
                         <%else%>
                           <% if can?(:update, :all) %>
-                            <%= link_to edit_purchase_sale_detail_path(id: purchase_sale_detail.id, order_total: @cold_storage_inward_total[purchase_sale_detail.id]) do %>
+                            <%= link_to edit_cold_storage_inward_path(id: purchase_sale_detail.id, order_total: @cold_storage_inward_total[purchase_sale_detail.id]) do %>
                               <i class="fa fa-edit" aria-hidden="true"></i>
                             <% end %>
                           <% end %>
@@ -148,7 +148,7 @@
                         Delete
                       </div>
                       <% if can?(:destory, :all) %>
-                        <%= link_to purchase_sale_detail, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+                        <%= link_to cold_storage_inward_path(purchase_sale_detail), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
                                   <i class="fa fa-trash" aria-hidden="true"></i>
                         <% end %>
                       <% end %>

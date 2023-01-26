@@ -3,7 +3,7 @@
 # FollowUps Controller
 class ColdStorageOutwardsController < ApplicationController
 
-  before_action :set_coldstorage, only: %i[show edit update]
+  before_action :set_cold_storage, only: %i[show edit update destroy]
   before_action :index_edit_new_data, only: %i[new show edit index]
 
   def index
@@ -18,7 +18,14 @@ class ColdStorageOutwardsController < ApplicationController
     @purchase_sale_details = PurchaseSaleDetail.all
     @purchase_sale_detail = PurchaseSaleDetail.new(order_id: params[:order_id],
                                                    sys_user_id: params[:sys_user_id])
-    @purchase_sale_detail.purchase_sale_items.build
+    if params[:order_id].present?
+      order=Order.find(params[:order_id])
+      order.order_items.each do |ord|
+        room_num = PurchaseSaleItem.find_by(product_id: ord.product_id, size_13: ord.marka,size_10: ord.challan_no, transaction_type: "Purchase").size_8
+        rack_num = PurchaseSaleItem.find_by(product_id: ord.product_id, size_13: ord.marka,size_10: ord.challan_no, transaction_type: "Purchase").size_7
+        @purchase_sale_detail.purchase_sale_items.build(product_id: ord.product_id, size_13: ord.marka, size_10: ord.challan_no, size_8: room_num, size_7: rack_num)
+      end
+    end
   end
 
   def edit; end
@@ -50,7 +57,7 @@ class ColdStorageOutwardsController < ApplicationController
           @purchase_sale_detail.salary_details.create(staff_id: @purchase_sale_detail.staff_id, amount: @purchase_sale_detail.loading, comment: "Loading", total_balance: staff.balance,created_at: @purchase_sale_detail.created_at)
           # @purchase_sale_detail.save!
         end
-        format.html { redirect_to cold_storage_outwards_path, notice: 'Outward was successfully created.' }
+        format.html { redirect_to order_outwards_path, notice: 'Outward was successfully created.' }
       else
         format.html { render :new }
         format.json { render json: @purchase_sale_detail.errors, status: :unprocessable_entity }
@@ -93,6 +100,37 @@ class ColdStorageOutwardsController < ApplicationController
         format.html { render :edit }
         format.json { render json: @purchase_sale_detail.errors, status: :unprocessable_entity }
       end
+    end
+  end
+
+  def destroy
+    type = @purchase_sale_detail.transaction_type
+    @products = Product.where(id:@purchase_sale_detail.purchase_sale_items.pluck(:product_id))
+    @purchase_sale_detail.destroy
+    ledger_book = @purchase_sale_detail.sys_user.ledger_books.last
+    UserLedgerBookJob.perform_later(current_user.superAdmin.company_type,@purchase_sale_detail.sys_user_id)
+    AccountPaymentJob.perform_later(current_user.superAdmin.company_type,@purchase_sale_detail.account_id)
+    SalaryDetailJob.perform_later(current_user.superAdmin.company_type,@purchase_sale_detail.staff_id)
+    respond_to do |format|
+      format.html { redirect_to cold_storage_outwards_path, notice: 'Purchase sale detail was successfully destroyed.' }
+      format.json { head :no_content }
+      format.js   { render :layout => false }
+    end
+  end
+
+  def get_outward_storage_stock_data
+    sys_user_id = params[:party_id]
+    marka_no = params[:marka_no]
+    challan_no = params[:challan_no]
+    product_id = params[:product_id]
+    rem_stock = PurchaseSaleItem.joins(:purchase_sale_detail).where('purchase_sale_details.sys_user_id': sys_user_id, 'purchase_sale_details.transaction_type': "OutWard", 'product_id': product_id, 'size_13': marka_no, 'size_10': challan_no).first&.size_6
+    if rem_stock.present?
+      stock = rem_stock
+    else
+      stock = PurchaseSaleItem.joins(:purchase_sale_detail).where('purchase_sale_details.sys_user_id': sys_user_id, 'purchase_sale_details.transaction_type': "InWard", 'product_id': product_id, 'size_13': marka_no, 'size_10': challan_no).pluck(:size_9)
+    end
+    respond_to do |format|
+      format.json { render json: stock }
     end
   end
   private

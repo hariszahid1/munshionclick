@@ -141,7 +141,7 @@ class OrderOutwardsController < ApplicationController
     challan_no = params[:challan_no]
     product_id = params[:product_id]
 
-    rem_stock = PurchaseSaleItem.joins(:purchase_sale_detail).where('purchase_sale_details.sys_user_id': sys_user_id, 'purchase_sale_details.transaction_type': "OutWard", 'product_id': product_id, 'size_13': marka_no, 'size_10': challan_no).first&.remaining_quantity
+    rem_stock = PurchaseSaleItem.joins(:purchase_sale_detail).where('purchase_sale_details.sys_user_id': sys_user_id, 'purchase_sale_details.transaction_type': "OutWard", 'product_id': product_id, 'size_13': marka_no, 'size_10': challan_no).first&.size_6
     if rem_stock.present?
       stock = rem_stock
     else
