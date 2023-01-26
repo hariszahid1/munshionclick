@@ -230,7 +230,10 @@
                       <td></td>
                       <td>
                         <%= link_to edit_cold_storage_inward_path(id: purchase_sale_detail.id, order_total: @order_inward_purchase_item_total[order.id]) do %>
-                          <i class="fa fa-edit" aria-hidden="true"></i>
+                          <i class="fa fa-edit" aria-hidden="true"></i> |
+                        <% end %>
+                        <%= link_to cold_storage_inward_path(purchase_sale_detail), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+                        <i class="fa fa-trash" aria-hidden="true"></i>
                         <% end %>
                       </td>
                     </tr>

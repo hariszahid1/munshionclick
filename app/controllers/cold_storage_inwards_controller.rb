@@ -5,7 +5,7 @@ class ColdStorageInwardsController < ApplicationController
   include PdfCsvGeneralMethod
   include InwardsHelper
 
-  before_action :set_cold_storage, only: %i[show edit update]
+  before_action :set_cold_storage, only: %i[show edit update destroy]
   before_action :index_edit_new_data, only: %i[new show edit index]
 
   def index
@@ -112,6 +112,22 @@ class ColdStorageInwardsController < ApplicationController
       end
     end
   end
+
+  def destroy
+    type = @purchase_sale_detail.transaction_type
+    @products = Product.where(id:@purchase_sale_detail.purchase_sale_items.pluck(:product_id))
+    @purchase_sale_detail.destroy
+    ledger_book = @purchase_sale_detail.sys_user.ledger_books.last
+    UserLedgerBookJob.perform_later(current_user.superAdmin.company_type,@purchase_sale_detail.sys_user_id)
+    AccountPaymentJob.perform_later(current_user.superAdmin.company_type,@purchase_sale_detail.account_id)
+    SalaryDetailJob.perform_later(current_user.superAdmin.company_type,@purchase_sale_detail.staff_id)
+    respond_to do |format|
+      format.html { redirect_to cold_storage_outwards_path, notice: 'Purchase sale detail was successfully destroyed.' }
+      format.json { head :no_content }
+      format.js   { render :layout => false }
+    end
+  end
+
   private
 
   def set_cold_storage

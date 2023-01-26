@@ -28,7 +28,11 @@ Rails.application.routes.draw do
   resources :product_warranties
   resources :warranties
   resources :cold_storage_inwards
-  resources :cold_storage_outwards
+  resources :cold_storage_outwards do
+    collection do
+      get :get_outward_storage_stock_data, to: 'cold_storage_outwards#get_outward_storage_stock_data'
+    end
+  end
   resources :order_inwards
 
   resources :order_outwards do

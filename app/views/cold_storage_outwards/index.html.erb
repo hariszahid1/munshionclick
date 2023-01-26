@@ -3,14 +3,6 @@
 <div class="hidden" id="purchase_sale_detail_list">
   <div class="row">
     <h1 class="ml-2">Cold Storage Outwards</h1>
-    <div class="col-lg-12">
-      <div class="col-lg-3 form-group float-left">
-        <%= link_to new_cold_storage_outward_path(), class: "btn btn-success col-lg-12" do %>
-          <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-          OutWard
-        <% end %>
-      </div>
-    </div>
   </div>
   <div class="clearfix"></div>
   <%= search_form_for @q, url: cold_storage_inwards_path, class: "admin-controls", method: "get" do |f| %>
@@ -105,32 +97,23 @@
           <td><%= purchase_sale_detail.purchase_sale_items.expiry rescue '' %> <%= purchase_sale_detail.bill_no%></td>
           <td><%=purchase_sale_detail.staff_full_name%> | <%= purchase_sale_detail.comment %> <%=purchase_sale_detail.with_gst.present? ? "GST" : ""%></td>
           <td>
-            <%if purchase_sale_detail.with_gst=="true"%>
-              <%= link_to purchase_sale_detail_path(purchase_sale_detail,with_gst: true),target: "_blank" do %>
-                <i class="fa fa-print" aria-hidden="true"></i> |
-              <% end %>
-            <%else%>
-              <%= link_to purchase_sale_detail,target: "_blank" do %>
-                <i class="fa fa-print" aria-hidden="true"></i> |
-              <% end %>
-            <%end%>
             <%if purchase_sale_detail.purchase_sale_items.present?%>
               <%if purchase_sale_detail.purchase_sale_items.first.product.present? %>
                 <% if can?(:update, :all) %>
-                  <%= link_to edit_cold_storage_inward_path(purchase_sale_detail) do %>
+                  <%= link_to edit_cold_storage_outward_path(purchase_sale_detail) do %>
                     <i class="fa fa-edit" aria-hidden="true"></i> |
                   <% end %>
                 <% end %>
               <%else%>
                 <% if can?(:update, :all) %>
-                  <%= link_to edit_purchase_sale_detail_path(purchase_sale_detail) do %>
+                  <%= link_to edit_cold_storage_path(purchase_sale_detail) do %>
                     <i class="fa fa-edit" aria-hidden="true"></i> |
                   <% end %>
                 <% end %>
               <%end%>
             <%end%>
           <% if can?(:destory, :all) %>
-            <%= link_to purchase_sale_detail, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+            <%= link_to cold_storage_outward_path(purchase_sale_detail), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
                       <i class="fa fa-trash" aria-hidden="true"></i>
             <% end %>
           <% end %>
@@ -141,10 +124,9 @@
           <td></td>
           <td class="table-active"><b>Item type</b></td>
           <td class="table-active"><b>Marka</b></td>
-          <td class="table-active"><b>Builty No:</b></td>
-          <td class="table-active"><b>Vehicle</b></td>
           <td class="table-active"><b>Challan</b></td>
           <td class="table-active"><b>Stock</b></td>
+          <td></td>
           <td></td>
           <td></td>
           <td></td>
@@ -157,90 +139,15 @@
               <td></td>
               <td><%=item&.product&.title %></td>
               <td><%=item.size_13%></td>
-              <td><%=item.size_12%></td>
-              <td><%=item.size_11%></td>
               <td><%= item.size_10 %></td>
               <td><%= item.size_9 %></td>
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
           <%end%>
-            <tr class="table-info">
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td><%=profit.to_f.round(2)-purchase_sale_detail.discount_price.to_f%></td>
-              <td><%=gst.to_f.round(2)%></td>
-              <td></td>
-            </tr>
       <% end %>
-      <tr>
-        <td><h5></h5><td
-        <td></td>
-        <td></td>
-        <td class="table-active"><h5>Total Stock</h5></td>
-        <td class="table-active"><h5>Total Paid</h5></td>
-        <td class="table-active"><h5>Total Discount</h5></td>
-        <td class="table-active"><h5>Pending</h5></td>
-        <td></td>
-        <td  class="table-active"><h5>Profit</h5></td>
-        <td></td>
-        <td></td>
-
-
-      </tr>
-      <tr>
-        <td class="table-active"><h5>Total</h5><td>
-        <td></td>
-        <td><h5><%=@total_stock.to_f.round(2)%></h5></td>
-        <td><h5><%=@total_am.to_f.round(2)%></h5></td>
-        <td><h5><%=@total_dis.to_f.round(2)%></h5></td>
-        <td></td>
-        <td><h5><%=@total_profit.to_f.round(2)%></h5></td>
-        <td></td>
-        <td></td>
-
-
-
-      </tr>
-      <tr>
-        <td><h5></h5><td>
-        <td></td>
-        <td class="table-active"><h5>Total Quantity</h5></td>
-        <td></td>
-        <td><h4></h4></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-
-
-
-      </tr>
-      <tr>
-        <td class="table-active"><h5>Product Sold</h5><td>
-        <td></td>
-        <td><h5><%=@total_pro%></h5></td>
-        <td></td>
-        <td><h4></h4></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-
-
-
-      </tr>
-
-
     </tbody>
   </table>
 </div>
