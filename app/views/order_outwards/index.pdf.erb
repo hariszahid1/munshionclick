@@ -39,7 +39,6 @@
           <th class="text-center">Marka No</th>
           <th class="text-center">Challan No</th>
           <th class="text-center">Product Name</th>
-          <th class="text-center">Remaining Qty</th>
         </thead>
         <tbody>
           <% data.each_with_index do |order, index| %>
@@ -50,44 +49,21 @@
                 <td class="text-center"><%= item['marka'] %></td>
                 <td class="text-center"><%= item['challan_no'] %></td>
                 <td class="text-center"><%= item['product'] %></td>
-                <td class="text-center"><%= item['quantity'] %></td>
               </tr>
             <% end %>
           <% end %>
-          <tr>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th>Sub Total: </th>
-            <th><%= @pdf_orders_total %></th>
-          </tr>
-          <tr>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th>Grand Total: </th>
-            <th><%= @pdf_orders_total %></th>
-          </tr>
           <thead class="lite-gray">
             <tr>
               <th colspan="5" class='text-left' style="padding-left: 40px;">Party Name</th>
-              <th> Remaining Qty </th>
             </tr>
           </thead>
           <% if @pdf_outward_total.present? %>
             <% @pdf_outward_total.each do |order| %>
               <tr>
                 <td colspan="5" class='text-left' style="padding-left: 40px;"><%= order.first %></td>
-                <td class="text-center"><%= order.second&.to_f %></td>
               </tr>
             <% end %>
           <% end %>
-          <tr>
-            <th colspan="5" class='text-left' style="padding-left: 40px;">Total</th>
-            <th><%= @pdf_orders_total %></th>
-          </tr>
         </tbody>
       </table>
     </div>

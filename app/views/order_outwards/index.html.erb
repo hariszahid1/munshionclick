@@ -156,13 +156,13 @@
           <td colspan="11" class="hiddenRow">
             <div class="accordian-body collapse card shadow-lg m-4" style="border-radius: 18px;" id="<%= demo_id %>">
               <table>
-                <tr class="table-warning">
+                <tr class="table-warning p-4 h5">
                   <td ></td>
                   <td>Order Detail</td>
                   <td>Product</td>
                   <td>Marka</td>
                   <td>Challan No.</td>
-                  <td>Stock Remaining</td>
+                  <td></td>
                   <td></td>
                   <td></td>
                 </tr>
@@ -171,14 +171,60 @@
                     <tr>
                       <td></td>
                       <td></td>
-                      <td class= "urdu-font"><%=order_item.product.title%></td>
+                      <td class= "urdu-font"><%=order_item.product&.title%></td>
                       <td><%=order_item.marka%></td>
                       <td><%=order_item.challan_no%></td>
-                      <td><%=order_item.comment%></td>
+                      <td></td>
                       <td></td>
                       <td></td>
                     </tr>
                   <%end%>
+                </tbody>
+              </table>
+              <%= link_to new_cold_storage_outward_path(sys_user_id: order.sys_user_id, order_id: order.id), class: "btn btn-success m-3", style:"width: 150px;" do %>
+                <i class="fa fa-plus" aria-hidden="true"></i>
+                Assign Rack
+              <% end %>
+              <table>
+                <tr class="table-active p-4 h5">
+                  <th>Rack Detail</th>
+                  <th>Product</th>
+                  <th>Marka</th>
+                  <th>Challan No</th>
+                  <th>Quantity</th>
+                  <th>Room No.</th>
+                  <th>Rack No.</th>
+                </tr>
+                <tbody>
+                  <% order.purchase_sale_details.each do |purchase_sale_detail| %>
+                    <% purchase_sale_detail.purchase_sale_items.each do |purchase_sale_item| %>
+                      <tr>
+                        <td></td>
+                        <td class= "urdu-font"> <%= purchase_sale_item.product&.title %> </td>
+                        <td> <%= purchase_sale_item.size_13 %> </td>
+                        <td> <%= purchase_sale_item.size_10 %> </td>
+                        <td> <%= purchase_sale_item.size_9 %> </td>
+                        <td> <%= purchase_sale_item.size_8 %> </td>
+                        <td> <%= purchase_sale_item.size_7 %> </td>
+                      </tr>
+                    <% end %>
+                    <tr>
+                      <th class="h5"><b>Action</b></th>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <%= link_to edit_cold_storage_outward_path(id: purchase_sale_detail) do %>
+                          <i class="fa fa-edit" aria-hidden="true"></i>|
+                        <% end %>
+                        <%= link_to cold_storage_outward_path(purchase_sale_detail), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                        <% end %>
+                      </td>
+                    </tr>
+                  <% end %>
                 </tbody>
               </table>
             </div>
