@@ -20,7 +20,9 @@
       <div class="col-lg-6 form-group float-left text-black">
         <%= f.text_area :comment, placeholder: "Enter your message", hide_label: true ,class: 'urdu-font' %>
       </div>
-      <div class="col-lg-12 form-group float-right links"><%= link_to_remove_association "Remove", f , class: "btn btn-danger float-left" %></div>
+      <% if (f.object.id.nil? || check_can_delete(@module_permission))%>
+        <div class="col-lg-12 form-group float-right links"><%= link_to_remove_association "Remove", f , class: "btn btn-danger float-left" %></div>
+      <% end %>
     </div>
   </div>
 </div>
