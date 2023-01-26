@@ -1,7 +1,7 @@
 <div class="nested-fields">
       <%= f.hidden_field :purchase_sale_detail_id %>
       <%= f.hidden_field :id %>
-      <% readonly_param = params[:order_id].present? ? true : false %>
+      <% readonly_param = params[:order_id].present? || f.object.present? ? true : false %>
       <div class="row font-weight-bold challan-stock-container">
         <div class="col-lg-2 form-group float-left">
           <%= f.select :product_id, options_from_collection_for_select(@products, 'id', ->(st){"#{st.title} \u{27F6} #{st.code}"}, f.object.product_id), {hide_label: true,prompt: "Select the Items"}, class: "chosen-select product",required: true %>
