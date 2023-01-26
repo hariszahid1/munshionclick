@@ -7,7 +7,7 @@
 <div class=''>
   <div>
     <div class="row mb-1">
-      <h1 class="ml-2 col">Sale Deals</h1>
+      <h1 class="ml-2 col"><%= params['q'].try(:[], 'transaction_type_eq') == '8' ? 'Re Sale Deal' : 'Fresh Sale Deal' %></h1>
     </div>
     <div class="row mb-2">
       <div class="col-lg-12 col-sm-12">
@@ -70,7 +70,7 @@
 
         <div class="row mb-4">
           <div id="new_city">
-            <% if params['q'].try(:[], 'transaction_type_eq') == 8 %>
+            <% if params['q'].try(:[], 'transaction_type_eq') == '8' %>
               <%= link_to new_sale_deal_path('type': 'Resale'),class: "btn btn-success mt-3 ml-2" do %>
                 <i class="fa fa-plus" aria-hidden="false"></i>
                 Create Resale Deal
