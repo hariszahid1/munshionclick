@@ -19,7 +19,7 @@
           <%= f.text_field :size_10, hide_label: true, placeholder: "Challan", label: "Challen", class: 'challan-no-value', value: "#{(f.object.size_10 == '0' ? nil : f.object.size_10)}",  readonly: readonly_param %>
         </div>
         <div class="col-lg-1 form-group float-left">
-          <%= f.text_field :size_9, hide_label: true, placeholder: "Stock", label: "Stock", class:'stock-value'%>
+          <%= f.text_field :size_9, hide_label: true, placeholder: "Stock", label: "Stock", class:'stock-value', readonly: readonly_param %>
         </div>
         <div class="col-lg-1 form-group float-left">
           <%= f.text_field :size_8, hide_label: true, label: "Room", value: "#{(f.object.size_8 == '0' ? nil : f.object.size_8)}", class:'inward-room-num'%>

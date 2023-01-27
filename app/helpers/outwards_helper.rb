@@ -45,4 +45,29 @@ module OutwardsHelper
                                                     }
                            }
     end
+
+    def sorted_outward_show_data
+        order_total = @purchase_sale_detail.purchase_sale_items&.sum(:quantity)
+        @sorted_data = []
+          @sorted_data << {
+                            id: @purchase_sale_detail.id,
+                            type: @purchase_sale_detail.transaction_type,
+                            total_quantity: order_total,
+                            date: @purchase_sale_detail.created_at&.strftime("%d-%b-%y at %I:%M %p"),
+                                                    name: @purchase_sale_detail.sys_user.name,
+                                                    status: @purchase_sale_detail.status,
+                                                    amount: @purchase_sale_detail.amount,
+                                                    items: @purchase_sale_detail.purchase_sale_items.map { |c_i|
+                                                    { product: c_i.product.title,
+                                                        marka: c_i.size_13,
+                                                        builty_no: c_i.size_12,
+                                                        vehicle_no: c_i.size_11,
+                                                        challan_no: c_i.size_10,
+                                                        quantity: c_i.quantity,
+                                                        room_num: c_i.size_8,
+                                                        rack_num: c_i.size_7
+                                                    }
+                                                    }
+                           }
+    end
 end
