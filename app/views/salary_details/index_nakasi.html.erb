@@ -2,7 +2,7 @@
 
 <div class="row ml-2 my-4">
   
-    <%= link_to pather_salary_details_path, class: "btn btn-info mx-2" do %>
+    <%= link_to pather_salary_details_path, class: "btn btn-info mr-2" do %>
       <i class="fa fa-male" aria-hidden="true"></i>
       Pather Book
     <% end %>
@@ -27,19 +27,19 @@
 	</ul>
 
 <div class="clearfix"></div>
-<div class="row card border-radius-1 shadow mx-2 py-4">
+<div class="row card border-radius-1 shadow m-2 p-3">
   <%= search_form_for @q, url: nakasi_salary_details_path, class: "admin-controls", method: "get" do |f| %>
-    <div class="row d-flex">
-      <div style="width:200px;" class="ml-4">
+    <div class="row d-flex p-2">
+      <div style="width:200px;" class="mr-2">
         <%= f.select :id_in, options_from_collection_for_select(@salary_searchs, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code}"},f.object.id_in),{:include_blank => "Select Nakasi"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Nakasi"}}%>
       </div>
-      <div style="width:200px;" class="ml-2">
+      <div style="width:180px;" class="mr-2">
         <%= f.search_field :salary_details_created_at_gteq, class: 'form-control input-sm datepicker',value: @created_at_gteq, 'datepicker' => true,placeholder: "YYYY-MM-DD" %>
       </div>
-      <div style="width:200px;" class="ml-2">
+      <div style="width:180px;" class="mr-2">
         <%= f.search_field :salary_details_created_at_lteq, class: 'form-control input-sm datepicker',value: @created_at_lteq, 'datepicker' => true ,placeholder: "YYYY-MM-DD"%>
       </div>
-      <div class="ml-2">
+      <div class="">
         <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
       </div>
       <div class="dropdown my-dropdown mr-2 ml-auto">
@@ -52,7 +52,7 @@
               <button class="form-control btn-danger my-2" name="submit_pdf_work" type="submit" value="Daily PDF" formtarget="_blank"><i class="fa fa-file-pdf"></i> Full Work</button>
             </div>
           </div>
-          <button style="width:100px;" class="form-control btn btn-info mr-4" name="email" type="submit" value="Email"><i class="fas fa-envelope"></i> Email</button>
+          <button style="width:100px;" class="form-control btn btn-info" name="email" type="submit" value="Email"><i class="fas fa-envelope"></i> Email</button>
      </div>
    <% end %>
  </div>

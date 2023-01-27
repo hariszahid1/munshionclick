@@ -80,12 +80,12 @@
         <div class="tab-content mb-2">
           <div class="tab-pane active card border-radius-1" id="search" role="tabpanel">
             <div class="row d-flex mt-3 mb-3">
-            <div class="col-lg-8">
+            <div class="col-lg-7">
               <%= search_form_for @q, url: staffs_path, class: "admin-controls mb-4", method: "get" do |f| %>
                     <span class="col-lg-4 form-group float-left">
                       <%= f.select :id_eq, options_from_collection_for_select(@staff_names, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code}"},@name),{:include_blank => "Select Staff"},:class=>"form-control chosen-select" %>
                     </span>
-                    <span class="col-lg-4 form-group float-left">
+                    <span class="col-lg-3 form-group float-left">
                       <%= f.select :department_id_eq, options_from_collection_for_select(@departments, 'id', 'title', @department), {hide_label:true,title: "Select the Department" ,prompt: "Select the Department"},:class=>"form-control chosen-select"%>
                     </span>
                     <span class="col-lg-3 form-group float-left">
@@ -96,9 +96,9 @@
                     </span>
                 </div> 
 
-                <div class="col-lg-4"> 
+                <div class="col-lg-5"> 
                   <% if check_can_send_email(@module_permission)%>
-                    <button class="form-control btn btn-info float-right mr-3" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-1"></i>&nbsp;Mail</button> 
+                    <button class="form-control btn btn-info float-right mr-2" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-2"></i>Email</button> 
                     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                       <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
@@ -133,17 +133,7 @@
                           </div>
                       </div>
                     </div>
-                  <% end %>
-                  <% if check_can_download_pdf(@module_permission)%>
-                    <div class="dropdown my-dropdown mr-2 float-right">
-                      <button type="button" class="form-control bg-danger text-light" style="width:100px">PDF List</button>
-                      <div class="dropdown-content my-dropdown-content p-2">
-                        <button class="btn btn-danger ml-2 mr-2 mt-2" name="submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mr-1"></i>Staff</button>
-                        <button class="btn btn-danger ml-2 mr-2 mt-2 d-flex" name="wage_submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mr-1"></i>Wage_Staff</button>
-                        <button class="btn btn-danger ml-2 mr-2 mt-2 d-flex"name="salary_submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mr-1"></i>Salary_Staff</button>
-                      </div>
-                    </div>
-                  <% end %>  
+                  <% end %>                 
                   <% if check_can_download_csv(@module_permission)%>
                     <div class="dropdown my-dropdown mr-2 float-right">
                       <button type="button" class="form-control bg-warning" style="width:100px">CSV List</button>
@@ -154,6 +144,16 @@
                       </div>
                     </div>
                   <% end %> 
+                  <% if check_can_download_pdf(@module_permission)%>
+                    <div class="dropdown my-dropdown mr-2 float-right">
+                      <button type="button" class="form-control bg-danger text-light" style="width:100px">PDF List</button>
+                      <div class="dropdown-content my-dropdown-content p-2">
+                        <button class="btn btn-danger ml-2 mr-2 mt-2" name="submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mr-1"></i>Staff</button>
+                        <button class="btn btn-danger ml-2 mr-2 mt-2 d-flex" name="wage_submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mr-1"></i>Wage_Staff</button>
+                        <button class="btn btn-danger ml-2 mr-2 mt-2 d-flex"name="salary_submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mr-1"></i>Salary_Staff</button>
+                      </div>
+                    </div>
+                  <% end %>  
                 </div>
               <% end %>
             </div>
