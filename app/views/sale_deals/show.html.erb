@@ -18,7 +18,7 @@
             <h3>Customer Contact:<h5><%= @sale_deal&.sys_user&.occupation %></h5> </h3>
           </div>
           <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Quota:<h5><%= @sale_deal&.purchase_sale_items.first.size_13 %></h5></h3>
+            <h3>Transaction Type:<h5 class='urdu-font'> <%= @sale_deal&.purchase_sale_items.first.size_12 %></h5></h3>
           </div>
         </div>
       </div>
@@ -26,13 +26,13 @@
       <div class="row">
         <div class="col-lg-12 col-sm-12">
           <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Transaction Type:<h5 class='urdu-font'> <%= @sale_deal&.purchase_sale_items.first.size_12 %></h5></h3>
-          </div>
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
             <h3>Project Name:<h5 class='urdu-font'><%= @sale_deal&.sys_user&.cms_data&.try(:[], 'project_name')&.titleize %></h5></h3>
           </div>
           <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
             <h3>Form No:<h5><%= @sale_deal&.purchase_sale_items.first.size_11  %></h5> </h3>
+          </div>
+          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+            <h3>MS No:<h5 class='urdu-font'> <%= @sale_deal&.purchase_sale_items.first.size_2 %></h5></h3>
           </div>
           <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
             <h3>Plot Size:<h5><%= @sale_deal&.sys_user&.ntn %></h5></h3>
@@ -60,6 +60,9 @@
       <div class="row">
         <div class="col-lg-12 col-sm-12">
           <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
+            <h3>Payment Type:<h5><%= @sale_deal&.purchase_sale_items.first.size_7 %></h5></h3>
+          </div>
+          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
             <h3>Deal Date:<h5 class='urdu-font'> <%= @sale_deal&.purchase_sale_items&.first&.expiry_date&.strftime('%d-%m-%Y') %></h5></h3>
           </div>
           <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
@@ -68,35 +71,26 @@
           <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
             <h3>Profit/Loss:<h5><%= @sale_deal&.purchase_sale_items.first.size_5 %></h5> </h3>
           </div>
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Payment Type:<h5><%= @sale_deal&.purchase_sale_items.first.size_7 %></h5></h3>
-          </div>
         </div>
       </div>
 
       <div class="row">
         <div class="col-lg-12 col-sm-12">
           <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Received Amount:<h5 class='urdu-font'> <%= @sale_deal&.purchase_sale_items.first.size_4 %></h5></h3>
+            <h3>Received Amount:<h5 class='urdu-font'> <%= @sale_deal&.amount%></h5></h3>
           </div>
           <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Balance Amount:<h5 class='urdu-font'><%= @sale_deal&.purchase_sale_items.first.size_3 %></h5></h3>
+            <h3>Balance Amount:<h5 class='urdu-font'><%= @sale_deal&.remaining_balance %></h5></h3>
           </div>
           <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Total Amount:<h5><%= @sale_deal&.purchase_sale_items.first.size_2 %></h5> </h3>
+            <h3>Total Amount:<h5><%= @sale_deal&.total_bill %></h5> </h3>
           </div>
           <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
             <h3>Trx No:<h5><%= @sale_deal&.purchase_sale_items.first.size_1 %></h5></h3>
           </div>
         </div>
       </div>
-       <div class="row">
-        <div class="col-lg-12 col-sm-12">
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>MS No:<h5 class='urdu-font'> <%= @sale_deal&.purchase_sale_items.first.size_2 %></h5></h3>
-          </div>
-        </div>
-      </div>
+
       <br>
       <div class="row">
         <div class="col-lg-1 float-left">
