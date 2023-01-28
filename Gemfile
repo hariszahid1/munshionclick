@@ -21,6 +21,12 @@ gem "mini_magick"
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 
+gem 'mapbox-sdk'
+
+gem 'geocoder' 
+
+gem 'gmaps4rails'
+
 gem 'momentjs-rails' # dependency of daterangepicker
 
 gem 'bootstrap-daterangepicker-rails'
