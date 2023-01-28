@@ -1,0 +1,98 @@
+<html>
+  <head>
+    <style>
+      .border-bottom{
+        border-bottom: double 4px;
+      }
+      .text-center{
+        text-align: center;
+      }
+      .text-left{
+        text-align: left;
+      }
+    </style>
+  </head>
+  <body>
+    <% @date = Date.today  %>
+    <% @time = DateTime.now %>
+    <% @time = Time.zone.now %>
+    <div>
+      <p class="border-bottom"></p>
+      <h1 class="text-center">Stock Status</h1>
+      <h3 class="text-center">
+        Date: <b><span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%></span>
+        Time: <span><%=@time.strftime("at %I:%M%p")%></span></b>
+      </h3>
+      <p class="border-bottom"></p>
+      <p class="text-center">Report by: <%=current_user.name%></p>
+    </div>
+    <div>
+
+      <table>
+       <thead class="lite-gray">
+        <tr>
+          <th colspan="6" class='text-left' style="padding-left: 20px;">Product Name</th>
+          <th> Room </th>
+          <th> Quantity </th>
+        </tr>
+        </thead>
+        <tbody>
+        <% if @product_room_quantity.present? %>
+            <% @product_room_quantity.each do |order| %>
+                <tr>
+                  <td colspan="6" class='text-left' style="padding-left: 20px;"><%= order.first&.first %></td>
+                  <td class="text-center"><%= order.first&.second %></td>
+                  <td class="text-center"><%= number_with_delimiter(order.second&.to_f) %></td>
+                </tr>
+            <% end %>
+        <% end %>
+         <tr>
+            <th colspan="7" class='text-left' style="padding-left: 30px;">Total</th>
+            <th><%= number_with_delimiter(@product_room_quantity.values&.sum.to_f) %></th>
+          </tr>
+        </tbody>
+      </table>
+
+
+      <table style= "margin-top: 100px;">
+        <thead class="lite-gray">
+        <tr>
+          <th colspan="6" class='text-left' style="padding-left: 20px;">Party Name</th>
+          <th> InWard Qty </th>
+          <th> OutWard Qty </th>
+          <th> Stock Balance </th>
+        </tr>
+        </thead>
+        <tbody>
+        <% if @merged_hash.present? %>
+            <%  @merged_hash.each do |order| %>
+                <tr>
+                    <td colspan="6" class='text-left' style="padding-left: 20px;"><%= order.first %></td>
+                    <% if order.second.class == Float %>
+                        <td class="text-center"><%= number_with_delimiter(order.second&.to_f) %></td>
+                         <td class="text-center">0</td>
+                    <% else %>
+                        <td class="text-center"><%= number_with_delimiter(order.second&.first.to_f) %></td>
+                        <td class="text-center"><%= number_with_delimiter(order.second&.second.to_f) %></td>
+                    <% end %>
+                    <% if order.second.class == Float %>
+                        <td class="text-center"><%= number_with_delimiter(order.second&.to_f) %></td>
+                    <% else %>
+                        <td class="text-center"><%= number_with_delimiter(order.second&.first.to_f - order.second&.second.to_f) %></td>
+                    <% end %>
+                </tr>
+            <% end %>
+        <% end %>
+        <thead class="lite-gray">
+        <tr>
+          <th colspan="6" class='text-left' style="padding-left: 20px;">Total</th>
+          <th> <%= number_with_delimiter(@pdf_inward_total) %> </th>
+          <th> <%= number_with_delimiter(@pdf_outward_total) %> </th>
+          <th> <%= number_with_delimiter(@pdf_inward_total-@pdf_outward_total) %> </th>
+        </tr>
+        </thead>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
