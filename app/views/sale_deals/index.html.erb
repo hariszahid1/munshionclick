@@ -22,7 +22,7 @@
           </ol>
         </div>
 
-        <div class="row w-100">
+        <div class="row w-100 justify-content-between">
           <div class="col-md-2">
             <%= link_to sale_deals_path('q[purchase_sale_items_size_7_eq]': 'Token Payment'), class: 'card border-info mx-sm-1 p-3' do %>
               <div class="card border-info shadow text-info p-3 my-card" ><span class="fa fa-wallet" aria-hidden="true"></span></div>
@@ -44,27 +44,30 @@
               <div class="text-danger text-center mt-3"><h2><%= @payment_status_count['Full Payment'] || 0 %></h2></div>
             <% end %>
           </div>
-          <div class="col-md-2">
-            <%= link_to sale_deals_path('q[purchase_sale_items_size_4_eq]': 'Transfer'), class: 'card border-warning mx-sm-1 p-3' do %>
-              <div class="card border-warning shadow text-warning p-3 my-card" ><span class="fa fa-gift" aria-hidden="true"></span></div>
-              <div class="text-warning text-center mt-4"><h6>Transfer</h6></div>
-              <div class="text-warning text-center mt-3"><h2><%= @deal_count['Transfer'] || 0 %></h2></div>
-            <% end %>
-          </div>
-          <div class="col-md-2">
-            <%= link_to sale_deals_path('q[purchase_sale_items_size_4_eq]': 'Saler Free'), class: 'card border-primary mx-sm-1 p-3' do %>
-              <div class="card border-primary shadow text-primary p-3 my-card" ><span class="fa fa-gift" aria-hidden="true"></span></div>
-              <div class="text-primary text-center mt-4"><h6>Saler Free</h6></div>
-              <div class="text-primary text-center mt-3"><h2><%= @deal_count['Saler Free'] || 0 %></h2></div>
-            <% end %>
-          </div>
-          <div class="col-md-2">
-            <%= link_to sale_deals_path('q[purchase_sale_items_size_4_eq]': 'Fresh Booking'), class: 'card border-secondary mx-sm-1 p-3' do %>
-              <div class="card border-secondary shadow text-secondary p-3 my-card" ><span class="fa fa-gift" aria-hidden="true"></span></div>
-              <div class="text-secondary text-center mt-4"><h6>Fresh Booking</h6></div>
-              <div class="text-secondary text-center mt-3"><h2><%= @deal_count['Fresh Booking'] || 0 %></h2></div>
-            <% end %>
-          </div>
+          <% if params['q'].try(:[], 'transaction_type_eq') == '8' %>
+            <div class="col-md-2">
+              <%= link_to sale_deals_path('q[purchase_sale_items_size_4_eq]': 'Transfer'), class: 'card border-warning mx-sm-1 p-3' do %>
+                <div class="card border-warning shadow text-warning p-3 my-card" ><span class="fa fa-gift" aria-hidden="true"></span></div>
+                <div class="text-warning text-center mt-4"><h6>Transfer</h6></div>
+                <div class="text-warning text-center mt-3"><h2><%= @deal_count['Transfer'] || 0 %></h2></div>
+              <% end %>
+            </div>
+            <div class="col-md-2">
+              <%= link_to sale_deals_path('q[purchase_sale_items_size_4_eq]': 'Saler Free'), class: 'card border-primary mx-sm-1 p-3' do %>
+                <div class="card border-primary shadow text-primary p-3 my-card" ><span class="fa fa-gift" aria-hidden="true"></span></div>
+                <div class="text-primary text-center mt-4"><h6>Saler Free</h6></div>
+                <div class="text-primary text-center mt-3"><h2><%= @deal_count['Saler Free'] || 0 %></h2></div>
+              <% end %>
+            </div>
+          <% else %>
+            <div class="col-md-2">
+              <%= link_to sale_deals_path('q[purchase_sale_items_size_4_eq]': 'Fresh Booking'), class: 'card border-secondary mx-sm-1 p-3' do %>
+                <div class="card border-secondary shadow text-secondary p-3 my-card" ><span class="fa fa-gift" aria-hidden="true"></span></div>
+                <div class="text-secondary text-center mt-4"><h6>Fresh Booking</h6></div>
+                <div class="text-secondary text-center mt-3"><h2><%= @deal_count['Fresh Booking'] || 0 %></h2></div>
+              <% end %>
+            </div>
+          <% end %>
         </div>
 
 
@@ -143,10 +146,10 @@
             <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker',placeholder: "YYYY-MM-DD" %>
             <%= f.search_field :created_at_lteq, class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
           </div>
-          <div class="col-lg-2 form-group float-left">
-            <%= f.search_field :purchase_sale_items_size_13_cont, class: "form-control chosen-select", placeholder: "Search Quota" %>
-          </div>
           <div class="col-lg-6 form-group float-left">
+            <% if  params[:q].try(:[], 'transaction_type_eq') %>
+              <%= f.hidden_field :transaction_type_eq , value: params[:q].try(:[], 'transaction_type_eq').to_i%>
+            <% end %>
             <button class="form-control btn btn-primary mr-4" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
             <button class="btn btn-danger mr-2" style="width: 100px;" title= "download expense vouchers pdf" name="pdf" type="submit" value="pdf"><i class="fa fa-file-excel mr-2"></i>PDF</button>
             <button class="btn btn-warning" style="width: 100px;" title= "download expense vouchers csv" name="csv" type="submit" value="csv"><i class="fa fa-file-excel mr-2"></i>CSV</button>
@@ -162,7 +165,6 @@
     <thead>
       <tr>
         <th>Date</th>
-        <th>Quota</th>
         <th>Agent</th>
         <th>Project</th>
         <th>Plot Type</th>
