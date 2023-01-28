@@ -59,7 +59,7 @@
             <div class="tab-pane active card border-radius-1 shadow" id="search" role="tabpanel">
               <p>
                 <%= search_form_for @q, url: receiveable_sys_users_path, class: "admin-controls", method: "get" do |f| %>
-                  <span class="mt-4 col-lg-12">
+                  <div class="mt-4 col-lg-12">
                     <span class="col-lg-3 form-group ">
                        <%= f.select :name_or_code_cont, options_from_collection_for_select(@all_user, "name", ->(st){"#{st.name} \u{27F6} #{st.code} , #{st.balance}"},f.object.name_or_code_cont),{:include_blank => "Select Name/Code"},:class=>"form-control chosen-select" %>
                     </span>
@@ -71,14 +71,10 @@
                     </span>
                     <span class="col-lg-1 form-group ">
                        <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
-                    </span>
-                    <span class="mx-2">
-                       <button class="form-control btn  btn-danger" title="Download customer pdf" name="submit_pdf_staff_with" type="submit" value="Accounts PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mr-2"></i>Receiveable</button>
-                   </span>
-                   <span class="mr-2">
-                       <button class="form-control btn btn-warning" title="Download receiveable csv" name="submit_csv_sys_user_receivable" type="submit" value="Accounts CSV A4"><i class="fa fa-file-excel mr-2"></i>Receiveable </button>
-                   </span>
-                   <span>
+                    </span>                
+                   <span class="col-lg-5">
+                      <button style="width:100px;" class="form-control btn  btn-danger " title="Download customer pdf" name="submit_pdf_staff_with" type="submit" value="Accounts PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mr-2"></i>PDF</button>                
+                      <button style="width:100px;"  class="form-control btn btn-warning" title="Download receiveable csv" name="submit_csv_sys_user_receivable" type="submit" value="Accounts CSV A4"><i class="fa fa-file-excel mr-2"></i>CSV </button>
                       <button class="form-control btn btn-info" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-2"></i>Email</button>
                        <!-- Modal -->
                       <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -117,7 +113,7 @@
                         </div>
                       </div>
                    </span>
-                  </span>
+                  </div>
                 <% end %>
               </p>
             </div>

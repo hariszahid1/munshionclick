@@ -41,23 +41,18 @@
          <div class="col-lg-2 form-group float-left">
            <%= f.select :department_id_eq, options_from_collection_for_select(@departments, 'id', 'title', @department), {hide_label:true,title: "Select the Department" ,prompt: "Select the Department"},:class=>"form-control chosen-select"%>
          </div>
-         <div class="col=lg-2 form-group float-left">
+         <div class="col-lg-2 form-group float-left">
            <%= f.select :staff_type_eq, Staff.staff_types.map { |key, value| [key.humanize, value] },{hide_label:true,class: "form-control", required: true},:class=>"form-control" %>
          </div>
          <div class="col-lg-2 form-group float-left">
            <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
-         </div>
-         <div class="col-lg-1 form-group float-left">
-         </div>
-         <div class="col-lg-1 form-group float-left">
-           <button style="width:100px;" class="form-control btn-danger" name="submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mr-2"></i>PDF</button>
-         </div>
-         <div class="col-lg-1 form-group float-left">
-           <button style="width:100px;"  class="form-control btn-warning" name="submit_csv" type="submit" value="Full CSV A4" formtarget="_blank"><i class="fa fa-file-excel mr-2"></i>CSV</button>
+         </div>        
+         <div class="col-lg-3 d-flex form-group float-right">
+           <button style="width:100px;" class="form-control btn-danger " name="submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mr-2"></i>PDF</button>
+           <button style="width:100px;"  class="form-control btn-warning ml-2" name="submit_csv" type="submit" value="Full CSV A4" formtarget="_blank"><i class="fa fa-file-excel mr-2"></i>CSV</button>
          </div>
        <% end %>
-     </div>
-     
+     </div>    
    </div>
    </div>
 </div>
