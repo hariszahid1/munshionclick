@@ -716,7 +716,7 @@
                             <i class="fa fa-money-check-alt fa-2x text-success mr-1" aria-hidden="true"></i><b><%=@due_advance.to_f.round(2) rescue 0%></b>
                             <p>Down Payment</p>
                           <% end %>
-      		  						  <%= link_to property_installment_property_plans_path('short_advance': true,'q[due_date_lteq]':Date.today), class: "col float-right" do %>
+      		  						  <%= link_to property_installment_property_plans_path('short_advance': true,'q[property_installments_due_date_lteq]':Date.today), class: "col float-right" do %>
                             <i class="fas fa-receipt fa-2x text-danger mr-1" aria-hidden="true"></i><b><%=@due_installment.to_f.round(2) rescue 0%></b>
                             <p>Installment</p>
                           <% end %>
