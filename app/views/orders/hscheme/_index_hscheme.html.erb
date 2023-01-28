@@ -271,7 +271,7 @@
                 <% end %>
 
                 <table>
-                  <div>
+                  <div class="mt-3">
                     <h5 class="float-left ml-2 font-weight-bold">Booking Details</h5>
                     <% if order.status !='Cancel' %>
                         <%= link_to booking_cancel_order_path(order), class: "btn btn-danger d-flex float-right ml-2 mr-2 mb-2", style:"width: 120px;" do %>
@@ -424,12 +424,12 @@
                           </td> 
                       </tr>  
                       <%if purchase_sale_detail.purchase_sale_items_names_and_quantity!=0%>
+                        <tr class=<%=order.status =='Cancel' ? "table-danger" : "table-warning" %> style="font-size: 1.2em;">
+                          <th colspan="5">Unit</th>
+                          <th colspan="2">Unit Size</th>
+                          <th colspan="2">Amount</th>
+                        </tr>
                         <%purchase_sale_detail.purchase_sale_items_names_and_quantity.each do |name_quantity|%>
-                          <tr class=<%=order.status =='Cancel' ? "table-danger" : "table-warning" %> style="font-size: 1.2em;">
-                            <th colspan="5">Unit</th>
-                            <th colspan="2">Unit Size</th>
-                            <th colspan="2">Amount</th>
-                          </tr>
                           <tr style="font-size: 1em;">  
                             <td colspan="5"><%=name_quantity.first%> <%=name_quantity[8]%></td>
                             <td colspan="2"><%=name_quantity[10]%>-M <%=name_quantity[12]%>-sqr</td>
@@ -441,11 +441,9 @@
                   <% end %>
                 </table>  
                 <%if order.purchase_sale_details.present?%>
-                  
                   <div class="btn-success">
                     <div class="row p-3 border-radius-1">
                       <div class="col"><h5>B-Total  </h5></div>
-                      
                       <div class="col"></div>
                       <div class="col"><h5><%= number_with_delimiter(order.sys_user.ledger_books.sum(:debit).to_i) %></h5></div>
                       <div class="col"><h5><%= number_with_delimiter(order.amount.to_i+order.purchase_sale_details.sum(:amount).to_i) %></h5></div>
@@ -483,12 +481,12 @@
       </tbody>
       
     </table>
-    <div class="row order-book-index-card mt-2">
-      <div class="col-lg-4 col-sm-4">
+    <div class="col-lg-12 digg_pagination order-book-index-card mt-2">
+      <div class="float-left page_info">
         <%= page_entries_info @orders %>
       </div>
-      <div class="col-lg-8 col-sm-8 pagination-left">
-        <%= paginate @orders %>
+      <div class="float-right">
+      <%= paginate @orders, :container => false %>
       </div>
     </div>
   </div>

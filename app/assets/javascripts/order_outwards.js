@@ -123,11 +123,39 @@ function markas_call(product_id, id){
           var rem_out_stock_val = parseInt(result_data) - parseInt(stock_val);
           $(target.closest('.challan-stock-container')).find('.outward-storage-remaining-stock').html(rem_out_stock_val);
           $(target.closest('.challan-stock-container')).find('.outward-stock-value-rem-quantity').val(rem_out_stock_val);
-
+          outwardCarriageCostUpdate()
         }
      },
      error: function (){
         window.alert("something wrong!");
      }
     });
+  }
+
+  function outwardCarriageCostUpdate(){
+    var carriage = $("#outward_purchase_sale_detail_carriage_value").val()!= "" ? parseFloat($("#outward_purchase_sale_detail_carriage_value").val()) : 0
+    var loading = $("#outward_purchase_sale_detail_loading_value").val()!= "" ? parseFloat($("#outward_purchase_sale_detail_loading_value").val()) : 0
+    var len = $('.outward-stock-value').length
+    var total_stock = 0
+    for (var i=0; i < len; i++)
+    {
+      var single_stock = parseFloat($('.outward-stock-value')[i].value)
+      total_stock = total_stock + single_stock
+    }
+    $("#outward_purchase_sale_detail_carriage").val((carriage*total_stock))
+    $("#outward_purchase_sale_detail_loading").val((loading*total_stock))
+  }
+
+  function outwardCarriageUpdate(){
+    var carriage = $("#outward_purchase_sale_detail_carriage").val()!= "" ? parseFloat($("#outward_purchase_sale_detail_carriage").val()) : 0
+    var loading = $("#outward_purchase_sale_detail_loading").val()!= "" ? parseFloat($("#outward_purchase_sale_detail_loading").val()) : 0
+    var len = $('.outward-stock-value').length
+    var total_stock = 0
+    for (var i=0; i < len; i++)
+    {
+      var single_stock = parseFloat($('.outward-stock-value')[i].value)
+      total_stock = total_stock + single_stock
+    }
+    $("#outward_purchase_sale_detail_carriage_value").val((carriage/total_stock).toFixed(2))
+    $("#outward_purchase_sale_detail_loading_value").val((loading/total_stock).toFixed(2))
   }

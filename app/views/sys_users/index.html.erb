@@ -80,8 +80,8 @@
         <div class="tab-content mb-3">
           <div class="tab-pane active card border-radius-1" id="search" role="tabpanel">
             <div class="row d-flex mt-3">
-              <div class="col-lg-8">
-              <%= search_form_for @q, url: sys_users_path, class: "admin-controls", method: "get" do |f| %>
+              <div class="col-lg-7">
+               <%= search_form_for @q, url: sys_users_path, class: "admin-controls", method: "get" do |f| %>
                   <span class="col-lg-4 form-group float-left">
                     <%= f.select :id_eq, options_from_collection_for_select(@all_user, "id", ->(st){"#{st.name} \u{27F6} \u{27F6} #{st.code} "},f.object.id_eq),{:include_blank => "Select Name/Code"},:class=>"form-control chosen-select " %>
                   </span>
@@ -95,15 +95,9 @@
                     <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
                   </span>
                 </div>
-                <div class="col">
-                  <% if check_can_download_pdf(@module_permission)%>
-                    <button class="ml-3 btn btn-danger float-right mr-3" style="width:100px" title="Download user pdf" name="pdf" type="submit" value="pdf" formtarget="_blank"><i class="fa fa-file-pdf mr-2"></i>PDF</button>
-                  <% end %>
-                  <% if check_can_download_csv(@module_permission)%>
-                    <button class="ml-3 btn btn-warning float-right" style="width:100px" title="Download user csv" name="csv" type="submit" value="csv"><i class="fa fa-file-excel mr-2" aria-hidden="true"></i>CSV</button>
-                  <% end %>
+                <div class="col-lg-5">                 
                   <% if check_can_send_email(@module_permission)%>
-                    <button class="form-control btn btn-info float-right" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-2"></i>&nbsp;Mail</button>
+                    <button class="form-control btn btn-info float-right mx-2" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-2"></i>Email</button>
                     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                       <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
@@ -138,6 +132,12 @@
                           </div>
                       </div>
                     </div>
+                  <% end %>
+                  <% if check_can_download_csv(@module_permission)%>
+                    <button class=" btn btn-warning float-right ml-2" style="width:100px" title="Download user csv" name="csv" type="submit" value="csv"><i class="fa fa-file-excel mr-2" aria-hidden="true"></i>CSV</button>
+                  <% end %>
+                  <% if check_can_download_pdf(@module_permission)%>
+                    <button class=" btn btn-danger float-right " style="width:100px" title="Download user pdf" name="pdf" type="submit" value="pdf" formtarget="_blank"><i class="fa fa-file-pdf mr-2"></i>PDF</button>
                   <% end %>
                 </div>
               <% end %>

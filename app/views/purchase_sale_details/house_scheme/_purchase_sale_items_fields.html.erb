@@ -32,13 +32,14 @@
         <div class="hidden"><%= f.number_field :discount_price,step: :any,class:'discount-price', hide_label: true,placeholder: :discount,onchange:"saleCostUpdateReturn()",onkeyup:"saleCostUpdateReturn()"%></div>
         <div class="hidden"><%=f.number_field :extra_quantity,value:0,step: :any,class:'extra-quantity', hide_label: true,placeholder: :extra%></div>
         <div ><%#= f.text_area :comment, hide_label: true,placeholder: :comment,title: :comment%></div>
-        <div class="form-group float-left text-xs font-weight-bold text-uppercase",onclick="saleCostUpdateReturn()",onkeyup="saleCostUpdateReturn()">
-          <%= link_to_remove_association f, class: "return btn btn-danger mt-4 d-flex",onclick:"costUpdateReturn()",onkeydown:"saleCostUpdateReturn()", onkeyup:"saleCostUpdateReturn()", style:"width: 100px;" do %>
-            <i class="fa fa-minus-circle"></i> Drop
-            <span class="span-line ml-1">1</span>
-          <% end %>
-
-        </div>
+        <% if (f.object.id.nil? || check_can_delete(@module_permission))%>
+          <div class="form-group float-left text-xs font-weight-bold text-uppercase",onclick="saleCostUpdateReturn()",onkeyup="saleCostUpdateReturn()">
+            <%= link_to_remove_association f, class: "return btn btn-danger mt-4 d-flex",onclick:"costUpdateReturn()",onkeydown:"saleCostUpdateReturn()", onkeyup:"saleCostUpdateReturn()", style:"width: 100px;" do %>
+              <i class="fa fa-minus-circle"></i> Drop
+              <span class="span-line ml-1">1</span>
+            <% end %>
+          </div>
+        <% end %>
       </div>
     </div>
 <%else%>
@@ -62,11 +63,13 @@
         </div>
         <div class="hidden"><%= f.number_field :discount_price,step: :any,class:'discount-price', hide_label: true,placeholder: :discount,onchange:"costUpdateReturn()",onkeyup:"costUpdateReturn()"%></div>
         <div class="hidden"><%= f.text_area :comment, hide_label: true,placeholder: :comment,title: :comment%></div>
-        <div class="col-lg-1 form-group float-left text-xs font-weight-bold text-danger text-uppercase">
-          <%= link_to_remove_association f, class: "return",onclick:"costUpdateReturn()",onkeyup:"costUpdateReturn()" do %>
-            <i class="fa fa-minus-circle"></i> Drop
-          <% end %>
-        </div>
+        <% if (f.object.id.nil? || check_can_delete(@module_permission))%>
+          <div class="col-lg-1 form-group float-left text-xs font-weight-bold text-danger text-uppercase">
+            <%= link_to_remove_association f, class: "return",onclick:"costUpdateReturn()",onkeyup:"costUpdateReturn()" do %>
+              <i class="fa fa-minus-circle"></i> Drop
+            <% end %>
+          </div>
+        <% end %>
       </div>
     </div>
 <%end%>

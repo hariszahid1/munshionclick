@@ -120,7 +120,7 @@ class AccountsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def account_params
-    params.require(:account).permit(:title, :bank_name, :iban_number, :amount, :user_id, :profile_image)
+    params.require(:account).permit(:title, :bank_name, :iban_number, :amount, :user_id, :default_account, :profile_image)
   end
 
   def download_accounts_csv_file

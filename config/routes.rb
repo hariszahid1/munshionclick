@@ -9,6 +9,9 @@ Rails.application.routes.draw do
     end
   end
   resources :compaign_entries
+
+  resources :plots_mapping
+
   get 'sms/index'
   get 'sms/sms_to_staff'
   resources :staff_deals
@@ -27,7 +30,11 @@ Rails.application.routes.draw do
   end
   resources :product_warranties
   resources :warranties
-  resources :cold_storage_inwards
+  resources :cold_storage_inwards do
+    collection do
+      get :stock_report_in_out, to: 'cold_storage_inwards#stock_report_in_out'
+    end
+  end
   resources :cold_storage_outwards do
     collection do
       get :get_outward_storage_stock_data, to: 'cold_storage_outwards#get_outward_storage_stock_data'

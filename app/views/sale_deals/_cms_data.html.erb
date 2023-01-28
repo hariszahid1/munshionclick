@@ -4,6 +4,6 @@
   </div>
 
   <div class="col-lg-6 form-group">
-    <%= cd.select :category, options_for_select(@category), {:include_blank => "Select Category"}, class: "form-control chosen-select disable-sys-users" %>
+    <%= cd.select :category, options_for_select(@category), {:include_blank => "Select Category", label: 'Plot Type'}, class: "form-control chosen-select disable-sys-users" %>
   </div>
 </div>

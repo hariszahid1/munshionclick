@@ -90,16 +90,16 @@
           <div class="dropdown my-dropdown mr-2 ml-auto">
             <button type="button" class="form-control bg-danger text-light"><i class="fa fa-file-pdf mr-2"></i>PDF List</button>
             <div class="dropdown-content my-dropdown-content p-1">
-              <button class="form-control btn btn-danger float-right mr-2 ml-3 mb-2 mt-2" style="width:150px" title= "download crm pdf" name="pdf_asc" type="submit" value="pdf_asc" formtarget="_blank" style="width:160px">PDF ASC</button>
-              <button class="form-control btn btn-danger float-right mr-2 ml-3 mb-2 mt-2" style="width:150px" title= "download crm pdf" name="pdf_desc" type="submit" value="pdf_desc" formtarget="_blank" style="width:160px">PDF DESC</button>
+              <button class="form-control btn btn-danger float-right  mx-2 my-2" style="width:150px" title= "download crm pdf" name="pdf_asc" type="submit" value="pdf_asc" formtarget="_blank" style="width:160px">PDF ASC</button>
+              <button class="form-control btn btn-danger float-right  mx-2 my-2" style="width:150px" title= "download crm pdf" name="pdf_desc" type="submit" value="pdf_desc" formtarget="_blank" style="width:160px">PDF DESC</button>
             </div>
           </div>
         <% end %>
         <%if (check_can_download_csv(@module_permission))%>
-          <button class="form-control d-flex justify-content-center btn btn-warning ml-3 float-right" name="csv" style="width:100px" type="submit" value="Accounts CSV"><i class="fa fa-file-excel mr-2"></i>CSV</button>
+          <button class="form-control btn btn-warning ml-3 float-right" name="csv" style="width:100px" type="submit" value="Accounts CSV"><i class="fa fa-file-excel mr-2"></i>CSV</button>
         <% end %>
         <%if (check_can_send_email(@module_permission))%>
-          <button class="form-control d-flex justify-content-center btn btn-info ml-3 float-right" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-1"></i>&nbsp;Mail</button>
+          <button class="form-control  btn btn-info ml-3 float-right" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-2"></i>Email</button>
           <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">

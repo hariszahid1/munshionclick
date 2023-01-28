@@ -33,11 +33,13 @@
     <span class="col-lg-2 form-group float-left text-xs font-weight-bold text-success text-uppercase">0</span>
     <textarea placeholder="Past Serial Number" class="form-control product_serial_no hidden"><%=(f.object&.serial&.split("\r\n").to_a+f.object&.product&.warranty_list&.split("\r\n").to_a).uniq.join("\r\n")%></textarea>
   </div>
-  <div class="col-lg-2 form-group float-left text-xs font-weight-bold text-danger text-uppercase">
-    <%= link_to_remove_association f do %>
-      <i class="fa fa-minus-circle"></i> Drop
-    <% end %>
-  </div>
+  <% if (f.object.id.nil? || check_can_delete(@module_permission))%>
+    <div class="col-lg-2 form-group float-left text-xs font-weight-bold text-danger text-uppercase">
+      <%= link_to_remove_association f do %>
+        <i class="fa fa-minus-circle"></i> Drop
+      <% end %>
+    </div>
+  <% end %>  
 </div>
 <script>
   $(document).ready(function() {

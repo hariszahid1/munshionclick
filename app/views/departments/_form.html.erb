@@ -22,8 +22,9 @@
           <div class="col-lg-12 form-group float-left">
             <%= f.text_field :code, {placeholder: "Enter the code", required: true , value: (f.object.code.nil? ? ("AGC-"+"%.4i" % (Department.maximum(:id).present? ? Department.maximum(:id).next : 1)) : (f.object.code ))} %>
           </div>
-
-
+          <div class="col-lg-12 form-group float-left">
+           <%= f.check_box :active, class: "form-control", checked: f.object.active %>
+          </div>
           <div class="col-lg-12 form-group float-left">
             <%= f.text_area :comment , placeholder:"Enter Comment"%>
           </div>

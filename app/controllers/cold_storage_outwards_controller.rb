@@ -2,11 +2,13 @@
 
 # FollowUps Controller
 class ColdStorageOutwardsController < ApplicationController
-
+  include PdfCsvGeneralMethod
+  include OutwardsHelper
   before_action :set_cold_storage, only: %i[show edit update destroy]
   before_action :index_edit_new_data, only: %i[new show edit index]
 
   def index
+    date_search
     index_data
     @q = PurchaseSaleDetail.includes(:order, :account, :sys_user,
                                      purchase_sale_items: :product).ransack(params[:q])
@@ -26,9 +28,14 @@ class ColdStorageOutwardsController < ApplicationController
         @purchase_sale_detail.purchase_sale_items.build(product_id: ord.product_id, size_13: ord.marka, size_10: ord.challan_no, size_8: room_num, size_7: rack_num)
       end
     end
+    @staffs = Staff.joins(:department).where('departments.active': true)
+
   end
 
-  def edit; end
+  def edit
+    @staffs = Staff.joins(:department).where('departments.active': true)
+
+  end
 
   def create
     @pos_setting=PosSetting.first
@@ -65,7 +72,9 @@ class ColdStorageOutwardsController < ApplicationController
     end
   end
 
-  def show; end
+  def show
+    download_outward_show_pdf_file if params[:pdf].present?
+  end
 
   def update
     @pos_setting=PosSetting.first
@@ -141,10 +150,20 @@ class ColdStorageOutwardsController < ApplicationController
 
   def index_edit_new_data
     @orders = Order.all
-    @customers = SysUser.where(:user_group=>['Customer','Both','Salesman'])
+    @customers = SysUser.all
     @suppliers = SysUser.where(:user_group=>['Supplier','Both','Own'])
     @accounts = Account.all
     @products = Product.all
+  end
+
+  def date_search
+    @created_at_gteq = DateTime.current.beginning_of_month
+    @created_at_lteq = DateTime.now
+    if params[:q].present?
+      @created_at_gteq = params[:q][:created_at_gteq] if params[:q][:created_at_gteq].present?
+      @created_at_lteq = params[:q][:created_at_lteq] if params[:q][:created_at_lteq].present?
+      params[:q][:created_at_lteq] = params[:q][:created_at_lteq].to_date.end_of_day if params[:q][:created_at_lteq].present?
+    end
   end
 
   def index_data
@@ -153,6 +172,11 @@ class ColdStorageOutwardsController < ApplicationController
     @staffs = Staff.loader_active_staff
     @total_stock = PurchaseSaleDetail.joins(:purchase_sale_items).includes(:purchase_sale_items).where(
       transaction_type: 'InWard').sum('purchase_sale_items.size_9')
+  end
+
+  def download_outward_show_pdf_file
+    sorted_outward_show_data
+    generate_pdf(@sorted_data.as_json, 'Outward', 'pdf.html', 'A4', false, 'cold_storage_outwards/show.pdf.erb')
   end
 
   def purchase_sale_detail_params

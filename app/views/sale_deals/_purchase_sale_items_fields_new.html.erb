@@ -10,9 +10,6 @@
         <%= f.select :size_12, options_for_select(@transaction_type, f.object.size_12), {:include_blank => "Select Transaction Type", label: "Transaction Type"}, class: "form-control chosen-select" %>
       </div>
       <div class="col-lg-6 form-group float-left">
-        <%= f.text_field :size_13, placeholder: "Quota",  label: "Quota", value: "#{(f.object.size_13 == '0' ? nil : f.object.size_13)}" %>
-      </div>
-      <div class="col-lg-6 form-group float-left">
         <%= f.text_field :size_11, placeholder: "Form No:", label: "Form No:", value: "#{(f.object.size_11 == '0' ? nil : f.object.size_11)}" %>
       </div>
       <div class="col-lg-6 form-group float-left">

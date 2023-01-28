@@ -1,6 +1,5 @@
-<tr>
+<tr class= <%= (sale_deal.transaction_type.eql?('NewSaleDeal') && sale_deal.purchase_sale_items.first.size_2.present? && sale_deal.purchase_sale_items.first.size_11.present?) ? "cms-table-row2" : (sale_deal.transaction_type.eql?('ReSaleDeal')) ? '' : "cms-table-row1" %>>
 	<td><%= sale_deal.created_at.strftime('%d/%m/%y at %I:%M%p')%></td>
-  <td><%= sale_deal&.purchase_sale_items&.first&.size_13 %></td>
 	<td>
 		<%= @all_agents.to_h.invert[sale_deal&.user_name.to_i].to_s%>
 	</td>

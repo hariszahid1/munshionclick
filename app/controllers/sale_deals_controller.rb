@@ -9,10 +9,11 @@ class SaleDealsController < ApplicationController
   # GET /sale_deals
   # GET /sale_deals.json
   def index
-    @q = PurchaseSaleDetail.includes(:sys_user, :purchase_sale_items).order('id desc').ransack(params[:q])
+    @q = PurchaseSaleDetail.includes(:sys_user, :purchase_sale_items).order('id desc').where(
+      transaction_type: %w[NewSaleDeal ReSaleDeal]).ransack(params[:q])
     download_sale_deals_pdf_file if params[:pdf].present?
     download_sale_deals_csv_file if params[:csv].present?
-    @sale_deals = @q.result.where(transaction_type: %w[NewSaleDeal ReSaleDeal]).page(params[:page])
+    @sale_deals = @q.result.page(params[:page])
   end
 
   # GET /sale_deals/1
@@ -148,15 +149,14 @@ class SaleDealsController < ApplicationController
   end
 
   def download_sale_deals_pdf_file
-    @sale_deals = @q.result.where(transaction_type: 'SaleDeal')
+    @sale_deals = @q.result
     sorted_data
     generate_pdf(@sorted_data.as_json, 'Sale Deal', 'pdf.html', 'A4', false, 'sale_deals/index.pdf.erb')
   end
 
   def download_sale_deals_csv_file
-    @sale_deals = @q.result.where(transaction_type: 'SaleDeal')
-    header_for_csv = %w[agent_name name contact quota transaction_type project_name type_of_plot form_no
-                        plot_size plot_quantity plot_category price_per_plot deal_date payment_type trx_no deal]
+    @sale_deals = @q.result
+    header_for_csv = %w[deal_date name number type_of_plot plot_size project_name form_no ms_no type]
     data_for_csv = get_data_for_sale_deals_csv
     generate_csv(data_for_csv, header_for_csv, 'SaleDeals')
   end

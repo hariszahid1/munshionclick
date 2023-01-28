@@ -34,11 +34,11 @@ class ColdStorageInwardsController < ApplicationController
         @purchase_sale_detail.purchase_sale_items.build(product_id: ord.product_id, size_13: ord.marka, size_12: ord.builty_no, size_11: ord.vehicle_no, size_10: ord.challan_no, size_9: ord.quantity, quantity: ord.quantity)
       end
     end
-    @staffs=Staff.all
+    @staffs = Staff.joins(:department).where('departments.active': true)
   end
 
   def edit
-    @staffs=Staff.all
+    @staffs = Staff.joins(:department).where('departments.active': true)
   end
 
   def create
@@ -126,6 +126,28 @@ class ColdStorageInwardsController < ApplicationController
       format.json { head :no_content }
       format.js   { render :layout => false }
     end
+  end
+
+  def stock_report_in_out
+    pdf_rep = PurchaseSaleDetail.includes(:sys_user, purchase_sale_items: :product)
+    in_report = pdf_rep.where(transaction_type: 'InWard').group('sys_users.name').sum('purchase_sale_items.quantity')
+    out_report = pdf_rep.where(transaction_type: 'OutWard').group('sys_users.name').sum('purchase_sale_items.quantity')
+    @pdf_inward_total = pdf_rep.where(transaction_type: 'InWard').sum('purchase_sale_items.quantity')
+    @pdf_outward_total = pdf_rep.where(transaction_type: 'OutWard').sum('purchase_sale_items.quantity')
+    @merged_hash = in_report.merge(out_report) do |key, oldval, newval|
+      if oldval.is_a?(Array)
+        oldval << newval
+      elsif newval.is_a?(Array)
+        newval << oldval
+      else
+        [oldval, newval]
+      end
+    end
+    in_prod = pdf_rep.where(transaction_type: 'InWard').group('products.title', 'purchase_sale_items.size_8').sum('purchase_sale_items.quantity')
+    out_prod = pdf_rep.where(transaction_type: 'OutWard').group('products.title', 'purchase_sale_items.size_8').sum('purchase_sale_items.quantity')
+    @product_room_quantity = in_prod.merge(out_prod) { |key, a_val, b_val| a_val - b_val }
+    generate_pdf('' ,'Stock-Report', 'pdf.html', 'A4', false, 'cold_storage_inwards/stock_report_in_out.pdf.erb')
+
   end
 
   private
