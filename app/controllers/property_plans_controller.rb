@@ -43,19 +43,19 @@ class PropertyPlansController < ApplicationController
     if params[:installment_count_from].present? && params[:installment_count_to].present?
       property_plan_ids = PropertyPlan.joins(:property_installments)
                                       .where('property_installments.due_status': [nil, PropertyPlan.due_statuses['Unpaid']])
-                                      .having("count(property_installments.property_plan_id) < #{params[:installment_count_to]} AND count(property_installments.property_plan_id) > #{params[:installment_count_from]}")
+                                      .having("count(property_installments.property_plan_id) <= #{params[:installment_count_to]} AND count(property_installments.property_plan_id) >= #{params[:installment_count_from]}")
                                       .ransack(params[:q]).result
                                       .group('property_plans.id').count&.keys
     elsif params[:installment_count_from].present?
       property_plan_ids = PropertyPlan.joins(:property_installments)
                                       .where('property_installments.due_status': [nil, PropertyPlan.due_statuses['Unpaid']])
-                                      .having("count(property_installments.property_plan_id) > #{params[:installment_count_from]}")
+                                      .having("count(property_installments.property_plan_id) >= #{params[:installment_count_from]}")
                                       .ransack(params[:q]).result
                                       .group('property_plans.id').count&.keys
     elsif params[:installment_count_to].present?
       property_plan_ids = PropertyPlan.joins(:property_installments)
                                       .where('property_installments.due_status': [nil, PropertyPlan.due_statuses['Unpaid']])
-                                      .having("count(property_installments.property_plan_id) < #{params[:installment_count_to]}")
+                                      .having("count(property_installments.property_plan_id) <= #{params[:installment_count_to]}")
                                       .ransack(params[:q]).result
                                       .group('property_plans.id').count&.keys
     else
