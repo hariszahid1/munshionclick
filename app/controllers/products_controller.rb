@@ -30,8 +30,7 @@ class ProductsController < ApplicationController
     # @item_types = ItemType.all
     @item_types = ItemType.pluck(:id, :title, :code)
     p_ids = []
-
-    if params[:commission_in_per].present? || params[:paid_in_per].present? || params[:phone_number_in].present? || params[:last_payment].present?
+    if [params[:commission_in_per], params[:paid_in_per], params[:phone_number_in], params[:last_payment], params[:paid_in_per_less]].any?(&:present?)
       @q.result.each do |product|
         staff_deal_orders = product.orders
         next if staff_deal_orders.blank?
@@ -45,7 +44,8 @@ class ProductsController < ApplicationController
         paid_in_per = ((sys_second / sys_first) * 100).round(2).to_s
         commission_in_per = ((token&.carriage.to_f / sys_first) * 100).round(2).to_s
         next if params[:commission_in_per].present? && commission_in_per.to_f < params[:commission_in_per].to_f
-        next if params[:paid_in_per].present? && paid_in_per.to_f < params[:paid_in_per].to_f
+        next if params[:paid_in_per].present? && paid_in_per.to_f <= params[:paid_in_per].to_f
+        next if params[:paid_in_per_less].present? && paid_in_per.to_f >= params[:paid_in_per_less].to_f
         next if params[:phone_number_in].present? && phone_no.to_s.exclude?(params[:phone_number_in])
         next if params[:last_payment].present? && last_pay.present? && last_pay.to_date < params[:last_payment].to_date
 

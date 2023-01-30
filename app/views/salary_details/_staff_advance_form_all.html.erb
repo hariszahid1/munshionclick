@@ -19,8 +19,8 @@
   </div>
   <div class="col-lg-2 form-group float-left">
     <%= f.number_field :amount,value:(staff.monthly_salary.present? ? staff.monthly_salary : staff.wage_rate), required: true,hide_label:true, class: "form-control salary-amount"%>
-    <div class="hidden">
-      <%= f.datetime_select :created_at%>
+    <div>
+      <%#= f.datetime_select :created_at%>
       <%= f.text_area :comment, value:"Payment Credit From all"%>
     </div>
   </div>
