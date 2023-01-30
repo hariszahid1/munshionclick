@@ -9,9 +9,6 @@ Rails.application.routes.draw do
     end
   end
   resources :compaign_entries
-
-  resources :plots_mapping
-
   get 'sms/index'
   get 'sms/sms_to_staff'
   resources :staff_deals
@@ -40,7 +37,12 @@ Rails.application.routes.draw do
       get :get_outward_storage_stock_data, to: 'cold_storage_outwards#get_outward_storage_stock_data'
     end
   end
-  resources :order_inwards
+  resources :order_inwards do
+    collection do
+      get :get_order_inward_product_data, to: 'order_inwards#get_order_inward_product_data'
+      get :get_order_inward_supplier_data, to: 'order_inwards#get_order_inward_supplier_data'
+    end
+  end
 
   resources :order_outwards do
     collection do

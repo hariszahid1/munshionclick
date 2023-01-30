@@ -102,6 +102,23 @@ class OrderInwardsController < ApplicationController
     end
   end
 
+  def get_order_inward_product_data
+    item_type_id =  params[:item_type_id]
+    products = Product.where(item_type_id: item_type_id)
+    respond_to do |format|
+      format.json { render json: products }
+    end
+  end
+
+  def get_order_inward_supplier_data
+    product_id =  params[:product_id]
+     s_ids = Order.includes(:sys_user, order_items: :product).where('order_items.product_id': product_id).pluck(:sys_user_id).uniq
+     sys_users = SysUser.where(id: s_ids)
+    respond_to do |format|
+      format.json { render json: sys_users }
+    end
+  end
+
   private
 
   # Use callbacks to share common setup or constraints between actions.

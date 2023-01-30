@@ -25,15 +25,17 @@
         <div class="col-lg-12 col-sm-12">
           <%= search_form_for @q, url: order_inwards_path, class: "admin-controls", method: "get" do |f| %>
             <div class="col-lg-3 form-group float-left">
-              <%= f.select :order_items_product_item_type_id_eq, options_from_collection_for_select(ItemType.all, 'id', "title",f.object.order_items_product_item_type_id_eq), {hide_label:true,title: "Select the Line Item" ,prompt: "Select the Line Item"},class: 'form-control chosen-select'%>
+              <%= f.select :order_items_product_item_type_id_eq, options_from_collection_for_select(ItemType.all, 'id', "title",f.object.order_items_product_item_type_id_eq), {hide_label:true,title: "Select the Line Item" ,prompt: "Select the Line Item"}, onchange:"set_order_inward_products(this.value)", class: 'form-control chosen-select'%>
             </div>
 
             <div class="col-lg-3 form-group float-left">
-              <%= f.select :order_items_product_id_eq, options_from_collection_for_select(@products, 'id', ->(st){"#{st.title} \u{27F6} #{st.code}"},f.object.order_items_product_id_eq), {hide_label:true,title: "Select the Products" ,prompt: "Select the Pruducts"},class: 'form-control chosen-select'%>
+              <!--%= f.select :order_items_product_id_eq, options_from_collection_for_select(@products, 'id', ->(st){"#{st.title} \u{27F6} #{st.code}"},f.object.order_items_product_id_eq), {hide_label:true,title: "Select the Products" ,prompt: "Select the Pruducts"},class: 'form-control chosen-select order-inward-products'%-->
+              <%= f.select :order_items_product_id_eq, options_for_select(@products.map{ |p| [p.title , p.id]}, f.object.order_items_product_id_eq), {hide_label:true, prompt: "Select a product."}, onchange:"set_order_inward_suppliers(this.value)", class:"form-control order-inward-products" %>
             </div>
 
             <div class="col-lg-3 form-group float-left">
-              <%= f.select :sys_user_id_eq, options_from_collection_for_select(@suppliers, 'id', 'name', f.object.sys_user_id_eq), {class: 'form-control',hide_label:true,title: "Select the Supplier" ,prompt: "Select the Supplier"},class: 'form-control chosen-select'%>
+              <!--%= f.select :sys_user_id_eq, options_from_collection_for_select(@suppliers, 'id', 'name', f.object.sys_user_id_eq), {class: 'form-control',hide_label:true,title: "Select the Supplier" ,prompt: "Select the Supplier"},class: 'form-control chosen-select'%-->
+              <%= f.select :sys_user_id_eq, options_for_select(@suppliers.map{ |s| [s.name , s.id]}, f.object.sys_user_id_eq), {hide_label:true, prompt: "Select a Supplier."}, class:"form-control order-inward-suppliers" %>
             </div>
 
             <div class="col-lg-3 form-group float-left">
