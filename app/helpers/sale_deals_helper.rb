@@ -12,26 +12,32 @@ module SaleDealsHelper
                       plot_size: d.sys_user&.ntn,
                       form_no: d.purchase_sale_items&.first&.size_11,
                       ms: d.purchase_sale_items&.first&.size_2,
+                      purchase_from: d.destination,
+                      share: d.l_c,
                       type: d.transaction_type
                       }
     end
   end
 
   def get_data_for_sale_deals_csv
-		temp=[]
-		@sale_deals.each do |d|
-      first = d.purchase_sale_items&.first&.expiry_date&.strftime('%d-%m-%Y')
-      second =  d.sys_user&.name
-      third =  d.sys_user&.occupation
-      four = d.sys_user&.cms_data&.try(:[], 'category')&.titleize
-      fifth = d.sys_user&.ntn
-      six = d.sys_user&.cms_data&.try(:[], 'project_name')&.titleize
-      seven = d.purchase_sale_items&.first&.size_11
-      eight = d.purchase_sale_items&.first&.size_2
-      nine = d.transaction_type
-			temp.push([first, second, third, four, fifth, six, seven, eight, nine])
-		end
-		return temp
+		temp = []
+    @sale_deals.each do |d|
+      data = [
+        d.purchase_sale_items&.first&.expiry_date&.strftime('%d-%m-%Y'),
+        d.sys_user&.name,
+        d.sys_user&.occupation,
+        d.sys_user&.cms_data&.fetch('category', ''),
+        d.sys_user&.ntn,
+        d.sys_user&.cms_data&.fetch('project_name', ''),
+        d.purchase_sale_items&.first&.size_11,
+        d.purchase_sale_items&.first&.size_2,
+        d.destination,
+        d.l_c,
+        d.transaction_type
+      ]
+      temp.push(data)
+    end
+    return temp
 	end
 
   def modify_update_salary_details

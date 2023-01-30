@@ -259,7 +259,7 @@ class ReportsController < ApplicationController
     @accounts = Account.all
     @root=root_url
 
-    return user_group_pdf if params[:user_group_pdf].present?
+    return user_group_pdf if params[:user_group_pdf].present? || params[:without_zero_pdf].present?
     return user_group_all_pdf if params[:user_group_all_pdf].present?
 
     if params[:email].present?

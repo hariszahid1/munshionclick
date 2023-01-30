@@ -32,11 +32,17 @@
             <div class="col-lg-3 form-group float-left">
               <%= f.search_field :property_installments_due_date_lteq,class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
             </div>
-            <div class="col-lg-2 form-group float-left">
+            <div class="col-lg-3 form-group float-left">
               <%= number_field_tag 'installment_count_from', params[:installment_count_from] || {}, class: 'form-control', placeholder: 'No. of installments from' %>
             </div>
-            <div class="col-lg-2 form-group float-left">
+            <div class="col-lg-3 form-group float-left">
               <%= number_field_tag 'installment_count_to', params[:installment_count_to] || {}, class: 'form-control', placeholder: 'No. of installments to' %>
+            </div>
+            <div class="col-lg-3 form-group float-left">
+              <%= number_field_tag 'installment_amount_from', params[:installment_amount_from] || {}, class: 'form-control', placeholder: 'Installments amount from' %>
+            </div>
+            <div class="col-lg-3 form-group float-left">
+              <%= number_field_tag 'installment_amount_to', params[:installment_amount_to] || {}, class: 'form-control', placeholder: 'Installments amount to' %>
             </div>
             <div class="col-lg-1 form-group float-left">
               <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
@@ -47,9 +53,6 @@
               <div class="dropdown-content my-dropdown-content p-2">
                 <button class="btn btn-danger mt-2" name="pdf" type="submit" value="pdf_without_group" formtarget="_blank">PDF</button>
                 <button class="btn btn-danger mt-2" name="pdf" type="submit" value="pdf_with_group" formtarget="_blank">PDF with group</button>
-                <!--button class="btn btn-danger d-flex justify-content-center ml-2 mt-2" style="width: 100px" title="Download pdf " name="pdf" type="submit" value="submit_pdf" formtarget="_blank"><i class="fa fa-file-pdf mt-1 ml-1 mr-1"></i>PDF </button>
-                <button class="btn btn-danger d-flex justify-content-center ml-2 mt-2" style="width: 100px" title="Download pdf with user data" name="pdf" type="submit" value="submit_pdf_search" formtarget="_blank"><i class="fa fa-file-pdf mt-1 ml-1 mr-1"></i>1-User</button>
-                <button class="btn btn-danger d-flex justify-content-center ml-2 mt-2" style="width: 100px" title= "Download pdf bulk" name="pdf" type="submit" value="submit_pdf_bulk" formtarget="_blank"><i class="fa fa-file-pdf mt-1 ml-1"></i>Bulk</button-->
               </div>
             </div>
             <div>

@@ -17,7 +17,7 @@
 						<div class="my-tooltip">
 							Edit
 						</div>
-							<%= link_to edit_sale_deal_path(sale_deal), class:"icon-div" do %>
+							<%= link_to edit_sale_deal_path(id: sale_deal.id, type: params['q'].try(:[], 'transaction_type_eq') == '8' ? 'ReSale' : 'New'), class:"icon-div" do %>
 								<i class="fa fa-edit mt-2" aria-hidden="true"></i>
 							<%end %>
 					</div>

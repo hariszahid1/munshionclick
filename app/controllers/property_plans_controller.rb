@@ -40,41 +40,20 @@ class PropertyPlansController < ApplicationController
 
   def property_installment
     @customers = SysUser.where(user_group: %w[Customer Supplier Both Salesman])
-    if params[:installment_count_from].present? && params[:installment_count_to].present?
-      property_plan_ids = PropertyPlan.joins(:property_installments)
-                                      .where('property_installments.due_status': [nil, PropertyPlan.due_statuses['Unpaid']])
-                                      .having("count(property_installments.property_plan_id) <= #{params[:installment_count_to]} AND count(property_installments.property_plan_id) >= #{params[:installment_count_from]}")
-                                      .ransack(params[:q]).result
-                                      .group('property_plans.id').count&.keys
-    elsif params[:installment_count_from].present?
-      property_plan_ids = PropertyPlan.joins(:property_installments)
-                                      .where('property_installments.due_status': [nil, PropertyPlan.due_statuses['Unpaid']])
-                                      .having("count(property_installments.property_plan_id) >= #{params[:installment_count_from]}")
-                                      .ransack(params[:q]).result
-                                      .group('property_plans.id').count&.keys
-    elsif params[:installment_count_to].present?
-      property_plan_ids = PropertyPlan.joins(:property_installments)
-                                      .where('property_installments.due_status': [nil, PropertyPlan.due_statuses['Unpaid']])
-                                      .having("count(property_installments.property_plan_id) <= #{params[:installment_count_to]}")
-                                      .ransack(params[:q]).result
-                                      .group('property_plans.id').count&.keys
-    else
-      property_plan_ids = PropertyPlan.joins(:property_installments)
-                                      .where('property_installments.due_status': [nil, PropertyPlan.due_statuses['Unpaid']])
-                                      .pluck(:id)
-    end
+    property_plan_ids = PropertyPlan.ransack_with_installment_count(params)
 
     @q = PropertyPlan.joins(:property_installments, order: :sys_user)
                      .includes(:property_installments, order: :sys_user)
-                     .where('property_installments.due_status': [nil, PropertyPlan.due_statuses['Unpaid']], id: property_plan_ids)
+                     .where('property_installments.due_status': [nil, PropertyPlan.due_statuses['Unpaid']],
+                            id: property_plan_ids)
                      .ransack(params[:q])
 
-    @property_installments = @q.result
-    @installments_count = @q.result.group('property_plans.id').count('property_installments.id')
-    @short_pay_total = @q.result.sum(:installment_price)
+    @property_installments = @q.result.with_installment_amount_in_range(params[:installment_amount_from], params[:installment_amount_to])
+    @installments_count = @property_installments.group('property_plans.id').count('property_installments.id')
+    @short_pay_total = @property_installments.sum(:installment_price)
 
     # @last_payment_total = @property_installments.sum('property_plan.order&.sys_user&.ledger_books.where('credit>0')&.last&.credit')
-    sys_users   = Order.joins(property_plans: :property_installments).where('property_plans.id': @q.result.pluck(:property_plan_id)).pluck(:sys_user_id).uniq
+    sys_users   = Order.joins(property_plans: :property_installments).where('property_plans.id': @property_installments.pluck(:property_plan_id)).pluck(:sys_user_id).uniq
     @sys_users  = SysUser.joins(:contact).where(id: sys_users)
     @home       = @sys_users.pluck('home').uniq
     @office     = @sys_users.pluck('office').uniq

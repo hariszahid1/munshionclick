@@ -15,7 +15,7 @@
 <p style="border-bottom: double 4px;  margin: 0;"></p>
 <h2 style="text-align: center; margin: 0;">Users</h2>
 <p style="border-bottom: double 4px;  margin: 0;"></p>
-<% if params[:user_group_pdf].present? %>
+<% if params[:user_group_pdf].present? || params[:without_zero_pdf] %>
   <h2 style="text-align: center; margin: 0;">User Payable</h2>
   <div>
     <%= render partial: 'group_by_data', locals: { heading: 'Customer',
@@ -215,106 +215,107 @@
                                                   }
     %>
   </div>
+  <% if params[:user_group_pdf].present? %>
+    <h2 style="text-align: center; margin: 0;">Users Nill</h2>
+    <div>
+      <%= render partial: 'group_by_data', locals: { heading: 'Customer',
+                                          users: @sys_user_nil_customer,
+                                          ledger_book_debit: @sys_user_nil_customer_ledger_book_debit,
+                                          ledger_book_credit: @sys_user_nil_customer_ledger_book_credit,
+                                          ledger_book_credit_total: @sys_user_nil_customer_ledger_book_credit_total,
+                                          ledger_book_debit_total: @sys_user_nil_customer_ledger_book_debit_total,
+                                          } %>
+      <%= render partial: 'group_by_data', locals: { heading: 'Own',
+                                                    users: @sys_user_nil_own,
+                                                    ledger_book_debit: @sys_user_nil_own_ledger_book_debit,
+                                                    ledger_book_credit: @sys_user_nil_own_ledger_book_credit,
+                                                    ledger_book_credit_total: @sys_user_nil_own_ledger_book_credit_total,
+                                                    ledger_book_debit_total: @sys_user_nil_own_ledger_book_debit_total,
+                                                    }
+      %>
 
-  <h2 style="text-align: center; margin: 0;">Users Nill</h2>
-  <div>
-    <%= render partial: 'group_by_data', locals: { heading: 'Customer',
-                                        users: @sys_user_nil_customer,
-                                        ledger_book_debit: @sys_user_nil_customer_ledger_book_debit,
-                                        ledger_book_credit: @sys_user_nil_customer_ledger_book_credit,
-                                        ledger_book_credit_total: @sys_user_nil_customer_ledger_book_credit_total,
-                                        ledger_book_debit_total: @sys_user_nil_customer_ledger_book_debit_total,
-                                        } %>
-    <%= render partial: 'group_by_data', locals: { heading: 'Own',
-                                                  users: @sys_user_nil_own,
-                                                  ledger_book_debit: @sys_user_nil_own_ledger_book_debit,
-                                                  ledger_book_credit: @sys_user_nil_own_ledger_book_credit,
-                                                  ledger_book_credit_total: @sys_user_nil_own_ledger_book_credit_total,
-                                                  ledger_book_debit_total: @sys_user_nil_own_ledger_book_debit_total,
-                                                  }
-    %>
+      <%= render partial: 'group_by_data', locals: { heading: 'Supplier',
+                                                    users: @sys_user_nil_supplier,
+                                                    ledger_book_debit: @sys_user_nil_supplier_ledger_book_debit,
+                                                    ledger_book_credit: @sys_user_nil_supplier_ledger_book_credit,
+                                                    ledger_book_credit_total: @sys_user_nil_supplier_ledger_book_credit_total,
+                                                    ledger_book_debit_total: @sys_user_nil_supplier_ledger_book_debit_total,
+                                                    }
+      %>
 
-    <%= render partial: 'group_by_data', locals: { heading: 'Supplier',
-                                                  users: @sys_user_nil_supplier,
-                                                  ledger_book_debit: @sys_user_nil_supplier_ledger_book_debit,
-                                                  ledger_book_credit: @sys_user_nil_supplier_ledger_book_credit,
-                                                  ledger_book_credit_total: @sys_user_nil_supplier_ledger_book_credit_total,
-                                                  ledger_book_debit_total: @sys_user_nil_supplier_ledger_book_debit_total,
-                                                  }
-    %>
+      <%= render partial: 'group_by_data', locals: { heading: 'Both',
+                                                    users: @sys_user_nil_both,
+                                                    ledger_book_debit: @sys_user_nil_both_ledger_book_debit,
+                                                    ledger_book_credit: @sys_user_nil_both_ledger_book_credit,
+                                                    ledger_book_credit_total: @sys_user_nil_both_ledger_book_credit_total,
+                                                    ledger_book_debit_total: @sys_user_nil_both_ledger_book_debit_total,
+                                                    }
+      %>
 
-    <%= render partial: 'group_by_data', locals: { heading: 'Both',
-                                                  users: @sys_user_nil_both,
-                                                  ledger_book_debit: @sys_user_nil_both_ledger_book_debit,
-                                                  ledger_book_credit: @sys_user_nil_both_ledger_book_credit,
-                                                  ledger_book_credit_total: @sys_user_nil_both_ledger_book_credit_total,
-                                                  ledger_book_debit_total: @sys_user_nil_both_ledger_book_debit_total,
-                                                  }
-    %>
+      <%= render partial: 'group_by_data', locals: { heading: 'MD-Investment',
+                                                    users: @sys_user_nil_md_investment,
+                                                    ledger_book_debit: @sys_user_nil_md_investment_ledger_book_debit,
+                                                    ledger_book_credit: @sys_user_nil_md_investment_ledger_book_credit,
+                                                    ledger_book_credit_total: @sys_user_nil_md_investment_ledger_book_credit_total,
+                                                    ledger_book_debit_total: @sys_user_nil_md_investment_ledger_book_debit_total,
+                                                    }
+      %>
 
-    <%= render partial: 'group_by_data', locals: { heading: 'MD-Investment',
-                                                  users: @sys_user_nil_md_investment,
-                                                  ledger_book_debit: @sys_user_nil_md_investment_ledger_book_debit,
-                                                  ledger_book_credit: @sys_user_nil_md_investment_ledger_book_credit,
-                                                  ledger_book_credit_total: @sys_user_nil_md_investment_ledger_book_credit_total,
-                                                  ledger_book_debit_total: @sys_user_nil_md_investment_ledger_book_debit_total,
-                                                  }
-    %>
+      <%= render partial: 'group_by_data', locals: { heading: 'Salesman',
+                                                    users: @sys_user_nil_sale_man,
+                                                    ledger_book_debit: @sys_user_nil_sale_man_ledger_book_debit,
+                                                    ledger_book_credit: @sys_user_nil_sale_man_ledger_book_credit,
+                                                    ledger_book_credit_total: @sys_user_nil_sale_man_ledger_book_credit_total,
+                                                    ledger_book_debit_total: @sys_user_nil_sale_man_ledger_book_debit_total,
+                                                    }
+      %>
 
-    <%= render partial: 'group_by_data', locals: { heading: 'Salesman',
-                                                  users: @sys_user_nil_sale_man,
-                                                  ledger_book_debit: @sys_user_nil_sale_man_ledger_book_debit,
-                                                  ledger_book_credit: @sys_user_nil_sale_man_ledger_book_credit,
-                                                  ledger_book_credit_total: @sys_user_nil_sale_man_ledger_book_credit_total,
-                                                  ledger_book_debit_total: @sys_user_nil_sale_man_ledger_book_debit_total,
-                                                  }
-    %>
+      <%= render partial: 'group_by_data', locals: { heading: 'Investor',
+                                                    users: @sys_user_nil_investor,
+                                                    ledger_book_debit: @sys_user_nil_investor_ledger_book_debit,
+                                                    ledger_book_credit: @sys_user_nil_investor_ledger_book_credit,
+                                                    ledger_book_credit_total: @sys_user_nil_investor_ledger_book_credit_total,
+                                                    ledger_book_debit_total: @sys_user_nil_investor_ledger_book_debit_total,
+                                                    }
+      %>
 
-    <%= render partial: 'group_by_data', locals: { heading: 'Investor',
-                                                  users: @sys_user_nil_investor,
-                                                  ledger_book_debit: @sys_user_nil_investor_ledger_book_debit,
-                                                  ledger_book_credit: @sys_user_nil_investor_ledger_book_credit,
-                                                  ledger_book_credit_total: @sys_user_nil_investor_ledger_book_credit_total,
-                                                  ledger_book_debit_total: @sys_user_nil_investor_ledger_book_debit_total,
-                                                  }
-    %>
+      <%= render partial: 'group_by_data', locals: { heading: 'LandLord',
+                                                    users: @sys_user_nil_landlord,
+                                                    ledger_book_debit: @sys_user_nil_landlord_ledger_book_debit,
+                                                    ledger_book_credit: @sys_user_nil_landlord_ledger_book_credit,
+                                                    ledger_book_credit_total: @sys_user_nil_landlord_ledger_book_credit_total,
+                                                    ledger_book_debit_total: @sys_user_nil_landlord_ledger_book_debit_total,
+                                                    }
+      %>
 
-    <%= render partial: 'group_by_data', locals: { heading: 'LandLord',
-                                                  users: @sys_user_nil_landlord,
-                                                  ledger_book_debit: @sys_user_nil_landlord_ledger_book_debit,
-                                                  ledger_book_credit: @sys_user_nil_landlord_ledger_book_credit,
-                                                  ledger_book_credit_total: @sys_user_nil_landlord_ledger_book_credit_total,
-                                                  ledger_book_debit_total: @sys_user_nil_landlord_ledger_book_debit_total,
-                                                  }
-    %>
+      <%= render partial: 'group_by_data', locals: { heading: 'Other',
+                                                    users: @sys_user_nil_other,
+                                                    ledger_book_debit: @sys_user_nil_other_ledger_book_debit,
+                                                    ledger_book_credit: @sys_user_nil_other_ledger_book_credit,
+                                                    ledger_book_credit_total: @sys_user_nil_other_ledger_book_credit_total,
+                                                    ledger_book_debit_total: @sys_user_nil_other_ledger_book_debit_total,
+                                                    }
+      %>
 
-    <%= render partial: 'group_by_data', locals: { heading: 'Other',
-                                                  users: @sys_user_nil_other,
-                                                  ledger_book_debit: @sys_user_nil_other_ledger_book_debit,
-                                                  ledger_book_credit: @sys_user_nil_other_ledger_book_credit,
-                                                  ledger_book_credit_total: @sys_user_nil_other_ledger_book_credit_total,
-                                                  ledger_book_debit_total: @sys_user_nil_other_ledger_book_debit_total,
-                                                  }
-    %>
+      <%= render partial: 'group_by_data', locals: { heading: 'Worker',
+                                                    users: @sys_user_nil_worker,
+                                                    ledger_book_debit: @sys_user_nil_worker_ledger_book_debit,
+                                                    ledger_book_credit: @sys_user_nil_worker_ledger_book_credit,
+                                                    ledger_book_credit_total: @sys_user_nil_worker_ledger_book_credit_total,
+                                                    ledger_book_debit_total: @sys_user_nil_worker_ledger_book_debit_total,
+                                                    }
+      %>
 
-    <%= render partial: 'group_by_data', locals: { heading: 'Worker',
-                                                  users: @sys_user_nil_worker,
-                                                  ledger_book_debit: @sys_user_nil_worker_ledger_book_debit,
-                                                  ledger_book_credit: @sys_user_nil_worker_ledger_book_credit,
-                                                  ledger_book_credit_total: @sys_user_nil_worker_ledger_book_credit_total,
-                                                  ledger_book_debit_total: @sys_user_nil_worker_ledger_book_debit_total,
-                                                  }
-    %>
-
-    <%= render partial: 'group_by_data', locals: { heading: 'Investment',
-                                                  users: @sys_user_nil_investment,
-                                                  ledger_book_debit: @sys_user_nil_investment_ledger_book_debit,
-                                                  ledger_book_credit: @sys_user_nil_investment_ledger_book_credit,
-                                                  ledger_book_credit_total: @sys_user_nil_investment_ledger_book_credit_total,
-                                                  ledger_book_debit_total: @sys_user_nil_investment_ledger_book_debit_total,
-                                                  }
-    %>
-  </div>
+      <%= render partial: 'group_by_data', locals: { heading: 'Investment',
+                                                    users: @sys_user_nil_investment,
+                                                    ledger_book_debit: @sys_user_nil_investment_ledger_book_debit,
+                                                    ledger_book_credit: @sys_user_nil_investment_ledger_book_credit,
+                                                    ledger_book_credit_total: @sys_user_nil_investment_ledger_book_credit_total,
+                                                    ledger_book_debit_total: @sys_user_nil_investment_ledger_book_debit_total,
+                                                    }
+      %>
+    </div>
+  <% end %>
 <% else %>
   <div>
     <%= render partial: 'group_by_data', locals: { heading: 'Customer',
@@ -433,6 +434,16 @@
     %>
 
     <%= render partial: 'staffs_group_by_data', locals: { heading: 'Staff Nill',
+                                                          departments: @departments_for_staffs
+                                                  }
+    %>
+  <% elsif params[:without_zero_pdf] %>
+    <%= render partial: 'staffs_group_by_data', locals: { heading: 'Staff Payable',
+                                                            departments: @departments_for_staffs
+                                                    }
+    %>
+
+    <%= render partial: 'staffs_group_by_data', locals: { heading: 'Staff Recievable',
                                                           departments: @departments_for_staffs
                                                   }
     %>

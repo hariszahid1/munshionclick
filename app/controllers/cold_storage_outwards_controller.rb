@@ -12,8 +12,14 @@ class ColdStorageOutwardsController < ApplicationController
     index_data
     @q = PurchaseSaleDetail.includes(:order, :account, :sys_user,
                                      purchase_sale_items: :product).ransack(params[:q])
-    purchase_sale_detail = @q.result.where(transaction_type: 'OutWard')
-    @purchase_sale_details = purchase_sale_detail.page(params[:page]).per(100)
+    purchase_sale_detail = @q.result.distinct.where(transaction_type: 'OutWard')
+    @purchase_sale_details = purchase_sale_detail.order('purchase_sale_details.created_at desc').page(params[:page]).per(100)
+    @pdf_orders = @q.result.where(transaction_type: 'OutWard')
+    if params[:pdf].present?
+      @pdf_orders_total = @pdf_orders.sum('purchase_sale_items.quantity')
+      @pdf_outward_total = @pdf_orders.group('sys_users.name').sum('purchase_sale_items.quantity')
+      download_cold_storage_outwards_pdf_file
+    end
   end
 
   def new
@@ -172,6 +178,12 @@ class ColdStorageOutwardsController < ApplicationController
     @staffs = Staff.loader_active_staff
     @total_stock = PurchaseSaleDetail.joins(:purchase_sale_items).includes(:purchase_sale_items).where(
       transaction_type: 'InWard').sum('purchase_sale_items.size_9')
+  end
+
+  def download_cold_storage_outwards_pdf_file
+    @sys_users = @q.result
+    sorted_outward_data
+    generate_pdf(@sorted_data.as_json, 'Inward', 'pdf.html', 'A4', false, 'cold_storage_outwards/index.pdf.erb')
   end
 
   def download_outward_show_pdf_file

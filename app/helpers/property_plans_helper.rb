@@ -18,20 +18,30 @@ module PropertyPlansHelper
 	end
 
 	def get_data_for_property_installment_csv
-		temp=[]
-		@property_installments.each do |installment|
-			first = installment.id
-			second = installment&.property_plan&.order&.sys_user&.name
-			third =  installment.property_plan.order&.sys_user&.contact&.phone
-			fourth = installment.property_plan.order&.order_items_names_and_quantity.to_s&.first.first
-			fifth = installment.property_plan.order&.order_items_names_and_quantity.to_s.first[8].to_s + '-M' + installment.property_plan.order&.order_items_names_and_quantity.to_s.first[9].to_s + '-sqr'
-			sixth = installment.property_plan.order&.sys_user&.ledger_books&.where('credit>0')&.last&.credit
-			seventh = installment.property_plan.order&.sys_user&.ledger_books&.where('credit>0')&.last&.created_at&.strftime("%d%b%y at %I:%M%p")
-			eighth = installment.installment_price
-			ninth = installment&.due_date&.strftime('%d%b%y')
-		  tenth = installment&.property_plan&.order&.order_plot_dealer&.first&.staff&.name if installment&.property_plan&.order&.order_plot_dealer != 0
-			temp.push([first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth])
+		@property_installments.flat_map do |property_plan|
+			property_plan.property_installments.map do |pi|
+				order = property_plan.order
+				user = order.sys_user
+				contact = user.contact
+				ledger_books = user.ledger_books
+				order_items = order.order_items_names_and_quantity
+				plot_dealer = order.order_plot_dealer
+				staff = plot_dealer&.first&.staff
+
+				[
+					pi.id,
+					user&.name,
+					contact&.phone,
+					order_items != 0 ? order_items&.first&.first : '',
+					order_items != 0 ? "#{order_items&.first&.[](8)}-M#{order_items&.first&.[](9)}-sqr" : '',
+					ledger_books.where("credit > 0").last&.credit,
+					ledger_books.where("credit > 0").last&.created_at&.strftime("%d%b%y at %I:%M%p"),
+					pi&.installment_price,
+					pi&.due_date&.strftime('%d%b%y'),
+					staff&.name || ''
+				]
+			end
 		end
-		return temp
 	end
+
 end

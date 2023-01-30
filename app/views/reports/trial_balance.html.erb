@@ -11,8 +11,20 @@
         <a href="<%= reports_trial_balance_path %>">Trial Balance</a>
       </li>
       <li class="ml-auto">
-        <%= link_to 'Category Wise PDF', reports_trial_balance_path(user_group_pdf: true), class: 'btn btn-danger', target: '_blank'%>
-        <%= link_to 'Without Category PDF', reports_trial_balance_path(user_group_all_pdf: true), class: 'btn btn-danger', target: '_blank'%>
+        <div class="dropdown my-dropdown float-right mr-2">
+          <button type="button" class="form-control bg-danger text-light"><i class="fa fa-file-pdf mr-2"></i>PDF List</button>
+          <div class="dropdown-content trial-balance-dropdown p-2">
+            <div class='mb-2'>
+              <%= link_to 'Category Wise', reports_trial_balance_path(user_group_pdf: true), class: 'btn btn-danger col-12', target: '_blank'%>
+            </div>
+            <div class='mb-2'>
+              <%= link_to 'Without Category', reports_trial_balance_path(user_group_all_pdf: true), class: 'btn btn-danger col-12', target: '_blank'%>
+            </div>
+            <div class='mb-2'>
+              <%= link_to 'Without Zero', reports_trial_balance_path(without_zero_pdf: true), class: 'btn btn-danger col-12', target: '_blank'%>
+            </div>
+          </div>
+        </div>
       </li>
     </ol>
   </div>
