@@ -28,7 +28,8 @@
 }
 
 /* Show the dropdown menu on hover */
-.my-dropdown:hover .my-dropdown-content {
+.my-dropdown:hover .my-dropdown-content,
+.my-dropdown:hover .trial-balance-dropdown {
   display: block;
   min-width: 150px;
 }
@@ -36,4 +37,14 @@
 /* Change the background color of the dropdown button when the dropdown content is shown */
 .my-dropdown:hover .dropbtn {
   background-color: #3e8e41;
+}
+
+.trial-balance-dropdown{
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  right: 0px;
+  width: 200px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
 }
