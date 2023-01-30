@@ -121,6 +121,7 @@ class SaleDealsController < ApplicationController
     @payment_status = @pos_setting&.extra_settings.present? ? @pos_setting.extra_settings['payment_status'] : []
     @transaction_type = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['transaction_type'] : []
     @deal = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['deal'] : []
+    @source = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['source']&.map(&:downcase) : []
     roles_mask = current_user&.allowed_to_view_roles_mask_for
     @users = User.where(roles_mask: roles_mask).where('company_type=? or created_by_id=?', current_user&.company_type,
                                                       created_by_ids)
@@ -156,7 +157,8 @@ class SaleDealsController < ApplicationController
 
   def download_sale_deals_csv_file
     @sale_deals = @q.result
-    header_for_csv = %w[deal_date name number type_of_plot plot_size project_name form_no ms_no type]
+    header_for_csv = %w[deal_date name number type_of_plot plot_size project_name form_no ms_no
+                        purchased_from deal_share type]
     data_for_csv = get_data_for_sale_deals_csv
     generate_csv(data_for_csv, header_for_csv, 'SaleDeals')
   end

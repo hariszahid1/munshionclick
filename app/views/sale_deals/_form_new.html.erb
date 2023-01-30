@@ -17,6 +17,14 @@
       <%= f.select :account_id , options_from_collection_for_select(@accounts, 'id', 'title', (f.object&.account_id.present? ? f.object&.account_id : @accounts.find_by(default_account: true)&.id)),{prompt: 'Select Account'},class: "form-control", required: true%>
     </div>
   </div>
+  <div class= 'row'>
+    <div class="col-lg-6 form-group">
+      <%= f.text_field :destination,  placeholder: "Purchased From", label: "Purchased From" %>
+    </div>
+    <div class="col-lg-6 form-group">
+      <%= f.text_field :l_c,  placeholder: "Deal Share", label: "Deal Share" %>
+    </div>
+  </div>
   <%  if params[:action] == 'new' %>
     <%= f.fields_for :sys_users do |sys_user| %>
       <%= render 'sys_users_fields_new', f: sys_user %>
