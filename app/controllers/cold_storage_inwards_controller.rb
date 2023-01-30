@@ -15,7 +15,7 @@ class ColdStorageInwardsController < ApplicationController
                                      purchase_sale_items: :product).ransack(params[:q])
     purchase_sale_detail = @q.result.distinct.where(transaction_type: 'InWard')
     @purchase_sale_details = purchase_sale_detail.order('purchase_sale_details.created_at desc').page(params[:page]).per(100)
-    @pdf_orders = @q.result
+    @pdf_orders = @q.result.where(transaction_type: 'InWard')
     @cold_storage_inward_total = purchase_sale_detail.group('purchase_sale_details.id').sum('purchase_sale_items.size_9')
     if params[:pdf].present?
       @pdf_orders_total = @pdf_orders.sum('purchase_sale_items.quantity')
