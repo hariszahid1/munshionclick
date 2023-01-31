@@ -193,8 +193,10 @@
           <th><%= sort_link(@q, :amount, 'Remaining') %></th>
           <th><%= sort_link(@q, :status, 'Status') %></th>
           <th><%= sort_link(@q, :created_at, 'Time') %></th>
-          <th><%= sort_link(@q, :bill_no, 'EDate/Bill/PO') %></th>
-          <th><%= sort_link(@q, :comment, 'Comment') %></th>
+          <% if pos_setting_sys_type != "MobileShop" %>
+            <th><%= sort_link(@q, :bill_no, 'EDate/Bill/PO') %></th>
+            <th><%= sort_link(@q, :comment, 'Comment') %></th>
+          <% end %>
           <th>Action</th>
         </tr>
       </thead>
@@ -239,8 +241,10 @@
                 <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d/%b/%y at %I:%M%p") : '' %>
               <%end%>
             </td>
-            <td><%= purchase_sale_detail.purchase_sale_items.expiry rescue '' %> <%= purchase_sale_detail.bill_no%></td>
-            <td><%=purchase_sale_detail.staff_full_name%> | <%= purchase_sale_detail.comment %> <%=purchase_sale_detail.with_gst.present? ? "GST" : ""%></td>
+            <% if pos_setting_sys_type != "MobileShop" %>
+              <td><%= purchase_sale_detail.purchase_sale_items.expiry rescue '' %> <%= purchase_sale_detail.bill_no%></td>
+              <td><%=purchase_sale_detail.staff_full_name%> | <%= purchase_sale_detail.comment %> <%=purchase_sale_detail.with_gst.present? ? "GST" : ""%></td>
+            <% end %>
             <td>
               <div class="icon-container-1">
                 <div class="my-icon-1 my-view-1">
@@ -512,6 +516,9 @@
   $(function() {
     setTimeout(function() { $(".my-loader").fadeOut(1500); }, 5000)
   })
+ $('.datepicker').datetimepicker({
+    format: "YYYY-MM-DD"
+  });
 </script>
 <script>
 $('.accordian-body').on('show.bs.collapse', function () {
