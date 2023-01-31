@@ -1,0 +1,140 @@
+<% @date = Date.today  %>
+<% @time = Time.zone.now %>
+<div>
+  <table>
+    <th></th>
+    <th></th>
+    <tr>
+      <td>Printing Date Time: <span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%> <%=@time.strftime("at %I:%M%p")%></span> </td>
+      <td><p style="text-align: center;margin: 0;">Report by: <%=current_user.name%></p></td>
+    </tr>
+  </table>
+</div>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h2 style="text-align: center; margin: 0;">6 Trail Balance Report => <%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%> <%=@time.strftime(" %I:%M%p")%></h2>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+<h2 style="text-align: center; margin: 0;">Users</h2>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+
+<table>
+  <thead>
+    <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+      <th>User</th>
+      <th>User Group</th>
+      <th>Opening Credit</th>
+      <th>Opening Debit</th>
+      <th>Current Credit</th>
+      <th>Current Debit</th>
+      <th>Closing Credit</th>
+      <th>Closing Debit</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @sys_users.each do |sys_user| %>
+      <tr class="" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif" >
+        <td><%= sys_user.name %></td>
+        <td><%= sys_user.user_group %></td>
+        <td><%= number_with_delimiter(@sys_user_ledger_book_credit_opening[sys_user.id].to_f) %></td>
+        <td><%= number_with_delimiter(@sys_user_ledger_book_debit_opening[sys_user.id].to_f) %></td>
+        <td><%= number_with_delimiter(@sys_user_ledger_book_credit_current[sys_user.id].to_f) %></td>
+        <td><%= number_with_delimiter(@sys_user_ledger_book_debit_current[sys_user.id].to_f) %></td>
+        <td><%= number_with_delimiter(@sys_user_ledger_book_credit_closing[sys_user.id].to_f) %></td>
+        <td><%= number_with_delimiter(@sys_user_ledger_book_debit_closing[sys_user.id].to_f) %></td>
+      </tr>
+    <% end %>
+    <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif" >
+      <td><h4>Total<h4></td>
+      <td></td>
+      <td><h4><%= number_with_delimiter(@sys_user_ledger_book_credit_opening_total)  %></h4></td>
+      <td><h4><%= number_with_delimiter(@sys_user_ledger_book_debit_opening_total)  %></h4></td>
+      <td><h4><%= number_with_delimiter(@sys_user_ledger_book_credit_current_total)  %></h4></td>
+      <td><h4><%= number_with_delimiter(@sys_user_ledger_book_debit_current_total)  %></h4></td>
+      <td><h4><%= number_with_delimiter(@sys_user_ledger_book_credit_closing_total)  %></h4></td>
+      <td><h4><%= number_with_delimiter(@sys_user_ledger_book_debit_closing_total)  %></h4></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 style="text-align: center; margin: 0;">Staffs</h2>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+
+<table>
+  <thead>
+    <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+      <th>Staff</th>
+      <th>Department</th>
+      <th>Opening Credit</th>
+      <th>Opening Debit</th>
+      <th>Current Credit</th>
+      <th>Current Debit</th>
+      <th>Closing Credit</th>
+      <th>Closing Debit</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @staffs.each do |staff| %>
+      <tr class="" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif" >
+        <td><%= staff.full_name %></td>
+        <td><%= staff&.department&.title %></td>
+        <td><%= number_with_delimiter(@staff_ledger_book_credit_opening[staff.id].to_f) %></td>
+        <td><%= number_with_delimiter(@staff_ledger_book_debit_opening[staff.id].to_f) %></td>
+        <td><%= number_with_delimiter(@staff_ledger_book_credit_current[staff.id].to_f) %></td>
+        <td><%= number_with_delimiter(@staff_ledger_book_debit_current[staff.id].to_f) %></td>
+        <td><%= number_with_delimiter(@staff_ledger_book_credit_closing[staff.id].to_f) %></td>
+        <td><%= number_with_delimiter(@staff_ledger_book_debit_closing[staff.id].to_f) %></td>
+      </tr>
+    <% end %>
+    <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif" >
+      <td><h4>Total<h4></td>
+      <td></td>
+      <td><h4><%= number_with_delimiter(@staff_ledger_book_credit_opening_total)  %></h4></td>
+      <td><h4><%= number_with_delimiter(@staff_ledger_book_debit_opening_total)  %></h4></td>
+      <td><h4><%= number_with_delimiter(@staff_ledger_book_credit_current_total)  %></h4></td>
+      <td><h4><%= number_with_delimiter(@staff_ledger_book_debit_current_total)  %></h4></td>
+      <td><h4><%= number_with_delimiter(@staff_ledger_book_credit_closing_total)  %></h4></td>
+      <td><h4><%= number_with_delimiter(@staff_ledger_book_debit_closing_total)  %></h4></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 style="text-align: center; margin: 0;">Accounts</h2>
+<p style="border-bottom: double 4px;  margin: 0;"></p>
+
+<table>
+  <thead>
+    <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+      <th>Title</th>
+      <th>Bank Name</th>
+      <th>Opening Credit</th>
+      <th>Opening Debit</th>
+      <th>Current Credit</th>
+      <th>Current Debit</th>
+      <th>Closing Credit</th>
+      <th>Closing Debit</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @accounts.each do |account| %>
+      <tr class="" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif" >
+        <td><%= account.title %></td>
+        <td><%= account.bank_name %></td>
+        <td><%= number_with_delimiter(@account_credit_opening[account.id].to_f) %></td>
+        <td><%= number_with_delimiter(@account_debit_opening[account.id].to_f) %></td>
+        <td><%= number_with_delimiter(@account_credit_current[account.id].to_f) %></td>
+        <td><%= number_with_delimiter(@account_debit_current[account.id].to_f) %></td>
+        <td><%= number_with_delimiter(@account_credit_closing[account.id].to_f) %></td>
+        <td><%= number_with_delimiter(@account_debit_closing[account.id].to_f) %></td>
+      </tr>
+    <% end %>
+    <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif" >
+      <td><h4>Total<h4></td>
+      <td></td>
+      <td><h4><%= number_with_delimiter(@account_credit_opening_total)  %></h4></td>
+      <td><h4><%= number_with_delimiter(@account_debit_opening_total)  %></h4></td>
+      <td><h4><%= number_with_delimiter(@account_credit_current_total)  %></h4></td>
+      <td><h4><%= number_with_delimiter(@account_debit_current_total)  %></h4></td>
+      <td><h4><%= number_with_delimiter(@account_credit_closing_total)  %></h4></td>
+      <td><h4><%= number_with_delimiter(@account_debit_closing_total)  %></h4></td>
+    </tr>
+  </tbody>
+</table>

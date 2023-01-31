@@ -317,6 +317,7 @@ Rails.application.routes.draw do
   get 'reports/trial_balance_purchase_reciveable'
   get 'reports/trial_balance_sale_payable'
   get 'reports/trial_balance_salary'
+  get 'reports/six_trial_balance'
 
   post :read_all, to: 'application#read_all'
   post :is_completed, to: 'follow_ups#is_completed'
