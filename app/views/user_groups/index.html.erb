@@ -73,15 +73,9 @@
             <button class="form-control btn btn-primary" title="search user groups" name="search_submit"type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
           </div>
         </div>
-        <div class="col">
-          <%if (check_can_download_pdf(@module_permission))%>
-            <button class="form-control btn btn-danger d-flex ml-2 d-flex float-right justify-content-center" title= "download user groups pdf" name="pdf" type="submit" value="pdf" formtarget="_blank" style="width:100px">PDF&nbsp;<i class="fa fa-file-pdf mt-1"></i></button>
-          <% end %>
-          <%if (check_can_download_csv(@module_permission))%>
-            <button class="form-control d-flex btn btn-warning ml-2 float-right justify-content-center" title= "download user groups csv" name="csv" type="submit" value="csv" style="width:100px">CSV &nbsp;<i class="fa fa-file-excel mt-1"></i></button>
-          <% end %>
+        <div class="col">        
           <%if (check_can_send_email(@module_permission))%>
-            <button class="form-control d-flex btn btn-info ml-2 float-right justify-content-center" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-2"></i>&nbsp;Mail</button>
+            <button class="form-control  btn btn-info ml-2 float-right" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-2"></i>Email</button>
               <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -116,6 +110,12 @@
                     </div>
                 </div>
               </div>
+          <% end %>
+           <%if (check_can_download_csv(@module_permission))%>
+            <button class="form-control  btn btn-warning ml-2 float-right " title= "download user groups csv" name="csv" type="submit" value="csv" style="width:100px"><i class="fa fa-file-excel mr-2"></i>CSV</button>
+           <% end %>
+            <%if (check_can_download_pdf(@module_permission))%>
+            <button class="form-control btn btn-danger  ml-2 float-right " title= "download user groups pdf" name="pdf" type="submit" value="pdf" formtarget="_blank" style="width:100px"><i class="fa fa-file-pdf mr-2"></i>PDF</button>
           <% end %>
         </div>
       </div>

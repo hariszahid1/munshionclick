@@ -72,16 +72,7 @@
               <button class="form-control btn btn-primary" title="search cities" name="search_submit"type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
             </div>
           </div>
-          <div class="col">
-            <%if (check_can_download_pdf(@module_permission))%>
-              <button class="form-control btn btn-danger mr-2 d-flex float-right justify-content-center" title= "download cities pdf" name="pdf" type="submit" value="pdf" formtarget="_blank" style="width:100px">PDF &nbsp;<i class="fa fa-file-pdf mt-1"></i></button>
-              <%if @pdf_template.present? %>
-                <button class="form-control btn btn-danger mr-2 d-flex float-right justify-content-center" title= "download cities pdf" name="dynamic_pdf" type="submit" value="dynamic_pdf" formtarget="_blank" style="width:100px">Dynamic &nbsp;<i class="fa fa-file-pdf mt-1"></i></button>
-              <% end %>
-            <% end %>
-            <%if (check_can_download_csv(@module_permission))%>
-              <button class="form-control btn btn-warning ml-2 mr-2 d-flex float-right justify-content-center mr-2" title= "download cities csv" name="csv" type="submit" value="csv" style="width:100px">CSV &nbsp;<i class="fa fa-file-excel mt-1 ml-1"></i></button>
-            <% end %>
+          <div class="col">           
             <%if (check_can_send_email(@module_permission))%>
               <button class="form-control btn btn-info d-flex justify-content-center float-right mr-2" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-1 mt-1"></i>&nbsp;Mail</button>
               <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -118,6 +109,15 @@
                     </div>
                   </div>
               </div>
+            <% end %>
+            <%if (check_can_download_csv(@module_permission))%>
+              <button class="form-control btn btn-warning  mr-2  float-right mr-2" title= "download cities csv" name="csv" type="submit" value="csv" style="width:100px"><i class="fa fa-file-excel mr-2"></i>CSV</button>
+            <% end %>
+            <%if (check_can_download_pdf(@module_permission))%>
+              <button class="form-control btn btn-danger mr-2  float-right justify-content-center" title= "download cities pdf" name="pdf" type="submit" value="pdf" formtarget="_blank" style="width:100px"><i class="fa fa-file-pdf mr-2"></i>PDF</button>
+              <%if @pdf_template.present? %>
+                <button class="form-control btn btn-danger mr-2 d-flex float-right justify-content-center" title= "download cities pdf" name="dynamic_pdf" type="submit" value="dynamic_pdf" formtarget="_blank" style="width:100px">Dynamic &nbsp;<i class="fa fa-file-pdf mt-1"></i></button>
+              <% end %>
             <% end %>
           </div>
         </div>
