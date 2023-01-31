@@ -5,9 +5,9 @@
   <td><%= expense_entry.comment %></td>
   <td>
     <%if expense_entry.created_at.strftime("%d%b%y")!=expense_entry.updated_at.strftime("%d%b%y")%>
-      <%= expense_entry.created_at.present? ? expense_entry.created_at.strftime("%d%b%y at %H:%M%p") : '' %> | <%= expense_entry.updated_at.present? ? expense_entry.updated_at.strftime("%d%b%y at %H:%M%p") : '' %>
+      <%= expense_entry.created_at.present? ? expense_entry.created_at.strftime("%d%b%y , %H:%M%p") : '' %> | <%= expense_entry.updated_at.present? ? expense_entry.updated_at.strftime("%d%b%y , %H:%M%p") : '' %>
     <%else%>
-      <%= expense_entry.created_at.present? ? expense_entry.created_at.strftime("%A,  %d-%b-%y at %H:%M%p") : '' %>
+      <%= expense_entry.created_at.present? ? expense_entry.created_at.strftime("%d-%b-%y , %H:%M%p") : '' %>
     <%end%>
   </td>
   <td>
