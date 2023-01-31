@@ -8,13 +8,13 @@
   <div class="row">
     <div class="col-lg-12 col-sm-12">
       <div class="main-content-header">
-        <h1>System Opeartors</h1>
+        <h1>System Operators</h1>
         <ol class="breadcrumb">
           <li class="breadcrumb-item">
             <a href="<%= root_path %>">Dashboard</a>
           </li>
           <li class="breadcrumb-item active">
-            <a href="<%= users_path %>">System Opeartors</a>
+            <a href="<%= users_path %>">System Operators</a>
           </li>
         </ol>
       </div>
@@ -57,10 +57,8 @@
                     <button class="form-control btn btn-primary" name="search_submit" type="submit"><i class="fa fa-search"></i></button>
                   </div>
                 </div>  
-                <div class="col"> 
-                    <button class="btn btn-danger form-control d-flex float-right justify-content-center" style="width:100px" title= "download users pdf" name="pdf" type="submit" value="pdf" formtarget="_blank">PDF &nbsp;<i class="fa fa-file-pdf ml-1 mt-1"></i></button>
-                    <button class="btn btn-warning form-control d-flex float-right justify-content-center mr-2" style="width:100px" title= "download users csv" name="csv" type="submit" value="csv">CSV &nbsp;<i class="fa fa-file-excel ml-1 mt-1"></i></button>
-                     <button class="form-control btn btn-info d-flex float-right justify-content-center mr-2" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope"></i>&nbsp;Mail</button>
+                 <div class="col"> 
+                    <button class="form-control btn btn-info  float-right  mr-2" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-2"></i>Email</button>
                       <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
@@ -95,7 +93,9 @@
                             </div>
                         </div>
                       </div>
-              </div>
+                      <button class="btn btn-warning form-control  float-right  mr-2" style="width:100px" title= "download users csv" name="csv" type="submit" value="csv"><i class="fa fa-file-excel mr-2"></i>CSV</button>
+                      <button class="btn btn-danger form-control  float-right mr-2 " style="width:100px" title= "download users pdf" name="pdf" type="submit" value="pdf" formtarget="_blank"><i class="fa fa-file-pdf mr-2"></i>PDF</button>
+                </div>
             </div>
         </div>
            

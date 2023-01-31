@@ -126,9 +126,9 @@
               <td><h6><%= number_with_delimiter(order.purchase_sale_details.sum(:discount_price).to_f.round(2)) %></h6></td>
               <td>
                 <%if order.created_at.strftime("%d%b%y")!=order.updated_at.strftime("%d%b%y")%>
-                  <%= order.created_at.present? ? order.created_at.strftime("%d/%b/%y at %I:%M %p") : '' %> <hr> <%= order.updated_at.present? ? order.updated_at.strftime("%d/%b/%y at %H:%M%p") : '' %>
+                  <%= order.created_at.present? ? order.created_at.strftime("%d/%b/%y , %I:%M %p") : '' %> <hr> <%= order.updated_at.present? ? order.updated_at.strftime("%d/%b/%y , %H:%M%p") : '' %>
                 <%else%>
-                  <%= order.created_at.present? ? order.created_at.strftime("%d/%b/%y at %I:%M %p") : '' %>
+                  <%= order.created_at.present? ? order.created_at.strftime("%d/%b/%y , %I:%M %p") : '' %>
                 <%end%>
               </td>
               <td><%= order.comment %></td>

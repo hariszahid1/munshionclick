@@ -55,7 +55,7 @@
             <tbody>
               <%(@created_at_gteq..@created_at_lteq).to_a.each do |date|%>
               <tr>
-                <td><%=date.strftime(" %d %b %Y : %a")%></td>
+                <td><%=date.strftime(" %d %b %Y")%></td>
                 <td><%=investment=@investment[date.to_date]%></td>
                 <td>
                   <%purchase=@purchase[date.to_date].to_f-@purchase_discount[date.to_date].to_f.to_f%>
