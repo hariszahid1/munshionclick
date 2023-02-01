@@ -112,9 +112,9 @@ function mobile_serail_number_return(value){
       var serial_fields = $('.serial_no');
       var quantity_fields = $('.quantity-price')
       for(var i = 0; i < serial_fields.length; i++){
-        var value = $.trim($(serial_fields[i]).val());
+        // var value = $.trim($(serial_fields[i]).val());
         var q_field = parseInt($(quantity_fields[i]).val())
-        var s_field = $(serial_fields[i]).val().split('\n').filter(e => String(e).trim()).length
+        var s_field = $(serial_fields[i]).val().split('\n').filter(function (e) { return e.trim(); }).length;
         if(q_field != s_field)
         {
           window.alert("Please Match the Quantity and Serial Number!")
