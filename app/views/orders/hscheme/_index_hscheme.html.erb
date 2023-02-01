@@ -373,27 +373,19 @@
                                     <div class="my-tooltip">
                                       Edit
                                     </div>
-                                    <%if purchase_sale_detail.purchase_sale_items.present?%>
-                                      <%if purchase_sale_detail.purchase_sale_items.first.product.present? %>
-                                      <% if check_can_update(@module_permission) %>
+                                    <% unless purchase_sale_detail.staff_id.present? && purchase_sale_detail.carriage.positive? %>
+                                      <% if purchase_sale_detail.purchase_sale_items.present? &&
+                                        purchase_sale_detail.purchase_sale_items.first.product.present? &&
+                                        check_can_update(@module_permission) %>
                                         <%= link_to edit_purchase_sale_detail_path(purchase_sale_detail,product: true), class:"icon-div" do %>
-                                                  <i class="fa fa-edit mt-2" aria-hidden="true"></i> 
+                                          <i class="fa fa-edit mt-2" aria-hidden="true"></i>
                                         <% end %>
-                                        <% end %>
-                                      <%else%>
-                                      <% if check_can_update(@module_permission) %>
+                                      <% elsif check_can_update(@module_permission) %>
                                         <%= link_to edit_purchase_sale_detail_path(purchase_sale_detail), class:"icon-div" do %>
-                                          <i class="fa fa-edit mt-2" aria-hidden="true"></i> 
+                                          <i class="fa fa-edit mt-2" aria-hidden="true"></i>
                                         <% end %>
-                                        <% end %>
-                                      <%end%>
-                                      <%else%>
-                                        <% if check_can_update(@module_permission) %>
-                                          <%= link_to edit_purchase_sale_detail_path(purchase_sale_detail), class:"icon-div" do %>
-                                            <i class="fa fa-edit mt-2" aria-hidden="true"></i> 
-                                            <% end %>
-                                        <% end %>
-                                      <%end%>
+                                      <% end %>
+                                    <% end %>
                                   </div>
                                   <div class="my-icon my-view">
                                     <div class="my-tooltip">
@@ -403,7 +395,7 @@
                                         <%= link_to purchase_sale_detail, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete', class:"icon-div" do %>
                                               <i class="fa fa-trash mt-2" aria-hidden="true"></i>
                                         <% end %>
-                                    <% end %>         
+                                    <% end %>
                                   </div>
                                   <div class="my-icon my-view">
                                     <div class="my-tooltip">
