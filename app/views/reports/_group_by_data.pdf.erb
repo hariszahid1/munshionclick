@@ -53,7 +53,7 @@
         <td><%= %></td>
         <td><%= number_with_delimiter(ledger_book_debit_total)%></td>
         <td><%= number_with_delimiter(ledger_book_credit_total)%></td>
-        <td><%= number_with_delimiter(users&.pluck('balance')&.map(&:abs)&.sum) %></td>
+        <td><%= number_with_delimiter(users&.pluck('balance')&.compact&.sum) %></td>
         <td></td>
       </tr>
     </tbody>
