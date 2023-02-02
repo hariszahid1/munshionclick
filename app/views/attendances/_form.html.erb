@@ -31,29 +31,3 @@
     <%=f.object.id.nil? ? (f.submit 'Mark Attendance', class: "btn btn-success mr-2", style: "float: right")  :  (f.submit 'Update Attendance', class: "btn btn-warning mr-2", style: "float: right")%>
   </div>
 <% end %>
-<script>
-
-  let staffIds = [];
-  function duplicate_staff(e){
-    debugger
-  var len = $('.staff-attandence').length
-  var val = e.currentTarget.value
-  if (staffIds.includes(val)) {
-    alert('An attendance record for the same staff member and same day already exists');
-    e.currentTarget.value = ''
-    return false;
-  }
-  else{
-    staffIds.push(val);
-  }
-  }
-
-</script>
-<script>
-
-  function check_in_out_time(event){
-    debugger;
-    var selected_value = event.target.value;
-    // Your code to handle the change event
-  }
-</script>

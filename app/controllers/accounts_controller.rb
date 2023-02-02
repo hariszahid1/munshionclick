@@ -7,8 +7,13 @@ class AccountsController < ApplicationController
   # GET /accounts
   # GET /accounts.json
   def index
+    @account_ids = Account.where(id: current_user&.extra_settings.try(:[], 'account_ids'))
     @pos_setting=PosSetting.first
-    @q = Account.order('id asc').ransack(params[:q])
+    if @account_ids.present?
+      @q = Account.where(id: @account_ids).order('id asc').ransack(params[:q])
+    else
+      @q = Account.order('id asc').ransack(params[:q])
+    end
     @accounts = @q.result(distinct: true).page(params[:page])
     @account = @q.result
     @account_total=@account.pluck('SUM(amount)')

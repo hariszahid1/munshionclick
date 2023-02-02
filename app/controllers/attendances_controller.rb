@@ -23,7 +23,10 @@ class AttendancesController < ApplicationController
   # GET /attendances/new
   def new
     @attendance = Attendance.new
-    @attendance.daily_attendances.build
+    staff_ids = @staffs.pluck(:id)
+    staff_ids.each do |staff_id|
+      @attendance.daily_attendances.build(staff_id: staff_id)
+    end
   end
 
   # GET /attendances/1/edit
