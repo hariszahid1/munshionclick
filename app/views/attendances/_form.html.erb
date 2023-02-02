@@ -1,0 +1,59 @@
+
+<%= bootstrap_form_for(attendance) do |f| %>
+  <% if attendance.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(attendance.errors.count, "error") %> prohibited this attendance from being saved:</h2>
+      <ul>
+        <% attendance.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="col-lg-12 row">
+    <div class="col-lg-6 form-group">
+      <%= f.date_select :date %>
+    </div>
+  </div>
+  <div  class="col-lg-12">
+    <%= f.fields_for :daily_attendances do |daily_attendance| %>
+    <%= render 'daily_attendances_new', f: daily_attendance %>
+    <% end %>
+  </div>
+  <div id="new_links">
+    <div class="links">
+      <%= link_to_add_association 'Add More', f, :daily_attendances, partial: 'daily_attendances_new', class: "btn btn-info float-right mr-4 mt-2" %>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+  <div class="modal-footer mt-2">
+    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+    <%=f.object.id.nil? ? (f.submit 'Mark Attendance', class: "btn btn-success mr-2", style: "float: right")  :  (f.submit 'Update Attendance', class: "btn btn-warning mr-2", style: "float: right")%>
+  </div>
+<% end %>
+<script>
+
+  let staffIds = [];
+  function duplicate_staff(e){
+    debugger
+  var len = $('.staff-attandence').length
+  var val = e.currentTarget.value
+  if (staffIds.includes(val)) {
+    alert('An attendance record for the same staff member and same day already exists');
+    e.currentTarget.value = ''
+    return false;
+  }
+  else{
+    staffIds.push(val);
+  }
+  }
+
+</script>
+<script>
+
+  function check_in_out_time(event){
+    debugger;
+    var selected_value = event.target.value;
+    // Your code to handle the change event
+  }
+</script>
