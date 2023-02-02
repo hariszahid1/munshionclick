@@ -121,10 +121,10 @@
     </div>
 
     <div class='d-flex'>
-      <div class='col-3 px-20 font-size-custom'><b>Balance Amount</b></div>
-      <div class='col-3 border-bottom font-size-custom'><%= @sale_deal&.remaining_balance %></div>
       <div class='col-3 px-20 font-size-custom'><b>Rebate/Profit:</b></div>
       <div class='col-3 border-bottom font-size-custom'><%= @sale_deal&.purchase_sale_items&.first&.size_5 %></div>
+      <div class='col-3 px-20 font-size-custom'><b>Balance Amount</b></div>
+      <div class='col-3 border-bottom font-size-custom'><%= @sale_deal&.remaining_balance %></div>
     </div>
 
     <div class='d-flex'>
@@ -153,7 +153,7 @@
       </div>
     </div>
     <h2 style='color: red;'>Important: You must call at this number (0321-8437272) for the verification of your receipt.</h2>
-   <div class='d-flex' style= 'margin-top: 40px;'>
+   <div class='d-flex' style= 'margin-top: 25px;'>
       <div style='width: 33%;'>
         <% if @pos_setting&.qr_links.try(:[], 'jr_qr').present?%>
           <%
@@ -173,13 +173,13 @@
        <% end %>
 
       </div>
-      <div style='width: 33%;'>
+      <div style='width: 33%;  margin-left: 25px;'>
         <h4 class='font-size-custom'>For verification of your Sale Receipt:</h4>
         <p class='font-size-custom'> 1) Open Camrea/QRScaner app on your phone.</p>
         <p class='font-size-custom'> 2) Point your phone to this QRCODE to capture the code.</p>
         <p class='font-size-custom'> 3) After capturing you will redirect to our Sale Deal Invoice.</p>
       </div>
-      <div style='width: 33%;  margin-left: 180px;'>
+      <div style='width: 33%;  margin-left: 150px;'>
         <% if @sale_deal.qr_code.present?%>
           <%
             require "rqrcode"
