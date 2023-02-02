@@ -14,7 +14,7 @@
   </head>
   <body>
     <p style="border-bottom: double 4px;  margin: 0;"></p>
-    <h1 class="text-center">Sale Deals </h1>
+    <h1 class="text-center"><%= data.first['type'] == 'NewSaleDeal' ? 'Fresh Sale Deals' : 'Re Sale Deals'%> </h1>
     <p style="border-bottom: double 4px;  margin: 0;"></p>
     <p class="text-center" style="margin-top: 30px;">Report by: <%=current_user.name%></p>
     <div style="margin-bottom: 30px">
@@ -32,52 +32,34 @@
     <div>
       <table>
         <thead class="lite-gray">
-          <th class="text-center">ID</th>
-          <th class="text-center">Agent</th>
-          <th class="text-center">Name</th>
-          <th class="text-center">Contact</th>
-          <th class="text-center">Quota</th>
-          <th class="text-center">Transaction Type</th>
-          <th class="text-center">Project Name</th>
+          <th class="text-center"></th>
+          <th class="text-center">Deal Date</th>
+          <th class="text-center">Client Name</th>
+          <th class="text-center">Client Number</th>
           <th class="text-center">Type of Plot</th>
           <th class="text-center">Plot Size</th>
+          <th class="text-center">Project Name</th>
+          <th class="text-center">MS No</th>
           <th class="text-center">Form No</th>
-          <th class="text-center">Plot Quantity</th>
-          <th class="text-center">Plot Category</th>
-          <th class="text-center">Price per Plot</th>
-          <th class="text-center">Deal Date</th>
-          <th class="text-center">Payment Type</th>
-          <th class="text-center">Profit/Loss</th>
-          <th class="text-center">Down Payment</th>
-          <th class="text-center">Received Amount</th>
-          <th class="text-center">Balanced Amount</th>
-          <th class="text-center">Total Amount</th>
-          <th class="text-center">Trx No</th>
+          <th class="text-center">Purchased From</th>
+          <th class="text-center">Deal Share</th>
+          <th class="text-center">Booking Type</th>
         </thead>
         <tbody>
           <% data.each_with_index do |s, index| %>
             <tr>
-              <th class="text-center"><%= s['id'] %></th>
-              <td class="text-center"><%= s['agent'] %></td>
+              <th class="text-center"><%= index + 1 %></th>
+              <td class="text-center"><%= s['deal_date'] %></td>
               <td class="text-center"><%= s['name'] %></td>
               <td class="text-center"><%= s['contact'] %></td>
-              <td class="text-center"><%= s['quota'] %></td>
-              <td class="text-center"><%= s['transaction'] %></td>
-              <td class="text-center"><%= s['project'] %></td>
               <td class="text-center"><%= s['plot_type'] %></td>
               <td class="text-center"><%= s['plot_size'] %></td>
+              <td class="text-center"><%= s['project'] %></td>
+              <td class="text-center"><%= s['ms'] %></td>
               <td class="text-center"><%= s['form_no'] %></td>
-              <td class="text-center"><%= s['quantity'] %></td>
-              <td class="text-center"><%= s['category'] %></td>
-              <td class="text-center"><%= s['price'] %></td>
-              <td class="text-center"><%= s['deal_date'] %></td>
-              <td class="text-center"><%= s['payment_type'] %></td>
-              <td class="text-center"><%= s['down_payment'] %></td>
-              <td class="text-center"><%= s['profit'] %></td>
-              <td class="text-center"><%= s['received'] %></td>
-              <td class="text-center"><%= s['balance'] %></td>
-              <td class="text-center"><%= s['total'] %></td>
-              <td class="text-center"><%= s['trx'] %></td>
+              <td class="text-center"><%= s['purchase_from'] %></td>
+              <td class="text-center"><%= s['share'] %></td>
+              <td class="text-center"><%= s['type'] %></td>
             </tr>
           <% end %>
         </tbody>

@@ -254,7 +254,7 @@ class DashboardController < ApplicationController
     elsif params[:mobile_pdf_submit].present?
       @q = Product.where('stock>0').ransack(params[:q])
       if @q.result.count > 0
-        @q.sorts = ['item_type_id asc', 'title asc'] if @q.sorts.empty?
+        @q.sorts = ['item_type_id asc', 'title asc'] if @q.sorts.empty? && @pos_setting.sys_type != "MobileShop"
       end
       @products = @q.result
       @products_sale_total =  PurchaseSaleItem.where(transaction_type: "Purchase").sum(:total_cost_price)

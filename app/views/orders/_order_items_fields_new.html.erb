@@ -38,7 +38,7 @@
           <%= f.text_field :discount_price,step: :any,class:'discount-price', hide_label: true,placeholder: :discount,onchange:"costUpdateReturnOrder()",onkeyup:"costUpdateReturnOrder()"%>
           </div>
           <div class="col-lg-2 form-group float-left text-xs font-weight-bold text-danger text-uppercase">
-            <% if check_can_delete(@module_permission) || params[:action].eql?("new")%>
+            <% if (f.object.id.nil? || check_can_delete(@module_permission) || pos_setting_sys_type=="MobileShop")%>
               <%= link_to_remove_association f do %>
                 <i class="fa fa-minus-circle"></i> Drop
               <% end %>
@@ -81,10 +81,12 @@
             <div class="col-lg-2 from-group float-left">
             <%= f.text_field :comment, hide_label: true,placeholder: :comment,title: :comment%></div>
           </div>
+          <% if (f.object.id.nil? || check_can_delete(@module_permission) || pos_setting_sys_type=="MobileShop")%>
             <div class="col-lg-1 from-group float-left">
-            <%= link_to_remove_association "Remove", f , class: "btn btn-danger" %>
+              <%= link_to_remove_association "Remove", f , class: "btn btn-danger" %>
             </div>
             <span class="span-line text-danger">1</span>
+          <% end %>  
 
     </div>
   <%end%>

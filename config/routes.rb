@@ -27,10 +27,32 @@ Rails.application.routes.draw do
   end
   resources :product_warranties
   resources :warranties
-  resources :cold_storage_inwards
-  resources :cold_storage_outwards
-  resources :order_inwards
-  resources :order_outwards
+  resources :cold_storage_inwards do
+    collection do
+      get :stock_report_in_out, to: 'cold_storage_inwards#stock_report_in_out'
+    end
+  end
+  resources :cold_storage_outwards do
+    collection do
+      get :get_outward_storage_stock_data, to: 'cold_storage_outwards#get_outward_storage_stock_data'
+    end
+  end
+  resources :order_inwards do
+    collection do
+      get :get_order_inward_product_data, to: 'order_inwards#get_order_inward_product_data'
+      get :get_order_inward_supplier_data, to: 'order_inwards#get_order_inward_supplier_data'
+    end
+  end
+
+  resources :order_outwards do
+    collection do
+      get :get_outward_party_data, to: 'order_outwards#get_outward_party_data'
+      get :get_outward_marka_data, to: 'order_outwards#get_outward_marka_data'
+      get :get_outward_challan_data, to: 'order_outwards#get_outward_challan_data'
+      get :get_outward_stock_data, to: 'order_outwards#get_outward_stock_data'
+    end
+  end
+
   resources :product_stocks
   resources :gates
   resources :staff_ledger_books do
@@ -233,6 +255,8 @@ Rails.application.routes.draw do
   resources :notes, only: %i[create new]
   resources :follow_ups
   resources :countries
+  resources :attendances
+
   resources :expense_types
   resources :expenses do
     collection do
@@ -295,6 +319,7 @@ Rails.application.routes.draw do
   get 'reports/trial_balance_purchase_reciveable'
   get 'reports/trial_balance_sale_payable'
   get 'reports/trial_balance_salary'
+  get 'reports/six_trial_balance'
 
   post :read_all, to: 'application#read_all'
   post :is_completed, to: 'follow_ups#is_completed'

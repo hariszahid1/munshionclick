@@ -1,10 +1,10 @@
 <div class="hidden" id="gate_list">
-  <h1>Gates</h1>
+  <h1 class="ml-2">Gates</h1>
   <div id="new_investment">
     <% if can?(:add, :all) %>
-      <%= link_to new_gate_path, class: "btn btn-success" do %>
+      <%= link_to new_gate_path, class: "btn btn-success ml-2" do %>
       <i class="fa fa-plus" aria-hidden="true"></i>
-        New Gate
+        Create Gate
       <% end %>
     <% end %>
   </div>
@@ -74,19 +74,13 @@
       <div class="col-lg-6 form-group float-left">
         <%= f.search_field :created_at_lteq,class: 'form-control input-sm datepicker' ,placeholder: "Created Date YYYY-MM-DD"%>
       </div>
-
+      
       <div class="col-lg-2 form-group float-left">
-        <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
-      </div>
-      <div class="col-lg-2 form-group float-left">
-      </div>
-      <div class="col-lg-2 form-group float-left">
-      </div>
-      <div class="col-lg-2 form-group float-left">
+        <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search "></i>Search</button>
       </div>
       <% if can?(:delete, :all) %>
         <div class="col-lg-1 form-group float-right">
-          <button class="form-control btn  badge badge-pill badge-danger" name="submit_pdf_a4" type="submit" value="Investment PDF A4" formtarget="_blank"><i class="fa fa-file-pdf"></i></button>
+          <button class="form-control btn-danger" name="submit_pdf_a4" type="submit" value="Investment PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mr-2"></i>PDF</button>
         </div>
       <% end %>
     </div>

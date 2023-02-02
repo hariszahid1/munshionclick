@@ -1,6 +1,5 @@
-<tr>
+<tr class= <%= (sale_deal.transaction_type.eql?('NewSaleDeal') && sale_deal.purchase_sale_items.first.size_2.present? && sale_deal.purchase_sale_items.first.size_11.present?) ? "cms-table-row2" : (sale_deal.transaction_type.eql?('ReSaleDeal')) ? '' : "cms-table-row1" %>>
 	<td><%= sale_deal.created_at.strftime('%d/%m/%y at %I:%M%p')%></td>
-  <td><%= sale_deal&.purchase_sale_items&.first&.size_13 %></td>
 	<td>
 		<%= @all_agents.to_h.invert[sale_deal&.user_name.to_i].to_s%>
 	</td>
@@ -18,7 +17,7 @@
 						<div class="my-tooltip">
 							Edit
 						</div>
-							<%= link_to edit_sale_deal_path(sale_deal), class:"icon-div" do %>
+							<%= link_to edit_sale_deal_path(id: sale_deal.id, type: params['q'].try(:[], 'transaction_type_eq') == '8' ? 'ReSale' : 'New'), class:"icon-div" do %>
 								<i class="fa fa-edit mt-2" aria-hidden="true"></i>
 							<%end %>
 					</div>
@@ -34,7 +33,7 @@
 						<div class="my-tooltip">
 							Delete
 						</div>
-							<%= link_to sale_deal, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+							<%= link_to sale_deal_path(sale_deal), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
 								<i class="fa fa-trash mt-2" aria-hidden="true"></i>
 							<%end %>
 					</div>

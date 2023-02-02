@@ -16,7 +16,7 @@ class Staff < ApplicationRecord
   has_paper_trail ignore: [:updated_at]
   has_one :contact, as: :contactable, dependent: :destroy
   accepts_nested_attributes_for :contact
-
+  has_many :daily_attendances
   def full_name
     self.name.to_s+' '+self.father.to_s
   end

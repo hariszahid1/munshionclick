@@ -40,17 +40,16 @@ class PropertyPlansController < ApplicationController
 
   def property_installment
     @customers = SysUser.where(user_group: %w[Customer Supplier Both Salesman])
-    if params[:short_advance].present?
-      @q = PropertyInstallment.where(due_status: [nil, PropertyPlan.due_statuses['Unpaid']]).ransack(params[:q])
-    elsif params[:submit_pdf_bulk].present?
-      @q = PropertyPlan.joins(:property_installments).includes(:property_installments).where('property_installments.due_status': [
-                                                                                               nil, PropertyPlan.due_statuses['Unpaid']
-                                                                                             ]).ransack('property_installments_due_date_lteq': params[:q][:due_date_lteq])
-    else
-      @q = PropertyInstallment.where(due_status: [nil, PropertyPlan.due_statuses['Unpaid']]).ransack(params[:q])
-    end
+    property_plan_ids = PropertyPlan.ransack_with_installment_count(params)
 
-    @property_installments = @q.result
+    @q = PropertyPlan.joins(:property_installments, order: :sys_user)
+                     .includes(:property_installments, order: :sys_user)
+                     .where('property_installments.due_status': [nil, PropertyPlan.due_statuses['Unpaid']],
+                            id: property_plan_ids)
+                     .ransack(params[:q])
+
+    @property_installments = @q.result.with_installment_amount_in_range(params[:installment_amount_from], params[:installment_amount_to])
+    @installments_count = @property_installments.group('property_plans.id').count('property_installments.id')
     @short_pay_total = @property_installments.sum(:installment_price)
 
     # @last_payment_total = @property_installments.sum('property_plan.order&.sys_user&.ledger_books.where('credit>0')&.last&.credit')
@@ -62,7 +61,6 @@ class PropertyPlansController < ApplicationController
     @phone      = (@mobile + @office + @home).uniq.compact.reject(&:empty?).join(',')
     property_installment_pdf if params[:pdf].present?
     property_installment_csv if params[:csv].present?
-
     @property_installments = @property_installments.page(params[:page])
   end
 

@@ -36,42 +36,48 @@
 
 <div class="hidden" id="daily_books_list">
   <div class="row">
-    <div class="col-lg-12 col-sm-12">
-      <h1>Production Report</h1>
-      <div class="col-lg-3 form-group float-left">
+   
+      <h1 class="ml-4">Production Report</h1>
+       <div class="ml-4 my-4">
+      
         <%= link_to daily_books_path(department_id: @departments.first.title), class: "btn btn-primary" do %>
                   <i class="fas fa-male" aria-hidden="true"></i>
                   <%=@departments.first.title%> Daily book
         <% end %>
-      </div>
-      <div class="col-lg-2 form-group float-left">
-        <%= link_to khakar_daily_books_path(department_id: @departments.second.title), class: "btn btn-primary" do %>
+     
+     
+        <%= link_to khakar_daily_books_path(department_id: @departments.second.title), class: "btn btn-success" do %>
           <i class="fas fa-truck" aria-hidden="true"></i>
           <%=@departments.second.title%> Daily book
         <% end %>
-      </div>
-      <div class="col-lg-2 form-group float-left">
-        <%= link_to production_cycles_path, class: "btn btn-primary" do %>
+    
+     
+        <%= link_to production_cycles_path, class: "btn btn-warning" do %>
           <i class="fas fa-sign-language" aria-hidden="true"></i>
           Bhari Daily Book
         <% end %>
-      </div>
-      <div class="col-lg-2 form-group float-left">
-      <%= link_to jalai_production_cycles_path, class: "btn btn-primary" do %>
+     
+     
+      <%= link_to jalai_production_cycles_path, class: "btn btn-danger" do %>
          <i class="fas fa-fire" aria-hidden="true"></i>
          Jalai Daily Book
        <% end %>
-      </div>
-      <div class="col-lg-2 form-group float-left">
-        <%= link_to nakasi_production_cycles_path(department_id: @departments.third.title), class: "btn btn-primary" do %>
+     
+     
+        <%= link_to nakasi_production_cycles_path(department_id: @departments.third.title), class: "btn btn-info" do %>
                   <i class="fas fa-align-justify" aria-hidden="true"></i>
                   <%=@departments.third.title%> Daily Book
         <% end %>
-      </div>
+    
     </div>
   </div>
+  <ul class="nav nav-pills ml-2 mb-2" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab">Search</a>
+    </li>		
+  </ul>
   <div class="clearfix"></div>
-  <div class="row">
+  <div class="row card border-radius-1 shadow mx-2 p-3 ">
     <div class="col-lg-12 col-sm-12">
       <%= search_form_for @q, url: production_report_daily_books_path, class: "admin-controls", method: "get" do |f| %>
         <div class="col-lg-2 form-group float-left">
@@ -83,16 +89,15 @@
         <div class="col-lg-2 form-group float-left">
           <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
         </div>
-        <div class="col-lg-2 form-group float-left">
-        </div>
-        <div class="col-lg-2 form-group float-left">
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <button class="fform-control btn  badge badge-pill badge-danger" name="submit_pdf" type="submit" value="Daily Production Details PDF A4" formtarget="_blank" ><i class="fa fa-file-pdf"></i> Daily</button>
+        
+        
+        <div class="col-lg-2 form-group float-right">
+          <button style="width:100px;" class="form-control btn-danger" name="submit_pdf" type="submit" value="Daily Production Details PDF A4" formtarget="_blank" ><i class="fa fa-file-pdf mr-2"></i> Daily</button>
         </div>
       <% end %>
     </div>
   </div>
+  <div class="row card border-radius-1 shadow p-3 m-2">
   <table data-toggle="table" data-search="true">
     <thead>
       <h4>Pathair</h4>
@@ -294,7 +299,7 @@
 
   <table data-toggle="table" data-search="true">
     <thead>
-      <h5>nakasi</h5>
+      <h5>Nakasi</h5>
       <th><%= sort_link(@j, :start_date, 'Date') %></th>
       <th><%= sort_link(@j, :lines, 'Lines') %></th>
       <th><%= sort_link(@j, :total_bricks, 'T Bricks') %></th>
@@ -320,6 +325,7 @@
 
     </tbody>
   </table>
+  </div>
 </div>
 
 <div class="clearfix"></div>

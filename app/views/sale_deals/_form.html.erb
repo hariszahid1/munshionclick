@@ -14,10 +14,18 @@
     <%= f.hidden_field :user_name, value: current_user.id %>
     <%= f.hidden_field :status, value: 'UnClear' if params[:action] == 'new'%>
     <div class="col-lg-6 form-group float-left">
-      <%= f.select :sys_user_id, options_from_collection_for_select(@sys_users, 'id', 'name', f.object.sys_user_id), {Prompt: 'Please Select User'}, required: true,  :class=>"form-control chosen-select user-select-in-sale-deal"%>
+      <%= f.select :sys_user_id, options_from_collection_for_select(@sys_users, 'id', 'name', f.object.sys_user_id), {Prompt: 'Please Select User', label: 'Client Name'}, required: true,  :class=>"form-control chosen-select user-select-in-sale-deal"%>
     </div>
     <div class="col-lg-6 form-group float-left">
-      <%= f.select :account_id , options_from_collection_for_select(@accounts, 'id', 'title', (f.object&.account_id.present? ? f.object&.account_id : @account)),{prompt: "Select Account"},class: "form-control", required: true%>
+      <%= f.select :account_id , options_from_collection_for_select(@accounts, 'id', 'title', (f.object&.account_id.present? ? f.object&.account_id : @accounts.find_by(default_account: true)&.id)),{prompt: 'Select Account'},class: "form-control", required: true%>
+    </div>
+  </div>
+  <div class= 'row'>
+    <div class="col-lg-6 form-group">
+      <%= f.text_field :destination,  placeholder: "Purchased From", label: "Purchased From" %>
+    </div>
+    <div class="col-lg-6 form-group">
+      <%= f.text_field :l_c,  placeholder: "Deal Share", label: "Deal Share" %>
     </div>
   </div>
   <%= f.fields_for :purchase_sale_items do |purchase_sale_item| %>
@@ -33,19 +41,10 @@
   </div>
   <div class= 'row'>
     <div class="col-lg-6 form-group">
-      <%= f.number_field :loading,  placeholder: "Resale Payment", label: "Resale Payment"%>
-    </div>
-    <div class="col-lg-6 form-group">
       <%= f.number_field :total_bill,  placeholder: "Total Amount", label: "Total Amount", value: f.object&.total_bill || 0, class: "text-field", id: "total"%>
     </div>
-
-  </div>
-  <div class= 'row'>
     <div class="col-lg-6 form-group">
       <%= f.number_field :amount,  placeholder: "Received Amount", label: "Received Amount",  value: f.object&.amount || 0, class: "text-field", id: "received" %>
-    </div>
-    <div class="col-lg-6 form-group">
-      <%= f.number_field :discount_price,  placeholder: "Discounted Price", label: "Discounted Price",  value: f.object&.discount_price || 0, class: "text-field", id: "discount", input_html: {value: 0.0}%>
     </div>
   </div>
 
@@ -83,12 +82,3 @@
     <%=f.object.id.nil? ? (f.submit 'Create sale deal', class: "btn btn-success mr-2", style: "float: right")  :  (f.submit 'Update sale Deal', class: "btn btn-warning mr-2", style: "float: right")%>
   </div>
 <% end %>
-
-<script>
-  $(document).ready(function(){
-    $('.user-select-in-sale-deal').on('change', function(){
-      $('.disable-sys-users').attr('disabled', true)
-      $('.cms-data-fields-container').addClass('d-none')
-    })
-  })
-</script>

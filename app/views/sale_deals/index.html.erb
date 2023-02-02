@@ -4,10 +4,10 @@
     <span aria-hidden="true">×</span>
   </button>
 </div>
-<div class='d-flex'>
+<div class=''>
   <div>
     <div class="row mb-1">
-      <h1 class="ml-2 col">Sale Deals</h1>
+      <h1 class="ml-2 col"><%= params['q'].try(:[], 'transaction_type_eq') == '8' ? 'Re Sale Deal' : 'Fresh Sale Deal' %></h1>
     </div>
     <div class="row mb-2">
       <div class="col-lg-12 col-sm-12">
@@ -21,9 +21,59 @@
             </li>
           </ol>
         </div>
+
+        <div class="row w-100 justify-content-between">
+          <div class="col-md-2">
+            <%= link_to sale_deals_path('q[purchase_sale_items_size_7_eq]': 'Token Payment'), class: 'card border-info mx-sm-1 p-3' do %>
+              <div class="card border-info shadow text-info p-3 my-card" ><span class="fa fa-wallet" aria-hidden="true"></span></div>
+              <div class="text-info text-center mt-4"><h6>Token Payment</h6></div>
+              <div class="text-info text-center mt-3"><h2><%= @payment_status_count['Token Payment'] || 0 %></h2></div>
+            <% end %>
+          </div>
+          <div class="col-md-2">
+            <%= link_to sale_deals_path('q[purchase_sale_items_size_7_eq]': 'Advance Payment'), class: 'card border-success mx-sm-1 p-3' do %>
+              <div class="card border-success shadow text-success p-3 my-card"><span class="fa fa-wallet" aria-hidden="true"></span></div>
+              <div class="text-success text-center mt-4"><h6>Advance Payment</h6></div>
+              <div class="text-success text-center mt-3"><h2><%=  @payment_status_count['Advance Payment'] || 0 %></h2></div>
+            <% end %>
+          </div>
+          <div class="col-md-2">
+            <%= link_to sale_deals_path('q[purchase_sale_items_size_7_eq]': 'Full Payment'), class: 'card border-danger mx-sm-1 p-3' do %>
+              <div class="card border-danger shadow text-danger p-3 my-card" ><span class="fa fa-wallet" aria-hidden="true"></span></div>
+              <div class="text-danger text-center mt-4"><h6>Full Payment</h6></div>
+              <div class="text-danger text-center mt-3"><h2><%= @payment_status_count['Full Payment'] || 0 %></h2></div>
+            <% end %>
+          </div>
+          <% if params['q'].try(:[], 'transaction_type_eq') == '8' %>
+            <div class="col-md-2">
+              <%= link_to sale_deals_path('q[purchase_sale_items_size_4_eq]': 'Transfer'), class: 'card border-warning mx-sm-1 p-3' do %>
+                <div class="card border-warning shadow text-warning p-3 my-card" ><span class="fa fa-gift" aria-hidden="true"></span></div>
+                <div class="text-warning text-center mt-4"><h6>Transfer</h6></div>
+                <div class="text-warning text-center mt-3"><h2><%= @deal_count['Transfer'] || 0 %></h2></div>
+              <% end %>
+            </div>
+            <div class="col-md-2">
+              <%= link_to sale_deals_path('q[purchase_sale_items_size_4_eq]': 'Saler Free'), class: 'card border-primary mx-sm-1 p-3' do %>
+                <div class="card border-primary shadow text-primary p-3 my-card" ><span class="fa fa-gift" aria-hidden="true"></span></div>
+                <div class="text-primary text-center mt-4"><h6>Saler Free</h6></div>
+                <div class="text-primary text-center mt-3"><h2><%= @deal_count['Saler Free'] || 0 %></h2></div>
+              <% end %>
+            </div>
+          <% else %>
+            <div class="col-md-2">
+              <%= link_to sale_deals_path('q[purchase_sale_items_size_4_eq]': 'Fresh Booking'), class: 'card border-secondary mx-sm-1 p-3' do %>
+                <div class="card border-secondary shadow text-secondary p-3 my-card" ><span class="fa fa-gift" aria-hidden="true"></span></div>
+                <div class="text-secondary text-center mt-4"><h6>Fresh Booking</h6></div>
+                <div class="text-secondary text-center mt-3"><h2><%= @deal_count['Fresh Booking'] || 0 %></h2></div>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+
+
         <div class="row mb-4">
           <div id="new_city">
-            <% if params['q'].try(:[], 'transaction_type_eq') == 8 %>
+            <% if params['q'].try(:[], 'transaction_type_eq') == '8' %>
               <%= link_to new_sale_deal_path('type': 'Resale'),class: "btn btn-success mt-3 ml-2" do %>
                 <i class="fa fa-plus" aria-hidden="false"></i>
                 Create Resale Deal
@@ -43,38 +93,6 @@
       </div>
     </div>
   </div>
-    <div class="d-flex ml-auto">
-      <div class="card shadow text-dark mr-3 p-1 close-card" style="border: 10px solid rgba(102, 255, 51, 0.3); border-radius: 50%;">
-        <%= link_to sale_deals_path('q[purchase_sale_items_size_7_eq]': 'Token Payment') do %>
-          <span><h3 class="mt-2"><b><%=  @payment_status_count['Token Payment'] || 0 %></b></h3><h6 style="position: relative;">Token Payment</h6></span>
-        <% end %>
-      </div>
-      <div class="card shadow text-dark mr-3 p-1 close-card" style="border: 10px solid rgba(255, 51, 0, 0.3); border-radius: 50%;">
-        <%= link_to sale_deals_path('q[purchase_sale_items_size_7_eq]': 'Advance Payment') do %>
-          <span><h3 class="mt-2"><b><%=  @payment_status_count['Advance Payment'] || 0 %></b></h3><h6 style="position: relative;">Advance<br>Payment</h6></span>
-        <% end %>
-      </div>
-      <div class="card shadow text-dark mr-3 p-1 close-card" style="border: 10px solid rgba(162, 162, 118, 0.7); border-radius: 50%;">
-        <%= link_to sale_deals_path('q[purchase_sale_items_size_7_eq]': 'Full Payment') do %>
-          <span><h3 class="mt-2"><b><%=  @payment_status_count['Full Payment'] || 0%></b></h3><h6 style="position: relative;">Full<br>Payment</h6></span>
-        <% end %>
-      </div>
-      <div class="card shadow text-dark mr-3 p-1 close-card" style="border: 10px solid rgba(255, 255, 0, 0.3); border-radius: 50%;">
-        <%= link_to sale_deals_path('q[purchase_sale_items_size_4_eq]': 'Transfer') do %>
-          <span><h3 class="mt-2"><b><%= @deal_count['Transfer'] || 0 %></b></h3><h6 style="position: relative;">Transfer</h6></span>
-        <% end %>
-      </div>
-      <div class="card shadow text-dark mr-3 p-1 close-card" style="border: 10px solid rgba(128, 229, 255, 0.3); border-radius: 50%;">
-        <%= link_to sale_deals_path('q[purchase_sale_items_size_4_eq]': 'Saler Free') do %>
-          <span><h3 class="mt-2"><b><%= @deal_count['Saler Free'] || 0 %></b></h3><h6 style="position: relative;">Saler<br>Free</h6></span>
-        <% end %>
-      </div>
-      <div class="card shadow text-dark mr-3 p-1 close-card" style="border: 10px solid rgba(255, 179, 217, 0.74); border-radius: 50%;">
-        <%= link_to sale_deals_path('q[purchase_sale_items_size_4_eq]': 'Fresh Booking') do %>
-          <span><h3 class="mt-2"><b><%= @deal_count['Fresh Booking'] || 0 %></b></h3><h6 style="position: relative;">Fresh<br>Booking</h6></span>
-        <% end %>
-      </div>
-    </div>
   </div>
 </div>
 <div class="float-right">
@@ -128,10 +146,10 @@
             <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker',placeholder: "YYYY-MM-DD" %>
             <%= f.search_field :created_at_lteq, class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
           </div>
-          <div class="col-lg-2 form-group float-left">
-            <%= f.search_field :purchase_sale_items_size_13_cont, class: "form-control chosen-select", placeholder: "Search Quota" %>
-          </div>
           <div class="col-lg-6 form-group float-left">
+            <% if  params[:q].try(:[], 'transaction_type_eq') %>
+              <%= f.hidden_field :transaction_type_eq , value: params[:q].try(:[], 'transaction_type_eq').to_i%>
+            <% end %>
             <button class="form-control btn btn-primary mr-4" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
             <button class="btn btn-danger mr-2" style="width: 100px;" title= "download expense vouchers pdf" name="pdf" type="submit" value="pdf"><i class="fa fa-file-excel mr-2"></i>PDF</button>
             <button class="btn btn-warning" style="width: 100px;" title= "download expense vouchers csv" name="csv" type="submit" value="csv"><i class="fa fa-file-excel mr-2"></i>CSV</button>
@@ -147,7 +165,6 @@
     <thead>
       <tr>
         <th>Date</th>
-        <th>Quota</th>
         <th>Agent</th>
         <th>Project</th>
         <th>Plot Type</th>

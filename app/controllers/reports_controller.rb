@@ -187,10 +187,6 @@ class ReportsController < ApplicationController
     @staff_payable_ledger_book_debit_total = StaffLedgerBook.where('debit > 0').where(staff_id: @staff_payable.ids).sum(:debit)
     @staff_payable_ledger_book_credit_total = StaffLedgerBook.where('credit > 0').where(staff_id: @staff_payable.ids).sum(:credit)
 
-
-
-
-
     @k = Staff.where('balance<0').where(deleted: false).ransack(params[:k])
     if @k.result.count > 0
       @k.sorts = ['department_id asc','name asc'] if @k.sorts.empty?
@@ -263,7 +259,7 @@ class ReportsController < ApplicationController
     @accounts = Account.all
     @root=root_url
 
-    return user_group_pdf if params[:user_group_pdf].present?
+    return user_group_pdf if params[:user_group_pdf].present? || params[:without_zero_pdf].present?
     return user_group_all_pdf if params[:user_group_all_pdf].present?
 
     if params[:email].present?
@@ -292,6 +288,104 @@ class ReportsController < ApplicationController
         format.csv { send_data csv_data, filename: "Trail Balance - #{Date.today}.csv" }
       end
     end
+  end
+
+  def six_trial_balance
+
+    from_date = params[:q][:created_at_lteq]
+    to_date = params[:q][:created_at_gteq]
+
+    #sys_users_data
+    @sys_users = SysUser.all.order(['user_group asc', 'name asc'])
+
+    sys_user_ids = @sys_users.ids
+
+    @ledger_books_current = LedgerBook.where(sys_user_id: sys_user_ids)
+                                      .where('created_at BETWEEN ? AND ?', from_date, to_date)
+
+    @ledger_books_opening = LedgerBook.where(sys_user_id: sys_user_ids)
+                                      .where('created_at < ?', from_date)
+
+    @ledger_books_closing = LedgerBook.where(sys_user_id: sys_user_ids)
+                                      .where('created_at > ?', to_date)
+
+    @sys_user_ledger_book_debit_current = @ledger_books_current.group('sys_user_id').sum(:debit)
+    @sys_user_ledger_book_credit_current = @ledger_books_current.group('sys_user_id').sum(:credit)
+    @sys_user_ledger_book_debit_current_total = @ledger_books_current.sum(:debit)
+    @sys_user_ledger_book_credit_current_total = @ledger_books_current.sum(:credit)
+
+    @sys_user_ledger_book_debit_opening = @ledger_books_opening.group('sys_user_id').sum(:debit)
+    @sys_user_ledger_book_credit_opening = @ledger_books_opening.group('sys_user_id').sum(:credit)
+    @sys_user_ledger_book_debit_opening_total = @ledger_books_opening.sum(:debit)
+    @sys_user_ledger_book_credit_opening_total = @ledger_books_opening.sum(:credit)
+
+    @sys_user_ledger_book_debit_closing = @ledger_books_closing.group('sys_user_id').sum(:debit)
+    @sys_user_ledger_book_credit_closing = @ledger_books_closing.group('sys_user_id').sum(:credit)
+    @sys_user_ledger_book_debit_closing_total = @ledger_books_closing.sum(:debit)
+    @sys_user_ledger_book_credit_closing_total = @ledger_books_closing.sum(:credit)
+
+    # staffs_data
+    @staffs = Staff.all.order(['department_id asc', 'name asc'])
+    staff_ids = @staffs.ids
+
+    @ledger_books_current = StaffLedgerBook.where(staff_id: staff_ids)
+                                           .where('created_at BETWEEN ? AND ?', from_date, to_date)
+
+    @ledger_books_opening = StaffLedgerBook.where(staff_id: staff_ids)
+                                           .where('created_at < ?', from_date)
+
+    @ledger_books_closing = StaffLedgerBook.where(staff_id: staff_ids)
+                                           .where('created_at > ?', to_date)
+
+    @staff_ledger_book_debit_current = @ledger_books_current.group('staff_id').sum(:debit)
+    @staff_ledger_book_credit_current = @ledger_books_current.group('staff_id').sum(:credit)
+    @staff_ledger_book_debit_current_total = @ledger_books_current.sum(:debit)
+    @staff_ledger_book_credit_current_total = @ledger_books_current.sum(:credit)
+
+    @staff_ledger_book_debit_opening = @ledger_books_opening.group('staff_id').sum(:debit)
+    @staff_ledger_book_credit_opening = @ledger_books_opening.group('staff_id').sum(:credit)
+    @staff_ledger_book_debit_opening_total = @ledger_books_opening.sum(:debit)
+    @staff_ledger_book_credit_opening_total = @ledger_books_opening.sum(:credit)
+
+    @staff_ledger_book_debit_closing = @ledger_books_closing.group('staff_id').sum(:debit)
+    @staff_ledger_book_credit_closing = @ledger_books_closing.group('staff_id').sum(:credit)
+    @staff_ledger_book_debit_closing_total = @ledger_books_closing.sum(:debit)
+    @staff_ledger_book_credit_closing_total = @ledger_books_closing.sum(:credit)
+
+    #accounts_data
+
+    @accounts = Account.all
+    account_ids = @accounts.ids
+
+    @account_current = Payment.where(account_id: account_ids)
+                              .where('created_at BETWEEN ? AND ?', from_date, to_date)
+
+    @account_opening = Payment.where(account_id: account_ids)
+                              .where('created_at < ?', from_date)
+
+    @account_closing = Payment.where(account_id: account_ids)
+                              .where('created_at > ?', to_date)
+
+    @account_debit_current = @account_current.group('account_id').sum(:debit)
+    @account_credit_current = @account_current.group('account_id').sum(:credit)
+    @account_debit_current_total = @account_current.sum(:debit)
+    @account_credit_current_total = @account_current.sum(:credit)
+
+    @account_debit_opening = @account_opening.group('account_id').sum(:debit)
+    @account_credit_opening = @account_opening.group('account_id').sum(:credit)
+    @account_debit_opening_total = @account_opening.sum(:debit)
+    @account_credit_opening_total = @account_opening.sum(:credit)
+
+    @account_debit_closing = @account_closing.group('account_id').sum(:debit)
+    @account_credit_closing = @account_closing.group('account_id').sum(:credit)
+    @account_debit_closing_total = @account_closing.sum(:debit)
+    @account_credit_closing_total = @account_closing.sum(:credit)
+
+    request.format = 'pdf'
+    @time = Time.zone.now
+    time = @time.strftime("%d")+' '+@time.strftime("%b")+' '+@time.strftime("%y")+' '+@time.strftime("at %I:%M %p")
+    name = '6 Trail Balance # '+time.to_s
+    print_pdf(name,'pdf.html','A4')
   end
 
   def user_group_pdf
@@ -331,6 +425,8 @@ class ReportsController < ApplicationController
     @sys_user_nil_landlord, @sys_user_nil_landlord_ledger_book_debit, @sys_user_nil_landlord_ledger_book_credit, @sys_user_nil_landlord_ledger_book_debit_total, @sys_user_nil_landlord_ledger_book_credit_total = get_nil_data(9)
     @sys_user_nil_md_investment, @sys_user_nil_md_investment_ledger_book_debit, @sys_user_nil_md_investment_ledger_book_credit, @sys_user_nil_md_investment_ledger_book_debit_total, @sys_user_nil_md_investment_ledger_book_credit_total = get_nil_data(10)
 
+    @departments_for_staffs = Department.joins(staffs: :staff_ledger_books).includes(staffs: :staff_ledger_books)
+
     request.format = 'pdf'
     @time = Time.zone.now
     time = @time.strftime("%d")+' '+@time.strftime("%b")+' '+@time.strftime("%y")+' '+@time.strftime("at %I:%M %p")
@@ -350,6 +446,8 @@ class ReportsController < ApplicationController
     @sys_user_other, @sys_user_other_ledger_book_debit, @sys_user_other_ledger_book_credit, @sys_user_other_ledger_book_debit_total, @sys_user_other_ledger_book_credit_total = get_all_data(8)
     @sys_user_landlord, @sys_user_landlord_ledger_book_debit, @sys_user_landlord_ledger_book_credit, @sys_user_landlord_ledger_book_debit_total, @sys_user_landlord_ledger_book_credit_total = get_all_data(9)
     @sys_user_md_investment, @sys_user_md_investment_ledger_book_debit, @sys_user_md_investment_ledger_book_credit, @sys_user_md_investment_ledger_book_debit_total, @sys_user_md_investment_ledger_book_credit_total = get_all_data(10)
+
+    @departments_for_staffs = Department.joins(staffs: :staff_ledger_books).includes(staffs: :staff_ledger_books)
 
     request.format = 'pdf'
     @time = Time.zone.now

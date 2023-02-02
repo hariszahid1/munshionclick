@@ -2,26 +2,46 @@
 
 # FollowUps Controller
 class ColdStorageOutwardsController < ApplicationController
-
-  before_action :set_coldstorage, only: %i[show edit update]
+  include PdfCsvGeneralMethod
+  include OutwardsHelper
+  before_action :set_cold_storage, only: %i[show edit update destroy]
   before_action :index_edit_new_data, only: %i[new show edit index]
 
   def index
+    date_search
     index_data
     @q = PurchaseSaleDetail.includes(:order, :account, :sys_user,
                                      purchase_sale_items: :product).ransack(params[:q])
-    purchase_sale_detail = @q.result.where(transaction_type: 'OutWard')
-    @purchase_sale_details = purchase_sale_detail.page(params[:page]).per(100)
+    purchase_sale_detail = @q.result.distinct.where(transaction_type: 'OutWard')
+    @purchase_sale_details = purchase_sale_detail.order('purchase_sale_details.created_at desc').page(params[:page]).per(100)
+    @pdf_orders = @q.result.where(transaction_type: 'OutWard')
+    if params[:pdf].present?
+      @pdf_orders_total = @pdf_orders.sum('purchase_sale_items.quantity')
+      @pdf_outward_total = @pdf_orders.group('sys_users.name').sum('purchase_sale_items.quantity')
+      download_cold_storage_outwards_pdf_file
+    end
   end
 
   def new
     @purchase_sale_details = PurchaseSaleDetail.all
     @purchase_sale_detail = PurchaseSaleDetail.new(order_id: params[:order_id],
                                                    sys_user_id: params[:sys_user_id])
-    @purchase_sale_detail.purchase_sale_items.build
+    if params[:order_id].present?
+      order=Order.find(params[:order_id])
+      order.order_items.each do |ord|
+        room_num = PurchaseSaleItem.find_by(product_id: ord.product_id, size_13: ord.marka,size_10: ord.challan_no, transaction_type: "Purchase").size_8
+        rack_num = PurchaseSaleItem.find_by(product_id: ord.product_id, size_13: ord.marka,size_10: ord.challan_no, transaction_type: "Purchase").size_7
+        @purchase_sale_detail.purchase_sale_items.build(product_id: ord.product_id, size_13: ord.marka, size_10: ord.challan_no, size_8: room_num, size_7: rack_num)
+      end
+    end
+    @staffs = Staff.joins(:department).where('departments.active': true)
+
   end
 
-  def edit; end
+  def edit
+    @staffs = Staff.joins(:department).where('departments.active': true)
+
+  end
 
   def create
     @pos_setting=PosSetting.first
@@ -50,7 +70,7 @@ class ColdStorageOutwardsController < ApplicationController
           @purchase_sale_detail.salary_details.create(staff_id: @purchase_sale_detail.staff_id, amount: @purchase_sale_detail.loading, comment: "Loading", total_balance: staff.balance,created_at: @purchase_sale_detail.created_at)
           # @purchase_sale_detail.save!
         end
-        format.html { redirect_to cold_storage_outwards_path, notice: 'Outward was successfully created.' }
+        format.html { redirect_to order_outwards_path, notice: 'Outward was successfully created.' }
       else
         format.html { render :new }
         format.json { render json: @purchase_sale_detail.errors, status: :unprocessable_entity }
@@ -58,7 +78,9 @@ class ColdStorageOutwardsController < ApplicationController
     end
   end
 
-  def show; end
+  def show
+    download_outward_show_pdf_file if params[:pdf].present?
+  end
 
   def update
     @pos_setting=PosSetting.first
@@ -95,6 +117,37 @@ class ColdStorageOutwardsController < ApplicationController
       end
     end
   end
+
+  def destroy
+    type = @purchase_sale_detail.transaction_type
+    @products = Product.where(id:@purchase_sale_detail.purchase_sale_items.pluck(:product_id))
+    @purchase_sale_detail.destroy
+    ledger_book = @purchase_sale_detail.sys_user.ledger_books.last
+    UserLedgerBookJob.perform_later(current_user.superAdmin.company_type,@purchase_sale_detail.sys_user_id)
+    AccountPaymentJob.perform_later(current_user.superAdmin.company_type,@purchase_sale_detail.account_id)
+    SalaryDetailJob.perform_later(current_user.superAdmin.company_type,@purchase_sale_detail.staff_id)
+    respond_to do |format|
+      format.html { redirect_to cold_storage_outwards_path, notice: 'Purchase sale detail was successfully destroyed.' }
+      format.json { head :no_content }
+      format.js   { render :layout => false }
+    end
+  end
+
+  def get_outward_storage_stock_data
+    sys_user_id = params[:party_id]
+    marka_no = params[:marka_no]
+    challan_no = params[:challan_no]
+    product_id = params[:product_id]
+    rem_stock = PurchaseSaleItem.joins(:purchase_sale_detail).where('purchase_sale_details.sys_user_id': sys_user_id, 'purchase_sale_details.transaction_type': "OutWard", 'product_id': product_id, 'size_13': marka_no, 'size_10': challan_no).first&.size_6
+    if rem_stock.present?
+      stock = rem_stock
+    else
+      stock = PurchaseSaleItem.joins(:purchase_sale_detail).where('purchase_sale_details.sys_user_id': sys_user_id, 'purchase_sale_details.transaction_type': "InWard", 'product_id': product_id, 'size_13': marka_no, 'size_10': challan_no).pluck(:size_9)
+    end
+    respond_to do |format|
+      format.json { render json: stock }
+    end
+  end
   private
 
   def set_cold_storage
@@ -103,10 +156,20 @@ class ColdStorageOutwardsController < ApplicationController
 
   def index_edit_new_data
     @orders = Order.all
-    @customers = SysUser.where(:user_group=>['Customer','Both','Salesman'])
+    @customers = SysUser.all
     @suppliers = SysUser.where(:user_group=>['Supplier','Both','Own'])
     @accounts = Account.all
     @products = Product.all
+  end
+
+  def date_search
+    @created_at_gteq = DateTime.current.beginning_of_month
+    @created_at_lteq = DateTime.now
+    if params[:q].present?
+      @created_at_gteq = params[:q][:created_at_gteq] if params[:q][:created_at_gteq].present?
+      @created_at_lteq = params[:q][:created_at_lteq] if params[:q][:created_at_lteq].present?
+      params[:q][:created_at_lteq] = params[:q][:created_at_lteq].to_date.end_of_day if params[:q][:created_at_lteq].present?
+    end
   end
 
   def index_data
@@ -115,6 +178,17 @@ class ColdStorageOutwardsController < ApplicationController
     @staffs = Staff.loader_active_staff
     @total_stock = PurchaseSaleDetail.joins(:purchase_sale_items).includes(:purchase_sale_items).where(
       transaction_type: 'InWard').sum('purchase_sale_items.size_9')
+  end
+
+  def download_cold_storage_outwards_pdf_file
+    @sys_users = @q.result
+    sorted_outward_data
+    generate_pdf(@sorted_data.as_json, 'Inward', 'pdf.html', 'A4', false, 'cold_storage_outwards/index.pdf.erb')
+  end
+
+  def download_outward_show_pdf_file
+    sorted_outward_show_data
+    generate_pdf(@sorted_data.as_json, 'Outward', 'pdf.html', 'A4', false, 'cold_storage_outwards/show.pdf.erb')
   end
 
   def purchase_sale_detail_params

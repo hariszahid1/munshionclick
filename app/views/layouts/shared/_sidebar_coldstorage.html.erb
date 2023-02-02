@@ -43,6 +43,33 @@
           </ul>
         </li>
         <li>
+          <a href="#OrderoutwardSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+            <i class="fas fa-money-bill"></i>
+            <span class="link-text">Outward</span>
+          </a>
+          <ul class="collapse list-unstyled" id="OrderoutwardSubmenu">
+            <% if check_is_hidden_by_module('orders') %>
+              <li class="activ-link">
+                <%= link_to order_outwards_path, class:"activ-link" do %>
+                  <i class="fas fa-plus"></i>
+                  <i class="fas fa-shopping-cart"></i>
+                  <span class="link-text">Outward without Racking</span>
+                <% end %>
+              </li>
+            <% end %>
+            <% if check_is_hidden_by_module('orders') %>
+              <li class="activ-link">
+                <%= link_to cold_storage_outwards_path, class:"activ-link" do %>
+                  <i class="fas fa-plus"></i>
+                  <i class="fas fa-shopping-cart"></i>
+                  <span class="link-text">Outward with Racking</span>
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+        </li>
+        
+        <li>
           <a href="#OrderSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
             <i class="fas fa-money-bill"></i>
             <span class="link-text">Expense</span>
@@ -175,6 +202,12 @@
                 <%= link_to reports_path do %>
                   <i class="fas fa-plus"></i>
                   <span class="link-text">Total Staff/Customer/Supplier</span>
+                <% end %>
+              </li>
+              <li>
+                <%= link_to stock_report_in_out_cold_storage_inwards_path, target: '_blank' do %>
+                  <i class="fas fa-th-list"></i>
+                  <span class="link-text">Stock Report</span>
                 <% end %>
               </li>
               <li>

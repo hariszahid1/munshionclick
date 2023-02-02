@@ -88,7 +88,7 @@ class DepartmentsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def department_params
-    params.require(:department).permit(:code, :title, :comment, :status)
+    params.require(:department).permit(:code, :title, :comment, :status, :active)
   end
   def download_departments_csv_file
     @departments = @q.result

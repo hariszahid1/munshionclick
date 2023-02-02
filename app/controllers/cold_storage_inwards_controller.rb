@@ -5,7 +5,7 @@ class ColdStorageInwardsController < ApplicationController
   include PdfCsvGeneralMethod
   include InwardsHelper
 
-  before_action :set_cold_storage, only: %i[show edit update]
+  before_action :set_cold_storage, only: %i[show edit update destroy]
   before_action :index_edit_new_data, only: %i[new show edit index]
 
   def index
@@ -15,7 +15,7 @@ class ColdStorageInwardsController < ApplicationController
                                      purchase_sale_items: :product).ransack(params[:q])
     purchase_sale_detail = @q.result.distinct.where(transaction_type: 'InWard')
     @purchase_sale_details = purchase_sale_detail.order('purchase_sale_details.created_at desc').page(params[:page]).per(100)
-    @pdf_orders = @q.result
+    @pdf_orders = @q.result.where(transaction_type: 'InWard')
     @cold_storage_inward_total = purchase_sale_detail.group('purchase_sale_details.id').sum('purchase_sale_items.size_9')
     if params[:pdf].present?
       @pdf_orders_total = @pdf_orders.sum('purchase_sale_items.quantity')
@@ -34,11 +34,11 @@ class ColdStorageInwardsController < ApplicationController
         @purchase_sale_detail.purchase_sale_items.build(product_id: ord.product_id, size_13: ord.marka, size_12: ord.builty_no, size_11: ord.vehicle_no, size_10: ord.challan_no, size_9: ord.quantity, quantity: ord.quantity)
       end
     end
-    @staffs=Staff.all
+    @staffs = Staff.joins(:department).where('departments.active': true)
   end
 
   def edit
-    @staffs=Staff.all
+    @staffs = Staff.joins(:department).where('departments.active': true)
   end
 
   def create
@@ -112,6 +112,44 @@ class ColdStorageInwardsController < ApplicationController
       end
     end
   end
+
+  def destroy
+    type = @purchase_sale_detail.transaction_type
+    @products = Product.where(id:@purchase_sale_detail.purchase_sale_items.pluck(:product_id))
+    @purchase_sale_detail.destroy
+    ledger_book = @purchase_sale_detail.sys_user.ledger_books.last
+    UserLedgerBookJob.perform_later(current_user.superAdmin.company_type,@purchase_sale_detail.sys_user_id)
+    AccountPaymentJob.perform_later(current_user.superAdmin.company_type,@purchase_sale_detail.account_id)
+    SalaryDetailJob.perform_later(current_user.superAdmin.company_type,@purchase_sale_detail.staff_id)
+    respond_to do |format|
+      format.html { redirect_to cold_storage_outwards_path, notice: 'Purchase sale detail was successfully destroyed.' }
+      format.json { head :no_content }
+      format.js   { render :layout => false }
+    end
+  end
+
+  def stock_report_in_out
+    pdf_rep = PurchaseSaleDetail.includes(:sys_user, purchase_sale_items: :product)
+    in_report = pdf_rep.where(transaction_type: 'InWard').group('sys_users.name').sum('purchase_sale_items.quantity')
+    out_report = pdf_rep.where(transaction_type: 'OutWard').group('sys_users.name').sum('purchase_sale_items.quantity')
+    @pdf_inward_total = pdf_rep.where(transaction_type: 'InWard').sum('purchase_sale_items.quantity')
+    @pdf_outward_total = pdf_rep.where(transaction_type: 'OutWard').sum('purchase_sale_items.quantity')
+    @merged_hash = in_report.merge(out_report) do |key, oldval, newval|
+      if oldval.is_a?(Array)
+        oldval << newval
+      elsif newval.is_a?(Array)
+        newval << oldval
+      else
+        [oldval, newval]
+      end
+    end
+    in_prod = pdf_rep.where(transaction_type: 'InWard').group('products.title', 'purchase_sale_items.size_8').sum('purchase_sale_items.quantity')
+    out_prod = pdf_rep.where(transaction_type: 'OutWard').group('products.title', 'purchase_sale_items.size_8').sum('purchase_sale_items.quantity')
+    @product_room_quantity = in_prod.merge(out_prod) { |key, a_val, b_val| a_val - b_val }
+    generate_pdf('' ,'Stock-Report', 'pdf.html', 'A4', false, 'cold_storage_inwards/stock_report_in_out.pdf.erb')
+
+  end
+
   private
 
   def set_cold_storage

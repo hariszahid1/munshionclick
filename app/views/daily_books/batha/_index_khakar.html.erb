@@ -1,4 +1,4 @@
-<div class="topnav">
+<div class="topnav ml-2">
   <%= link_to daily_books_path() do %>
     <i class="fa fa-male" aria-hidden="true"></i>
     <%=@departments.first.title%> Daily
@@ -19,10 +19,7 @@
         <i class="fa fa-align-justify" aria-hidden="true"></i>
         <%=@departments.third.title%> Daily Book
       <% end %>
-
 </div>
-
-
 <%@daily_book_salary_details_raw_quantity = 0 %>
 <%@daily_book_salary_details_quantity = 0 %>
 <%@daily_book_salary_details_wast = 0 %>
@@ -36,10 +33,15 @@
 <%@daily_book_salary_details_pather_khakar_wast=0%>
 
 <div class="hidden" id="daily_books_list">
-  <h1>Daily books By <%=@departments.second.title%></h1>
+  <h1 class="my-3 ml-2">Daily books By <%=@departments.second.title%></h1>
+  <ul class="nav nav-pills ml-2 mb-2" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab">Search</a>
+    </li>		
+  </ul>
   <div class="clearfix"></div>
-  <div class="row">
-    <div class="col-lg-12 col-sm-12">
+  <div class="row card border-radius-1 shadow mx-2 my-2 p-4">
+    <div class="">
       <%= search_form_for @q, url: khakar_daily_books_path, class: "admin-controls", method: "get" do |f| %>
         <div class="col-lg-2 form-group float-left">
           <%= f.search_field :book_date_gteq, class: 'form-control input-sm datepicker',value: @book_date_gteq, 'datepicker' => true,placeholder: "YYYY-MM-DD" %>
@@ -50,22 +52,21 @@
         <div class="col-lg-2 form-group float-left">
           <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
         </div>
-
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn  badge badge-pill badge-danger" name="submit_pdf" type="submit" value="Khakar Daily Production Detail A4" formtarget="_blank"><i class="fa fa-file-pdf"></i> Khakar Daily</button>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn  badge badge-pill badge-danger" name="page_pdf" type="submit" value="Khakar Daily Production Detail A4" formtarget="_blank"><i class="fa fa-file-pdf"></i> Daily page</button>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn btn-info" name="email" type="submit" value="Email"><i class="fas fa-envelope"></i> email</button>
-        </div>
+        <div class="float-right">
+        <div class="dropdown my-dropdown mr-2 ml-auto">
+            <button type="button" class="form-control bg-danger text-light"><i class="fa fa-file-pdf mr-2"></i>PDF List</button>
+            <div class="dropdown-content my-dropdown-content p-1">
+              <button class="form-control btn-danger my-2" name="submit_pdf" type="submit" value="Khakar Daily Production Detail A4" formtarget="_blank"><i class="fa fa-file-pdf"></i> Khakar Daily</button>
+              <button class="form-control btn-danger my-2" name="page_pdf" type="submit" value="Khakar Daily Production Detail A4" formtarget="_blank"><i class="fa fa-file-pdf"></i> Daily page</button>
+            </div>
+          </div>       
+          <button style="width:100px;" class="form-control btn btn-info" name="email" type="submit" value="Email"><i class="fas fa-envelope"></i> Email</button> 
+          </div>    
       <% end %>
     </div>
   </div>
   <div class="clearfix"></div>
-
-  <div class="row ">
+   <div class="row ">
                 <div class="col-xl-4 col-md-6 mb-4">
                     <div class="card border-left-primary shadow h-100 py-2">
                       <div class="card-body">
@@ -116,11 +117,7 @@
                                           </div>
                                         </div>
                                       </div>
-      </div>
-
-
-
-
+   </div>
 
   <div class="card shadow mb-4">
       <!-- Card Header - Accordion -->
@@ -130,7 +127,7 @@
       <!-- Card Content - Collapse -->
       <div class="collapse show" id="collapseCardExample" style="">
 
-        <div class="row">
+        <div class="row p-2">
             <div class="col-lg-12 col-sm-12">
               <div class="col-lg-12 ">
                 <table>
@@ -165,7 +162,7 @@
             </div>
           </div>
         </div>
-    </div>
+  </div>
 
       <div>
 
@@ -181,7 +178,7 @@
           <div class="row">
             <div class="col-lg-12 col-sm-12">
               <div class="col-lg-12 ">
-  <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+  <ul class="nav nav-pills mb-3 mt-2" id="pills-tab" role="tablist">
     <li class="nav-item" onclick="updatetabs('pills-home')">
       <a class="<%=params[:from_tabe]=='pills-home' ? 'nav-link active' : 'nav-link'%> active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true"><b>Khakar</b></a>
     </li>
@@ -192,10 +189,10 @@
 
   <div class="tab-content" id="pills-tabContent">
 
-    <div class= "<%=params[:from_tabe]=='pills-home' ? 'tab-pane fade show active' : 'tab-pane fade show active'%>" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+    <div class= " p-2 <%=params[:from_tabe]=='pills-home' ? 'tab-pane fade show active' : 'tab-pane fade show active'%>" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
       <%= render partial: "khakar", locals: {} %>
     </div>
-    <div class= "<%=params[:from_tabe]=='pills-profile' ? 'tab-pane fade show active' : 'tab-pane fade '%>" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+    <div class= " p-2 <%=params[:from_tabe]=='pills-profile' ? 'tab-pane fade show active' : 'tab-pane fade '%>" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
       <%= render partial: "khakar_merge", locals: {} %>
     </div>
 

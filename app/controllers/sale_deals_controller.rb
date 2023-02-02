@@ -9,10 +9,11 @@ class SaleDealsController < ApplicationController
   # GET /sale_deals
   # GET /sale_deals.json
   def index
-    @q = PurchaseSaleDetail.includes(:sys_user, :purchase_sale_items).order('id desc').ransack(params[:q])
+    @q = PurchaseSaleDetail.includes(:sys_user, :purchase_sale_items).order('id desc').where(
+      transaction_type: %w[NewSaleDeal ReSaleDeal]).ransack(params[:q])
     download_sale_deals_pdf_file if params[:pdf].present?
     download_sale_deals_csv_file if params[:csv].present?
-    @sale_deals = @q.result.where(transaction_type: %w[NewSaleDeal ReSaleDeal]).page(params[:page])
+    @sale_deals = @q.result.page(params[:page])
   end
 
   # GET /sale_deals/1
@@ -79,7 +80,7 @@ class SaleDealsController < ApplicationController
   # DELETE /sale_deals/1
   # DELETE /sale_deals/1.json
   def destroy
-    @sale_dealsa.destroy
+    @sale_deal.destroy
     respond_to do |format|
       format.html { redirect_to sale_deals_url, notice: 'Sale Deal was successfully destroyed.' }
       format.json { head :no_content }
@@ -103,7 +104,7 @@ class SaleDealsController < ApplicationController
     code = 'AGC-' + '%.4i' % (SysUser.maximum(:id).present? ? SysUser.maximum(:id).next : 1)
     user = params[:purchase_sale_detail][:sys_users]
     user_id = SysUser.create(name: user[:name], code: code, user_type_id: UserType.first.id, ntn: user[:ntn],
-                             for_crms: false, occupation: user[:occupation], cms_data: user[:cms_data])
+                             occupation: user[:occupation], cms_data: user[:cms_data])
     @sale_deal[:sys_user_id] = user_id.id
   end
 
@@ -112,7 +113,7 @@ class SaleDealsController < ApplicationController
     @category = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['category']&.map(&:downcase) : []
     @staffs = Staff.all
     @sys_users = SysUser.all.where(for_crms: [false, nil])
-    @accounts = Account.all
+    @accounts = current_user&.super_admin? ? Account.all : Account.where(id: current_user.extra_settings['account_ids'])
     @products = Product.all
     created_by_ids = current_user.created_by_ids_list_to_view
     @all_agents = User.where('company_type=? or created_by_id=?', current_user.company_type, created_by_ids).pluck(:name,
@@ -120,11 +121,12 @@ class SaleDealsController < ApplicationController
     @payment_status = @pos_setting&.extra_settings.present? ? @pos_setting.extra_settings['payment_status'] : []
     @transaction_type = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['transaction_type'] : []
     @deal = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['deal'] : []
+    @source = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['source']&.map(&:downcase) : []
     roles_mask = current_user&.allowed_to_view_roles_mask_for
     @users = User.where(roles_mask: roles_mask).where('company_type=? or created_by_id=?', current_user&.company_type,
                                                       created_by_ids)
-    @deal_count = PurchaseSaleDetail.joins(:purchase_sale_items).where(transaction_type: "SaleDeal").group('purchase_sale_items.size_4').count
-    @payment_status_count = PurchaseSaleDetail.joins(:purchase_sale_items).where(transaction_type: "SaleDeal").group('purchase_sale_items.size_7').count
+    @deal_count = PurchaseSaleDetail.joins(:purchase_sale_items).where(transaction_type: %w[NewSaleDeal ReSaleDeal]).group('purchase_sale_items.size_4').count
+    @payment_status_count = PurchaseSaleDetail.joins(:purchase_sale_items).where(transaction_type: %w[NewSaleDeal ReSaleDeal]).group('purchase_sale_items.size_7').count
 
   end
 
@@ -148,15 +150,15 @@ class SaleDealsController < ApplicationController
   end
 
   def download_sale_deals_pdf_file
-    @sale_deals = @q.result.where(transaction_type: 'SaleDeal')
+    @sale_deals = @q.result
     sorted_data
     generate_pdf(@sorted_data.as_json, 'Sale Deal', 'pdf.html', 'A4', false, 'sale_deals/index.pdf.erb')
   end
 
   def download_sale_deals_csv_file
-    @sale_deals = @q.result.where(transaction_type: 'SaleDeal')
-    header_for_csv = %w[agent_name name contact quota transaction_type project_name type_of_plot form_no
-                        plot_size plot_quantity plot_category price_per_plot deal_date payment_type trx_no deal]
+    @sale_deals = @q.result
+    header_for_csv = %w[deal_date name number type_of_plot plot_size project_name form_no ms_no
+                        purchased_from deal_share type]
     data_for_csv = get_data_for_sale_deals_csv
     generate_csv(data_for_csv, header_for_csv, 'SaleDeals')
   end

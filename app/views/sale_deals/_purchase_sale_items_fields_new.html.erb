@@ -10,9 +10,6 @@
         <%= f.select :size_12, options_for_select(@transaction_type, f.object.size_12), {:include_blank => "Select Transaction Type", label: "Transaction Type"}, class: "form-control chosen-select" %>
       </div>
       <div class="col-lg-6 form-group float-left">
-        <%= f.text_field :size_13, placeholder: "Quota",  label: "Quota", value: "#{(f.object.size_13 == '0' ? nil : f.object.size_13)}" %>
-      </div>
-      <div class="col-lg-6 form-group float-left">
         <%= f.text_field :size_11, placeholder: "Form No:", label: "Form No:", value: "#{(f.object.size_11 == '0' ? nil : f.object.size_11)}" %>
       </div>
       <div class="col-lg-6 form-group float-left">
@@ -31,10 +28,10 @@
         <%= f.select :size_4, options_for_select(@deal, f.object.size_4), {:include_blank => "Select Deal", label: "Deal"}, class: "form-control chosen-select" %>
       </div>
       <div class="col-lg-6 form-group float-left">
-        <%= f.text_field :size_8,  placeholder: "Price per Plot", label: "Price per Plot", value: "#{(f.object.size_8 == '0' ? nil : f.object.size_8)}"%>
+        <%= f.select :size_13, options_for_select(@source, f.object.size_13), {:include_blank => "Select Client Source", label: "Client Source"}, class: "form-control chosen-select" %>
       </div>
       <div class="col-lg-6 form-group float-left">
-        <%= f.datetime_select :expiry_date,  placeholder: "Deal Date", label: "Deal Date"%>
+        <%= f.text_field :size_8,  placeholder: "Price per Plot", label: "Price per Plot", value: "#{(f.object.size_8 == '0' ? nil : f.object.size_8)}"%>
       </div>
       <div class="col-lg-6 form-group float-left">
         <%= f.text_field :size_6, placeholder: "Down Payment",  label: "Down Payment",  value: "#{(f.object.size_6 == '0' ? nil : f.object.size_6)}" %>
@@ -47,6 +44,9 @@
       </div>
       <div class="col-lg-6 form-group float-left">
         <%= f.text_field :size_3, placeholder: "Customer CNIC", label: "Customer CNIC", value: "#{(f.object.size_3 == '0' ? nil : f.object.size_3)}" %>
+      </div>
+      <div class="col-lg-6 form-group float-left">
+        <%= f.datetime_select :expiry_date,  placeholder: "Deal Date", label: "Deal Date"%>
       </div>
       <div class="col-lg-6 form-group float-left">
         <%= f.text_area :comment, placeholder: "Internal Remarks:", label: "Internal Remarks" %>

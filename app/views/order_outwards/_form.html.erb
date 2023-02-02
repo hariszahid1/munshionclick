@@ -28,7 +28,7 @@
               <%= f.select :status, Order.statuses.map { |key, value| [key.humanize, key] },{hide_label:true,class: "form-control", required: true} %>
             </div>
             <div class="col-lg-4 form-group float-left">
-              <%= f.select :sys_user_id, options_from_collection_for_select(@suppliers, 'id', 'name', f.object.sys_user_id), {hide_label:true,prompt: "Select the Supplier"},class:"form-control chosen-select", required: true %>
+              <%= f.select :sys_user_id, options_from_collection_for_select(@suppliers, 'id', 'name', f.object.sys_user_id), {hide_label:true,prompt: "Select the Supplier"}, onchange:"products_call(this.value, false)",class:"form-control chosen-select",id: "party-name", required: true %>
             </div>
             <div class="col-lg-4 form-group float-left">
               <%= f.select :account_id , options_from_collection_for_select(@accounts, 'id', 'title', (f.object.account_id.present? ? f.object.account_id : @account)), {hide_label:true},class:"form-control"%>
@@ -47,23 +47,17 @@
         <div class="row no-gutters align-items-center">
           <div class="col mr-2">
             <div class="row">
-              <div class="col-lg-2 form-group float-left">
-                <h5>Order</h5>
+              <div class="col-lg-3 form-group float-left">
+                <h5>product</h5>
               </div>
               <div class="col-lg-2 form-group float-left">
                 <h5>Marka</h5>
               </div>
               <div class="col-lg-2 form-group float-left">
-                <h5>Builty No</h5>
+                <h5>Challan No.</h5>
               </div>
               <div class="col-lg-2 form-group float-left">
-                <h5>Vehicle</h5>
-              </div>
-              <div class="col-lg-2 form-group float-left">
-                <h5>Challan No</h5>
-              </div>
-              <div class="col-lg-2 form-group float-left">
-                <h5>Stock</h5>
+                <h5>Remaining Stock</h5>
               </div>
             </div>
 
@@ -74,7 +68,7 @@
             <%end%>
             <div class="links font-weight-bold text-success text-uppercase">
               <%# //ADD PRODUCT HERE %>
-              <%= link_to_add_association f, :order_items, partial: 'order_outwards/order_items_fields', class: "new_product"  do %>
+              <%= link_to_add_association f, :order_items, partial: 'order_outwards/order_items_fields', class: "add-new-outward"  do %>
                 <i class="fa fa-plus"></i> Add Product (<span id="total_product_quantity"></span>)
               <% end %>
             </div>
@@ -118,3 +112,12 @@
 
 <% end %>
 <%= javascript_include_tag 'hover', 'data-turbolinks-track': 'reload' %>
+
+<script>
+  $(document).ready(function() {
+      $('.add-new-outward').on('click', function(){
+    products_call($("#party-name").val(), true);
+  })
+
+});
+</script>

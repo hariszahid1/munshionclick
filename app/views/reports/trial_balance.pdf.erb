@@ -15,7 +15,7 @@
 <p style="border-bottom: double 4px;  margin: 0;"></p>
 <h2 style="text-align: center; margin: 0;">Users</h2>
 <p style="border-bottom: double 4px;  margin: 0;"></p>
-<% if params[:user_group_pdf].present? %>
+<% if params[:user_group_pdf].present? || params[:without_zero_pdf] %>
   <h2 style="text-align: center; margin: 0;">User Payable</h2>
   <div>
     <%= render partial: 'group_by_data', locals: { heading: 'Customer',
@@ -215,106 +215,107 @@
                                                   }
     %>
   </div>
+  <% if params[:user_group_pdf].present? %>
+    <h2 style="text-align: center; margin: 0;">Users Nill</h2>
+    <div>
+      <%= render partial: 'group_by_data', locals: { heading: 'Customer',
+                                          users: @sys_user_nil_customer,
+                                          ledger_book_debit: @sys_user_nil_customer_ledger_book_debit,
+                                          ledger_book_credit: @sys_user_nil_customer_ledger_book_credit,
+                                          ledger_book_credit_total: @sys_user_nil_customer_ledger_book_credit_total,
+                                          ledger_book_debit_total: @sys_user_nil_customer_ledger_book_debit_total,
+                                          } %>
+      <%= render partial: 'group_by_data', locals: { heading: 'Own',
+                                                    users: @sys_user_nil_own,
+                                                    ledger_book_debit: @sys_user_nil_own_ledger_book_debit,
+                                                    ledger_book_credit: @sys_user_nil_own_ledger_book_credit,
+                                                    ledger_book_credit_total: @sys_user_nil_own_ledger_book_credit_total,
+                                                    ledger_book_debit_total: @sys_user_nil_own_ledger_book_debit_total,
+                                                    }
+      %>
 
-  <h2 style="text-align: center; margin: 0;">Users Nill</h2>
-  <div>
-    <%= render partial: 'group_by_data', locals: { heading: 'Customer',
-                                        users: @sys_user_nil_customer,
-                                        ledger_book_debit: @sys_user_nil_customer_ledger_book_debit,
-                                        ledger_book_credit: @sys_user_nil_customer_ledger_book_credit,
-                                        ledger_book_credit_total: @sys_user_nil_customer_ledger_book_credit_total,
-                                        ledger_book_debit_total: @sys_user_nil_customer_ledger_book_debit_total,
-                                        } %>
-    <%= render partial: 'group_by_data', locals: { heading: 'Own',
-                                                  users: @sys_user_nil_own,
-                                                  ledger_book_debit: @sys_user_nil_own_ledger_book_debit,
-                                                  ledger_book_credit: @sys_user_nil_own_ledger_book_credit,
-                                                  ledger_book_credit_total: @sys_user_nil_own_ledger_book_credit_total,
-                                                  ledger_book_debit_total: @sys_user_nil_own_ledger_book_debit_total,
-                                                  }
-    %>
+      <%= render partial: 'group_by_data', locals: { heading: 'Supplier',
+                                                    users: @sys_user_nil_supplier,
+                                                    ledger_book_debit: @sys_user_nil_supplier_ledger_book_debit,
+                                                    ledger_book_credit: @sys_user_nil_supplier_ledger_book_credit,
+                                                    ledger_book_credit_total: @sys_user_nil_supplier_ledger_book_credit_total,
+                                                    ledger_book_debit_total: @sys_user_nil_supplier_ledger_book_debit_total,
+                                                    }
+      %>
 
-    <%= render partial: 'group_by_data', locals: { heading: 'Supplier',
-                                                  users: @sys_user_nil_supplier,
-                                                  ledger_book_debit: @sys_user_nil_supplier_ledger_book_debit,
-                                                  ledger_book_credit: @sys_user_nil_supplier_ledger_book_credit,
-                                                  ledger_book_credit_total: @sys_user_nil_supplier_ledger_book_credit_total,
-                                                  ledger_book_debit_total: @sys_user_nil_supplier_ledger_book_debit_total,
-                                                  }
-    %>
+      <%= render partial: 'group_by_data', locals: { heading: 'Both',
+                                                    users: @sys_user_nil_both,
+                                                    ledger_book_debit: @sys_user_nil_both_ledger_book_debit,
+                                                    ledger_book_credit: @sys_user_nil_both_ledger_book_credit,
+                                                    ledger_book_credit_total: @sys_user_nil_both_ledger_book_credit_total,
+                                                    ledger_book_debit_total: @sys_user_nil_both_ledger_book_debit_total,
+                                                    }
+      %>
 
-    <%= render partial: 'group_by_data', locals: { heading: 'Both',
-                                                  users: @sys_user_nil_both,
-                                                  ledger_book_debit: @sys_user_nil_both_ledger_book_debit,
-                                                  ledger_book_credit: @sys_user_nil_both_ledger_book_credit,
-                                                  ledger_book_credit_total: @sys_user_nil_both_ledger_book_credit_total,
-                                                  ledger_book_debit_total: @sys_user_nil_both_ledger_book_debit_total,
-                                                  }
-    %>
+      <%= render partial: 'group_by_data', locals: { heading: 'MD-Investment',
+                                                    users: @sys_user_nil_md_investment,
+                                                    ledger_book_debit: @sys_user_nil_md_investment_ledger_book_debit,
+                                                    ledger_book_credit: @sys_user_nil_md_investment_ledger_book_credit,
+                                                    ledger_book_credit_total: @sys_user_nil_md_investment_ledger_book_credit_total,
+                                                    ledger_book_debit_total: @sys_user_nil_md_investment_ledger_book_debit_total,
+                                                    }
+      %>
 
-    <%= render partial: 'group_by_data', locals: { heading: 'MD-Investment',
-                                                  users: @sys_user_nil_md_investment,
-                                                  ledger_book_debit: @sys_user_nil_md_investment_ledger_book_debit,
-                                                  ledger_book_credit: @sys_user_nil_md_investment_ledger_book_credit,
-                                                  ledger_book_credit_total: @sys_user_nil_md_investment_ledger_book_credit_total,
-                                                  ledger_book_debit_total: @sys_user_nil_md_investment_ledger_book_debit_total,
-                                                  }
-    %>
+      <%= render partial: 'group_by_data', locals: { heading: 'Salesman',
+                                                    users: @sys_user_nil_sale_man,
+                                                    ledger_book_debit: @sys_user_nil_sale_man_ledger_book_debit,
+                                                    ledger_book_credit: @sys_user_nil_sale_man_ledger_book_credit,
+                                                    ledger_book_credit_total: @sys_user_nil_sale_man_ledger_book_credit_total,
+                                                    ledger_book_debit_total: @sys_user_nil_sale_man_ledger_book_debit_total,
+                                                    }
+      %>
 
-    <%= render partial: 'group_by_data', locals: { heading: 'Salesman',
-                                                  users: @sys_user_nil_sale_man,
-                                                  ledger_book_debit: @sys_user_nil_sale_man_ledger_book_debit,
-                                                  ledger_book_credit: @sys_user_nil_sale_man_ledger_book_credit,
-                                                  ledger_book_credit_total: @sys_user_nil_sale_man_ledger_book_credit_total,
-                                                  ledger_book_debit_total: @sys_user_nil_sale_man_ledger_book_debit_total,
-                                                  }
-    %>
+      <%= render partial: 'group_by_data', locals: { heading: 'Investor',
+                                                    users: @sys_user_nil_investor,
+                                                    ledger_book_debit: @sys_user_nil_investor_ledger_book_debit,
+                                                    ledger_book_credit: @sys_user_nil_investor_ledger_book_credit,
+                                                    ledger_book_credit_total: @sys_user_nil_investor_ledger_book_credit_total,
+                                                    ledger_book_debit_total: @sys_user_nil_investor_ledger_book_debit_total,
+                                                    }
+      %>
 
-    <%= render partial: 'group_by_data', locals: { heading: 'Investor',
-                                                  users: @sys_user_nil_investor,
-                                                  ledger_book_debit: @sys_user_nil_investor_ledger_book_debit,
-                                                  ledger_book_credit: @sys_user_nil_investor_ledger_book_credit,
-                                                  ledger_book_credit_total: @sys_user_nil_investor_ledger_book_credit_total,
-                                                  ledger_book_debit_total: @sys_user_nil_investor_ledger_book_debit_total,
-                                                  }
-    %>
+      <%= render partial: 'group_by_data', locals: { heading: 'LandLord',
+                                                    users: @sys_user_nil_landlord,
+                                                    ledger_book_debit: @sys_user_nil_landlord_ledger_book_debit,
+                                                    ledger_book_credit: @sys_user_nil_landlord_ledger_book_credit,
+                                                    ledger_book_credit_total: @sys_user_nil_landlord_ledger_book_credit_total,
+                                                    ledger_book_debit_total: @sys_user_nil_landlord_ledger_book_debit_total,
+                                                    }
+      %>
 
-    <%= render partial: 'group_by_data', locals: { heading: 'LandLord',
-                                                  users: @sys_user_nil_landlord,
-                                                  ledger_book_debit: @sys_user_nil_landlord_ledger_book_debit,
-                                                  ledger_book_credit: @sys_user_nil_landlord_ledger_book_credit,
-                                                  ledger_book_credit_total: @sys_user_nil_landlord_ledger_book_credit_total,
-                                                  ledger_book_debit_total: @sys_user_nil_landlord_ledger_book_debit_total,
-                                                  }
-    %>
+      <%= render partial: 'group_by_data', locals: { heading: 'Other',
+                                                    users: @sys_user_nil_other,
+                                                    ledger_book_debit: @sys_user_nil_other_ledger_book_debit,
+                                                    ledger_book_credit: @sys_user_nil_other_ledger_book_credit,
+                                                    ledger_book_credit_total: @sys_user_nil_other_ledger_book_credit_total,
+                                                    ledger_book_debit_total: @sys_user_nil_other_ledger_book_debit_total,
+                                                    }
+      %>
 
-    <%= render partial: 'group_by_data', locals: { heading: 'Other',
-                                                  users: @sys_user_nil_other,
-                                                  ledger_book_debit: @sys_user_nil_other_ledger_book_debit,
-                                                  ledger_book_credit: @sys_user_nil_other_ledger_book_credit,
-                                                  ledger_book_credit_total: @sys_user_nil_other_ledger_book_credit_total,
-                                                  ledger_book_debit_total: @sys_user_nil_other_ledger_book_debit_total,
-                                                  }
-    %>
+      <%= render partial: 'group_by_data', locals: { heading: 'Worker',
+                                                    users: @sys_user_nil_worker,
+                                                    ledger_book_debit: @sys_user_nil_worker_ledger_book_debit,
+                                                    ledger_book_credit: @sys_user_nil_worker_ledger_book_credit,
+                                                    ledger_book_credit_total: @sys_user_nil_worker_ledger_book_credit_total,
+                                                    ledger_book_debit_total: @sys_user_nil_worker_ledger_book_debit_total,
+                                                    }
+      %>
 
-    <%= render partial: 'group_by_data', locals: { heading: 'Worker',
-                                                  users: @sys_user_nil_worker,
-                                                  ledger_book_debit: @sys_user_nil_worker_ledger_book_debit,
-                                                  ledger_book_credit: @sys_user_nil_worker_ledger_book_credit,
-                                                  ledger_book_credit_total: @sys_user_nil_worker_ledger_book_credit_total,
-                                                  ledger_book_debit_total: @sys_user_nil_worker_ledger_book_debit_total,
-                                                  }
-    %>
-
-    <%= render partial: 'group_by_data', locals: { heading: 'Investment',
-                                                  users: @sys_user_nil_investment,
-                                                  ledger_book_debit: @sys_user_nil_investment_ledger_book_debit,
-                                                  ledger_book_credit: @sys_user_nil_investment_ledger_book_credit,
-                                                  ledger_book_credit_total: @sys_user_nil_investment_ledger_book_credit_total,
-                                                  ledger_book_debit_total: @sys_user_nil_investment_ledger_book_debit_total,
-                                                  }
-    %>
-  </div>
+      <%= render partial: 'group_by_data', locals: { heading: 'Investment',
+                                                    users: @sys_user_nil_investment,
+                                                    ledger_book_debit: @sys_user_nil_investment_ledger_book_debit,
+                                                    ledger_book_credit: @sys_user_nil_investment_ledger_book_credit,
+                                                    ledger_book_credit_total: @sys_user_nil_investment_ledger_book_credit_total,
+                                                    ledger_book_debit_total: @sys_user_nil_investment_ledger_book_debit_total,
+                                                    }
+      %>
+    </div>
+  <% end %>
 <% else %>
   <div>
     <%= render partial: 'group_by_data', locals: { heading: 'Customer',
@@ -420,194 +421,106 @@
 <p style="border-bottom: double 4px;  margin: 0;"></p>
 <h2 style="text-align: center; margin: 0;">Staff</h2>
 <p style="border-bottom: double 4px;  margin: 0;"></p>
-<h2 style="text-align: center; margin: 0;">Staff Payable</h2>
-<div >
-  <table>
-    <thead>
-      <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
-        <th>Status</th>
-        <th>Code</th>
-        <th>Name</th>
-        <th>Monthly/Wage</th>
-        <th>Department/Raw</th>
-        <th>Debit</th>
-        <th>Credit</th>
-        <th>Balance</th>
-        <th>Check</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @staff_payable.each do |staff| %>
-      <tr class="" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif" >
-        <td><%= staff.staff_type %></td>
-          <td>
-              <i class="fa fa-address-book"></i><%= staff.code %>
-          </td>
-          <td><%= staff.full_name %></td>
-          <td><%= staff.staff_salary_or_wage.to_f.round(2)%></td>
-          <td><%= staff.department.present? ? staff.department.title : ""%>:<%= staff.staff_raw_products.present? ? staff.staff_raw_products_titles : ""%></td>
-          <td>
-            <% debit_sum  = @staff_payable_ledger_book_debit[staff.id].to_d%>
-            <%= number_with_delimiter(debit_sum)%>
-          </td>
-          <td>
-            <% credit_sum = @staff_payable_ledger_book_credit[staff.id].to_d%>
-            <%= number_with_delimiter(credit_sum)%>
-          </td>
-          <td>
-            <% balance = staff.balance.to_f.round(2)%><%credit_debit = credit_sum-debit_sum%>
-            <%= number_with_delimiter(balance)%>
-          </td>
-          <td>
-            <% if balance == credit_debit%>
-              <i class="fa fa-check"></i>
-            <%else%>
-              <i class="fa fa-trash"></i>
-              <%=number_with_delimiter(balance-credit_debit)%>
-            <%end%>
-          </td>
-        </tr>
-      <% end %>
-      <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif" >
-        <td><h4>Total<h4></td>
-        <td><h4><%#=@staff_payable.count%></h4></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td><h4><%=@staff_payable.sum(:balance)%><h4></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-<h2 style="text-align: center; margin: 0;">Staff Reciveable</h2>
-<div >
-  <table>
-    <thead>
-      <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
-        <th>Status</th>
-        <th>Code</th>
-        <th>Name</th>
-        <th>Monthly/Wage</th>
-        <th>Department/Raw</th>
-        <th>Debit</th>
-        <th>Credit</th>
-        <th>Balance</th>
-        <th>Check</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @staff_reciveable.each do |staff| %>
-        <tr class="" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif" >
-          <td><%= staff.staff_type %></td>
-          <td>
-              <i class="fa fa-address-book"></i><%= staff.code %>
-          </td>
-          <td><%= staff.full_name %></td>
-          <td><%= staff.staff_salary_or_wage.to_f.round(2)%></td>
-          <td><%= staff.department.present? ? staff.department.title : ""%>:<%= staff.staff_raw_products.present? ? staff.staff_raw_products_titles : ""%></td>
-          <td>
-            <% debit_sum  = @staff_reciveable_ledger_book_debit[staff.id].to_d%>
-            <%= number_with_delimiter(debit_sum)%>
-          </td>
-          <td>
-            <% credit_sum = @staff_reciveable_ledger_book_credit[staff.id].to_d%>
-            <%= number_with_delimiter(credit_sum)%>
-          </td>
-          <td>
-            <% balance = staff.balance.to_f.round(2)%> <%credit_debit = credit_sum-debit_sum%>
-            <%= number_with_delimiter(balance)%>
-          </td>
-          <td>
-            <% if balance == credit_debit%>
-              <i class="fa fa-check"></i>
-              ok
-            <%else%>
-              <i class="fa fa-trash"></i>
-              <%=number_with_delimiter(balance-credit_debit)%>
-            <%end%>
-          </td>
-        </tr>
-      <% end %>
-      <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif" >
-        <td><h4>Total<h4></td>
-        <td><h4><%#=@staff_reciveable.count%></h4></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td><h4><%=@staff_reciveable.sum(:balance).abs%><h4></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-<h2 style="text-align: center; margin: 0;">Staff Nill</h2>
-<div >
-  <table>
-    <thead>
-      <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
-        <th>Status</th>
-        <th>Code</th>
-        <th>Name</th>
-        <th>Monthly/Wage</th>
-        <th>Department/Raw</th>
-        <th>Debit</th>
-        <th>Credit</th>
-        <th>Balance</th>
-        <th>Check</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @staff_nill.each do |staff| %>
-        <tr style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
-          <td><%= staff.staff_type %></td>
-          <td>
-              <i class="fa fa-address-book"></i><%= staff.code %>
-          </td>
-          <td><%= staff.full_name %></td>
-          <td><%= staff.staff_salary_or_wage.to_f.round(2)%></td>
-          <td><%= staff.department.present? ? staff.department.title : ""%>:<%= staff.staff_raw_products.present? ? staff.staff_raw_products_titles : ""%></td>
-          <td>
-            <% debit_sum  = @staff_nill_ledger_book_debit[staff.id].to_d%>
-            <%= number_with_delimiter(debit_sum)%>
-          </td>
-          <td>
-            <% credit_sum = @staff_nill_ledger_book_credit[staff.id].to_d%>
-            <%= number_with_delimiter(credit_sum)%>
-          </td>
-          <td>
-            <% balance = staff.balance.to_f.round(2)%><%credit_debit = credit_sum-debit_sum%>
-            <%= number_with_delimiter(balance)%>
-          </td>
-          <td>
-            <% if balance == credit_debit%>
-              <i class="fa fa-check"></i>
-              ok
-            <%else%>
-              <i class="fa fa-trash"></i>
-              <%=number_with_delimiter(balance-credit_debit)%>
-            <%end%>
-          </td>
-        </tr>
-      <% end %>
-      <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
-        <td><h4>Total<h4></td>
-        <td><h4><%#=@staff_nill.count%></h4></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td><h4><%=@staff_nill.sum(:balance).abs%><h4></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+  <% if params[:user_group_pdf].present? %>
+
+    <%= render partial: 'staffs_group_by_data', locals: { heading: 'Staff Payable',
+                                                          departments: @departments_for_staffs
+                                                  }
+    %>
+
+    <%= render partial: 'staffs_group_by_data', locals: { heading: 'Staff Recievable',
+                                                          departments: @departments_for_staffs
+                                                  }
+    %>
+
+    <%= render partial: 'staffs_group_by_data', locals: { heading: 'Staff Nill',
+                                                          departments: @departments_for_staffs
+                                                  }
+    %>
+  <% elsif params[:without_zero_pdf] %>
+    <%= render partial: 'staffs_group_by_data', locals: { heading: 'Staff Payable',
+                                                            departments: @departments_for_staffs
+                                                    }
+    %>
+
+    <%= render partial: 'staffs_group_by_data', locals: { heading: 'Staff Recievable',
+                                                          departments: @departments_for_staffs
+                                                  }
+    %>
+  <% else %>
+    <% @departments_for_staffs.each do |department| %>
+      <h2 style="text-align: center; margin: 0;"><%= department.title %></h2>
+      <div>
+        <table>
+          <thead>
+            <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
+              <th>Status</th>
+              <th>Code</th>
+              <th>Name</th>
+              <th>Monthly/Wage</th>
+              <th>Department/Raw</th>
+              <th>Debit</th>
+              <th>Credit</th>
+              <th>Balance</th>
+              <th>Check</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% total_balance = 0 %>
+            <% total_credit = 0 %>
+            <% total_debit = 0 %>
+            <% department&.staffs.each do |staff| %>
+              <tr class="" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif" >
+                <td><%= staff.staff_type %></td>
+                <td>
+                    <i class="fa fa-address-book"></i><%= staff.code %>
+                </td>
+                <td><%= staff.full_name %></td>
+                <td><%= staff.staff_salary_or_wage.to_f.round(2)%></td>
+                <td><%= staff.department.present? ? staff.department.title : ""%>:<%= staff.staff_raw_products.present? ? staff.staff_raw_products_titles : ""%></td>
+                <td>
+                  <% debit_sum  = staff&.staff_ledger_books&.sum(:debit) %>
+                  <% total_debit = total_debit.to_f + debit_sum.to_f %>
+                  <%= number_with_delimiter(debit_sum)%>
+                </td>
+                <td>
+                  <% credit_sum = staff&.staff_ledger_books&.sum(:debit) %>
+                  <% total_credit = total_credit.to_f + credit_sum.to_f %>
+                  <%= number_with_delimiter(credit_sum)%>
+                </td>
+                <td>
+                  <% balance = staff.balance.to_f.round(2)%>
+                  <% credit_debit = credit_sum.to_i - debit_sum.to_i %>
+                  <% total_balance = total_balance.to_i + balance.to_i %>
+                  <%= number_with_delimiter(balance)%>
+                </td>
+                <td>
+                  <% if balance == credit_debit%>
+                    <i class="fa fa-check"></i>
+                  <%else%>
+                    <i class="fa fa-trash"></i>
+                    <%=number_with_delimiter(balance-credit_debit)%>
+                  <%end%>
+                </td>
+              </tr>
+            <% end %>
+            <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif" >
+              <td><h4>Total<h4></td>
+              <td><h4></h4></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td><h4><%= number_with_delimiter(total_debit) %></h4></td>
+              <td><h4><%= number_with_delimiter(total_credit) %></h4></td>
+              <td><h4><%= number_with_delimiter(total_balance) %></h4></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    <% end %>
+  <% end %>
+
 <div class="alwaysbreak">
 <p style="border-bottom: double 4px;  margin: 0;"></p>
 <h2 style="text-align: center; margin: 0;">Accounts</h2>

@@ -14,7 +14,15 @@
     <%= f.hidden_field :user_name, value: current_user.id %>
     <%= f.hidden_field :status, value: 'UnClear' if params[:action] == 'new'%>
     <div class="col-lg-6 form-group float-left">
-      <%= f.select :account_id , options_from_collection_for_select(@accounts, 'id', 'title', (f.object&.account_id.present? ? f.object&.account_id : @account)),{prompt: "Select Account"},class: "form-control", required: true%>
+      <%= f.select :account_id , options_from_collection_for_select(@accounts, 'id', 'title', (f.object&.account_id.present? ? f.object&.account_id : @accounts.find_by(default_account: true)&.id)),{prompt: 'Select Account'},class: "form-control", required: true%>
+    </div>
+  </div>
+  <div class= 'row'>
+    <div class="col-lg-6 form-group">
+      <%= f.text_field :destination,  placeholder: "Purchased From", label: "Purchased From" %>
+    </div>
+    <div class="col-lg-6 form-group">
+      <%= f.text_field :l_c,  placeholder: "Deal Share", label: "Deal Share" %>
     </div>
   </div>
   <%  if params[:action] == 'new' %>
@@ -43,10 +51,10 @@
   </div>
   <div class= 'row'>
     <div class="col-lg-6 form-group">
-      <%= f.text_area :comment,  placeholder: "External Remarks", label: "External Remarks" %>
+      <%= f.number_field :remaining_balance,  placeholder: "Balanced Amount", label: "Balanced Amount", class: "text-field", id: "balance", readonly: true %>
     </div>
     <div class="col-lg-6 form-group">
-      <%= f.number_field :discount_price,  placeholder: "Discounted Price", label: "Discounted Price",  value: f.object&.discount_price || 0, class: "text-field", id: "discount", input_html: {value: 0.0}%>
+      <%= f.text_area :comment,  placeholder: "External Remarks", label: "External Remarks" %>
     </div>
   </div>
   <!-- follow _ups -->
@@ -76,11 +84,3 @@
   </div>
 <% end %>
 
-<script>
-  $(document).ready(function(){
-    $('.user-select-in-sale-deal').on('change', function(){
-      $('.disable-sys-users').attr('disabled', true)
-      $('.cms-data-fields-container').addClass('d-none')
-    })
-  })
-</script>

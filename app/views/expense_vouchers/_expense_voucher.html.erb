@@ -11,9 +11,9 @@
   <td class="urdu-font"><%= expense_voucher.comment %> <%=expense_voucher.expense_entry_vouchers.distinct.pluck(:comment) %></td>
   <td>
     <%if expense_voucher.created_at.strftime("%d%b%y")!=expense_voucher.updated_at.strftime("%d%b%y")%>
-      <%= expense_voucher.created_at.present? ? expense_voucher.created_at.strftime("%d%b%y at %H:%M%p") : '' %> | <%= expense_voucher.updated_at.present? ? expense_voucher.updated_at.strftime("%d%b%y at %H:%M%p") : '' %>
+      <%= expense_voucher.created_at.present? ? expense_voucher.created_at.strftime("%d%b%y , %H:%M%p") : '' %> | <%= expense_voucher.updated_at.present? ? expense_voucher.updated_at.strftime("%d%b%y , %H:%M%p") : '' %>
     <%else%>
-      <%= expense_voucher.created_at.present? ? expense_voucher.created_at.strftime("%A,  %d-%b-%y at %H:%M%p") : '' %>
+      <%= expense_voucher.created_at.present? ? expense_voucher.created_at.strftime("%d-%b-%y , %H:%M%p") : '' %>
     <%end%>
   </td>
   <td>

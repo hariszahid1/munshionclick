@@ -8,6 +8,12 @@
               <span class="link-text">Dashboard</span>
           <% end %>
         </li>
+        <li class="activ-link">
+            <a href="<%= attendances_path%>" class="activ-link">
+            <i class="fas fa-users"></i>
+            <span class="link-text">Attendance</span>
+            </a>
+        </li>
         <% if check_is_hidden_by_module('crms') %>
             <li class="activ-link">
               <a href="<%=crms_path%>" class="activ-link">
@@ -16,7 +22,10 @@
               </a>
             </li>
         <% end %>
-        <li>
+        <li class='position-relative'>
+            <% if @requested_deals&.positive?%>
+                <span class = "notification-dot my_blinker" style='top: 15px;position: absolute;right: 35px;'></span>
+            <% end %>
             <a href="#SaleSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                 <i class="fas fa fa-percent"></i>
                 <span class="link-text">Sale Deals</span>

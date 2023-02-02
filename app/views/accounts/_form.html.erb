@@ -37,7 +37,9 @@
     <div class="col-lg-12 form-group float-left">
       <%= f.select :user_id, options_from_collection_for_select(@users, 'id', 'user_name', f.object.user_id), {hide_label:true,prompt: "Select the User"}, class:"form-control chosen-select"%>
     </div>
-
+    <div class="col-lg-12 form-group float-left">
+      <%= f.check_box :default_account, class: "form-control", checked: f.object.default_account%>
+    </div>
     <div class="col-lg-12 form-group float-left">
      <%= f.file_field :profile_image %>
     </div>

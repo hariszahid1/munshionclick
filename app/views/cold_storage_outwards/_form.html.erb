@@ -5,12 +5,6 @@
           <div class="col mr-2">
             <div class="row">
                 <div class="col-lg-4 form-group float-left">
-                  <div class="col-lg-3 form-group float-left">
-                    <%= link_to new_purchase_sale_detail_path(transaction_type: :sale, with_gst: true,product: true), class: "btn btn-success col-lg-12" do %>
-                      <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                      with GST
-                    <% end %>
-                  </div>
                   <h2>
                     <%if params[:transaction_type].present?%>
                     <%= (params[:transaction_type].present?) ? "New Sale # "+(PurchaseSaleDetail.maximum(:id).present? ? PurchaseSaleDetail.maximum(:id).next : 1).to_s : "New Purchase # "+(PurchaseSaleDetail.maximum(:id).present? ? PurchaseSaleDetail.maximum(:id).next : 1).to_s%> /
@@ -25,9 +19,6 @@
                   </h2>
                 </div>
                 <div class="col-lg-2 form-group float-left font-weight-bold">New Balance <h2 class="newBalance1">0.00</h2></div>
-                <div class="col-lg-2 form-group float-left font-weight-bold">Total Bill <h2 class="purchase_sale_detail_total_bill totalBill">0.00</h2></div>
-                <div class="col-lg-2 form-group float-left font-weight-bold">Total <h2 class="purchase_sale_discount_amount">0.00</h2></div>
-                <div class="col-lg-2 form-group float-left font-weight-bold">Remaning <h2 class="purchase_sale_detail_amount">0.00</h2></div>
             </div>
           </div>
         </div>
@@ -67,7 +58,7 @@
                 <%= f.hidden_field :transaction_type, value: 'OutWard', class: 'inward-outward-field'%>
                 <%= f.select :status, PurchaseSaleDetail.statuses.map { |key, value| [key.humanize, key] },{hide_label:true,class: "form-control", required: true} %>
               </div>
-              <div class="col-lg-2 form-group float-left font-weight-bold"><%= f.select :sys_user_id, options_from_collection_for_select(@suppliers, 'id', 'name', f.object.sys_user_id), {label:'User',prompt: "Select the Supplier"}, required: true,:class=>"form-control chosen-select",onchange:"set_sys_user_balance(this.value,'sys_user_balance')",onkeyup:"set_sys_user_balance(this.value,'sys_user_balance')" %></div>
+              <div class="col-lg-2 form-group float-left font-weight-bold"><%= f.select :sys_user_id, options_from_collection_for_select(@suppliers, 'id', 'name', f.object.sys_user_id), {label:'User',prompt: "Select the Supplier"}, required: true,:class=>"form-control chosen-select outward-party-name",onchange:"set_sys_user_balance(this.value,'sys_user_balance')",onkeyup:"set_sys_user_balance(this.value,'sys_user_balance')" %></div>
               <div class="col-lg-2 form-group float-left font-weight-bold">
                 <%= f.select :order_id, options_from_collection_for_select(@orders, 'id', ->(st){"#{st.id} \u{27F6} #{st.total_bill} "}, f.object.order_id), {prompt: "Select the Order"},class: "form-control"%>
               </div>
@@ -97,16 +88,25 @@
                 <h5>Marka</h5>
               </div>
               <div class="col-lg-2 form-group float-left">
-                <h5>Builty No.</h5>
-              </div>
-              <div class="col-lg-2 form-group float-left">
-                <h5>Vehicle</h5>
-              </div>
-              <div class="col-lg-2 form-group float-left">
                 <h5>Challan No</h5>
               </div>
               <div class="col-lg-1 form-group float-left">
                 <h5>Stock</h5>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <h5>Remaining Stock</h5>
+              </div>
+              <div class="col-lg-1 form-group float-left">
+                <h5>Room No.</h5>
+              </div>
+              <div class="form-group">
+                <%= search_field_tag :room_count, {}, class:'add-outward-room', style:"width: 50px;" %>
+              </div>
+              <div class="col-lg-1 form-group float-left">
+                <h5>Rack No.</h5>
+              </div>
+              <div class="form-group">
+                <%= search_field_tag :rack_count, {}, class:'add-outward-rack', style:"width: 50px;" %>
               </div>
             </div>
             <%= f.fields_for :purchase_sale_items do |purchase_sale_item| %>
@@ -132,6 +132,20 @@
               <div class="col-lg-6 form-group float-left font-weight-bold">
                 <%= f.datetime_select :created_at,{},class: "form-control"%>
               </div>
+              <div class="col-lg-2 form-group float-left font-weight-bold"><%= f.select :staff_id, options_from_collection_for_select(@staffs, 'id', 'name', f.object.staff_id), {prompt: "Select the Loader"},class: "form-control"%></div>
+              <div class="col-lg-2 form-group float-left font-weight-bold">
+                <label class="required" for="purchase_sale_detail_carriage_value">Carriage</label>
+                <input onchange = "outwardCarriageCostUpdate()" onkeyup = "outwardCarriageCostUpdate()" class="form-control valid" type="number" value="0.0" id="outward_purchase_sale_detail_carriage_value" aria-invalid="false">
+                <%= f.number_field :carriage, onchange: "outwardCarriageUpdate()", hide_label:true, onkeyup: "outwardCarriageUpdate()", id: "outward_purchase_sale_detail_carriage", required: true %>
+              </div>
+              <div class="col-lg-2 form-group float-left font-weight-bold">
+                <label class="required" for="purchase_sale_detail_loading_value">Loading</label>
+                <input onchange = "outwardCarriageCostUpdate()" onkeyup = "outwardCarriageCostUpdate()" class="form-control valid" type="number" value="0.0" id="outward_purchase_sale_detail_loading_value" aria-invalid="false">
+                <%= f.number_field :loading, onchange: "outwardCarriageUpdate()", hide_label:true, onkeyup: "outwardCarriageUpdate()", id: "outward_purchase_sale_detail_loading", required: true %>
+              </div>
+              <div class="col-lg-6 form-group float-left font-weight-bold">
+                <%= f.text_area :comment%>
+              </div>
             </div>
             <div class="row">
               <div class="actions col-lg-6 form-group float-left font-weight-bold">
@@ -151,3 +165,25 @@
     </div>
   </div>
 <% end%>
+
+
+<script>
+$(document).ready(function(){
+    $('.add-outward-room').on('keypress', e => {
+        if (e.keyCode == 13) {
+          var room = $('.add-outward-room').val()
+          $('.outward-room-num').val(room)
+          return false;
+        }
+    });
+
+    $('.add-outward-rack').on('keypress', e => {
+        if (e.keyCode == 13) {
+          var room = $('.add-outward-rack').val()
+          $('.outward-rack-num').val(room)
+          return false;
+        }
+    });
+
+})
+</script>
