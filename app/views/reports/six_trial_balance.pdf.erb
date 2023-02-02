@@ -38,8 +38,8 @@
         <td><%= number_with_delimiter(@sys_user_ledger_book_debit_opening[sys_user.id].to_f) %></td>
         <td><%= number_with_delimiter(@sys_user_ledger_book_credit_current[sys_user.id].to_f) %></td>
         <td><%= number_with_delimiter(@sys_user_ledger_book_debit_current[sys_user.id].to_f) %></td>
-        <td><%= number_with_delimiter(@sys_user_ledger_book_credit_closing[sys_user.id].to_f) %></td>
-        <td><%= number_with_delimiter(@sys_user_ledger_book_debit_closing[sys_user.id].to_f) %></td>
+        <td><%= number_with_delimiter(@sys_user_ledger_book_credit_closing[sys_user.id].to_f.zero? ? @sys_user_ledger_book_credit_current[sys_user.id].to_f : @sys_user_ledger_book_credit_closing[sys_user.id].to_f ) %></td>
+        <td><%= number_with_delimiter(@sys_user_ledger_book_debit_closing[sys_user.id].to_f.zero? ? @sys_user_ledger_book_debit_current[sys_user.id].to_f : @sys_user_ledger_book_debit_closing[sys_user.id].to_f ) %></td>
       </tr>
     <% end %>
     <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif" >
@@ -49,8 +49,8 @@
       <td><h4><%= number_with_delimiter(@sys_user_ledger_book_debit_opening_total)  %></h4></td>
       <td><h4><%= number_with_delimiter(@sys_user_ledger_book_credit_current_total)  %></h4></td>
       <td><h4><%= number_with_delimiter(@sys_user_ledger_book_debit_current_total)  %></h4></td>
-      <td><h4><%= number_with_delimiter(@sys_user_ledger_book_credit_closing_total)  %></h4></td>
-      <td><h4><%= number_with_delimiter(@sys_user_ledger_book_debit_closing_total)  %></h4></td>
+      <td><h4><%= number_with_delimiter(@sys_user_ledger_book_credit_closing_total.to_f.zero? ? @sys_user_ledger_book_credit_current_total : @sys_user_ledger_book_credit_closing_total )  %></h4></td>
+      <td><h4><%= number_with_delimiter(@sys_user_ledger_book_debit_closing_total.to_f.zero? ? @sys_user_ledger_book_debit_current_total : @sys_user_ledger_book_debit_closing_total )  %></h4></td>
     </tr>
   </tbody>
 </table>
@@ -80,8 +80,8 @@
         <td><%= number_with_delimiter(@staff_ledger_book_debit_opening[staff.id].to_f) %></td>
         <td><%= number_with_delimiter(@staff_ledger_book_credit_current[staff.id].to_f) %></td>
         <td><%= number_with_delimiter(@staff_ledger_book_debit_current[staff.id].to_f) %></td>
-        <td><%= number_with_delimiter(@staff_ledger_book_credit_closing[staff.id].to_f) %></td>
-        <td><%= number_with_delimiter(@staff_ledger_book_debit_closing[staff.id].to_f) %></td>
+        <td><%= number_with_delimiter(@staff_ledger_book_credit_closing[staff.id].to_f.zero? ? @staff_ledger_book_credit_current[staff.id].to_f : @staff_ledger_book_credit_closing[staff.id].to_f) %></td>
+        <td><%= number_with_delimiter(@staff_ledger_book_debit_closing[staff.id].to_f.zero? ? @staff_ledger_book_debit_current[staff.id].to_f : @staff_ledger_book_debit_closing[staff.id].to_f ) %></td>
       </tr>
     <% end %>
     <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif" >
@@ -91,8 +91,8 @@
       <td><h4><%= number_with_delimiter(@staff_ledger_book_debit_opening_total)  %></h4></td>
       <td><h4><%= number_with_delimiter(@staff_ledger_book_credit_current_total)  %></h4></td>
       <td><h4><%= number_with_delimiter(@staff_ledger_book_debit_current_total)  %></h4></td>
-      <td><h4><%= number_with_delimiter(@staff_ledger_book_credit_closing_total)  %></h4></td>
-      <td><h4><%= number_with_delimiter(@staff_ledger_book_debit_closing_total)  %></h4></td>
+      <td><h4><%= number_with_delimiter(@staff_ledger_book_credit_closing_total.to_f.zero? ? @staff_ledger_book_credit_current_total : @staff_ledger_book_credit_closing_total)  %></h4></td>
+      <td><h4><%= number_with_delimiter(@staff_ledger_book_debit_closing_total.to_f.zero? ? @staff_ledger_book_debit_current_total : @staff_ledger_book_debit_closing_total)  %></h4></td>
     </tr>
   </tbody>
 </table>
@@ -122,8 +122,8 @@
         <td><%= number_with_delimiter(@account_debit_opening[account.id].to_f) %></td>
         <td><%= number_with_delimiter(@account_credit_current[account.id].to_f) %></td>
         <td><%= number_with_delimiter(@account_debit_current[account.id].to_f) %></td>
-        <td><%= number_with_delimiter(@account_credit_closing[account.id].to_f) %></td>
-        <td><%= number_with_delimiter(@account_debit_closing[account.id].to_f) %></td>
+        <td><%= number_with_delimiter(@account_credit_closing[account.id].to_f.zero? ? @account_credit_current[account.id].to_f : @account_credit_closing[account.id].to_f ) %></td>
+        <td><%= number_with_delimiter(@account_debit_closing[account.id].to_f.zero? ? @account_debit_current[account.id].to_f : @account_debit_closing[account.id].to_f.zero? ) %></td>
       </tr>
     <% end %>
     <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif" >
@@ -133,8 +133,8 @@
       <td><h4><%= number_with_delimiter(@account_debit_opening_total)  %></h4></td>
       <td><h4><%= number_with_delimiter(@account_credit_current_total)  %></h4></td>
       <td><h4><%= number_with_delimiter(@account_debit_current_total)  %></h4></td>
-      <td><h4><%= number_with_delimiter(@account_credit_closing_total)  %></h4></td>
-      <td><h4><%= number_with_delimiter(@account_debit_closing_total)  %></h4></td>
+      <td><h4><%= number_with_delimiter(@account_credit_closing_total.to_f.zero? ? @account_credit_current_total : @account_credit_closing_total )  %></h4></td>
+      <td><h4><%= number_with_delimiter(@account_debit_closing_total.to_f.zero? ? @account_debit_current_total : @account_debit_closing_total ) %></h4></td>
     </tr>
   </tbody>
 </table>
