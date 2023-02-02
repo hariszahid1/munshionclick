@@ -484,7 +484,7 @@
                   <%= number_with_delimiter(debit_sum)%>
                 </td>
                 <td>
-                  <% credit_sum = staff&.staff_ledger_books&.sum(:debit) %>
+                  <% credit_sum = staff&.staff_ledger_books&.sum(:credit) %>
                   <% total_credit = total_credit.to_f + credit_sum.to_f %>
                   <%= number_with_delimiter(credit_sum)%>
                 </td>
@@ -496,10 +496,10 @@
                 </td>
                 <td>
                   <% if balance == credit_debit%>
-                    <i class="fa fa-check"></i>
+                    ok
                   <%else%>
                     <i class="fa fa-trash"></i>
-                    <%=number_with_delimiter(balance-credit_debit)%>
+                    <%=number_with_delimiter(balance.to_f-credit_debit.to_f)%>
                   <%end%>
                 </td>
               </tr>
