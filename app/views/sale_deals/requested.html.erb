@@ -26,7 +26,7 @@
         <tr>
           <td><%= sale_deal.created_at.strftime('%d/%m/%y at %I:%M%p')%></td>
           <td>
-            <%= @all_agents.to_h.invert[sale_deal&.sys_user&.credit_status].to_s%>
+		        <%= @all_agents.to_h.invert[sale_deal&.user_name.to_i].to_s%>
           </td>
           <td><%= sale_deal&.sys_user&.cms_data&.try(:[], 'project_name')&.titleize %></td>
           <td><%= sale_deal&.sys_user&.cms_data&.try(:[], 'category')&.titleize %></td>
