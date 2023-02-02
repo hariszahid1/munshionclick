@@ -292,8 +292,8 @@ class ReportsController < ApplicationController
 
   def six_trial_balance
 
-    from_date = params[:q][:created_at_lteq]
-    to_date = params[:q][:created_at_gteq]
+    from_date = params[:q][:created_at_lteq].to_date.beginning_of_day
+    to_date = params[:q][:created_at_gteq].to_date.end_of_day
 
     #sys_users_data
     @sys_users = SysUser.all.order(['user_group asc', 'name asc'])

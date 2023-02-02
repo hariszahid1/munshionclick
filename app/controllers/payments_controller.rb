@@ -5,6 +5,7 @@ class PaymentsController < ApplicationController
   # GET /payments
   # GET /payments.json
   def index
+    @account_ids = Account.where(id: current_user&.extra_settings.try(:[], 'account_ids'))
     @start_date = Date.today.prev_occurring(:thursday)
     @end_date = DateTime.now
     if params[:q].present?
@@ -33,7 +34,11 @@ class PaymentsController < ApplicationController
       @payments = @q.result
       @account = Account.where(id: @payments.pluck(:account_id)).pluck(:title).join(',')
     else
-      @payments = @q.result.page(params[:page]).per(50)
+      if @account_ids.present?
+        @payments = @q.result.where(account_id: @account_ids).page(params[:page]).per(50)
+      else
+        @payments = @q.result.page(params[:page]).per(50)
+      end
     #  @t_dabit=@payments.sum(:debit)
     end
 

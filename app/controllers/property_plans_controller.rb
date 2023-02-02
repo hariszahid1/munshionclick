@@ -98,14 +98,16 @@ class PropertyPlansController < ApplicationController
     @orders = Order.all
     respond_to do |format|
       format.js
+      format.html
     end
   end
-  
+
   # GET /property_plans/1/edit
   def edit
     @orders = Order.all
     respond_to do |format|
       format.js
+      format.html
     end
   end
 
