@@ -249,8 +249,8 @@
             <td><%= number_with_delimiter(staff.advance_amount.to_f.round(2)) %><%#@advance += staff.advance_amount.to_f.round(2) %></td>
             <td><%= number_with_delimiter(staff.wage_debit.to_f.round(2)) %><% @short_pay += staff.wage_debit.to_f.round(2) %></td>
             <td>
-            <div class="icon-container">
-                <span class="mt-2 mr-1"><%= number_with_delimiter(staff.balance.to_f.round(2)) %><% @balance += staff.balance.to_f.round(2) %></span>
+              <div class="float-left"><%= number_with_delimiter(staff.balance.to_f.round(2)) %><% @balance += staff.balance.to_f.round(2) %></div>
+              <div class="icon-container float-right">
                 <%if staff.balance.to_f > 0  %>
                   <div class="my-icon my-view float-right">
                     <div class="my-tooltip text-primary">
