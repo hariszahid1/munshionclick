@@ -200,9 +200,9 @@
             <td class="urdu-font"><%= expense.comment %> <%=expense.expense_entries.distinct.pluck(:comment) %></td>
             <td>
               <%if expense.created_at.strftime("%d%b%y")!=expense.updated_at.strftime("%d%b%y")%>
-                <%= expense.created_at.present? ? expense.created_at.strftime("%d%b%y , %H:%M%p") : '' %> | <%= expense.updated_at.present? ? expense.updated_at.strftime("%d%b%y , %H:%M%p") : '' %>
+                <%= expense.created_at.present? ? expense.created_at.strftime("%d%b%y , %I:%M") : '' %> | <%= expense.updated_at.present? ? expense.updated_at.strftime("%d%b%y , %I:%M") : '' %>
               <%else%>
-                <%= expense.created_at.present? ? expense.created_at.strftime("%d-%b-%y , %H:%M%p") : '' %>
+                <%= expense.created_at.present? ? expense.created_at.strftime("%d%b%y , %I:%M") : '' %>
               <%end%>
             </td>
             <td>

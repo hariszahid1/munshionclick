@@ -106,7 +106,7 @@
                   <td><%= number_with_delimiter(daily_sale.sale.to_f.round(2)) %><% @total_sale+=daily_sale.sale.to_f.round(2)%></td>
                   <td><%= number_with_delimiter(daily_sale.cash_out.to_f.round(2)) %><% @total_cash+=daily_sale.cash_out.to_f.round(2)%></td>
                   <td><%= daily_sale.shift %></td>
-                  <td><%= daily_sale.created_at.strftime("%d %B %Y") %> || <%= daily_sale.comment %></td>
+                  <td><%= daily_sale.created_at.strftime("%d%b%y , %I:%M") %> || <%= daily_sale.comment %></td>
                   <td></td>
                   <td class="p-3">
                   <div class="icon-container-1">

@@ -7,9 +7,9 @@
   <td><span title="<%= investment.comment %>" class='truncate-text'><%= investment.comment %></span></td>
   <td>
     <%if investment.created_at.strftime("%d%b%y")!=investment.updated_at.strftime("%d%b%y")%>
-      <%= investment.created_at.present? ? investment.created_at.strftime("%d-%b-%y , %H:%M%p") : '' %> | <%= investment.updated_at.present? ? investment.updated_at.strftime("%d-%b-%y , %H:%M%p") : '' %>
+      <%= investment.created_at.present? ? investment.created_at.strftime("%d%b%y , %I:%M") : '' %> | <%= investment.updated_at.present? ? investment.updated_at.strftime("%d%b%y , %I:%M") : '' %>
     <%else%>
-      <%= investment.created_at.present? ? investment.created_at.strftime("%d-%b-%y , %H:%M%p") : '' %>
+      <%= investment.created_at.present? ? investment.created_at.strftime("%d%b%y , %I:%M") : '' %>
     <%end%>
   </td>
   <td class="p-3">

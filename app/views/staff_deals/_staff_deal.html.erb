@@ -34,7 +34,7 @@
             <%= booking.sys_user.contact.phone_with_comma%>
           </li>
           <li class="list-group-item">
-            <%= ("<b>Last Payment Date: </b></br>"+booking&.sys_user&.ledger_books&.last&.created_at&.strftime("%d%b%y at %I:%M%p")).html_safe if booking.present?%>
+            <%= ("<b>Last Payment Date: </b></br>"+booking&.sys_user&.ledger_books&.last&.created_at&.strftime("%d%b%y , %I:%M")).html_safe if booking.present?%>
           </li>
         <%else%>
           <span>
@@ -54,7 +54,7 @@
               <%= booking.sys_user.contact.phone_with_comma%>
             </li>
             <li class="list-group-item">
-              <%= ("<b>Last Payment Date: </b></br>"+booking&.sys_user&.ledger_books&.last&.created_at&.strftime("%d%b%y at %I:%M%p")).html_safe if booking.present?%>
+              <%= ("<b>Last Payment Date: </b></br>"+booking&.sys_user&.ledger_books&.last&.created_at&.strftime("%d%b%y , %I:%M")).html_safe if booking.present?%>
               <b>Booking-Canceled</b>
             </li>
           </span>

@@ -262,7 +262,7 @@
                         <%=booking.sys_user&.ledger_books&.pluck('SUM(debit)','SUM(credit)').map { |sys| "<br> <b>Total:</b> "+ number_with_delimiter(sys.first.to_s) + " <b>Paid:</b> "+ number_with_delimiter(sys.second.to_s) +" <b>In %</b> "+((sys.second.to_f/sys.first.to_f)*100).round(2).to_s+" <br><b>Remaining:</b> "+ number_with_delimiter((sys.first.to_i-sys.second.to_i).to_s)+" <b>Commission:</b> "+token&.carriage.to_s+"<b> In % </b>"+((token&.carriage.to_f/sys.first.to_f)*100).round(2).to_s}.join(',').html_safe%>
                       <%end%>
                       <%=booking.sys_user.contact.phone_with_comma%>
-                      <%= ("<br><b>Last Payment Date: </b>"+booking&.sys_user&.ledger_books&.last&.created_at&.strftime("%d/%b/%y , %I:%M%p")).html_safe if booking.present?%>
+                      <%= ("<br><b>Last Payment Date: </b>"+booking&.sys_user&.ledger_books&.last&.created_at&.strftime("%d%b%y , %I:%M")).html_safe if booking.present?%>
                     <%else%>
                       <span>
                         <b>Booking-Canceled</b>
@@ -271,7 +271,7 @@
                           <%=booking.sys_user.ledger_books.pluck('SUM(debit)','SUM(credit)').map { |sys| "<br> <b>Total:</b> "+ number_with_delimiter(sys.first.to_s) +" <b>Paid:</b> "+ number_with_delimiter(sys.second.to_s) +" <b>In %</b> "+((sys.second/sys.first)*100).round(2).to_s+"<br><b>Remaining:</b> "+ number_with_delimiter((sys.first.to_i-sys.second.to_i).to_s) +" <b>Commission:</b> "+token&.carriage.to_s+"<b> In % </b>"+((token&.carriage.to_f/sys.first)*100).round(2).to_s}.join(',').html_safe%>
                         <%end%>
                         <%=booking.sys_user.contact.phone_with_comma%>
-                        <%= ("<br><b>Last Payment Date: </b>"+booking&.sys_user&.ledger_books&.last&.created_at&.strftime("%d/%b/%y , %I:%M%p")).html_safe if booking.present?%>
+                        <%= ("<br><b>Last Payment Date: </b>"+booking&.sys_user&.ledger_books&.last&.created_at&.strftime("%d%b%y , %I:%M")).html_safe if booking.present?%>
                         <b>Booking-Canceled</b>
                       </span>
                     <%end%>
