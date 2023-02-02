@@ -108,21 +108,24 @@ function mobile_serail_number_return(value){
   }
   function save_mobile_sale()
   {
+    return_type=true;
     if($("#pos_setting_sys_type").val()=="MobileShop"){
       var serial_fields = $('.serial_no');
       var quantity_fields = $('.quantity-price')
-      for(var i = 0; i < serial_fields.length; i++){
-        // var value = $.trim($(serial_fields[i]).val());
-        var q_field = parseInt($(quantity_fields[i]).val())
-        var s_field = $(serial_fields[i]).val().split('\n').filter(function (e) { return e.trim(); }).length;
-        if(q_field != s_field)
-        {
-          window.alert("Please Match the Quantity and Serial Number!")
-          return false;
+      for(var j=0; j< quantity_fields.length; j++)
+      {
+        var q_product = $('.product')[j].value;
+        var q_field = parseInt($(quantity_fields[j]).val())
+        for(var i = 0; i < serial_fields.length; i++){
+          var s_product = $('.product-warranty')[i].value
+          var s_field = $(serial_fields[i]).val().split('\n').filter(function (e) { return e.trim(); }).length;
+          if(q_product == s_product && q_field != s_field)
+          {
+            window.alert("Please Match the Quantity and Serial Number!");return_type = false;
+          }
         }
-      }
     }
-    return_type=true;
+    }
     if($("#pos_setting_sys_type").val()!="HousingScheme")
     {
       if ($(".stock").length>0)
@@ -136,14 +139,18 @@ function mobile_serail_number_return(value){
     $(".product").each(function( index ) {
         product_detail = $('.product')[index].value
       if (window.location.href.split('transaction_type=sale').length>1)
-        {product_detail_value = $("#"+$('.product')[index].id).parent().parent().next().next().children().children()[1].value}
-      else {product_detail_value = $("#"+$('.product')[index].id).parent().parent().next().children().children()[1].value}
+      {
+        product_detail_value = $("#"+$('.product')[index].id).parent().parent().next().next().children().children()[1].value
+      }
+      else {
+        product_detail_value = $("#"+$('.product')[index].id).parent().parent().next().children().children()[1].value
+      }
         $(".product-warranty").each(function( index ) {
             product_war_detail = $('.product-warranty')[index].value
             product_war_detail_value = $("#"+$('.product-warranty')[index].id).parent().parent().next().children().next('span:first').text()
             if (product_war_detail==product_detail && parseInt(product_detail_value)!=parseInt(product_war_detail_value) && product_detail != '')
             {
-          //window.alert("Please Match the Quantity and Serial Number!");return_type = false;
+           //window.alert("Please Match the Quantity and Serial Number!");return_type = false;
         }
         });
     });
