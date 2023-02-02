@@ -652,6 +652,7 @@ function expenseUpdate(){
       $(".expense_total_bill").text($("#expense_expense").val());
     }
   }
+  price_in_words($("#expense_expense").val(), 'price_in_words')
 }
 
 function carriageCostUpdate(){

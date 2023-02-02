@@ -9,4 +9,5 @@ function expenseVoucherUpdate(){
       $(".expense_voucher_total_bill").text($("#expense_voucher_amount").val());
     }
   }
+  price_in_words($("#expense_voucher_amount").val(), 'price_in_words')
 }

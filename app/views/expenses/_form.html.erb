@@ -23,12 +23,13 @@
       </div>
 
       <div class="col">
-        <div class="row">
-        </div>
         <div class="row p-5 ml-5">
           <h2 style="font-size: 50px">Total Expense:</h2>
           <%= f.hidden_field :expense%>
           <h2 class="expense_total_bill ml-3" style="font-size: 50px">0.00</h2>
+        </div>
+        <div class="row p-5 ml-5">
+            <h5>Payment in Words: <span id="price_in_words" style="font-size:20px;color:blue;">0.0</span></h5>
         </div>
       </div>
       <% if params['expense_id'].present? %>
