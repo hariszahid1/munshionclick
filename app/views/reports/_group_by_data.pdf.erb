@@ -33,14 +33,14 @@
               <%= number_with_delimiter(credit_sum)%>
             </td>
             <td>
-              <% balance = sys_user.balance %> <%credit_debit = credit_sum-debit_sum%>
+              <% balance = sys_user.balance %> <%credit_debit = credit_sum.to_f-debit_sum.to_f%>
               <%= number_with_delimiter(balance)%>
             </td>
             <td>
               <% if balance == credit_debit%>
                 ok
               <%else%>
-                <%= number_with_delimiter(balance-credit_debit)%>
+                <%= number_with_delimiter(balance.to_f-credit_debit.to_f)%>
               <%end%>
             </td>
           </tr>
