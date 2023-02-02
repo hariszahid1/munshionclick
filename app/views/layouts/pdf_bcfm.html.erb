@@ -33,7 +33,7 @@
   <% if @pos_setting&.header.present? %>
     <div class="header" style="height: <%=@pos_setting.header_hieght%>px; <%=@pos_setting.header_style%> ">
       <div class="<%= @pos_setting.header_logo_placement%>_text">
-        <h1 style="padding-top: <%=@pos_setting.title_padding%>px; <%=@pos_setting.title_style%>" > <%=admin_name_on_nav if admin_name_on_nav.present?%></h1>
+        <h3 style="padding-top: <%=@pos_setting.title_padding%>px; <%=@pos_setting.title_style%>" > <%=admin_name_on_nav if admin_name_on_nav.present?%></h3>
       </div>
     </div>
   <% end %>
