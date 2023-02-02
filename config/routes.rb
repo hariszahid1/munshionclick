@@ -255,6 +255,8 @@ Rails.application.routes.draw do
   resources :notes, only: %i[create new]
   resources :follow_ups
   resources :countries
+  resources :attendances
+
   resources :expense_types
   resources :expenses do
     collection do

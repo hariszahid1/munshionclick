@@ -113,7 +113,7 @@ class SaleDealsController < ApplicationController
     @category = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['category']&.map(&:downcase) : []
     @staffs = Staff.all
     @sys_users = SysUser.all.where(for_crms: [false, nil])
-    @accounts = Account.all
+    @accounts = current_user&.super_admin? ? Account.all : Account.where(id: current_user.extra_settings['account_ids'])
     @products = Product.all
     created_by_ids = current_user.created_by_ids_list_to_view
     @all_agents = User.where('company_type=? or created_by_id=?', current_user.company_type, created_by_ids).pluck(:name,
