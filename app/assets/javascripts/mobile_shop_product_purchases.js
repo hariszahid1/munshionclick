@@ -125,6 +125,10 @@ function mobile_serail_number_return(value){
           }
         }
     }
+    if (return_type == false)
+    {
+      return false
+    }
     }
     if($("#pos_setting_sys_type").val()!="HousingScheme")
     {
