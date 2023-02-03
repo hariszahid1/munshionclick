@@ -166,7 +166,7 @@
           <td><%= sys_user.occupation %></td>
           <td><b><%= number_with_delimiter sys_user.opening_balance %></b></td>
           <td><b><%= number_with_delimiter sys_user.balance %><%@sys_user_balance += sys_user.balance.abs %></b> </td>
-          <td><%= date.strftime("%d/%b/%y , %I:%M%p") %> </td>
+          <td><%= date.strftime("%d%b%y , %I:%M") %> </td>
           <td>
            <div class="icon-container-1">
                 <div class="my-icon-1 my-view-1">
