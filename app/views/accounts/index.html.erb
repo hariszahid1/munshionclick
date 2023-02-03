@@ -170,7 +170,7 @@
         <th><%= sort_link(@q, :title, 'Title') %></th>
         <th><%= sort_link(@q, :bank_name, 'Bank') %></th>
         <th><%= sort_link(@q, :amount, 'Balance') %></th>
-        <th class="border_none">Action</th>
+        <th class="border_none"><span class="ml-5">Action</span></th>
       </tr>
     </thead>
 
@@ -192,8 +192,8 @@
           </td>
           <td class="urdu-font"><%= account.bank_name %></td>
           <td>
-          <span class="mt-2 mr-1"><%= number_with_delimiter(account.amount.to_f.round(2)) %></span>
-          <div class="icon-container">
+          <div class="float-left"><%= number_with_delimiter(account.amount.to_f.round(2)) %></div>
+          <div class="icon-container float-right">
                 <%if account.amount.to_f < 0  %>
                   <div class="my-icon my-view float-right">
                     <div class="my-tooltip text-primary">
@@ -227,7 +227,7 @@
               </div>
           </td>
 				<td>
-        <div class="icon-container-1">
+        <div class="icon-container-1 ml-5">
           <div class="my-icon-1 my-view-1">
             <div class="my-tooltip-1">
               <div class="icon-container">

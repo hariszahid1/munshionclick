@@ -1,13 +1,6 @@
 <nav id="sidebar" class="col-lg-2 col-4 p-0">
   <% if can?(:view, :sys_user) %>
-    <div class="input-group">
-      <div class="input-group-prepend">
-        <span class="input-group-text bg-dark text-light" style="border: none !important; padding-right: 0; font-size: 20px; color: white;">
-          <i class="fas fa-search" style="border: none !important; font-size: 20px; color: white;"></i>
-        </span>
-      </div>
-      <input type="text" id="search-bar" class="form-control bg-dark text-light p-3" style="border: none !important; font-size: 20px; color: white;" placeholder="Search">
-    </div>
+    <input type="text" id="search-bar" class="form-control mt-2 bg-dark text-light" style="border-radius: 20px" placeholder="Search">
     <ul class="list-unstyled components" id="mylist">
       <li class="activ-link mt-2">
         <%= link_to dashboard_path, class:"activ-link" do%>
@@ -15,16 +8,16 @@
             <span class="link-text ml-1">Dashboard</span>
         <% end %>
       </li>
-      <p class="mt-4 mb-3 text-light ml-2">Menu</p>
+      <h5 class="mt-4 mb-3 text-secondary ml-2">Menu</h5>
       <% if check_is_hidden_by_module('crms') %>
-        <li class="activ-link mb-3">
+        <li class="activ-link mb-2">
           <a href="<%=crms_path%>" class="activ-link">
             <i class="fas fa-user ml-3"></i>
             <span class="link-text ml-1">CRM</span>
           </a>
         </li>
       <% end %>
-      <li class="mb-3">
+      <li class="mb-2">
         <a href="#AccountSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
           <i class="fas fa fa-book ml-3"></i>
           <span class="link-text ml-1">Accounts</span>
@@ -112,7 +105,7 @@
           <% end %>
         </ul>
       </li>        
-      <li class="mb-3">
+      <li class="mb-2">
         <a href="#UnitSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
           <i class="fas fa-stream ml-3"></i>
           <span class="link-text ml-1">Units</span>
@@ -154,7 +147,7 @@
           <% end %>
         </ul>
       </li>
-      <li class="mb-3">
+      <li class="mb-2">
         <a href="#AllUserSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
           <i class="fas fa-users ml-3"></i>
           <span class="link-text ml-1">Users</span>
@@ -274,7 +267,7 @@
           </li>
         </ul>
       </li>
-      <li class="mb-3">
+      <li class="mb-2">
         <a href="#DealSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
           <i class="fas fa-handshake ml-3"></i>
           <span class="link-text ml-1">Deals</span>
@@ -349,7 +342,7 @@
         </ul>
       </li>
       <% if check_is_hidden_by_module('reports') %>    
-        <li class="mb-3">
+        <li class="mb-2">
           <a href="#ReportsSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
             <i class="fas fa fa-print ml-3"></i>
             <span class="link-text">Reports</span>
@@ -402,7 +395,7 @@
           </ul>
         </li>
       <% end %>    
-      <p class="mt-5 mb-3 text-light ml-2">System Settings</p>
+      <h5 class="mt-5 mb-3 text-secondary ml-2">System Settings</h5>
       <% if can?(:view, :all) %>  
         <% if check_is_hidden_by_module('pos_settings') %>
           <% if can?(:delete, :all) %>
@@ -416,14 +409,14 @@
         <% end %>
         <% if check_is_hidden_by_module('users') %> 
           <% if can?(:delete, :all) %>
-            <li class="mb-3">
+            <li class="mb-2">
               <%= link_to users_path, class:"activ-link" do %>
                 <i class="fas fa-user ml-3"></i>
                 <span class="link-text">System Opeartors</span>
               <% end %>
             </li>
           <%else%>
-            <li class="mb-3">
+            <li class="mb-2">
               <%= link_to edit_user_path(current_user), class:"activ-link" do %>
                 <i class="fas fa-user-circle ml-3"></i>
                 <span class="link-text">Profile</span>
@@ -433,7 +426,7 @@
         <% end %>         
       <%end%>
       <% if check_is_hidden_by_module('helps') %>
-        <li class="mb-3">
+        <li class="mb-2">
           <%= link_to helps_path, class:"activ-link" do %>
             <i class="fas fa-question ml-3"></i>
             <span class="link-text">Help</span>
@@ -441,7 +434,7 @@
         </li>
       <% end %>    
       <% if can?(:delete, :all) %>
-        <li class="mb-3">
+        <li class="mb-2">
           <%= link_to bd_backups_path, class:"activ-link" do %>
             <i class="fas fa-paste ml-3"></i>
             <span class="link-text">Import/Export</span>
@@ -449,7 +442,7 @@
         </li>
       <%end%>
       <% if check_is_hidden_by_module('sms') %>
-        <li class="activ-link mb-3">
+        <li class="activ-link mb-2">
           <%= link_to sms_index_path, class:"activ-link" do %>
             <i class="fas fa-paper-plane ml-3"></i>
             <span class="link-text">Contact</span>

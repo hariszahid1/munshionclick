@@ -210,7 +210,7 @@
         </div>
 
  <div class='card border-radius-1 shadow p-4 sys-user-book-index-card'>
-   <div class="row d-flex" style="position: absolute;">
+  <div class="row d-flex" style="position: absolute;">
     <div>
       <%if (check_can_delete(@module_permission))%>
 	      <button class="btn btn-outline-danger delete-selected mt-4 ml-3" type='button' value='SysUser'>
@@ -233,7 +233,7 @@
             <th>Group<%= sort_link(@q, :user_group, "", {}, class: 'sorting-button ml-3') %></th>
             <th>Status</th>
             <th>Occupation</th>
-            <th>OB</th>
+            <th title="Opening Balance">OB</th>
             <th>Balance<div class='float-right'><%= sort_link(@q, :balance, "", {}, class: 'sorting-button') %></div></th>
             <th>Address</th>
             <th>Action</th>
