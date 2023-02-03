@@ -61,7 +61,7 @@
      <table data-toggle="table" data-search="true">
     <thead>
       <tr>
-        <th>Profile Image</th>
+        <th>DP</th>
         <th><%= sort_link(@q, :staff_type, 'Status') %></th>
         <th><%= sort_link(@q, :code, 'Code') %></th>
         <th><%= sort_link(@q, :name, 'Name') %></th>
@@ -82,7 +82,7 @@
         <tr>
           <td>
             <% if  staff.profile_image.attached? %>
-              <%= image_tag staff.profile_image.service_url, width: 100 %>
+              <%= image_tag staff.profile_image.service_url,class:"shadow border-radius-1 dp-size" %>
             <% end %>
           </td>
           <td><%= staff.staff_type %></td>
