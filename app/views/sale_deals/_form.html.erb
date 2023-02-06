@@ -10,7 +10,7 @@
     </div>
   <% end %>
   <div class= 'row'>
-    <%= f.hidden_field :transaction_type, value: 'ReSaleDeal' %>
+    <%= f.hidden_field :transaction_type, value: params[:type].present? ? params[:type] : 'ReSaleDeal' %>
     <%= f.hidden_field :user_name, value: current_user.id %>
     <%= f.hidden_field :status, value: 'UnClear' if params[:action] == 'new'%>
     <div class="col-lg-6 form-group float-left">

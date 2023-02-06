@@ -74,12 +74,16 @@
         <div class="row mb-4">
           <div id="new_city">
             <% if params['q'].try(:[], 'transaction_type_eq') == '8' %>
-              <%= link_to new_sale_deal_path('type': 'Resale'),class: "btn btn-success mt-3 ml-2" do %>
+              <%= link_to new_sale_deal_path, class: "btn btn-success mt-3 ml-2" do %>
                 <i class="fa fa-plus" aria-hidden="false"></i>
-                Create Resale Deal
+                Resale Deal
+              <% end %>
+              <%= link_to new_sale_deal_path('type': 'ReSaleDeal'), class: "btn btn-success mt-3 ml-2" do %>
+                <i class="fa fa-plus" aria-hidden="false"></i>
+                Resale with new User
               <% end %>
             <% else %>
-              <%= link_to new_sale_deal_path,class: "btn btn-success mt-3 ml-2" do %>
+              <%= link_to new_sale_deal_path('type': 'NewSaleDeal'), class: "btn btn-success mt-3 ml-2" do %>
                 <i class="fa fa-plus" aria-hidden="false"></i>
                 Create New Sale Deal
               <% end %>
