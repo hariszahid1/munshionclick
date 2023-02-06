@@ -240,6 +240,14 @@
                   <span class="link-text">Profit Report</span>
                 <% end %>
               </li>
+              <% if check_is_hidden_by_module('profit_reports') %>
+                <li>
+                  <%= link_to profit_reports_path do %>
+                    <i class="fas fa-th-list"></i>
+                    <span class="link-text">Profit Report 2</span>
+                  <% end %>
+                </li>
+              <% end %>
               <li>
                 <%= link_to reports_stock_report_path do %>
                   <i class="fas fa-th-list"></i>

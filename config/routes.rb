@@ -259,7 +259,7 @@ Rails.application.routes.draw do
   resources :follow_ups
   resources :countries
   resources :attendances
-
+  resources :profit_reports
   resources :expense_types
   resources :expenses do
     collection do
