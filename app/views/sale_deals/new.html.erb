@@ -1,9 +1,9 @@
 
 <div class="card">
   <div class="card-header">
-    <h3><%= params["type"] == "Resale" ||  params['q'].try(:[], 'transaction_type_eq') == '8' ? 'Re Sale Deals' : 'Fresh Sale Deals' %></h3>
+    <h3><%= params['q'].try(:[], 'transaction_type_eq') == '8' ? 'Re Sale Deals' : 'Fresh Sale Deals' %></h3>
   </div>
   <div class="card-body">
-    <%= render params[:type].present? ? 'form' : 'form_new', sale_deal: @sale_deal, model: @sale_deal, local: true,  method: :post, url: sale_deals_path(@sale_deal) %>
+    <%= render params[:type].present? ? 'form_new' : 'form', sale_deal: @sale_deal, model: @sale_deal, local: true,  method: :post, url: sale_deals_path(@sale_deal) %>
   </div>
 </div>

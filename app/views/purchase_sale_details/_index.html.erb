@@ -220,25 +220,43 @@
             <td><b><%= number_with_delimiter purchase_sale_detail.amount.to_f.round(2) rescue 0%></b></td>
             <td><b><%= number_with_delimiter(purchase_sale_detail.total_bill.to_f.round(2) - purchase_sale_detail.discount_price.to_f.round(2) - purchase_sale_detail.amount.to_f.round(2)) rescue 0%></b></td>
             <td>
-              <b>
+              <div class="icon-container">
                 <% if (purchase_sale_detail.total_bill.to_i - (purchase_sale_detail.amount.to_f+purchase_sale_detail.discount_price.to_f)) > 0 %>
-                  <p class="text-danger">
-                  Pending
-                  <br>
-                  </p>
-                  <h5 style="color:#FF0000"><%= number_with_delimiter(purchase_sale_detail.total_bill.to_i - (purchase_sale_detail.amount.to_f+purchase_sale_detail.discount_price.to_f))%></h5>
+                  <div class="my-icon my-view float-right">
+                    <div class="my-tooltip text-danger">
+                      Pending
+                      <br>
+                      <h5 style="color:#FF0000"><%= number_with_delimiter(purchase_sale_detail.total_bill.to_i - (purchase_sale_detail.amount.to_f+purchase_sale_detail.discount_price.to_f))%></h5>
+                    </div>
+                    <div class="icon-div">
+                     <i class="fa fa-arrow-down mt-2 text-danger" aria-hidden="true"></i>
+                    </div>
+                  </div>
                 <% elsif (purchase_sale_detail.total_bill.to_f - (purchase_sale_detail.amount.to_f+purchase_sale_detail.discount_price.to_f))  < 0 %>
-                  <p class="text-danger">
-                  Remaining
-                  <br>
-                  </p>
-                  <h5 style="color:#FF0000"><%= number_with_delimiter(purchase_sale_detail.total_bill.to_f - (purchase_sale_detail.amount.to_f+purchase_sale_detail.discount_price.to_f))%></h5>
+                  <div class="my-icon my-view float-right">
+                    <div class="my-tooltip text-primary">
+                      Remaining
+                      <br>
+                      <h5 style="color:#FF0000"><%= number_with_delimiter(purchase_sale_detail.total_bill.to_f - (purchase_sale_detail.amount.to_f+purchase_sale_detail.discount_price.to_f))%></h5>
+                    </div>
+                     <div class="icon-div">
+                       <i class="fa fa-arrow-up mt-2 text-primary" aria-hidden="true"></i>
+                     </div>
+                  </div>
                 <% else %>
-                  <p class="text-success">
-                    <b><%= purchase_sale_detail.status  %></b>
-                  </p>
-                <% end %>
-              </b>
+                  <div class="my-icon my-view float-right">
+                    <div class="my-tooltip text-success">
+                       <b><%= purchase_sale_detail.status  %></b>
+                      <br>
+                    </div>
+                    <i class="fa fa-check mt-2 text-success" aria-hidden="true"></i>
+                  </div>  
+                <% end %>  
+              </div>
+
+
+
+              
             </td>
             <td>
               <%if purchase_sale_detail.created_at.strftime("%d%b%y")!=purchase_sale_detail.updated_at.strftime("%d%b%y")%>

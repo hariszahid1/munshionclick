@@ -126,9 +126,9 @@
               <td><h6><%= number_with_delimiter(order.purchase_sale_details.sum(:discount_price).to_f.round(2)) %></h6></td>
               <td>
                 <%if order.created_at.strftime("%d%b%y")!=order.updated_at.strftime("%d%b%y")%>
-                  <%= order.created_at.present? ? order.created_at.strftime("%d/%b/%y , %I:%M %p") : '' %> <hr> <%= order.updated_at.present? ? order.updated_at.strftime("%d/%b/%y , %H:%M%p") : '' %>
+                  <%= order.created_at.present? ? order.created_at.strftime("%d%b%y , %I:%M") : '' %> <hr> <%= order.updated_at.present? ? order.updated_at.strftime("%d%b%y , %I:%M") : '' %>
                 <%else%>
-                  <%= order.created_at.present? ? order.created_at.strftime("%d/%b/%y , %I:%M %p") : '' %>
+                  <%= order.created_at.present? ? order.created_at.strftime("%d%b%y , %I:%M") : '' %>
                 <%end%>
               </td>
               <td><%= order.comment %></td>
@@ -348,9 +348,9 @@
                         <td><%= number_with_delimiter(purchase_sale_detail.total_bill.to_f.round(2) - purchase_sale_detail.discount_price.to_f.round(2) - purchase_sale_detail.amount.to_f.round(2)) rescue 0%></td>
                         <td>
                           <%if purchase_sale_detail.created_at.strftime("%d%b%y")!=purchase_sale_detail.updated_at.strftime("%d%b%y")%>
-                            <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d/%b/%y at %I:%M%p") : '' %> | <%= purchase_sale_detail.updated_at.present? ? purchase_sale_detail.updated_at.strftime("%d/%b/%y at %H:%M%p") : '' %>
+                            <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d%b%y , %I:%M") : '' %> | <%= purchase_sale_detail.updated_at.present? ? purchase_sale_detail.updated_at.strftime("%d/%b/%y at %H:%M%p") : '' %>
                           <%else%>
-                            <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d/%b/%y at %I:%M%p") : '' %>
+                            <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d%b%y , %I:%M") : '' %>
                           <%end%>
                         </td>
                         <td><%= purchase_sale_detail.comment %></td>

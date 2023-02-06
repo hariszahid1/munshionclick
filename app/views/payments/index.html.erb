@@ -19,8 +19,6 @@
           </ol>
         </div>
       </div>
-
-
       <%if (check_can_create(@module_permission))%>
         <div class="row ml-1 d-flex mb-5" style="font-family: arial">
           <div class="col-lg-3 col-sm-3 stats-cards border-radius-1 shadow-lg p-4 mr-4" style="background:linear-gradient(45deg, #0f1d59 73%, white 8%); color:white;">
@@ -102,7 +100,7 @@
 	</ul>
 
   <div class="tab-content">
-    <div class="tab-pane active mb-3 card card-border-left-side shadow p-3 mt-2 border-radius-1 mr-4" id="search" role="tabpanel">
+    <div class="tab-pane active mb-3 card shadow p-3 mt-2 border-radius-1 mr-4" id="search" role="tabpanel">
       <%= search_form_for @q, url: payments_path, class: "admin-controls", method: "get" do |f| %>
         <div class="row d-flex ml-1 mr-1 mt-4">
           <div class="col-lg-3 form-group float-left">
@@ -193,7 +191,7 @@
       <% end %>
     </div>
 
-    <div class="tab-pane card card-border-left-side mb-3 shadow p-3 mt-2 border-radius-1" id="import-export" role="tabpanel">
+    <div class="tab-pane card mb-3 shadow p-3 mt-2 border-radius-1" id="import-export" role="tabpanel">
       <p>
         <%= search_form_for @q, url: payments_path, class: "admin-controls", method: "get" do |f| %>
           <div class="d-flex ml-2">
@@ -204,7 +202,7 @@
       </p>
     </div>
 
-    <div class="tab-pane card card-border-left-side shadow p-3 mt-2 border-radius-1" id="logs" role="tabpanel">
+    <div class="tab-pane card shadow p-3 mt-2 border-radius-1" id="logs" role="tabpanel">
       <p>
         <div class="d-flex">
           <%= link_to view_history_payments_path, class: "btn btn-success d-none", id: "payment-logs", remote:true do %>
@@ -220,14 +218,14 @@
   <div>
 
 
-  <div class="card card-border-left-side shadow border-radius-1 p-4 ml-4 mr-5 payment-book-index-card">
+  <div class="card shadow border-radius-1 p-4 ml-4 mr-5 payment-book-index-card">
     <%= render 'map_columns/map_column_partials' %>
     <%if (check_can_delete(@module_permission))%>
 	    <button class="btn btn-outline-danger delete-selected mt-2" style=" position: absolute;" type='button' value='Payment'>
 	    	Delete Selected
 	    </button>		
     <%end%>
-    <table data-toggle="table" data-search="true" class=" overflow-hidden border-radius-1">
+    <table data-toggle="table" data-search="true" class=" overflow-hidden border-radius-1 content-table">
     <thead>
       <tr>
         <th><input type="checkbox" id="master" class='select-all-checkbox' style="cursor: pointer;">
@@ -238,8 +236,9 @@
         <th><%= sort_link(@q, :credit, 'Credit/Jama') %></th>
         <th><%= sort_link(@q, :amount, 'Balance') %></th>
         <th><%= sort_link(@q, :paymentable, 'Paymentable') %></th>
-        <th class ="urdu-font"><%= sort_link(@q, :comment, 'Comment') %></th>
-        <th><%= sort_link(@q, :created_at, 'Date') %></th>
+        <th class ="urdu-font"><%= sort_link(@q, :comment, 'Summary') %></th>
+        <th><%= sort_link(@q, :created_at, 'Created at') %></th>
+        <th><%= sort_link(@q, :created_at, 'Updated at') %></th>
         <th class="border_none">Action</th>
     </tr>
     </thead>
@@ -257,9 +256,8 @@
           <td><%= number_with_delimiter(payment.debit) %></td>
           <td><%= number_with_delimiter(payment.credit) %></td>
           <td>
-          
-            <div class="icon-container">
-              <span class="mt-2 mr-1"><%= number_with_delimiter(payment.amount) %></span>
+            <div class="float-left"><%= number_with_delimiter(payment.amount) %></div>
+            <div class="icon-container float-right">
               <%if payment.amount.to_f < 0  %>
                 <div class="my-icon my-view">
                   <div class="my-tooltip text-primary">
@@ -371,15 +369,12 @@
               </p>
             <%end%>
           </td>
-
           <td>
-            <%if payment.created_at.strftime("%d%b%y")!=payment.updated_at.strftime("%d%b%y")%>
-              <%= payment.created_at.present? ? payment.created_at.strftime("%d/%b/%y at %H:%M %p") : '' %> | <%= payment.updated_at.present? ? payment.updated_at.strftime("%d/%b/%y at %H:%M %p") : '' %>
-            <%else%>
-              <%= payment.created_at.present? ? payment.created_at.strftime("%d/%b/%y at %H:%M %p") : '' %>
-            <%end%>
+            <%= payment.created_at.strftime("%d%b%y, %I:%M") %>
           </td>
-
+          <td>
+            <%= payment.updated_at.strftime("%d%b%y, %I:%M") %>
+          </td>
           <td class="p-3">
           <div class="icon-container-1">
             <div class="my-icon-1 my-view-1">
@@ -522,12 +517,11 @@
         </tr>
       <% end %>
       <tr>
-        <td></td>
-        <td><h5>Total</h5></td>
-        <td></td>
+        <td colspan="3"><h5>Total</h5></td>
         <td><h5><%=number_with_delimiter(@t_dabit.first.sum_debit)%></h5></td>
         <td><h5><%=number_with_delimiter(@t_dabit.first.sum_credit) %></h5></td>
         <td><h5><%=number_with_delimiter(@t_dabit.first.mean_sum)%> </h5></td>
+        <td colspan="5"></td>
       </tr>
     </tbody>
   </table>

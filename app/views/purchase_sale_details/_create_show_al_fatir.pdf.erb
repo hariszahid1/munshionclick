@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Booking Reciept</title>
+    <%= wicked_pdf_stylesheet_link_tag ("pdf") -%>
+    <style>
+      .text-center{
+        text-align: center;
+      }
+      .text-right{
+        text-align: right;
+      }
+      .text-left{
+        text-align: left;
+      }
+      .d-flex{
+        display: flex;
+        display: -webkit-box;
+        margin-bottom: 10px;
+      }
+      .col-3{
+        -webkit-box-flex: 0;
+        flex: 0 0 25%;
+        max-width: 25%;
+        width: 25%;
+      }
+      .border-bottom{
+        border-bottom: 1px solid black;
+      }
+      .px-20{
+        padding: 0px 20px;
+      }
+      .box{
+        height: 20px;
+        width: 30px;
+        border: 1px solid black;
+        margin-left: 5px;
+        margin-right: 5px;
+      }
+      .bold{
+        font-weight: bold;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div style='padding-top: 150px;'>
+      <div class='text-right' style='margin-bottom: 10px;'>
+        <b>Serial No.</b>
+        <span class='border-bottom px-20'><%= order.voucher_id.to_s+'#'+order.id.to_s %></span>
+      </div>
+      <div class='d-flex'>
+        <div class='d-flex' style='width: 57%;'>
+          <div style='width: 10%; margin-right: 10px;' class='bold'>Name:</div>
+          <div class='border-bottom' style='width: 90%;'><%= order.sys_user&.name %></div>
+        </div>
+        <div class='d-flex' style='width: 40%; margin-left: 20px;'>
+          <div style='width: 45%' class='bold'>Current Received:</div>
+          <span class='bold' style='margin-right: 10px;'>RS.</span>
+          <div class='border-bottom' style='width: 55%;'><%= order.amount %></div>
+        </div>
+      </div>
+
+      <div class='d-flex'>
+        <div class='d-flex' style='width: 57%;'>
+          <div style='width: 25%;' class='bold'>S/O, D/O, W/O:</div>
+          <div class='border-bottom' style='width: 75%;'><%= order.sys_user&.father %></div>
+        </div>
+        <div class='d-flex' style='width: 40%; margin-left: 20px;'>
+          <div style='width: 45%' class='bold'>Previous Received:</div>
+          <span class='bold' style='margin-right: 10px;'>RS.</span>
+          <div class='border-bottom' style='width: 55%;'>
+            <% ids = order.order.purchase_sale_details.pluck(:id) %>
+            <% prev_order = order.order.purchase_sale_details.where(id: ids[ids.find_index(order.id)-1]) %>
+            <%= prev_order.present? ? prev_order[0].amount : '0'%>
+          </div>
+        </div>
+      </div>
+      <div class='d-flex'>
+        <div class='d-flex' style='width: 57%;'>
+          <div style='width: 25%;' class='bold'>Cash/Cheque:</div>
+          <div class='border-bottom' style='width: 75%;'></div>
+        </div>
+        <div class='d-flex' style='width: 40%; margin-left: 20px;'>
+          <div style='width: 45%' class='bold'>Total Received:</div>
+          <span class='bold' style='margin-right: 10px;'>RS.</span>
+          <div class='border-bottom' style='width: 55%;'><%= order.order.purchase_sale_details.sum(:amount).to_i + order.order.amount.to_i %></div>
+        </div>
+      </div>
+      <div class='d-flex'>
+        <div class='d-flex' style='width: 57%;'>
+          <div style='width: 15%;' class='bold'>Amount:</div>
+          <div class='border-bottom' style='width: 85%;'><%= order.amount %></div>
+        </div>
+        <div class='d-flex' style='width: 40%; margin-left: 20px;'>
+          <div style='width: 45%' class='bold'>Balance:</div>
+          <span class='bold' style='margin-right: 10px;'>RS.</span>
+          <div class='border-bottom' style='width: 55%;'><%= order.order&.sys_user&.balance.to_i %></div>
+        </div>
+      </div>
+
+      <div class='d-flex'>
+        <div style='width: 17%;' class='bold'>Amount In Words: </div>
+        <div class='border-bottom' style='width: 83%;'><%= number_to_words(order.amount) %></div>
+      </div>
+    </div>
+
+    <div style='padding-top: 250px;'>
+      <div class='text-right' style='margin-bottom: 10px;'>
+        <b>Serial No.</b>
+        <span class='border-bottom px-20'><%= order.voucher_id.to_s+'#'+order.id.to_s %></span>
+      </div>
+      <div class='d-flex'>
+        <div class='d-flex' style='width: 57%;'>
+          <div style='width: 10%; margin-right: 10px;' class='bold'>Name:</div>
+          <div class='border-bottom' style='width: 90%;'><%= order.sys_user&.name %></div>
+        </div>
+        <div class='d-flex' style='width: 40%; margin-left: 20px;'>
+          <div style='width: 45%' class='bold'>Current Received:</div>
+          <span class='bold' style='margin-right: 10px;'>RS.</span>
+          <div class='border-bottom' style='width: 55%;'><%= order.amount %></div>
+        </div>
+      </div>
+
+      <div class='d-flex'>
+        <div class='d-flex' style='width: 57%;'>
+          <div style='width: 25%;' class='bold'>S/O, D/O, W/O:</div>
+          <div class='border-bottom' style='width: 75%;'><%= order.sys_user&.father %></div>
+        </div>
+        <div class='d-flex' style='width: 40%; margin-left: 20px;'>
+          <div style='width: 45%' class='bold'>Previous Received:</div>
+          <span class='bold' style='margin-right: 10px;'>RS.</span>
+          <div class='border-bottom' style='width: 55%;'>
+            <% ids = order.order.purchase_sale_details.pluck(:id) %>
+            <% prev_order = order.order.purchase_sale_details.where(id: ids[ids.find_index(order.id)-1]) %>
+            <%= prev_order.present? ? prev_order[0].amount : '0'%>
+          </div>
+        </div>
+      </div>
+      <div class='d-flex'>
+        <div class='d-flex' style='width: 57%;'>
+          <div style='width: 25%;' class='bold'>Cash/Cheque:</div>
+          <div class='border-bottom' style='width: 75%;'></div>
+        </div>
+        <div class='d-flex' style='width: 40%; margin-left: 20px;'>
+          <div style='width: 45%' class='bold'>Total Received:</div>
+          <span class='bold' style='margin-right: 10px;'>RS.</span>
+          <div class='border-bottom' style='width: 55%;'><%= order.order.purchase_sale_details.sum(:amount).to_i + order.order.amount.to_i %></div>
+        </div>
+      </div>
+      <div class='d-flex'>
+        <div class='d-flex' style='width: 57%;'>
+          <div style='width: 15%;' class='bold'>Amount:</div>
+          <div class='border-bottom' style='width: 85%;'><%= order.amount %></div>
+        </div>
+        <div class='d-flex' style='width: 40%; margin-left: 20px;'>
+          <div style='width: 45%' class='bold'>Balance:</div>
+          <span class='bold' style='margin-right: 10px;'>RS.</span>
+          <div class='border-bottom' style='width: 55%;'><%= order.order&.sys_user&.balance.to_i %></div>
+        </div>
+      </div>
+
+      <div class='d-flex'>
+        <div style='width: 17%;' class='bold'>Amount In Words: </div>
+        <div class='border-bottom' style='width: 83%;'><%= number_to_words(order.amount) %></div>
+      </div>
+    </div>
+
+    <div style='padding-top: 250px;'>
+      <div class='text-right' style='margin-bottom: 10px;'>
+        <b>Serial No.</b>
+        <span class='border-bottom px-20'><%= order.voucher_id.to_s+'#'+order.id.to_s %></span>
+      </div>
+      <div class='d-flex'>
+        <div class='d-flex' style='width: 57%;'>
+          <div style='width: 10%; margin-right: 10px;' class='bold'>Name:</div>
+          <div class='border-bottom' style='width: 90%;'><%= order.sys_user&.name %></div>
+        </div>
+        <div class='d-flex' style='width: 40%; margin-left: 20px;'>
+          <div style='width: 45%' class='bold'>Current Received:</div>
+          <span class='bold' style='margin-right: 10px;'>RS.</span>
+          <div class='border-bottom' style='width: 55%;'><%= order.amount %></div>
+        </div>
+      </div>
+
+      <div class='d-flex'>
+        <div class='d-flex' style='width: 57%;'>
+          <div style='width: 25%;' class='bold'>S/O, D/O, W/O:</div>
+          <div class='border-bottom' style='width: 75%;'><%= order.sys_user&.father %></div>
+        </div>
+        <div class='d-flex' style='width: 40%; margin-left: 20px;'>
+          <div style='width: 45%' class='bold'>Previous Received:</div>
+          <span class='bold' style='margin-right: 10px;'>RS.</span>
+          <div class='border-bottom' style='width: 55%;'>
+            <% ids = order.order.purchase_sale_details.pluck(:id) %>
+            <% prev_order = order.order.purchase_sale_details.where(id: ids[ids.find_index(order.id)-1]) %>
+            <%= prev_order.present? ? prev_order[0].amount : '0'%>
+          </div>
+        </div>
+      </div>
+      <div class='d-flex'>
+        <div class='d-flex' style='width: 57%;'>
+          <div style='width: 25%;' class='bold'>Cash/Cheque:</div>
+          <div class='border-bottom' style='width: 75%;'></div>
+        </div>
+        <div class='d-flex' style='width: 40%; margin-left: 20px;'>
+          <div style='width: 45%' class='bold'>Total Received:</div>
+          <span class='bold' style='margin-right: 10px;'>RS.</span>
+          <div class='border-bottom' style='width: 55%;'><%= order.order.purchase_sale_details.sum(:amount).to_i + order.order.amount.to_i %></div>
+        </div>
+      </div>
+      <div class='d-flex'>
+        <div class='d-flex' style='width: 57%;'>
+          <div style='width: 15%;' class='bold'>Amount:</div>
+          <div class='border-bottom' style='width: 85%;'><%= order.amount %></div>
+        </div>
+        <div class='d-flex' style='width: 40%; margin-left: 20px;'>
+          <div style='width: 45%' class='bold'>Balance:</div>
+          <span class='bold' style='margin-right: 10px;'>RS.</span>
+          <div class='border-bottom' style='width: 55%;'><%= order.order&.sys_user&.balance.to_i %></div>
+        </div>
+      </div>
+
+      <div class='d-flex'>
+        <div style='width: 17%;' class='bold'>Amount In Words: </div>
+        <div class='border-bottom' style='width: 83%;'><%= number_to_words(order.amount) %></div>
+      </div>
+    </div>
+  </body>
+</html>

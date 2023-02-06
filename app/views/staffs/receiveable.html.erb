@@ -63,7 +63,7 @@
      <table data-toggle="table" data-search="true">
      <thead>
       <tr>
-        <th>Profile Image<th>
+        <th>DP<th>
       
         <th><%= sort_link(@q, :staff_type, 'Status') %></th>
         <th><%= sort_link(@q, :code, 'Code') %></th>
@@ -85,7 +85,7 @@
         <tr>
           <td>
             <% if  staff.profile_image.attached? %>
-              <%= image_tag staff.profile_image.service_url, width: 100 %>
+              <%= image_tag staff.profile_image.service_url, class:"shadow border-radius-1 dp-size" %>
             <% end %>
           </td>
           <td></td>
@@ -93,7 +93,7 @@
           <td><%= staff.code %></td>
           <td><%= staff.name %></td>
           <td><%= staff.father %></td>
-          <td><%= staff.date_of_joining.strftime("%A,  %d-%b-%y") if staff.date_of_joining%></td>
+          <td><%= staff.date_of_joining.strftime("%d%b%y , %I:%M") if staff.date_of_joining%></td>
           <td><%= number_with_delimiter staff.staff_salary_or_wage.to_f.round(2)%><% @monthly_wage += staff.staff_salary_or_wage.to_f.round(2) %></td>
           <td><%= number_with_delimiter staff.advance_amount.to_f.round(2) %><% @advance += staff.advance_amount.to_f.round(2) %></td>
           <td><%= number_with_delimiter staff.department.present? ? staff.department.title : ""%>:<%= staff.staff_raw_products.present? ? staff.staff_raw_products_titles : ""%></td>

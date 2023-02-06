@@ -90,7 +90,9 @@ module OutwardsHelper
                                                         challan_no: c_i.size_10,
                                                         quantity: c_i.quantity,
                                                         room_num: c_i.size_8,
-                                                        rack_num: c_i.size_7
+                                                        rack_num: c_i.size_7,
+                                                        in_date: c_i.inward_date&.strftime("%d-%b-%y"),
+                                                        close_date: c_i.closed_date&.strftime("%d-%b-%y")
                                                     }
                                                     }
                            }

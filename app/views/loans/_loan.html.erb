@@ -7,9 +7,9 @@
   <td><span title="<%= loan.comment %>" class='truncate-text'><%= loan.comment %></span></td>
   <td>
     <%if loan.created_at.strftime("%d%b%y")!=loan.updated_at.strftime("%d%b%y")%>
-      <%= loan.created_at.present? ? loan.created_at.strftime("%d-%b-%y , %H:%M%p") : '' %> | <%= loan.updated_at.present? ? loan.updated_at.strftime(" %d-%b-%y , %H:%M%p") : '' %>
+      <%= loan.created_at.present? ? loan.created_at.strftime("%d%b%y , %I:%M") : '' %> | <%= loan.updated_at.present? ? loan.updated_at.strftime(" %d%b%y , %I:%M") : '' %>
     <%else%>
-      <%= loan.created_at.present? ? loan.created_at.strftime(" %d-%b-%y , %H:%M%p") : '' %>
+      <%= loan.created_at.present? ? loan.created_at.strftime(" %d%b%y , %I:%M") : '' %>
     <%end%>
   </td>
   <td class="p-3">

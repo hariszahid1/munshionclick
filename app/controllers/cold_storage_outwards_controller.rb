@@ -29,9 +29,11 @@ class ColdStorageOutwardsController < ApplicationController
     if params[:order_id].present?
       order=Order.find(params[:order_id])
       order.order_items.each do |ord|
-        room_num = PurchaseSaleItem.find_by(product_id: ord.product_id, size_13: ord.marka,size_10: ord.challan_no, transaction_type: "Purchase").size_8
-        rack_num = PurchaseSaleItem.find_by(product_id: ord.product_id, size_13: ord.marka,size_10: ord.challan_no, transaction_type: "Purchase").size_7
-        @purchase_sale_detail.purchase_sale_items.build(product_id: ord.product_id, size_13: ord.marka, size_10: ord.challan_no, size_8: room_num, size_7: rack_num)
+        p_in_item = PurchaseSaleItem.find_by(product_id: ord.product_id, size_13: ord.marka,size_10: ord.challan_no, transaction_type: "Purchase")
+        room_num = p_in_item.size_8
+        rack_num = p_in_item.size_7
+        in_date = p_in_item.purchase_sale_detail.created_at
+        @purchase_sale_detail.purchase_sale_items.build(product_id: ord.product_id, size_13: ord.marka, size_10: ord.challan_no, size_8: room_num, size_7: rack_num, inward_date: in_date)
       end
     end
     @staffs = Staff.joins(:department).where('departments.active': true)
@@ -109,7 +111,7 @@ class ColdStorageOutwardsController < ApplicationController
         UserLedgerBookJob.perform_later(current_user.superAdmin.company_type,@purchase_sale_detail.sys_user_id)
         AccountPaymentJob.perform_later(current_user.superAdmin.company_type,@purchase_sale_detail.account_id)
         SalaryDetailJob.perform_later(current_user.superAdmin.company_type,@purchase_sale_detail.staff_id)
-        format.html { redirect_to cold_storage_inwards_path, notice: 'Inward was successfully updated.' }
+        format.html { redirect_to cold_storage_outwards_path, notice: 'Outward was successfully updated.' }
         format.json { render :show, status: :ok, location: @purchase_sale_detail }
       else
         format.html { render :edit }
@@ -138,7 +140,7 @@ class ColdStorageOutwardsController < ApplicationController
     marka_no = params[:marka_no]
     challan_no = params[:challan_no]
     product_id = params[:product_id]
-    rem_stock = PurchaseSaleItem.joins(:purchase_sale_detail).where('purchase_sale_details.sys_user_id': sys_user_id, 'purchase_sale_details.transaction_type': "OutWard", 'product_id': product_id, 'size_13': marka_no, 'size_10': challan_no).first&.size_6
+    rem_stock = PurchaseSaleItem.joins(:purchase_sale_detail).where('purchase_sale_details.sys_user_id': sys_user_id, 'purchase_sale_details.transaction_type': "OutWard", 'product_id': product_id, 'size_13': marka_no, 'size_10': challan_no).last&.size_6
     if rem_stock.present?
       stock = rem_stock
     else
@@ -236,6 +238,8 @@ class ColdStorageOutwardsController < ApplicationController
         :total_sale_price,
         :transaction_type,
         :size_1,:size_2,:size_3,:size_4,:size_5,:size_6,:size_7,:size_8,:size_9,:size_10,:size_11,:size_12,:size_13,
+        :inward_date,
+        :closed_date,
         :discount_price,
         :purchase_sale_type,
         :created_at,

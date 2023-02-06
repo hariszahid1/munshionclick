@@ -135,14 +135,14 @@
       <tr>
         <th><input type="checkbox" id="master" class='select-all-checkbox'></th>
         <th>ID<div class='float-right'><%= sort_link(@q, :id, "", {}, class: 'sorting-button') %></div></th>
-        <th>Profile Image</th>
+        <th>DP</th>
         <th>Code<div class='float-right'><%= sort_link(@q, :code, "", {}, class: 'sorting-button') %></div></th>
         <th class="urdu-font">Name<div class='float-right'><%= sort_link(@q, :name, "", {}, class: 'sorting-button') %></div></th>
-        <th><div class='float-right'>User Type<%= sort_link(@q, :user_type, "", {}, class: 'sorting-button') %></div></th>
-        <th><div class='float-right'>User Group<%= sort_link(@q, :user_group, "", {}, class: 'sorting-button') %></div></th>
+        <th><div class='float-right'>Type<%= sort_link(@q, :user_type, "", {}, class: 'sorting-button') %></div></th>
+        <th><div class='float-right'>Group<%= sort_link(@q, :user_group, "", {}, class: 'sorting-button') %></div></th>
         <th>Status</th>
         <th>Occupation</th>
-        <th>Opening</th>
+        <th title="Opening Balance">OB</th>
         <th><div class='float-right'>Balance<%= sort_link(@q, :balance, "", {}, class: 'sorting-button') %></div></th>
         <th><div class='float-right'>Ledger created_at<%= sort_link(@q, :ledger_book_created_at, "", {}, class: 'sorting-button') %></div></th>
         <th class="border_none">Action</th>
@@ -157,7 +157,7 @@
           <td><%= sys_user.id %></td>
           <td>
             <% if  sys_user.profile_image.attached? %>
-              <%= image_tag sys_user.profile_image.service_url, width: 100 %>
+              <%= image_tag sys_user.profile_image.service_url, class:"shadow border-radius-1 dp-size"%>
             <% end %>
           </td>
           <td><%= sys_user.code %></td>
@@ -168,7 +168,7 @@
           <td><%= sys_user.occupation %></td>
           <td><b><%= number_with_delimiter sys_user.opening_balance %></b></td>
           <td><b><%= number_with_delimiter sys_user.balance %><%@sys_user_balance += sys_user.balance.abs %></b></td>
-          <td><%= date.strftime("%d/%b/%y , %I:%M%p") %> </td>
+          <td><%= date.strftime("%d%b%y , %I:%M") %> </td>
           <td>
             <div class="icon-container-1">
                 <div class="my-icon-1 my-view-1">

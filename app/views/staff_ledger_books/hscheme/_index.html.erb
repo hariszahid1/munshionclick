@@ -243,14 +243,14 @@
             <%end%>
           </td>
           <td>
-            <%= staff_ledger_book.created_at.strftime("%d/%b/%y at %I:%M:%S %p") %>
+            <%= staff_ledger_book.created_at.strftime("%d%b%y, %I:%M") %>
             <% if staff_ledger_book.salary.present? && staff_ledger_book.created_at.strftime("%d%b%y")!=staff_ledger_book.salary.created_at.strftime("%d%b%y") %>
               <br>
-              <%= staff_ledger_book.salary.created_at.strftime("%d/%b/%y at %I:%M:%S %p") %>
+              <%= staff_ledger_book.salary.created_at.strftime("%d%b%y, %I:%M") %>
             <%end%>
             <%if staff_ledger_book.salary_detail.present? && staff_ledger_book.created_at.strftime("%d%b%y")!=staff_ledger_book.salary_detail.created_at.strftime("%d%b%y") %>
               <br>
-              <%= staff_ledger_book.salary_detail.created_at.strftime("%d/%b/%y at %I:%M:%S %p") %>
+              <%= staff_ledger_book.salary_detail.created_at.strftime("%d%b%y, %I:%M") %>
             <%end%>
           </td>
           <td>
