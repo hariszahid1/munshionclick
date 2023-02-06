@@ -14,6 +14,8 @@
 <%elsif pos_setting_sys_type=="HousingScheme"%>
   <% if @pos_setting&.extra_settings.present? && @pos_setting&.extra_settings['ghouse5'].present? %>
     <%= render partial: "create_show_ghouse", locals: {order: @purchase_sale_detail} %>
+  <% elsif @pos_setting&.extra_settings.present? && @pos_setting&.extra_settings['al_fatir'].present? %>
+    <%= render partial: "create_show_al_fatir", locals: {order: @purchase_sale_detail} %>
   <% else %>
     <%= render partial: "purchase_sale_details/house_scheme/show", locals: {order: @purchase_sale_detail} %>
   <% end %>
