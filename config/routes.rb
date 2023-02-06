@@ -9,6 +9,9 @@ Rails.application.routes.draw do
     end
   end
   resources :compaign_entries
+
+  resources :plot_mappings
+
   get 'sms/index'
   get 'sms/sms_to_staff'
   resources :staff_deals

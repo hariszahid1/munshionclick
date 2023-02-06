@@ -1,0 +1,2 @@
+class PlotMappingsController < ApplicationController
+end
