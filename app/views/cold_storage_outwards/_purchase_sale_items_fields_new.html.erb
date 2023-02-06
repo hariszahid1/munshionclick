@@ -2,6 +2,7 @@
       <%= f.hidden_field :purchase_sale_detail_id %>
       <%= f.hidden_field :id %>
       <% readonly_param = params[:order_id].present? || f.object.present? ? true : false %>
+      <% stock_read_only = params[:action].eql?("edit") ? true : false %>
       <div class="row font-weight-bold challan-stock-container">
         <div class="col-lg-2 form-group float-left">
           <%= f.select :product_id, options_from_collection_for_select(@products, 'id', ->(st){"#{st.title} \u{27F6} #{st.code}"}, f.object.product_id), {hide_label: true,prompt: "Select the products"}, class: "chosen-select product-storage-outward", readonly: readonly_param, required: true %>
@@ -13,7 +14,7 @@
           <%= f.text_field :size_10, hide_label: true, placeholder: "Challan", label: "Challen", class: 'challan-no-value', value: "#{(f.object.size_10 == '0' ? nil : f.object.size_10)}", class: "challan-storage-outward", readonly: readonly_param %>
         </div>
         <div class="col-lg-1 form-group float-left">
-          <%= f.text_field :size_9, hide_label: true, placeholder: "Stock", label: "Stock", class:'outward-stock-value', onkeyup:'set_remainimg_outward_quantity(event); return false;',required: true %>
+          <%= f.text_field :size_9, hide_label: true, placeholder: "Stock", label: "Stock", class:'outward-stock-value', onkeyup:'set_remainimg_outward_quantity(event); return false;',required: true, readonly: stock_read_only %>
           <%= f.hidden_field :quantity, class: "outward-stock-value-quantity"%>
           <%= f.hidden_field :size_6, class: "outward-stock-value-rem-quantity"%>
         </div>
@@ -25,6 +26,12 @@
         </div>
         <div class="col-lg-1 form-group float-left">
           <%= f.text_field :size_7, hide_label: true, label: "Rack",  value: "#{(f.object.size_7 == '0' ? nil : f.object.size_7)}", class:'outward-rack-num'%>
+        </div>
+        <div class="col-lg-6 form-group float-left font-weight-bold">
+          <%= f.datetime_select :inward_date,{},class: "form-control"%>
+        </div>
+        <div class="col-lg-6 form-group float-left font-weight-bold">
+          <%= f.datetime_select :closed_date,{},class: "form-control"%>
         </div>
         <%= f.hidden_field :transaction_type, value: "Sale"%>
         <div class="col-lg-1 form-group float-left text-xs font-weight-bold text-danger text-uppercase">

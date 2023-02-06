@@ -32,23 +32,31 @@
        <thead class="lite-gray">
         <tr>
           <th colspan="6" class='text-left' style="padding-left: 20px;">Product Name</th>
-          <th> Room </th>
-          <th> Quantity </th>
+          <th colspan="6" class='text-center'> Room Number</th>
         </tr>
         </thead>
         <tbody>
         <% if @product_room_quantity.present? %>
             <% @product_room_quantity.each do |order| %>
                 <tr>
-                  <td colspan="6" class='text-left' style="padding-left: 20px;"><%= order.first&.first %></td>
-                  <td class="text-center"><%= order.first&.second %></td>
-                  <td class="text-center"><%= number_with_delimiter(order.second&.to_f) %></td>
+                  <td colspan="6" class='text-left' style="padding-left: 20px;"><%= order.first %></td>
+                  <% (order.second['room_no'].zip(order.second['remaining'])).each do |room, quantity| %>
+                    <td>
+                      <table>
+                        <thead>
+                          <th><%= room %></th>
+                        </thead>
+                        <thead>
+                          <th><%= quantity %></th>
+                        </thead>
+                      </table>
+                    </td>
+                  <% end %>
                 </tr>
             <% end %>
         <% end %>
          <tr>
-            <th colspan="7" class='text-left' style="padding-left: 30px;">Total</th>
-            <th><%= number_with_delimiter(@product_room_quantity.values&.sum.to_f) %></th>
+            <th colspan="12" class='text-left' style="padding-left: 30px;">Total Remaining: <%= number_with_delimiter(@pdf_inward_total-@pdf_outward_total) %> </th>
           </tr>
         </tbody>
       </table>

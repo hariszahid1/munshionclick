@@ -43,20 +43,26 @@
       <table>
         <thead class="lite-gray">
           <th class="text-center">Serial No</th>
+          <th class="text-center">Marka</th>
           <th class="text-center">Challan No</th>
           <th class="text-center">Room No</th>
           <th class="text-center">Rack No</th>
           <th class="text-center">Product Qty</th>
+          <th class="text-center">In Date</th>
+          <th class="text-center">Close Date</th>
         </thead>
         <tbody>
           <% data.each_with_index do |order, index| %>
             <% order['items'].each_with_index do |item, index| %>
               <tr>
                 <td class="text-center"><%= index %></td>
+                <td class="text-center"><%= item['marka'] %></td>
                 <td class="text-center"><%= item['challan_no'] %></td>
                 <td class="text-center"><%= item['room_num'] %></td>
                 <td class="text-center"><%= item['rack_num'] %></td>
                 <td class="text-center"><%= item['quantity'] %></td>
+                <td class="text-center"><%= item['in_date'] %></td>
+                <td class="text-center"><%= item['close_date'] %></td>
               </tr>
             <% end %>
           <% end %>
@@ -75,10 +81,73 @@
       <div class='col-3 px-20'><h3>Manager</h3></div>
     </div>
 
+    <div class='d-flex' style='margin-top: 50px;'>
+      <div><p> Please verify your product and paying total bill. </p></div>
+      <div><p> After leaving the Mehtab, we will not be responsible. </p></div>
+    </div>
 
     <div>
       <p class="border-bottom"></p>
       <h2 class="text-center">Gate Pass OutWard with racking</h2>
+      <h3 class="text-center">
+        OutWard Date: <b><span><%= data.first['date'] %></span></b>
+      </h3>
+      <h2 class= "text-right">Gate Pass No: <%= data.first['id']%></h2>
+      <h3>Party: <%= data.first['name']%></h3>
+      <h3>Product: <%= data.first['items'].first['product']%></h3>
+      <p class="border-bottom"></p>
+      <p class="text-center">Report by: <%=current_user.name%></p>
+    </div>
+    <div>
+      <table>
+        <thead class="lite-gray">
+          <th class="text-center">Serial No</th>
+          <th class="text-center">Marka</th>
+          <th class="text-center">Challan No</th>
+          <th class="text-center">Room No</th>
+          <th class="text-center">Rack No</th>
+          <th class="text-center">Product Qty</th>
+          <th class="text-center">In Date</th>
+          <th class="text-center">Close Date</th>
+        </thead>
+        <tbody>
+          <% data.each_with_index do |order, index| %>
+            <% order['items'].each_with_index do |item, index| %>
+              <tr>
+                <td class="text-center"><%= index %></td>
+                <td class="text-center"><%= item['marka'] %></td>
+                <td class="text-center"><%= item['challan_no'] %></td>
+                <td class="text-center"><%= item['room_num'] %></td>
+                <td class="text-center"><%= item['rack_num'] %></td>
+                <td class="text-center"><%= item['quantity'] %></td>
+                <td class="text-center"><%= item['in_date'] %></td>
+                <td class="text-center"><%= item['close_date'] %></td>
+              </tr>
+            <% end %>
+          <% end %>
+          <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th>Total: </th>
+            <th><%= data.first['total_quantity'] %></th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class='d-flex' style='margin-top: 100px;'>
+      <div class='col-3 sig-bottom'></div>
+      <div class='col-3 px-20'><h3>Manager</h3></div>
+    </div>
+
+    <div class='d-flex' style='margin-top: 50px;'>
+      <div><p> Please verify your product and paying total bill. </p></div>
+      <div><p> After leaving the Mehtab, we will not be responsible. </p></div>
+    </div>
+
+    <div>
+      <p class="border-bottom"></p>
+      <h2 class="text-center">For Office Gate Pass OutWard with racking</h2>
       <h3 class="text-center">
         OutWard Date: <b><span><%= data.first['date'] %></span></b>
       </h3>
@@ -93,20 +162,26 @@
       <table>
         <thead class="lite-gray">
           <th class="text-center">Serial No</th>
+          <th class="text-center">Marka</th>
           <th class="text-center">Challan No</th>
           <th class="text-center">Room No</th>
           <th class="text-center">Rack No</th>
           <th class="text-center">Product Qty</th>
+          <th class="text-center">In Date</th>
+          <th class="text-center">Close Date</th>
         </thead>
         <tbody>
           <% data.each_with_index do |order, index| %>
             <% order['items'].each_with_index do |item, index| %>
               <tr>
                 <td class="text-center"><%= index %></td>
-                <td class="text-center"><%= item['challan_no'] %></td>
+                <td class="text-center"><%= item['marka'] %></td>
+                 <td class="text-center"><%= item['challan_no'] %></td>
                 <td class="text-center"><%= item['room_num'] %></td>
                 <td class="text-center"><%= item['rack_num'] %></td>
                 <td class="text-center"><%= item['quantity'] %></td>
+                <td class="text-center"><%= item['in_date'] %></td>
+                <td class="text-center"><%= item['close_date'] %></td>
               </tr>
             <% end %>
           <% end %>
@@ -124,55 +199,10 @@
       <div class='col-3 sig-bottom'></div>
       <div class='col-3 px-20'><h3>Manager</h3></div>
     </div>
-    
 
-    <div>
-      <p class="border-bottom"></p>
-      <h2 class="text-center">Gate Pass OutWard with racking</h2>
-      <h3 class="text-center">
-        OutWard Date: <b><span><%= data.first['date'] %></span></b>
-      </h3>
-      <h2 class= "text-right">Gate Pass No: <%= data.first['id']%></h2>
-      <h3>Party: <%= data.first['name']%></h3>
-      <h3>Marka: <%= data.first['items'].first['marka']%></h3>
-      <h3>Product: <%= data.first['items'].first['product']%></h3>
-      <p class="border-bottom"></p>
-      <p class="text-center">Report by: <%=current_user.name%></p>
-    </div>
-    <div>
-      <table>
-        <thead class="lite-gray">
-          <th class="text-center">Serial No</th>
-          <th class="text-center">Challan No</th>
-          <th class="text-center">Room No</th>
-          <th class="text-center">Rack No</th>
-          <th class="text-center">Product Qty</th>
-        </thead>
-        <tbody>
-          <% data.each_with_index do |order, index| %>
-            <% order['items'].each_with_index do |item, index| %>
-              <tr>
-                <td class="text-center"><%= index %></td>
-                <td class="text-center"><%= item['challan_no'] %></td>
-                <td class="text-center"><%= item['room_num'] %></td>
-                <td class="text-center"><%= item['rack_num'] %></td>
-                <td class="text-center"><%= item['quantity'] %></td>
-              </tr>
-            <% end %>
-          <% end %>
-          <tr>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th>Total: </th>
-            <th><%= data.first['total_quantity'] %></th>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div class='d-flex' style='margin-top: 100px;'>
-      <div class='col-3 sig-bottom'></div>
-      <div class='col-3 px-20'><h3>Manager</h3></div>
+    <div class='d-flex' style='margin-top: 50px;'>
+      <div><p> Please verify your product and paying total bill. </p></div>
+      <div><p> After leaving the Mehtab, we will not be responsible. </p></div>
     </div>
 
   </body>

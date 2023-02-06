@@ -16,7 +16,7 @@ class ColdStorageInwardsController < ApplicationController
     purchase_sale_detail = @q.result.distinct.where(transaction_type: 'InWard')
     @purchase_sale_details = purchase_sale_detail.order('purchase_sale_details.created_at desc').page(params[:page]).per(100)
     @pdf_orders = @q.result.where(transaction_type: 'InWard')
-    @cold_storage_inward_total = purchase_sale_detail.group('purchase_sale_details.id').sum('purchase_sale_items.size_9')
+    @cold_storage_inward_total = PurchaseSaleDetail.joins(:purchase_sale_items).group('purchase_sale_details.id').sum('purchase_sale_items.size_9')
     if params[:pdf].present?
       @pdf_orders_total = @pdf_orders.sum('purchase_sale_items.quantity')
       @pdf_inward_total = @pdf_orders.group('sys_users.name').sum('purchase_sale_items.quantity')
@@ -145,7 +145,18 @@ class ColdStorageInwardsController < ApplicationController
     end
     in_prod = pdf_rep.where(transaction_type: 'InWard').group('products.title', 'purchase_sale_items.size_8').sum('purchase_sale_items.quantity')
     out_prod = pdf_rep.where(transaction_type: 'OutWard').group('products.title', 'purchase_sale_items.size_8').sum('purchase_sale_items.quantity')
-    @product_room_quantity = in_prod.merge(out_prod) { |key, a_val, b_val| a_val - b_val }
+    mergedHash = in_prod.merge(out_prod) { |key, a_val, b_val| a_val - b_val }
+    result = {}
+    mergedHash.each do |key, value|
+      product_name, room_no = key
+      if result[product_name].nil?
+        result[product_name] = { 'room_no' => [room_no], 'remaining' => [value] }
+      else
+        result[product_name]['room_no'] << room_no
+        result[product_name]['remaining'] << value
+      end
+    end
+    @product_room_quantity = result
     generate_pdf('' ,'Stock-Report', 'pdf.html', 'A4', false, 'cold_storage_inwards/stock_report_in_out.pdf.erb')
 
   end
@@ -247,6 +258,8 @@ class ColdStorageInwardsController < ApplicationController
         :total_sale_price,
         :transaction_type,
         :size_1,:size_2,:size_3,:size_4,:size_5,:size_6,:size_7,:size_8,:size_9,:size_10,:size_11,:size_12,:size_13,
+        :inward_date,
+        :closed_date,
         :discount_price,
         :purchase_sale_type,
         :created_at,
