@@ -4,69 +4,69 @@
     <span aria-hidden="true">×</span>
   </button>
 </div>
-
+<div class="row-lg-12 m-4">
+  <div class="float-left">
+    <h2 class="ml-2 logo-back"><i class="fa fa-users mr-2"></i>Users</h2>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<%= root_path %>">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active">
+        <a href="<%= sys_users_path %>">Users</a>
+      </li>
+    </ol>
+  </div>
+  <% if check_can_create(@module_permission) %>
+    <div class="float-right mt-3">
+      <%= link_to payable_sys_users_sys_users_path, class: "btn btn-primary file-btn-color mt-3 mr-2" do %>
+          Payable
+      <% end %>
+      <%= link_to receiveable_sys_users_path, class: "btn btn-danger file-btn-color mt-3 mr-2" do %>
+          Receiveable
+      <% end %>
+      <%= link_to transfer_ledger_books_path, class: "btn btn-info file-btn-color mt-3 mr-2" do %>
+          Payment Transfer
+      <% end %>
+      <%= link_to new_sys_user_path, style:"width: 150px;", class: "btn btn-success mt-3 mr-1" do %>
+          <i class="fa fa-plus-circle"></i>
+          Create
+      <% end %>
+    </div>
+  <% end %>
+</div>
+<div class="clearfix"></div>
 <div class="hidden m-4" id="sys_users_list">
   <div class="row">
     <div class="col-lg-12 col-sm-12">
-        <div class="main-content-header">
-          <h1 class="ml-2">User's List</h1>
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-              <a href="<%= root_path %>">Dashboard</a>
-            </li>
-            <li class="breadcrumb-item active">
-              <a href="<%= sys_users_path %>">User's List</a>
-            </li>
-          </ol>
-        </div>
-        <div class="row mb-5">
-          <% if check_can_create(@module_permission) %>
-            <%= link_to new_sys_user_path, remote: true, class: "btn btn-success mt-3 ml-3" do %>
-              <i class="fa fa-plus" aria-hidden="true"></i>
-                Create
+      <div class="clearfix"></div>
+      <div class="float-right">
+        <div class="dropdown ml-auto">
+          <span class="btn btn-info" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
+          <div class="dropdown-content">
+            <% if @help.present? %>
+              <% @help&.help_links.each do |link| %>
+                <a type="button" class="" target="_blank" href="<%= link[1] %>" >Help in <%= link[0] %></a>
+              <% end %>
             <% end %>
-            <%= link_to payable_sys_users_sys_users_path, class: "btn btn-primary mt-3 ml-3" do %>
-                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                  Payable
-            <% end %>
-              <%= link_to receiveable_sys_users_path, class: "btn btn-danger mt-3 ml-3" do %>
-                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                  Reciveable
-              <% end %>
-              <%= link_to transfer_ledger_books_path, class: "btn btn-info mt-3 ml-3" do %>
-                  <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                    Payment Transfer
-              <% end %>
-          <% end %>
-        </div>
-        <div class="float-right">
-          <div class="dropdown ml-auto mr-4">
-            <span class="btn btn-info" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
-            <div class="dropdown-content">
-              <% if @help.present? %>
-                <% @help&.help_links.each do |link| %>
-                  <a type="button" class="" target="_blank" href="<%= link[1] %>" >Help in <%= link[0] %></a>
-                <% end %>
-              <% end %>
-            </div>
           </div>
         </div>
-        <ul class="nav nav-pills mb-2" role="tablist">
-          <li class="nav-item">
-            <a class="nav-link tab-label sys-user-search-exp-tab active" data-toggle="tab" href="#search" role="tab">Search</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link tab-label sys-user-search-exp-tab" data-toggle="tab" href="#analytics" data-remote="true" role="tab">Analytics</a>
-          </li>
-					<%if (check_can_import_export(@module_permission))%>
-						<li class="nav-item">
-						  <a class="nav-link tab-label sys-user-search-exp-tab" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
-						</li>
-					<%end%>
-            <li class="nav-item">
-              <a class="nav-link tab-label sys-user-logs-tab" data-toggle="tab" href="#logs" role="tab">Logs</a>
-            </li>
-        </ul>
+      </div>
+      <ul class="nav nav-pills mb-2" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link tab-label sys-user-search-exp-tab active" data-toggle="tab" href="#search" role="tab">Search</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link tab-label sys-user-search-exp-tab" data-toggle="tab" href="#analytics" data-remote="true" role="tab">Analytics</a>
+        </li>
+				<%if (check_can_import_export(@module_permission))%>
+					<li class="nav-item">
+					  <a class="nav-link tab-label sys-user-search-exp-tab" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
+					</li>
+				<%end%>
+        <li class="nav-item">
+          <a class="nav-link tab-label sys-user-logs-tab" data-toggle="tab" href="#logs" role="tab">Logs</a>
+        </li>
+      </ul>
 
     <%= hidden_field_tag "userCount", @user_count, { :id => "userCount" } %>
     <%= hidden_field_tag "balanceSum", @balance_sum, { :id => "balanceSum" } %>
@@ -78,10 +78,11 @@
     <%= hidden_field_tag "cityUser", @city_user, { :id => "cityUser" } %>
 
         <div class="tab-content mb-3">
-          <div class="tab-pane active card border-radius-1 shadow p-3" id="search" role="tabpanel">
-            <div class="row d-flex mt-3">
-              <div class="col-lg-7">
-               <%= search_form_for @q, url: sys_users_path, class: "admin-controls", method: "get" do |f| %>
+        <div class="tab-pane active no-tab-border" id="search" role="tabpanel">
+          <%= search_form_for @q, url: sys_users_path, class: "admin-controls", method: "get" do |f| %>
+            <div class="card shadow mb-3">
+              <div class="row ml-1 mr-1 mb-2 p-2 d-flex">
+                <div class="col-lg-7 mt-4">
                   <span class="col-lg-4 form-group float-left">
                     <%= f.select :id_eq, options_from_collection_for_select(@all_user, "id", ->(st){"#{st.name} \u{27F6} \u{27F6} #{st.code} "},f.object.id_eq),{:include_blank => "Select Name/Code"},:class=>"form-control chosen-select " %>
                   </span>
@@ -92,12 +93,29 @@
                     <%= f.select :status_eq, SysUser.statuses.map { |key, value| [key.humanize, value] },{include_blank: "Select Status", hide_label:true, required: true },:class=>"form-control chosen-select" %>
                   </span>
                   <span class="col-lg-2 form-group float-left">
-                    <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+                    <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:80px"><i class="fa fa-search"></i></button>
                   </span>
                 </div>
-                <div class="col-lg-5">                 
+              </div>
+            </div>
+            <div class='card shadow p-4 sys-user-book-index-card'>
+              <div class="row d-flex" style="position: absolute;">
+                <div>
+                  <%if (check_can_delete(@module_permission))%>
+	                  <button class="btn btn-danger file-btn-color delete-selected mt-4 ml-3" type='button' value='SysUser'>
+	                  	<i class="fa fa-trash"></i>
+	                  </button>		
+                  <%end%>
+                </div> 
+                <div class="mt-4 ml-3">
+                  <% if check_can_download_pdf(@module_permission)%>
+                    <button class=" btn btn-danger file-btn-color" style="width: 80px;" title="Download user pdf" name="pdf" type="submit" value="pdf" formtarget="_blank">PDF</button>
+                  <% end %>
+                  <% if check_can_download_csv(@module_permission)%>
+                    <button class=" btn btn-warning file-btn-color" style="width: 80px;" title="Download user csv" name="csv" type="submit" value="csv">CSV</button>
+                  <% end %>
                   <% if check_can_send_email(@module_permission)%>
-                    <button class="form-control btn btn-info float-right mx-2" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-2"></i>Email</button>
+                    <button class="form-control btn btn-info file-btn-color" style="width: 80px;"  type="button" data-toggle="modal" data-target="#exampleModalCenter">Mail</button>
                     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                       <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
@@ -133,45 +151,207 @@
                       </div>
                     </div>
                   <% end %>
-                  <% if check_can_download_csv(@module_permission)%>
-                    <button class=" btn btn-warning float-right ml-2" style="width:100px" title="Download user csv" name="csv" type="submit" value="csv"><i class="fa fa-file-excel mr-2" aria-hidden="true"></i>CSV</button>
-                  <% end %>
-                  <% if check_can_download_pdf(@module_permission)%>
-                    <button class=" btn btn-danger float-right " style="width:100px" title="Download user pdf" name="pdf" type="submit" value="pdf" formtarget="_blank"><i class="fa fa-file-pdf mr-2"></i>PDF</button>
-                  <% end %>
+                </div> 
+              </div>
+              <div class="mt-3">
+                <table data-toggle="table" data-search="true" class="overflow-hidden content-table">
+                  <%= render 'map_columns/map_column_partials' %>
+                    <thead>
+                      <tr>
+                        <th><input type="checkbox" id="master" class='select-all-checkbox'>
+                          </th>
+                        <th>ID<%= sort_link(@q, :id, "", {}, class: 'sorting-button ml-3') %></th>
+                        <th>DP</th>
+                        <th>Code<%= sort_link(@q, :code, "", {}, class: 'sorting-button ml-3') %></th>
+                        <th>Name<div class='float-right'><%= sort_link(@q, :cnic, "", {}, class: 'sorting-button') %></div></th>
+                        <th>Group<%= sort_link(@q, :user_group, "", {}, class: 'sorting-button ml-3') %></th>
+                        <th>Status</th>
+                        <th>Occupation</th>
+                        <th>OB</th>
+                        <th>Balance<div class='float-right'><%= sort_link(@q, :balance, "", {}, class: 'sorting-button') %></div></th>
+                        <th>Address</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                  <tbody>
+                     <% @sys_users.each do |sys_user| %>
+                      <% date = (sys_user.ledger_books.present? ? sys_user.ledger_books.last.created_at : sys_user.created_at)%>
+                      <tr class=<%=((DateTime.now.to_datetime-date.to_datetime).to_i>30 && !sys_user.balance.to_i.zero?) ? '' : ''%>>
+                        <td><%= check_box_tag 'object_ids[]', sys_user.id %></td>
+                        <td><%= sys_user.id %></td>
+                        <td>
+                        <div>
+                          <% if  sys_user.profile_image.attached? %>
+                            <%= image_tag sys_user.profile_image.service_url, class:"shadow border-radius-1 dp-size" %>
+                          <% end %>
+                        </div>
+                        </td>
+                        <td><%= sys_user.code %></td>
+                        <td class="urdu-font">
+                            <%=link_to ledger_books_path('q[sys_user_id_eq]':sys_user.id) do%>
+                              <i class="fa fa-address-book"></i><%= sys_user.name %>
+                            <%end %>
+                          </td>
+                        </td>
+                        <td><%= link_to sys_user.user_group, user_groups_path() %></td>
+                        <td><%= sys_user.status %></td>
+                        <td><%= sys_user.occupation %></td>
+                        <td><b><%= number_with_delimiter(sys_user.opening_balance.to_f.round(2)) %></b></td>
+                        <td>
+                          <div class="icon-container">
+                            <span class="mt-2 mr-1"><%= number_with_delimiter(sys_user.balance.to_f.round(2)) %></span>
+                            <%if sys_user.balance.to_f > 0  %>
+                              <div class="my-icon my-view float-right">
+                                <div class="my-tooltip text-primary">
+                                  Jama/Payable
+                                </div>
+                                  <%= link_to sys_user_path(sys_user), remote: true, class:"icon-div" do %>
+                                    <i class="fa fa-arrow-up mt-2 text-primary" aria-hidden="true"></i>
+                                  <%end %>
+                              </div>
+                            <% end %> 
+                            <%if sys_user.balance.to_f < 0  %>
+                              <div class="my-icon my-view">
+                                <div class="my-tooltip text-danger">
+                                  Benam/Recievable
+                                </div>
+                                  <%= link_to sys_user_path(sys_user), remote: true, class:"icon-div" do %>
+                                    <i class="fa fa-arrow-down mt-2 text-danger" aria-hidden="true"></i>
+                                  <%end %>
+                              </div>
+                            <% end %> 
+                            <%if sys_user.balance.to_f == 0  %>
+                              <div class="my-icon my-view">
+                                <div class="my-tooltip text-success">
+                                  Nil
+                                </div>
+                                  <%= link_to sys_user_path(sys_user), remote: true, class:"icon-div" do %>
+                                    <i class="fa fa-check mt-2 text-success" aria-hidden="true"></i>
+                                  <%end %>
+                              </div>
+                            <% end %>  
+                          </div>
+                         </td>
+                        <td>
+                          <%if sys_user.contact.present?%>
+                          <%=sys_user.contact.city.title if sys_user.contact.city.present?%>
+                          <%end%>
+                        </td>
+                        <td>
+                          <div class="icon-container-1">
+                            <div class="my-icon-1 my-view-1">
+                              <div class="my-tooltip-1">
+                                  <div class="icon-container">
+	                      						<%if (check_can_update(@module_permission))%>
+	                      							<div class="my-icon my-view">
+	                      								<div class="my-tooltip">
+	                      									Edit
+	                      									</div>
+	                      										<%= link_to edit_sys_user_path(sys_user), remote: true, class:"icon-div" do %>
+	                      											<i class="fa fa-edit mt-2" aria-hidden="true"></i>
+	                      										<%end %>
+	                      							</div>
+	                      						<% end %>
+	                      						<%if (check_can_delete(@module_permission))%>
+	                      							<div class="my-icon my-view">
+	                      								<div class="my-tooltip">
+	                      									Delete
+	                      								</div>
+	                      								<%= link_to sys_user, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+	                      								<i class="fa fa-trash mt-2" aria-hidden="true"></i>
+	                      								<%end %>
+	                      							</div>
+	                      						<%end%>
+	                      						<%if (check_can_read(@module_permission))%>
+	                      							<div class="my-icon my-view">
+	                      								<div class="my-tooltip">
+	                      									Show
+	                      								</div>
+	                      								<%= link_to sys_user_path(sys_user), remote: true, class:"icon-div" do %>
+	                      									<i class="fa fa-eye mt-2" aria-hidden="true"></i>
+	                      								<%end %>
+	                      							</div>
+	                      						<%end%>
+	                      						<%if (check_can_download_pdf(@module_permission))%>
+                                      <div class="my-icon my-view">
+                                        <div class="my-tooltip">
+                                          PDF
+                                        </div>
+                                            <%= link_to sys_users_path('q[id_eq]':sys_user.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
+                                              <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
+                                            <%end %>
+                                      </div>
+	                      						<%end%>
+	                      						<%if (check_can_download_csv(@module_permission))%>
+                                      <div class="my-icon my-view">
+	                      								<div class="my-tooltip">
+	                      									CSV
+	                      								</div>
+	                      									<%= link_to sys_users_path('q[id_eq]':sys_user.id,'csv':true), title: 'Download CSV', class:"icon-div" do%>
+	                      									<i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
+	                      								<%end %>
+                                       </div>
+	                      						<%end%>
+                                  </div>
+                                  </div>
+                                      <span class="icon-div-1">
+                                            <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+                                      </span>
+                                  </div>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                        </td>
+                      </tr>
+                      <% end %>
+                      <tr>
+                        <td colspan="9"><h5>Total</h5></td>
+                        <td colspan="3"><b><%=number_with_delimiter(@sys_user_balance.to_f.round(2)) %></b></td>
+                      </tr>
+                    </tbody>
+                </table>
+              </div>
+              <div class="col-lg-12 digg_pagination mt-3">
+                <div class="float-left page_info">
+                  <%= page_entries_info @sys_users %>
                 </div>
-              <% end %>
+                <div class="float-right">
+                <%= paginate @sys_users, :container => false %>
+                </div>
+              </div>
             </div>
-          </div>
-          <div class="tab-pane card border-radius-1 shadow p-5" id="analytics" role="tabpanel">
+          <% end %>
+        </div>
+          <div class="tab-pane card shadow p-5" id="analytics" role="tabpanel">
             <div class="row d-flex">
               <div class="col-lg-6">
                 <div class="my-chart-Container">
-                  <div class="mychartBox card border-radius-1 shadow mt-2">
+                  <div class="mychartBox card shadow mt-2">
                     <canvas id="myChart"></canvas>
                   </div> 
                 </div>
               </div>
               <div class="col-lg-6">
                 <div class="my-chart-Container">
-                  <div class="mychartBox card border-radius-1 shadow mt-2">
+                  <div class="mychartBox card shadow mt-2">
                     <canvas id="myChart4"></canvas>
                   </div> 
                 </div>
               </div>
-              
             </div>
             <div class="row d-flex mt-3">
               <div class="col-lg-6">  
                 <div class="my-chart-Container">
-                  <div class="mychartBox card border-radius-1 shadow mt-2">
+                  <div class="mychartBox card shadow mt-2">
                     <canvas id="myChart1"></canvas>
                   </div> 
                 </div>
               </div> 
               <div class="col-lg-6">
                 <div class="my-chart-Container">
-                  <div class="mychartBox card border-radius-1 shadow mt-2">
+                  <div class="mychartBox card shadow mt-2">
                     <canvas id="myChart2"></canvas>
                   </div> 
                 </div>
@@ -179,14 +359,14 @@
             </div>
             <div class="col-lg-6">  
               <div class="my-chart-Container">
-                <div class="mychartBox card border-radius-1 shadow mt-2">
+                <div class="mychartBox card shadow mt-2">
                   <canvas id="myChart3"></canvas>
                 </div> 
               </div>
             </div>  
                
           </div>
-          <div class="tab-pane card border-radius-1 shadow p-3" id="import-export" role="tabpanel">
+          <div class="tab-pane card shadow p-3" id="import-export" role="tabpanel">
             <p>
               <%= search_form_for @q, url: sys_users_path, class: "admin-controls", method: "get" do |f| %>
                 <div class="d-flex ml-2">
@@ -196,7 +376,7 @@
               <% end %>
             </p>
           </div>
-          <div class="tab-pane card shadow mt-2 border-radius-1" id="logs" role="tabpanel">
+          <div class="tab-pane card shadow mt-2" id="logs" role="tabpanel">
             <p>
               <div class="d-flex">
                 <%= link_to view_history_sys_users_path, class: "btn btn-success d-none", id: "sys-user-logs", remote:true do %>
@@ -208,187 +388,6 @@
             </p>
           </div>
         </div>
-
- <div class='card border-radius-1 shadow p-4 sys-user-book-index-card'>
-  <div class="row d-flex" style="position: absolute;">
-    <div>
-      <%if (check_can_delete(@module_permission))%>
-	      <button class="btn btn-outline-danger delete-selected mt-4 ml-3" type='button' value='SysUser'>
-	      	Delete Selected
-	      </button>		
-      <%end%>
-    </div>  
-  </div>
-  <div class="mt-3">
-    <table data-toggle="table" data-search="true" class="overflow-hidden border-radius-1 content-table">
-      <%= render 'map_columns/map_column_partials' %>
-        <thead>
-          <tr>
-            <th><input type="checkbox" id="master" class='select-all-checkbox'>
-              </th>
-            <th>ID<%= sort_link(@q, :id, "", {}, class: 'sorting-button ml-3') %></th>
-            <th>DP</th>
-            <th>Code<%= sort_link(@q, :code, "", {}, class: 'sorting-button ml-3') %></th>
-            <th>Name<div class='float-right'><%= sort_link(@q, :cnic, "", {}, class: 'sorting-button') %></div></th>
-            <th>Group<%= sort_link(@q, :user_group, "", {}, class: 'sorting-button ml-3') %></th>
-            <th>Status</th>
-            <th>Occupation</th>
-            <th title="Opening Balance">OB</th>
-            <th>Balance<div class='float-right'><%= sort_link(@q, :balance, "", {}, class: 'sorting-button') %></div></th>
-            <th>Address</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-      <tbody>
-         <% @sys_users.each do |sys_user| %>
-          <% date = (sys_user.ledger_books.present? ? sys_user.ledger_books.last.created_at : sys_user.created_at)%>
-          <tr class=<%=((DateTime.now.to_datetime-date.to_datetime).to_i>30 && !sys_user.balance.to_i.zero?) ? '' : ''%>>
-            <td><%= check_box_tag 'object_ids[]', sys_user.id %></td>
-            <td><%= sys_user.id %></td>
-            <td>
-            <div>
-              <% if  sys_user.profile_image.attached? %>
-                <%= image_tag sys_user.profile_image.service_url, class:"shadow border-radius-1 dp-size" %>
-              <% end %>
-            </div>
-            </td>
-            <td><%= sys_user.code %></td>
-            <td class="urdu-font">
-                <%=link_to ledger_books_path('q[sys_user_id_eq]':sys_user.id) do%>
-                  <i class="fa fa-address-book"></i><%= sys_user.name %>
-                <%end %>
-              </td>
-            </td>
-            <td><%= link_to sys_user.user_group, user_groups_path() %></td>
-            <td><%= sys_user.status %></td>
-            <td><%= sys_user.occupation %></td>
-            <td><b><%= number_with_delimiter(sys_user.opening_balance.to_f.round(2)) %></b></td>
-            <td>
-              <div class="icon-container">
-                <span class="mt-2 mr-1"><%= number_with_delimiter(sys_user.balance.to_f.round(2)) %></span>
-                <%if sys_user.balance.to_f > 0  %>
-                  <div class="my-icon my-view float-right">
-                    <div class="my-tooltip text-primary">
-                      Jama/Payable
-                    </div>
-                      <%= link_to sys_user_path(sys_user), remote: true, class:"icon-div" do %>
-                        <i class="fa fa-arrow-up mt-2 text-primary" aria-hidden="true"></i>
-                      <%end %>
-                  </div>
-                <% end %> 
-                <%if sys_user.balance.to_f < 0  %>
-                  <div class="my-icon my-view">
-                    <div class="my-tooltip text-danger">
-                      Benam/Recievable
-                    </div>
-                      <%= link_to sys_user_path(sys_user), remote: true, class:"icon-div" do %>
-                        <i class="fa fa-arrow-down mt-2 text-danger" aria-hidden="true"></i>
-                      <%end %>
-                  </div>
-                <% end %> 
-                <%if sys_user.balance.to_f == 0  %>
-                  <div class="my-icon my-view">
-                    <div class="my-tooltip text-success">
-                      Nil
-                    </div>
-                      <%= link_to sys_user_path(sys_user), remote: true, class:"icon-div" do %>
-                        <i class="fa fa-check mt-2 text-success" aria-hidden="true"></i>
-                      <%end %>
-                  </div>
-                <% end %>  
-              </div>
-             </td>
-            <td>
-              <%if sys_user.contact.present?%>
-              <%=sys_user.contact.city.title if sys_user.contact.city.present?%>
-              <%end%>
-            </td>
-            <td>
-              <div class="icon-container-1">
-                <div class="my-icon-1 my-view-1">
-                  <div class="my-tooltip-1">
-                      <div class="icon-container">
-	          						<%if (check_can_update(@module_permission))%>
-	          							<div class="my-icon my-view">
-	          								<div class="my-tooltip">
-	          									Edit
-	          									</div>
-	          										<%= link_to edit_sys_user_path(sys_user), remote: true, class:"icon-div" do %>
-	          											<i class="fa fa-edit mt-2" aria-hidden="true"></i>
-	          										<%end %>
-	          							</div>
-	          						<% end %>
-	          						<%if (check_can_delete(@module_permission))%>
-	          							<div class="my-icon my-view">
-	          								<div class="my-tooltip">
-	          									Delete
-	          								</div>
-	          								<%= link_to sys_user, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
-	          								<i class="fa fa-trash mt-2" aria-hidden="true"></i>
-	          								<%end %>
-	          							</div>
-	          						<%end%>
-	          						<%if (check_can_read(@module_permission))%>
-	          							<div class="my-icon my-view">
-	          								<div class="my-tooltip">
-	          									Show
-	          								</div>
-	          								<%= link_to sys_user_path(sys_user), remote: true, class:"icon-div" do %>
-	          									<i class="fa fa-eye mt-2" aria-hidden="true"></i>
-	          								<%end %>
-	          							</div>
-	          						<%end%>
-	          						<%if (check_can_download_pdf(@module_permission))%>
-                          <div class="my-icon my-view">
-                            <div class="my-tooltip">
-                              PDF
-                            </div>
-                                <%= link_to sys_users_path('q[id_eq]':sys_user.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
-                                  <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
-                                <%end %>
-                          </div>
-	          						<%end%>
-	          						<%if (check_can_download_csv(@module_permission))%>
-                          <div class="my-icon my-view">
-	          								<div class="my-tooltip">
-	          									CSV
-	          								</div>
-	          									<%= link_to sys_users_path('q[id_eq]':sys_user.id,'csv':true), title: 'Download CSV', class:"icon-div" do%>
-	          									<i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
-	          								<%end %>
-                           </div>
-	          						<%end%>
-                      </div>
-                      </div>
-                          <span class="icon-div-1">
-                                <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
-                          </span>
-                      </div>
-                    </div>
-                    </div>
-                  </div>
-            </td>
-          </tr>
-  
-            </td>
-          </tr>
-          <% end %>
-          <tr>
-            <td colspan="9"><h5>Total</h5></td>
-            <td colspan="3"><b><%=number_with_delimiter(@sys_user_balance.to_f.round(2)) %></b></td>
-          </tr>
-        </tbody>
-    </table>
-  </div>
-  <div class="col-lg-12 digg_pagination mt-3">
-    <div class="float-left page_info">
-      <%= page_entries_info @sys_users %>
-    </div>
-    <div class="float-right">
-    <%= paginate @sys_users, :container => false %>
-    </div>
-  </div>
-</div>
 </div>
 
 <%= form_for :bulk_import, url: bulk_import_data_path, method: :post, html: {class: "bulk-import-form"} do |f| %>
