@@ -165,7 +165,7 @@ class ColdStorageInwardsController < ApplicationController
     @total_stock = @merged_hash_rem.values.sum
     get_seasonal_room_product_rem_total
     if params[:submit_pdf].present?
-      generate_pdf('' ,'Seasonal-Stock-Report', 'pdf.html', 'A4', false, 'cold_storage_inwards/seasonal-stock_report.pdf.erb')
+      generate_pdf('' ,'Seasonal-Stock-Report', 'pdf.html', 'A4', false, 'cold_storage_inwards/seasonal_stock_report.pdf.erb')
     end
   end
 
