@@ -68,7 +68,7 @@ class Ability
     can :update, CompaignEntry
   end
 
-  def developer_rules
+  def developer_rules(user)
     can :manage, :all
     can :view, :all
     can :destory, :all
