@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Booking Reciept</title>
+    <title>Installments Reciept</title>
     <%= wicked_pdf_stylesheet_link_tag ("pdf") -%>
     <style>
       .text-center{
@@ -39,6 +39,10 @@
       }
       .bold{
         font-weight: bold;
+        font-size: 12px;
+      }
+      b, div, p, span {
+        font-size: 12px;
       }
     </style>
   </head>
@@ -51,22 +55,22 @@
       </div>
       <div class='d-flex' style='margin-top: 30px;'>
         <div class='d-flex' style='margin-left: 10px; width: 15%;'>
-          <p>PLOT No.</p> <p class='box' style='width: 60px;'></p>
+          <p style='padding-top: 5px;'>PLOT No.</p> <p class='box' style='width: 60px;'></p>
         </div>
         <div class='d-flex' style='margin-left: 10px; width: 12%;'>
-          <p>Area. Sqft:</p> <p class='box'></p>
+          <p style='padding-top: 5px;'>Area. Sqft:</p> <p class='box'></p>
         </div>
         <div class='d-flex' style='margin-left: 10px; width: 7%;'>
-          <p>Res:</p> <p class='box'></p>
+          <p style='padding-top: 5px;'>Res:</p> <p class='box'></p>
         </div>
         <div class='d-flex' style='margin-left: 10px; width: 8%;'>
-          <p>Com:</p> <p class='box'></p>
+          <p style='padding-top: 5px;'>Com:</p> <p class='box'></p>
         </div>
         <div class='d-flex' style='margin-left: 10px; width: 7%;'>
-          <p>Cor:</p> <p class='box'></p>
+          <p style='padding-top: 5px;'>Cor:</p> <p class='box'></p>
         </div>
         <div class='d-flex' style='margin-left: 10px; width: 16%;'>
-          <p>Cash Payment:</p> <p class='box'></p>
+          <p style='padding-top: 5px;'>Cash Payment:</p> <p class='box'></p>
         </div>
         <div class='d-flex' style='margin-left: 10px; width: 13%;'>
           <p>36 Months <br> Ins. Plan:</p> <p class='box'></p>
@@ -83,7 +87,7 @@
         <div class='d-flex' style='width: 40%; margin-left: 20px;'>
           <div style='width: 45%' class='bold'>Current Received:</div>
           <span class='bold' style='margin-right: 10px;'>RS.</span>
-          <div class='border-bottom' style='width: 55%;'><%= order.amount %></div>
+          <div class='border-bottom' style='width: 55%;'><%= number_with_delimiter(order.amount) %></div>
         </div>
       </div>
 
@@ -98,7 +102,7 @@
           <div class='border-bottom' style='width: 55%;'>
             <% ids = order.order.purchase_sale_details.pluck(:id) %>
             <% prev_order = order.order.purchase_sale_details.where(id: ids[ids.find_index(order.id)-1]) %>
-            <%= prev_order.present? ? prev_order[0].amount : '0'%>
+            <%= prev_order.present? ? number_with_delimiter(prev_order[0].amount) : '0'%>
           </div>
         </div>
       </div>
@@ -110,18 +114,18 @@
         <div class='d-flex' style='width: 40%; margin-left: 20px;'>
           <div style='width: 45%' class='bold'>Total Received:</div>
           <span class='bold' style='margin-right: 10px;'>RS.</span>
-          <div class='border-bottom' style='width: 55%;'><%= order.order.purchase_sale_details.sum(:amount).to_i + order.order.amount.to_i %></div>
+          <div class='border-bottom' style='width: 55%;'><%= number_with_delimiter(order.order.purchase_sale_details.sum(:amount).to_i + order.order.amount.to_i) %></div>
         </div>
       </div>
       <div class='d-flex'>
         <div class='d-flex' style='width: 57%;'>
           <div style='width: 15%;' class='bold'>Amount:</div>
-          <div class='border-bottom' style='width: 85%;'><%= order.amount %></div>
+          <div class='border-bottom' style='width: 85%;'><%= number_with_delimiter(order.amount) %></div>
         </div>
         <div class='d-flex' style='width: 40%; margin-left: 20px;'>
           <div style='width: 45%' class='bold'>Balance:</div>
           <span class='bold' style='margin-right: 10px;'>RS.</span>
-          <div class='border-bottom' style='width: 55%;'><%= order.order&.sys_user&.balance.to_i %></div>
+          <div class='border-bottom' style='width: 55%;'><%= number_with_delimiter(order.order&.sys_user&.balance.to_i&.abs) %></div>
         </div>
       </div>
 
@@ -139,22 +143,22 @@
       </div>
       <div class='d-flex' style='margin-top: 30px;'>
         <div class='d-flex' style='margin-left: 10px; width: 15%;'>
-          <p>PLOT No.</p> <p class='box' style='width: 60px;'></p>
+          <p style='padding-top: 5px;'>PLOT No.</p> <p class='box' style='width: 60px;'></p>
         </div>
         <div class='d-flex' style='margin-left: 10px; width: 12%;'>
-          <p>Area. Sqft:</p> <p class='box'></p>
+          <p style='padding-top: 5px;'>Area. Sqft:</p> <p class='box'></p>
         </div>
         <div class='d-flex' style='margin-left: 10px; width: 7%;'>
-          <p>Res:</p> <p class='box'></p>
+          <p style='padding-top: 5px;'>Res:</p> <p class='box'></p>
         </div>
         <div class='d-flex' style='margin-left: 10px; width: 8%;'>
-          <p>Com:</p> <p class='box'></p>
+          <p style='padding-top: 5px;'>Com:</p> <p class='box'></p>
         </div>
         <div class='d-flex' style='margin-left: 10px; width: 7%;'>
-          <p>Cor:</p> <p class='box'></p>
+          <p style='padding-top: 5px;'>Cor:</p> <p class='box'></p>
         </div>
         <div class='d-flex' style='margin-left: 10px; width: 16%;'>
-          <p>Cash Payment:</p> <p class='box'></p>
+          <p style='padding-top: 5px;'>Cash Payment:</p> <p class='box'></p>
         </div>
         <div class='d-flex' style='margin-left: 10px; width: 13%;'>
           <p>36 Months <br> Ins. Plan:</p> <p class='box'></p>
@@ -171,7 +175,7 @@
         <div class='d-flex' style='width: 40%; margin-left: 20px;'>
           <div style='width: 45%' class='bold'>Current Received:</div>
           <span class='bold' style='margin-right: 10px;'>RS.</span>
-          <div class='border-bottom' style='width: 55%;'><%= order.amount %></div>
+          <div class='border-bottom' style='width: 55%;'><%= number_with_delimiter(order.amount) %></div>
         </div>
       </div>
 
@@ -186,7 +190,7 @@
           <div class='border-bottom' style='width: 55%;'>
             <% ids = order.order.purchase_sale_details.pluck(:id) %>
             <% prev_order = order.order.purchase_sale_details.where(id: ids[ids.find_index(order.id)-1]) %>
-            <%= prev_order.present? ? prev_order[0].amount : '0'%>
+            <%= prev_order.present? ? number_with_delimiter(prev_order[0].amount) : '0'%>
           </div>
         </div>
       </div>
@@ -198,18 +202,18 @@
         <div class='d-flex' style='width: 40%; margin-left: 20px;'>
           <div style='width: 45%' class='bold'>Total Received:</div>
           <span class='bold' style='margin-right: 10px;'>RS.</span>
-          <div class='border-bottom' style='width: 55%;'><%= order.order.purchase_sale_details.sum(:amount) %></div>
+          <div class='border-bottom' style='width: 55%;'><%= number_with_delimiter(order.order.purchase_sale_details.sum(:amount).to_i + order.order.amount.to_i) %></div>
         </div>
       </div>
       <div class='d-flex'>
         <div class='d-flex' style='width: 57%;'>
           <div style='width: 15%;' class='bold'>Amount:</div>
-          <div class='border-bottom' style='width: 85%;'><%= order.amount %></div>
+          <div class='border-bottom' style='width: 85%;'><%= number_with_delimiter(order.amount) %></div>
         </div>
         <div class='d-flex' style='width: 40%; margin-left: 20px;'>
           <div style='width: 45%' class='bold'>Balance:</div>
           <span class='bold' style='margin-right: 10px;'>RS.</span>
-          <div class='border-bottom' style='width: 55%;'><%= order.order&.sys_user&.balance.to_i %></div>
+          <div class='border-bottom' style='width: 55%;'><%= number_with_delimiter(order.order&.sys_user&.balance.to_i&.abs) %></div>
         </div>
       </div>
 
