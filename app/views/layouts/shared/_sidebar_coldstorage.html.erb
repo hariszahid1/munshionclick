@@ -211,6 +211,12 @@
                 <% end %>
               </li>
               <li>
+                <%= link_to seasonal_stock_report_cold_storage_inwards_path, target: '_blank' do %>
+                  <i class="fas fa-th-list"></i>
+                  <span class="link-text">Seasonal Stock Report</span>
+                <% end %>
+              </li>
+              <li>
                 <%= link_to reports_chart_path do %>
                   <i class="fas fa-th-list"></i>
                   <span class="link-text">Chart/Graph</span>
@@ -240,6 +246,14 @@
                   <span class="link-text">Profit Report</span>
                 <% end %>
               </li>
+              <% if check_is_hidden_by_module('profit_reports') %>
+                <li>
+                  <%= link_to profit_reports_path do %>
+                    <i class="fas fa-th-list"></i>
+                    <span class="link-text">Profit Report 2</span>
+                  <% end %>
+                </li>
+              <% end %>
               <li>
                 <%= link_to reports_stock_report_path do %>
                   <i class="fas fa-th-list"></i>

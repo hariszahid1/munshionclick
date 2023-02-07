@@ -57,7 +57,7 @@
         </div>
         <div class='text-right' style='width: 50%;'>
           <b>Ref#</b>
-          <span class='border-bottom px-20'></span>
+          <span class='border-bottom px-20'><%= @order.order_items&.first&.product&.title %></span>
         </div>
       </div>
       <div class='text-right'>

@@ -1,0 +1,89 @@
+<div class="hidden" id="products_list">
+  <div class="main-content-header">
+    <h1 class="ml-2">Seasonal Stock Report</h1>
+  </div>
+  <ul class="nav nav-pills mb-2 ml-2" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab">Search</a>
+    </li>
+  </ul>
+  <div class="tab-content">
+      <div class="tab-pane active" id="search" style="border: none;" role="tabpanel">
+        <div class="row card border-radius-1 shadow p-2 mb-2 m-2">
+          <%= search_form_for @q, url:seasonal_stock_report_cold_storage_inwards_path , class: "admin-controls mt-3", method: "get" do |f| %>
+            <div class="col-lg-3 form-group float-left">
+                <%= f.select :purchase_sale_items_product_id_eq, options_from_collection_for_select(@products, 'id', 'title',f.object.purchase_sale_items_product_id_eq),{:include_blank => "Select product"}, class: "chosen-select"%>
+            </div>
+            <div class="col-lg-3 form-group float-left">
+              <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker',value: @created_at_gteq, 'datepicker' => true,placeholder: "YYYY-MM-DD" %>
+            </div>
+            <div class="col-lg-3 form-group float-left">
+              <%= f.search_field :created_at_lteq, class: 'form-control input-sm datepicker',value: @created_at_lteq, 'datepicker' => true ,placeholder: "YYYY-MM-DD"%>
+            </div>
+            <div class="col-lg-1 form-group float-left">
+              <input class="form-control btn btn-primary" name="search_submit" type="submit" value="Search">
+            </div>
+            <button class="form-control btn btn-danger float-right mr-2" style="width: 100px;" name="submit_pdf" type="submit" value="Stock PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mr-2"></i>PDF</button>
+          <% end %>
+        </div>
+        <div class="card border-radius-1 shadow p-2 m-2">
+          <table data-toggle="table" data-search="true">
+            <thead>
+              <tr>
+                <th>Product Name</th>
+                <th>Room No 1</th>
+                <th>Room No 2</th>
+                <th>Room No 3</th>
+                <th>Room No 4</th>
+                <th>Room No 5</th>
+                <th>Total Stock</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <% Product.all.each do |prod| %>
+                <% if  @merged_prod_rem_total [prod.title].present? %>
+                    <tr>
+                        <td><%= prod.title %></td>
+                        <td><%= @merged_hash_rem[[prod.title, "1"]]%></td>
+                        <td><%= @merged_hash_rem[[prod.title, "2"]]%></td>
+                        <td><%= @merged_hash_rem[[prod.title, "3"]]%></td>
+                        <td><%= @merged_hash_rem[[prod.title, "4"]]%></td>
+                        <td><%= @merged_hash_rem[[prod.title, "5"]]%></td>
+                        <td colspan="6" class="text-center"><b><%= @merged_prod_rem_total [prod.title]%></b></td>
+                    </tr>
+                <% end %>
+              <% end %>
+              <tr>
+                <td><b>Total </b></td>
+                <td><b><%= @merged_room_rem_total["1"] %> </b></td>
+                <td><b><%= @merged_room_rem_total["2"] %> </b></td>
+                <td><b><%= @merged_room_rem_total["3"] %> </b></td>
+                <td><b><%= @merged_room_rem_total["4"] %> </b></td>
+                <td><b><%= @merged_room_rem_total["5"] %> </b></td>
+                <td colspan="6" class="text-center"><b><%= @total_stock %> </b></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+  </div>
+</div>
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#products_list").removeClass('hidden');
+  });
+</script>
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#daily_books_list").removeClass('hidden');
+    FontAwesome.dom.i2svg();
+  });
+</script>
+

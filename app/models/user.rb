@@ -78,7 +78,7 @@ class User < ApplicationRecord
 							"production_blocks","production_cycles","productions","products","property_plans","purchase_sale_details",
 						"purchase_sale_items","raw_products","remarks","reports","salaries","salary_details","sms","staff_deals","staff_ledger_books",
 					"staff_raw_products","staffs","sys_users","sys_users/customer","sys_users/supplier","sys_users/own","user_types","users","warranties","user_groups","crms",
-          "loans", "expense_vouchers"]
+          "loans", "expense_vouchers", 'mobile_shop_product_purchases', 'sticky_notes', 'profit_reports']
 
                     # "accounts","cities","compaigns","contacts","countries","daily_books","daily_sales","dashboard","departments","expense_entries",
                     # "expense_types","expenses","gates","helps","home","investments","item_types","items","ledger_books",
