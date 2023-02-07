@@ -569,6 +569,15 @@ class PurchaseSaleDetailsController < ApplicationController
               print_pdf('installment_payment', nil,'A4')
             end
           end
+        else
+          @profile_image_url = @purchase_sale_detail.order.sys_user.profile_image.url
+          name = @purchase_sale_detail.sys_user.name+' Invoice #'+@purchase_sale_detail.id.to_s
+          respond_to do |format|
+            format.html
+            format.pdf do
+              print_pdf(name,'pdf.html','A4')
+            end
+          end
         end
       else
         @profile_image_url = @purchase_sale_detail.order.sys_user.profile_image.url
@@ -757,6 +766,12 @@ class PurchaseSaleDetailsController < ApplicationController
                 request.format = 'pdf'
                 format.pdf do
                   print_pdf('installment_payment', nil,'A4',false)
+                end
+              else
+                request.format = 'pdf'
+                format.pdf do
+                  name = @purchase_sale_detail.sys_user.name+' Invoice #'+@purchase_sale_detail.id.to_s
+                  print_pdf(name,'pdf.html','A4')
                 end
               end
             else
