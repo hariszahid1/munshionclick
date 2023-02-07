@@ -60,7 +60,7 @@
         <td><h4>Total</h4></td>
         <td><h4><%=@count%></h4></td>
         <td></td>
-        <td><h4><%=number_with_delimiter @sys_user_payable.pluck('balance').map(&:abs).sum %><h4></h4></td>
+        <td><h4><%=number_with_delimiter @sys_user_payable.pluck('balance').map(&:abs).sum.round(2) %><h4></h4></td>
 
       </tr>
     </tbody>
@@ -115,7 +115,7 @@
         <td><h4>Total<h4></td>
         <td><h4><%=@staff_payable.count%></h4></td>
         <td></td>
-        <td><h4><%=number_with_delimiter @staff_payable.sum(:balance).abs%><h4></td>
+        <td><h4><%=number_with_delimiter @staff_payable.sum(:balance).abs&.round(2) %><h4></td>
       </tr>
     </tbody>
   </table>
@@ -152,7 +152,7 @@
         <td><h4>Total : <%=@sale_item_list.count.to_i+@sale_product_list.count.to_i%></h4></td>
         <td></td>
         <td></td>
-        <td><h4><%=number_with_delimiter @sale_item_total.to_i+@sale_product_total.to_i%><h4></td>
+        <td><h4><%=number_with_delimiter @sale_item_total.to_f+@sale_product_total.to_f&.round(2) %><h4></td>
       </tr>
     </tbody>
   </table>
@@ -173,7 +173,7 @@
         </tr>
       <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
         <td><h4>Total</h4></td>
-        <td><h4><%=number_with_delimiter @investments_credit.to_i%><h4></td>
+        <td><h4><%=number_with_delimiter @investments_credit&.round(2) %><h4></td>
       </tr>
     </tbody>
   </table>
@@ -229,7 +229,7 @@
         <td><h4>Total</h4></td>
         <td><h4><%=@sys_user_receiveable.count%></h4></td>
         <td></td>
-        <td><h4><%= number_with_delimiter @sys_user_receiveable.pluck('balance').map(&:abs).sum %><h4></td>
+        <td><h4><%= number_with_delimiter @sys_user_receiveable.pluck('balance').map(&:abs).sum&.round(2) %><h4></td>
 
       </tr>
     </tbody>
@@ -281,7 +281,7 @@
         <td><h4>Total<h4></td>
         <td><h4><%=@staff_reciveable.count%></h4></td>
         <td></td>
-        <td><h4><%=number_with_delimiter @staff_reciveable.sum(:balance).abs%><h4></td>
+        <td><h4><%=number_with_delimiter @staff_reciveable.sum(:balance).abs&.round(2) %><h4></td>
       </tr>
     </tbody>
   </table>
@@ -310,7 +310,7 @@
         <td><h4>Total : <%=@expense_list.count%></h4></td>
         <td></td>
         <td></td>
-        <td><h4><%=number_with_delimiter @expense_total.to_i%><h4></td>
+        <td><h4><%=number_with_delimiter @expense_total&.round(2) %><h4></td>
       </tr>
     </tbody>
   </table>
@@ -331,7 +331,7 @@
         </tr>
       <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
         <td><h4>Total</h4></td>
-        <td><h4><%=number_with_delimiter @investments_debit.to_i%><h4></td>
+        <td><h4><%=number_with_delimiter @investments_debit&.round(2) %><h4></td>
       </tr>
     </tbody>
   </table>
@@ -368,7 +368,7 @@
         <td><h4>Total : <%=@purchase_item_list.count.to_i+@purchase_product_list.count.to_i%></h4></td>
         <td></td>
         <td></td>
-        <td><h4><%=number_with_delimiter @purchase_item_total.to_i+@purchase_product_total.to_i%><h4></td>
+        <td><h4><%=number_with_delimiter @purchase_item_total.to_f+@purchase_product_total.to_f&.round(2) %><h4></td>
       </tr>
     </tbody>
   </table>
@@ -399,7 +399,7 @@
       <% end %>
       <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
         <td><h4>Total : <%=@salary_detail_list.count.to_i%></h4></td>
-        <td><h4><%=number_with_delimiter @salary_detail_total.to_i%><h4></td>
+        <td><h4><%=number_with_delimiter @salary_detail_total&.round(2) %><h4></td>
       </tr>
     </tbody>
   </table>
@@ -429,7 +429,7 @@
         <td><h4>Total : <%=@credit_salary_list.count.to_i%></h4></td>
         <td></td>
         <td></td>
-        <td><h4><%=number_with_delimiter @credit_salary.to_i%><h4></td>
+        <td><h4><%=number_with_delimiter @credit_salary&.round(2) %><h4></td>
       </tr>
     </tbody>
   </table>
@@ -455,7 +455,7 @@
       <% end %>
       <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
         <td><h4>Total : <%=@purchase_sale_detail_discount_list.count.to_i%></h4></td>
-        <td><h4><%=number_with_delimiter @purchase_sale_detail_discount_list.sum(:discount_price)%><h4></td>
+        <td><h4><%=number_with_delimiter @purchase_sale_detail_discount_list.sum(:discount_price)&.round(2) %><h4></td>
       </tr>
     </tbody>
   </table>
@@ -510,7 +510,7 @@
       <% end %>
       <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
         <td><h4>Total/Cash in Hand : <%=@accounts.count.to_i%></h4></td>
-        <td><h4><%=number_with_delimiter @accounts.sum(:amount).to_i%><h4></td>
+        <td><h4><%=number_with_delimiter @accounts.sum(:amount)&.round(2) %><h4></td>
       </tr>
     </tbody>
   </table>

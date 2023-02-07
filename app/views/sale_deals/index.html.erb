@@ -53,10 +53,10 @@
               <% end %>
             </div>
             <div class="col-md-2">
-              <%= link_to sale_deals_path('q[purchase_sale_items_size_4_eq]': 'Saler Free'), class: 'card border-primary mx-sm-1 p-3' do %>
+              <%= link_to sale_deals_path('q[purchase_sale_items_size_4_eq]': 'Seller Free'), class: 'card border-primary mx-sm-1 p-3' do %>
                 <div class="card border-primary shadow text-primary p-3 my-card" ><span class="fa fa-gift" aria-hidden="true"></span></div>
-                <div class="text-primary text-center mt-4"><h6>Saler Free</h6></div>
-                <div class="text-primary text-center mt-3"><h2><%= @deal_count['Saler Free'] || 0 %></h2></div>
+                <div class="text-primary text-center mt-4"><h6>Seller Free</h6></div>
+                <div class="text-primary text-center mt-3"><h2><%= @deal_count['Seller Free'] || 0 %></h2></div>
               <% end %>
             </div>
           <% else %>
@@ -138,10 +138,16 @@
             <%= f.select :purchase_sale_items_size_4_eq, options_for_select(@deal, f.object.purchase_sale_items_size_4_eq),  {:include_blank => "Select Deal"}, class: "form-control chosen-select" %>
           </div>
           <div class="col-lg-2 form-group float-left">
+            <%= f.select :sys_user_cms_data_cont, options_for_select(@project_name, f.object.sys_user_cms_data_cont), {:include_blank => "Select Project Name"}, class: "form-control chosen-select" %>
+          </div>
+          <div class="col-lg-2 form-group float-left">
             <%= f.search_field :purchase_sale_items_size_11_cont, class: "form-control chosen-select", placeholder: "Search Form No" %>
           </div>
           <div class="col-lg-2 form-group float-left">
             <%= f.search_field :purchase_sale_items_size_2_cont, class: "form-control chosen-select", placeholder: "Search MS No" %>
+          </div>
+          <div class='col-lg-2 form-group float-left'>
+            <%= f.search_field :sys_user_ntn_cont, class: "form-control chosen-select", placeholder: "Search Plot Size" %>
           </div>
           <div class="col-lg-2 form-group float-left d-flex">
             <%= f.search_field :created_at, id: "reportrange", class: 'form-control' %>
@@ -150,7 +156,7 @@
             <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker',placeholder: "YYYY-MM-DD" %>
             <%= f.search_field :created_at_lteq, class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
           </div>
-          <div class="col-lg-6 form-group float-left">
+          <div class="col-lg-4 form-group float-left">
             <% if  params[:q].try(:[], 'transaction_type_eq') %>
               <%= f.hidden_field :transaction_type_eq , value: params[:q].try(:[], 'transaction_type_eq').to_i%>
             <% end %>
