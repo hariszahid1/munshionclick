@@ -10,7 +10,7 @@
   <% elsif @pos_setting&.extra_settings.present? && @pos_setting&.extra_settings['al_fatir'].present? %>
     <%= render partial: "create_show_al_fatir", locals: {order: @purchase_sale_detail} %>
   <% else %>
-    <%= render partial: "create_show_batha", locals: {order: @purchase_sale_detail} %>
+    <%= render partial: "purchase_sale_details/house_scheme/show", locals: {order: @purchase_sale_detail} %>
   <% end %>
 <%elsif pos_setting_sys_type=="CustomClear"%>
   <%= render partial: "order_show_custom_clear", locals: {order: @purchase_sale_detail} %>
@@ -23,7 +23,7 @@
     <%= render partial: "create_order_show", locals: {purchase_sale_detail: @purchase_sale_detail} %>
   <%end%>
 <%end%>
-<%if @pos_setting&.is_qr.present? && @pos_setting&.website.present? && @pos_setting&.extra_settings.nil? && @pos_setting&.extra_settings['ghouse5'].nil? %>
+<%if @pos_setting&.is_qr.present? && @pos_setting&.website.present? && @pos_setting&.extra_settings.nil? && @pos_setting&.extra_settings.try(:[], 'ghouse5').nil? %>
   <p style="text-align: center; margin: 0;">
     <img width="150px" height="115px" class="figure" style=""src=<%="data:image/svg+xml;base64,"+@str%> />
   </p>
@@ -31,7 +31,7 @@
 
 <%@printfun=@pos_setting&.extra_settings.present? ? @pos_setting&.extra_settings["printfun"].to_f : 100%>
 <%@redirectfun=@pos_setting&.extra_settings.present? ? @pos_setting&.extra_settings["redirectfun"].to_f : 1200%>
-<%if pos_setting_sys_type!="FastFood"%>
+<%if pos_setting_sys_type!="FastFood" && pos_setting_sys_type!="HousingScheme"%>
   <script type="text/javascript">
       window.setTimeout(printfun, <%=@printfun%>);
       window.setTimeout(redirectfun, <%=@redirectfun%>);
