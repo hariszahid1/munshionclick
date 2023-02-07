@@ -1,0 +1,73 @@
+<html>
+  <head>
+    <style>
+      .border-bottom{
+        border-bottom: double 4px;
+      }
+      .text-center{
+        text-align: center;
+      }
+      .text-left{
+        text-align: left;
+      }
+    </style>
+  </head>
+  <body>
+    <% @date = Date.today  %>
+    <% @time = DateTime.now %>
+    <% @time = Time.zone.now %>
+    <div>
+      <p class="border-bottom"></p>
+      <h1 class="text-left">Seasonal Stock Information</h1>
+      <h3 class="text-left">
+        <b><span>From: <%= params[:q].present? && params[:q][:created_at_gteq].present? ? params[:q][:created_at_gteq]&.to_date&.strftime("%d-%b-%y") : 'start'%></span>
+         </b>
+      </h3>
+      <h3 class="text-left">
+        <b> <span>To: <%= params[:q].present? && params[:q][:created_at_lteq].present? ? params[:q][:created_at_lteq]&.to_date&.strftime("%d-%b-%y") : 'end' %></span>
+         </b>
+      </h3>
+      <p class="border-bottom"></p>
+    </div>
+    <div>
+
+      <table>
+       <thead class="lite-gray">
+        <tr>
+          <th colspan="6" class='text-left' style="padding-left: 20px;">Product Name</th>
+          <th colspan="6" class='text-center'> Room No 1</th>
+          <th colspan="6" class='text-center'> Room No 2</th>
+          <th colspan="6" class='text-center'> Room No 3</th>
+          <th colspan="6" class='text-center'> Room No 4</th>
+          <th colspan="6" class='text-center'> Room No 5</th>
+          <th colspan="6" class='text-center'> Total Stock</th>
+        </tr>
+        </thead>
+        <tbody>
+          <% Product.all.each do |prod| %>
+            <% if  @merged_prod_rem_total[prod.title].present? %>
+                <tr>
+                <td colspan="6" class="text-left" style="padding-left: 20px;"><%= prod.title %></td>
+                <td colspan="6" class="text-center"><%= @merged_hash_rem[[prod.title, "1"]]%></td>
+                <td colspan="6" class="text-center"><%= @merged_hash_rem[[prod.title, "2"]]%></td>
+                <td colspan="6" class="text-center"><%= @merged_hash_rem[[prod.title, "3"]]%></td>
+                <td colspan="6" class="text-center"><%= @merged_hash_rem[[prod.title, "4"]]%></td>
+                <td colspan="6" class="text-center"><%= @merged_hash_rem[[prod.title, "5"]]%></td>
+                <td colspan="6" class="text-center h5"><b><%= @merged_prod_rem_total [prod.title]%></b></td>
+                </tr>
+            <% end %>
+          <% end %>
+            <tr>
+              <td colspan="6" class='text-left h5' style="padding-left: 20px;"><b>Total </b></td>
+              <td colspan="6" class='text-center h5'><b><%= @merged_room_rem_total["1"] %> </b></td>
+              <td colspan="6" class='text-center h5'><b><%= @merged_room_rem_total["2"] %> </b></td>
+              <td colspan="6" class='text-center h5'><b><%= @merged_room_rem_total["3"] %> </b></td>
+              <td colspan="6" class='text-center h5'><b><%= @merged_room_rem_total["4"] %> </b></td>
+              <td colspan="6" class='text-center h5'><b><%= @merged_room_rem_total["5"] %> </b></td>
+              <td colspan="6" class='text-center h5'><b><%= @total_stock %> </b></td>
+            </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

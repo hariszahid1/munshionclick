@@ -32,32 +32,35 @@
        <thead class="lite-gray">
         <tr>
           <th colspan="6" class='text-left' style="padding-left: 20px;">Product Name</th>
-          <th colspan="6" class='text-center'> Room Number</th>
+          <th colspan="6" class='text-center'> Room No 1</th>
+          <th colspan="6" class='text-center'> Room No 2</th>
+          <th colspan="6" class='text-center'> Room No 3</th>
+          <th colspan="6" class='text-center'> Room No 4</th>
+          <th colspan="6" class='text-center'> Room No 5</th>
+          <th colspan="6" class='text-center'> Total</th>
         </tr>
         </thead>
         <tbody>
-        <% if @product_room_quantity.present? %>
-            <% @product_room_quantity.each do |order| %>
-                <tr>
-                  <td colspan="6" class='text-left' style="padding-left: 20px;"><%= order.first %></td>
-                  <% (order.second['room_no'].zip(order.second['remaining'])).each do |room, quantity| %>
-                    <td>
-                      <table>
-                        <thead>
-                          <th><%= room %></th>
-                        </thead>
-                        <thead>
-                          <th><%= quantity %></th>
-                        </thead>
-                      </table>
-                    </td>
-                  <% end %>
-                </tr>
-            <% end %>
-        <% end %>
-         <tr>
-            <th colspan="12" class='text-left' style="padding-left: 30px;">Total Remaining: <%= number_with_delimiter(@pdf_inward_total-@pdf_outward_total) %> </th>
-          </tr>
+          <% Product.all.each do |prod| %>
+            <tr>
+              <td colspan="6" class="text-left" style="padding-left: 20px;"><%= prod.title %></td>
+              <td colspan="6" class="text-center"><%= @merged_hash_rem[[prod.title, "1"]]%></td>
+              <td colspan="6" class="text-center"><%= @merged_hash_rem[[prod.title, "2"]]%></td>
+              <td colspan="6" class="text-center"><%= @merged_hash_rem[[prod.title, "3"]]%></td>
+              <td colspan="6" class="text-center"><%= @merged_hash_rem[[prod.title, "4"]]%></td>
+              <td colspan="6" class="text-center"><%= @merged_hash_rem[[prod.title, "5"]]%></td>
+              <td colspan="6" class="text-center h5"><b><%= @merged_prod_rem[prod.title]%></b></td>
+            </tr>
+          <% end %>
+            <tr>
+              <td colspan="6" class='text-left h5' style="padding-left: 20px;"><b>Total </b></td>
+              <td colspan="6" class='text-center h5'><b><%= @merged_room_rem["1"] %> </b></td>
+              <td colspan="6" class='text-center h5'><b><%= @merged_room_rem["2"] %> </b></td>
+              <td colspan="6" class='text-center h5'><b><%= @merged_room_rem["3"] %> </b></td>
+              <td colspan="6" class='text-center h5'><b><%= @merged_room_rem["4"] %> </b></td>
+              <td colspan="6" class='text-center h5'><b><%= @merged_room_rem["5"] %> </b></td>
+              <td colspan="6" class='text-center h5'><b><%= number_with_delimiter(@pdf_inward_total-@pdf_outward_total) %> </b></td>
+            </tr>
         </tbody>
       </table>
 
