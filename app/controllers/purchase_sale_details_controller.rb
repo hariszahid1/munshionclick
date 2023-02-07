@@ -562,21 +562,10 @@ class PurchaseSaleDetailsController < ApplicationController
     @id=PurchaseSaleDetail.where(created_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).count
     request.format = 'pdf'
     if @pos_setting.sys_type=="industry" || @pos_setting.sys_type =="HousingScheme"
-      if @pos_setting&.extra_settings.present?
-        if @pos_setting&.extra_settings['ghouse5'].present? || @pos_setting&.extra_settings['al_fatir'].present?
-          respond_to do |format|
-            format.pdf do
-              print_pdf('installment_payment', nil,'A4')
-            end
-          end
-        else
-          @profile_image_url = @purchase_sale_detail.order.sys_user.profile_image.url
-          name = @purchase_sale_detail.sys_user.name+' Invoice #'+@purchase_sale_detail.id.to_s
-          respond_to do |format|
-            format.html
-            format.pdf do
-              print_pdf(name,'pdf.html','A4')
-            end
+      if @pos_setting&.extra_settings.present? && @pos_setting&.extra_settings.try(:[], 'ghouse5').present? || @pos_setting&.extra_settings.try(:[], 'al_fatir').present?
+        respond_to do |format|
+          format.pdf do
+            print_pdf('installment_payment', nil,'A4')
           end
         end
       else
@@ -761,19 +750,11 @@ class PurchaseSaleDetailsController < ApplicationController
             # @purchase_sale_detail.save!
           end
           if @pos_setting.sys_type=="industry" || @pos_setting.sys_type =="HousingScheme"
-            if @pos_setting&.extra_settings.present?
-              if @pos_setting&.extra_settings['ghouse5'].present? || @pos_setting&.extra_settings['al_fatir'].present?
-                request.format = 'pdf'
+            if @pos_setting&.extra_settings.present? && @pos_setting&.extra_settings.try(:[], 'ghouse5').present? || @pos_setting&.extra_settings.try(:[], 'al_fatir').present?
+              request.format = 'pdf'
                 format.pdf do
                   print_pdf('installment_payment', nil,'A4',false)
                 end
-              else
-                request.format = 'pdf'
-                format.pdf do
-                  name = @purchase_sale_detail.sys_user.name+' Invoice #'+@purchase_sale_detail.id.to_s
-                  print_pdf(name,'pdf.html','A4')
-                end
-              end
             else
               if params[:commit]=="Save with Print"
                 request.format = 'pdf'
