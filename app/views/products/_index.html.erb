@@ -1,12 +1,12 @@
 <div class="hidden" id="product_list">
   <div class="main-content-header">
-    <h1 class="ml-2">Products</h1>
+    <h1 class="ml-2"><%= pos_setting_sys_type.eql?('Dealer') ? 'Units' : 'Products'%></h1>
     <ol class="breadcrumb">
       <li class="breadcrumb-item">
         <a href="<%= root_path %>">Dashboard</a>
       </li>
       <li class="breadcrumb-item active">
-        <a href="<%= products_path %>">Products</a>
+        <a href="<%= products_path %>"><%= pos_setting_sys_type.eql?('Dealer') ? 'Units' : 'Products'%></a>
       </li>
     </ol>
   </div>

@@ -14,7 +14,11 @@ class CrmsController < ApplicationController
   # GET /crms
   # GET /crms.json
   def index
-    @q = SysUser.order('id desc').where(for_crms: [true, false]).ransack(params[:q])
+    if current_user&.extra_settings.try(:[], 'show_all_crm_users').present?
+      @q = SysUser.order('id desc').where(for_crms: [true, false]).ransack(params[:q])
+    else
+      @q = SysUser.order('id desc').where(for_crms: [true, false], credit_status: current_user&.id).ransack(params[:q])
+    end
     @options_for_select = SysUser.all
     @custom_pagination = params[:limit].present? ? params[:limit] : 25
     @custom_pagination = @pos_setting.custom_pagination['sys_users'] if @pos_setting&.custom_pagination.present? && @pos_setting&.custom_pagination['sys_users'].present?
