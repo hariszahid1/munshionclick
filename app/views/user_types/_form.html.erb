@@ -34,8 +34,8 @@
       </div>
 
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-        <%=f.object.id.nil? ? (f.submit class: "btn btn-success", style: "float: right")  :  (f.submit class: "btn btn-warning", style: "float: right")%>
+        <button type="button" class="btn btn-light btn-outline-secondary" data-dismiss="modal">Cancel</button>
+        <%=f.object.id.nil? ? (f.submit "Save",class: "btn btn-primary", style: "float: right")  :  (f.submit class: "btn btn-warning", style: "float: right")%>
       </div>
   
     <% end %>

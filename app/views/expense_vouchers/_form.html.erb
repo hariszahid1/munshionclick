@@ -60,7 +60,7 @@
   <br>
   <div class="clearfix"></div>
     <div class="modal-footer">
-      <%=f.object.id.nil? ? (f.submit class: "btn btn-success mr-4", style: "float: right")  :  (f.submit class: "btn btn-warning mr-4", style: "float: right")%>
+      <%=f.object.id.nil? ? (f.submit "Save" ,class: "btn btn-primary ", style: "float: right")  :  (f.submit class: "btn btn-warning mr-4", style: "float: right")%>
     </div>
 
 <% end %>
