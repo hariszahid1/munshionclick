@@ -17,7 +17,10 @@ class ColdStorageOutwardsController < ApplicationController
     @pdf_orders = @q.result.where(transaction_type: 'OutWard')
     if params[:pdf].present?
       @pdf_orders_total = @pdf_orders.sum('purchase_sale_items.quantity')
-      @pdf_outward_total = @pdf_orders.group('sys_users.name').sum('purchase_sale_items.quantity')
+      @pdf_orders_total_bill = @pdf_orders.sum('purchase_sale_items.total_pandri_bill')
+      pdf_outward_q = @pdf_orders.group('sys_users.name').sum('purchase_sale_items.quantity')
+      pdf_outward_t = @pdf_orders.group('sys_users.name').sum('purchase_sale_items.total_pandri_bill')
+      @pdf_outward_total = pdf_outward_q.merge(pdf_outward_t) { |key, old_val, new_val| [old_val, new_val] }
       download_cold_storage_outwards_pdf_file
     end
   end
@@ -72,6 +75,7 @@ class ColdStorageOutwardsController < ApplicationController
           @purchase_sale_detail.salary_details.create(staff_id: @purchase_sale_detail.staff_id, amount: @purchase_sale_detail.loading, comment: "Loading", total_balance: staff.balance,created_at: @purchase_sale_detail.created_at)
           # @purchase_sale_detail.save!
         end
+        set_penalty_pandri(@purchase_sale_detail)
         format.html { redirect_to order_outwards_path, notice: 'Outward was successfully created.' }
       else
         format.html { render :new }
@@ -91,6 +95,7 @@ class ColdStorageOutwardsController < ApplicationController
       @purchase_sale_detail.purchase_sale_items.each do |item|
         purchase[item.product_id]=item.quantity if item.product_id.present?
       end
+      before_update_carriage_loading = @purchase_sale_detail.carriage+@purchase_sale_detail.loading
       @before_products_cost = @purchase_sale_detail.purchase_sale_items.group(:product_id).sum(:cost_price)
       @before_products_quantity = @purchase_sale_detail.purchase_sale_items.group(:product_id).sum('purchase_sale_items.quantity')
       @before_products_count = @purchase_sale_detail.purchase_sale_items.group(:product_id).count
@@ -108,9 +113,31 @@ class ColdStorageOutwardsController < ApplicationController
             end
           end
         end
+        if @purchase_sale_detail.salary_details.present?
+          if @purchase_sale_detail.staff.present?
+            staff=@purchase_sale_detail.staff
+            staff.wage_debit = ((@purchase_sale_detail.carriage+@purchase_sale_detail.loading)-before_update_carriage_loading+staff.wage_debit)
+            staff.balance = ((@purchase_sale_detail.carriage+@purchase_sale_detail.loading)-before_update_carriage_loading+staff.balance)
+            staff.save!
+            @purchase_sale_detail.salary_details.first.update(staff_id: @purchase_sale_detail.staff_id, amount: @purchase_sale_detail.carriage, comment: "Carriage" , total_balance: staff.balance-@purchase_sale_detail.loading,quantity: @purchase_sale_detail.purchase_sale_items_quantities, created_at: @purchase_sale_detail.created_at)
+            @purchase_sale_detail.salary_details.last.update(staff_id: @purchase_sale_detail.staff_id, amount: @purchase_sale_detail.loading, comment: "Loading", total_balance: staff.balance,created_at: @purchase_sale_detail.created_at)
+          end
+        else
+          # @purchase_sale_detail.salary_detail_id=salary_detail.id
+          if @purchase_sale_detail.staff.present?
+            staff=@purchase_sale_detail.staff
+            staff.wage_debit = ((@purchase_sale_detail.carriage+@purchase_sale_detail.loading)-before_update_carriage_loading+staff.wage_debit)
+            staff.balance = ((@purchase_sale_detail.carriage+@purchase_sale_detail.loading)-before_update_carriage_loading+staff.balance)
+            staff.save!
+            @purchase_sale_detail.salary_details.build(staff_id: @purchase_sale_detail.staff_id, amount: @purchase_sale_detail.carriage, comment: "Carriage", total_balance: staff.balance-@purchase_sale_detail.loading,quantity: @purchase_sale_detail.purchase_sale_items_quantities, created_at: @purchase_sale_detail.created_at)
+            @purchase_sale_detail.salary_details.build(staff_id: @purchase_sale_detail.staff_id, amount: @purchase_sale_detail.loading, comment: "Loading", total_balance: staff.balance,created_at: @purchase_sale_detail.created_at)
+          end
+        end
+        @purchase_sale_detail.save!
         UserLedgerBookJob.perform_later(current_user.superAdmin.company_type,@purchase_sale_detail.sys_user_id)
         AccountPaymentJob.perform_later(current_user.superAdmin.company_type,@purchase_sale_detail.account_id)
         SalaryDetailJob.perform_later(current_user.superAdmin.company_type,@purchase_sale_detail.staff_id)
+        set_penalty_pandri(@purchase_sale_detail)
         format.html { redirect_to cold_storage_outwards_path, notice: 'Outward was successfully updated.' }
         format.json { render :show, status: :ok, location: @purchase_sale_detail }
       else
@@ -185,12 +212,24 @@ class ColdStorageOutwardsController < ApplicationController
   def download_cold_storage_outwards_pdf_file
     @sys_users = @q.result
     sorted_outward_data
-    generate_pdf(@sorted_data.as_json, 'Inward', 'pdf.html', 'A4', false, 'cold_storage_outwards/index.pdf.erb')
+    generate_pdf(@sorted_data.as_json, 'Daily-basis-Outward', 'pdf.html', 'A4', false, 'cold_storage_outwards/index.pdf.erb')
   end
 
   def download_outward_show_pdf_file
     sorted_outward_show_data
     generate_pdf(@sorted_data.as_json, 'Outward', 'pdf.html', 'A4', false, 'cold_storage_outwards/show.pdf.erb')
+  end
+
+  def set_penalty_pandri(purchase_sale_detail)
+    out_ward_date = purchase_sale_detail.created_at.to_date
+    purchase_sale_detail.purchase_sale_items.each do |p_item|
+      if out_ward_date.present? && p_item.closed_date.present?
+        close_date =  p_item.closed_date&.to_date
+        panelty = ((out_ward_date-close_date).to_f/15).ceil()
+        total_bill = (p_item.rent_pandri.to_f*p_item.quantity.to_f*panelty.to_f)
+        p_item.update(panelty_pandri: panelty, total_pandri_bill: total_bill)
+      end
+    end
   end
 
   def purchase_sale_detail_params
@@ -240,6 +279,9 @@ class ColdStorageOutwardsController < ApplicationController
         :size_1,:size_2,:size_3,:size_4,:size_5,:size_6,:size_7,:size_8,:size_9,:size_10,:size_11,:size_12,:size_13,
         :inward_date,
         :closed_date,
+        :rent_pandri,
+        :panelty_pandri,
+        :total_pandri_bill,
         :discount_price,
         :purchase_sale_type,
         :created_at,

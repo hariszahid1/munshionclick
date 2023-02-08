@@ -41,7 +41,13 @@
           <th class="text-center">Product Name</th>
           <th class="text-center">Room No</th>
           <th class="text-center">Rack No</th>
-          <th class="text-center">OutWard Qty</th>
+          <th class="text-center">Out Qty</th>
+          <th class="text-center">In Date</th>
+          <th class="text-center">Close Date</th>
+          <th class="text-center">Outward Date</th>
+          <th class="text-center">Rent Pandri</th>
+          <th class="text-center">Penalty Pandri</th>
+          <th class="text-center">total bill</th>
         </thead>
         <tbody>
           <% data.each_with_index do |order, index| %>
@@ -52,9 +58,15 @@
                 <td class="text-center"><%= item['marka'] %></td>
                 <td class="text-center"><%= item['challan_no'] %></td>
                 <td class="text-center"><%= item['product'] %></td>
-                 <td class="text-center"><%= item['room_num'] %></td>
+                <td class="text-center"><%= item['room_num'] %></td>
                 <td class="text-center"><%= item['rack_num'] %></td>
                 <td class="text-center"><%= item['quantity'] %></td>
+                <td class="text-center"><%= item['in_date'] %></td>
+                <td class="text-center"><%= item['close_date'] %></td>
+                <td class="text-center"><%= order['date'] %></td>
+                <td class="text-center"><%= item['rent_pandri'] %></td>
+                <td class="text-center"><%= item['panelty_pandri'] %></td>
+                <td class="text-center"><%= item['total_pandri_bill'] %></td>
               </tr>
             <% end %>
           <% end %>
@@ -67,6 +79,12 @@
             <th></th>
             <th>Sub Total: </th>
             <th><%=  @pdf_orders_total  %></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th><%=  @pdf_orders_total_bill %></th>
           </tr>
           <tr>
             <th></th>
@@ -77,24 +95,33 @@
             <th></th>
             <th>Grand Total: </th>
             <th><%=  @pdf_orders_total %></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th><%=  @pdf_orders_total_bill %></th>
           </tr>
           <thead class="lite-gray">
             <tr>
-              <th colspan="7" class='text-left' style="padding-left: 20px;">Party Name</th>
+              <th colspan="12" class='text-left' style="padding-left: 20px;">Party Name</th>
               <th> OutWard Qty </th>
+              <th> Total bill </th>
             </tr>
           </thead>
           <% if @pdf_outward_total.present? %>
             <% @pdf_outward_total.each do |order| %>
               <tr>
-                <td colspan="7" class='text-left' style="padding-left: 20px;"><%= order.first %></td>
-                <td class="text-center"><%= order.second&.to_f %></td>
+                <td colspan="12" class='text-left' style="padding-left: 20px;"><%= order.first %></td>
+                <td class="text-center"><%= order.second&.first.to_f %></td>
+                <td class="text-center"><%= order.second&.second.to_f %></td>
               </tr>
             <% end %>
           <% end %>
             <tr>
-              <th colspan="7" class='text-left' style="padding-left: 20px;">Total</th>
+              <th colspan="12" class='text-left' style="padding-left: 20px;">Total</th>
               <th><%= @pdf_orders_total %></th>
+              <th><%=  @pdf_orders_total_bill %></th>
             </tr>
         </tbody>
       </table>

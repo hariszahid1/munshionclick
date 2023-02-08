@@ -28,13 +28,12 @@
 
     <div>
       <p class="border-bottom"></p>
-      <h2 class="text-center"> For Aarti Gate Pass OutWard with racking</h2>
+      <h2 class="text-center"> Nakasi Gate Pass OutWard with racking</h2>
       <h3 class="text-center">
         OutWard Date: <b><span><%= data.first['date'] %></span></b>
       </h3>
       <h2 class= "text-right">Gate Pass No: <%= data.first['id']%></h2>
       <h3>Party: <%= data.first['name']%></h3>
-      <h3>Marka: <%= data.first['items'].first['marka']%></h3>
       <h3>Product: <%= data.first['items'].first['product']%></h3>
       <p class="border-bottom"></p>
       <p class="text-center">Report by: <%=current_user.name%></p>
@@ -48,8 +47,6 @@
           <th class="text-center">Room No</th>
           <th class="text-center">Rack No</th>
           <th class="text-center">Product Qty</th>
-          <th class="text-center">In Date</th>
-          <th class="text-center">Close Date</th>
         </thead>
         <tbody>
           <% data.each_with_index do |order, index| %>
@@ -61,12 +58,11 @@
                 <td class="text-center"><%= item['room_num'] %></td>
                 <td class="text-center"><%= item['rack_num'] %></td>
                 <td class="text-center"><%= item['quantity'] %></td>
-                <td class="text-center"><%= item['in_date'] %></td>
-                <td class="text-center"><%= item['close_date'] %></td>
               </tr>
             <% end %>
           <% end %>
           <tr>
+            <th></th>
             <th></th>
             <th></th>
             <th></th>
@@ -109,6 +105,9 @@
           <th class="text-center">Product Qty</th>
           <th class="text-center">In Date</th>
           <th class="text-center">Close Date</th>
+          <th class="text-center">Panelty Pandri</th>
+          <th class="text-center">Rent One Pandri</th>
+          <th class="text-center">Total bill</th>
         </thead>
         <tbody>
           <% data.each_with_index do |order, index| %>
@@ -122,10 +121,14 @@
                 <td class="text-center"><%= item['quantity'] %></td>
                 <td class="text-center"><%= item['in_date'] %></td>
                 <td class="text-center"><%= item['close_date'] %></td>
+                <td class="text-center"><%= item['panelty_pandri'] %></td>
+                <td class="text-center"><%= item['rent_pandri'] %></td>
+                <td class="text-center"><%= item['total_pandri_bill'] %></td>
               </tr>
             <% end %>
           <% end %>
           <tr>
+            <th></th>
             <th></th>
             <th></th>
             <th></th>
@@ -169,6 +172,9 @@
           <th class="text-center">Product Qty</th>
           <th class="text-center">In Date</th>
           <th class="text-center">Close Date</th>
+          <th class="text-center">Panelty Pandri</th>
+          <th class="text-center">Rent One Pandri</th>
+          <th class="text-center">Total</th>
         </thead>
         <tbody>
           <% data.each_with_index do |order, index| %>
@@ -176,16 +182,20 @@
               <tr>
                 <td class="text-center"><%= index %></td>
                 <td class="text-center"><%= item['marka'] %></td>
-                 <td class="text-center"><%= item['challan_no'] %></td>
+                <td class="text-center"><%= item['challan_no'] %></td>
                 <td class="text-center"><%= item['room_num'] %></td>
                 <td class="text-center"><%= item['rack_num'] %></td>
                 <td class="text-center"><%= item['quantity'] %></td>
                 <td class="text-center"><%= item['in_date'] %></td>
                 <td class="text-center"><%= item['close_date'] %></td>
+                <td class="text-center"><%= item['panelty_pandri'] %></td>
+                <td class="text-center"><%= item['rent_pandri'] %></td>
+                <td class="text-center"><%= item['total_pandri_bill'] %></td>
               </tr>
             <% end %>
           <% end %>
           <tr>
+            <th></th>
             <th></th>
             <th></th>
             <th></th>

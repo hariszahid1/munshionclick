@@ -55,6 +55,7 @@ module OutwardsHelper
                                                     name: o_i.sys_user&.name,
                                                     status: o_i.status,
                                                     amount: o_i.amount,
+                                                    date: o_i.created_at&.strftime("%d-%b-%y"),
                                                     items: o_i.purchase_sale_items.map { |c_i|
                                                     { product: c_i.product&.title,
                                                         marka: c_i.size_13,
@@ -63,7 +64,12 @@ module OutwardsHelper
                                                         challan_no: c_i.size_10,
                                                         quantity: c_i.quantity,
                                                         room_num: c_i.size_8,
-                                                        rack_num: c_i.size_7
+                                                        rack_num: c_i.size_7,
+                                                        in_date: c_i.inward_date&.strftime("%d-%b-%y"),
+                                                        close_date: c_i.closed_date&.strftime("%d-%b-%y"),
+                                                        rent_pandri: c_i.rent_pandri,
+                                                        panelty_pandri: c_i.panelty_pandri,
+                                                        total_pandri_bill: c_i.total_pandri_bill
                                                     }
                                                     }
                            }
@@ -78,7 +84,7 @@ module OutwardsHelper
                             id: @purchase_sale_detail.id,
                             type: @purchase_sale_detail.transaction_type,
                             total_quantity: order_total,
-                            date: @purchase_sale_detail.created_at&.strftime("%d-%b-%y at %I:%M %p"),
+                            date: @purchase_sale_detail.created_at&.strftime("%d-%b-%y"),
                                                     name: @purchase_sale_detail.sys_user.name,
                                                     status: @purchase_sale_detail.status,
                                                     amount: @purchase_sale_detail.amount,
@@ -92,7 +98,10 @@ module OutwardsHelper
                                                         room_num: c_i.size_8,
                                                         rack_num: c_i.size_7,
                                                         in_date: c_i.inward_date&.strftime("%d-%b-%y"),
-                                                        close_date: c_i.closed_date&.strftime("%d-%b-%y")
+                                                        close_date: c_i.closed_date&.strftime("%d-%b-%y"),
+                                                        rent_pandri: c_i.rent_pandri,
+                                                        panelty_pandri: c_i.panelty_pandri,
+                                                        total_pandri_bill: c_i.total_pandri_bill
                                                     }
                                                     }
                            }
