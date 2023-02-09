@@ -171,8 +171,8 @@
               <th class="table-active"><b>Marka</b></th>
               <th class="table-active"><b>Challan</b></th>
               <th class="table-active"><b>Stock</b></th>
-              <th></th>
-              <th></th>
+              <th class="table-active"><b>In Date</b></th>
+              <th class="table-active"><b>Close Date</b></th>
               <th></th>
               <th></th>
             </tr>
@@ -187,8 +187,8 @@
                 <td><%=item.size_13%></td>
                 <td><%= item.size_10 %></td>
                 <td><%= item.size_9 %></td>
-                <td></td>
-                <td></td>
+                <td><%= item.inward_date&.to_date %></td>
+                <td><%= item.closed_date&.to_date %></td>
                 <td></td>
                 <td></td>
               </tr>

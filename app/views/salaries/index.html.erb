@@ -140,9 +140,9 @@
           <td><%= salary.account_id.present? ? salary.account.title : '' %></td>
           <td>
             <%if salary.created_at.strftime("%d%b%y")!=salary.updated_at.strftime("%d%b%y")%>
-              <%= salary.created_at.present? ? salary.created_at.strftime("%d-%b-%y , %H:%M%p") : '' %> | <%= salary.updated_at.present? ? salary.updated_at.strftime("%d%b%y , %H:%M%p") : '' %>
+              <%= salary.created_at.present? ? salary.created_at.strftime("%d%b%y , %I:%M") : '' %> | <%= salary.updated_at.present? ? salary.updated_at.strftime("%d%b%y , %I:%M") : '' %>
             <%else%>
-              <%= salary.created_at.present? ? salary.created_at.strftime("%d-%b-%y , %H:%M%p") : '' %>
+              <%= salary.created_at.present? ? salary.created_at.strftime("%d%b%y , %I:%M") : '' %>
             <%end%>
           </td>
           <td><%= salary.comment %> | <%= salary.payment_type %></td>

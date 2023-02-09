@@ -63,27 +63,27 @@
       </div>
     </div>
   </div>
-  <ul class="nav nav-pills ml-1" role="tablist">
+  <div class="row">
+    <ul class="nav nav-tabs ml-1" role="tablist">
       <li class="nav-item">
-        <a class="nav-link tab-label active investment-search-exp-tab" data-toggle="tab" href="#search" role="tab">Search</a>
+        <a class="nav-link tab-label active investment-search-exp-tab" data-toggle="tab" href="#search" role="tab"><i class="fa fa-search mr-2"></i>Search</a>
       </li>
-
       <%# <li class="nav-item">
         <a class="nav-link tab-label" data-remote="true" data-toggle="tab" href="#analytics" role="tab">Analytics</a>
       </li> %>
       <%# <li class="nav-item">
         <a class="nav-link tab-label investment-search-exp-tab" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
       </li> %>
-
       <li class="nav-item">
-        <a class="nav-link tab-label investment-logs-tab" data-toggle="tab" href="#logs" role="tab">Logs</a>
+        <a class="nav-link tab-label investment-logs-tab" data-toggle="tab" href="#logs" role="tab"><i class="fa fa-history mr-2"></i>Logs</a>
       </li>
-	</ul>
+	  </ul>
+  </div>
 
   <div class="tab-content">
     <div class="tab-pane active no-tab-border mb-3 mt-2" id="search" role="tabpanel">
       <%= search_form_for @q, url: loans_path, class: "admin-controls", method: "get" do |f| %>
-        <div class="card shadow p-3">
+        <div class="card shadow mb-3 p-3">
           <div class="row d-flex mt-3">
             <div class="col">
               <div class="col-lg-3 form-group float-left">

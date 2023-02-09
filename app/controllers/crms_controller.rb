@@ -14,7 +14,11 @@ class CrmsController < ApplicationController
   # GET /crms
   # GET /crms.json
   def index
-    @q = SysUser.order('id desc').where(for_crms: [true, false]).ransack(params[:q])
+    if current_user&.extra_settings.try(:[], 'show_all_crm_users').present?
+      @q = SysUser.order('id desc').where(for_crms: [true, false]).ransack(params[:q])
+    else
+      @q = SysUser.order('id desc').where(for_crms: [true, false], credit_status: current_user&.id).ransack(params[:q])
+    end
     @options_for_select = SysUser.all
     @custom_pagination = params[:limit].present? ? params[:limit] : 25
     @custom_pagination = @pos_setting.custom_pagination['sys_users'] if @pos_setting&.custom_pagination.present? && @pos_setting&.custom_pagination['sys_users'].present?
@@ -185,12 +189,12 @@ class CrmsController < ApplicationController
     @user_groups = UserGroup.all
     @staff = Staff.all
     @pos_setting = PosSetting.last
-    @project_name = @pos_setting.extra_settings.present? ? PosSetting.last.extra_settings['project_name']&.map(&:downcase) : []
-    @client_type = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['client_type']&.map(&:downcase) : []
-    @client_status = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['client_status'] : []
-    @category = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['category']&.map(&:downcase) : []
-    @deal_stat = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['deal_status']&.map(&:downcase) : []
-    @source = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['source']&.map(&:downcase) : []
+    @project_name = get_setting('project_name')
+    @client_type = get_setting('client_type')
+    @client_status = get_setting('client_status')
+    @category = get_setting('category')
+    @deal_stat = get_setting('deal_status')
+    @source = get_setting('source')
     created_by_ids = current_user.created_by_ids_list_to_view
     roles_mask = current_user.allowed_to_view_roles_mask_for
     @users = User.where(roles_mask: roles_mask).where('company_type=? or created_by_id=?', current_user.company_type,
@@ -241,6 +245,10 @@ class CrmsController < ApplicationController
     @user_groups = UserGroup.all
     @total_followups = FollowUp.where(followable_type: 'SysUser').group(:followable_id).count
     @follow_up_count = FollowUp.where(created_at: Time.current.all_day).count
+  end
+
+  def get_setting(setting_name)
+    @pos_setting&.extra_settings&.dig(setting_name)&.map(&:downcase) || []
   end
 end
 

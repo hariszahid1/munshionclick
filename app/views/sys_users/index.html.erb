@@ -51,22 +51,24 @@
           </div>
         </div>
       </div>
-      <ul class="nav nav-pills mb-2" role="tablist">
+      <div class="row">
+      <ul class="nav nav-tabs mb-2" role="tablist">
         <li class="nav-item">
-          <a class="nav-link tab-label sys-user-search-exp-tab active" data-toggle="tab" href="#search" role="tab">Search</a>
+          <a class="nav-link tab-label sys-user-search-exp-tab active" data-toggle="tab" href="#search" role="tab"><i class="fa fa-search mr-2"></i>Search</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link tab-label sys-user-search-exp-tab" data-toggle="tab" href="#analytics" data-remote="true" role="tab">Analytics</a>
+          <a class="nav-link tab-label sys-user-search-exp-tab" data-toggle="tab" href="#analytics" data-remote="true" role="tab"><i class="fa fa-signal mr-2"></i>Analytics</a>
         </li>
 				<%if (check_can_import_export(@module_permission))%>
 					<li class="nav-item">
-					  <a class="nav-link tab-label sys-user-search-exp-tab" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
+	  			<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab"><i class="fa fa-exchange-alt mr-2"></i>Import/Export</a>
 					</li>
 				<%end%>
         <li class="nav-item">
-          <a class="nav-link tab-label sys-user-logs-tab" data-toggle="tab" href="#logs" role="tab">Logs</a>
+          <a class="nav-link tab-label sys-user-logs-tab" data-toggle="tab" href="#logs" role="tab"><i class="fa fa-history mr-2"></i>Logs</a>
         </li>
       </ul>
+      </div>
 
     <%= hidden_field_tag "userCount", @user_count, { :id => "userCount" } %>
     <%= hidden_field_tag "balanceSum", @balance_sum, { :id => "balanceSum" } %>
@@ -247,7 +249,7 @@
 	                      								<div class="my-tooltip">
 	                      									Edit
 	                      									</div>
-	                      										<%= link_to edit_sys_user_path(sys_user), remote: true, class:"icon-div" do %>
+	                      										<%= link_to edit_sys_user_path(sys_user), class:"icon-div" do %>
 	                      											<i class="fa fa-edit mt-2" aria-hidden="true"></i>
 	                      										<%end %>
 	                      							</div>

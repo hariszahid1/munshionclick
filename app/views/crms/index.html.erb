@@ -25,7 +25,7 @@
           <div class="row mb-4">
             <% if check_can_create(@module_permission) %>
               <div id="new_city">
-                <%= link_to new_crm_path, remote: true,class: "btn btn-success mt-3 ml-3" do %>
+                <%= link_to new_crm_path, class: "btn btn-success mt-3 ml-3" do %>
                   <i class="fa fa-plus" aria-hidden="false"></i>
                   Create
                 <% end %>
@@ -121,6 +121,9 @@
               </div>
               <div class="col-lg-2 form-group float-left">
                 <%= f.search_field :nom_name_cont, class: "form-control chosen-select", placeholder: "Search Block" %>
+              </div>
+              <div class='col-lg-2 form-group float-left'>
+                <%= f.search_field :occupation_cont, class: "form-control chosen-select", placeholder: "Search Client Number" %>
               </div>
               <div class="col-lg-3 form-group float-left d-flex">
                 <%= f.search_field :created_at, id: "reportrange", class: 'form-control' %>

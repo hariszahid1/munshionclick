@@ -109,8 +109,12 @@ class SaleDealsController < ApplicationController
   end
 
   def set_data
-    @project_name = @pos_setting.extra_settings.present? ? PosSetting.last.extra_settings['project_name']&.map(&:downcase) : []
-    @category = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['category']&.map(&:downcase) : []
+    @project_name = get_setting('project_name')
+    @payment_status = get_setting('payment_status')
+    @transaction_type = get_setting('transaction_type')
+    @deal = get_setting('deal')
+    @source = get_setting('source')
+    @category = get_setting('category')
     @staffs = Staff.all
     @sys_users = SysUser.all.where(for_crms: [false, nil])
     @accounts = Account.all
@@ -118,10 +122,6 @@ class SaleDealsController < ApplicationController
     created_by_ids = current_user.created_by_ids_list_to_view
     @all_agents = User.where('company_type=? or created_by_id=?', current_user.company_type, created_by_ids).pluck(:name,
       :id)
-    @payment_status = @pos_setting&.extra_settings.present? ? @pos_setting.extra_settings['payment_status'] : []
-    @transaction_type = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['transaction_type'] : []
-    @deal = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['deal'] : []
-    @source = @pos_setting.extra_settings.present? ? @pos_setting.extra_settings['source']&.map(&:downcase) : []
     roles_mask = current_user&.allowed_to_view_roles_mask_for
     @users = User.where(roles_mask: roles_mask).where('company_type=? or created_by_id=?', current_user&.company_type,
                                                       created_by_ids)
@@ -192,4 +192,7 @@ class SaleDealsController < ApplicationController
     redirect_to request.referrer, notice: 'Sale Deal was approved successfully.'
   end
 
+  def get_setting(setting_name)
+    @pos_setting&.extra_settings&.dig(setting_name)&.map(&:downcase) || []
+  end
 end

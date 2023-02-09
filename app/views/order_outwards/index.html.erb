@@ -194,6 +194,8 @@
                   <th>Quantity</th>
                   <th>Room No.</th>
                   <th>Rack No.</th>
+                  <th>In date</th>
+                  <th>Close date</th>
                 </tr>
                 <tbody>
                   <% order.purchase_sale_details.each do |purchase_sale_detail| %>
@@ -206,10 +208,14 @@
                         <td> <%= purchase_sale_item.size_9 %> </td>
                         <td> <%= purchase_sale_item.size_8 %> </td>
                         <td> <%= purchase_sale_item.size_7 %> </td>
+                        <td> <%= purchase_sale_item.inward_date&.to_date %> </td>
+                        <td> <%= purchase_sale_item.closed_date&.to_date %> </td>
                       </tr>
                     <% end %>
                     <tr>
                       <th class="h5"><b>Action</b></th>
+                      <td></td>
+                      <td></td>
                       <td></td>
                       <td></td>
                       <td></td>
