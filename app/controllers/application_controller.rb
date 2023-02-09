@@ -37,6 +37,7 @@ class ApplicationController < ActionController::Base
       @follow_up_unread = FollowUp.preload(:followable).order('id desc').where(is_read: false, assigned_to_id: current_user&.id)
       @total_follow_ups = FollowUp.where(assigned_to_id: current_user&.id).count
     end
+    @sale_deal_count = PurchaseSaleDetail.where(transaction_type: [8, 9]).group(:transaction_type).count
     unless (request.referrer.to_s.include? 'edit') || (request.referrer.to_s.include? 'new')
       return session[:referrer].to_s
     end
