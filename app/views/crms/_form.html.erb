@@ -39,7 +39,7 @@
 
   <div class="col-lg-12 row">
     <div class="col-lg-6 form-group float-left text-black">
-      <%= f.select :credit_status, options_from_collection_for_select(@users, 'id', 'name',f.object&.credit_status.present? ? f.object&.credit_status : nil ),{include_blank: "Select Agent Name", label: "Agent Name"},{class: "form-control"} %>
+      <%= f.select :credit_status, options_from_collection_for_select(@users, 'id', 'name',f.object&.credit_status.present? ? f.object&.credit_status : nil ),{include_blank: "Select Agent Name", label: "Agent Name"},{class: "form-control", required: true} %>
     </div>
     <div class="col-lg-6 form-group">
       <%= f.text_area :gst,  placeholder: "Short Details", label: "Short Details" %>
