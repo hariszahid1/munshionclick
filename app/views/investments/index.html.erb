@@ -64,22 +64,24 @@
       </div>
     </div>
   </div>
-  <ul class="nav nav-pills ml-1" role="tablist">
-    <li class="nav-item">
-      <a class="nav-link tab-label active investment-search-exp-tab" data-toggle="tab" href="#search" role="tab">Search</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link tab-label" data-remote="true" data-toggle="tab" href="#analytics" role="tab">Analytics</a>
-    </li>
-		<%if (check_can_import_export(@module_permission))%>
-			<li class="nav-item">
-				<a class="nav-link tab-label investment-search-exp-tab" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
-			</li>
-		<%end%>
-    <li class="nav-item">
-      <a class="nav-link tab-label investment-logs-tab" data-toggle="tab" href="#logs" role="tab">Logs</a>
-    </li>
-	</ul>
+  <div class="row">
+    <ul class="nav nav-tabs ml-1" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link tab-label active investment-search-exp-tab" data-toggle="tab" href="#search" role="tab"><i class="fa fa-search mr-2"></i>Search</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link tab-label" data-remote="true" data-toggle="tab" href="#analytics" role="tab"><i class="fa fa-signal mr-2"></i>Analytics</a>
+      </li>
+	  	<%if (check_can_import_export(@module_permission))%>
+	  		<li class="nav-item">
+	  			<a class="nav-link tab-label investment-search-exp-tab" data-toggle="tab" href="#import-export" role="tab"><i class="fa fa-exchange-alt mr-2"></i>Import/Export</a>
+	  		</li>
+	  	<%end%>
+      <li class="nav-item">
+        <a class="nav-link tab-label investment-logs-tab" data-toggle="tab" href="#logs" role="tab"><i class="fa fa-history mr-2"></i>Logs</a>
+      </li>
+	  </ul>
+  </div>
   <%= hidden_field_tag "dcSum", @dc_sum, { :id => "dcSum" } %>
   <%= hidden_field_tag "dcCount", @dc_count, { :id => "dcCount" } %>
   <%= hidden_field_tag "dbKeys", @db_keys, { :id => "dbKeys" } %>
