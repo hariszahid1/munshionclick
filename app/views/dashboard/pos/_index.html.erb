@@ -292,7 +292,7 @@
                             <i class="fas fa-shopping-basket logo-back fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
                           <% end %>
                           <%= link_to products_path, class:"ml-3" do %>
-        	  								<h5  style="text-align: left; color:black;font-weight: bold;">Products</h5>
+        	  								<h5  style="text-align: left; color:black;font-weight: bold;"><%= pos_setting_sys_type.eql?('Dealer') ? 'Units' : 'Prodcuts' %></h5>
                             <h5 class="text-primary"><%=@product_count%></h5>
                           <% end %>
                         </div>
