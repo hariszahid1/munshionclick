@@ -375,31 +375,31 @@
           <ul class="collapse list-unstyled" id="ReportsSubmenu">
             <% if check_is_hidden_by_module('reports') %>
               <li>
-                <%= link_to reports_chart_path do %>
+                <%= link_to reports_chart_path, class:"activ-link"  do %>
                   <i class="fas fa-plus"></i>
                   <span class="link-text">Chart/Graph</span>
                 <% end %>
               </li>
               <li>
-                <%= link_to reports_trial_balance_path do %>
+                <%= link_to reports_trial_balance_path, class:"activ-link"  do %>
                   <i class="fas fa-plus"></i>
                   <span class="link-text">Trial Balance</span>
                 <% end %>
               </li>
               <li>
-                <%= link_to reports_chart_of_account_path do %>
+                <%= link_to reports_chart_of_account_path, class:"activ-link"  do %>
                   <i class="fas fa-plus"></i>
                   <span class="link-text">Chart of Account</span>
                 <% end %>
               </li>
               <li>
-                <%= link_to reports_sale_report_path do %>
+                <%= link_to reports_sale_report_path, class:"activ-link"  do %>
                   <i class="fas fa-plus"></i>
                   <span class="link-text">Sale Report</span>
                 <% end %>
               </li>
               <li>
-                <%= link_to reports_product_report_path do %>
+                <%= link_to reports_product_report_path, class:"activ-link"  do %>
                   <i class="fas fa-plus"></i>
                   <span class="link-text">Profit Report</span>
                 <% end %>
@@ -413,14 +413,14 @@
                 </li>
               <% end %>
               <li>
-                <%= link_to reports_stock_report_path do %>
+                <%= link_to reports_stock_report_path, class:"activ-link"  do %>
                   <i class="fas fa-plus"></i>
                   <span class="link-text">Sale/Purchase/Stock</span>
                 <% end %>
               </li>
             <% end %>
             <li>
-              <%= link_to dashboard_path do %>
+              <%= link_to dashboard_path, class:"activ-link"  do %>
                 <i class="fas fa-plus"></i>
                 <span class="link-text">Stock Statment</span>
               <% end %>
@@ -520,24 +520,26 @@
   <%end%>
 </nav>
 <script>
-    $('#search-bar').keyup(function(){
-        var value = $(this).val().toLowerCase();
-        $('#mylist li').each(function(){
-            var search = $(this).text().toLowerCase();
-            if(search.indexOf(value)>-1){
-                $(this).show();
-            }
-            else{
-                $(this).hide();
-            }
-        });
+  $('#search-bar').keyup(function(){
+    var value = $(this).val().toLowerCase();
+    $('#mylist li').each(function(){
+        var search = $(this).text().toLowerCase();
+        if(search.indexOf(value)>-1){
+            $(this).show();
+        }
+        else{
+            $(this).hide();
+        }
     });
+  });
 </script>
 <script>
     $(document).ready(function(){
-        $('#mylist .activ-link ').filter(function(){return this.href==location.href}).parent().addClass('active').siblings().removeClass('active')
-        $('#mylist .activ-link ').click(function(){
-            $(this).parent().addClass('active').siblings().removeClass('active')    
-        })
+      $('#mylist .activ-link').filter(function(){return this.href==location.href}).parent().parent().addClass('show')
+      $('#mylist .activ-link').filter(function(){return this.href==location.href}).parent().parent().parent().addClass('show')
+      $('#mylist .activ-link').filter(function(){return this.href==location.href}).parent().addClass('active').siblings().removeClass('active')
+      $('#mylist .activ-link').click(function(){
+          $(this).parent().addClass('active').siblings().removeClass('active')    
+      })
     });
 </script>

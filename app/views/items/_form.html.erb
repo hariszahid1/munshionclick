@@ -2,19 +2,16 @@
   <% if item.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(item.errors.count, "error") %> prohibited this item from being saved:</h2>
-
       <ul>
-      <% item.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
+       <% item.errors.full_messages.each do |message| %>
+         <li><%= message %></li>
+       <% end %>
       </ul>
     </div>
   <% end %>
-
   <div class="col-lg-6 form-group float-left">
     <%= f.select :item_type_id, options_from_collection_for_select(@item_types, 'id', 'title', f.object.item_type_id), {prompt: "Select the Item Type"}, required: true %>
   </div>
-
   <div class="col-lg-6 form-group float-left">
     <%= f.label :title do %>
           <%= Item.human_attribute_name :title %>
@@ -22,47 +19,36 @@
         <% end %>
     <%= f.text_field :title, required: true, hide_label: true ,class: 'urdu-font', placeholder:"Enter Title" %>
   </div>
-
   <div class="col-lg-6 form-group float-left">
     <%= f.text_field :code, {placeholder: "Enter the code", required: true , value: (f.object.code.nil? ? ("AGC-"+"%.4i" % (Item.maximum(:id).present? ? Item.maximum(:id).next : 1)) : (f.object.code ))} %>
   </div>
-
   <div class="col-lg-6 form-group float-left">
     <%= f.number_field :minimum %>
   </div>
-
   <div class="col-lg-6 form-group float-left">
     <%= f.number_field :optimal %>
   </div>
-
   <div class="col-lg-6 form-group float-left">
     <%= f.number_field :maximun %>
   </div>
-
   <div class="col-lg-6 form-group float-left">
     <%= f.number_field :stock %>
   </div>
-
   <div class="col-lg-6 form-group float-left">
     <%= f.number_field :cost %>
   </div>
-
   <div class="col-lg-6 form-group float-left">
     <%= f.number_field :sale %>
   </div>
-
   <div class="col-lg-6 form-group float-left">
     <%= f.select :status, Item.statuses.map { |key, value| [key.humanize, key] },{class: "form-control", required: true} %>
   </div>
-
   <div class="col-lg-6 form-group float-left">
     <%= f.select :purchase_type, Item.purchase_types.map { |key, value| [key.humanize, key] },{class: "form-control", required: true} %>
   </div>
-
   <div class="col-lg-6 form-group float-left">
     <%= f.select :quantity_type, Item.quantity_types.map { |key, value| [key.humanize, key] },{prompt: "Select the Quantity Type", class: "form-control", required: true} %>
   </div>
-
   <div class="col-lg-6 form-group float-left">
     <%= f.select :weight_type, Item.weight_types.map { |key, value| [key.humanize, key] },{prompt: "Select the Weight Type",class: "form-control", required: true} %>
   </div>
@@ -71,16 +57,15 @@
   </div>
   <div class="col-lg-6 form-group float-left">
     <%= f.label :comment do %>
-          <%= Item.human_attribute_name :comment %>
-          <i class="fas fa-language"></i> 
-        <% end %>
+      <%= Item.human_attribute_name :comment %>
+        <i class="fas fa-language"></i> 
+      <% end %>
     <%= f.text_area :comment, placeholder:"Enter Comment", hide_label: true ,class: 'urdu-font' %>
   </div>
   <div class="clearfix"></div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-      <%=f.object.id.nil? ? (f.submit class: "btn btn-success mr-4", style: "float: right")  :  (f.submit class: "btn btn-warning mr-4", style: "float: right")%>
+      <button type="button" class="btn btn-light btn-outline-secondary" data-dismiss="modal">Cancel</button>
+      <%=f.object.id.nil? ? (f.submit "Save" ,class: "btn btn-primary mr-4", style: "float: right")  :  (f.submit class: "btn btn-warning mr-4", style: "float: right")%>
     </div>   
-
 <% end %>
 <%= javascript_include_tag 'hover', 'data-turbolinks-track': 'reload' %>
