@@ -10,6 +10,8 @@
   <%= render 'dashboard/custom_clear/index_custom', products: @products %>
 <%elsif pos_setting_sys_type=="HousingScheme"%>
   <%= render 'dashboard/housing_scheme/index_housing', products: @products %>
+<%elsif current_user&.developer? %>
+  <%= render 'dashboard/developer/index_developer', products: @products %>
 <%else%>
   <%= render 'dashboard/pos/index', products: @products %>
 <%end%>

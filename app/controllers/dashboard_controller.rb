@@ -16,6 +16,19 @@ class DashboardController < ApplicationController
     @total_exp_today = ExpenseEntry.where(created_at: Time.current.all_day).sum(:amount)
     @total_exp_yesterday = ExpenseEntry.where(created_at: 1.day.ago.all_day).sum(:amount)
     @staff_count=Staff.count
+    @users_by_company_type = User.select('company_type, count(*) as count, GROUP_CONCAT(id) as ids_csv, GROUP_CONCAT(name) as names_csv')
+                         .group(:company_type).map do |group|
+                                                {
+                                                  company_type: group.company_type,
+                                                  count: group.count,
+                                                  ids: group.ids_csv.split(','),
+                                                  names: group.names_csv.split(',')
+                                                }
+                                              end
+    @total_company_types = User.group(:company_type).count
+    @company_type_count = @total_company_types.keys.count
+    @users_by_type_count = @total_company_types.values.sum
+                                            
     @transfer=Payment.where(confirmable: nil).count
     pos_setting = PosSetting.first
     if pos_setting.present?
