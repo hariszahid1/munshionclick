@@ -1,5 +1,17 @@
 
 <%# <%= render "devise/shared/links" %>
+<%
+  require "rqrcode"
+    qrcode = RQRCode::QRCode.new(request.original_url)
+    @svg = qrcode.as_svg(
+      color: "000",
+      shape_rendering: "crispEdges",
+      module_size: 11,
+      standalone: true,
+      use_path: true
+    )
+    @str=Base64.encode64(@svg ).gsub("\n", '')
+  %>
 <div class="vh-100">
   <div class="container-fluid h-custom">
     <div class="row d-flex justify-content-center align-items-center h-100 ">
@@ -18,6 +30,9 @@
               </ul>
             </div>
           <% end %>
+          <div class='d-flex text-center'>
+            <img width="180px" height="150px" class="figure mx-auto" style=""src=<%="data:image/svg+xml;base64,"+@str%>>
+          </div>
           <div class="my-divider d-flex align-items-center my-4">
             <h4 class="text-center fw-bold mx-3 mb-0 head-color">LOGIN FORM</h4>
           </div>
@@ -28,7 +43,7 @@
           <!-- Password input -->
           <%= f.password_field :password, autocomplete: "current-password", required: true, class: "form-control" %>
 
-          <% if devise_mapping.rememberable? %>  
+          <% if devise_mapping.rememberable? %>
             <div class="d-flex justify-content-between align-items-center">
               <!-- Checkbox -->
               <%= f.check_box :remember_me, class:"d-flex mt-3", style:"cursor: pointer;" %>
