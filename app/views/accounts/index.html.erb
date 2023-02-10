@@ -4,11 +4,10 @@
     <span aria-hidden="true">×</span>
   </button>
 </div>
-
-<div class="hidden m-4" id="city_list">
-  <div class="main-content-header">
-    <h1 class="ml-2">Accounts</h1>
-    <ol class="breadcrumb mb-4">
+<div class="row-lg-12 m-4">
+  <div class="float-left">
+    <h2 class="ml-2 logo-back"><i class="fa fa-address-book mr-2"></i>Accounts</h2>
+    <ol class="breadcrumb">
       <li class="breadcrumb-item">
         <a href="<%= root_path %>">Dashboard</a>
       </li>
@@ -16,36 +15,34 @@
         <a href="<%= accounts_path %>">Accounts</a>
       </li>
     </ol>
-    
   </div>
-  <div class="row d-flex ml-1 mb-5">
-  <%if (check_can_create(@module_permission))%>
-    <div>
-      <%= link_to new_account_path, class: "btn btn-success mr-2", remote: true do %>
-        <i class="fa fa-plus" aria-hidden="true"></i>
-        Create
+  <% if check_can_create(@module_permission) %>
+    <div class="float-right mt-3">
+      <%= link_to new_account_path, remote: true, style:"width: 150px;", class: "btn btn-success mt-3" do %>
+          <i class="fa fa-plus-circle"></i>
+          Create
       <% end %>
-    </div>  
-    <% end %>
-    <%if (check_can_create(@module_permission))%>
-    <div>
-      <%= link_to payments_path, class: "btn btn-danger mr-2" do %>
-        <i class="fa fa-credit-card" aria-hidden="true"></i>
-        Payments
-      <% end %>
-    </div>  
-    <% end %>
-    <%if (check_can_create(@module_permission))%>
-    <div>
-      <%= link_to transfer_payments_path, class: "btn btn-warning" do %>
-        <i class="fa fa-credit-card" aria-hidden="true"></i>
-        Transfer Payments
-      <% end %>
-    </div>  
-    <% end %>
     </div>
+  <% end %>
+  <% if check_can_create(@module_permission) %>
+    <div class="float-right mt-3">
+      <%= link_to payments_path, remote: true, class: "btn btn-danger file-btn-color mr-2 mt-3" do %>
+          Payments
+      <% end %>
+    </div>
+  <% end %>
+  <% if check_can_create(@module_permission) %>
+    <div class="float-right mt-3">
+      <%= link_to transfer_payments_path, remote: true, class: "btn btn-primary file-btn-color mr-2 mt-3" do %>
+          Transfer Payments
+      <% end %>
+    </div>
+  <% end %>
+</div>
+<div class="clearfix"></div>
+<div class="hidden m-4" id="city_list">
   <div class="float-right">
-    <div class="dropdown ml-auto mr-4">
+    <div class="dropdown ml-auto">
      <span class="btn btn-info" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
       <div class="dropdown-content">
         <% if @help.present? %>
@@ -56,96 +53,266 @@
       </div>
     </div>
   </div>
-
-	<ul class="nav nav-pills" role="tablist"> 
+<div class="row">
+	<ul class="nav nav-tabs" role="tablist"> 
 		<li class="nav-item">
-			<a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
+			<a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab"><i class="fa fa-search mr-2"></i>Search</a>
+		</li>
+    <li class="nav-item">
+			<a class="nav-link tab-label" data-toggle="tab" href="#analytics" data-remote="true" role="tab"><i class="fa fa-signal mr-2"></i>Analytics</a>
 		</li>
 		<%if (check_can_import_export(@module_permission ))%>
 			<li class="nav-item">
-				<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
+				<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab"><i class="fa fa-exchange-alt mr-2"></i>Import/Export</a>
 			</li>
 		<%end%>
-    <li class="nav-item">
-			<a class="nav-link tab-label" data-toggle="tab" href="#analytics" data-remote="true" role="tab">Analytics</a>
-		</li>
 	</ul>
+</div>  
 <%= hidden_field_tag "accountTitle", @account_title, { :id => "accountTitle" } %>
 <%= hidden_field_tag "accountAmount", @account_amount, { :id => "accountAmount" } %>
 <%= search_form_for @q, url: accounts_path, class: "admin-controls", method: "get" do |f| %>
-
   <div class="tab-content">
-    <div class="tab-pane active mb-3 card shadow mt-2 border-radius-1 p-3" id="search" role="tabpanel">
-     <div class="row d-flex mt-3 mr-2">
-      <div class="col">
-      <div class="col-lg-4 form-group float-left">
-          <%= f.select :id_in, options_from_collection_for_select(@accounts, "id", ->(st){"#{st.title} \u{27F6} #{st.bank_name}"},f.object.id_in),{:include_blank => "Select the Title"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Title"} }%>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
-        </div>
-        </div>
-        <div class="d-flex">
-        <%if (check_can_download_pdf(@module_permission))%>
-          <div class="dropdown my-dropdown mr-2 ml-auto">
-            <button type="button" class="form-control bg-danger text-light"><i class="fa fa-file-pdf mr-2"></i>PDF List</button>
-            <div class="dropdown-content my-dropdown-content p-1">
-              <button class="form-control btn btn-danger float-right  mx-2 my-2" style="width:150px" title= "download crm pdf" name="pdf_asc" type="submit" value="pdf_asc" formtarget="_blank" style="width:160px">PDF ASC</button>
-              <button class="form-control btn btn-danger float-right  mx-2 my-2" style="width:150px" title= "download crm pdf" name="pdf_desc" type="submit" value="pdf_desc" formtarget="_blank" style="width:160px">PDF DESC</button>
-            </div>
+    <div class="tab-pane active mb-3 no-tab-border" id="search" role="tabpanel">
+      <div class="card shadow mt-2 mb-3 p-4">  
+        <div class="row d-flex mt-3 mr-2">
+          <div class="col-lg-4 form-group float-left">
+            <%= f.select :id_in, options_from_collection_for_select(@accounts, "id", ->(st){"#{st.title} \u{27F6} #{st.bank_name}"},f.object.id_in),{:include_blank => "Select the Title"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Title"} }%>
           </div>
-        <% end %>
-        <%if (check_can_download_csv(@module_permission))%>
-          <button class="form-control btn btn-warning ml-3 float-right" name="csv" style="width:100px" type="submit" value="Accounts CSV"><i class="fa fa-file-excel mr-2"></i>CSV</button>
-        <% end %>
-        <%if (check_can_send_email(@module_permission))%>
-          <button class="form-control  btn btn-info ml-3 float-right" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-2"></i>Email</button>
-          <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-                </div>
-                <div class="modal-body">
-                  <% @pos_setting = PosSetting.first %>
-                  <label>Email:</label>
-                  <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
-                  <br />
-                  <label>Subject:</label>
-                  <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Accounts Detail report from MunshiOnClick", class: 'form-control email-fields'%>
-                  <br />
-                  <label>Body:</label><br />
-                  <%= text_area_tag 'body', nil, class: 'form-control'%>
-                  <br />
-                  <label>Please select one of them.</label>
-                  <div>
-                    <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
-                    <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
-                    <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
+          <div class="col-lg-2 form-group float-left">
+            <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+          </div>
+        </div>
+      </div>
+      <div class="card shadow p-4">
+        <div class="row d-flex" style="position: absolute;">
+          <div>
+            <%if (check_can_delete(@module_permission))%>
+              <button class="btn btn-danger file-btn-color delete-selected mt-4 ml-3" type='button' value='Account'>
+                <i class="fa fa-trash"></i>
+              </button>		
+            <%end%>
+          </div>
+          <div class="mt-4 ml-3">
+            <%if (check_can_download_pdf(@module_permission))%>
+                <div class="dropdown my-dropdown mr-1 ml-auto">
+                  <button type="button" class="btn btn-danger file-btn-color" style="width:80px">PDF</button>
+                  <div class="dropdown-content my-dropdown-content p-3">
+                    <button class="btn btn-danger file-btn-color mr-1 ml-1 mt-2 mb-2" title= "download crm pdf" name="pdf_asc" type="submit" value="pdf_asc" formtarget="_blank" style="width:100px">ASC</button>
+                    <button class="btn btn-danger file-btn-color mr-1 ml-1 mt-2 mb-2" title= "download crm pdf" name="pdf_desc" type="submit" value="pdf_desc" formtarget="_blank" style="width:100px">DESC</button>
                   </div>
                 </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                  <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
+              <% end %>
+              <%if (check_can_download_csv(@module_permission))%>
+                <button class="btn btn-danger file-btn-color mr-1" name="csv" style="width:80px" type="submit" value="Accounts CSV">CSV</button>
+              <% end %>
+              <%if (check_can_send_email(@module_permission))%>
+                <button class="btn btn-danger file-btn-color mr-1" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:80px">Mail</button>
+                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      </div>
+                      <div class="modal-body">
+                        <% @pos_setting = PosSetting.first %>
+                        <label>Email:</label>
+                        <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
+                        <br />
+                        <label>Subject:</label>
+                        <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Accounts Detail report from MunshiOnClick", class: 'form-control email-fields'%>
+                        <br />
+                        <label>Body:</label><br />
+                        <%= text_area_tag 'body', nil, class: 'form-control'%>
+                        <br />
+                        <label>Please select one of them.</label>
+                        <div>
+                          <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
+                          <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
+                          <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
+                      </div>
+                      </div>
+                  </div>
                 </div>
-                </div>
-            </div>
+              <% end %>
           </div>
-        <% end %>
+        </div>
+        <div class="mt-3">
+          <%# <button class='btn btn-outline-danger float-right delete-selected' type='button' style="width:163px"value='City' >Delete Selected</button> %>
+          <%= render 'map_columns/map_column_partials' %>
+          <table data-toggle="table" data-search="true" class=" overflow-hidden content-table">
+            <thead>
+              <tr>
+                <th><input type="checkbox" id="master" class='select-all-checkbox' style="cursor: pointer;">
+                    </th>
+                <th>DP</th>
+                <th><%= sort_link(@q, :id, 'ID') %></th>
+                <th><%= sort_link(@q, :title, 'Title') %></th>
+                <th><%= sort_link(@q, :bank_name, 'Bank') %></th>
+                <th><%= sort_link(@q, :amount, 'Balance') %></th>
+                <th class="border_none"><span class="ml-5">Action</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @accounts.each do |account| %>
+                <tr>
+                  <td><%= check_box_tag 'object_ids[]', account.id %></td>
+                  <td>
+                  <div>
+                    <% if account.profile_image.attached? %>
+                      <%= image_tag account.profile_image.service_url, class:"shadow dp-size" %>
+                    <% end %>
+                  </div>  
+                  </td>
+                  <td><%= account.id %></td>
+                  <td class="urdu-font">
+                    <%= link_to payments_path('q[account_id_in]':account.id) do%>
+                      <i class="fa fa-address-book"></i><%= account.title %>
+                    <%end %>
+                  </td>
+                  <td class="urdu-font"><%= account.bank_name %></td>
+                  <td>
+                  <div class="float-left"><%= number_with_delimiter(account.amount.to_f.round(2)) %></div>
+                  <div class="icon-container float-right">
+                        <%if account.amount.to_f < 0  %>
+                          <div class="my-icon my-view float-right">
+                            <div class="my-tooltip text-primary">
+                              Jama/Payable
+                            </div>
+                              <%= link_to account_path(account), remote: true, class:"icon-div" do %>
+                                <i class="fa fa-arrow-up mt-2 text-primary" aria-hidden="true"></i>
+                              <%end %>
+                          </div>
+                        <% end %> 
+                        <%if account.amount.to_f > 0  %>
+                          <div class="my-icon my-view">
+                            <div class="my-tooltip text-danger">
+                              Benam/Recievable
+                            </div>
+                              <%= link_to account_path(account), remote: true, class:"icon-div" do %>
+                                <i class="fa fa-arrow-down mt-2 text-danger" aria-hidden="true"></i>
+                              <%end %>
+                          </div>
+                        <% end %> 
+                        <%if account.amount.to_f == 0  %>
+                          <div class="my-icon my-view">
+                            <div class="my-tooltip text-success">
+                              Nil
+                            </div>
+                              <%= link_to account_path(account), remote: true, class:"icon-div" do %>
+                                <i class="fa fa-check mt-2 text-success" aria-hidden="true"></i>
+                              <%end %>
+                          </div>
+                        <% end %>  
+                      </div>
+                  </td>
+                <td>
+                <div class="icon-container-1 ml-5">
+                  <div class="my-icon-1 my-view-1">
+                    <div class="my-tooltip-1">
+                      <div class="icon-container">
+                        <div class="my-icon my-view">
+                          <div class="my-tooltip">
+                            New Payment
+                          </div>
+                          <%= link_to new_payment_path(account_id:account), title: "Make New Payment", class:"icon-div" do %>
+                            <i class="fa fa-plus mt-2 " aria-hidden="true"></i>
+                          <%end %>
+                        </div>
+                        <%if (check_can_update(@module_permission))%>
+                          <div class="my-icon my-view">
+                            <div class="my-tooltip">
+                              Edit
+                            </div>
+                            <%= link_to edit_account_path(account), remote: true, class:"icon-div" do %>
+                              <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+                            <%end %>
+                          </div>
+                        <% end %>
+                        <%if (check_can_delete(@module_permission))%>
+                          <div class="my-icon my-view">
+                            <div class="my-tooltip">
+                              Delete
+                            </div>
+                            <%= link_to account, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+                              <i class="fa fa-trash mt-2" aria-hidden="true"></i>
+                            <%end %>
+                          </div>
+                        <% end %>
+                        <%if (check_can_read(@module_permission))%>
+                          <div class="my-icon my-view">
+                            <div class="my-tooltip">
+                              Show
+                            </div>
+                            <%= link_to account_path(account), remote: true, class:"icon-div" do %>
+                              <i class="fa fa-eye mt-2" aria-hidden="true"></i>
+                            <%end %>
+                          </div>
+                        <%end%>
+                        <%if (check_can_download_pdf(@module_permission))%>
+                          <div class="my-icon my-view">
+                            <div class="my-tooltip">
+                              PDF
+                            </div>
+                            <%= link_to accounts_path('q[id_eq]':account.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
+                              <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
+                            <%end %>
+                          </div>
+                        <%end %>
+                        <%if (check_can_download_csv(@module_permission))%>
+                          <div class="my-icon my-view">
+                            <div class="my-tooltip">
+                              CSV
+                            </div>
+                            <%= link_to accounts_path('q[id_eq]':account.id,'csv':true), title: 'Download CSV', class:"icon-div" do%>
+                              <i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
+                            <%end %>
+                          </div>
+                        <%end %>
+                      </div>
+                    </div>
+                    <span class="icon-div-1">
+                      <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+                  </td>
+                </tr>
+              <% end %>
+              <tr>
+                <td colspan="4"><h5>Total</h5></td>
+                <td colspan="3"><h5><%=number_with_delimiter(@account_total.first.to_f.round(2))%></h5></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>  
+        <div class="col-lg-12 digg_pagination mt-3">
+          <div class="float-left page_info">
+            <%= page_entries_info @accounts %>
+          </div>
+          <div class="float-right">
+          <%= paginate @accounts, :container => false %>
+          </div>
         </div>
       </div>
     </div>
-    <div class="tab-pane card mb-3 shadow mt-2 border-radius-1 p-3" id="analytics" role="tabpanel">
+    <div class="tab-pane card mb-3 shadow mt-2 p-3" id="analytics" role="tabpanel">
         <div class="my-chart-Container">
           <div class="mychartBox">
             <canvas id="myChart"></canvas>
           </div> 
         </div>   
     </div>
-    <div class="tab-pane card mb-3 shadow mt-2 border-radius-1 p-3" id="import-export" role="tabpanel">
+    <div class="tab-pane card mb-3 shadow mt-2 p-3" id="import-export" role="tabpanel">
       <p>
         <div class="d-flex ml-2">
         <button class="btn btn-danger ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
@@ -156,173 +323,7 @@
     </div>
   <% end %>
   </div>
-  <div>
-
-  <div class="card shadow border-radius-1 p-4 m-4">
-  <%# <button class='btn btn-outline-danger float-right delete-selected' type='button' style="width:163px"value='City' >Delete Selected</button> %>
-    <%= render 'map_columns/map_column_partials' %>
-
-    <table data-toggle="table" data-search="true" class=" overflow-hidden border-radius-1 content-table">
-    <thead>
-      <tr>
-        <th>DP</th>
-        <th><%= sort_link(@q, :id, 'ID') %></th>
-        <th><%= sort_link(@q, :title, 'Title') %></th>
-        <th><%= sort_link(@q, :bank_name, 'Bank') %></th>
-        <th><%= sort_link(@q, :amount, 'Balance') %></th>
-        <th class="border_none"><span class="ml-5">Action</span></th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <% @accounts.each do |account| %>
-        <tr>
-          <td>
-          <div>
-            <% if account.profile_image.attached? %>
-              <%= image_tag account.profile_image.service_url, class:"shadow border-radius-1 dp-size" %>
-            <% end %>
-          </div>  
-          </td>
-          <td><%= account.id %></td>
-          <td class="urdu-font">
-            <%= link_to payments_path('q[account_id_in]':account.id) do%>
-              <i class="fa fa-address-book"></i><%= account.title %>
-            <%end %>
-          </td>
-          <td class="urdu-font"><%= account.bank_name %></td>
-          <td>
-          <div class="float-left"><%= number_with_delimiter(account.amount.to_f.round(2)) %></div>
-          <div class="icon-container float-right">
-                <%if account.amount.to_f < 0  %>
-                  <div class="my-icon my-view float-right">
-                    <div class="my-tooltip text-primary">
-                      Jama/Payable
-                    </div>
-                      <%= link_to account_path(account), remote: true, class:"icon-div" do %>
-                        <i class="fa fa-arrow-up mt-2 text-primary" aria-hidden="true"></i>
-                      <%end %>
-                  </div>
-                <% end %> 
-                <%if account.amount.to_f > 0  %>
-                  <div class="my-icon my-view">
-                    <div class="my-tooltip text-danger">
-                      Benam/Recievable
-                    </div>
-                      <%= link_to account_path(account), remote: true, class:"icon-div" do %>
-                        <i class="fa fa-arrow-down mt-2 text-danger" aria-hidden="true"></i>
-                      <%end %>
-                  </div>
-                <% end %> 
-                <%if account.amount.to_f == 0  %>
-                  <div class="my-icon my-view">
-                    <div class="my-tooltip text-success">
-                      Nil
-                    </div>
-                      <%= link_to account_path(account), remote: true, class:"icon-div" do %>
-                        <i class="fa fa-check mt-2 text-success" aria-hidden="true"></i>
-                      <%end %>
-                  </div>
-                <% end %>  
-              </div>
-          </td>
-				<td>
-        <div class="icon-container-1 ml-5">
-          <div class="my-icon-1 my-view-1">
-            <div class="my-tooltip-1">
-              <div class="icon-container">
-        		  	<div class="my-icon my-view">
-        		  		<div class="my-tooltip">
-        		  			New Payment
-        		  		</div>
-        		  		<%= link_to new_payment_path(account_id:account), title: "Make New Payment", class:"icon-div" do %>
-        		  			<i class="fa fa-plus mt-2 " aria-hidden="true"></i>
-        		  		<%end %>
-        		  	</div>
-
-        		  		<%if (check_can_update(@module_permission))%>
-        		  			<div class="my-icon my-view">
-        		  				<div class="my-tooltip">
-        		  					Edit
-        		  				</div>
-        		  				<%= link_to edit_account_path(account), remote: true, class:"icon-div" do %>
-        		  					<i class="fa fa-edit mt-2" aria-hidden="true"></i>
-        		  				<%end %>
-        		  			</div>
-        		  		<% end %>
-
-        		  		<%if (check_can_delete(@module_permission))%>
-        		  			<div class="my-icon my-view">
-        		  				<div class="my-tooltip">
-        		  					Delete
-        		  				</div>
-        		  				<%= link_to account, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
-        		  					<i class="fa fa-trash mt-2" aria-hidden="true"></i>
-        		  				<%end %>
-        		  			</div>
-        		  		<% end %>
-
-        		  		<%if (check_can_read(@module_permission))%>
-        		  			<div class="my-icon my-view">
-        		  				<div class="my-tooltip">
-        		  					Show
-        		  				</div>
-        		  				<%= link_to account_path(account), remote: true, class:"icon-div" do %>
-        		  					<i class="fa fa-eye mt-2" aria-hidden="true"></i>
-        		  				<%end %>
-        		  			</div>
-        		  		<%end%>
-        		  		<%if (check_can_download_pdf(@module_permission))%>
-        		  			<div class="my-icon my-view">
-        		  				<div class="my-tooltip">
-        		  					PDF
-        		  				</div>
-        		  				<%= link_to accounts_path('q[id_eq]':account.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
-        		  					<i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
-        		  				<%end %>
-        		  			</div>
-        		  		<%end %>
-        		  		<%if (check_can_download_csv(@module_permission))%>
-        		  			<div class="my-icon my-view">
-        		  				<div class="my-tooltip">
-        		  					CSV
-        		  				</div>
-        		  				<%= link_to accounts_path('q[id_eq]':account.id,'csv':true), title: 'Download CSV', class:"icon-div" do%>
-        		  					<i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
-        		  				<%end %>
-        		  			</div>
-        		  		<%end %>
-        		  </div>
-        	</div>
-        	<span class="icon-div-1">
-        				<i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
-        	</span>
-        </div>
-      </div>
-      </div>
-    </div>
-
-          </td>
-        </tr>
-
-      <% end %>
-      <tr>
-        <td colspan="4"><h5>Total</h5></td>
-        <td colspan="2"><h5><%=number_with_delimiter(@account_total.first.to_f.round(2))%></h5></td>
-      </tr>
-    </tbody>
-  </table>
-
-  <div class="col-lg-12 digg_pagination mt-3">
-    <div class="float-left page_info">
-      <%= page_entries_info @accounts %>
-    </div>
-    <div class="float-right">
-    <%= paginate @accounts, :container => false %>
-    </div>
-  </div>
-  </div>
-
+<div>
 <%= form_for :bulk_import, url: bulk_import_data_path, method: :post, html: {class: "bulk-import-form"} do |f| %>
   <div class="modal fade" id="importFile" tabindex="-1" role="dialog" aria-labelledby="importFileTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -346,10 +347,6 @@
   </div>
 <% end %>
 <div class="show-data"></div>
-
-
-
-
 <script>
   $(document).ready(function() {
 
