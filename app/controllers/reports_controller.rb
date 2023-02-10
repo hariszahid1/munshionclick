@@ -22,29 +22,21 @@ class ReportsController < ApplicationController
 
   def chart_of_account
 
-    @pos_setting=PosSetting.first
-    @q = SysUser.where('balance > 0').ransack(params[:q])
-    if @q.result.count > 0
-      @q.sorts = ['user_group asc','name asc'] if @q.sorts.empty?
-    end
+    @pos_setting = PosSetting.first
+    @q = SysUser.where('balance > 0').order('user_group asc', 'name asc').ransack(params[:q])
     @sys_user_payable = @q.result
 
-    @p =SysUser.where('balance < 0').ransack(params[:p])
-    if @p.result.count > 0
-      @p.sorts = ['user_group asc','name asc'] if @p.sorts.empty?
-    end
+    @p = SysUser.where('balance < 0').order('user_group asc', 'name asc').ransack(params[:p])
     @sys_user_receiveable = @p.result
 
-    @all_user =SysUser.all
-    @user_types=UserType.all
-    @staff_names=Staff.all
-    @sys_user_payable_group=SysUser.where('balance > 0').group(:user_group).sum(:balance)
-    @sys_user_receiveable_group=SysUser.where('balance < 0').group(:user_group).sum(:balance)
-    @departments=Department.all
-    @s = Staff.where('balance>0').where(deleted: false).ransack(params[:s])
-    if @s.result.count > 0
-      @s.sorts = ['department_id asc','name asc'] if @s.sorts.empty?
-    end
+    @all_user = SysUser.all
+    @user_types = UserType.all
+    @staff_names = Staff.all
+    @sys_user_payable_group = SysUser.where('balance > 0').group(:user_group).sum(:balance)
+    @sys_user_receiveable_group = SysUser.where('balance < 0').group(:user_group).sum(:balance)
+    @departments = Department.all
+    @s = Staff.where('balance>0').where(deleted: false).order('department_id asc', 'name asc').ransack(params[:s])
+
     if params[:s].present?
       @name = params[:s][:id_eq]
       @department=params[:s][:department_id_eq]
@@ -1366,6 +1358,7 @@ class ReportsController < ApplicationController
 
   end
 
+
   def sale_report_analytics
     type = params[:type]
     case type
@@ -1563,22 +1556,22 @@ class ReportsController < ApplicationController
 end
 
 def chart_of_account_analytics
-  
+
   @user_group_count = SysUser.where('balance > 0').group('user_group').count
-  @u_group_keys = @user_group_count.keys.map { |a| a.gsub(' ', '-') }
+  @u_group_keys = @user_group_count.keys&.compact&.map { |a| a.gsub(' ', '-') }
   @u_group_count = @user_group_count.values
 
   @user_group_balance = SysUser.where('balance > 0').group('user_group').sum(:balance)
-  @u_balance_keys = @user_group_balance.keys.map { |a| a.gsub(' ', '-') }
+  @u_balance_keys = @user_group_balance.keys&.compact&.map { |a| a.gsub(' ', '-') }
   @u_balance_count = @user_group_balance.values
 
   @staff_dep_count = Staff.joins(:department).where('balance > 0').group('departments.title').count
-  @dep_keys = @staff_dep_count.keys.map { |a| a.gsub(' ', '-') }
+  @dep_keys = @staff_dep_count.keys&.compact&.map { |a| a.gsub(' ', '-') }
   @dep_values = @staff_dep_count.values
 
   @staff_dep_balance = Staff.joins(:department).where('balance > 0').group('departments.title').sum(:balance)
-  @staff_dep_sorted = @staff_dep_balance.map { |a| [a.first, a.last.to_f] }.to_h
-  @staff_balance_keys = @staff_dep_sorted.keys.map { |a| a.gsub(' ', '-') }
+  @staff_dep_sorted = @staff_dep_balance&.map { |a| [a.first, a.last.to_f] }.to_h
+  @staff_balance_keys = @staff_dep_sorted.keys&.compact&.map { |a| a.gsub(' ', '-') }
   @staff_balance_values = @staff_dep_sorted.values
 
 end

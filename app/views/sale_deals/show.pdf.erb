@@ -152,34 +152,40 @@
         <textarea rows='5' class='font-size-custom' style='width: 100%; padding: 5px;'><%= @sale_deal&.comment %></textarea>
       </div>
     </div>
-    <h2 style='color: red;'>Important: You must call at this number (0321-8437272) for the verification of your receipt.</h2>
+    <% custome_width = 77 %>
+    <% custome_margin_1 = 0 %>
+    <% custome_margin_2 = 0 %>
+    <h2 style='color: red;'><%= @pos_setting&.extra_settings.try(:[], "verification_message")%></h2>
    <div class='d-flex' style= 'margin-top: 25px;'>
-      <div style='width: 33%;'>
         <% if @pos_setting&.qr_links.try(:[], 'jr_qr').present?%>
-          <%
-            require "rqrcode"
-            qrcode = RQRCode::QRCode.new(@pos_setting.qr_links['jr_qr'])
-            @svg = qrcode.as_svg(
-                color: "000",
-                shape_rendering: "crispEdges",
-                module_size: 11,
-                standalone: true,
-                use_path: true
-              )
-              @str=Base64.encode64(@svg ).gsub("\n", '')
-          %>
-        <img width="180px" height="150px" class="figure" style=""src=<%="data:image/svg+xml;base64,"+@str%> >
-        <p style= 'margin-top: 5%; margin-left: 12%;'>Jr Website QR</p>
+          <div style='width: 33%;'>
+              <% custome_width = 33 %>
+              <% custome_margin_1 = 25 %>
+              <% custome_margin_2 = 150 %>
+              <%
+                require "rqrcode"
+                qrcode = RQRCode::QRCode.new(@pos_setting.qr_links['jr_qr'])
+                @svg = qrcode.as_svg(
+                    color: "000",
+                    shape_rendering: "crispEdges",
+                    module_size: 11,
+                    standalone: true,
+                    use_path: true
+                  )
+                  @str=Base64.encode64(@svg ).gsub("\n", '')
+              %>
+            <img width="180px" height="150px" class="figure" style=""src=<%="data:image/svg+xml;base64,"+@str%> >
+            <p style= 'margin-top: 5%; margin-left: 12%;'><%= @pos_setting&.qr_links.try(:[], "qr_title")%></p>
+          </div>
        <% end %>
 
-      </div>
-      <div style='width: 33%;  margin-left: 25px;'>
+      <div style="width: <%= custome_width %>%; margin-left: <%= custome_margin_1 %>px;">
         <h4 class='font-size-custom'>For verification of your Sale Receipt:</h4>
         <p class='font-size-custom'> 1) Open Camrea/QRScaner app on your phone.</p>
         <p class='font-size-custom'> 2) Point your phone to this QRCODE to capture the code.</p>
         <p class='font-size-custom'> 3) After capturing you will redirect to our Sale Deal Invoice.</p>
       </div>
-      <div style='width: 33%;  margin-left: 150px;'>
+      <div style='width: 33%;  margin-left: <%= custome_margin_2 %>px;'>
         <% if @sale_deal.qr_code.present?%>
           <%
             require "rqrcode"
@@ -203,19 +209,25 @@
 
     <div class='d-flex'>
       <div style='width: 33%; margin-top: 20px; color: green'>
-        <h3><%= @pos_setting&.extra_settings.try(:[], "address_1").try(:[], 0) %><img src="<%= image_url('pin-location.svg') %>" height='20px' width='20px'></h3>
-        <p class='font-size-custom'><%= @pos_setting&.extra_settings.try(:[], "address_1").try(:[], 1)%></p>
-        <p class='font-size-custom'><%= @pos_setting&.extra_settings.try(:[], "address_1").try(:[], 2) %></p>
+        <% if  @pos_setting&.extra_settings.try(:[], "address_1").present? %>
+          <h3><%= @pos_setting&.extra_settings.try(:[], "address_1").try(:[], 0) %><img src="<%= image_url('pin-location.svg') %>" height='20px' width='20px'></h3>
+          <p class='font-size-custom'><%= @pos_setting&.extra_settings.try(:[], "address_1").try(:[], 1)%></p>
+          <p class='font-size-custom'><%= @pos_setting&.extra_settings.try(:[], "address_1").try(:[], 2) %></p>
+        <% end %>
       </div>
       <div style='width: 33%;  margin-top: 20px; color: green'>
-        <h3><%= @pos_setting&.extra_settings.try(:[], "address_3").try(:[], 0) %> <img src="<%= image_url('pin-location.svg') %>" height='20px' width='20px'></h3>
-        <p class='font-size-custom'><%= @pos_setting&.extra_settings.try(:[], "address_3").try(:[], 1) %></p>
-        <p class='font-size-custom'><%= @pos_setting&.extra_settings.try(:[], "address_3").try(:[], 2) %></p>
+        <% if  @pos_setting&.extra_settings.try(:[], "address_3").present? %>
+          <h3><%= @pos_setting&.extra_settings.try(:[], "address_3").try(:[], 0) %> <img src="<%= image_url('pin-location.svg') %>" height='20px' width='20px'></h3>
+          <p class='font-size-custom'><%= @pos_setting&.extra_settings.try(:[], "address_3").try(:[], 1) %></p>
+          <p class='font-size-custom'><%= @pos_setting&.extra_settings.try(:[], "address_3").try(:[], 2) %></p>
+        <% end %>
       </div>
       <div style='width: 33%; margin-left: 7%; margin-top: 20px; color: green'>
-        <h3><%= @pos_setting&.extra_settings.try(:[], "address_2").try(:[], 0) %> <img src="<%= image_url('pin-location.svg') %>" height='20px' width='20px'></h3>
-        <p class='font-size-custom'><%= @pos_setting&.extra_settings.try(:[], "address_2").try(:[], 1) %></p>
-        <p class='font-size-custom'><%= @pos_setting&.extra_settings.try(:[], "address_2").try(:[], 2) %></p>
+        <% if  @pos_setting&.extra_settings.try(:[], "address_2").present? %>
+          <h3><%= @pos_setting&.extra_settings.try(:[], "address_2").try(:[], 0) %> <img src="<%= image_url('pin-location.svg') %>" height='20px' width='20px'></h3>
+          <p class='font-size-custom'><%= @pos_setting&.extra_settings.try(:[], "address_2").try(:[], 1) %></p>
+          <p class='font-size-custom'><%= @pos_setting&.extra_settings.try(:[], "address_2").try(:[], 2) %></p>
+        <% end%>
       </div>
     </div>
   </body>

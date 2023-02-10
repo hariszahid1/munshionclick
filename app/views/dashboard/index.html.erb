@@ -12,6 +12,8 @@
   <%= render 'dashboard/housing_scheme/index_housing', products: @products %>
 <%elsif current_user&.developer? %>
   <%= render 'dashboard/developer/index_developer', products: @products %>
+<%elsif pos_setting_sys_type=="Dealer"%>
+  <%= render 'dashboard/dealer/index_dealer', products: @products %>
 <%else%>
   <%= render 'dashboard/pos/index', products: @products %>
 <%end%>
