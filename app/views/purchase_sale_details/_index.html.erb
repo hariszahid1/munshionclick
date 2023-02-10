@@ -260,9 +260,9 @@
             </td>
             <td>
               <%if purchase_sale_detail.created_at.strftime("%d%b%y")!=purchase_sale_detail.updated_at.strftime("%d%b%y")%>
-                <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d/%b/%y at %I:%M%p") : '' %> <hr> <%= purchase_sale_detail.updated_at.present? ? purchase_sale_detail.updated_at.strftime("%d/%b/%y at %H:%M%p") : '' %>
+                <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d%b%y, %I:%M") : '' %> <hr> <%= purchase_sale_detail.updated_at.present? ? purchase_sale_detail.updated_at.strftime("%d%b%y, %I:%M") : '' %>
               <%else%>
-                <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d/%b/%y at %I:%M%p") : '' %>
+                <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d%b%y, %I:%M") : '' %>
               <%end%>
             </td>
             <% if pos_setting_sys_type != "MobileShop" %>

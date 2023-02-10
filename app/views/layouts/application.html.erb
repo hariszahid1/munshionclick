@@ -50,7 +50,11 @@
     <%= render 'layouts/shared/loader' %>
     <div class="d-flex wrapper" id="wrapper">
       <% if !request.url.to_s.include? 'db_backup_files' %>
-        <%= render 'layouts/shared/navigation_bar' %>
+        <% if current_user&.developer? %>
+          <%= render 'layouts/shared/developer_navbar'%>
+        <% else %>
+          <%= render 'layouts/shared/navigation_bar' %>
+        <% end %>
         <div id="sidebar-container" style="margin-top: 75px;" class="col-1 col-2 p-0 d-none d-lg-block">
           <%if check_system_type(@pos_setting)=="batamega"%>
             <%= render 'layouts/shared/sidebar_bata' %>
@@ -80,8 +84,9 @@
       <!-- Page Content -->
       <div id="content" class="col-12 col-lg-10 p-0 margin-top-layout mb-5">
         <div class="container-fluid">
-
-          <div style="margin-top: 2rem"></div>
+          <% if !current_user&.developer? %>  
+            <div style="margin-top: 2rem"></div>
+          <% end %>  
           <div id='js-msg'></div>
           <%= render 'layouts/shared/alerts' %>
 

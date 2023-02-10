@@ -1,0 +1,131 @@
+        
+<html>
+  <head>
+    <style>
+      .border-bottom{
+        border-bottom: double 4px;
+      }
+      .text-center{
+        text-align: center;
+      }
+      .text-right{
+        text-align: right;
+      }
+      .col-3{
+        -webkit-box-flex: 0;
+        flex: 0 0 25%;
+        max-width: 25%;
+        width: 25%;
+      }
+      .sig-bottom{
+        border-bottom: 1px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    <% @date = Date.today  %>
+    <% @time = DateTime.now %>
+    <% @time = Time.zone.now %>
+
+    <div>
+      <p class="border-bottom"></p>
+      <h2 class= "text-right">Gate Pass No: <%= data.first['id']%></h2>
+      <h3>Party: <%= data.first['name']%></h3>
+      <h3>Marka No: <%= data.first['items'].first['marka']%></h3>
+      <h3>Vehicle: <%= data.first['items'].first['vehicle_no']%></h3>
+      <h3>Inward date: <%= indate = data.first['date'] %></h3>
+      <h3>Product: <%= data.first['items'].first['product']%></h3>
+      <p class="border-bottom"></p>
+      <p class="text-center">Report by: <%=current_user.name%></p>
+    </div>
+    <div>
+      <table>
+        <thead class="lite-gray">
+          <th class="text-center">Close Date</th>
+          <th class="text-center">Total Pandri</th>
+          <th class="text-center">Product Qty</th>
+          <th class="text-center">1/peti Mazdoori</th>
+          <th class="text-center">Total Mazdoori</th>
+          <th class="text-center">Pandri Rent</th>
+          <th class="text-center">Store Bill</th>
+          <th class="text-center">Total Store Bill</th>
+        </thead>
+        <tbody>
+          <% data.each_with_index do |order, index| %>
+            <% order['items'].each_with_index do |item, index| %>
+              <% if item['close_date'].present? %>
+                <tr>
+                    <td class="text-center"><%= close_date = item['close_date'] %></td>
+                    <td class="text-center"><%= item['panelty_pandri'] %></td>
+                    <td class="text-center"><%= qty = item['quantity'] %></td>
+                    <td class="text-center"><%= 15 %></td>
+                    <td class="text-center"><%= t_mzdoori = item['total_mazdoori'].to_f %></td>
+                    <td class="text-center"><%= 22 %></td>
+                    <td class="text-center"><%= st_bill = item['total_pandri_bill'].to_f %></td>
+                    <td class="text-center"><%= (t_mzdoori + st_bill) %></td>
+                </tr>
+              <% end %>
+            <% end %>
+          <% end %>
+          <tr>
+            <th>Total: </th>
+            <th></th>
+            <th><%= data.first['total_quantity'] %></th>
+            <th></th>
+            <th><%= t_m = data.first['total_mazdoori'] %></th>
+            <th></th>
+            <th><%= t_b = data.first['total_bill'] %></th>
+            <th><%= t_m.to_f + t_b.to_f %></th>
+          </tr>
+        </tbody>
+      </table>
+
+      <table style='margin-top: 100px;'>
+        <thead class="lite-gray">
+          <th class="text-center">Total Pandri</th>
+          <th class="text-center">Product Qty</th>
+          <th class="text-center">1/peti Mazdoori</th>
+          <th class="text-center">Total Mazdoori</th>
+          <th class="text-center">Pandri Rent</th>
+          <th class="text-center">Store Bill</th>
+          <th class="text-center">Total Store Bill</th>
+        </thead>
+        <tbody>
+          <% data.each_with_index do |order, index| %>
+            <% order['items'].each_with_index do |item, index| %>
+            <% if item['close_date'].present? %>
+              <tr>
+                <td class="text-center"><%= total_pandri =  ((item['close_date'].to_date - (indate.to_date-1)).to_f/15).ceil() %></td>
+                <td class="text-center"><%= qty = item['quantity'] %></td>
+                <td class="text-center"><%= 15 %></td>
+                <td class="text-center"><%= t_mzdoori = (qty.to_f*15) %></td>
+                <td class="text-center"><%= item['rent_pandri'] %></td>
+                <td class="text-center"><%= st_bill = (qty.to_f * total_pandri.to_f * 22) %></td>
+                <td class="text-center"><%= (t_mzdoori + st_bill) %></td>
+              </tr>
+            <% end %>  
+            <% end %>
+          <% end %>
+          <tr>
+            <th>Total: </th>
+            <th><%= data.first['total_quantity'] %></th>
+            <th></th>
+            <th><%= t_m = data.first['total_mazdoori'] %></th>
+            <th></th>
+            <th><%= t_b = data.first['total_bill'] %></th>
+            <th><%= t_m.to_f + t_b.to_f %></th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class='d-flex' style='margin-top: 100px;'>
+      <div class='col-3 sig-bottom'></div>
+      <div class='col-3 px-20'><h3>Manager</h3></div>
+    </div>
+    <div class='d-flex' style='margin-top: 30px;'>
+      <div><p> Please verify your product and paying total bill.  After leaving the Mehtab, we will not be responsible. </p></div>
+    </div>
+
+  </body>
+</html>
+
