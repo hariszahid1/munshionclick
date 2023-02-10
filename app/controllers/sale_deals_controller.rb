@@ -48,6 +48,8 @@ class SaleDealsController < ApplicationController
                                       purchase_sale_detail_id: @sale_deal.id, account_id: @sale_deal&.account_id)
         @ledger_book.save!
         type = params[:purchase_sale_detail]['transaction_type'] == 'ReSaleDeal' ? 8 : 9
+        qr_link_generator
+
         format.js
         format.html { redirect_to sale_deals_path('q[transaction_type_eq]': type), notice: 'Please Take Approval from admin.' }
         format.json { render :show, status: :created, location: @sale_deal }
@@ -128,6 +130,20 @@ class SaleDealsController < ApplicationController
     @deal_count = PurchaseSaleDetail.joins(:purchase_sale_items).where(transaction_type: %w[NewSaleDeal ReSaleDeal]).group('purchase_sale_items.size_4').count
     @payment_status_count = PurchaseSaleDetail.joins(:purchase_sale_items).where(transaction_type: %w[NewSaleDeal ReSaleDeal]).group('purchase_sale_items.size_7').count
 
+  end
+
+  def qr_link_generator
+    website = PosSetting.first.website.to_s
+    company_mask = PosSetting.first.company_mask.to_s
+    sale_deal_id = @sale_deal.id.to_s
+
+    qrcode = "#{website}/sale_deals/#{sale_deal_id}?receivable=#{company_mask}"
+
+    if @sale_deal.links.blank?
+      @sale_deal.links.create(qrcode: qrcode)
+    else
+      @sale_deal.links.first.update(qrcode: qrcode)
+    end
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

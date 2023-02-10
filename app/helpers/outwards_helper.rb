@@ -62,7 +62,7 @@ module OutwardsHelper
                                                         builty_no: c_i.size_12,
                                                         vehicle_no: c_i.size_11,
                                                         challan_no: c_i.size_10,
-                                                        quantity: c_i.quantity,
+                                                        quantity: c_i.size_9,
                                                         room_num: c_i.size_8,
                                                         rack_num: c_i.size_7,
                                                         in_date: c_i.inward_date&.strftime("%d-%b-%y"),
@@ -78,12 +78,14 @@ module OutwardsHelper
     end
 
     def sorted_outward_show_data
-        order_total = @purchase_sale_detail.purchase_sale_items&.sum(:quantity)
+        order_total = @purchase_sale_detail.purchase_sale_items&.sum(:size_9)
+        bill_total = @purchase_sale_detail.purchase_sale_items&.sum(:total_pandri_bill)
         @sorted_data = []
           @sorted_data << {
                             id: @purchase_sale_detail.id,
                             type: @purchase_sale_detail.transaction_type,
                             total_quantity: order_total,
+                            total_bill: bill_total,
                             date: @purchase_sale_detail.created_at&.strftime("%d-%b-%y"),
                                                     name: @purchase_sale_detail.sys_user.name,
                                                     status: @purchase_sale_detail.status,
@@ -94,7 +96,7 @@ module OutwardsHelper
                                                         builty_no: c_i.size_12,
                                                         vehicle_no: c_i.size_11,
                                                         challan_no: c_i.size_10,
-                                                        quantity: c_i.quantity,
+                                                        quantity: c_i.size_9,
                                                         room_num: c_i.size_8,
                                                         rack_num: c_i.size_7,
                                                         in_date: c_i.inward_date&.strftime("%d-%b-%y"),

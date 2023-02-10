@@ -9,8 +9,8 @@
      </ul>
     </div>
   <% end %>
-  <div class="card border-radius-1 p-3 shadow">
-    <div class="">
+  <div class="card p-4 shadow m-4">
+    <div>
       <div class="col-lg-2 form-group float-left">
         <%= f.text_field :code, {placeholder: "Enter the code", required: true , value: (f.object.code.nil? ? ("AGC-"+"%.4i" % (SysUser.maximum(:id).present? ? SysUser.maximum(:id).next : 1)) : (f.object.code ))} %>
       </div>
@@ -42,27 +42,23 @@
       <div class="col-lg-6 form-group float-left">
         <%= f.select :status, SysUser.statuses.map { |key, value| [key.humanize, key] },{include_blank: "Please Select Status"},{class: "form-control"} %>
       </div>
-      <div class="clearfix"> 
-     </div> 
-   </div>
- 
-   <div class="clearfix"></div>
-   <div class="row">
-     <ul class="nav nav-tabs ml-" role="tablist">    
+      <div class="clearfix"> </div> 
+    </div>
+    <div class="clearfix"></div>
+     <ul class="nav nav-tabs m-2" role="tablist">    
        <li class="nav-item active-link">
-         <a class="nav-link tab-label active " data-toggle="tab" href="#Custom" role="tab">Custom</a>
+         <a class="nav-link tab-label active " data-toggle="tab" href="#Custom" role="tab">Custom Details</a>
        </li>
        <li class="nav-item">
          <a class="nav-link tab-label " data-toggle="tab" href="#Nominee" role="tab">Nominee Details</a>
        </li>
        <li class="nav-item">
-         <a class="nav-link tab-label " data-toggle="tab" href="#ContactForm" role="tab"> Contact Form</a>
+         <a class="nav-link tab-label " data-toggle="tab" href="#ContactForm" role="tab">Contact Form</a>
        </li>		
 	   </ul>
-    </div>
-   <div class="tab-content">
-     <div class="tab-pane active no-tab-border mb-3 p-4 " id="Custom" role="tabpanel">
-       <div class="card border-radius-1 shadow p-3">  
+    <div class="tab-content">
+      <div class="tab-pane active no-tab-border mb-3 p-4 " id="Custom" role="tabpanel">
+        <div class="card shadow p-3">  
           <div>
             <div class="col-lg-6 form-group float-left">
              <%= f.text_field :occupation , placeholder:"Enter Occupation"%>
@@ -100,9 +96,9 @@
             </div>
           </div>
         </div>
-     </div>
-     <div class="tab-pane no-tab-border mb-3 p-4 " id="Nominee" role="tabpanel">
-        <div class="card border-radius-1 shadow p-3">  
+      </div>
+      <div class="tab-pane no-tab-border mb-3 p-4 " id="Nominee" role="tabpanel">
+        <div class="card shadow p-3">  
           <div> 
            <div class="col-lg-6 form-group float-left">
              <%= f.text_field :nom_name , placeholder:"Enter Name"%>
@@ -118,25 +114,24 @@
            </div>
           </div>
         </div>
-     </div>
-     <div class="tab-pane no-tab-border p-4 " id="ContactForm" role="tabpanel">
-        <div class="card border-radius-1 shadow p-3">  
+      </div>
+      <div class="tab-pane no-tab-border p-4 " id="ContactForm" role="tabpanel">
+        <div class="card shadow p-3">  
           <div> 
             <%= f.fields_for :contact do |af| %>
               <%= render 'contact', af: af %>
             <% end %>
           </div>
         </div>
-     </div>
-   </div>   
-  
-  <div class="clearfix">
+      </div>
+    </div>   
+    <div class="clearfix">
     <div class="modal-footer">
-      <button type="button" class="btn btn-light btn-outline-secondary" data-dismiss="modal">Cancel</button>
+      <a href="<%= sys_users_path %>" class="btn btn-light btn-outline-secondary cancel-btn-outline">Cancel</a>
       <%=f.object.id.nil? ? (f.submit "Save" ,class: "btn btn-primary", style: "")  :  (f.submit class: "btn btn-warning", style: "float: right")%>
     </div>
-    <% end %>
   </div>
+<% end %>
   <%= javascript_include_tag 'hover', 'data-turbolinks-track': 'reload' %>
 
 

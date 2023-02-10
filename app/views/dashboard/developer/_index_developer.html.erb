@@ -1,0 +1,351 @@
+<div class='d-flex mt-3'>
+    <div>
+      <div class="row mb-1 mt-3">
+        <h3 class="ml-2 col">Dashboard</h3>
+      </div>
+      <div class="row mb-2">
+        <div class="col-lg-12 col-sm-12">
+          <div class="main-content-header">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a href="<%= root_path %>"><i class="fa fa-home"></i></a>
+              </li>
+              <li class="breadcrumb-item">
+                <a href="<%= root_path %>">Dashboard</a>
+              </li>
+              <li class="breadcrumb-item active">
+                <a href="<%= crms_path %>">User Permissions</a>
+              </li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex ml-auto">
+      <div class="card shadow text-dark mr-3 p-1 dev-card" style="border: 10px solid darkgray; border-radius: 50%;">
+        <span><h2 class="mt-2"><b><%= @company_type_count %></b></h2><p>Company<br>Types</p></span>
+      </div>
+      <div class="card shadow text-dark mr-3 p-1 dev-card" style="border: 10px solid darkgray; border-radius: 50%;">
+        <span><h2 class="mt-2"><b><%= @users_by_type_count %></b></h2><p>Total<br>Users</p></span>
+      </div>
+    </div>
+  </div>
+
+<div class="clearfix"></div>
+<div class="row ml-2 mt-3 mb-3">
+  <h5>Users Roles and Permissions</h5>
+</div>
+<div class="row">
+  <ul class="nav nav-tabs ml-4" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link tab-label active " data-toggle="tab" href="#users" role="tab"><i class="fa fa-user mr-2"></i>Users</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link tab-label " data-toggle="tab" href="#permissions" data-remote="true" role="tab"><i class="fa fa-key mr-2"></i>Permissions</a>
+    </li>
+	</ul>
+</div>
+
+<div class="tab-content">
+  <div class="tab-pane active no-tab-border p-3 mb-3" id="users" role="tabpanel">
+    <% @users_by_company_type.each do |data| %>
+      <% users = User.where(id: data[:ids]) %>
+      <div class="card shadow-sm mb-4 p-4">
+      <table>
+        <thead>
+          <tr>
+            <h4 class="text-uppercase"><%= data[:company_type].present? ? data[:company_type] : 'nill'%></h4>
+            <th></th>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Username</th>
+            <th>Email</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% users.each do |user| %>
+            <% demo_id = "demo#{user.id}"%>
+            <tr>
+              <td class="accordion-toggle acc-pointer" data-toggle="collapse" data-target="#<%= demo_id %>"><i class="fa fa-plus-circle"></i></td>
+              <td><%= user.id %></td>
+              <td><%= user.name %></td>
+              <td><%= user.user_name %></td>
+              <td><%= user.email %></td>
+            </tr>
+            <tr>
+            <td colspan="11" class="hiddenRow">
+              <div class="accordian-body collapse card shadow m-4" style="border-radius: 10px;" id="<%= demo_id %>">
+                <% if user.persisted?
+                  submit_url = users_path
+                  submit_method = :patch
+                else
+                  submit_url = create_user_users_path
+                  submit_method = :post
+                end
+                %>
+                <%= bootstrap_form_for(user, url: users_path, method: :put) do |f| %>
+                  <%= f.hidden_field :id %>
+                  <% if user.user_permissions.present? %>
+                    <table>
+                      <thead>
+                      <tr>
+                        <th class="h5 p-1 ">Accessed</th>
+                        <th class="h5 p-1 ">Module</th>
+                        <th class="h5 p-1 "><input type="checkbox" id='select-all-checkbox-of-create'><span class="ml-1">Create</span></th>
+                        <th class="h5 p-1 "><input type="checkbox" id='select-all-checkbox-of-read'><span class="ml-1">Read</span></th>
+                        <th class="h5 p-1 "><input type="checkbox" id='select-all-checkbox-of-update'><span class="ml-1">Edit</span></th>
+                        <th class="h5 p-1 "><input type="checkbox" id='select-all-checkbox-of-delete'><span class="ml-1">Delete</span></th>
+                        <th class="h5 p-1 "><input type="checkbox" id='select-all-checkbox-of-can-download-pdf'><span class="ml-1">PDF</span></th>
+                        <th class="h5 p-1 "><input type="checkbox" id='select-all-checkbox-of-can-download-csv'><span class="ml-1">CSV</span></th>
+                        <th class="h5 p-1 "><input type="checkbox" id='select-all-checkbox-of-can-send-email'><span class="ml-1">Email</span></th>
+                        <th class="h5 p-1 "><input type="checkbox" id='select-all-checkbox-of-can-import-export'><span class="ml-1">Import/Export</span></th>
+                        <th class='hidden_column_head h5 p-1'><input type="checkbox" id='select-all-checkbox-of-hidden'><span class="ml-1">Hidden</span></th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                          <%= f.fields_for :user_permissions do |perm| %>
+                            <%= render 'users/user_permission_fields', f: perm %>
+                          <%end%>
+                      </tbody>
+                    </table>			
+                  <% end %>
+                  <button type='submit'>Submit</button>
+                <% end %>
+              </div>
+
+            </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      </div>
+    <% end %>
+  </div>
+  <div class="tab-pane card shadow p-3 mb-3 mt-2" id="permissions" role="tabpanel">
+
+  </div>
+</div>  
+
+
+<script>
+  $(document).ready(function () {
+    //for hidding isHidden column
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const hidden = urlParams.get('hidden')
+
+    if(!(hidden=='true')){
+      $('.hidden_column_td').css('display','none');
+      $('.hidden_column_head').css('display','none');
+    }
+
+      // for create
+    $('#select-all-checkbox-of-create').on('click', function () {
+      if (this.checked) {
+        $('.can-create-checkbox').each(function () {
+          this.checked = true;
+        });
+      } else {
+        $('.can-create-checkbox').each(function () {
+          this.checked = false;
+        });
+      }
+    });
+
+    $('.can-create-checkbox').on('click', function () {
+      if ($('.can-create-checkbox:checked').length == $('.can-create-checkbox').length) {
+        $('#select-all-checkbox-of-create').prop('checked', true);
+      } else {
+        $('#select-all-checkbox-of-create').prop('checked', false);
+      }
+    });
+
+    // for read
+    $('#select-all-checkbox-of-read').on('click', function () {
+      if (this.checked) {
+        $('.can-read-checkbox').each(function () {
+          this.checked = true;
+        });
+      } else {
+        $('.can-read-checkbox').each(function () {
+          this.checked = false;
+        });
+      }
+    });
+
+    $('.can-read-checkbox').on('click', function () {
+      if ($('.can-read-checkbox:checked').length == $('.can-read-checkbox').length) {
+        $('#select-all-checkbox-of-read').prop('checked', true);
+      } else {
+        $('#select-all-checkbox-of-read').prop('checked', false);
+      }
+    });
+
+    // for update
+    $('#select-all-checkbox-of-update').on('click', function () {
+      if (this.checked) {
+        $('.can-update-checkbox').each(function () {
+          this.checked = true;
+        });
+      } else {
+        $('.can-update-checkbox').each(function () {
+          this.checked = false;
+        });
+      }
+    });
+
+    $('.can-update-checkbox').on('click', function () {
+      if ($('.can-update-checkbox:checked').length == $('.can-update-checkbox').length) {
+        $('#select-all-checkbox-of-update').prop('checked', true);
+      } else {
+        $('#select-all-checkbox-of-update').prop('checked', false);
+      }
+    });
+
+    // for delete
+    $('#select-all-checkbox-of-delete').on('click', function () {
+      if (this.checked) {
+        $('.can-delete-checkbox').each(function () {
+          this.checked = true;
+        });
+      } else {
+        $('.can-delete-checkbox').each(function () {
+          this.checked = false;
+        });
+      }
+    });
+
+    $('.can-delete-checkbox').on('click', function () {
+      if ($('.can-delete-checkbox:checked').length == $('.can-delete-checkbox').length) {
+        $('#select-all-checkbox-of-delete').prop('checked', true);
+      } else {
+        $('#select-all-checkbox-of-delete').prop('checked', false);
+      }
+    });
+
+    // for hidden
+    $('#select-all-checkbox-of-hidden').on('click', function () {
+      if (this.checked) {
+        $('.is-hidden-checkbox').each(function () {
+          this.checked = true;
+        });
+      } else {
+        $('.is-hidden-checkbox').each(function () {
+          this.checked = false;
+        });
+      }
+    });
+
+    $('.is-hidden-checkbox').on('click', function () {
+      if ($('.is-hidden-checkbox:checked').length == $('.is-hidden-checkbox').length) {
+        $('#select-all-checkbox-of-hidden').prop('checked', true);
+      } else {
+        $('#select-all-checkbox-of-hidden').prop('checked', false);
+      }
+    });
+
+    // for pdf
+    $('#select-all-checkbox-of-can-download-pdf').on('click', function () {
+      if (this.checked) {
+        $('.can-download-pdf-checkbox').each(function () {
+          this.checked = true;
+        });
+      } else {
+        $('.can-download-pdf-checkbox').each(function () {
+          this.checked = false;
+        });
+      }
+    });
+
+    $('.can-download-pdf-checkbox').on('click', function () {
+      if ($('.can-download-pdf-checkbox:checked').length == $('.can-download-pdf-checkbox').length) {
+        $('#select-all-checkbox-of-can-download-pdf').prop('checked', true);
+      } else {
+        $('#select-all-checkbox-of-can-download-pdf').prop('checked', false);
+      }
+    });
+
+    // for csv
+    $('#select-all-checkbox-of-can-download-csv').on('click', function () {
+      if (this.checked) {
+        $('.can-download-csv-checkbox').each(function () {
+          this.checked = true;
+        });
+      } else {
+        $('.can-download-csv-checkbox').each(function () {
+          this.checked = false;
+        });
+      }
+    });
+
+    $('.can-download-csv-checkbox').on('click', function () {
+      if ($('.can-download-csv-checkbox:checked').length == $('.can-download-csv-checkbox').length) {
+        $('#select-all-checkbox-of-can-download-csv').prop('checked', true);
+      } else {
+        $('#select-all-checkbox-of-can-download-csv').prop('checked', false);
+      }
+    });
+
+    // for eamil
+    $('#select-all-checkbox-of-can-send-email').on('click', function () {
+      if (this.checked) {
+        $('.can-send-email-checkbox').each(function () {
+          this.checked = true;
+        });
+      } else {
+        $('.can-send-email-checkbox').each(function () {
+          this.checked = false;
+        });
+      }
+    });
+
+    $('.can-send-email-checkbox').on('click', function () {
+      if ($('.can-send-email-checkbox:checked').length == $('.can-send-email-checkbox').length) {
+        $('#select-all-checkbox-of-can-send-email').prop('checked', true);
+      } else {
+        $('#select-all-checkbox-of-can-send-email').prop('checked', false);
+      }
+    });
+
+    // for import export
+    $('#select-all-checkbox-of-can-import-export').on('click', function () {
+      if (this.checked) {
+        $('.can-import-export-checkbox').each(function () {
+          this.checked = true;
+        });
+      } else {
+        $('.can-import-export-checkbox').each(function () {
+          this.checked = false;
+        });
+      }
+    });
+
+    $('.can-import-export-checkbox').on('click', function () {
+      if ($('.can-import-export-checkbox:checked').length == $('.can-import-export-checkbox').length) {
+        $('#select-all-checkbox-of-can-import-export').prop('checked', true);
+      } else {
+        $('#select-all-checkbox-of-can-import-export').prop('checked', false);
+      }
+    });
+
+    // for disabling entire tr
+    $('.can-access-checkbox').on('click', function () {
+      debugger;
+      $(this).closest('tr').find('input').prop('disabled', !$(this).is(':checked'))
+      $(this).closest('td').find('input').removeAttr('disabled')
+    })
+		var checkboxes = $('.can-access-checkbox')
+		for(var i = 0; i < checkboxes.length; i++ ){
+			$(checkboxes[i]).closest('tr').find('input').prop('disabled', !$(checkboxes[i]).is(':checked'))
+			$(checkboxes[i]).closest('td').find('input').removeAttr('disabled')
+		}
+	})
+
+$('.accordian-body').on('show.bs.collapse', function () {
+    $(this).closest("table")
+        .find(".collapse.in")
+        .not(this)
+        .collapse('toggle')
+})
+</script>
+

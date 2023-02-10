@@ -16,9 +16,9 @@ class ColdStorageOutwardsController < ApplicationController
     @purchase_sale_details = purchase_sale_detail.order('purchase_sale_details.created_at desc').page(params[:page]).per(100)
     @pdf_orders = @q.result.where(transaction_type: 'OutWard')
     if params[:pdf].present?
-      @pdf_orders_total = @pdf_orders.sum('purchase_sale_items.quantity')
+      @pdf_orders_total = @pdf_orders.sum('purchase_sale_items.size_9')
       @pdf_orders_total_bill = @pdf_orders.sum('purchase_sale_items.total_pandri_bill')
-      pdf_outward_q = @pdf_orders.group('sys_users.name').sum('purchase_sale_items.quantity')
+      pdf_outward_q = @pdf_orders.group('sys_users.name').sum('purchase_sale_items.size_9')
       pdf_outward_t = @pdf_orders.group('sys_users.name').sum('purchase_sale_items.total_pandri_bill')
       @pdf_outward_total = pdf_outward_q.merge(pdf_outward_t) { |key, old_val, new_val| [old_val, new_val] }
       download_cold_storage_outwards_pdf_file
@@ -225,7 +225,11 @@ class ColdStorageOutwardsController < ApplicationController
     purchase_sale_detail.purchase_sale_items.each do |p_item|
       if out_ward_date.present? && p_item.closed_date.present?
         close_date =  p_item.closed_date&.to_date
-        panelty = ((out_ward_date-close_date).to_f/15).ceil()
+        months = (out_ward_date.year - close_date.year) * 12 + out_ward_date.month - close_date.month
+        days = out_ward_date.day - close_date.day
+        result =  months * 30 + days
+        panelty = ((result).to_f/15).ceil()
+        panelty = panelty < 0 ? 0 : panelty
         total_bill = (p_item.rent_pandri.to_f*p_item.quantity.to_f*panelty.to_f)
         p_item.update(panelty_pandri: panelty, total_pandri_bill: total_bill)
       end
