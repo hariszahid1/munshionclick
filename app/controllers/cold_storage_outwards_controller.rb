@@ -225,7 +225,11 @@ class ColdStorageOutwardsController < ApplicationController
     purchase_sale_detail.purchase_sale_items.each do |p_item|
       if out_ward_date.present? && p_item.closed_date.present?
         close_date =  p_item.closed_date&.to_date
-        panelty = ((out_ward_date-close_date).to_f/15).ceil()
+        months = (out_ward_date.year - close_date.year) * 12 + out_ward_date.month - close_date.month
+        days = out_ward_date.day - close_date.day
+        result =  months * 30 + days
+        panelty = ((result).to_f/15).ceil()
+        panelty = panelty < 0 ? 0 : panelty
         total_bill = (p_item.rent_pandri.to_f*p_item.quantity.to_f*panelty.to_f)
         p_item.update(panelty_pandri: panelty, total_pandri_bill: total_bill)
       end
