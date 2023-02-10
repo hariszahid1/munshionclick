@@ -186,22 +186,23 @@
         <p class='font-size-custom'> 3) After capturing you will redirect to our Sale Deal Invoice.</p>
       </div>
       <div style='width: 33%;  margin-left: <%= custome_margin_2 %>px;'>
-        <% if @sale_deal.qr_code.present?%>
-          <%
-            require "rqrcode"
-            qrcode = RQRCode::QRCode.new(@sale_deal.qr_code)
-            @svg = qrcode.as_svg(
-                color: "000",
-                shape_rendering: "crispEdges",
-                module_size: 11,
-                standalone: true,
-                use_path: true
-              )
-              @str=Base64.encode64(@svg ).gsub("\n", '')
-          %>
-          <img width="180px" height="150px" class="figure" style=""src=<%="data:image/svg+xml;base64,"+@str%>>
-          <p style= 'margin-left: 15%; margin-top: 5%;'>Sale Deal QR</p>
-
+        <% @sale_deal.links.each do |link| %>
+          <% if link.qrcode.present? %>
+            <%
+              require "rqrcode"
+              qrcode = RQRCode::QRCode.new(link.qrcode)
+              @svg = qrcode.as_svg(
+                  color: "000",
+                  shape_rendering: "crispEdges",
+                  module_size: 11,
+                  standalone: true,
+                  use_path: true
+                )
+                @str=Base64.encode64(@svg ).gsub("\n", '')
+            %>
+            <img width="180px" height="150px" class="figure" style=""src=<%="data:image/svg+xml;base64,"+@str%>>
+            <p style= 'margin-left: 15%; margin-top: 5%;'>Sale Deal QR</p>
+          <% end %>
         <% end %>
       </div>
     </div>

@@ -18,6 +18,8 @@ class PurchaseSaleDetail < ApplicationRecord
   enum with_gst: %i[false true]
   has_paper_trail ignore: [:updated_at]
   has_many :follow_ups, as: :followable, dependent: :destroy
+  has_many :links, as: :linkable
+  accepts_nested_attributes_for :links, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :follow_ups, allow_destroy: true
   accepts_nested_attributes_for :sys_user
 
