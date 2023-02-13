@@ -64,7 +64,7 @@ module InwardsHelper
 													builty_no: c_i.size_12,
 													vehicle_no: c_i.size_11,
 													challan_no: c_i.size_10,
-													quantity: c_i.quantity,
+													quantity: c_i.size_9,
 													room_num: c_i.size_8,
 													rack_num: c_i.size_7
 												}
@@ -80,6 +80,7 @@ module InwardsHelper
       @sorted_data << {
 		                id: @purchase_sale_detail.id,
                         type: @purchase_sale_detail.transaction_type,
+						amount: @purchase_sale_detail.amount,
 						total_quantity: order_total,
 						date: @purchase_sale_detail.created_at&.strftime("%d-%b-%y at %I:%M %p"),
 												name: @purchase_sale_detail.sys_user.name,
@@ -91,7 +92,7 @@ module InwardsHelper
 													builty_no: c_i.size_12,
 													vehicle_no: c_i.size_11,
 													challan_no: c_i.size_10,
-													quantity: c_i.quantity,
+													quantity: c_i.size_9,
 													room_num: c_i.size_8,
 													rack_num: c_i.size_7
 												}
@@ -99,3 +100,33 @@ module InwardsHelper
                        }
   end
 end
+def sorted_inward_bill_data
+	order_total = @purchase_sale_detail.purchase_sale_items&.sum(:size_9)
+	mazdoori_total = @purchase_sale_detail.purchase_sale_items&.sum(:size_2)
+	bill_total = @purchase_sale_detail.purchase_sale_items&.sum(:total_pandri_bill)
+    @sorted_data = []
+      @sorted_data << {
+		                id: @purchase_sale_detail.id,
+                        type: @purchase_sale_detail.transaction_type,
+						total_quantity: order_total,
+						total_mazdoori: mazdoori_total,
+						total_bill: bill_total,
+						date: @purchase_sale_detail.created_at&.strftime("%d-%b-%y at %I:%M %p"),
+												name: @purchase_sale_detail.sys_user.name,
+												status: @purchase_sale_detail.status,
+												amount: @purchase_sale_detail.amount,
+												items: @purchase_sale_detail.purchase_sale_items.map { |c_i|
+												{ product: c_i.product.title,
+													marka: c_i.size_13,
+													builty_no: c_i.size_12,
+													vehicle_no: c_i.size_11,
+													close_date: c_i.closed_date&.strftime("%d-%b-%y"),
+													quantity: c_i.size_9,
+													rent_pandri: c_i.rent_pandri,
+													panelty_pandri: c_i.panelty_pandri,
+													total_pandri_bill: c_i.total_pandri_bill,
+													total_mazdoori: c_i.size_2
+												}
+												}
+                       }
+  end

@@ -5,7 +5,7 @@ class ColdStorageInwardsController < ApplicationController
   include PdfCsvGeneralMethod
   include InwardsHelper
 
-  before_action :set_cold_storage, only: %i[show edit update destroy]
+  before_action :set_cold_storage, only: %i[show edit update destroy bill_report_for_arti]
   before_action :index_edit_new_data, only: %i[new show edit index]
 
   def index
@@ -78,7 +78,7 @@ class ColdStorageInwardsController < ApplicationController
   end
 
   def update
-    @pos_setting=PosSetting.first
+    @pos_setting = PosSetting.first
     respond_to do |format|
       purchase = Hash.new
       @purchase_sale_detail.purchase_sale_items.each do |item|
@@ -181,6 +181,11 @@ class ColdStorageInwardsController < ApplicationController
     if params[:submit_pdf].present?
       generate_pdf('' ,'Seasonal-Stock-Report', 'pdf.html', 'A4', false, 'cold_storage_inwards/seasonal_stock_report.pdf.erb')
     end
+  end
+
+  def bill_report_for_arti
+    sorted_inward_bill_data
+    generate_pdf(@sorted_data.as_json, 'Inward', 'pdf.html', 'A4', false, 'cold_storage_inwards/aarti_bill.pdf.erb')
   end
 
   private

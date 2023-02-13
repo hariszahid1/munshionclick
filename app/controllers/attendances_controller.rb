@@ -4,6 +4,7 @@
 class AttendancesController < ApplicationController
   include PdfCsvGeneralMethod
 
+  before_action :check_access
   before_action :set_attendance, only: %i[show edit update destroy]
   before_action :set_staff, only: %i[edit new index]
 
@@ -12,6 +13,10 @@ class AttendancesController < ApplicationController
   # GET /attendances
   # GET /attendances.json
   def index
+    if params[:q].present?
+      params[:q][:date_gteq] = params[:q][:date_gteq].to_date.beginning_of_day
+      params[:q][:date_lteq] = params[:q][:date_lteq].to_date.end_of_day
+    end
     @q = Attendance.includes(daily_attendances: :staff).order('date desc').ransack(params[:q])
     @attendances = @q.result.page(params[:page]).per(@custom_pagination)
   end

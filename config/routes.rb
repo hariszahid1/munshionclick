@@ -34,6 +34,7 @@ Rails.application.routes.draw do
     collection do
       get :stock_report_in_out, to: 'cold_storage_inwards#stock_report_in_out'
       get :seasonal_stock_report, to: 'cold_storage_inwards#seasonal_stock_report'
+      get :bill_report_for_arti, to: 'cold_storage_inwards#bill_report_for_arti'
     end
   end
   resources :cold_storage_outwards do
