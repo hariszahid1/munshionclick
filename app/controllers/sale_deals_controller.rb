@@ -137,7 +137,7 @@ class SaleDealsController < ApplicationController
     company_mask = PosSetting.first.company_mask.to_s
     sale_deal_id = @sale_deal.id.to_s
 
-    qrcode = "#{website}/sale_deals/#{sale_deal_id}?receivable=#{company_mask}"
+    qrcode = "#{website}/sale_deals/#{sale_deal_id}?receivable=#{company_mask}&pdf=true"
 
     if @sale_deal.links.blank?
       @sale_deal.links.create(qrcode: qrcode)

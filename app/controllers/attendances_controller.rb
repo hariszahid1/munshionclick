@@ -4,6 +4,7 @@
 class AttendancesController < ApplicationController
   include PdfCsvGeneralMethod
 
+  before_action :check_access
   before_action :set_attendance, only: %i[show edit update destroy]
   before_action :set_staff, only: %i[edit new index]
 
