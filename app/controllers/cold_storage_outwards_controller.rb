@@ -14,7 +14,7 @@ class ColdStorageOutwardsController < ApplicationController
                                      purchase_sale_items: :product).ransack(params[:q])
     purchase_sale_detail = @q.result.distinct.where(transaction_type: 'OutWard')
     @purchase_sale_details = purchase_sale_detail.order('purchase_sale_details.created_at desc').page(params[:page]).per(100)
-    @pdf_orders = @q.result.where(transaction_type: 'OutWard')
+    @pdf_orders = @q.result.distinct.where(transaction_type: 'OutWard')
     if params[:pdf].present?
       download_cold_storage_outwards_pdf_file
     end
@@ -206,10 +206,12 @@ class ColdStorageOutwardsController < ApplicationController
   end
 
   def download_cold_storage_outwards_pdf_file
-    @pdf_orders_total = @pdf_orders.sum('purchase_sale_items.size_9')
-    @pdf_orders_total_bill = @pdf_orders.sum('purchase_sale_items.total_pandri_bill')
-    pdf_outward_q = @pdf_orders.group('sys_users.name').sum('purchase_sale_items.size_9')
-    pdf_outward_t = @pdf_orders.group('sys_users.name').sum('purchase_sale_items.total_pandri_bill')
+    p_item_qts = PurchaseSaleDetail.joins(:purchase_sale_items).ransack(params[:q]).result.where(transaction_type: 'OutWard')
+    @pdf_orders_total =  p_item_qts.sum('purchase_sale_items.size_9')
+    @pdf_orders_total_bill =  p_item_qts.sum('purchase_sale_items.total_pandri_bill')
+    p_item_parties = PurchaseSaleDetail.joins(:purchase_sale_items, :sys_user).ransack(params[:q]).result.where(transaction_type: 'OutWard')
+    pdf_outward_q = p_item_parties.group('sys_users.name').sum('purchase_sale_items.size_9')
+    pdf_outward_t = p_item_parties.group('sys_users.name').sum('purchase_sale_items.total_pandri_bill')
     @pdf_outward_total = pdf_outward_q.merge(pdf_outward_t) { |key, old_val, new_val| [old_val, new_val] }
     @sys_users = @q.result
     sorted_outward_data
