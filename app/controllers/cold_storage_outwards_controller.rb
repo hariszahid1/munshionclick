@@ -231,7 +231,7 @@ class ColdStorageOutwardsController < ApplicationController
         result =  months * 30 + days
         panelty = ((result).to_f/15).ceil()
         panelty = panelty < 0 ? 0 : panelty
-        total_bill = (p_item.rent_pandri.to_f*p_item.quantity.to_f*panelty.to_f)
+        total_bill = (p_item.rent_pandri.to_f*p_item.size_9.to_f*panelty.to_f)
         p_item.update(panelty_pandri: panelty, total_pandri_bill: total_bill)
       end
       in_item = PurchaseSaleItem.find_by(product_id: p_item.product_id, size_13: p_item.size_13,size_10: p_item.size_10, transaction_type: "Purchase")
@@ -243,7 +243,7 @@ class ColdStorageOutwardsController < ApplicationController
         in_result =  in_months * 30 + in_days
         in_panelty = ((in_result).to_f/15).ceil()
         in_panelty = in_panelty < 0 ? 0 : in_panelty
-        total_bill = (p_item.rent_pandri.to_f*in_item.quantity.to_f*in_panelty.to_f)
+        total_bill = (p_item.rent_pandri.to_f*in_item.size_9.to_f*in_panelty.to_f)
         in_rent = p_item.rent_pandri.to_f
         in_mzdoori = 15 * in_item.quantity.to_f
         in_item.update(rent_pandri: in_rent, panelty_pandri: in_panelty, total_pandri_bill: total_bill, closed_date: close_date, inward_date: p_item.inward_date, size_2: in_mzdoori)

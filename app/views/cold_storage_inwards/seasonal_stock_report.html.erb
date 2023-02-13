@@ -12,6 +12,9 @@
         <div class="row card border-radius-1 shadow p-2 mb-2 m-2">
           <%= search_form_for @q, url:seasonal_stock_report_cold_storage_inwards_path , class: "admin-controls mt-3", method: "get" do |f| %>
             <div class="col-lg-3 form-group float-left">
+              <%= f.select :purchase_sale_items_product_item_type_id_in, options_from_collection_for_select(ItemType.all, "id", "title",f.object.purchase_sale_items_product_item_type_id_in),{:include_blank => "Select the line item"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the line item"} }%>
+            </div>
+            <div class="col-lg-3 form-group float-left">
                 <%= f.select :purchase_sale_items_product_id_eq, options_from_collection_for_select(@products, 'id', 'title',f.object.purchase_sale_items_product_id_eq),{:include_blank => "Select product"}, class: "chosen-select"%>
             </div>
             <div class="col-lg-3 form-group float-left">

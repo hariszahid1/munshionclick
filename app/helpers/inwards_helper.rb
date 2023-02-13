@@ -64,7 +64,7 @@ module InwardsHelper
 													builty_no: c_i.size_12,
 													vehicle_no: c_i.size_11,
 													challan_no: c_i.size_10,
-													quantity: c_i.quantity,
+													quantity: c_i.size_9,
 													room_num: c_i.size_8,
 													rack_num: c_i.size_7
 												}
@@ -80,6 +80,7 @@ module InwardsHelper
       @sorted_data << {
 		                id: @purchase_sale_detail.id,
                         type: @purchase_sale_detail.transaction_type,
+						amount: @purchase_sale_detail.amount,
 						total_quantity: order_total,
 						date: @purchase_sale_detail.created_at&.strftime("%d-%b-%y at %I:%M %p"),
 												name: @purchase_sale_detail.sys_user.name,
@@ -91,7 +92,7 @@ module InwardsHelper
 													builty_no: c_i.size_12,
 													vehicle_no: c_i.size_11,
 													challan_no: c_i.size_10,
-													quantity: c_i.quantity,
+													quantity: c_i.size_9,
 													room_num: c_i.size_8,
 													rack_num: c_i.size_7
 												}
