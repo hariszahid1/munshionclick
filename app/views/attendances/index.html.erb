@@ -35,8 +35,12 @@
           <div class='col-lg-3 form-group float-left'>
             <%= f.select :daily_attendances_staff_id_eq, options_for_select(@staffs.map{ |p| [p.name , p.id]}, f.object.daily_attendances_staff_id_eq),{:include_blank => "Select Staff Name"},:class=>"form-control chosen-select" %>
           </div>
-          <div class='col-lg-3 form-group float-left'>
-            <%= f.search_field :date_cont, class: 'form-control input-sm datepicker', placeholder: "YYYY-MM-DD" %>
+          <div class="d-none">
+            <%= f.search_field :date_gteq, class: 'form-control input-sm datepicker',placeholder: "YYYY-MM-DD" %>
+            <%= f.search_field :date_lteq, class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
+          </div>
+          <div class="col-lg-3 form-group float-left d-flex">
+            <%= f.search_field :date, id: "reportrange", class: 'form-control' %>
           </div>
           <div class="col-lg-1 form-group float-left">
             <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search"><i class="fa fa-search"></i></button>
@@ -46,7 +50,7 @@
     </div>
   </div>
 <div>
-<div class='card p-4 border-radius-1 shadow cms-book-index-card m-4'>
+<div class='card p-4 border-radius-1 shadow cms-book-index-card'>
   <div class="mt-3 p-2">
     <table>
       <thead>
@@ -148,8 +152,55 @@
     $("#city_list").removeClass('hidden');
     FontAwesome.dom.i2svg();
   });
-$('.datepicker').datetimepicker({
-    format: "YYYY-MM-DD"
+  $(function() {
+
+    var start = moment();
+    var end = moment();
+
+    function cb(start, end) {
+      $('#reportrange span').html(start.format('YYYY-MM-DD') + ' - ' + end.format('YYYY-MM-DD'));
+    }
+
+    var gteq = $('#q_date_gteq').val()
+    var lteq = $('#q_date_lteq').val()
+    if (gteq !== ''){
+      start = moment(new Date(gteq))
+    }
+    if(lteq !== ''){
+      end = moment(new Date(lteq))
+    }
+
+    $('#reportrange').daterangepicker({
+        startDate: start,
+        endDate: end,
+      ranges: {
+          'Select Date Range':[],
+           'Today': [moment(), moment()],
+           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+           'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+           'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+           '1 Year': [moment().subtract(1, 'years')],
+           '5 Year': [moment().subtract(5, 'years')],
+           'This Month': [moment().startOf('month'), moment().endOf('month')],
+           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+           'This Month Last Year': [moment().subtract(1, 'years').startOf('month'), moment().subtract(1, 'years').endOf('month')],
+           'This Year': [moment().startOf('year'), moment().endOf('year')],
+           'Last Year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')]
+        },
+        locale: {
+          format: 'YYYY-MM-DD'
+        }
+    }, cb);
+    cb(start, end);
+
+    $('#reportrange').on('change', function(){
+      var value = $(this).val()
+      var greater_eq = value.split(' - ')[0]
+      var less_eq = value.split(' - ')[1]
+      $('#q_date_gteq').val(greater_eq)
+      $('#q_date_lteq').val(less_eq)
+    })
+
   });
- 
+
 </script>
