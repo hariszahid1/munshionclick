@@ -39,7 +39,7 @@
                 <%= f.text_field :purchase_sale_items_size_13_cont, class: "form-control",placeholder: "Marka"%>
               </div>
               <div class="col-lg-2 form-group float-left">
-                <%= f.text_field :purchase_sale_items_size_12_cont, class: "form-control",placeholder: "Builty No"%>
+                <%= f.text_field :id_eq, class: "form-control",placeholder: "search by id"%>
               </div>
               <div class="col-lg-1 form-group float-left">
                 <button class="form-control btn btn-primary" name="search_submit" type="submit" style="width:100px" value="Search"><i class="fa fa-search"></i></button>
@@ -115,6 +115,16 @@
               <div class="my-icon-1 my-view-1">
                 <div class="my-tooltip-1">
                   <div class="icon-container">
+                    <% if purchase_sale_detail.purchase_sale_items.count == purchase_sale_detail.purchase_sale_items.pluck(:closed_date).compact.count %>
+                      <div class="my-icon my-view">
+                        <div class="my-tooltip">
+                          Aarti bill
+                        </div>
+                        <%= link_to bill_report_for_arti_cold_storage_inwards_path(id: purchase_sale_detail.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
+                          <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
+                        <%end %>
+                      </div>
+                    <% end %>
                     <div class="my-icon my-view">
                       <div class="my-tooltip">
                         PDF
