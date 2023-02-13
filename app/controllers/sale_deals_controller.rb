@@ -3,7 +3,7 @@ class SaleDealsController < ApplicationController
   include SaleDealsHelper
 
   before_action :set_sale_deal, only: %i[show edit update destroy approve_requested_deal]
-  before_action :set_data, only: %i[new edit create update show index requested]
+  before_action :set_data, only: %i[new edit create update index requested]
   skip_before_action :authenticate_user!, only: [:show]
 
   # GET /sale_deals
