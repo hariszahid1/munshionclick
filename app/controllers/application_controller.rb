@@ -457,6 +457,8 @@ class ApplicationController < ActionController::Base
   end
 
   def check_is_hidden_by_module(temp_module)
+    return unless current_user.present?
+
     # All Permission of Current User
     # @all_permissions = User.eager_load(:user_permissions).find(current_user.id).user_permissions
     # Current User Current Module Permission
