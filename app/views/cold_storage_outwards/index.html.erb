@@ -18,6 +18,9 @@
         <div class="row">
           <div class="col-lg-12 collapse show" id="multiCollapseExample1">
             <div class="col-lg-3 form-group float-left">
+              <%= f.select :purchase_sale_items_product_item_type_id_eq, options_from_collection_for_select(ItemType.all, 'id', "title",f.object.purchase_sale_items_product_item_type_id_eq), {hide_label:true,:include_blank => "Select Line Item"},class: 'form-control chosen-select'%>
+            </div>
+            <div class="col-lg-3 form-group float-left">
               <%= f.select :purchase_sale_items_product_id_eq, options_from_collection_for_select(@products, 'id', 'title',f.object.purchase_sale_items_product_id_eq),{:include_blank => "Select product"}, class: "chosen-select"%>
             </div>
             <div class="col-lg-3 form-group float-left">
@@ -38,8 +41,8 @@
             <div class="col-lg-2 form-group float-left">
               <%= f.text_field :purchase_sale_items_size_13_cont, class: "form-control", placeholder: "Marka"%>
             </div>
-            <div class="col-lg-2 form-group float-left">
-              <%= f.text_field :purchase_sale_items_size_12_cont, class: "form-control", placeholder: "Builty No"%>
+            <div class="col-lg-1 form-group float-left">
+              <%= f.text_field :id_eq, class: "form-control",placeholder: "id"%>
             </div>
             <div class="col-lg-1 form-group float-left">
               <button class="form-control btn btn-primary" name="search_submit" type="submit" style="width:100px" value="Search"><i class="fa fa-search"></i></button>
