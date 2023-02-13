@@ -23,7 +23,7 @@ class PurchaseSaleDetail < ApplicationRecord
   accepts_nested_attributes_for :follow_ups, allow_destroy: true
   accepts_nested_attributes_for :sys_user
 
-  after_create :modify_account_balance, :set_qr_code
+  after_create :modify_account_balance
   after_update :update_account_balance
   after_destroy :delete_account_balance
   before_create :generate_guid
@@ -204,14 +204,5 @@ class PurchaseSaleDetail < ApplicationRecord
   def generate_guid
     self.guid = SecureRandom.hex(6)
     generate_guid if PurchaseSaleDetail.exists?(guid: guid)
-  end
-
-  def set_qr_code
-    if transaction_type == 'ReSaleDeal' || transaction_type == 'NewSaleDeal'
-      update_column(:qr_code, PosSetting.first.website.to_s + '/sale_deals/' + self.id.to_s + '?' + 'receiveable=')
-    else
-      update_column(:qr_code, PosSetting.first.website.to_s +
-        '/purchase_sale_details/' + self.id.to_s + '?' + 'receiveable=')
-    end
   end
 end

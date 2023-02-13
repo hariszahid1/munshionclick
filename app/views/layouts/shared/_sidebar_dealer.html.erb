@@ -8,12 +8,14 @@
               <span class="link-text">Dashboard</span>
           <% end %>
         </li>
-        <li class="activ-link">
-            <a href="<%= attendances_path%>" class="activ-link">
-            <i class="fas fa-users"></i>
-            <span class="link-text">Attendance</span>
-            </a>
-        </li>
+        <% if check_is_hidden_by_module('attendances') %>
+            <li class="activ-link">
+                <a href="<%= attendances_path%>" class="activ-link">
+                <i class="fas fa-users"></i>
+                <span class="link-text">Attendance</span>
+                </a>
+            </li>
+        <% end %>
         <% if check_is_hidden_by_module('crms') %>
             <li class="activ-link">
               <a href="<%=crms_path%>" class="activ-link">
