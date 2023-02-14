@@ -127,7 +127,7 @@
                   <% end %>
                 </div>
                 <div>  
-                <%= search_form_for @q, url: user_types_path, class: "admin-controls ml-3", method: "get" do |f| %>
+                <%= search_form_for @q, url: user_types_path, class: "admin-controls ml-", method: "get" do |f| %>
                   <div class="d-flex mt-4" style="width: 100%;">
                     <%= select_tag :limit, options_for_select(['Show Entries',5, 10, 15, 20, 25], selected: 'Show Entries'), id: 'pagination-limit', class:"file-btn-color", title:'Show Entries', style:'cursor: pointer;' %>
                   </div>

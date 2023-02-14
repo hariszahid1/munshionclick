@@ -9,7 +9,11 @@
     <div class="col-lg-4 form-group float-left"><%= f.select :expense_type_id, options_from_collection_for_select(@expense_types, 'id', 'title', f.object.expense_type_id), {hide_label:true,prompt: "Select the Expense Type"}, required: true,class: "form-control" %></div>
     <div class="col-lg-3 form-group float-left"><%= f.text_area :comment, placeholder:"Enter Comment for Expense Entry", hide_label: true%></div>
     <% if (f.object.id.nil? || check_can_delete(@module_permission))%>
-      <div class="form-group float-right links"><%= link_to_remove_association "Remove", f , class: "btn btn-danger mr-3" %></div>
+      <div class="form-group float-right links">
+        <%= link_to_remove_association f , class: "btn btn-danger float-left" do %>
+          <i class="fa fa-minus-circle text-light"></i>
+        <% end %>
+      </div>
     <% end %>
   </div>
 </div>
