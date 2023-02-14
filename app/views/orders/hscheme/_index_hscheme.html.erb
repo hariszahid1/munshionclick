@@ -100,7 +100,8 @@
             <th><%= sort_link(@q, :amount, 'Received') %></th>
             <th><%= sort_link(@q, :amount, 'Remaining') %></th>
             <th><%= sort_link(@q, :discount, 'Discount') %></th>
-            <th><%= sort_link(@q, :created_at, 'Date/Time') %></th>
+            <th><%= sort_link(@q, :created_at, 'Created at') %></th>
+            <th><%= sort_link(@q, :updated_at, 'Updated at') %></th>
             <th><%= sort_link(@q, :comment, 'Summary') %></th>
             <th>Action</th>
           </tr>
@@ -125,11 +126,10 @@
               <td><h6><%= number_with_delimiter((order.total_bill.to_f.round(2))-(order.amount.to_i+order.purchase_sale_details.sum(:amount).to_i)) %></h6></td>
               <td><h6><%= number_with_delimiter(order.purchase_sale_details.sum(:discount_price).to_f.round(2)) %></h6></td>
               <td>
-                <%if order.created_at.strftime("%d%b%y")!=order.updated_at.strftime("%d%b%y")%>
-                  <%= order.created_at.present? ? order.created_at.strftime("%d%b%y , %I:%M") : '' %> <hr> <%= order.updated_at.present? ? order.updated_at.strftime("%d%b%y , %I:%M") : '' %>
-                <%else%>
-                  <%= order.created_at.present? ? order.created_at.strftime("%d%b%y , %I:%M") : '' %>
-                <%end%>
+                <%= order.created_at ? order.created_at.strftime("%d/%b/%y,%I:%M") : "-" %>    
+              </td>
+              <td>
+                <%= order.updated_at ? order.updated_at.strftime("%d/%b/%y,%I:%M") : "-" %>
               </td>
               <td><%= order.comment %></td>
               <td>
