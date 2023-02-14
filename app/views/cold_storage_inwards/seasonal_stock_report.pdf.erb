@@ -68,6 +68,46 @@
             </tr>
         </tbody>
       </table>
+
+      <table style= "margin-top: 100px;">
+        <thead class="lite-gray">
+        <tr>
+          <th colspan="6" class='text-left' style="padding-left: 20px;">Party Name</th>
+          <th> InWard Qty </th>
+          <th> OutWard Qty </th>
+          <th> Stock Balance </th>
+        </tr>
+        </thead>
+        <tbody>
+        <% if @merged_hash_party_rem.present? %>
+            <%  @merged_hash_party_rem.each do |order| %>
+                <tr>
+                    <td colspan="6" class='text-left' style="padding-left: 20px;"><%= order.first %></td>
+                    <% if order.second.class == Float %>
+                        <td class="text-center"><%= number_with_delimiter(order.second&.to_f) %></td>
+                         <td class="text-center">0</td>
+                    <% else %>
+                        <td class="text-center"><%= number_with_delimiter(order.second&.first.to_f) %></td>
+                        <td class="text-center"><%= number_with_delimiter(order.second&.second.to_f) %></td>
+                    <% end %>
+                    <% if order.second.class == Float %>
+                        <td class="text-center"><%= number_with_delimiter(order.second&.to_f) %></td>
+                    <% else %>
+                        <td class="text-center"><%= number_with_delimiter(order.second&.first.to_f - order.second&.second.to_f) %></td>
+                    <% end %>
+                </tr>
+            <% end %>
+        <% end %>
+        <thead class="lite-gray">
+        <tr>
+          <th colspan="6" class='text-left' style="padding-left: 20px;">Total</th>
+          <th> <%= number_with_delimiter(@pdf_inward_total.to_f) %> </th>
+          <th> <%= number_with_delimiter(@pdf_outward_total.to_f) %> </th>
+          <th> <%= number_with_delimiter(@pdf_inward_total.to_f-@pdf_outward_total.to_f) %> </th>
+        </tr>
+        </thead>
+        </tbody>
+      </table>
     </div>
   </body>
 </html>

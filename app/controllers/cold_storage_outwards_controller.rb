@@ -14,7 +14,7 @@ class ColdStorageOutwardsController < ApplicationController
                                      purchase_sale_items: :product).ransack(params[:q])
     purchase_sale_detail = @q.result.distinct.where(transaction_type: 'OutWard')
     @purchase_sale_details = purchase_sale_detail.order('purchase_sale_details.created_at desc').page(params[:page]).per(100)
-    @pdf_orders = @q.result.where(transaction_type: 'OutWard')
+    @pdf_orders = @q.result.distinct.where(transaction_type: 'OutWard')
     if params[:pdf].present?
       download_cold_storage_outwards_pdf_file
     end
@@ -182,7 +182,7 @@ class ColdStorageOutwardsController < ApplicationController
   def index_edit_new_data
     @orders = Order.all
     @customers = SysUser.all
-    @suppliers = SysUser.where(:user_group=>['Supplier','Both','Own'])
+    @suppliers = SysUser.all
     @accounts = Account.all
     @products = Product.all
   end
@@ -206,10 +206,12 @@ class ColdStorageOutwardsController < ApplicationController
   end
 
   def download_cold_storage_outwards_pdf_file
-    @pdf_orders_total = @pdf_orders.sum('purchase_sale_items.size_9')
-    @pdf_orders_total_bill = @pdf_orders.sum('purchase_sale_items.total_pandri_bill')
-    pdf_outward_q = @pdf_orders.group('sys_users.name').sum('purchase_sale_items.size_9')
-    pdf_outward_t = @pdf_orders.group('sys_users.name').sum('purchase_sale_items.total_pandri_bill')
+    p_item_qts = PurchaseSaleDetail.joins(:purchase_sale_items).ransack(params[:q]).result.where(transaction_type: 'OutWard')
+    @pdf_orders_total =  p_item_qts.sum('purchase_sale_items.size_9')
+    @pdf_orders_total_bill =  p_item_qts.sum('purchase_sale_items.total_pandri_bill')
+    p_item_parties = PurchaseSaleDetail.joins(:purchase_sale_items, :sys_user).ransack(params[:q]).result.where(transaction_type: 'OutWard')
+    pdf_outward_q = p_item_parties.group('sys_users.name').sum('purchase_sale_items.size_9')
+    pdf_outward_t = p_item_parties.group('sys_users.name').sum('purchase_sale_items.total_pandri_bill')
     @pdf_outward_total = pdf_outward_q.merge(pdf_outward_t) { |key, old_val, new_val| [old_val, new_val] }
     @sys_users = @q.result
     sorted_outward_data
@@ -235,18 +237,18 @@ class ColdStorageOutwardsController < ApplicationController
         p_item.update(panelty_pandri: panelty, total_pandri_bill: total_bill)
       end
       in_item = PurchaseSaleItem.find_by(product_id: p_item.product_id, size_13: p_item.size_13,size_10: p_item.size_10, transaction_type: "Purchase")
-      if in_item.present? && in_item.closed_date.blank? && close_date.present? && p_item.inward_date.present?
+      if in_item.present? && p_item.closed_date.present? && p_item.inward_date.present?
         in_date = in_item.purchase_sale_detail&.created_at&.to_date
-        close_in_date = close_date.to_date
+        close_in_date = p_item.closed_date.to_date
         in_months = (close_in_date.year - in_date.year) * 12 + close_in_date.month - in_date.month
         in_days = close_in_date.day - (in_date.day - 1)
         in_result =  in_months * 30 + in_days
         in_panelty = ((in_result).to_f/15).ceil()
         in_panelty = in_panelty < 0 ? 0 : in_panelty
-        total_bill = (p_item.rent_pandri.to_f*in_item.size_9.to_f*in_panelty.to_f)
+        total_in_bill = (p_item.rent_pandri.to_f*in_item.size_9.to_f*in_panelty.to_f)
         in_rent = p_item.rent_pandri.to_f
         in_mzdoori = 15 * in_item.quantity.to_f
-        in_item.update(rent_pandri: in_rent, panelty_pandri: in_panelty, total_pandri_bill: total_bill, closed_date: close_date, inward_date: p_item.inward_date, size_2: in_mzdoori)
+        in_item.update(rent_pandri: in_rent, panelty_pandri: in_panelty, total_pandri_bill: total_in_bill, closed_date: close_in_date, inward_date: in_date, size_2: in_mzdoori)
       end
     end
   end

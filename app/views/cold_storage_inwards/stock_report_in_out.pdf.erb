@@ -59,7 +59,7 @@
               <td colspan="6" class='text-center h5'><b><%= @merged_room_rem["3"] %> </b></td>
               <td colspan="6" class='text-center h5'><b><%= @merged_room_rem["4"] %> </b></td>
               <td colspan="6" class='text-center h5'><b><%= @merged_room_rem["5"] %> </b></td>
-              <td colspan="6" class='text-center h5'><b><%= number_with_delimiter(@pdf_inward_total-@pdf_outward_total) %> </b></td>
+              <td colspan="6" class='text-center h5'><b><%= number_with_delimiter(@pdf_inward_total.to_f-@pdf_outward_total.to_f) %> </b></td>
             </tr>
         </tbody>
       </table>
@@ -97,9 +97,9 @@
         <thead class="lite-gray">
         <tr>
           <th colspan="6" class='text-left' style="padding-left: 20px;">Total</th>
-          <th> <%= number_with_delimiter(@pdf_inward_total) %> </th>
-          <th> <%= number_with_delimiter(@pdf_outward_total) %> </th>
-          <th> <%= number_with_delimiter(@pdf_inward_total-@pdf_outward_total) %> </th>
+          <th> <%= number_with_delimiter(@pdf_inward_total.to_f) %> </th>
+          <th> <%= number_with_delimiter(@pdf_outward_total.to_f) %> </th>
+          <th> <%= number_with_delimiter(@pdf_inward_total.to_f-@pdf_outward_total.to_f) %> </th>
         </tr>
         </thead>
         </tbody>
