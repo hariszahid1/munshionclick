@@ -1,21 +1,21 @@
-<div class="hidden" id="staff_deal_list">
+<div class="hidden m-4" id="staff_deal_list">
   <div class="row mb-4">
     <div class="col-lg-12 col-sm-12">
-      <div class="main-content-header">
-        <h1 class="ml-2">Dealer Deals</h1>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item">
-            <a href="<%= root_path %>">Dashboard</a>
-          </li>
-          <li class="breadcrumb-item active">
-            <a href="<%= staff_deals_path %>">Dealer Deals</a>
-          </li>
-        </ol>
+      <div class="float-left">
+       <h2 class="ml-2 logo-back"><i class="fa fa-handshake mr-2"></i>Dealer Deals</h2>
+       <ol class="breadcrumb">
+         <li class="breadcrumb-item">
+           <a href="<%= root_path %>">Dashboard</a>
+         </li>
+         <li class="breadcrumb-item active">
+           <a href="<%= staff_deals_path %>">Dealer Deals</a>
+         </li>
+       </ol>
       </div>
       <% if check_can_create(@module_permission) %>
-        <div id="new_staff_deal">
-          <%= link_to new_staff_deal_path, remote: true, class: "btn btn-success ml-2" do %>
-             <i class="fa fa-plus" aria-hidden="true"></i>
+        <div class="float-right mt-3"id="new_staff_deal">
+          <%= link_to new_staff_deal_path, remote: true,style:"width: 150px;", class: "btn btn-success ml-2" do %>
+             <i class="fa fa-plus-circle"></i>
              Create
           <% end %>
         </div>
@@ -23,7 +23,7 @@
     </div>
   </div>
   <div class="float-right">
-    <div class="dropdown ml-auto mr-4">
+    <div class="dropdown ml-auto ">
      <span class="btn btn-info" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
       <div class="dropdown-content">
         <% if @help.present? %>
@@ -34,27 +34,25 @@
       </div>
     </div>
   </div>
-  <ul class="nav nav-pills ml-2" role="tablist">
-     
+  <div class="row">
+    <ul class="nav nav-tabs ml-1" role="tablist">
       <li class="nav-item">
-        <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab">Search</a>
+        <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab"><i class="fa fa-search mr-2"></i>Search</a>
       </li>
- 
-			<%if (check_can_import_export(@module_permission))%>
-				<li class="nav-item">
-					<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
-				</li>
-			<%end%>
-	</ul>
-
-
+	  	<%if (check_can_import_export(@module_permission))%>
+	  		<li class="nav-item">
+	  			<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab"><i class="fa fa-exchange-alt mr-2"></i>Import/Export</a>
+	  		</li>
+	  	<%end%>
+	  </ul>
+  </div>
   <div class="clearfix"></div>
-
   <div class="tab-content">
-    <div class="tab-pane active mb-3 card shadow-sm mt-2 p-3 border-radius-1" id="search" role="tabpanel">
+    <div class="tab-pane active no-tab-border mt-2 " id="search" role="tabpanel">
       <%= search_form_for @q, url: staff_deals_path, class: "admin-controls", method: "get" do |f| %>
-        <div class="row">
-          <div class="col-lg-12 col-sm-12">
+        <div class="card shadow mb-3 p-3">
+          <div class="row">
+            <div class="col-lg-12 col-sm-12">
               <div class="col-lg-3 form-group float-left">
                 <%= f.select :staff_id_in, options_from_collection_for_select(@staffs, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code}"},f.object.staff_id_in),{:include_blank => "Select Staff"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Staff"} }%>
               </div>
@@ -81,53 +79,88 @@
               </div>
             </div>
           </div>
-          <div class="row ml-2">    
-              <%if (check_can_download_pdf(@module_permission))%>
-                <button class="form-control btn btn-danger ml-1 mr-2" style="width:100px" name="submit_pdf" type="submit" value="Products PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mr-2"></i>PDF &nbsp;</button>
-              <% end %>
-
-              <%if (check_can_send_email(@module_permission))%>
-                <button class="form-control btn btn-info d-flex justify-content-center float-right mr-2" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-1 mt-1"></i>&nbsp;Mail</button>
-                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                  <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                        </div>
-                        <div class="modal-body">
-                          <% @pos_setting = PosSetting.first %>
-                          <label>Email:</label>
-                          <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
-                          <br />
-                          <label>Subject:</label>
-                          <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Dealer Deals Detail report from MunshiOnClick", class: 'form-control email-fields'%>
-                          <br />
-                          <label>Body:</label><br />
-                          <%= text_area_tag 'body', nil, class: 'form-control'%>
-                          <br />
-                          <label>Please select one of them.</label>
-                          <div>
-                            <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
-                            <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
-                            <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
-                          </div>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                          <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
-                        </div>
+        </div>
+        <div class="card  shadow p-4">
+          <div class="row d-flex" style="position: absolute;">
+            <div class="mt-4 ml-3">    
+            <%if (check_can_download_pdf(@module_permission))%>
+              <button class="form-control btn btn-danger file-btn-color ml-1" style="width:80px" name="submit_pdf" type="submit" value="Products PDF A4" formtarget="_blank">PDF</button>
+            <% end %>
+            <%if (check_can_send_email(@module_permission))%>
+              <button class="form-control btn btn-info file-btn-color  mr-2" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:80px">Mail</button>
+              <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <% @pos_setting = PosSetting.first %>
+                      <label>Email:</label>
+                      <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
+                      <br />
+                      <label>Subject:</label>
+                      <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Dealer Deals Detail report from MunshiOnClick", class: 'form-control email-fields'%>
+                      <br />
+                      <label>Body:</label><br />
+                      <%= text_area_tag 'body', nil, class: 'form-control'%>
+                      <br />
+                      <label>Please select one of them.</label>
+                      <div>
+                        <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
+                        <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
+                        <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
                       </div>
                     </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                      <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
+                    </div>
+                  </div>
                 </div>
-              <% end %>
+              </div>
+            <% end %>
+            </div>
+          </div>
+          <div class="mt-3">
+            <table data-toggle="table" data-search="true" id="staff_deal_table">
+            <thead>
+              <tr>
+                <th><%= sort_link(@q, :staff, 'Staff/Dealer') %></th>
+                <th><%= sort_link(@q, :product, 'Plot') %></th>
+                <th><%= sort_link(@q, :cost, 'Category') %></th>
+                <th><%= sort_link(@q, :cost, 'Sub Category') %></th>
+                <th><%= sort_link(@q, :cost, 'Per Marla') %></th>
+                <th><%= sort_link(@q, :comment, 'Total') %></th>
+                <th><%= sort_link(@q, :comment, 'Area') %></th>
+                <th><%= sort_link(@q, :comment, 'Booking') %></th>
+                <th><%= sort_link(@q, :comment, 'Advance') %></th>
+                <th><%= sort_link(@q, :comment, 'Short Inst') %></th>
+                <th><%= sort_link(@q, :comment, 'Comment') %></th>
+                <th class="border_none">Action</th>
+              </tr>
+            </thead>
+      
+            <tbody>
+              <%= render partial: 'staff_deal', collection: @staff_deals %>
+            </tbody>
+            </table>
+          </div>
+          <div class="row">
+            <div class="col-lg-4 col-sm-4">
+              <%= page_entries_info @staff_deals %>
+            </div>
+            <div class="col-lg-8 col-sm-8 pagination-left">
+              <%= paginate @staff_deals %>
+            </div>
+          </div>
         </div>
       <% end %>
     </div>
-  
-    <div class="tab-pane card shadow-sm mt-2 border-radius-1 mb-3" id="import-export" role="tabpanel">
+    <div class="tab-pane card shadow-sm mt-2 p-2 mb-3" id="import-export" role="tabpanel">
       <p>
         <div class="d-flex">
         <button class="btn btn-danger ml-4" name="export_data" type="submit" value="export_data">Export Data</button>
@@ -136,44 +169,7 @@
       </p>
     </div>
   </div>  
-  
-  <div class="card border-radius-1 shadow p-4">
-    <table data-toggle="table" data-search="true" id="staff_deal_table">
-      <thead>
-        <tr>
-          <th><%= sort_link(@q, :staff, 'Staff/Dealer') %></th>
-          <th><%= sort_link(@q, :product, 'Plot') %></th>
-          <th><%= sort_link(@q, :cost, 'Category') %></th>
-          <th><%= sort_link(@q, :cost, 'Sub Category') %></th>
-          <th><%= sort_link(@q, :cost, 'Per Marla') %></th>
-          <th><%= sort_link(@q, :comment, 'Total') %></th>
-          <th><%= sort_link(@q, :comment, 'Area') %></th>
-          <th><%= sort_link(@q, :comment, 'Booking') %></th>
-          <th><%= sort_link(@q, :comment, 'Advance') %></th>
-          <th><%= sort_link(@q, :comment, 'Short Inst') %></th>
-          <th><%= sort_link(@q, :comment, 'Comment') %></th>
-          <th class="border_none">Action</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <%= render partial: 'staff_deal', collection: @staff_deals %>
-      </tbody>
-    </table>
-
-    <div class="row">
-      <div class="col-lg-4 col-sm-4">
-        <%= page_entries_info @staff_deals %>
-      </div>
-      <div class="col-lg-8 col-sm-8 pagination-left">
-        <%= paginate @staff_deals %>
-      </div>
-    </div>
-  </div>
 </div>
-
-
-
 <%= form_for :bulk_import, url: bulk_import_data_path, method: :post, html: {class: "bulk-import-form"} do |f| %>
   <div class="modal fade" id="importFile" tabindex="-1" role="dialog" aria-labelledby="importFileTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">

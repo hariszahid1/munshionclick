@@ -15,11 +15,11 @@ class ColdStorageInwardsController < ApplicationController
                                      purchase_sale_items: :product).ransack(params[:q])
     purchase_sale_detail = @q.result.distinct.where(transaction_type: 'InWard')
     @purchase_sale_details = purchase_sale_detail.order('purchase_sale_details.created_at desc').page(params[:page]).per(100)
-    @pdf_orders = @q.result.where(transaction_type: 'InWard')
+    @pdf_orders = @q.result.distinct.where(transaction_type: 'InWard')
     @cold_storage_inward_total = PurchaseSaleDetail.joins(:purchase_sale_items).group('purchase_sale_details.id').sum('purchase_sale_items.size_9')
     if params[:pdf].present?
-      @pdf_orders_total = @pdf_orders.sum('purchase_sale_items.quantity')
-      @pdf_inward_total = @pdf_orders.group('sys_users.name').sum('purchase_sale_items.quantity')
+      @pdf_orders_total = PurchaseSaleDetail.joins(:purchase_sale_items).ransack(params[:q]).result.where(transaction_type: 'InWard').sum('purchase_sale_items.size_9')
+      @pdf_inward_total = PurchaseSaleDetail.joins(:purchase_sale_items, :sys_user).ransack(params[:q]).result.where(transaction_type: 'InWard').group('sys_users.name').sum('purchase_sale_items.size_9')
       download_cold_storage_inwards_pdf_file
     end
   end
@@ -172,11 +172,16 @@ class ColdStorageInwardsController < ApplicationController
       @created_at_lteq = params[:q][:created_at_lteq] if params[:q][:created_at_lteq].present?
       params[:q][:created_at_lteq] = params[:q][:created_at_lteq].to_date.end_of_day if params[:q][:created_at_lteq].present?
     end
-    @q = PurchaseSaleDetail.joins(purchase_sale_items: :product).ransack(params[:q])
+    @q = PurchaseSaleDetail.joins(:sys_user, purchase_sale_items: :product).ransack(params[:q])
     in_prod_rooms = @q.result.where('transaction_type': 'InWard').group("products.title","purchase_sale_items.size_8").having("purchase_sale_items.size_8 BETWEEN 1 AND 5").sum('purchase_sale_items.quantity')
     out_prod_rooms = @q.result.where('transaction_type': 'OutWard').group("products.title","purchase_sale_items.size_8").having("purchase_sale_items.size_8 BETWEEN 1 AND 5").sum('purchase_sale_items.quantity')
     @merged_hash_rem = in_prod_rooms.merge(out_prod_rooms) { |key, a_val, b_val| a_val - b_val }
     @total_stock = @merged_hash_rem.values.sum
+    in_prod_parties = @q.result.where('transaction_type': 'InWard').group("sys_users.name").sum('purchase_sale_items.quantity')
+    out_prod_parties = @q.result.where('transaction_type': 'OutWard').group("sys_users.name").sum('purchase_sale_items.quantity')
+    @pdf_inward_total = @q.result.where('transaction_type': 'InWard').sum('purchase_sale_items.quantity')
+    @pdf_outward_total = @q.result.where('transaction_type': 'OutWard').sum('purchase_sale_items.quantity')
+    @merged_hash_party_rem = in_prod_parties.merge(out_prod_parties) { |key, old_val, new_val| [old_val, new_val] }
     get_seasonal_room_product_rem_total
     if params[:submit_pdf].present?
       generate_pdf('' ,'Seasonal-Stock-Report', 'pdf.html', 'A4', false, 'cold_storage_inwards/seasonal_stock_report.pdf.erb')
