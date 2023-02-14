@@ -237,18 +237,18 @@ class ColdStorageOutwardsController < ApplicationController
         p_item.update(panelty_pandri: panelty, total_pandri_bill: total_bill)
       end
       in_item = PurchaseSaleItem.find_by(product_id: p_item.product_id, size_13: p_item.size_13,size_10: p_item.size_10, transaction_type: "Purchase")
-      if in_item.present? && in_item.closed_date.blank? && close_date.present? && p_item.inward_date.present?
+      if in_item.present? && p_item.closed_date.present? && p_item.inward_date.present?
         in_date = in_item.purchase_sale_detail&.created_at&.to_date
-        close_in_date = close_date.to_date
+        close_in_date = p_item.closed_date.to_date
         in_months = (close_in_date.year - in_date.year) * 12 + close_in_date.month - in_date.month
         in_days = close_in_date.day - (in_date.day - 1)
         in_result =  in_months * 30 + in_days
         in_panelty = ((in_result).to_f/15).ceil()
         in_panelty = in_panelty < 0 ? 0 : in_panelty
-        total_bill = (p_item.rent_pandri.to_f*in_item.size_9.to_f*in_panelty.to_f)
+        total_in_bill = (p_item.rent_pandri.to_f*in_item.size_9.to_f*in_panelty.to_f)
         in_rent = p_item.rent_pandri.to_f
         in_mzdoori = 15 * in_item.quantity.to_f
-        in_item.update(rent_pandri: in_rent, panelty_pandri: in_panelty, total_pandri_bill: total_bill, closed_date: close_date, inward_date: p_item.inward_date, size_2: in_mzdoori)
+        in_item.update(rent_pandri: in_rent, panelty_pandri: in_panelty, total_pandri_bill: total_in_bill, closed_date: close_in_date, inward_date: in_date, size_2: in_mzdoori)
       end
     end
   end
