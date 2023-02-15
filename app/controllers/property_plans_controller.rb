@@ -40,6 +40,8 @@ class PropertyPlansController < ApplicationController
 
   def property_installment
     @customers = SysUser.where(user_group: %w[Customer Supplier Both Salesman])
+    @products = Product.all
+    @dealers = Staff.all
     property_plan_ids = PropertyPlan.ransack_with_installment_count(params)
 
     @q = PropertyPlan.joins(:property_installments, order: :sys_user)
