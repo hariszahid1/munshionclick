@@ -271,7 +271,7 @@
                                     <div class="my-tooltip">
                                       Edit
                                     </div>
-                                      <% if can?(:update, :all) %>
+                                      <% if check_can_update(@module_permission) %>
                                         <%= link_to edit_staff_path(staff), class: "icon-div" do %>
                                           <i class="fa fa-edit mt-2" aria-hidden="true"></i>
                                         <%end %>
@@ -282,7 +282,7 @@
                                       <div class="my-tooltip">
                                           Delete
                                         </div>
-                                        <% if can?(:delete, :all) %>
+                                        <% if check_can_delete(@module_permission) %>
                                           <%= link_to staff, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
                                           <i class="fa fa-trash mt-2" aria-hidden="true"></i>
                                         <%end %>
@@ -293,11 +293,9 @@
                                       <div class="my-tooltip">
                                         Show
                                       </div>
-                                      <% if can?(:view, :all) %>
-                                        <%= link_to staff_path(staff), remote: true, class: "icon-div" do %>
-                                          <i class="fa fa-eye mt-2" aria-hidden="true"></i>
-                                        <%end %>
-                                      <%end%>
+                                      <%= link_to staff_path(staff), remote: true, class: "icon-div" do %>
+                                        <i class="fa fa-eye mt-2" aria-hidden="true"></i>
+                                      <%end %>
                                     </div>
 
                                     <div class="my-icon my-view">

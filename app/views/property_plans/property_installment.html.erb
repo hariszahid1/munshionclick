@@ -27,10 +27,22 @@
               <%= f.select :order_sys_user_id_eq, options_from_collection_for_select(@customers, 'id', 'name', f.object.order_sys_user_id_eq),{:include_blank => "Select Customer"},class: 'form-control chosen-select'%>
             </div>
             <div class="col-lg-3 form-group float-left">
-              <%= f.search_field :property_installments_due_date_gteq,class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
+              <%= f.select :order_order_items_product_id_eq, options_from_collection_for_select(@products, 'id', ->(st){"#{st.title} \u{27F6} #{st.code}"}, f.object.order_order_items_product_id_eq),{:include_blank => "Select Plot"},class: 'form-control chosen-select'%>
             </div>
             <div class="col-lg-3 form-group float-left">
-              <%= f.search_field :property_installments_due_date_lteq,class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
+              <%= f.select :order_purchase_sale_details_staff_id_eq, options_from_collection_for_select(@dealers, 'id', 'name', f.object.order_purchase_sale_details_staff_id_eq),{:include_blank => "Select Dealer"},class: 'form-control chosen-select'%>
+            </div>
+            <div class="col-lg-3 form-group float-left">
+              <%= f.select :order_order_items_product_item_type_id_eq, options_from_collection_for_select(ItemType.all, 'id', 'title', f.object.order_order_items_product_item_type_id_eq),{:include_blank => "Select Block"},class: 'form-control chosen-select'%>
+            </div>
+            <div class="col-lg-3 form-group float-left">
+              <%= f.search_field :order_order_items_marla_eq,class: 'form-control' ,placeholder: "Enter Marla"%>
+            </div>
+            <div class="col-lg-3 form-group float-left">
+              <%= f.search_field :property_installments_due_date_gteq,class: 'form-control input-sm datepicker' ,placeholder: "From -> YYYY-MM-DD"%>
+            </div>
+            <div class="col-lg-3 form-group float-left">
+              <%= f.search_field :property_installments_due_date_lteq,class: 'form-control input-sm datepicker' ,placeholder: "To -> YYYY-MM-DD"%>
             </div>
             <div class="col-lg-3 form-group float-left">
               <%= number_field_tag 'installment_count_from', params[:installment_count_from] || {}, class: 'form-control', placeholder: 'No. of installments from' %>
@@ -69,6 +81,7 @@
         <th></th>
         <th>User</th>
         <th>Phone</th>
+        <th>Block</th>
         <th>Plot</th>
         <th>Size</th>
         <th>No. of Installments</th>
@@ -87,6 +100,7 @@
           <td><%= sys_user&.contact&.phone %></td>
           <% order_items = property_plan&.order&.order_items_names_and_quantity %>
           <% if order_items != 0 %>
+            <td><%= order_items.first.try(:[], 6) %></td>
             <td><%= order_items&.first&.first %></td>
             <td><%= order_items&.first.try(:[], 8) %>-M <%= order_items&.first.try(:[], 9) %>-sqr</td>
           <% else %>

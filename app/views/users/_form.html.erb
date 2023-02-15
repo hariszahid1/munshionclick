@@ -1,14 +1,14 @@
 <style>
 input[type=checkbox] {
-cursor: pointer;
-height: 15px;
-width: 15px;
+	cursor: pointer;
+	height: 15px;
+	width: 15px;
 }
-.u-perm-scroll {
-text-align: center;
-font-family: Arial;
-height: 500px;
-overflow: auto;
+.fixed-table-body {
+	text-align: center;
+	font-family: Arial;
+	height: 500px !important;
+	overflow: auto;
 }
 </style>
 
@@ -96,11 +96,10 @@ overflow: auto;
 		</div>
 		<div class="tab-pane mb-3 card shadow mt-2 p-3 border-radius-1" id="type_2" role="tabpanel">
 			<%= f.hidden_field :created_by_id %>
-			<div class="u-perm-scroll p-1">
+			<div class="p-1">
 			<% if @user.user_permissions.present? && current_user.super_admin? %>
-			
-				<table>
-					<thead>
+				<table class='table-reponsive' style='height: 400px;'>
+					<thead style='position: sticky; top: 0px; z-index: 9999;'>
 					<tr>
 						<th class="h5 p-1 ">Accessed</th>
 						<th class="h5 p-1 ">Module</th>
@@ -120,9 +119,9 @@ overflow: auto;
 								<%= render 'user_permission_fields', f: perm %>
 							<%end%>
 					</tbody>
-				</table>			
+				</table>
 			<% end %>
-		</div>	
+		</div>
 		</div>
 
 	</div>
