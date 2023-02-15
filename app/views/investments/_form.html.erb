@@ -40,11 +40,11 @@
     <div class="row-lg-12 p-3"> 
       <div class="float-left"> 
         <%= link_to investments_path, class:"btn btn-info float-left" do %>
-        <i class="fa fa-arrow-left mr-2" aria-hidden="true"></i>Back to Investments
+        <i class="fa fa-arrow-left mr-2" aria-hidden="true"></i>Back
         <% end %>
       </div>  
       <div class="float-right">
-        <%=f.object.id.nil? ? (f.submit class: "btn btn-success", style: "float: right")  :  (f.submit class: "btn btn-warning", style: "float: right")%>
+        <%=f.object.id.nil? ? (f.submit class: "btn btn-success", style: "float: right")  :  (f.submit "Update", class: "btn btn-warning", style: "float: right")%>
       </div>
     </div>  
   </div>               

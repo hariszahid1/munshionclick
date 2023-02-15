@@ -65,7 +65,7 @@
   <div class="clearfix"></div>
     <div class="modal-footer">
       <button type="button" class="btn btn-light btn-outline-secondary" data-dismiss="modal">Cancel</button>
-      <%=f.object.id.nil? ? (f.submit "Save" ,class: "btn btn-primary mr-4", style: "float: right")  :  (f.submit class: "btn btn-warning mr-4", style: "float: right")%>
+      <%=f.object.id.nil? ? (f.submit "Save" ,class: "btn btn-primary", style: "float: right")  :  (f.submit "Update" , class: "btn btn-warning", style: "float: right")%>
     </div>   
 <% end %>
 <%= javascript_include_tag 'hover', 'data-turbolinks-track': 'reload' %>

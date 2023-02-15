@@ -39,9 +39,9 @@
   <hr>
   <div class="col-lg-12">
     <%= link_to loans_path, class:"btn btn-info float-left" do %>
-      <i class="fa fa-arrow-left mr-2" aria-hidden="true"></i>Back to Loan
+      <i class="fa fa-arrow-left mr-2" aria-hidden="true"></i>Back
     <% end %>
-    <%=f.object.id.nil? ? (f.submit class: "btn btn-success", style: "float: right")  :  (f.submit class: "btn btn-warning", style: "float: right")%>
+    <%=f.object.id.nil? ? (f.submit class: "btn btn-success", style: "float: right")  :  (f.submit "Update", class: "btn btn-warning", style: "float: right")%>
   </div>
 </div>
 <% end %>

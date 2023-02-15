@@ -79,8 +79,8 @@ th, td{
   </div>
   
   <div class="actions m-3">
-    <%= link_to 'Back to Daily Sale', daily_sales_path, class: "btn btn-info" %>
-    <%= f.submit class: "btn btn-primary", style: "float: right" %>
+    <%= link_to 'Back', daily_sales_path,  class: "btn btn-info" , style: "float: left" %>
+    <%=f.object.id.nil? ? (f.submit "Save", class: "btn btn-primary", style: "float: right") : (f.submit "Update", class: "btn btn-warning", style: "float: right") %>
   </div>
 
 <% end %>
