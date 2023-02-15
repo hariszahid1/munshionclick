@@ -85,6 +85,7 @@ module OutwardsHelper
                             id: @purchase_sale_detail.id,
                             type: @purchase_sale_detail.transaction_type,
                             amount: @purchase_sale_detail.amount,
+                            comment: @purchase_sale_detail.comment,
                             total_quantity: order_total,
                             total_bill: bill_total,
                             date: @purchase_sale_detail.created_at&.strftime("%d-%b-%y"),

@@ -210,7 +210,7 @@ class ColdStorageOutwardsController < ApplicationController
     @pdf_orders_total =  p_item_qts.pluck('purchase_sale_items.size_9').compact&.map(&:to_f).sum
     @pdf_orders_total_bill =  p_item_qts.sum('purchase_sale_items.total_pandri_bill')
     p_item_parties = PurchaseSaleDetail.joins(:purchase_sale_items, :sys_user).ransack(params[:q]).result.where(transaction_type: 'OutWard')
-    pdf_outward_q = p_item_parties.group('sys_users.name').sum('purchase_sale_items.quantity')
+    pdf_outward_q = p_item_parties.group('sys_users.name').sum('purchase_sale_items.size_9')
     pdf_outward_t = p_item_parties.group('sys_users.name').sum('purchase_sale_items.total_pandri_bill')
     @pdf_outward_total = pdf_outward_q.merge(pdf_outward_t) { |key, old_val, new_val| [old_val, new_val] }
     @sys_users = @q.result
@@ -220,7 +220,11 @@ class ColdStorageOutwardsController < ApplicationController
 
   def download_outward_show_pdf_file
     sorted_outward_show_data
-    generate_pdf(@sorted_data.as_json, 'Outward', 'pdf.html', 'A4', false, 'cold_storage_outwards/show.pdf.erb')
+    if params["nakasi"].present?
+      generate_pdf(@sorted_data.as_json, 'Outward', 'pdf.html', 'A4', false, 'cold_storage_outwards/nakasi.pdf.erb')
+    else
+      generate_pdf(@sorted_data.as_json, 'Outward', 'pdf.html', 'A4', false, 'cold_storage_outwards/show.pdf.erb')
+    end
   end
 
   def set_penalty_pandri(purchase_sale_detail)

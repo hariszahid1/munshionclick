@@ -41,6 +41,9 @@
             <div class="col-lg-2 form-group float-left">
               <%= f.text_field :purchase_sale_items_size_13_cont, class: "form-control", placeholder: "Marka"%>
             </div>
+            <div class="col-lg-2 form-group float-left">
+              <%= f.text_field :purchase_sale_items_size_10_cont, class: "form-control", placeholder: "challan"%>
+            </div>
             <div class="col-lg-1 form-group float-left">
               <%= f.text_field :id_eq, class: "form-control",placeholder: "id"%>
             </div>
@@ -119,7 +122,15 @@
                   <div class="icon-container">
                     <div class="my-icon my-view">
                       <div class="my-tooltip">
-                        PDF
+                        Nakasi PDF
+                      </div>
+                      <%= link_to cold_storage_outward_path(purchase_sale_detail.id,'pdf':true, 'nakasi': true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
+                        <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
+                      <%end %>
+                    </div>
+                    <div class="my-icon my-view">
+                      <div class="my-tooltip">
+                        Gate Pass PDF
                       </div>
                       <%= link_to cold_storage_outward_path(purchase_sale_detail.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
                         <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
