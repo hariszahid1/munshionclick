@@ -293,11 +293,9 @@
                                       <div class="my-tooltip">
                                         Show
                                       </div>
-                                      <% if check_can_view(@module_permission) %>
-                                        <%= link_to staff_path(staff), remote: true, class: "icon-div" do %>
-                                          <i class="fa fa-eye mt-2" aria-hidden="true"></i>
-                                        <%end %>
-                                      <%end%>
+                                      <%= link_to staff_path(staff), remote: true, class: "icon-div" do %>
+                                        <i class="fa fa-eye mt-2" aria-hidden="true"></i>
+                                      <%end %>
                                     </div>
 
                                     <div class="my-icon my-view">
