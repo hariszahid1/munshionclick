@@ -214,22 +214,6 @@
                     </a>
                   </li>
                 <% end %>
-                <% if check_is_hidden_by_module('salaries') %>  
-                  <li>
-                    <a href="<%=salaries_path%>" class="activ-link">
-                      <i class="fa fa-minus ml-3 mr-1"></i>
-                      <span class="link-text">Salary Debit detail</span>
-                    </a>
-                  </li>
-                <% end %>
-                <% if check_is_hidden_by_module('salary_details') %>  
-                  <li>
-                    <a href="<%=salary_details_path%>" class="activ-link">
-                      <i class="fa fa-minus ml-3 mr-1"></i>
-                      <span class="link-text">Salary Credit detail</span>
-                    </a>
-                  </li>
-                <% end %>  
               </li>                    
             </ul>
             <% if check_is_hidden_by_module('cities') %>
@@ -265,6 +249,30 @@
               </li>
             <% end %> 
           </li>
+        </ul>
+      </li>
+      <li class="mb-2">
+        <a href="#PayrollSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+          <i class="fa fa-money-bill-alt ml-3"></i>
+          <span class="link-text ml-1">Payroll</span>
+        </a>
+        <ul class="collapse list-unstyled" id="PayrollSubmenu">
+          <% if check_is_hidden_by_module('salaries') %>  
+            <li>
+              <a href="<%=salaries_path%>" class="activ-link">
+                <i class="fa fa-plus ml-3 mr-1"></i>
+                <span class="link-text">Salary Debit detail</span>
+              </a>
+            </li>
+          <% end %>
+          <% if check_is_hidden_by_module('salary_details') %>  
+            <li>
+              <a href="<%=salary_details_path%>" class="activ-link">
+                <i class="fa fa-plus ml-3 mr-1"></i>
+                <span class="link-text">Salary Credit detail</span>
+              </a>
+            </li>
+          <% end %>            
         </ul>
       </li>
       <li class="mb-2">

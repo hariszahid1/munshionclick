@@ -119,10 +119,10 @@
                 <%= f.select :sys_user_id_eq, options_from_collection_for_select(@ledger_searchs, "id", ->(st){"#{st.name} \u{27F6} \u{27F6} #{st.code} "}, f.object.sys_user_id_eq), {:include_blank => "Select Name/Code"},{:class=>"form-control chosen-select", :data => {:placeholder => "Select Name/Code"} } %>
               </div>
               <div class="d-none">
-                <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker',placeholder: "YYYY-MM-DD" %>
-                <%= f.search_field :created_at_lteq, class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
+                <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker', value: @created_at_gteq, placeholder: "YYYY-MM-DD" %>
+                <%= f.search_field :created_at_lteq, class: 'form-control input-sm datepicker', value: @created_at_lteq, placeholder: "YYYY-MM-DD"%>
               </div>
-              <div class="col-lg-3 form-group float-left d-flex">
+              <div class="col-lg-4 form-group float-left d-flex">
                 <%= f.search_field :created_at, id: "reportrange", class: 'form-control' %>
               </div>
               <div class="col-lg-1 form-group float-left">
@@ -191,13 +191,14 @@
                 <div class="dropdown my-dropdown float-right mr-2">
                   <button type="button" class="form-control bg-danger text-light">PDF List</button>
                   <div class="dropdown-content my-dropdown-content p-2" style="width: 100px;">
-                    <button class="form-control d-flex justify-content-center ml-2 mr-2 mt-2 btn btn-danger" style="width:120px" title="Download ledger book pdf for single user in ascending order pdf" name="submit_form_without" type="submit" value="Ledger Book PDF A4" formtarget="_blank">1-Asc &nbsp;<i class="fa fa-file-pdf"></i></button>
-                    <button class="form-control d-flex justify-content-center ml-2 mr-2 mt-2 btn btn-danger" style="width:120px" title="Download ledger book pdf for single user in descending order pdf" name="submit_pdf_without" type="submit" value="Ledger Book PDF A4" formtarget="_blank">1-Desc &nbsp;<i class="fa fa-file-pdf"></i></button>
-                    <button class="form-control d-flex justify-content-center ml-2 mr-2 mt-2 btn btn-danger" style="width:120px" title="Download ledger book for all user in ascending order pdf" name="submit_form" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Asc &nbsp; <i class="fa fa-file-pdf"></i></button>
-                    <button class="form-control d-flex justify-content-center ml-2 mr-2 mt-2 btn btn-danger" style="width:120px" title="Download ledger book for all user in desending order pdf" name="submit_pdf" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Desc &nbsp; <i class="fa fa-file-pdf"></i></button>
-                    <button class="form-control d-flex justify-content-center ml-2 mr-2 mt-2 btn btn-danger" style="width:120px" title="Download ledger book with short commenting pdf" name="submit_pdf_short" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Short &nbsp;<i class="fa fa-file-pdf"></i></button>
-                    <button class="form-control d-flex justify-content-center ml-2 mr-2 mt-2 btn btn-danger" style="width:120px" title="Download debit pdf" name="submit_debit" type="submit" value="Ledger Book PDF A4" formtarget="_blank">DebitList &nbsp;<i class="fa fa-file-pdf"></i></button>
-                    <button class="form-control d-flex justify-content-center ml-2 mr-2 mt-2 btn btn-danger" style="width:120px" title="Download credit pdf" name="submit_credit" type="submit" value="Ledger Book PDF A4" formtarget="_blank">CreditList &nbsp;<i class="fa fa-file-pdf"></i></button>
+                    <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download ledger book pdf for single user in ascending order pdf" name="submit_form_without" type="submit" value="Ledger Book PDF A4" formtarget="_blank">1-Asc &nbsp;<i class="fa fa-file-pdf"></i></button>
+                    <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download ledger book pdf for single user in descending order pdf" name="submit_pdf_without" type="submit" value="Ledger Book PDF A4" formtarget="_blank">1-Desc &nbsp;<i class="fa fa-file-pdf"></i></button>
+                    <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download ledger book pdf for single user in ascending order pdf" name="ledger_book_ob" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Ledger OB &nbsp;<i class="fa fa-file-pdf"></i></button>
+                    <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download ledger book for all user in ascending order pdf" name="submit_form" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Asc &nbsp; <i class="fa fa-file-pdf"></i></button>
+                    <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download ledger book for all user in desending order pdf" name="submit_pdf" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Desc &nbsp; <i class="fa fa-file-pdf"></i></button>
+                    <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download ledger book with short commenting pdf" name="submit_pdf_short" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Short &nbsp;<i class="fa fa-file-pdf"></i></button>
+                    <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download debit pdf" name="submit_debit" type="submit" value="Ledger Book PDF A4" formtarget="_blank">DebitList &nbsp;<i class="fa fa-file-pdf"></i></button>
+                    <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download credit pdf" name="submit_credit" type="submit" value="Ledger Book PDF A4" formtarget="_blank">CreditList &nbsp;<i class="fa fa-file-pdf"></i></button>
                   </div>
                 </div>
               <% end %>

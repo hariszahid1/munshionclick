@@ -75,7 +75,7 @@ module InwardsHelper
   end
 
   def sorted_inward_show_data
-	order_total = @purchase_sale_detail.purchase_sale_items&.sum(:quantity)
+	order_total = @purchase_sale_detail.purchase_sale_items&.pluck('purchase_sale_items.size_9').compact&.map(&:to_f).sum
     @sorted_data = []
       @sorted_data << {
 		                id: @purchase_sale_detail.id,
@@ -101,8 +101,8 @@ module InwardsHelper
   end
 end
 def sorted_inward_bill_data
-	order_total = @purchase_sale_detail.purchase_sale_items&.sum(:size_9)
-	mazdoori_total = @purchase_sale_detail.purchase_sale_items&.sum(:size_2)
+	order_total = @purchase_sale_detail.purchase_sale_items&.pluck('purchase_sale_items.size_9').compact&.map(&:to_f).sum
+	mazdoori_total = @purchase_sale_detail.purchase_sale_items&.pluck('purchase_sale_items.size_2').compact&.map(&:to_f).sum
 	bill_total = @purchase_sale_detail.purchase_sale_items&.sum(:total_pandri_bill)
     @sorted_data = []
       @sorted_data << {
