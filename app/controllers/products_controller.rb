@@ -362,7 +362,6 @@ class ProductsController < ApplicationController
     end
 
     def export_file
-      byebug
       export_data('Product')
     end
 end
