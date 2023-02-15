@@ -1,4 +1,5 @@
 class ProductsController < ApplicationController
+  include PdfCsvGeneralMethod
   before_action :check_access
   before_action :set_product, only: [:show, :edit, :update, :destroy]
   skip_before_action :authenticate_user!, only: [:index]
@@ -54,6 +55,7 @@ class ProductsController < ApplicationController
       @q = @q.result.where(id: p_ids).ransack(params[:q])
     end
     @products = @q.result.page(params[:page]).per(100)
+    export_file if params[:export_data].present?
 
     if @status != '1'
       @product_price = @products.select('SUM(sale*(products.marla+(products.square_feet/225 ))) as total_price')&.first&.total_price
@@ -98,7 +100,6 @@ class ProductsController < ApplicationController
       format.html
       format.csv { send_data csv_data, filename: "Unit/Inventory Detail - #{Date.today}.csv" }
     end
-    
   end
 
   # GET /products/1
@@ -340,23 +341,29 @@ class ProductsController < ApplicationController
         ]
       )
     end
+
+    def product_charts
+      @block_item = Product.joins(:item_type).group('item_types.title').sum(:sale)
+      @block_keys = @block_item.keys.map { |a| a.gsub(' ', '-') }
+      @block_count = @block_item.values
+
+      @block_occurence = Product.joins(:item_type).group('item_types.title').count
+      @b_title = @block_occurence.keys.map { |a| a.gsub(' ', '-') }
+      @b_count = @block_occurence.values
+
+      @category_revenue = Product.joins(:product_category).group('product_categories.title').sum(:sale)
+      @cat_keys = @category_revenue.keys.map { |a| a.gsub(' ', '-') }
+      @cat_sum = @category_revenue.values
+
+      @sub_category_revenue = Product.joins(:product_sub_category).group('product_sub_categories.title').sum(:sale)
+      @sub_cat_keys = @sub_category_revenue.keys.map { |a| a.gsub(' ', '-') }
+      @sub_cat_sum = @sub_category_revenue.values
+
+    end
+
+    def export_file
+      byebug
+      export_data('Product')
+    end
 end
 
-def product_charts
-  @block_item = Product.joins(:item_type).group('item_types.title').sum(:sale)
-  @block_keys = @block_item.keys.map { |a| a.gsub(' ', '-') }
-  @block_count = @block_item.values
-
-  @block_occurence = Product.joins(:item_type).group('item_types.title').count
-  @b_title = @block_occurence.keys.map { |a| a.gsub(' ', '-') }
-  @b_count = @block_occurence.values
-
-  @category_revenue = Product.joins(:product_category).group('product_categories.title').sum(:sale)
-  @cat_keys = @category_revenue.keys.map { |a| a.gsub(' ', '-') }
-  @cat_sum = @category_revenue.values
-
-  @sub_category_revenue = Product.joins(:product_sub_category).group('product_sub_categories.title').sum(:sale)
-  @sub_cat_keys = @sub_category_revenue.keys.map { |a| a.gsub(' ', '-') }
-  @sub_cat_sum = @sub_category_revenue.values
-  
-end 

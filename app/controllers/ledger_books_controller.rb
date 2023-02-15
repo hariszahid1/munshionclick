@@ -362,6 +362,10 @@ class LedgerBooksController < ApplicationController
       @q.sorts = ['created_at desc', 'id desc'] if @q.sorts.empty?
     end
     @ledger_books = @q.result.page(params[:page])
+    if params[:ledger_book_ob].present?
+      @ledger_book_by_date = @ledger_books.group_by { |ledger_book| ledger_book.created_at.to_date }
+      print_pdf("OpeningBalance-LedgerBook -" + @created_at_gteq.to_s + ' to ' + @created_at_lteq.to_s, 'pdf.html', 'A4')
+    end
 
     if params[:desc_email].present? or params[:asc_email].present?
       @pos_setting = PosSetting.first

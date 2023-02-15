@@ -1,0 +1,81 @@
+<style>
+  .table-bordered {
+    border: 1px solid black;
+  }
+  table {
+    border-collapse: collapse;
+  }
+  .table-bordered td, .table-bordered th {
+      border: 1px solid black;
+      padding: 5px;
+  }
+  .text-left{
+    text-align: left;
+  }
+  .text-right{
+    text-align: right;
+  }
+  .text-center{
+    text-align: center;
+  }
+</style>
+<div style='margin: 20px 0px;'>
+  <h2>Ledger Book by Opening Balance</h2>
+  <div style='border: 1px solid black; margin: 20px 0px; padding: 10px;'>
+    <h3>
+      Dated: <%= params[:q][:created_at_gteq]&.to_date&.strftime("%d/%m/%Y") %>
+      TO <%= params[:q][:created_at_lteq]&.to_date&.strftime("%d/%m/%Y") %>
+    </h3>
+  </div>
+
+  <table class="table-bordered">
+    <tr>
+      <th class='text-left'>Date</th>
+      <th class='text-left'>Customer/Supplier</th>
+      <th class='text-left'>Naration</th>
+      <th class='text-right'>Debit</th>
+      <th class='text-right'>Credit</th>
+      <th class='text-right'>Balance</th>
+    </tr>
+    <% @ledger_book_by_date.each do |data| %>
+      <tr>
+        <td rowspan="<%= data.last.count.to_i + 1 %>" class='text-left' >
+          <%= data.first&.to_date&.strftime("%d/%m/%Y") %>
+          <% data&.last&.each do |ledger_book| %>
+            <tr>
+              <td class='text-left'><%= ledger_book.sys_user&.name %></td>
+              <td class='text-left urdu-font'>
+                <% if ledger_book.purchase_sale_detail_id.present? %>
+                  <%= link_to 'Bill',edit_purchase_sale_detail_path(ledger_book.purchase_sale_detail_id) if ledger_book.purchase_sale_detail.transaction_type=="Sale"%>
+                  <%= link_to 'Purchase',edit_purchase_sale_detail_path(ledger_book.purchase_sale_detail_id) if ledger_book.purchase_sale_detail.transaction_type=="Purchase"%>
+                <% elsif ledger_book.order.present? %>
+                  <%= link_to 'Sale Order',edit_order_path(ledger_book.order_id) if ledger_book.order.transaction_type=="Sale"%>
+                  <%= link_to 'Purchase Order',edit_order_path(ledger_book.order_id) if ledger_book.order.transaction_type=="Purchase"%>
+                <%else%>
+                  Ledger Book
+                <% end %>
+                <%= ledger_book.comment %>
+                <% if ledger_book.account.present? %>
+                <p>
+                  Casher: <span><%=ledger_book.account.title %></span>
+                </p>
+                <%end%>
+              </td>
+              <td class='text-right'><%= number_with_delimiter(ledger_book.debit.to_i) %></td>
+              <td class='text-right'><%= number_with_delimiter(ledger_book.credit.to_i) %></td>
+              <td class='text-right'><%= number_with_delimiter(ledger_book.balance.to_i) %></td>
+            </tr>
+          <% end %>
+        </td>
+        <tr>
+          <th class='text-left'>Total:</th>
+          <td></td>
+          <td></td>
+          <td class='text-right'><%= number_with_delimiter(data.last.pluck(:debit).compact.sum) %></td>
+          <td class='text-right'><%= number_with_delimiter(data.last.pluck(:credit).compact.sum) %></td>
+          <td class='text-right'><%= number_with_delimiter(data.last.pluck(:balance).compact.sum) %></td>
+        </tr>
+      </tr>
+    <% end %>
+  </table>
+</div>
