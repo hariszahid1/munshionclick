@@ -16,10 +16,10 @@ class ColdStorageInwardsController < ApplicationController
     purchase_sale_detail = @q.result.distinct.where(transaction_type: 'InWard')
     @purchase_sale_details = purchase_sale_detail.order('purchase_sale_details.created_at desc').page(params[:page]).per(100)
     @pdf_orders = @q.result.distinct.where(transaction_type: 'InWard')
-    @cold_storage_inward_total = PurchaseSaleDetail.joins(:purchase_sale_items).group('purchase_sale_details.id').sum('purchase_sale_items.size_9')
+    @cold_storage_inward_total = PurchaseSaleDetail.joins(:purchase_sale_items).where(transaction_type: 'InWard').group('purchase_sale_details.id').sum('purchase_sale_items.quantity')
     if params[:pdf].present?
-      @pdf_orders_total = PurchaseSaleDetail.joins(:purchase_sale_items).ransack(params[:q]).result.where(transaction_type: 'InWard').sum('purchase_sale_items.size_9')
-      @pdf_inward_total = PurchaseSaleDetail.joins(:purchase_sale_items, :sys_user).ransack(params[:q]).result.where(transaction_type: 'InWard').group('sys_users.name').sum('purchase_sale_items.size_9')
+      @pdf_orders_total = PurchaseSaleDetail.joins(:purchase_sale_items).ransack(params[:q]).result.where(transaction_type: 'InWard').pluck('purchase_sale_items.size_9').compact&.map(&:to_f).sum
+      @pdf_inward_total = PurchaseSaleDetail.joins(:purchase_sale_items, :sys_user).ransack(params[:q]).result.where(transaction_type: 'InWard').group('sys_users.name').sum('purchase_sale_items.quantity')
       download_cold_storage_inwards_pdf_file
     end
   end
@@ -212,7 +212,7 @@ class ColdStorageInwardsController < ApplicationController
     @items = Item.all
     @staffs = Staff.loader_active_staff
     @total_stock = PurchaseSaleDetail.joins(:purchase_sale_items).includes(:purchase_sale_items).where(
-      transaction_type: 'InWard').sum('purchase_sale_items.size_9')
+      transaction_type: 'InWard').pluck('purchase_sale_items.size_9').compact&.map(&:to_f).sum
   end
 
   def date_search

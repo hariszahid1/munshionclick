@@ -78,7 +78,7 @@ module OutwardsHelper
     end
 
     def sorted_outward_show_data
-        order_total = @purchase_sale_detail.purchase_sale_items&.sum(:size_9)
+        order_total = @purchase_sale_detail.purchase_sale_items&.pluck('purchase_sale_items.size_9').compact&.map(&:to_f).sum
         bill_total = @purchase_sale_detail.purchase_sale_items&.sum(:total_pandri_bill)
         @sorted_data = []
           @sorted_data << {
