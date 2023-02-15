@@ -54,52 +54,85 @@
                 <td class="text-center"><%= item['challan_no'] %></td>
                 <td class="text-center"><%= item['vehicle_no'] %></td>
                 <td class="text-center"><%= item['product'] %></td>
-                 <td class="text-center"><%= item['room_num'] %></td>
+                <td class="text-center"><%= item['room_num'] %></td>
                 <td class="text-center"><%= item['rack_num'] %></td>
                 <td class="text-center"><%= item['quantity'] %></td>
               </tr>
             <% end %>
+            <tr>
+              <th class="text-center"></th>
+              <th class="text-center"></th>
+              <th class="text-center"></th>
+              <th class="text-center">Amount:</th>
+              <th class="text-center"><%= order['amount'] %></th>
+              <th class="text-center"></th>
+              <th class="text-center"></th>
+              <th class="text-center"></th>
+              <th class="text-center"></th>
+            </tr>
           <% end %>
           <tr>
             <th></th>
             <th></th>
             <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
             <th>Sub Total: </th>
+            <th><%= @amount_total %></th>
+            <th></th>
+            <th></th>
+            <th></th>
             <th><%= @pdf_orders_total %></th>
           </tr>
           <tr>
             <th></th>
             <th></th>
             <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
             <th>Grand Total: </th>
+            <th><%= @amount_total %></th>
+            <th></th>
+            <th></th>
+            <th></th>
             <th><%= @pdf_orders_total %></th>
           </tr>
+
+
           <thead class="lite-gray">
             <tr>
-              <th colspan="6" class='text-left' style="padding-left: 20px;">Party Name</th>
+              <th colspan="8" class='text-left' style="padding-left: 20px;">Party Name</th>
               <th> InWard Qty </th>
             </tr>
           </thead>
           <% if @pdf_inward_total.present? %>
             <% @pdf_inward_total.each do |order| %>
               <tr>
-                <td colspan="6" class='text-left' style="padding-left: 20px;"><%= order.first %></td>
+                <td colspan="8" class='text-left' style="padding-left: 20px;"><%= order.first %></td>
                 <td class="text-center"><%= order.second&.to_f %></td>
               </tr>
             <% end %>
           <% end %>
+          <tr>
+            <th colspan="8" class='text-left' style="padding-left: 20px;">Total</th>
+            <th><%= @pdf_orders_total %></th>
+          </tr>
+
+
+          <thead class="lite-gray">
             <tr>
-              <th colspan="6" class='text-left' style="padding-left: 20px;">Total</th>
-              <th><%= @pdf_orders_total %></th>
+              <th colspan="8" class='text-left' style="padding-left: 20px;">Product Name</th>
+              <th> InWard Qty </th>
             </tr>
+          </thead>
+          <% if @pdf_prod_total.present? %>
+            <% @pdf_prod_total.each do |order| %>
+              <tr>
+                <td colspan="8" class='text-left' style="padding-left: 20px;"><%= order.first %></td>
+                <td class="text-center"><%= order.second&.to_f %></td>
+              </tr>
+            <% end %>
+          <% end %>
+          <tr>
+            <th colspan="8" class='text-left' style="padding-left: 20px;">Total</th>
+            <th><%= @pdf_orders_total %></th>
+          </tr>
         </tbody>
       </table>
     </div>

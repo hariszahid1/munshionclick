@@ -16,10 +16,8 @@ class ColdStorageInwardsController < ApplicationController
     purchase_sale_detail = @q.result.distinct.where(transaction_type: 'InWard')
     @purchase_sale_details = purchase_sale_detail.order('purchase_sale_details.created_at desc').page(params[:page]).per(100)
     @pdf_orders = @q.result.distinct.where(transaction_type: 'InWard')
-    @cold_storage_inward_total = PurchaseSaleDetail.joins(:purchase_sale_items).where(transaction_type: 'InWard').group('purchase_sale_details.id').sum('purchase_sale_items.quantity')
+    @cold_storage_inward_total = PurchaseSaleDetail.joins(:purchase_sale_items).where(transaction_type: 'InWard').group('purchase_sale_details.id').sum('purchase_sale_items.size_9')
     if params[:pdf].present?
-      @pdf_orders_total = PurchaseSaleDetail.joins(:purchase_sale_items).ransack(params[:q]).result.where(transaction_type: 'InWard').pluck('purchase_sale_items.size_9').compact&.map(&:to_f).sum
-      @pdf_inward_total = PurchaseSaleDetail.joins(:purchase_sale_items, :sys_user).ransack(params[:q]).result.where(transaction_type: 'InWard').group('sys_users.name').sum('purchase_sale_items.quantity')
       download_cold_storage_inwards_pdf_file
     end
   end
@@ -235,6 +233,10 @@ class ColdStorageInwardsController < ApplicationController
   end
 
   def download_cold_storage_inwards_pdf_file
+    pdf_purchase_sale = PurchaseSaleDetail.joins(:sys_user, purchase_sale_items: :product).ransack(params[:q])
+    @pdf_orders_total =  pdf_purchase_sale.result.where(transaction_type: 'InWard').pluck('purchase_sale_items.size_9').compact&.map(&:to_f).sum
+    @pdf_inward_total =  pdf_purchase_sale.result.where(transaction_type: 'InWard').group('sys_users.name').sum('purchase_sale_items.size_9')
+    @pdf_prod_total  =  pdf_purchase_sale.result.where(transaction_type: 'InWard').group('products.title').sum('purchase_sale_items.size_9')
     @sys_users = @q.result
     sorted_inward_data
     generate_pdf(@sorted_data.as_json, 'Inward', 'pdf.html', 'A4', false, 'cold_storage_inwards/index.pdf.erb')
