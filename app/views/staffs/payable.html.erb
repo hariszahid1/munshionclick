@@ -2,185 +2,186 @@
 <%@advance=0%>
 <%@short_pay=0%>
 <%@balance=0%>
-<div class="hidden" id="staff_list">
-  <h1> Payable Staff (Jama)</h1>
- 
-  <div class="row ml-1 mb-4 mt-3">
- 
-  <%= link_to staffs_path, class: "btn btn-danger mr-2" do %>
-    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-    Staff
-  <% end %>
- 
- 
-  <%= link_to receiveable_staffs_path, class: "btn btn-warning mr-2" do %>
-    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-    Reciveable
-  <% end %>
-
-  <%= link_to dasti_staffs_path, class: "btn btn-success" do %>
-    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-    Dasti
-  <% end %>
+<div class="hidden m-4" id="staff_list">
+  <div class="float-left">
+    <h2 class="ml-2 logo-back"><i class="fas fa-sign-out-alt mr-2"></i>Payable Staff (Jama)</h2>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<%= root_path %>">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active">
+        <a href="<%= payable_staffs_path %>">Payable Staff (Jama)</a>
+      </li>
+    </ol>
   </div>
- 
-   <ul class="nav nav-pills" role="tablist">     
-     <li class="nav-item">
-      <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab">Search</a>
-     </li>
-  </ul>
-<div class="tab-content">
-
-     <div class="tab-pane active mb-3 card shadow mt-2 p-4 border-radius-1" id="search" role="tabpanel">
-     <div class="row">
-     <div class="col-lg-12 col-sm-12">
-       <%= search_form_for @q, url: payable_staffs_path, class: "admin-controls", method: "get" do |f| %>
-         <div class="col-lg-3 form-group float-left">
-           <%= f.select :id_eq, options_from_collection_for_select(@staff_names, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code}"},@name),{:include_blank => "Select Staff"},:class=>"form-control chosen-select" %>
-         </div>
-         <div class="col-lg-2 form-group float-left">
-           <%= f.select :department_id_eq, options_from_collection_for_select(@departments, 'id', 'title', @department), {hide_label:true,title: "Select the Department" ,prompt: "Select the Department"},:class=>"form-control chosen-select"%>
-         </div>
-         <div class="col-lg-2 form-group float-left">
-           <%= f.select :staff_type_eq, Staff.staff_types.map { |key, value| [key.humanize, value] },{hide_label:true,class: "form-control", required: true},:class=>"form-control" %>
-         </div>
-         <div class="col-lg-2 form-group float-left">
-           <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
-         </div>        
-         <div class="col-lg-3 d-flex form-group float-right">
-           <button style="width:100px;" class="form-control btn-danger " name="submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mr-2"></i>PDF</button>
-           <button style="width:100px;"  class="form-control btn-warning ml-2" name="submit_csv" type="submit" value="Full CSV A4" formtarget="_blank"><i class="fa fa-file-excel mr-2"></i>CSV</button>
-         </div>
-       <% end %>
-     </div>    
-   </div>
-   </div>
-</div>
-
-    <div class="card border-radius-1 shadow p-3 ">
-     <table data-toggle="table" data-search="true">
-    <thead>
-      <tr>
-        <th>DP</th>
-        <th><%= sort_link(@q, :staff_type, 'Status') %></th>
-        <th><%= sort_link(@q, :code, 'Code') %></th>
-        <th><%= sort_link(@q, :name, 'Name') %></th>
-        <th><%= sort_link(@q, :father, 'Father') %></th>
-        <th><%= sort_link(@q, :date_of_joining, 'Date of joining') %></th>
-        <th><%= sort_link(@q, :monthly_salary, 'Monthly/Wage') %></th>
-        <th><%= sort_link(@q, :advance_amount, 'Advance') %></th>
-        <th><%= sort_link(@q, :department_id, 'Department/Raw') %></th>
-        <th><%= sort_link(@q, :wage_debit, 'Short-Pay') %></th>
-        <th><%= sort_link(@q, :balance, 'Balance') %></th>
-        <th>Action</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <% @staffs.each do |staff| %>
-       <% if staff.balance.to_i > 0 %>
-        <tr>
-          <td>
-            <% if  staff.profile_image.attached? %>
-              <%= image_tag staff.profile_image.service_url,class:"shadow border-radius-1 dp-size" %>
-            <% end %>
-          </td>
-          <td><%= staff.staff_type %></td>
-          <td><%= staff.code %></td>
-          <td><%= staff.name %></td>
-          <td><%= staff.father %></td>
-          <td><%= staff.date_of_joining.strftime("%d%b%y , %I:%M") if staff.date_of_joining%></td>
-          <td><%= number_with_delimiter staff.staff_salary_or_wage.to_f.round(2)%><% @monthly_wage += staff.staff_salary_or_wage.to_f.round(2) %></td>
-          <td><%= number_with_delimiter staff.advance_amount.to_f.round(2) %><% @advance += staff.advance_amount.to_f.round(2) %></td>
-          <td><%= number_with_delimiter staff.department.present? ? staff.department.title : ""%>:<%= staff.staff_raw_products.present? ? staff.staff_raw_products_titles : ""%></td>
-          <td><%= number_with_delimiter staff.wage_debit.to_f.round(2) %><% @short_pay += staff.wage_debit.to_f.round(2) %></td>
-          <td><%= number_with_delimiter staff.balance.to_f.round(2) %><% @balance += staff.balance.to_f.round(2) %></td>
-          <td class="p-3">
-          <div class="icon-container-1">
-          <div class="my-icon-1 my-view-1">
-            <div class="my-tooltip-1">
-              <div class="icon-container">
-                <div class="my-icon my-view">
-                  <div class="my-tooltip">
-                    Edit
-                  </div>
-                  <%if (check_can_update(@module_permission))%>
-                    <%= link_to edit_staff_path(staff), class:"icon-div" do %>
-                      <i class="fa fa-edit mt-2" aria-hidden="true"></i>
-                    <%end %>
-                  <% end %>
-                </div>
-                <div class="my-icon my-view">
-                  <div class="my-tooltip">
-                    Delete
-                  </div>
-                  <%if (check_can_delete(@module_permission))%>
-                    <%= link_to staff, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'},:class => 'delete icon-div' do %>
-                      <i class="fa fa-trash mt-2" aria-hidden="true"></i>
-                    <%end %>
-                  <% end %> 
-                </div>
-                <div class="my-icon my-view">
-                  <div class="my-tooltip">
-                    Show
-                  </div>
-                  <%if (check_can_read(@module_permission))%>
-                    <%= link_to staff, class:"icon-div" do %>
-                      <i class="fa fa-eye mt-2" aria-hidden="true"></i>
-                    <%end %>
-                  <%end%>    
-                </div>
-                <div class="my-icon my-view">
-                  <div class="my-tooltip">
-                    Staff ledger Book
-                  </div>
-                  <%if (check_can_read(@module_permission))%>
-                    <a href="<%=staff_ledger_books_path('q[staff_id_eq]':staff.id)%>">
-                    <i class="fa fa-address-book mt-2" aria-hidden="true"></i>                     
-                     </a>                     
-                  <%end%>    
-                </div>                                
-              </div>
-            </div>
-            <span class="icon-div-1">
-                  <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
-            </span>
-          </div>
-        </div>
-        </td>
-        </tr>
-        <%end%>
-      <% end %>
-      <tr>
-        <td><h4>Total<h4></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td><h4><%= number_with_delimiter @monthly_wage.round(2) %><h4></td>
-        <td><h4><%= number_with_delimiter @advance.round(2) %><h4></td>
-        <td></td>
-        <td><h4><%= number_with_delimiter @short_pay.round(2) %><h4></td>
-        <td><h4><%= number_with_delimiter @balance.round(2) %><h4></td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="float-right mt-4">
+    <%= link_to staffs_path, class: "btn btn-danger file-btn-color" do %>
+      Staff
+    <% end %>
+    <%= link_to receiveable_staffs_path, class: "btn btn-warning file-btn-color " do %>
+      Reciveable
+    <% end %>
+    <%= link_to dasti_staffs_path, class: "btn btn-success file-btn-color" do %>
+      Dasti
+    <% end %>
   </div>
-</div>
+  <div class="clearfix"></div>
   <div class="row">
-    <div class="col-lg-4 col-sm-4">
-    <%= page_entries_info @staffs %>
+    <ul class="nav nav-tabs ml-3" role="tablist">     
+      <li class="nav-item">
+       <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab">Search</a>
+      </li>
+    </ul>
+  </div>
+  <div class="tab-content">
+    <div class="tab-pane active no-tab-border mt-2 " id="search" role="tabpanel">
+      <%= search_form_for @q, url: payable_staffs_path, class: "admin-controls", method: "get" do |f| %>
+        <div class="card shadow mb-3 p-3">
+          <div class="row">
+            <div class="col-lg-12 col-sm-12">
+              <div class="col-lg-3 form-group float-left">
+                <%= f.select :id_eq, options_from_collection_for_select(@staff_names, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code}"},@name),{:include_blank => "Select Staff"},:class=>"form-control chosen-select" %>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <%= f.select :department_id_eq, options_from_collection_for_select(@departments, 'id', 'title', @department), {hide_label:true,title: "Select the Department" ,prompt: "Select the Department"},:class=>"form-control chosen-select"%>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <%= f.select :staff_type_eq, Staff.staff_types.map { |key, value| [key.humanize, value] },{hide_label:true,class: "form-control", required: true},:class=>"form-control" %>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+              </div>        
+            </div>    
+          </div>
+       </div>
+       <div class="card shadow p-3 ">
+          <div class="row d-flex" style="position: absolute;">
+            <div class="col-lg-3 mt-2 d-flex form-group ">
+              <button style="width:80px;" class="form-control btn-danger file-btn-color" name="submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank">PDF</button>
+              <button style="width:80px;"  class="form-control btn-warning file-btn-color ml-2" name="submit_csv" type="submit" value="Full CSV A4" formtarget="_blank">CSV</button>
+            </div>
+          </div>
+          <table data-toggle="table" data-search="true">
+           <thead>
+              <tr>
+                <th>DP</th>
+                <th><%= sort_link(@q, :staff_type, 'Status') %></th>
+                <th><%= sort_link(@q, :code, 'Code') %></th>
+                <th><%= sort_link(@q, :name, 'Name') %></th>
+                <th><%= sort_link(@q, :father, 'Father') %></th>
+                <th><%= sort_link(@q, :date_of_joining, 'Date of joining') %></th>
+                <th><%= sort_link(@q, :monthly_salary, 'Monthly/Wage') %></th>
+                <th><%= sort_link(@q, :advance_amount, 'Advance') %></th>
+                <th><%= sort_link(@q, :department_id, 'Department/Raw') %></th>
+                <th><%= sort_link(@q, :wage_debit, 'Short-Pay') %></th>
+                <th><%= sort_link(@q, :balance, 'Balance') %></th>
+                <th>Action</th>
+              </tr>
+           </thead>
+           <tbody>
+             <% @staffs.each do |staff| %>
+              <% if staff.balance.to_i > 0 %>
+                 <tr>
+                   <td>
+                     <% if  staff.profile_image.attached? %>
+                       <%= image_tag staff.profile_image.service_url,class:"shadow border-radius-1 dp-size" %>
+                     <% end %>
+                   </td>
+                   <td><%= staff.staff_type %></td>
+                   <td><%= staff.code %></td>
+                   <td><%= staff.name %></td>
+                   <td><%= staff.father %></td>
+                   <td><%= staff.date_of_joining.strftime("%d%b%y , %I:%M") if staff.date_of_joining%></td>
+                   <td><%= number_with_delimiter staff.staff_salary_or_wage.to_f.round(2)%><% @monthly_wage += staff.staff_salary_or_wage.to_f.round(2) %></td>
+                   <td><%= number_with_delimiter staff.advance_amount.to_f.round(2) %><% @advance += staff.advance_amount.to_f.round(2) %></td>
+                   <td><%= number_with_delimiter staff.department.present? ? staff.department.title : ""%>:<%= staff.staff_raw_products.present? ? staff.staff_raw_products_titles : ""%></td>
+                   <td><%= number_with_delimiter staff.wage_debit.to_f.round(2) %><% @short_pay += staff.wage_debit.to_f.round(2) %></td>
+                   <td><%= number_with_delimiter staff.balance.to_f.round(2) %><% @balance += staff.balance.to_f.round(2) %></td>
+                   <td class="p-3">
+                   <div class="icon-container-1">
+                     <div class="my-icon-1 my-view-1">
+                       <div class="my-tooltip-1">
+                         <div class="icon-container">
+                           <div class="my-icon my-view">
+                             <div class="my-tooltip">
+                               Edit
+                             </div>
+                             <%if (check_can_update(@module_permission))%>
+                               <%= link_to edit_staff_path(staff), class:"icon-div" do %>
+                                 <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+                               <%end %>
+                             <% end %>
+                           </div>
+                           <div class="my-icon my-view">
+                             <div class="my-tooltip">
+                               Delete
+                             </div>
+                             <%if (check_can_delete(@module_permission))%>
+                               <%= link_to staff, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'},:class => 'delete icon-div' do %>
+                                 <i class="fa fa-trash mt-2" aria-hidden="true"></i>
+                               <%end %>
+                             <% end %> 
+                           </div>
+                           <div class="my-icon my-view">
+                             <div class="my-tooltip">
+                               Show
+                             </div>
+                             <%if (check_can_read(@module_permission))%>
+                               <%= link_to staff, class:"icon-div" do %>
+                                 <i class="fa fa-eye mt-2" aria-hidden="true"></i>
+                               <%end %>
+                             <%end%>    
+                           </div>
+                           <div class="my-icon my-view">
+                             <div class="my-tooltip">
+                               Staff ledger Book
+                             </div>
+                             <%if (check_can_read(@module_permission))%>
+                               <a href="<%=staff_ledger_books_path('q[staff_id_eq]':staff.id)%>">
+                               <i class="fa fa-address-book mt-2" aria-hidden="true"></i>                     
+                                </a>                     
+                             <%end%>    
+                           </div>                                
+                         </div>
+                       </div>
+                       <span class="icon-div-1">
+                             <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+                       </span>
+                     </div>
+                   </div>
+                  </td>
+                 </tr>
+               <%end%>
+             <% end %>
+             <tr>
+               <td><h4>Total<h4></td>
+               <td></td>
+               <td></td>
+               <td></td>
+               <td></td>
+               <td></td>
+               <td><h4><%= number_with_delimiter @monthly_wage.round(2) %><h4></td>
+               <td><h4><%= number_with_delimiter @advance.round(2) %><h4></td>
+               <td></td>
+               <td><h4><%= number_with_delimiter @short_pay.round(2) %><h4></td>
+               <td><h4><%= number_with_delimiter @balance.round(2) %><h4></td>
+             </tr>
+           </tbody>
+         </table>
+       </div>
+      <% end %>
     </div>
-    <div class="col-lg-8 col-sm-8 pagination-left">
-      <%= paginate @staffs %>
-    </div>
+  </div>
 </div>
-
-
+<div class="row">
+  <div class="col-lg-4 col-sm-4">
+    <%= page_entries_info @staffs %>
+  </div>
+  <div class="col-lg-8 col-sm-8 pagination-left">
+    <%= paginate @staffs %>
+  </div>
+</div>
 <div class="clearfix"></div>
-
-
 <script>
   $(document).ready(function() {
     if ($(".bootstrap-table").length == 0){

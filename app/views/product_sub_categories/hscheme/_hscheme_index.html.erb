@@ -87,7 +87,7 @@
 	              </button>		
               <%end%>
             </div> 
-            <div class="mt-4 ml-3">          
+            <div class="mt-4 ml-2">          
               <%if (check_can_download_pdf(@module_permission))%>
                 <button class="form-control btn btn-danger file-btn-color ml-2  " title= "download subcategories pdf" style="width:80px" name="pdf" type="submit" value="pdf" formtarget="_blank" >PDF</button>
               <% end %>
@@ -135,7 +135,7 @@
             <div>
               <%= search_form_for @q, url: product_sub_categories_path, class: "admin-controls ml-4", method: "get" do |f| %>
                 <div class="d-flex mt-4" style="width: 100%;">    
-                  <%= select_tag :limit, options_for_select(['Show Entries',5, 10, 15, 20, 25], selected: 'Show Entries'), id: 'pagination-limit', title:'Show Entries', style:'cursor: pointer;' %>
+                  <%= select_tag :limit, options_for_select(['Show Entries',5, 10, 15, 20, 25], selected: 'Show Entries'), id: 'pagination-limit', class: 'file-btn-color', title:'Show Entries', style:'cursor: pointer;' %>
                 </div>
               <% end %>
             </div>
