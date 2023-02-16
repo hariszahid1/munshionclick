@@ -237,6 +237,7 @@ class ColdStorageInwardsController < ApplicationController
     @pdf_orders_total =  pdf_purchase_sale.result.where(transaction_type: 'InWard').pluck('purchase_sale_items.size_9').compact&.map(&:to_f).sum
     @pdf_inward_total =  pdf_purchase_sale.result.where(transaction_type: 'InWard').group('sys_users.name').sum('purchase_sale_items.size_9')
     @pdf_prod_total  =  pdf_purchase_sale.result.where(transaction_type: 'InWard').group('products.title').sum('purchase_sale_items.size_9')
+    @amount_total =  pdf_purchase_sale.result.where(transaction_type: 'InWard').sum(:amount)
     @sys_users = @q.result
     sorted_inward_data
     generate_pdf(@sorted_data.as_json, 'Inward', 'pdf.html', 'A4', false, 'cold_storage_inwards/index.pdf.erb')
