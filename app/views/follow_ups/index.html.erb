@@ -4,64 +4,58 @@
     <span aria-hidden="true">×</span>
   </button>
 </div>
-<div class="hidden" id="city_list">
-  <div class='d-flex'>
-    <div>
-      <div class="row mb-1">
-        <h1 class="ml-2 col">Follow Ups</h1>
+<div class="m-4">
+  <div class="hidden" id="city_list">
+    <div class='d-flex'>
+      <div class="float-left">
+       <h2 class="ml-2 logo-back"><i class="fas fa-arrow-up mr-2"></i>Follow Ups</h2>
+       <ol class="breadcrumb">
+         <li class="breadcrumb-item">
+           <a href="<%= root_path %>">Dashboard</a>
+         </li>
+         <li class="breadcrumb-item active">
+           <a href="<%= follow_ups_path %>">Follow Ups</a>
+         </li>
+       </ol>
       </div>
-      <div class="row mb-2">
-        <div class="col-lg-12 col-sm-12">
-          <div class="main-content-header">
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item">
-                <a href="<%= root_path %>">Dashboard</a>
-              </li>
-              <li class="breadcrumb-item active">
-                <a href="<%= follow_ups_path %>">FollowUp</a>
-              </li>
-            </ol>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="d-flex ml-auto">
-     <% follow_up_types = {
-          'crms' => { color: 'rgba(102, 255, 51, 0.3)', text: 'CRM' },
-          'sale_deals' => { color: 'rgba(255, 51, 0, 0.3)', text: 'Sale Deal' },
-          'purchase_sale_details' => { color: 'rgba(255, 255, 0, 0.3)', text: 'Purchase Sale Detail' },
-          'orders' => { color: 'rgba(128, 229, 255, 0.3)', text: 'Order' },
-          'expense_vouchers' => { color: 'rgba(255, 179, 217, 0.74)', text: 'Expense Voucher' }
-      } %>
-      <% follow_up_types.each do |type, details| %>
-        <% if @follow_up_gadets[type].present? %>
-          <div class="card shadow text-dark mr-3 p-1 close-card" style="border: 10px solid <%= details[:color] %>; border-radius: 50%;">
-            <%= link_to follow_ups_path(q: { reminder_type_eq: type }) do %>
-              <span>
-                <h2 class="mt-2">
-                  <b><%= @follow_up_gadets[type] %></b>
-                </h2>
-                <%= details[:text] %>
-              </span>
-            <% end %>
-          </div>
+      <div class="d-flex ml-auto">
+       <% follow_up_types = {
+            'crms' => { color: 'rgba(102, 255, 51, 0.3)', text: 'CRM' },
+            'sale_deals' => { color: 'rgba(255, 51, 0, 0.3)', text: 'Sale Deal' },
+            'purchase_sale_details' => { color: 'rgba(255, 255, 0, 0.3)', text: 'Purchase Sale Detail' },
+            'orders' => { color: 'rgba(128, 229, 255, 0.3)', text: 'Order' },
+            'expense_vouchers' => { color: 'rgba(255, 179, 217, 0.74)', text: 'Expense Voucher' }
+        } %>
+        <% follow_up_types.each do |type, details| %>
+          <% if @follow_up_gadets[type].present? %>
+            <div class="card shadow text-dark mr-3 p-1 close-card" style="border: 10px solid <%= details[:color] %>; border-radius: 50%;">
+              <%= link_to follow_ups_path(q: { reminder_type_eq: type }) do %>
+                <span>
+                  <h2 class="mt-2">
+                    <b><%= @follow_up_gadets[type] %></b>
+                  </h2>
+                  <%= details[:text] %>
+                </span>
+              <% end %>
+            </div>
+          <% end %>
         <% end %>
-      <% end %>
+      </div>
     </div>
   </div>
-</div>
-
-    <ul class="nav nav-pills" role="tablist">
+  <div class="row">
+    <ul class="nav nav-tabs ml-3" role="tablist">
       <li class="nav-item">
-        <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
+        <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab"><i class="fa fa-search mr-2"></i>Search</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link tab-label active ml-3  " href="<%= crms_path %>">CRM</a>
+        <a class="nav-link tab-label active ml-3 btn-primary " href="<%= crms_path %>">CRM</a>
       </li>
     </ul>
+  </div>
   <%= search_form_for @q, url: follow_ups_path, class: "admin-controls", method: "get" do |f| %>
     <div class="tab-content mb-3">
-      <div class="tab-pane active card border-radius-1 mt-2" id="search" role="tabpanel">
+      <div class="tab-pane active card  mt-2" id="search" role="tabpanel">
         <div class="row d-flex mt-3 mr-2">
           <div class="col">
             <div class="col-lg-3 form-group float-left">
@@ -84,43 +78,41 @@
       </div>
     </div>
   <% end %>
-</div>
-
-<div class='card p-3 border-radius-1'>
-  <table data-toggle="table" data-search="true" id="follow_up_table">
-    <thead>
-      <tr>
-        <th><input type="checkbox" id="master" class='select-all-checkbox'>
-					<div class="icon-container float-center">
-						<span class="ml-2 mt-2">
-          		<div class="my-icon my-view">
-								<button class="icon-div btn delete-selected p-2 " type='button' value='FollowUp'>
-									<i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i>
-								</button>
-							</div>
-						</span>
-					</div>
-        <th>CRM User</th>
-        <th>Task Type<div class='float-right'><%= sort_link(@q, :task_type, "", {}, class: 'sorting-button') %></div></th>
-        <th>Priority<div class='float-right'><%= sort_link(@q, :priority, "", {}, class: 'sorting-button') %></div></th>
-        <th>Comment<div class='float-right'><%= sort_link(@q, :comment, "", {}, class: 'sorting-button') %></div></th>
-        <th>Assignee<div class='float-right'><%= sort_link(@q, :assigned_to_id, "", {}, class: 'sorting-button') %></div></th>
-        <th>Date<div class='float-right'><%= sort_link(@q, :date, "", {}, class: 'sorting-button') %></div></th>
-        <th class="border_none text-center">Action</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <%= render partial: 'follow_up', collection: @follow_ups %>
-    </tbody>
-  </table>
-
-  <div class="row">
-    <div class="col-lg-4 col-sm-4">
-      <%= page_entries_info @follow_ups %>
-    </div>
-    <div class="col-lg-8 col-sm-8 pagination-left">
-      <%= paginate @follow_ups %>
+  </div>
+  <div class='card p-3 m-4 '>
+    <table data-toggle="table" data-search="true" id="follow_up_table">
+      <thead>
+        <tr>
+          <th><input type="checkbox" id="master" class='select-all-checkbox'>
+  					<div class="icon-container float-center">
+  						<span class="ml-2 mt-2">
+            		<div class="my-icon my-view">
+  								<button class="icon-div btn delete-selected p-2 " type='button' value='FollowUp'>
+  									<i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i>
+  								</button>
+  							</div>
+  						</span>
+  					</div>
+          <th>CRM User</th>
+          <th>Task Type<div class='float-right'><%= sort_link(@q, :task_type, "", {}, class: 'sorting-button') %></div></th>
+          <th>Priority<div class='float-right'><%= sort_link(@q, :priority, "", {}, class: 'sorting-button') %></div></th>
+          <th>Comment<div class='float-right'><%= sort_link(@q, :comment, "", {}, class: 'sorting-button') %></div></th>
+          <th>Assignee<div class='float-right'><%= sort_link(@q, :assigned_to_id, "", {}, class: 'sorting-button') %></div></th>
+          <th>Date<div class='float-right'><%= sort_link(@q, :date, "", {}, class: 'sorting-button') %></div></th>
+          <th class="border_none text-center">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= render partial: 'follow_up', collection: @follow_ups %>
+      </tbody>
+    </table>
+    <div class="row">
+      <div class="col-lg-4 col-sm-4">
+        <%= page_entries_info @follow_ups %>
+      </div>
+      <div class="col-lg-8 col-sm-8 pagination-left">
+        <%= paginate @follow_ups %>
+      </div>
     </div>
   </div>
 </div>

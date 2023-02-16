@@ -1,19 +1,18 @@
-<div class="hidden" id="products_list">
-  <div class="main-content-header">
-    <h1>Chatha => Chart of Account</h1>
+<div class="hidden m-4" id="products_list">
+  <div class="float-left">
+    <h2 class="ml-2 logo-back"><i class="fa fa-home mr-2"></i> Chart of Account</h2>
     <ol class="breadcrumb">
       <li class="breadcrumb-item">
         <a href="<%= root_path %>">Dashboard</a>
       </li>
       <li class="breadcrumb-item active">
-        <a href="<%= reports_chart_of_account_path %>">Chart of Account</a>
+        <a href="<%= reports_chart_of_account_path %>"> Chart of Account</a>
       </li>
     </ol>
   </div>
   <div class="clearfix"></div>
-
   <div class="float-right">
-    <div class="dropdown ml-auto mr-4">
+    <div class="dropdown ml-auto">
      <span class="btn btn-info" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
       <div class="dropdown-content">
         <% if @help.present? %>
@@ -34,21 +33,22 @@
   <%= hidden_field_tag "depBKeys", @staff_balance_keys, { :id => "depBKeys" } %>
   <%= hidden_field_tag "depBValues", @staff_balance_values, { :id => "depBValues" } %>
 
-
-  <ul class="nav nav-pills" role="tablist">
-    <li class="nav-item">
-      <a class="nav-link tab-label active " data-toggle="tab" href="#payable" role="tab">Payables</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link tab-label " data-toggle="tab" href="#reciveable" role="tab">Reciveables</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link tab-label " data-toggle="tab" href="#salary" role="tab">Salary</a>
-    </li>
-	</ul>
+  <div class="row">
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link tab-label active " data-toggle="tab" href="#payable" role="tab"><i class="fas fa-sign-out-alt mr-2"></i>Payables</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link tab-label " data-toggle="tab" href="#reciveable" role="tab"><i class="fas fa-sign-in-alt mr-2"></i>Reciveables</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link tab-label " data-toggle="tab" href="#salary" role="tab"><i class="fa fa-money-bill-alt mr-2"></i>Salary</a>
+      </li>
+	  </ul>
+  </div>
 
     <div class="tab-content">
-      <div class="tab-pane active mb-3 card shadow-sm mt-2 p-4 border-radius-1" id="payable" role="tabpanel">
+      <div class="tab-pane active mb-3 no-tab-border card shadow-sm mt-2 p-4" id="payable" role="tabpanel">
         <div class="card shadow mb-4">
 	      	<!-- Card Header - Accordion -->
 	      	<a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
@@ -61,16 +61,16 @@
 	      			<div class="col mr-2">
                 <br>
                 
-                <ul class="nav nav-pills" role="tablist">
+                <ul class="nav nav-tabs" role="tablist">
                   <li class="nav-item">
-                    <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab">Search</a>
+                    <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab"><i class="fa fa-search mr-2"></i>Search</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link tab-label " data-toggle="tab" href="#analytics" data-remote="true" role="tab">Analytics</a>
+                    <a class="nav-link tab-label " data-toggle="tab" href="#analytics" data-remote="true" role="tab"><i class="fa fa-signal mr-2"></i>Analytics</a>
                   </li>
 	              </ul>
                 <div class="tab-content">
-                  <div class="tab-pane active mb-3 mt-2 p-4 border-radius-1" id="search" role="tabpanel">
+                  <div class="tab-pane active mb-3 no-tab-border mt-2 p-4 " id="search" role="tabpanel">
                     <div class="row">
                       <div class="col-lg-12 col-sm-12">
                         <%= search_form_for @q, url: reports_chart_of_account_path, class: "admin-controls", method: "get" do |f| %>
@@ -84,9 +84,9 @@
                             <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
                           </div>
                         
-                          <button class="form-control btn btn-info float-right" name="email" style="width:100px" type="submit" value="Email"><i class="fas fa-envelope"></i> Email</button>
-                          <button class="form-control btn btn-warning float-right mr-2" style="width:100px" name="submit_csv" type="submit" value="Chart of Account CSV" formtarget="_blank"> <i class="fa fa-file-excel mr-2" aria-hidden="true"></i>CSV</button>
-                          <button class="form-control btn btn-danger float-right mr-2" style="width:100px" name="submit_pdf_staff_with" type="submit" value="Accounts PDF A4" formtarget="_blank"> <i class="fa fa-file-pdf mr-2"></i>PDF</button>
+                          <button class="form-control btn btn-info file-btn-color float-right" name="email" style="width:80px" type="submit" value="Email">Mail</button>
+                          <button class="form-control btn btn-warning file-btn-color float-right mr-2" style="width:80px" name="submit_csv" type="submit" value="Chart of Account CSV" formtarget="_blank">CSV</button>
+                          <button class="form-control btn btn-danger file-btn-color float-right mr-2" style="width:80px" name="submit_pdf_staff_with" type="submit" value="Accounts PDF A4" formtarget="_blank">PDF</button>
                           
                         <% end %>
                       </div>
@@ -148,7 +148,7 @@
                       </tbody>
                     </table>
                   </div>
-                  <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1 p-1" id="analytics" role="tabpanel">
+                  <div class="tab-pane mb-3 card shadow-sm mt-2 p-4" id="analytics" role="tabpanel">
                     <div class="row d-flex border-radius-1">
                       <div class="col-lg-6">
                         <div class="my-chart-Container">
@@ -188,16 +188,18 @@
         			<div class="row no-gutters align-items-center">
         				<div class="col mr-2">
                   <br>
-                  <ul class="nav nav-pills" role="tablist">
-                    <li class="nav-item">
-                      <a class="nav-link tab-label active " data-toggle="tab" href="#search1" role="tab">Search</a>
-                    </li>
-                     <li class="nav-item">
-                      <a class="nav-link tab-label " data-toggle="tab" href="#analytics1" data-remote="true" role="tab">Analytics</a>
-                    </li>
-	                </ul>
+                  <div class="row">
+                    <ul class="nav nav-tabs ml-3" role="tablist">
+                      <li class="nav-item">
+                        <a class="nav-link tab-label active " data-toggle="tab" href="#search1" role="tab"><i class="fa fa-search mr-2"></i>Search</a>
+                      </li>
+                       <li class="nav-item">
+                        <a class="nav-link tab-label " data-toggle="tab" href="#analytics1" data-remote="true" role="tab"><i class="fa fa-signal mr-2"></i>Analytics</a>
+                      </li>
+	                  </ul>
+                  </div>
                   <div class="tab-content">
-                    <div class="tab-pane active mb-3 card shadow-sm mt-2 p-3 border-radius-1" id="search1" role="tabpanel">
+                    <div class="tab-pane active mb-3 card shadow-sm mt-2 p-4" id="search1" role="tabpanel">
                       <div class="row">
                         <div class="col-lg-12 col-sm-12">
                           <%= search_form_for @s, url: reports_chart_of_account_path, class: "admin-controls", method: "get" do |f| %>
@@ -214,7 +216,7 @@
                               <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
                             </div>
                             
-                            <button class="form-control btn btn-danger float-right" style="width: 100px;" name="submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mr-2"></i>PDF</button>
+                            <button class="form-control btn btn-danger file-btn-color float-right" style="width: 80px;" name="submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank">PDF</button>
                             
                           <% end %>
                         </div>
@@ -278,7 +280,7 @@
                         </tbody>
                       </table>
                     </div>
-                    <div class="tab-pane mb-3 card shadow-sm mt-2 p-3 border-radius-1" id="analytics1" role="tabpanel">
+                    <div class="tab-pane mb-3 card shadow-sm mt-2 p-4" id="analytics1" role="tabpanel">
                       <div class="row d-flex border-radius-1">
                       <div class="col-lg-6">
                         <div class="my-chart-Container">
@@ -352,7 +354,7 @@
         </div>
       </div>
 
-      <div class="tab-pane mb-3 card shadow-sm mt-2 p-3 border-radius-1" id="reciveable" role="tabpanel">
+      <div class="tab-pane mb-3 card shadow-sm mt-2 p-4" id="reciveable" role="tabpanel">
         <%@sys_user_balance = 0 %>
         <div class="card shadow mb-4">
 	      	<!-- Card Header - Accordion -->
@@ -365,13 +367,15 @@
         			<div class="row no-gutters align-items-center">
         				<div class="col mr-2">
                   <br>
-                  <ul class="nav nav-pills" role="tablist">
-                    <li class="nav-item">
-                      <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab">Search</a>
-                    </li>
-	                </ul>
+                  <div class="row">
+                    <ul class="nav nav-tabs ml-3" role="tablist">
+                      <li class="nav-item">
+                        <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab"><i class="fa fa-search mr-2"></i>Search</a>
+                      </li>
+	                  </ul>
+                  </div>
                   <div class="tab-content">
-                    <div class="tab-pane active mb-3 card shadow-sm mt-2 p-3 border-radius-1" id="search" role="tabpanel">
+                    <div class="tab-pane active mb-3 card shadow-sm mt-2 p-4" id="search" role="tabpanel">
                       <div class="row">
                         <div class="col-lg-12 col-sm-12">
                           <%= search_form_for @p, url: reports_chart_of_account_path, class: "admin-controls", method: "get" do |f| %>
@@ -385,7 +389,7 @@
                               <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
                             </div>
                            
-                            <button class="form-control btn btn-danger float-right" style="width: 100px;" name="submit_pdf_staff_with" type="submit" value="Accounts PDF A4" formtarget="_blank"> <i class="fa fa-file-pdf mr-2"></i>PDF</button>
+                            <button class="form-control btn btn-danger file-btn-color float-right" style="width: 80px;" name="submit_pdf_staff_with" type="submit" value="Accounts PDF A4" formtarget="_blank">PDF</button>
                             
                           <% end %>
                         </div>
@@ -468,13 +472,15 @@
         			<div class="row no-gutters align-items-center">
         				<div class="col mr-2">
                   <br>
-                  <ul class="nav nav-pills" role="tablist">
-                    <li class="nav-item">
-                      <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab">Search</a>
-                    </li>
-	                </ul>
+                  <div class="row">
+                    <ul class="nav nav-tabs ml-3" role="tablist">
+                      <li class="nav-item">
+                        <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab"><i class="fa fa-search mr-2"></i>Search</a>
+                      </li>
+	                  </ul>
+                  </div>
                   <div class="tab-content">
-                    <div class="tab-pane active mb-3 card shadow-sm mt-2 p-3 border-radius-1" id="search" role="tabpanel">
+                    <div class="tab-pane active mb-3 card shadow-sm mt-2 p-3" id="search" role="tabpanel">
                       <div class="row">
                         <div class="col-lg-12 col-sm-12">
                           <%= search_form_for @k, url: reports_chart_of_account_path, class: "admin-controls", method: "get" do |f| %>
@@ -491,7 +497,7 @@
                               <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
                             </div>
                             
-                            <button class="form-control btn btn-danger float-right" style="width: 100px;" name="submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mr-2"></i>PDF</button>
+                            <button class="form-control btn btn-danger file-btn-color float-right" style="width: 80px;" name="submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank">PDF</button>
                            
                           <% end %>
                         </div>
@@ -645,7 +651,7 @@
         </div>
       </div>
 
-      <div class="tab-pane mb-3 card shadow-sm mt-2 p-3 border-radius-1" id="salary" role="tabpanel">
+      <div class="tab-pane mb-3 card shadow-sm mt-2 p-3 " id="salary" role="tabpanel">
         <div class="card shadow mb-4">
           <!-- Card Header - Accordion -->
           <a href="#collapseCardExample8" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample8">

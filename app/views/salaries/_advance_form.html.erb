@@ -63,13 +63,13 @@
       <hr>
       <div class="row m-1">
         <div class="col form-group float-left">
-          <%= link_to salaries_path, class:"btn btn-info" do %>
-            <i class="fa fa-arrow-left mr-2" aria-hidden="true"></i>Back to Salaries 
+          <%= link_to salaries_path, class:"btn btn-light btn-outline-secondary" do %>
+          Cancel
           <% end %>
         </div>
         
           <div class="actions col form-group float-right font-weight-bold">
-            <%=f.object.id.nil? ? (f.submit class: "btn btn-success", style: "float: right",value: "Save")  :  (f.submit class: "btn btn-warning", style: "float: right",value: "Save")%>
+            <%=f.object.id.nil? ? (f.submit class: "btn btn-success", style: "float: right",value: "Save")  :  (f.submit class: "btn btn-warning", style: "float: right",value: "Update")%>
             <%= f.submit class: "btn btn-primary mr-2", style: "float: right",value: "Save with Print",target: "_blank" %>
           </div>
 
