@@ -50,7 +50,6 @@ module InwardsHelper
   end
 
   def sorted_inward_data
-	@amount_total = @pdf_orders.sum(:amount)
     @sorted_data = []
     @pdf_orders.each do |o_i|
       @sorted_data << {
