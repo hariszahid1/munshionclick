@@ -10,6 +10,10 @@
       .text-left{
         text-align: left;
       }
+      .text-right{
+        text-align: right;
+        padding-right: 10px;
+      }
     </style>
   </head>
   <body>
@@ -102,28 +106,70 @@
             <th></th>
             <th><%=  @pdf_orders_total_bill %></th>
           </tr>
-          <thead class="lite-gray">
-            <tr>
-              <th colspan="12" class='text-left' style="padding-left: 20px;">Party Name</th>
-              <th> OutWard Qty </th>
-              <th> Total bill </th>
-            </tr>
-          </thead>
-          <% if @pdf_outward_total.present? %>
-            <% @pdf_outward_total.each do |order| %>
-              <tr>
-                <td colspan="12" class='text-left' style="padding-left: 20px;"><%= order.first %></td>
-                <td class="text-center"><%= order.second&.first.to_f %></td>
-                <td class="text-center"><%= order.second&.second.to_f %></td>
-              </tr>
-            <% end %>
-          <% end %>
-            <tr>
-              <th colspan="12" class='text-left' style="padding-left: 20px;">Total</th>
-              <th><%= @pdf_orders_total %></th>
-              <th><%=  @pdf_orders_total_bill %></th>
-            </tr>
         </tbody>
+      </table>
+      <table style='margin-top: 30px'>
+        <thead class="lite-gray">
+          <tr>
+            <th class='text-left' style="padding-left: 20px;">Party Name</th>
+            <th> Out Qty </th>
+            <th class='text-right'> Total bill </th>
+          </tr>
+        </thead>
+        <% if @pdf_outward_total.present? %>
+          <% @pdf_outward_total.each do |order| %>
+            <tr>
+              <td class='text-left' style="padding-left: 20px;"><%= order.first %></td>
+              <td class="text-center"><%= order.second&.first.to_f %></td>
+              <td class="text-right"><%= order.second&.second.to_f %></td>
+            </tr>
+          <% end %>
+        <% end %>
+          <tr>
+            <th class='text-left' style="padding-left: 20px;">Total</th>
+            <th><%= @pdf_orders_total %></th>
+            <th class='text-right'><%=  @pdf_orders_total_bill %></th>
+          </tr>
+      </table>
+      <table style='margin-top: 30px'>
+        <thead class="lite-gray">
+          <tr>
+            <th class='text-left' style="padding-left: 20px;">Product Name</th>
+            <th class= 'text-right'> Out Qty </th>
+          </tr>
+        </thead>
+        <% if @pdf_prod_total.present? %>
+          <% @pdf_prod_total.each do |order| %>
+            <tr>
+              <td class='text-left' style="padding-left: 20px;"><%= order.first %></td>
+              <td class="text-right"><%= order.second&.to_f %></td>
+            </tr>
+          <% end %>
+        <% end %>
+        <tr>
+          <th class='text-left' style="padding-left: 20px;">Total</th>
+          <th class="text-right"><%= @pdf_orders_total %></th>
+        </tr>
+      </table>
+      <table style='margin-top: 30px'>
+        <thead class="lite-gray">
+          <tr>
+            <th class='text-left' style="padding-left: 20px;">Marka Wise</th>
+            <th class="text-right"> Out Qty </th>
+          </tr>
+        </thead>
+        <% if @pdf_marka_total.present? %>
+          <% @pdf_marka_total.each do |order| %>
+            <tr>
+              <td class='text-left' style="padding-left: 20px;"><%= order.first %></td>
+              <td class="text-right"><%= order.second&.to_f %></td>
+            </tr>
+          <% end %>
+        <% end %>
+        <tr>
+          <th class='text-left' style="padding-left: 20px;">Total</th>
+          <th class="text-right"><%= @pdf_orders_total %></th>
+        </tr>
       </table>
     </div>
   </body>

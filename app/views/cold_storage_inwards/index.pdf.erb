@@ -133,6 +133,26 @@
             <th colspan="8" class='text-left' style="padding-left: 20px;">Total</th>
             <th><%= @pdf_orders_total %></th>
           </tr>
+
+
+          <thead class="lite-gray">
+            <tr>
+              <th colspan="8" class='text-left' style="padding-left: 20px;">Marka Wise</th>
+              <th> InWard Qty </th>
+            </tr>
+          </thead>
+          <% if @pdf_marka_total.present? %>
+            <% @pdf_marka_total.each do |order| %>
+              <tr>
+                <td colspan="8" class='text-left' style="padding-left: 20px;"><%= order.first %></td>
+                <td class="text-center"><%= order.second&.to_f %></td>
+              </tr>
+            <% end %>
+          <% end %>
+          <tr>
+            <th colspan="8" class='text-left' style="padding-left: 20px;">Total</th>
+            <th><%= @pdf_orders_total %></th>
+          </tr>
         </tbody>
       </table>
     </div>
