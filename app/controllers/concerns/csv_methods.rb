@@ -368,7 +368,7 @@ module CsvMethods
       discount_list.each { |s| csv.add_row [s.sys_user.name, convert_to_delimiter(s.discount_price.to_f.round(2))] }
       csv.add_row ["Total : #{discount_list.count}", convert_to_delimiter(discount_list.sum(:discount_price))]
       csv.add_row []
-      @total_receiveable = @sys_user_receiveable.pluck('balance').map(&:abs).sum + @staff_reciveable.sum(:balance).abs + @expense_total.to_i+@purchase_item_total.to_i+@purchase_product_total.to_i+@salary_detail_total.to_i+@credit_salary+@investments+@purchase_sale_detail_discount_list.sum(:discount_price)
+      @total_receiveable = @sys_user_receiveable.pluck('balance').map(&:abs).sum + @staff_reciveable.sum(:balance).abs + @expense_total.to_i+@purchase_item_total.to_i+@purchase_product_total.to_i+@salary_detail_total.to_i+@credit_salary.to_i+@investments.to_i+@purchase_sale_detail_discount_list.sum(:discount_price)
       @total_payable = @sys_user_payable.pluck('balance').map(&:abs).sum + @staff_payable.sum(:balance).abs + @sale_item_total.to_i+@sale_product_total.to_i
       csv.add_row ['Cash in Hand = Payable-Reciveable']
       csv.add_row %w[Title Total]

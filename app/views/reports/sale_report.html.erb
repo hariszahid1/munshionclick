@@ -28,11 +28,12 @@
       <%= search_form_for @q, url: reports_sale_report_path, class: "admin-controls mt-3", method: "get" do |f| %>
         <div class="row card  shadow p-3 m-1 mb-3">
           <div class="row p-3">
-            <div class="col-lg-3 form-group float-left">
-              <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker',value: @created_at_gteq, 'datepicker' => true,placeholder: "YYYY-MM-DD" %>
+            <div class="col-lg-3 form-group float-left d-flex">
+              <%= f.search_field :created_at, id: "reportrange", class: 'form-control' %>
             </div>
-            <div class="col-lg-3 form-group float-left">
-              <%= f.search_field :created_at_lteq, class: 'form-control input-sm datepicker',value: @created_at_lteq, 'datepicker' => true ,placeholder: "YYYY-MM-DD"%>
+            <div class="d-none">
+              <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker',placeholder: "YYYY-MM-DD" %>
+              <%= f.search_field :created_at_lteq, class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
             </div>
             <div class="col-lg-1 form-group float-left">
               <input class="form-control btn btn-primary" name="search_submit" type="submit" value="Search">
@@ -120,13 +121,13 @@
               </tbody>
             </table>
           </div>
-       </div>
-     <% end %> 
-   </div>
-   <div class="tab-pane card shadow-sm m-4 p-3" id="analytics" role="tabpanel">
+        </div>
+      <% end %> 
+    </div>
+    <div class="tab-pane card shadow-sm m-4 p-3" id="analytics" role="tabpanel">
      <%# <div id="barchart_values"></div> %>
-     <div id="show-analytics"></div>
-   </div>
+      <div id="show-analytics"></div>
+    </div>
   </div>
 </div>
 <%= link_to 'test', reports_sale_report_analytics_path, id: 'analytics-path', class: 'd-none', remote: true %>
@@ -166,6 +167,57 @@
 
     $('.analytics-tab').on('click', function(){
       $('#analytics-path').click();
+    })
+
+  });
+  $(function() {
+
+    var start = moment();
+    var end = moment();
+
+    function cb(start, end) {
+        $('#reportrange span').html(start.format('YYYY/MM/DD') + ' - ' + end.format('YYYY/MM/DD'));
+    }
+
+    var gteq = $('#q_created_at_gteq').val()
+    var lteq = $('#q_created_at_lteq').val()
+    if (gteq !== ''){
+      start = moment(new Date(gteq))
+    }
+    if(lteq !== ''){
+      end = moment(new Date(lteq))
+    }
+
+    $('#reportrange').daterangepicker({
+        startDate: start,
+        endDate: end,
+      ranges: {
+          'Select Date Range':[],
+           'Today': [moment(), moment()],
+           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+           'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+           'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+           '1 Year': [moment().subtract(1, 'years')],
+           '5 Year': [moment().subtract(5, 'years')],
+           'This Month': [moment().startOf('month'), moment().endOf('month')],
+           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+           'This Month Last Year': [moment().subtract(1, 'years').startOf('month'), moment().subtract(1, 'years').endOf('month')],
+           'This Year': [moment().startOf('year'), moment().endOf('year')],
+           'Last Year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')]
+        },
+        locale: {
+          format: 'YYYY/MM/DD'
+        }
+    }, cb);
+
+    cb(start, end);
+
+    $('#reportrange').on('change', function(){
+      var value = $(this).val()
+      var greater_eq = value.split(' - ')[0]
+      var less_eq = value.split(' - ')[1]
+      $('#q_created_at_gteq').val(greater_eq)
+      $('#q_created_at_lteq').val(less_eq)
     })
 
   });
