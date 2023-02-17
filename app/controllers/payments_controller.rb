@@ -45,25 +45,32 @@ class PaymentsController < ApplicationController
     if params[:asc_email].present? or  params[:desc_email].present? and @q.result.count > 0
       @pdf_index=render_to_string(:pdf => "Asc - Payment",:template => 'payments/index.pdf.erb',:filename => 'Asc - Payments')
     end
-
     @t_dabit=@payment_all.select('SUM(debit) as sum_debit','SUM(credit) as sum_credit','SUM(credit)-SUM(debit) as mean_sum')
     pdfName = '[' + Account.where(id: @q.result.pluck(:account_id)).pluck(:title).join(' ') + ']'
-    respond_to do |format|
-      format.html
-      format.pdf do
-        render pdf: "#{pdfName}-DayBook+Payment-History -" + @created_at_gteq.to_s + ' to ' + @created_at_lteq.to_s,
-        layout: 'pdf.html',
-        page_size: 'A4',
-        margin_top: '0',
-        margin_right: '0',
-        margin_bottom: '0',
-        margin_left: '0',
-        encoding: "UTF-8",
-        footer:  {             # optional, use 'pdf_plain' for a pdf_plain.html.pdf.erb file, defaults to main layout
-          right: '[page] of [topage]'},
-        show_as_html: false
-      end
 
+    if params[:payment_asc_op].present?
+      @payments = @q.result.reorder('id asc', 'created_at asc')
+      print_pdf("ASC-OP-Payment -" + @start_date.to_s + ' to ' + @end_date.to_s, 'pdf.html', 'A4')
+    elsif params[:payment_desc_op]
+      @payments = @q.result.reorder('id desc', 'created_at desc')
+      print_pdf("DESC-OP-Payment -" + @start_date.to_s + ' to ' + @end_date.to_s, 'pdf.html', 'A4')
+    else
+      respond_to do |format|
+        format.html
+        format.pdf do
+          render pdf: "#{pdfName}-DayBook+Payment-History -" + @start_date.to_s + ' to ' + @end_date.to_s,
+          layout: 'pdf.html',
+          page_size: 'A4',
+          margin_top: '0',
+          margin_right: '0',
+          margin_bottom: '0',
+          margin_left: '0',
+          encoding: "UTF-8",
+          footer:  {             # optional, use 'pdf_plain' for a pdf_plain.html.pdf.erb file, defaults to main layout
+            right: '[page] of [topage]'},
+          show_as_html: false
+        end
+    end
     end
 
     if params[:desc_email].present? or params[:asc_email].present? and @q.result.count > 0
