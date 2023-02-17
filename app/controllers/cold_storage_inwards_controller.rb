@@ -150,14 +150,14 @@ class ColdStorageInwardsController < ApplicationController
 
   def stock_report_in_out
     @pdf_rep = PurchaseSaleDetail.includes(:sys_user, purchase_sale_items: :product)
-    in_report = @pdf_rep.where(transaction_type: 'InWard').group('sys_users.name').sum('purchase_sale_items.quantity')
-    out_report = @pdf_rep.where(transaction_type: 'OutWard').group('sys_users.name').sum('purchase_sale_items.quantity')
-    @pdf_inward_total = @pdf_rep.where(transaction_type: 'InWard').sum('purchase_sale_items.quantity')
-    @pdf_outward_total = @pdf_rep.where(transaction_type: 'OutWard').sum('purchase_sale_items.quantity')
+    in_report = @pdf_rep.where(transaction_type: 'InWard').group('sys_users.name').sum('purchase_sale_items.size_9')
+    out_report = @pdf_rep.where(transaction_type: 'OutWard').group('sys_users.name').sum('purchase_sale_items.size_9')
+    @pdf_inward_total = @pdf_rep.where(transaction_type: 'InWard').sum('purchase_sale_items.size_9')
+    @pdf_outward_total = @pdf_rep.where(transaction_type: 'OutWard').sum('purchase_sale_items.size_9')
     @merged_hash =  in_report.merge(out_report) { |key, old_val, new_val| [old_val, new_val] }
-    in_prod_rooms = @pdf_rep.where('transaction_type': 'InWard').group("products.title","purchase_sale_items.size_8").having("purchase_sale_items.size_8 BETWEEN 1 AND 5").sum('purchase_sale_items.quantity')
-    out_prod_rooms = @pdf_rep.where('transaction_type': 'OutWard').group("products.title","purchase_sale_items.size_8").having("purchase_sale_items.size_8 BETWEEN 1 AND 5").sum('purchase_sale_items.quantity')
-    @merged_hash_rem = in_prod_rooms.merge(out_prod_rooms) { |key, a_val, b_val| a_val - b_val }
+    in_prod_rooms = @pdf_rep.where('transaction_type': 'InWard').group("products.title","purchase_sale_items.size_8").having("purchase_sale_items.size_8 BETWEEN 1 AND 5").sum('purchase_sale_items.size_9')
+    out_prod_rooms = @pdf_rep.where('transaction_type': 'OutWard').group("products.title","purchase_sale_items.size_8").having("purchase_sale_items.size_8 BETWEEN 1 AND 5").sum('purchase_sale_items.size_9')
+    @merged_hash_rem = in_prod_rooms.merge(out_prod_rooms) { |key, a_val, b_val| a_val.to_f - b_val.to_f }
     get_room_product_rem_total
     generate_pdf('' ,'Stock-Report', 'pdf.html', 'A4', false, 'cold_storage_inwards/stock_report_in_out.pdf.erb')
 
@@ -171,14 +171,14 @@ class ColdStorageInwardsController < ApplicationController
       params[:q][:created_at_lteq] = params[:q][:created_at_lteq].to_date.end_of_day if params[:q][:created_at_lteq].present?
     end
     @q = PurchaseSaleDetail.joins(:sys_user, purchase_sale_items: :product).ransack(params[:q])
-    in_prod_rooms = @q.result.where('transaction_type': 'InWard').group("products.title","purchase_sale_items.size_8").having("purchase_sale_items.size_8 BETWEEN 1 AND 5").sum('purchase_sale_items.quantity')
-    out_prod_rooms = @q.result.where('transaction_type': 'OutWard').group("products.title","purchase_sale_items.size_8").having("purchase_sale_items.size_8 BETWEEN 1 AND 5").sum('purchase_sale_items.quantity')
-    @merged_hash_rem = in_prod_rooms.merge(out_prod_rooms) { |key, a_val, b_val| a_val - b_val }
-    @total_stock = @merged_hash_rem.values.sum
-    in_prod_parties = @q.result.where('transaction_type': 'InWard').group("sys_users.name").sum('purchase_sale_items.quantity')
-    out_prod_parties = @q.result.where('transaction_type': 'OutWard').group("sys_users.name").sum('purchase_sale_items.quantity')
-    @pdf_inward_total = @q.result.where('transaction_type': 'InWard').sum('purchase_sale_items.quantity')
-    @pdf_outward_total = @q.result.where('transaction_type': 'OutWard').sum('purchase_sale_items.quantity')
+    in_prod_rooms = @q.result.where('transaction_type': 'InWard').group("products.title","purchase_sale_items.size_8").having("purchase_sale_items.size_8 BETWEEN 1 AND 5").sum('purchase_sale_items.size_9')
+    out_prod_rooms = @q.result.where('transaction_type': 'OutWard').group("products.title","purchase_sale_items.size_8").having("purchase_sale_items.size_8 BETWEEN 1 AND 5").sum('purchase_sale_items.size_9')
+    @merged_hash_rem = in_prod_rooms.merge(out_prod_rooms) { |key, a_val, b_val| a_val.to_f - b_val.to_f }
+    @total_stock = @merged_hash_rem.values.map(&:to_f).sum
+    in_prod_parties = @q.result.where('transaction_type': 'InWard').group("sys_users.name").sum('purchase_sale_items.size_9')
+    out_prod_parties = @q.result.where('transaction_type': 'OutWard').group("sys_users.name").sum('purchase_sale_items.size_9')
+    @pdf_inward_total = @q.result.where('transaction_type': 'InWard').sum('purchase_sale_items.size_9')
+    @pdf_outward_total = @q.result.where('transaction_type': 'OutWard').sum('purchase_sale_items.size_9')
     @merged_hash_party_rem = in_prod_parties.merge(out_prod_parties) { |key, old_val, new_val| [old_val, new_val] }
     get_seasonal_room_product_rem_total
     if params[:submit_pdf].present?
@@ -233,11 +233,11 @@ class ColdStorageInwardsController < ApplicationController
   end
 
   def download_cold_storage_inwards_pdf_file
-    pdf_purchase_sale = PurchaseSaleDetail.joins(:sys_user, purchase_sale_items: :product).ransack(params[:q])
-    @pdf_orders_total =  pdf_purchase_sale.result.where(transaction_type: 'InWard').pluck('purchase_sale_items.size_9').compact&.map(&:to_f).sum
-    @pdf_inward_total =  pdf_purchase_sale.result.where(transaction_type: 'InWard').group('sys_users.name').sum('purchase_sale_items.size_9')
-    @pdf_prod_total  =  pdf_purchase_sale.result.where(transaction_type: 'InWard').group('products.title').sum('purchase_sale_items.size_9')
-    @amount_total =  pdf_purchase_sale.result.where(transaction_type: 'InWard').sum(:amount)
+    pdf_purchase_sale = PurchaseSaleDetail.joins(:sys_user, purchase_sale_items: :product).ransack(params[:q]).result.where(transaction_type: 'InWard')
+    @pdf_orders_total =  pdf_purchase_sale.pluck('purchase_sale_items.size_9').compact&.map(&:to_f).sum
+    @pdf_inward_total =  pdf_purchase_sale.group('sys_users.name').sum('purchase_sale_items.size_9')
+    @pdf_prod_total  =  pdf_purchase_sale.group('products.title').sum('purchase_sale_items.size_9')
+    @pdf_marka_total = pdf_purchase_sale.group('purchase_sale_items.size_13').sum('purchase_sale_items.size_9')
     @sys_users = @q.result
     sorted_inward_data
     generate_pdf(@sorted_data.as_json, 'Inward', 'pdf.html', 'A4', false, 'cold_storage_inwards/index.pdf.erb')
@@ -249,21 +249,21 @@ class ColdStorageInwardsController < ApplicationController
   end
 
   def get_seasonal_room_product_rem_total
-    room_in_qty = @q.result.where('transaction_type': 'InWard').group("purchase_sale_items.size_8").sum('purchase_sale_items.quantity')
-    room_out_qty = @q.result.where('transaction_type': 'OutWard').group("purchase_sale_items.size_8").sum('purchase_sale_items.quantity')
-    @merged_room_rem_total = room_in_qty.merge(room_out_qty) { |key, a_val, b_val| a_val - b_val }
-    prod_in_qty = @q.result.where('transaction_type': 'InWard').group("products.title").sum('purchase_sale_items.quantity')
-    prod_out_qty = @q.result.where('transaction_type': 'OutWard').group("products.title").sum('purchase_sale_items.quantity')
-    @merged_prod_rem_total = prod_in_qty.merge(prod_out_qty) { |key, a_val, b_val| a_val - b_val }
+    room_in_qty = @q.result.where('transaction_type': 'InWard').group("purchase_sale_items.size_8").sum('purchase_sale_items.size_9')
+    room_out_qty = @q.result.where('transaction_type': 'OutWard').group("purchase_sale_items.size_8").sum('purchase_sale_items.size_9')
+    @merged_room_rem_total = room_in_qty.merge(room_out_qty) { |key, a_val, b_val| a_val.to_f - b_val.to_f }
+    prod_in_qty = @q.result.where('transaction_type': 'InWard').group("products.title").sum('purchase_sale_items.size_9')
+    prod_out_qty = @q.result.where('transaction_type': 'OutWard').group("products.title").sum('purchase_sale_items.size_9')
+    @merged_prod_rem_total = prod_in_qty.merge(prod_out_qty) { |key, a_val, b_val| a_val.to_f - b_val.to_f }
   end
 
   def get_room_product_rem_total
-    room_in_qty = @pdf_rep.where('transaction_type': 'InWard').group("purchase_sale_items.size_8").sum('purchase_sale_items.quantity')
-    room_out_qty =  @pdf_rep.where('transaction_type': 'OutWard').group("purchase_sale_items.size_8").sum('purchase_sale_items.quantity')
-    @merged_room_rem = room_in_qty.merge(room_out_qty) { |key, a_val, b_val| a_val - b_val }
-    prod_in_qty =  @pdf_rep.where('transaction_type': 'InWard').group("products.title").sum('purchase_sale_items.quantity')
-    prod_out_qty =  @pdf_rep.where('transaction_type': 'OutWard').group("products.title").sum('purchase_sale_items.quantity')
-    @merged_prod_rem = prod_in_qty.merge(prod_out_qty) { |key, a_val, b_val| a_val - b_val }
+    room_in_qty = @pdf_rep.where('transaction_type': 'InWard').group("purchase_sale_items.size_8").sum('purchase_sale_items.size_9')
+    room_out_qty =  @pdf_rep.where('transaction_type': 'OutWard').group("purchase_sale_items.size_8").sum('purchase_sale_items.size_9')
+    @merged_room_rem = room_in_qty.merge(room_out_qty) { |key, a_val, b_val| a_val.to_f - b_val.to_f }
+    prod_in_qty =  @pdf_rep.where('transaction_type': 'InWard').group("products.title").sum('purchase_sale_items.size_9')
+    prod_out_qty =  @pdf_rep.where('transaction_type': 'OutWard').group("products.title").sum('purchase_sale_items.size_9')
+    @merged_prod_rem = prod_in_qty.merge(prod_out_qty) { |key, a_val, b_val| a_val.to_f - b_val.to_f }
   end
 
   def purchase_sale_detail_params

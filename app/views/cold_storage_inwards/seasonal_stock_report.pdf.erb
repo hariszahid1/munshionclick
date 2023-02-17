@@ -64,7 +64,7 @@
               <td colspan="6" class='text-center h5'><b><%= @merged_room_rem_total["3"] %> </b></td>
               <td colspan="6" class='text-center h5'><b><%= @merged_room_rem_total["4"] %> </b></td>
               <td colspan="6" class='text-center h5'><b><%= @merged_room_rem_total["5"] %> </b></td>
-              <td colspan="6" class='text-center h5'><b><%= @total_stock %> </b></td>
+              <td colspan="6" class='text-center h5'><b><%= number_with_delimiter(@total_stock) %> </b></td>
             </tr>
         </tbody>
       </table>
@@ -83,14 +83,14 @@
             <%  @merged_hash_party_rem.each do |order| %>
                 <tr>
                     <td colspan="6" class='text-left' style="padding-left: 20px;"><%= order.first %></td>
-                    <% if order.second.class == Float %>
+                    <% if order.second.class.eql?(String) %>
                         <td class="text-center"><%= number_with_delimiter(order.second&.to_f) %></td>
                          <td class="text-center">0</td>
                     <% else %>
                         <td class="text-center"><%= number_with_delimiter(order.second&.first.to_f) %></td>
                         <td class="text-center"><%= number_with_delimiter(order.second&.second.to_f) %></td>
                     <% end %>
-                    <% if order.second.class == Float %>
+                    <% if order.second.class.eql?(String) %>
                         <td class="text-center"><%= number_with_delimiter(order.second&.to_f) %></td>
                     <% else %>
                         <td class="text-center"><%= number_with_delimiter(order.second&.first.to_f - order.second&.second.to_f) %></td>

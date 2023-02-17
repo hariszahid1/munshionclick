@@ -1,4 +1,4 @@
-<% if params[:ledger_book_ob].present? %>
+<% if params[:ledger_book_asc_op].present? || params[:ledger_book_desc_op].present? %>
   <%= render 'ledger_book_ob' %>
 <% else%>
   <%if @debit.present? or params[:submit_debit].present?%>

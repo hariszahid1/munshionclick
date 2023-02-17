@@ -206,13 +206,14 @@ class ColdStorageOutwardsController < ApplicationController
   end
 
   def download_cold_storage_outwards_pdf_file
-    p_item_qts = PurchaseSaleDetail.joins(:purchase_sale_items).ransack(params[:q]).result.where(transaction_type: 'OutWard')
+    p_item_qts = PurchaseSaleDetail.joins(:sys_user, purchase_sale_items: :product).ransack(params[:q]).result.where(transaction_type: 'OutWard')
     @pdf_orders_total =  p_item_qts.pluck('purchase_sale_items.size_9').compact&.map(&:to_f).sum
     @pdf_orders_total_bill =  p_item_qts.sum('purchase_sale_items.total_pandri_bill')
-    p_item_parties = PurchaseSaleDetail.joins(:purchase_sale_items, :sys_user).ransack(params[:q]).result.where(transaction_type: 'OutWard')
-    pdf_outward_q = p_item_parties.group('sys_users.name').sum('purchase_sale_items.size_9')
-    pdf_outward_t = p_item_parties.group('sys_users.name').sum('purchase_sale_items.total_pandri_bill')
+    pdf_outward_q = p_item_qts.group('sys_users.name').sum('purchase_sale_items.size_9')
+    pdf_outward_t = p_item_qts.group('sys_users.name').sum('purchase_sale_items.total_pandri_bill')
     @pdf_outward_total = pdf_outward_q.merge(pdf_outward_t) { |key, old_val, new_val| [old_val, new_val] }
+    @pdf_prod_total  =  p_item_qts.group('products.title').sum('purchase_sale_items.size_9')
+    @pdf_marka_total = p_item_qts.group('purchase_sale_items.size_13').sum('purchase_sale_items.size_9')
     @sys_users = @q.result
     sorted_outward_data
     generate_pdf(@sorted_data.as_json, 'Daily-basis-Outward', 'pdf.html', 'A4', false, 'cold_storage_outwards/index.pdf.erb')

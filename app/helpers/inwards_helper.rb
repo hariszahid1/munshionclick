@@ -50,6 +50,7 @@ module InwardsHelper
   end
 
   def sorted_inward_data
+	@amount_total =  PurchaseSaleDetail.ransack(params[:q]).result.where(transaction_type: 'InWard').sum(:amount)
     @sorted_data = []
     @pdf_orders.each do |o_i|
       @sorted_data << {
