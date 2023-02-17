@@ -72,13 +72,13 @@
     <div class="clearfix">
     <div class="row d-flex actions">
       <div class="col form-group float-left">
-        <%= link_to payments_path, class:"btn btn-info" do %>
-        <i class="fa fa-arrow-left mr-2" aria-hidden="true"></i>Back to Payments
+        <%= link_to payments_path, class:"btn btn-light btn-outline-secondary" do %>
+        Cancel
         <% end %>
       </div>
 
       <div class="col" style="float:right">
-        <%=f.object.id.nil? ? (f.submit class: "btn btn-success", style: "float: right")  :  (f.submit class: "btn btn-warning", style: "float: right")%>       
+        <%=f.object.id.nil? ? (f.submit "Save" ,class: "btn btn-success", style: "float: right")  :  (f.submit "Update" ,class: "btn btn-warning", style: "float: right")%>       
       </div>
     </div>
 

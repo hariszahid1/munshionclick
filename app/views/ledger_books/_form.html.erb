@@ -90,13 +90,13 @@
     <hr>
     <div class="row d-flex ">
       <div class="col form-group float-left">
-        <%= link_to ledger_books_path, class:"btn btn-info" do %>
-        <i class="fa fa-arrow-left mr-2" aria-hidden="true"></i>Back to Ledger Book
+        <%= link_to ledger_books_path, class:"btn btn-light btn-outline-secondary" do %>
+        Cancel
         <% end %>
       </div>
        
       <div class="actions col form-group float-left font-weight-bold">
-        <%=f.object.id.nil? ? (f.submit class: "btn btn-success", style: "float: right; width: 100px;",value: "Save")  :  (f.submit class: "btn btn-warning", style: "float: right; width: 100px;",value: "Save")%>
+        <%=f.object.id.nil? ? (f.submit class: "btn btn-success", style: "float: right; width: 80px;",value: "Save")  :  (f.submit class: "btn btn-warning", style: "float: right; width: 100px;",value: "Save")%>
         <%= f.submit class: "btn btn-primary mr-2", style: "float: right; width: 150px;",value: "Save with Print" %>
       </div>
       

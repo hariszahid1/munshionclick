@@ -244,12 +244,12 @@
   <div class="clearfix">
 <div class="row-lg-12">
   
-    <%= link_to pos_settings_path, class:"btn btn-info float-left" do %>
-    <i class="fa fa-arrow-left mr-2" aria-hidden="true"></i>Back to General Settings
+    <%= link_to pos_settings_path, class:"btn btn-light btn-outline-secondary ml-2 float-left" do %>
+    Cancel
     <% end %>
   
     
-        <%=f.object.id.nil? ? (f.submit class: "btn btn-success", style: "float: right")  :  (f.submit class: "btn btn-warning", style: "float: right")%>
+        <%=f.object.id.nil? ? (f.submit class: "btn btn-success", style: "float: right")  :  (f.submit 'Update', class: "btn btn-warning mr-2", style: "float: right")%>
     
   <% end %>
 </div>
