@@ -1,16 +1,25 @@
-<div class="main-content-header">
-  <h1 class="ml-2">Reports Charts</h1>
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item">
-      <a href="<%= root_path %>">Dashboard</a>
-    </li>
-    <li class="breadcrumb-item active">
-      <a href="<%= reports_chart_path %>">Reports Charts</a>
-    </li>
-  </ol>
-</div>
-<%@rev=Hash.new%>
-<div class="row card border-radius-1 shadow p-3 m-3">
+<div class="m-4">
+  <div class="float-left">
+    <h2 class="ml-2 logo-back"><i class="fas fa-bar-chart mr-2"></i>Reports Charts</h2>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<%= root_path %>">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active">
+        <a href="<%= reports_chart_path %>">Reports Charts</a>
+      </li>
+    </ol>
+  </div>
+  <div class="clearfix"></div>
+  <div class="row">
+    <ul class="nav nav-tabs ml-4" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab"><i class="fa fa-search mr-2"></i>Search</a>
+      </li>
+    </ul>
+  </div>
+  <%@rev=Hash.new%>
+  <div class="row card shadow p-3 m-2">
     <%=form_tag(reports_chart_path, method: :get) do %>
       <div class="row col-lg-8 form-group float-left mt-4">
         <div class="col-lg-4 mb-2">
@@ -26,54 +35,57 @@
         </div>
       </div>
       <div class="row col-lg-2 form-group mt-4 float-right mr-3">
-        <button class="form-control btn btn-danger ml-auto mr-3" style="width: 100px;" name="submit_pdf" type="submit" value="Accounts PDF A4" formtarget="_blank"> <i class="fa fa-file-pdf mr-2"></i>PDF</button>
+        <button class="form-control btn btn-danger file-btn-color ml-auto mr-3" style="width: 80px;" name="submit_pdf" type="submit" value="Accounts PDF A4" formtarget="_blank">PDF</button>
       </div>
     <% end %>
-</div>
-<ul class="nav nav-pills ml-3 mt-4 mb-2" id="pills-tab" role="tablist">
-  <li class="nav-item" onclick="updatetabs('pills-home')">
-    <a class="<%=params[:from_tabe]=='pills-home' ? 'nav-link active' : 'nav-link active'%>" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Line Chart</a>
-  </li>
-  <li class="nav-item" onclick="updatetabs('pills-profile')">
-    <a class="<%=params[:from_tabe]=='pills-profile' ? 'nav-link active' : 'nav-link'%>" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Graph chart</a>
-  </li>
-  <li class="nav-item" onclick="updatetabs('pills-expense-month')">
-      <a class="<%=params[:from_tabe]=='pills-expense-month' ? 'nav-link active' : 'nav-link'%>" id="pills-profile-expense" data-toggle="pill" href="#pills-expense" role="tab" aria-controls="pills-expense" aria-selected="false">Expense By Month</a>
-  </li>
-  <li class="nav-item" onclick="updatetabs('pills-expense-day')">
-      <a class="<%=params[:from_tabe]=='pills-expense-day' ? 'nav-link active' : 'nav-link'%>" id="pills-profile-expense-day" data-toggle="pill" href="#pills-expense-day" role="tab" aria-controls="pills-expense" aria-selected="false">Expense By Day</a>
-  </li>
-  <li class="nav-item" onclick="updatetabs('pills-revenue-month')">
-      <a class="<%=params[:from_tabe]=='pills-revenue-month' ? 'nav-link active' : 'nav-link'%>" id="pills-profile-revenue" data-toggle="pill" href="#pills-revenue" role="tab" aria-controls="pills-revenue" aria-selected="false">Revenue By Month</a>
-  </li>
-  <li class="nav-item" onclick="updatetabs('pills-revenue-day')">
-      <a class="<%=params[:from_tabe]=='pills-revenue-day' ? 'nav-link active' : 'nav-link'%>" id="pills-profile-revenue-day" data-toggle="pill" href="#pills-revenue-day" role="tab" aria-controls="pills-expense" aria-selected="false">Revenue By Day</a>
-  </li>
-  <li class="nav-item" onclick="updatetabs('pills-account')">
-      <a class="<%=params[:from_tabe]=='pills-account' ? 'nav-link active' : 'nav-link'%>" id="pills-profile-account" data-toggle="pill" href="#pills-account" role="tab" aria-controls="pills-expense" aria-selected="false">Accounts</a>
-  </li>
-</ul>
-<div class="tab-content" id="pills-tabContent">
-  <div class= "<%=params[:from_tabe]=='pills-home' ? 'tab-pane card border-radius-1 shadow m-3 p-3 fade show active' : 'tab-pane card border-radius-1 shadow m-3 p-3 fade show active'%>" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-    <%= render partial: "column_chart_revenue_expenses", locals: {} %>
   </div>
-  <div class= "<%=params[:from_tabe]=='pills-profile' ? 'tab-pane card border-radius-1 shadow m-3 p-3 fade show active' : 'tab-pane card border-radius-1 shadow m-3 p-3 fade '%>" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-    <%= render partial: "line_chart_revenue_expenses", locals: {} %>
+  <div class="row">
+    <ul class="nav nav-tabs ml-3 mt-4 mb-2" id="pills-tab" role="tablist">
+      <li class="nav-item" onclick="updatetabs('pills-home')">
+        <a class="<%=params[:from_tabe]=='pills-home' ? 'nav-link active' : 'nav-link active'%>" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Line Chart</a>
+      </li>
+      <li class="nav-item" onclick="updatetabs('pills-profile')">
+        <a class="<%=params[:from_tabe]=='pills-profile' ? 'nav-link active' : 'nav-link'%>" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Graph chart</a>
+      </li>
+      <li class="nav-item" onclick="updatetabs('pills-expense-month')">
+          <a class="<%=params[:from_tabe]=='pills-expense-month' ? 'nav-link active' : 'nav-link'%>" id="pills-profile-expense" data-toggle="pill" href="#pills-expense" role="tab" aria-controls="pills-expense" aria-selected="false">Expense By Month</a>
+      </li>
+      <li class="nav-item" onclick="updatetabs('pills-expense-day')">
+          <a class="<%=params[:from_tabe]=='pills-expense-day' ? 'nav-link active' : 'nav-link'%>" id="pills-profile-expense-day" data-toggle="pill" href="#pills-expense-day" role="tab" aria-controls="pills-expense" aria-selected="false">Expense By Day</a>
+      </li>
+      <li class="nav-item" onclick="updatetabs('pills-revenue-month')">
+          <a class="<%=params[:from_tabe]=='pills-revenue-month' ? 'nav-link active' : 'nav-link'%>" id="pills-profile-revenue" data-toggle="pill" href="#pills-revenue" role="tab" aria-controls="pills-revenue" aria-selected="false">Revenue By Month</a>
+      </li>
+      <li class="nav-item" onclick="updatetabs('pills-revenue-day')">
+          <a class="<%=params[:from_tabe]=='pills-revenue-day' ? 'nav-link active' : 'nav-link'%>" id="pills-profile-revenue-day" data-toggle="pill" href="#pills-revenue-day" role="tab" aria-controls="pills-expense" aria-selected="false">Revenue By Day</a>
+      </li>
+      <li class="nav-item" onclick="updatetabs('pills-account')">
+          <a class="<%=params[:from_tabe]=='pills-account' ? 'nav-link active' : 'nav-link'%>" id="pills-profile-account" data-toggle="pill" href="#pills-account" role="tab" aria-controls="pills-expense" aria-selected="false">Accounts</a>
+      </li>
+    </ul>
   </div>
-  <div class="<%=params[:from_tabe]=='pills-expense-month' ? 'tab-pane card border-radius-1 shadow m-3 p-3 fade show active' : 'tab-pane card border-radius-1 shadow m-3 p-3 fade '%>" id="pills-expense" role="tabpanel" aria-labelledby="pills-profile-tab">
-    <%= render partial: "expense_detail", locals: {} %>
-  </div>
-  <div class="<%=params[:from_tabe]=='pills-expense-day' ? 'tab-pane card border-radius-1 shadow m-3 p-3 fade show active' : 'tab-pane card border-radius-1 shadow m-3 p-3 fade '%>" id="pills-expense-day" role="tabpanel" aria-labelledby="pills-profile-tab">
-    <%= render partial: "expense_detail_day", locals: {} %>
-  </div>
-  <div class="<%=params[:from_tabe]=='pills-revenue-month' ? 'tab-pane card border-radius-1 shadow m-3 p-3 fade show active' : 'tab-pane card border-radius-1 shadow m-3 p-3 fade '%>" id="pills-revenue" role="tabpanel" aria-labelledby="pills-profile-tab">
-    <%= render partial: "revenue_detail", locals: {} %>
-  </div>
-  <div class="<%=params[:from_tabe]=='pills-revenue-day' ? 'tab-pane card border-radius-1 shadow m-3 p-3 fade show active' : 'tab-pane card border-radius-1 shadow m-3 p-3 fade '%>" id="pills-revenue-day" role="tabpanel" aria-labelledby="pills-profile-tab">
-    <%= render partial: "revenue_detail_day", locals: {} %>
-  </div>
-  <div class="<%=params[:from_tabe]=='pills-account' ? 'tab-pane card border-radius-1 shadow m-3 p-3 fade show active' : 'tab-pane card border-radius-1 shadow m-3 p-3 fade '%>" id="pills-account" role="tabpanel" aria-labelledby="pills-profile-tab">
-    <%= render partial: "account_detail", locals: {} %>
+  <div class="tab-content" id="pills-tabContent">
+    <div class= "<%=params[:from_tabe]=='pills-home' ? 'tab-pane card  shadow  p-3 fade show active' : 'tab-pane card  shadow  p-3 fade show active'%>" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+      <%= render partial: "column_chart_revenue_expenses", locals: {} %>
+    </div>
+    <div class= "<%=params[:from_tabe]=='pills-profile' ? 'tab-pane card  shadow  p-3 fade show active' : 'tab-pane card  shadow  p-3 fade '%>" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+      <%= render partial: "line_chart_revenue_expenses", locals: {} %>
+    </div>
+    <div class="<%=params[:from_tabe]=='pills-expense-month' ? 'tab-pane card  shadow  p-3 fade show active' : 'tab-pane card  shadow  p-3 fade '%>" id="pills-expense" role="tabpanel" aria-labelledby="pills-profile-tab">
+      <%= render partial: "expense_detail", locals: {} %>
+    </div>
+    <div class="<%=params[:from_tabe]=='pills-expense-day' ? 'tab-pane card  shadow  p-3 fade show active' : 'tab-pane card  shadow  p-3 fade '%>" id="pills-expense-day" role="tabpanel" aria-labelledby="pills-profile-tab">
+      <%= render partial: "expense_detail_day", locals: {} %>
+    </div>
+    <div class="<%=params[:from_tabe]=='pills-revenue-month' ? 'tab-pane card  shadow  p-3 fade show active' : 'tab-pane card  shadow  p-3 fade '%>" id="pills-revenue" role="tabpanel" aria-labelledby="pills-profile-tab">
+      <%= render partial: "revenue_detail", locals: {} %>
+    </div>
+    <div class="<%=params[:from_tabe]=='pills-revenue-day' ? 'tab-pane card  shadow  p-3 fade show active' : 'tab-pane card  shadow  p-3 fade '%>" id="pills-revenue-day" role="tabpanel" aria-labelledby="pills-profile-tab">
+      <%= render partial: "revenue_detail_day", locals: {} %>
+    </div>
+    <div class="<%=params[:from_tabe]=='pills-account' ? 'tab-pane card  shadow  p-3 fade show active' : 'tab-pane card  shadow  p-3 fade '%>" id="pills-account" role="tabpanel" aria-labelledby="pills-profile-tab">
+      <%= render partial: "account_detail", locals: {} %>
+    </div>
   </div>
 </div>
 <script>
@@ -83,4 +95,5 @@
       {$('#pills-home').removeClass('active');}
     }, 50);
   });
+  
 </script>
