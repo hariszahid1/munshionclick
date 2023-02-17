@@ -1,5 +1,9 @@
-<%if params['1_submit_pdf'].present? || params['2_submit_pdf_asc'].present?%>
-  <%= render '1_index'%>
-<%else%>
-  <%= render 'normal_index'%>
+<% if params[:payment_asc_op].present? || params[:payment_desc_op].present? %>
+  <%= render 'payment_ob' %>
+<% else %>
+  <%if params['1_submit_pdf'].present? || params['2_submit_pdf_asc'].present?%>
+    <%= render '1_index'%>
+  <%else%>
+    <%= render 'normal_index'%>
+  <%end%>
 <%end%>
