@@ -41,7 +41,7 @@
   </div>
   <hr>
   <div class="col-lg-12">
-    <%=f.object.id.nil? ? (f.submit class: "btn btn-success", style: "float: right")  :  (f.submit class: "btn btn-warning", style: "float: right")%>
+    <%=f.object.id.nil? ? (f.submit "Save" ,class: "btn btn-success", style: "float: right")  :  (f.submit class: "btn btn-warning", style: "float: right")%>
   </div>
 </div>
 <% end %>

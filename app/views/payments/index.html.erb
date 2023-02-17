@@ -130,10 +130,16 @@
               <div class="dropdown my-dropdown float-right mr-2">
                 <button type="button" class="form-control bg-danger text-light">PDF List</button>
                 <div class="dropdown-content my-dropdown-content p-2">
-                  <button class="btn btn-danger d-flex justify-content-center ml-2 mt-2" style="width: 100px" title="Download payment pdf for all user in descending order " name="submit_pdf" type="submit" value="Payment History PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mt-1 ml-1 mr-1"></i>Desc </button>
-                  <button class="btn btn-danger d-flex justify-content-center ml-2 mt-2" style="width: 100px" title="Download payment pdf for all user in ascending order" name="submit_pdf_asc" type="submit" value="Payment History PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mt-1 ml-1 mr-1"></i>Asc</button>
-                  <button class="btn btn-danger d-flex justify-content-center ml-2 mt-2" style="width: 100px" title= "Download payment pdf for single user in descending order" name="1_submit_pdf" type="submit" value="Payment History PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mt-1 ml-1"></i>1-Desc</button>
-                  <button class="btn btn-danger d-flex justify-content-center ml-2 mt-2" style="width: 100px" title= "Download payment pdf for single user in ascending order" name="2_submit_pdf_asc" type="submit" value="Payment History PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mt-1 ml-1"></i>1-Asc</button>
+                  <button class="btn btn-danger d-flex justify-content-center ml-2 mt-2" style="width: 120px" title="Download payment pdf for all user in descending order " name="submit_pdf" type="submit" value="Payment History PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mt-1 ml-1 mr-1"></i>Desc </button>
+                  <button class="btn btn-danger d-flex justify-content-center ml-2 mt-2" style="width: 120px" title="Download payment pdf for all user in ascending order" name="submit_pdf_asc" type="submit" value="Payment History PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mt-1 ml-1 mr-1"></i>Asc</button>
+                  <button class="btn btn-danger d-flex justify-content-center ml-2 mt-2" style="width: 120px" title= "Download payment pdf for single user in descending order" name="1_submit_pdf" type="submit" value="Payment History PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mt-1 ml-1"></i>1-Desc</button>
+                  <button class="btn btn-danger d-flex justify-content-center ml-2 mt-2" style="width: 120px" title= "Download payment pdf for single user in ascending order" name="2_submit_pdf_asc" type="submit" value="Payment History PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mt-1 ml-1"></i>1-Asc</button>
+                  <% if params.dig(:q, :account_id_in).present? %>
+                    <% if params[:q][:account_id_in].count.eql?(2) %>
+                      <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download payment pdf for single account in ascending with OP order pdf" name="payment_asc_op" type="submit" value="Ledger Book PDF A4" formtarget="_blank">1-ASC OP &nbsp;<i class="fa fa-file-pdf"></i></button>
+                      <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download payment pdf for single account in desending with OP order pdf" name="payment_desc_op" type="submit" value="Ledger Book PDF A4" formtarget="_blank">1-Desc OP &nbsp;<i class="fa fa-file-pdf"></i></button>
+                    <% end %>
+                  <% end %>
                 </div>
               </div>
             <% end %>

@@ -83,6 +83,10 @@
                   <div class="dropdown-content my-dropdown-content p-3" style="width: 200px;">
                     <button class="form-control btn btn-danger d-flex justify-content-center float-left mt-2" name="submit_pdf_staff_with_asc" type="submit" value="Accounts PDF A4" formtarget="_blank">ASC<i class="fa fa-file-pdf"></i></button>
                     <button class="form-control btn btn-danger d-flex justify-content-center float-left mt-2" name="submit_pdf_staff_with_desc" type="submit" value="Accounts PDF A4" formtarget="_blank">Desc<i class="fa fa-file-pdf"></i></button>
+                    <% if params.dig(:q, :staff_id_eq).present? %>
+                      <button class="form-control btn btn-danger d-flex justify-content-center float-left mt-2" title="Download staff ledger book pdf for single user in ascending order with OP" name="staff_ledger_book_asc_op" type="submit" value="Ledger Book PDF A4" formtarget="_blank">1-ASC OP &nbsp;<i class="fa fa-file-pdf"></i></button>
+                      <button class="form-control btn btn-danger d-flex justify-content-center float-left mt-2" title="Download staff ledger book pdf for single user in desending order with OP" name="staff_ledger_book_desc_op" type="submit" value="Ledger Book PDF A4" formtarget="_blank">1-Desc OP &nbsp;<i class="fa fa-file-pdf"></i></button>
+                    <% end %>
                     <button class="form-control btn btn-danger d-flex justify-content-center float-left mt-2" name="bulk" type="submit" value="Accounts PDF A4" formtarget="_blank">Bulk Record<i class="fa fa-file-pdf"></i></button>
                   </div>
                 </div>
