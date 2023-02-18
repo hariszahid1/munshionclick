@@ -135,7 +135,12 @@
                   <button class="btn btn-danger d-flex justify-content-center ml-2 mt-2" style="width: 120px" title= "Download payment pdf for single user in descending order" name="1_submit_pdf" type="submit" value="Payment History PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mt-1 ml-1"></i>1-Desc</button>
                   <button class="btn btn-danger d-flex justify-content-center ml-2 mt-2" style="width: 120px" title= "Download payment pdf for single user in ascending order" name="2_submit_pdf_asc" type="submit" value="Payment History PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mt-1 ml-1"></i>1-Asc</button>
                   <% if params.dig(:q, :account_id_in).present? %>
-                    <% if params[:q][:account_id_in].count.eql?(2) %>
+                    <% if params[:q][:account_id_in].class.eql?(Array) %>
+                      <% if params[:q][:account_id_in].count.eql?(2) %>
+                        <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download payment pdf for single account in ascending with OP order pdf" name="payment_asc_op" type="submit" value="Ledger Book PDF A4" formtarget="_blank">1-ASC OP &nbsp;<i class="fa fa-file-pdf"></i></button>
+                        <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download payment pdf for single account in desending with OP order pdf" name="payment_desc_op" type="submit" value="Ledger Book PDF A4" formtarget="_blank">1-Desc OP &nbsp;<i class="fa fa-file-pdf"></i></button>
+                      <% end %>
+                    <% else %>
                       <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download payment pdf for single account in ascending with OP order pdf" name="payment_asc_op" type="submit" value="Ledger Book PDF A4" formtarget="_blank">1-ASC OP &nbsp;<i class="fa fa-file-pdf"></i></button>
                       <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download payment pdf for single account in desending with OP order pdf" name="payment_desc_op" type="submit" value="Ledger Book PDF A4" formtarget="_blank">1-Desc OP &nbsp;<i class="fa fa-file-pdf"></i></button>
                     <% end %>
