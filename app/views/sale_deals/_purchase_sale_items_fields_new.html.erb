@@ -7,6 +7,9 @@
         <%= f.select :product_id, options_from_collection_for_select(@products, 'id', ->(st){"#{st.title}"}, f.object.item_id), {label: "Product",prompt: "Select the Product"},required: true %>
       </div>
       <div class="col-lg-6 form-group float-left">
+        <%= f.select :status, options_for_select(@stamps.map{ |key, value| [value , key]}, f.object.status),{:include_blank => "Select Stamp", label: 'Stamp'}, class: "form-control" %>
+      </div>
+      <div class="col-lg-6 form-group float-left">
         <%= f.select :size_12, options_for_select(@transaction_type, f.object.size_12), {:include_blank => "Select Transaction Type", label: "Transaction Type"}, class: "form-control chosen-select" %>
       </div>
       <div class="col-lg-6 form-group float-left">

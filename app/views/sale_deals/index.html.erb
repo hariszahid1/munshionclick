@@ -92,6 +92,9 @@
             <%= f.select :sys_user_cms_data_cont, options_for_select(@project_name, f.object.sys_user_cms_data_cont), {:include_blank => "Select Project Name"}, class: "form-control chosen-select" %>
           </div>
           <div class="col-lg-2 form-group float-left">
+            <%= f.select :purchase_sale_items_status_eq, options_for_select(@stamps.map{ |key, value| [value , key]}, f.object.purchase_sale_items_status_eq),{:include_blank => "Select Stamp"},:class=>"form-control chosen-select" %>
+          </div>
+          <div class="col-lg-2 form-group float-left">
             <%= f.search_field :purchase_sale_items_size_11_cont, class: "form-control chosen-select", placeholder: "Search Form No" %>
           </div>
           <div class="col-lg-2 form-group float-left">
@@ -132,6 +135,7 @@
                 <th>Plot Type</th>
                 <th>Category</th>
                 <th>Customer</th>
+                <th>Stamp</th>
                 <th class="border_none">Action</th>
               </tr>
             </thead>

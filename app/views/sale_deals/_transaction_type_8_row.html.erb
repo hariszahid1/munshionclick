@@ -1,7 +1,7 @@
 <div class="row mb-4 ml-1 mr-1">
   <div class="col-lg-12">
-    <div class="row">      
-      <div class="col-xl-4 col-sm-6 mb-2">
+    <div class="row">
+      <div class="col-xl-3 col-sm-6 mb-2">
         <%= link_to sale_deals_path('q[purchase_sale_items_size_7_eq]': 'Token Payment') do %> 
           <div class="card shadow">
             <div class="card-content">
@@ -18,9 +18,9 @@
               </div>
             </div>
           </div>
-        <% end %>  
+        <% end %>
       </div>
-      <div class="col-xl-4 col-sm-6 mb-2">
+      <div class="col-xl-3 col-sm-6 mb-2">
         <%= link_to sale_deals_path('q[purchase_sale_items_size_7_eq]': 'Advance Payment') do %>
           <div class="card shadow">
             <div class="card-content">
@@ -39,7 +39,7 @@
           </div>
         <% end %>  
       </div>
-      <div class="col-xl-4 col-sm-6 mb-2">
+      <div class="col-xl-3 col-sm-6 mb-2">
         <%= link_to sale_deals_path('q[purchase_sale_items_size_7_eq]': 'Full Payment') do %>
           <div class="card shadow">
             <div class="card-content">
@@ -58,7 +58,7 @@
           </div>
         <% end %>  
       </div>
-      <div class="col-xl-4 col-sm-6">
+      <div class="col-xl-3 col-sm-6">
         <%= link_to sale_deals_path('q[purchase_sale_items_size_4_eq]': 'Transfer') do %>
           <div class="card shadow">
             <div class="card-content">
@@ -75,9 +75,9 @@
               </div>
             </div>
           </div>
-        <% end %>  
+        <% end %>
       </div>
-      <div class="col-xl-4 col-sm-6">
+      <div class="col-xl-3 col-sm-6">
         <%= link_to sale_deals_path('q[purchase_sale_items_size_4_eq]': 'Seller Free') do %>
           <div class="card shadow">
             <div class="card-content">
@@ -96,6 +96,66 @@
           </div>
         <% end %>  
       </div>
-    </div>  
-  </div>    
+
+      <div class="col-xl-3 col-sm-6">
+        <%= link_to sale_deals_path('q[purchase_sale_items_status_eq]': 0) do %>
+          <div class="card shadow">
+            <div class="card-content">
+              <div class="card-body">
+                <div class="media d-flex">
+                  <div class="align-self-center">
+                    <i class="fa fa-user-tie logo-back fa-3x float-left"></i>
+                  </div>
+                  <div class="media-body text-right">
+                    <h3><%= @seller_stamps_count %></h3>
+                    <span>Seller Stamp</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>  
+      </div>
+
+      <div class="col-xl-3 col-sm-6">
+        <%= link_to sale_deals_path('q[purchase_sale_items_status_eq]': 1) do %>
+          <div class="card shadow">
+            <div class="card-content">
+              <div class="card-body">
+                <div class="media d-flex">
+                  <div class="align-self-center">
+                    <i class="fa fa-user logo-back fa-3x float-left"></i>
+                  </div>
+                  <div class="media-body text-right">
+                    <h3><%= @buyer_stamps_count %></h3>
+                    <span>Buyer Stamp</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>  
+      </div>
+
+      <div class="col-xl-3 col-sm-6">
+        <%= link_to sale_deals_path('q[purchase_sale_items_status_eq]': 2) do %>
+          <div class="card shadow">
+            <div class="card-content">
+              <div class="card-body">
+                <div class="media d-flex">
+                  <div class="align-self-center">
+                    <i class="fa fa-ban logo-back fa-3x float-left"></i>
+                  </div>
+                  <div class="media-body text-right">
+                    <h3><%= @no_stamps_count %></h3>
+                    <span>No Stamp</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>  
+      </div>
+    </div>
+  </div>
 </div>
