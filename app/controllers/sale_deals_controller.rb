@@ -5,6 +5,7 @@ class SaleDealsController < ApplicationController
   before_action :set_sale_deal, only: %i[show edit update destroy approve_requested_deal]
   before_action :set_data, only: %i[new edit create update index requested]
   skip_before_action :authenticate_user!, only: [:show]
+  before_action :set_stamps
 
   # GET /sale_deals
   # GET /sale_deals.json
@@ -130,6 +131,9 @@ class SaleDealsController < ApplicationController
     @deal_count = PurchaseSaleDetail.joins(:purchase_sale_items).where(transaction_type: %w[NewSaleDeal ReSaleDeal]).group('purchase_sale_items.size_4').count
     @payment_status_count = PurchaseSaleDetail.joins(:purchase_sale_items).where(transaction_type: %w[NewSaleDeal ReSaleDeal]).group('purchase_sale_items.size_7').count
 
+    @seller_stamps_count = PurchaseSaleDetail.joins(:purchase_sale_items).where(transaction_type: %w[NewSaleDeal ReSaleDeal], purchase_sale_items: { status: 0 }).count
+    @buyer_stamps_count = PurchaseSaleDetail.joins(:purchase_sale_items).where(transaction_type: %w[NewSaleDeal ReSaleDeal], purchase_sale_items: { status: 1 }).count
+    @no_stamps_count = PurchaseSaleDetail.joins(:purchase_sale_items).where(transaction_type: %w[NewSaleDeal ReSaleDeal], purchase_sale_items: { status: 2 }).count
   end
 
   def qr_link_generator
@@ -154,7 +158,7 @@ class SaleDealsController < ApplicationController
                                                   :destination, :l_c, :g_d, :g_d_type, :g_d_date, :quantity, :dispatched_to,
                                                   :despatch_date, :job_no, :reference_no, :company_name, :with_gst, :remaining_balance,
                                                   purchase_sale_items_attributes: %i[id purchase_sale_detail_id item_id
-                                                                                    product_id quantity cost_price sale_pricestatuscomment
+                                                                                    product_id quantity cost_price sale_price status comment
                                                                                     total_cost_price total_sale_price transaction_type
                                                                                     size_1 size_2 size_3 size_4 size_5 size_6 size_7 size_8
                                                                                     size_9 size_10 size_11 size_12 size_13
@@ -210,5 +214,9 @@ class SaleDealsController < ApplicationController
 
   def get_setting(setting_name)
     @pos_setting&.extra_settings&.dig(setting_name)&.map(&:downcase) || []
+  end
+
+  def set_stamps
+    @stamps = { '0' => 'Seller', '1' => 'Buyer', '2' => 'No Stamp' }
   end
 end
