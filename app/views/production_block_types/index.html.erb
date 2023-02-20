@@ -4,174 +4,160 @@
     <span aria-hidden="true">×</span>
   </button>
 </div>
-
-<div class="hidden" id="city_list">
-          <div class="main-content-header">
-            <h1 class="ml-2">Production Block Type</h1>
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item">
-                <a href="<%= root_path %>">Dashboard</a>
-              </li>
-              <li class="breadcrumb-item active">
-                <a href="<%= production_block_types_path %>">Production Block Type</a>
-              </li>
-            </ol>
-          </div>
-          <div class="row d-flex mb-4 ml-1">
-            <%if (check_can_create(@module_permission))%>
-                <div id="new_production_block_type">
-                  <%= link_to new_production_block_type_path, remote: true ,class: "btn btn-success"  do %>
-                     <i class="fa fa-plus" aria-hidden="true"></i>
-                     Create
-                  <% end %>
-                </div>
-            <% end %>
-          </div>
-          <div class="float-right">
-            <div class="dropdown ml-auto mr-4">
-             <span class="btn btn-info" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
-              <div class="dropdown-content">
-                <% if @help.present? %>
-                <% @help&.help_links.each do |link| %>
-                <a type="button" class="" target="_blank" href="<%= link[1] %>" >Help in <%= link[0] %></a>
-                 <% end %>
-                <% end %>
-              </div>
-            </div>
-          </div>
-
-					<ul class="nav nav-pills" role="tablist">
-            
-						<li class="nav-item">
-							<a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
-						</li>
-						<%if (check_can_import_export(@module_permission))%>
-							<li class="nav-item">
-								<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
-							</li>
-						<%end%>
-				</ul>
-
-
-<%= search_form_for @q, url: production_block_types_path, class: "admin-controls", method: "get" do |f| %>
-
-  <div class="tab-content">
-    <div class="tab-pane active mb-3 card shadow-sm mt-2 border-radius-1" id="search" role="tabpanel">
-     <div class="row d-flex mt-3">
-     <div class="col">
-        <div class="col-lg-3 form-group float-left">
-          <%= f.search_field :title_cont, value: @title, placeholder: "Title", title: "Title" ,:class=>"form-control" %>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
-        </div>
-      </div>
-      <div class="col mr-3"> 
-        <%if (check_can_download_pdf(@module_permission))%>
-          <button class="d-flex justify-content-center form-control btn btn-danger ml-2 float-right" style="width:100px" title= "download production block type pdf" name="pdf" type="submit" value="pdf" formtarget="_blank">PDF &nbsp;<i class="fa fa-file-pdf"></i></button>
-        <% end %>
-
-        <%if (check_can_download_csv(@module_permission))%>
-          <button class="d-flex justify-content-center form-control btn btn-warning ml-2 float-right" style="width:100px" title= "download production block type csv" name="csv" type="submit" value="csv">CSV &nbsp;<i class="fa fa-file-excel"></i></button>
-        <% end %>
-
-        <%if (check_can_send_email(@module_permission))%>
-          <button class="d-flex justify-content-center form-control btn btn-info ml-2 float-right" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-2"></i>&nbsp;Mail</button>
-            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                  </div>
-                  <div class="modal-body">
-                    <% @pos_setting = PosSetting.first %>
-                    <label>Email:</label>
-                    <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
-                    <br />
-                    <label>Subject:</label>
-                    <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Production Block Type Detail report from MunshiOnClick", class: 'form-control email-fields'%>
-                    <br />
-                    <label>Body:</label><br />
-                    <%= text_area_tag 'body', nil, class: 'form-control'%>
-                    <br />
-                    <label>Please select one of them.</label>
-                    <div>
-                      <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
-                      <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
-                      <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
-                    </div>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
-                  </div>
-                  </div>
-              </div>
-            </div>
-        <% end %>
-      </div>
-
-      </div>
-    </div>
-    
-    
-    <div class="tab-pane card shadow-sm mt-2 border-radius-1 mb-3" id="import-export" role="tabpanel">
-      <p>
-        <div class="d-flex ml-2">
-        <button class="btn btn-danger ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
-        <button class="btn btn-info ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
-        </div>
-      </p>
-    </div>
+<div class="hidden m-4" id="city_list">
+  <div class="float-left">
+    <h2 class="ml-2 logo-back"><i class="fas fa-th-list mr-2"></i>Production Block Type</h2>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<%= root_path %>">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active">
+        <a href="<%= production_block_types_path %>">Production Block Type</a>
+      </li>
+    </ol>
+  </div>
+  <%if (check_can_create(@module_permission))%>
+    <div class="float-right mt-3" id="new_production_block_type">
+      <%= link_to new_production_block_type_path, remote: true , style:"width: 150px;",class: "btn btn-success"  do %>
+         <i class="fa fa-plus-circle" aria-hidden="true"></i>
+         Create
+      <% end %>
     </div>
   <% end %>
+  <div class="clearfix"></div>     
+  <div class="float-right">
+    <div class="dropdown ml-auto">
+     <span class="btn btn-info" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
+      <div class="dropdown-content">
+        <% if @help.present? %>
+        <% @help&.help_links.each do |link| %>
+        <a type="button" class="" target="_blank" href="<%= link[1] %>" >Help in <%= link[0] %></a>
+         <% end %>
+        <% end %>
+      </div>
+    </div>
   </div>
+  <div class="row">
+	  <ul class="nav nav-tabs" role="tablist">
+	  	<li class="nav-item">
+	  		<a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
+	  	</li>
+	  	<%if (check_can_import_export(@module_permission))%>
+	  		<li class="nav-item">
+	  			<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
+	  		</li>
+	  	<%end%>
+	  </ul>
+  </div>
+  <%= search_form_for @q, url: production_block_types_path, class: "admin-controls", method: "get" do |f| %>
+    <div class="tab-content">
+      <div class="tab-pane active no-tab-border mt-2 " id="search" role="tabpanel">
+        <div class="card shadow mb-3 p-4">
+          <div class="row d-flex mt-3">
+            <div class="col">
+              <div class="col-lg-3 form-group float-left">
+                <%= f.search_field :title_cont, value: @title, placeholder: "Title", title: "Title" ,:class=>"form-control" %>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card  p-4">
+          <%# <button class='btn btn-outline-danger float-right delete-selected' type='button' style="width:163px"value='City' >Delete Selected</button> %>
+          <%= render 'map_columns/map_column_partials' %>
+          <div class="row d-flex" style="position: absolute;">
+            <div>
+              <%if (check_can_delete(@module_permission))%>
+              	<button class="btn delete-selected btn btn-danger file-btn-color mt-4 ml-3 " type='button' value='ProductionBlockType'>
+              		<i class="fa fa-trash "></i>
+              	</button>
+              <%end%>
+            </div>
+            <div class=" mt-4 "> 
+              <%if (check_can_download_pdf(@module_permission))%>
+                <button class=" form-control btn btn-danger file-btn-color ml-2 " style="width:80px" title= "download production block type pdf" name="pdf" type="submit" value="pdf" formtarget="_blank">PDF</button>
+              <% end %>
+              <%if (check_can_download_csv(@module_permission))%>
+                <button class="form-control btn btn-warning file-btn-color ml-2 " style="width:80px" title= "download production block type csv" name="csv" type="submit" value="csv">CSV</button>
+              <% end %>
+              <%if (check_can_send_email(@module_permission))%>
+                <button class="form-control btn btn-info file-btn-color ml-2 " type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:80px">Mail</button>
+                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <% @pos_setting = PosSetting.first %>
+                        <label>Email:</label>
+                        <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
+                        <br />
+                        <label>Subject:</label>
+                        <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Production Block Type Detail report from MunshiOnClick", class: 'form-control email-fields'%>
+                        <br />
+                        <label>Body:</label><br />
+                        <%= text_area_tag 'body', nil, class: 'form-control'%>
+                        <br />
+                        <label>Please select one of them.</label>
+                        <div>
+                          <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
+                          <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
+                          <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-light btn-outline-secondary" data-dismiss="modal">Cancel</button>
+                        <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+          <div class="mt-3 ">
+            <table data-toggle="table" data-search="true" id="production_block_type_table" class=" overflow-hidden border-radius-1">
+              <thead>
+                <th><input type="checkbox" id="master" class='select-all-checkbox' style="cursor: pointer;">
+	          	  </th>
+                <th>ID<div class="float-right"><%= sort_link(@q, :id,"", {}, class: 'sorting-button') %></div></th>
+                <th>Title</th>
+                <th>Quantity</th>
+                <th>Comment</th>
+                <th>Action</th>
+              </thead>
+              <tbody>
+               <%= render partial: 'production_block_type', collection: @production_block_types %>
+              </tbody>
+            </table>
+          </div>
+          <div class="row mt-2">
+            <div class="col-lg-4 col-sm-4">
+              <%= page_entries_info @production_block_types %>
+            </div>
+            <div class="col-lg-8 col-sm-8 pagination-left">
+              <%= paginate @production_block_types %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane card shadow-sm mt-2 p-3 mb-3" id="import-export" role="tabpanel">
+        <p>
+          <div class="d-flex ml-2">
+            <button class="btn btn-danger ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
+            <button class="btn btn-info ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
+          </div>
+        </p>
+      </div>
+    </div>
+  <% end %>
   <div>
-
-
-  <div class="card shadow-sm border-radius-1 p-2">
-  <%# <button class='btn btn-outline-danger float-right delete-selected' type='button' style="width:163px"value='City' >Delete Selected</button> %>
-    <%= render 'map_columns/map_column_partials' %>
-
-   <table data-toggle="table" data-search="true" id="production_block_type_table" class=" overflow-hidden border-radius-1">
-    <thead>
-     <th><input type="checkbox" id="master" class='select-all-checkbox' style="cursor: pointer;">
-			<%if (check_can_delete(@module_permission))%>
-				<div class="icon-container float-center">
-					<span class="ml-2 mt-2">
-						<div class="my-icon my-view">
-							<button class="icon-div btn delete-selected p-2 " type='button' value='City'>
-								<i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i>
-							</button>
-						</div>
-					</span>
-				</div>
-			<%end%>
-		</th>
-      <th>ID<div class="float-right"><%= sort_link(@q, :id,"", {}, class: 'sorting-button') %></div></th>
-      <th>Title</th>
-      <th>Quantity</th>
-      <th>Comment</th>
-      <th>Action</th>
-    </thead>
-
-    <tbody>
-     <%= render partial: 'production_block_type', collection: @production_block_types %>
-    </tbody>
-  </table>
-
-  <div class="row mt-2">
-    <div class="col-lg-4 col-sm-4">
-      <%= page_entries_info @production_block_types %>
-    </div>
-    <div class="col-lg-8 col-sm-8 pagination-left">
-      <%= paginate @production_block_types %>
-    </div>
-  </div>
-  </div>
 
 <%= form_for :bulk_import, url: bulk_import_data_path, method: :post, html: {class: "bulk-import-form"} do |f| %>
   <div class="modal fade" id="importFile" tabindex="-1" role="dialog" aria-labelledby="importFileTitle" aria-hidden="true">
@@ -195,8 +181,8 @@
     </div>
   </div>
 <% end %>
+</div>
 <div class="show-data"></div>
-
 <script>
   $(document).ready(function() {
 

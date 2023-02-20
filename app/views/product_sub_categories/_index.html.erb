@@ -4,162 +4,160 @@
     <span aria-hidden="true">×</span>
   </button>
 </div>
-<div class="hidden" id="product_sub_category_list">
-    <div class="main-content-header">
-      <h1 class="ml-2 mt-2">Product Sub Categories</h1>
-      <ol class="breadcrumb mt-2 mb-3">
-        <li class="breadcrumb-item">
-          <a href="<%= root_path %>">Dashboard</a>
-        </li>
-        <li class="breadcrumb-item active">
-          <a href="<%= product_sub_categories_path %>">Product Sub Categories</a>
-        </li>
-      </ol>
+<div class="hidden m-4" id="product_sub_category_list">
+  <div class="float-left">
+    <h2 class="ml-2 logo-back"><i class="fas fa-th-list mr-2"></i>Product Sub Categories</h2>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<%= root_path %>">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active">
+        <a href="<%= product_sub_categories_path %>">Product Sub Categories</a>
+      </li>
+    </ol>
+  </div>
+  <% if check_can_create(@module_permission) %>
+    <div id="new_product_sub_category" class="float-right mt-3">
+      <%= link_to new_product_sub_category_path,remote: true , style:"width: 150px;",class: "btn btn-success" do %>
+      <i class="fas fa-plus" aria-hidden="true"></i>
+      Create
+      <% end %>
     </div>
-    <% if check_can_create(@module_permission) %>
-      <div id="new_product_sub_category" class="col-lg-12 mb-3">
-        <%= link_to new_product_sub_category_path,remote: true ,class: "btn btn-success" do %>
-        <i class="fas fa-plus" aria-hidden="true"></i>
-        Create
-        <% end %>
-      </div>
-    <% end %>
-   <div class="float-right">
-      <div class="dropdown ml-auto mr-4">
-        <span class="btn btn-info" title= "About This page">Help</span>
-        <div class="dropdown-content">
-          <% if @help.present? %>
-          <% @help&.help_links.each do |link| %>
-          <a type="button" class="" target="_blank" href="<%= link[1] %>" >Help in <%= link[0] %></a>
-          <% end %>
-          <% end %>
-         </div>
+  <% end %>
+  <div class="clearfix"></div>
+  <div class="float-right">
+    <div class="dropdown ml-auto">
+     <span class="btn btn-info" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
+     <div class="dropdown-content">
+       <% if @help.present? %>
+       <% @help&.help_links.each do |link| %>
+       <a type="button" class="" target="_blank" href="<%= link[1] %>" >Help in <%= link[0] %></a>
+       <% end %>
+       <% end %>
       </div>
     </div>
-
-		<ul class="nav nav-pills ml-3" role="tablist">
+  </div>
+  <div class="row">
+		<ul class="nav nav-tabs " role="tablist">
       <li class="nav-item">
-        <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab">Search</a>
+        <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab"><i class="fa fa-search mr-2"></i>Search</a>
       </li>
 			<%if (check_can_import_export(@module_permission))%>
 				<li class="nav-item">
-					<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
+					<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab"><i class="fa fa-exchange-alt mr-2"></i>Import/Export</a>
 				</li>
 			<%end%>
-	</ul>
-       <%= search_form_for @q, url: product_sub_categories_path, class: "admin-controls", method: "get" do |f| %>
-
- <div class="tab-content ">
-    <div class="tab-pane active mb-3 card shadow-sm mt-2 border-radius-1" id="search" role="tabpanel">
-      <p>
-        <div class="row p-3">
+	  </ul>
+  </div>
+  <%= search_form_for @q, url: product_sub_categories_path, class: "admin-controls", method: "get" do |f| %>
+    <div class="tab-content ">
+      <div class="tab-pane active no-tab-border mt-2" id="search" role="tabpanel">
+        <div class="card shadow mb-3 p-4">
+          <div class="row p-3">
             <div class='col-lg-2 float-left'>
-            <%= f.select :id_eq, options_for_select(@options_for_select.map{ |p| [p.title.to_s + '--->' + p.code.to_s, p.id]}, f.object.id_eq),{:include_blank => "Select SubCategory"},:class=>"form-control chosen-select" %>
+              <%= f.select :id_eq, options_for_select(@options_for_select.map{ |p| [p.title.to_s + '--->' + p.code.to_s, p.id]}, f.object.id_eq),{:include_blank => "Select SubCategory"},:class=>"form-control chosen-select" %>
             </div>
-              <div class='col-lg-2 float-left'>
-            <%= f.select :id_eq, options_for_select(@options_for_select_cat.map{ |p| [p.title.to_s + '--->' + p.code.to_s, p.id]}, f.object.id_eq),{:include_blank => "Select Category"},:class=>"form-control chosen-select" %>
+            <div class='col-lg-2 float-left'>
+              <%= f.select :id_eq, options_for_select(@options_for_select_cat.map{ |p| [p.title.to_s + '--->' + p.code.to_s, p.id]}, f.object.id_eq),{:include_blank => "Select Category"},:class=>"form-control chosen-select" %>
             </div>
-          <div class='col-lg-3'>
-            <%= f.search_field :title_or_code_or_comment_cont, placeholder: "Search in sub categories", title: "Enter title" ,:class=>"form-control" %>
+            <div class='col-lg-3'>
+              <%= f.search_field :title_or_code_or_comment_cont, placeholder: "Search in sub categories", title: "Enter title" ,:class=>"form-control" %>
+            </div>
+            <div class="col-lg-1">
+              <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px;"><i class="fa fa-search"></i></button>
+            </div>
           </div>
-          <div class="col-lg-1">
-          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px;"><i class="fa fa-search"></i></button>
-          </div>
-          <div class="col-lg-4">
-            <button class="form-control btn btn-info float-right" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-2"></i>Mail</button>
-            <button class="btn btn-warning float-right mr-2" title= "download sub categories csv" style="width:100px;" name="csv" type="submit" value="csv"><i class="fa fa-file-pdf mr-1"></i>CSV &nbsp;</button>
-            <button class="btn btn-danger float-right mr-2" title= "download subcategories pdf" style="width:100px;" name="pdf" type="submit" value="pdf" formtarget="_blank" ><i class="fa fa-file-pdf mr-1"></i>PDF &nbsp;</button>
-          </div>
-          <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  <% @pos_setting = PosSetting.first %>
-                    <label>Email:</label>
-                    <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
-                    <br />
-                    <label>Subject:</label>
-                    <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Product Sub Categories Detail report from MunshiOnClick", class: 'form-control email-fields'%>
-                    <br />
-                    <label>Body:</label><br />
-                    <%= text_area_tag 'body', nil, class: 'form-control'%>
-                    <br />
-                  <label>Please select one of them.</label>
-                  <div>
-                    <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
-                    <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
-                    <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
+        </div>
+        <%= render 'map_columns/map_column_partials' %>
+        <div class='card  p-4'>
+          <div class="row d-flex" style="position: absolute;">
+            <div>
+        	    <%if (check_can_delete(@module_permission))%>
+        	    	<button class="btn delete-selected btn btn-danger file-btn-color mt-4 ml-3 " type='button' value='ProductSubCategory'>
+        	    		<i class="fa fa-trash "></i>
+        	    	</button>
+        	    <%end%>
+            </div>
+            <div class="mt-4 ml-2">
+              <button class="btn btn-danger file-btn-color file-btn-color mr-2" title= "download subcategories pdf" style="width:80px;" name="pdf" type="submit" value="pdf" formtarget="_blank" >PDF</button>
+              <button class="btn btn-warning file-btn-color file-btn-color mr-2" title= "download sub categories csv" style="width:80px;" name="csv" type="submit" value="csv">CSV</button>
+              <button class="form-control btn btn-info file-btn-color" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:80px">Mail</button>
+              <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <% @pos_setting = PosSetting.first %>
+                        <label>Email:</label>
+                        <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
+                        <br />
+                        <label>Subject:</label>
+                        <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Product Sub Categories Detail report from MunshiOnClick", class: 'form-control email-fields'%>
+                        <br />
+                        <label>Body:</label><br />
+                        <%= text_area_tag 'body', nil, class: 'form-control'%>
+                        <br />
+                      <label>Please select one of them.</label>
+                      <div>
+                        <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
+                        <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
+                        <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                      <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
+                    </div>
                   </div>
-                </div>
-                <div class="modal-footer">
-                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                  <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
                 </div>
               </div>
             </div>
           </div>
+          <div class="mt-3">
+            <table data-toggle="table" data-search="true" id="product_sub_category_table" class=" overflow-hidden border-radius-1">
+              <thead>
+                <tr>
+                  <th><input type="checkbox" id="master" class='select-all-checkbox'>
+                  </th>
+                   <th>ID<div class='float-right'><%= sort_link(@q, :id, '', {}, class: 'sorting-button') %></div></th>
+                  <th>Category<div class='float-right'><%= sort_link(@q, :product_category, '', {}, class: 'sorting-button') %></div></th>
+                  <th>Title<div class='float-right'><%= sort_link(@q, :tile, '', {}, class: 'sorting-button') %></div></th>
+                  <th>Products</th>
+                  <th>Code<div class='float-right'><%= sort_link(@q, :code, '', {}, class: 'sorting-button') %></div></th>
+                  <th>Comment<div class='float-right'><%= sort_link(@q, :comment, '', {}, class: 'sorting-button') %></div></th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <%= render partial: 'product_sub_category', collection: @product_sub_categories %>
+              </tbody>
+            </table>
+          </div>
+          <div class="row">
+            <div class="col-lg-4 col-sm-4">
+              <%= page_entries_info @product_sub_categories %>
+            </div>
+            <div class="col-lg-8 col-sm-8 pagination-left">
+              <%= paginate @product_sub_categories %>
+            </div>
+          </div>
         </div>
-      </p>
-  </div>
-  <div class="tab-pane mb-3 card shadow-sm mt-2 border-radius-1" id="import-export" role="tabpanel">
-    <p>
-      <div class="d-flex">
-      <button class="btn btn-info ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
-      <button class="btn btn-danger ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
       </div>
-    </p>
-  </div>
-</div>
-<% end %>
-
-  <%= render 'map_columns/map_column_partials' %>
-<div class='card border-radius-1 shadow p-3'>
-  <table data-toggle="table" data-search="true" id="product_sub_category_table" class=" overflow-hidden border-radius-1">
-    <thead>
-      <tr>
-        <th><input type="checkbox" id="master" class='select-all-checkbox'>
-					<%if (check_can_delete(@module_permission))%>
-            <div class="icon-container float-center">
-							<span class="ml-2 mt-2">
-								<div class="my-icon my-view">
-									<button class="icon-div btn delete-selected p-2 " type='button' value='ProductSubCategory'>
-											<i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i>
-								</button>
-							</div>
-						</span>
-					</div>
-				<%end%>
-        </th>
-         <th>ID<div class='float-right'><%= sort_link(@q, :id, '', {}, class: 'sorting-button') %></div></th>
-        <th>Category<div class='float-right'><%= sort_link(@q, :product_category, '', {}, class: 'sorting-button') %></div></th>
-        <th>Title<div class='float-right'><%= sort_link(@q, :tile, '', {}, class: 'sorting-button') %></div></th>
-        <th>Products</th>
-        <th>Code<div class='float-right'><%= sort_link(@q, :code, '', {}, class: 'sorting-button') %></div></th>
-        <th>Comment<div class='float-right'><%= sort_link(@q, :comment, '', {}, class: 'sorting-button') %></div></th>
-        <th>Action</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <%= render partial: 'product_sub_category', collection: @product_sub_categories %>
-    </tbody>
-  </table>
-
-<div class="row">
-  <div class="col-lg-4 col-sm-4">
-    <%= page_entries_info @product_sub_categories %>
-  </div>
-  <div class="col-lg-8 col-sm-8 pagination-left">
-    <%= paginate @product_sub_categories %>
-  </div>
-</div>
-</div>
+      <div class="tab-pane mb-3 card shadow-sm mt-2 p-3" id="import-export" role="tabpanel">
+        <p>
+          <div class="d-flex">
+          <button class="btn btn-info ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
+          <button class="btn btn-danger ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
+          </div>
+        </p>
+      </div>
+    </div>
+  <% end %>
 <div class="show-data"></div>
 <%= form_for :bulk_import, url: bulk_import_data_path, method: :post, html: {class: "bulk-import-form"} do |f| %>
   <div class="modal fade" id="importFile" tabindex="-1" role="dialog" aria-labelledby="importFileTitle" aria-hidden="true">
