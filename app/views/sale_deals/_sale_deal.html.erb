@@ -17,8 +17,8 @@
 	<td><%= sale_deal&.purchase_sale_items&.first&.size_9 %></td>
   <td><%= sale_deal.sys_user.name %></td>
   <td><%= @stamps[sale_deal.purchase_sale_items&.first&.status.to_s] %></td>
-  <td><%= sale_deal&.comment %></td>
   <td><%= sale_deal.purchase_sale_items&.first&.comment %></td>
+  <td><%= sale_deal&.comment %></td>
   <td>
 	<div class="icon-container-1">
 		<% if current_user.super_admin? || sale_deal.status == 'Clear'%>
