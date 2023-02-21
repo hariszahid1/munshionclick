@@ -57,7 +57,7 @@
       <div class='d-flex'>
         <div class='d-flex' style='width: 57%;'>
           <div style='width: 10%; margin-right: 10px;' class='bold'>Name:</div>
-          <div class='border-bottom' style='width: 90%;'><%= order.sys_user&.name %></div>
+          <div class='border-bottom' style='width: 90%;'><%= order.sys_user&.name + ' ' + order&.sys_user&.father.to_s %></div>
         </div>
         <div class='d-flex' style='width: 40%; margin-left: 20px;'>
           <div style='width: 45%' class='bold'>Current Received:</div>
@@ -122,7 +122,7 @@
       <div class='d-flex'>
         <div class='d-flex' style='width: 57%;'>
           <div style='width: 10%; margin-right: 10px;' class='bold'>Name:</div>
-          <div class='border-bottom' style='width: 90%;'><%= order.sys_user&.name %></div>
+          <div class='border-bottom' style='width: 90%;'><%= order.sys_user&.name + ' ' + order&.sys_user&.father.to_s %></div>
         </div>
         <div class='d-flex' style='width: 40%; margin-left: 20px;'>
           <div style='width: 45%' class='bold'>Current Received:</div>
@@ -187,7 +187,7 @@
       <div class='d-flex'>
         <div class='d-flex' style='width: 57%;'>
           <div style='width: 10%; margin-right: 10px;' class='bold'>Name:</div>
-          <div class='border-bottom' style='width: 90%;'><%= order.sys_user&.name %></div>
+          <div class='border-bottom' style='width: 90%;'><%= order.sys_user&.name + ' ' + order&.sys_user&.father.to_s %></div>
         </div>
         <div class='d-flex' style='width: 40%; margin-left: 20px;'>
           <div style='width: 45%' class='bold'>Current Received:</div>
