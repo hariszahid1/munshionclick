@@ -23,6 +23,10 @@
           Create
         <% end %>
       <% end %>
+      <%= link_to show_staff_attendances_path,class: "btn btn-success mt-3 ml-3" do %>
+        <i class="fa fa-users" aria-hidden="false"></i>
+        Attendance by Staff
+      <% end %>
     </div>
   </div>
   <ul class="mt-4 nav nav-pills" role="tablist">
@@ -127,7 +131,7 @@
                 </tr>
                 <tbody>
                   <% atten.daily_attendances.each do |daily| %>
-                    <tr>
+                    <tr class= <%= daily.check_in.blank? ? "table-danger text-dark" : "" %> >
                       <td class="text-center"><%=daily.staff&.name%></td>
                       <td class="text-center"><%=daily.check_in&.strftime('%I:%M %p')%></td>
                       <td class="text-center"><%=daily.check_out&.strftime('%I:%M %p')%></td>

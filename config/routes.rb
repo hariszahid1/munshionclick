@@ -260,7 +260,11 @@ Rails.application.routes.draw do
   resources :notes, only: %i[create new]
   resources :follow_ups
   resources :countries
-  resources :attendances
+  resources :attendances do
+    collection do
+      get :show_staff, to: 'attendances#show_staff'
+    end
+  end
   resources :profit_reports
   resources :expense_types
   resources :expenses do
