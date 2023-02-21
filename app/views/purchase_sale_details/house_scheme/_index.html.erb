@@ -212,7 +212,7 @@
             <td class="urdu-font">
               <b>
                 <%= link_to sys_users_path('q[id_eq]':purchase_sale_detail.sys_user) do %>
-                  <%= purchase_sale_detail.sys_user.name %>
+                  <%= purchase_sale_detail.sys_user.name.to_s + ' ' + purchase_sale_detail&.sys_user&.father.to_s %>
                 <%end %>
               </b>
             </td>
