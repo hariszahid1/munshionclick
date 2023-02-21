@@ -1,6 +1,6 @@
-<div class="">
-  <div class="main-content-header">
-    <h1>Database Backup Lists</h1>
+<div class="m-4">
+  <div class="float-left">
+    <h2 class="ml-2 logo-back"><i class="fas fa-database mr-2"></i>Database Backup Lists</h2>
     <ol class="breadcrumb">
       <li class="breadcrumb-item">
         <a href="<%= root_path %>">Dashboard</a>
@@ -10,56 +10,55 @@
       </li>
     </ol>
   </div>
-  <div class=" form-group float-left">
+  <div class=" float-right mt-3">
     <%= link_to export_path, class: "btn btn-success", style: "width: 150px;"  do %>
-      <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+      <i class="fa fa-plus-circle" aria-hidden="true"></i>
       Export
     <% end %>
   </div>
-
   <div class="clearfix"></div>
-<div class="card border-radius-1 shadow p-3">
-  <table data-toggle="table">
-    <thead>
-      <tr>
-        <th>Backup#</th>
-        <th>Export Date</th>
-        <th>File</th>
-        <th class="border_none">Action</th>
-      </tr>
-    </thead>
-    <tbody>
-    <% @db_backup_files.each_with_index do |db_backup_file, indx| %>
-    <% exported_date, db_file = db_backup_file.split('/db_backup/')[1].split("/#{RequestStore.store[:company_type]}/") %>
-      <tr>
-        <td><%= indx.to_i + 1 %></td>
-        <td><%= exported_date.to_date.strftime("%d-%m-%Y")  %></td>
-        <td><%= db_file %></td>
-        <td>
-          <div class="hidden">
-            <%=form_tag(import_bd_backups_path, method: :post) do %>
-              <%=hidden_field_tag 'backup_file', db_backup_file.split('/db_backup/')[1] %>
-              <input class="form-control btn btn-link" name="import" type="submit" value="Import" onclick = "confirm('This will remove DB changes after made after Export Date, Are you ok?');"></input>
-            <% end %>        
-          </div>
-        </td>
-      </tr>
-    <% end %>
-    <%# <% if current_user.superAdmin&.backup_files.present? %>
-      <%# <% current_user.superAdmin.backup_files.each do |document| %>
-        <!-- <tr> -->
-          <!-- <td><%#=current_user.superAdmin&.backup_files.present?%></td> -->
-          <!-- <td></td> -->
-          <!-- <td> -->
-            <!-- <span class="underline text-blue-500 hover:text-blue-700 attachment-link__download"><%#= link_to document&.blob&.filename&.to_s, document&.blob&.service_url, target: "_blank" %></span> -->
-          <!-- </td> -->
-          <!-- <td> -->
-            <!-- <span class="underline text-blue-500 hover:text-blue-700 attachment-link__download"><%# link_to 'Remove', '', target: "_blank" %></span> -->
-          <!-- </td> -->
-        <!-- </tr> -->
-      <%# end %>
-    <%# end  %>
-    </tbody>
-  </table>
+  <div class="card  shadow p-3 mt-4">
+    <table data-toggle="table">
+      <thead>
+        <tr>
+          <th>Backup#</th>
+          <th>Export Date</th>
+          <th>File</th>
+          <th class="border_none">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+      <% @db_backup_files.each_with_index do |db_backup_file, indx| %>
+      <% exported_date, db_file = db_backup_file.split('/db_backup/')[1].split("/#{RequestStore.store[:company_type]}/") %>
+        <tr>
+          <td><%= indx.to_i + 1 %></td>
+          <td><%= exported_date.to_date.strftime("%d-%m-%Y")  %></td>
+          <td><%= db_file %></td>
+          <td>
+            <div class="hidden">
+              <%=form_tag(import_bd_backups_path, method: :post) do %>
+                <%=hidden_field_tag 'backup_file', db_backup_file.split('/db_backup/')[1] %>
+                <input class="form-control btn btn-link" name="import" type="submit" value="Import" onclick = "confirm('This will remove DB changes after made after Export Date, Are you ok?');"></input>
+              <% end %>        
+            </div>
+          </td>
+        </tr>
+      <% end %>
+      <%# <% if current_user.superAdmin&.backup_files.present? %>
+        <%# <% current_user.superAdmin.backup_files.each do |document| %>
+          <!-- <tr> -->
+            <!-- <td><%#=current_user.superAdmin&.backup_files.present?%></td> -->
+            <!-- <td></td> -->
+            <!-- <td> -->
+              <!-- <span class="underline text-blue-500 hover:text-blue-700 attachment-link__download"><%#= link_to document&.blob&.filename&.to_s, document&.blob&.service_url, target: "_blank" %></span> -->
+            <!-- </td> -->
+            <!-- <td> -->
+              <!-- <span class="underline text-blue-500 hover:text-blue-700 attachment-link__download"><%# link_to 'Remove', '', target: "_blank" %></span> -->
+            <!-- </td> -->
+          <!-- </tr> -->
+        <%# end %>
+      <%# end  %>
+      </tbody>
+    </table>
   </div>
 </div>
