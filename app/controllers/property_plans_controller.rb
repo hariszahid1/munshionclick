@@ -44,8 +44,8 @@ class PropertyPlansController < ApplicationController
     @dealers = Staff.all
     property_plan_ids = PropertyPlan.ransack_with_installment_count(params)
 
-    @q = PropertyPlan.joins(:property_installments, order: :sys_user)
-                     .includes(:property_installments, order: :sys_user)
+    @q = PropertyPlan.joins(:property_installments, order: [:sys_user, order_items: :product])
+                     .includes(:property_installments, order: [:sys_user, order_items: :product])
                      .where('property_installments.due_status': [nil, PropertyPlan.due_statuses['Unpaid']],
                             id: property_plan_ids)
                      .ransack(params[:q])
@@ -63,7 +63,7 @@ class PropertyPlansController < ApplicationController
     @phone      = (@mobile + @office + @home).uniq.compact.reject(&:empty?).join(',')
     property_installment_pdf if params[:pdf].present?
     property_installment_csv if params[:csv].present?
-    @property_installments = @property_installments.page(params[:page])
+    @property_installments = @property_installments.order('products.title ASC').page(params[:page])
   end
 
   def property_installment_bulk
