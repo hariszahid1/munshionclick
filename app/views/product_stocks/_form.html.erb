@@ -33,9 +33,9 @@
 
 <hr>
 <div class="row-lg-12">
-  <%=form.object.product_id.nil? ? (form.submit class: "btn btn-success", style: "float: right")  :  (form.submit class: "btn btn-warning", style: "float: right")%>
+  <%=form.object.product_id.nil? ? (form.submit "Save" ,class: "btn btn-success", style: "float: right")  :  (form.submit "Update" ,class: "btn btn-warning", style: "float: right")%>
     <% end %>
-  <%= link_to product_stocks_path, class: "float-left btn btn-info" do %>
-  <i class="fa fa-arrow-left mr-2" aria-hidden="true"></i>Back to Product Stocks
+  <%= link_to product_stocks_path, class: "float-left btn btn-light btn-outline-secondary" do %>
+  Cancel
   <% end %>
 </div>  

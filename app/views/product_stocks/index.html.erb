@@ -1,29 +1,26 @@
-<div class="hidden" id="city_list">
-  <div class="row">
-    <div class="col-lg-12 col-sm-12">
-      <div class="main-content-header ml-2">
-        <h1>Product Stock by Day</h1>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item">
-            <a href="<%= root_path %>">Dashboard</a>
-          </li>
-          <li class="breadcrumb-item active">
-            <a href="<%= product_stocks_path %>">Product Stock by Day</a>
-          </li>
-        </ol>
-      </div>
-      <% if can?(:add, :all) %>
-      <div id="new_city">
-        <%= link_to new_product_stock_path,class: "btn btn-success mb-3 ml-3" do %>
-           <i class="fa fa-plus" aria-hidden="true"></i>
-           Create
-           <% end %>
-      </div>
+<div class="hidden m-4" id="city_list">
+  <div class="float-left">
+   <h2 class="ml-2 logo-back"><i class="fas fa-th-list mr-2"></i>Product Stock by Day</h2>
+    <ol class="breadcrumb">
+     <li class="breadcrumb-item">
+       <a href="<%= root_path %>">Dashboard</a>
+     </li>
+     <li class="breadcrumb-item active">
+       <a href="<%= product_stocks_path %>">Product Stock by Day</a>
+     </li>
+    </ol>
+  </div>
+  <% if can?(:add, :all) %>
+    <div class="float-right mt-3" id="new_city">
+      <%= link_to new_product_stock_path, style:"width: 150px;",class: "btn btn-success mb-3 ml-3" do %>
+        <i class="fa fa-plus-circle" aria-hidden="true"></i>
+        Create
       <% end %>
     </div>
-  </div>
+  <% end %>
+  <div class="clearfix"></div>
   <div class="float-right">
-    <div class="dropdown ml-auto mr-4">
+    <div class="dropdown ml-auto ">
      <span class="btn btn-info" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
       <div class="dropdown-content">
         <% if @help.present? %>
@@ -34,15 +31,17 @@
       </div>
     </div>
   </div>
-  <ul class="nav nav-pills ml-3" role="tablist">
-    <li class="nav-item">
-      <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab">Search</a>
-    </li>
-	</ul>
+  <div class="row">
+    <ul class="nav nav-tabs ml-1" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab"><i class="fa fa-search mr-2"></i>Search</a>
+      </li>
+	  </ul>
+  </div>
   <div class="clearfix"></div>
   <div class="tab-content">
-    <div class="tab-pane active" style="border: none !important;" id="search" role="tabpanel">
-      <div class="row card border-radius-1 shadow p-3 m-1 mb-3">
+    <div class="tab-pane active no-tab-border"  id="search" role="tabpanel">
+      <div class="row card  shadow p-3 m-1 mb-3">
         <div class="col-lg-12 col-sm-12">
           <%= search_form_for @q, url: product_stocks_path, class: "admin-controls", method: "get" do |f| %>
             <div class="col-lg-2 form-group float-left">
@@ -60,7 +59,7 @@
           <% end %>
         </div>
       </div>
-      <div class="card border-radius-1 shadow p-3">    
+      <div class="card  shadow p-3">    
         <table data-toggle="table" data-search="true" id="city_table">
           <thead>
             <tr>
