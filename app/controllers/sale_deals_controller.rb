@@ -15,6 +15,8 @@ class SaleDealsController < ApplicationController
     download_sale_deals_pdf_file if params[:pdf].present?
     download_sale_deals_csv_file if params[:csv].present?
     @sale_deals = @q.result.page(params[:page])
+    @requested_count = PurchaseSaleDetail.includes(:sys_user, :purchase_sale_items).where(transaction_type:
+                                                    %w[ReSaleDeal NewSaleDeal], status: 'UnClear').count
   end
 
   # GET /sale_deals/1
@@ -134,6 +136,7 @@ class SaleDealsController < ApplicationController
     @seller_stamps_count = PurchaseSaleDetail.joins(:purchase_sale_items).where(transaction_type: %w[NewSaleDeal ReSaleDeal], purchase_sale_items: { status: 0 }).count
     @buyer_stamps_count = PurchaseSaleDetail.joins(:purchase_sale_items).where(transaction_type: %w[NewSaleDeal ReSaleDeal], purchase_sale_items: { status: 1 }).count
     @no_stamps_count = PurchaseSaleDetail.joins(:purchase_sale_items).where(transaction_type: %w[NewSaleDeal ReSaleDeal], purchase_sale_items: { status: 2 }).count
+    @both_count = PurchaseSaleDetail.joins(:purchase_sale_items).where(transaction_type: %w[NewSaleDeal ReSaleDeal], purchase_sale_items: { status: 3 }).count
   end
 
   def qr_link_generator
@@ -217,6 +220,6 @@ class SaleDealsController < ApplicationController
   end
 
   def set_stamps
-    @stamps = { '0' => 'Seller', '1' => 'Buyer', '2' => 'No Stamp' }
+    @stamps = { '0' => 'Seller', '1' => 'Buyer', '2' => 'No Stamp', '3' => 'Seller & Buyer' }
   end
 end

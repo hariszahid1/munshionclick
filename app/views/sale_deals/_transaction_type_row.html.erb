@@ -96,7 +96,7 @@
   </div>
 
   <div class="col-xl-3 col-sm-6">
-    <%= link_to sale_deals_path('q[purchase_sale_items_status_eq]': 0) do %>
+    <%= link_to sale_deals_path('q[purchase_sale_items_status_in]': [0, 3]) do %>
       <div class="card shadow">
         <div class="card-content">
           <div class="card-body">
@@ -105,7 +105,7 @@
                 <i class="fa fa-user-tie logo-back fa-3x float-left"></i>
               </div>
               <div class="media-body text-right">
-                <h3><%= @seller_stamps_count %></h3>
+                <h3><%= @seller_stamps_count.to_i + @both_count.to_i %></h3>
                 <span>Seller Stamp</span>
               </div>
             </div>
@@ -116,7 +116,7 @@
   </div>
 
   <div class="col-xl-3 col-sm-6">
-    <%= link_to sale_deals_path('q[purchase_sale_items_status_eq]': 1) do %>
+    <%= link_to sale_deals_path('q[purchase_sale_items_status_in]': [1, 3]) do %>
       <div class="card shadow">
         <div class="card-content">
           <div class="card-body">
@@ -125,7 +125,7 @@
                 <i class="fa fa-user logo-back fa-3x float-left"></i>
               </div>
               <div class="media-body text-right">
-                <h3><%= @buyer_stamps_count %></h3>
+                <h3><%= @buyer_stamps_count.to_i + @both_count.to_i %></h3>
                 <span>Buyer Stamp</span>
               </div>
             </div>
@@ -136,7 +136,7 @@
   </div>
 
   <div class="col-xl-3 col-sm-6">
-    <%= link_to sale_deals_path('q[purchase_sale_items_status_eq]': 2) do %>
+    <%= link_to sale_deals_path('q[purchase_sale_items_status_in]': [2]) do %>
       <div class="card shadow">
         <div class="card-content">
           <div class="card-body">
