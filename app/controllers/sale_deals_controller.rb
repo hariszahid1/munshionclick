@@ -15,6 +15,8 @@ class SaleDealsController < ApplicationController
     download_sale_deals_pdf_file if params[:pdf].present?
     download_sale_deals_csv_file if params[:csv].present?
     @sale_deals = @q.result.page(params[:page])
+    @requested_count = PurchaseSaleDetail.includes(:sys_user, :purchase_sale_items).where(transaction_type:
+                                                    %w[ReSaleDeal NewSaleDeal], status: 'UnClear').count
   end
 
   # GET /sale_deals/1

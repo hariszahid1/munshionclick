@@ -36,7 +36,9 @@
   </div>
   <%= link_to 'Follow Ups', follow_ups_path('q[reminder_type_eq]': 'sale_deals'), class: "btn btn-primary file-btn-color mr-1 float-right" %>
   <% if current_user&.super_admin? %>
-    <%= link_to 'Requested', requested_sale_deals_path, class: "btn btn-warning file-btn-color mr-1 float-right" %>
+    <%= link_to requested_sale_deals_path, class: "btn btn-warning file-btn-color mr-1 float-right position-relative" do %>
+      Requested (<%= @requested_count %>) <span class='requested-blink'></span>
+    <% end %>
   <% end %>
 </div>
 <div class="clearfix"></div>
