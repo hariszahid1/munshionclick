@@ -14,7 +14,8 @@ module SaleDealsHelper
                       ms: d.purchase_sale_items&.first&.size_2,
                       purchase_from: d.destination,
                       share: d.l_c,
-                      type: d.transaction_type
+                      type: d.transaction_type,
+                      stamp: d.purchase_sale_items&.first&.status
                       }
     end
   end

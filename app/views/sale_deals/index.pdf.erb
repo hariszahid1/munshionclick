@@ -44,6 +44,7 @@
           <th class="text-center">Purchased From</th>
           <th class="text-center">Deal Share</th>
           <th class="text-center">Booking Type</th>
+          <th class="text-center">Stamp</th>
         </thead>
         <tbody>
           <% data.each_with_index do |s, index| %>
@@ -60,6 +61,7 @@
               <td class="text-center"><%= s['purchase_from'] %></td>
               <td class="text-center"><%= s['share'] %></td>
               <td class="text-center"><%= s['type'] %></td>
+              <td class="text-center"><%= @stamps[s['stamp'].to_s] %></td>
             </tr>
           <% end %>
         </tbody>

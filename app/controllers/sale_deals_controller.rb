@@ -134,6 +134,7 @@ class SaleDealsController < ApplicationController
     @seller_stamps_count = PurchaseSaleDetail.joins(:purchase_sale_items).where(transaction_type: %w[NewSaleDeal ReSaleDeal], purchase_sale_items: { status: 0 }).count
     @buyer_stamps_count = PurchaseSaleDetail.joins(:purchase_sale_items).where(transaction_type: %w[NewSaleDeal ReSaleDeal], purchase_sale_items: { status: 1 }).count
     @no_stamps_count = PurchaseSaleDetail.joins(:purchase_sale_items).where(transaction_type: %w[NewSaleDeal ReSaleDeal], purchase_sale_items: { status: 2 }).count
+    @both_count = PurchaseSaleDetail.joins(:purchase_sale_items).where(transaction_type: %w[NewSaleDeal ReSaleDeal], purchase_sale_items: { status: 3 }).count
   end
 
   def qr_link_generator
@@ -217,6 +218,6 @@ class SaleDealsController < ApplicationController
   end
 
   def set_stamps
-    @stamps = { '0' => 'Seller', '1' => 'Buyer', '2' => 'No Stamp' }
+    @stamps = { '0' => 'Seller', '1' => 'Buyer', '2' => 'No Stamp', '3' => 'Seller & Buyer' }
   end
 end

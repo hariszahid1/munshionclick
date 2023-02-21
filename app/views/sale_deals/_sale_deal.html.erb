@@ -1,13 +1,24 @@
 <tr class= <%= (sale_deal.transaction_type.eql?('NewSaleDeal') && sale_deal.purchase_sale_items.first.size_2.present? && sale_deal.purchase_sale_items.first.size_11.present?) ? "cms-table-row2" : (sale_deal.transaction_type.eql?('ReSaleDeal')) ? '' : "cms-table-row1" %>>
-	<td><%= sale_deal.created_at.strftime('%d/%m/%y at %I:%M%p')%></td>
+	<td><%= sale_deal.created_at.strftime('%d/%m/%y')%></td>
 	<td>
 		<%= @all_agents.to_h.invert[sale_deal&.user_name.to_i].to_s%>
 	</td>
-	<td><%= sale_deal&.sys_user&.cms_data&.try(:[], 'project_name')&.titleize %></td>
+		<% if sale_deal&.sys_user&.cms_data&.try(:[], 'project_name')&.titleize == 'Lahore Smart City' %>
+			<% project_name = 'LSC' %>
+		<% elsif sale_deal&.sys_user&.cms_data&.try(:[], 'project_name')&.titleize == 'Capital Smart City' %>
+			<% project_name = 'CSC' %>
+		<% elsif sale_deal&.sys_user&.cms_data&.try(:[], 'project_name')&.titleize == 'One Capital Residences' %>
+			<% project_name = 'OCR' %>
+		<% else %>
+			<% project_name = sale_deal&.sys_user&.cms_data&.try(:[], 'project_name')&.titleize %>
+		<% end %>
+	<td><%= project_name %></td>
   <td><%= sale_deal&.sys_user&.cms_data&.try(:[], 'category')&.titleize %></td>
 	<td><%= sale_deal&.purchase_sale_items&.first&.size_9 %></td>
   <td><%= sale_deal.sys_user.name %></td>
   <td><%= @stamps[sale_deal.purchase_sale_items&.first&.status.to_s] %></td>
+  <td><%= sale_deal&.comment %></td>
+  <td><%= sale_deal.purchase_sale_items&.first&.comment %></td>
   <td>
 	<div class="icon-container-1">
 		<% if current_user.super_admin? || sale_deal.status == 'Clear'%>
