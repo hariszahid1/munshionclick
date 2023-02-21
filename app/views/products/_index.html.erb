@@ -1,6 +1,6 @@
-<div class="hidden" id="product_list">
-  <div class="main-content-header">
-    <h1 class="ml-2"><%= pos_setting_sys_type.eql?('Dealer') ? 'Units' : 'Products'%></h1>
+<div class="hidden m-4" id="product_list">
+  <div class="main-content-header float-left">
+    <h2 class="ml-2 logo-back"><i class="fas fa-stream mr-2"></i><%= pos_setting_sys_type.eql?('Dealer') ? 'Units' : 'Products'%></h2>
     <ol class="breadcrumb">
       <li class="breadcrumb-item">
         <a href="<%= root_path %>">Dashboard</a>
@@ -11,15 +11,16 @@
     </ol>
   </div>
   <% if check_can_create(@module_permission) %>
-      <div id="new_product" class="col-lg-12 form-group float-left">
-        <%= link_to new_product_path, class: "btn btn-success" do %>
-          <i class="fa fa-plus" aria-hidden="true"></i>
-          Create
-          <% end %>
-      </div>
+    <div id="new_product" class="float-right mt-3">
+      <%= link_to new_product_path,style:"width: 150px;", class: "btn btn-success" do %>
+        <i class="fa fa-plus-circle"></i>
+        Create
+        <% end %>
+    </div>
   <% end %>
+  <div class="clearfix"></div>
   <div class="float-right">
-    <div class="dropdown ml-auto mr-4">
+    <div class="dropdown ml-auto">
      <span class="btn btn-info" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
       <div class="dropdown-content">
         <% if @help.present? %>
@@ -30,235 +31,236 @@
       </div>
     </div>
   </div>
-  <ul class="nav nav-pills ml-3" role="tablist">
-    <li class="nav-item">
-      <a class="nav-link tab-label active product-search-exp-tab" data-toggle="tab" href="#search" role="tab">Search</a>
-    </li>
-		<% if check_can_import_export(@module_permission) %>
-		<li class="nav-item">
-			<a class="nav-link tab-label product-search-exp-tab" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
-		</li>
-    <% end %>
-    <li class="nav-item">
-      <a class="nav-link tab-label product-logs-tab" data-toggle="tab" href="#logs" role="tab">Logs</a>
-    </li>
-	</ul>
-
-    <div class="tab-content">
-      <div class="tab-pane active mb-3 card shadow-sm mt-2 p-3 border-radius-1" id="search" role="tabpanel">
-        <%= search_form_for @q, url: products_path, class: "admin-controls", method: "get" do |f| %>
+  <div class="row">
+    <ul class="nav nav-tabs ml-" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link tab-label active product-search-exp-tab" data-toggle="tab" href="#search" role="tab"><i class="fa fa-search mr-2"></i>Search</a>
+      </li>
+	  	<% if check_can_import_export(@module_permission) %>
+	  	<li class="nav-item">
+	  		<a class="nav-link tab-label product-search-exp-tab" data-toggle="tab" href="#import-export" role="tab"><i class="fa fa-exchange-alt mr-2"></i>Import/Export</a>
+	  	</li>
+      <% end %>
+      <li class="nav-item">
+        <a class="nav-link tab-label product-logs-tab" data-toggle="tab" href="#logs" role="tab"><i class="fa fa-history mr-2"></i>Logs</a>
+      </li>
+	  </ul>
+  </div>
+  <div class="tab-content">
+    <div class="tab-pane active no-tab-border mt-2  " id="search" role="tabpanel">
+      <%= search_form_for @q, url: products_path, class: "admin-controls", method: "get" do |f| %>
+        <div class="card shadow mb-3 p-4">
           <div class="row">
-              <div class="col-lg-2 form-group float-left">
-                <%= f.select :item_type_id_in, options_for_select(@item_types.map {|i| ["#{i.second} \u{27F6} #{i.last}", i.first]}, f.object.item_type_id_in),{:include_blank => "Select the Block"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Block"} }%>
-              </div>
-              <div class="col-lg-2 form-group float-left">
-                <%= f.select :id_in, options_for_select(@product.map {|i| ["#{i.second} \u{27F6} #{i.last}", i.first]}, f.object.id_in),{:include_blank => "Select Title/Code"},{:multiple => true, :class=>"form-control chosen-select", :data => {:placeholder => "Select Title/Code"}} %>
-              </div>
-              <div class="col-lg-3 form-group float-left">
-                <%= f.select :product_category_id_in, options_for_select(@product_categories.map {|i| ["#{i.second} \u{27F6} #{i.last}", i.first]}, f.object.product_category_id_in),{:include_blank => "Select Unit category"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select Unit-Category"}} %>
-              </div>
-              <div class="col-lg-3 form-group float-left">
-                <%= f.select :product_sub_category_id_in, options_for_select(@product_sub_categories.map {|i| ["#{i.second} \u{27F6} #{i.last}", i.first]}, f.object.product_sub_category_id_in),{:include_blank => "Select Unit sub category"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select Unit Sub-Category"}} %>
-              </div>
-              <div class="col-lg-1 form-group float-left">
-                <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px;"><i class="fa fa-search"></i></button>
-              </div>
+            <div class="col-lg-2 form-group float-left">
+              <%= f.select :item_type_id_in, options_for_select(@item_types.map {|i| ["#{i.second} \u{27F6} #{i.last}", i.first]}, f.object.item_type_id_in),{:include_blank => "Select the Block"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Block"} }%>
+            </div>
+            <div class="col-lg-2 form-group float-left">
+              <%= f.select :id_in, options_for_select(@product.map {|i| ["#{i.second} \u{27F6} #{i.last}", i.first]}, f.object.id_in),{:include_blank => "Select Title/Code"},{:multiple => true, :class=>"form-control chosen-select", :data => {:placeholder => "Select Title/Code"}} %>
+            </div>
+            <div class="col-lg-3 form-group float-left">
+              <%= f.select :product_category_id_in, options_for_select(@product_categories.map {|i| ["#{i.second} \u{27F6} #{i.last}", i.first]}, f.object.product_category_id_in),{:include_blank => "Select Unit category"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select Unit-Category"}} %>
+            </div>
+            <div class="col-lg-3 form-group float-left">
+              <%= f.select :product_sub_category_id_in, options_for_select(@product_sub_categories.map {|i| ["#{i.second} \u{27F6} #{i.last}", i.first]}, f.object.product_sub_category_id_in),{:include_blank => "Select Unit sub category"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select Unit Sub-Category"}} %>
+            </div>
+            <div class="col-lg-1 form-group float-left">
+              <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px;"><i class="fa fa-search"></i></button>
+            </div>
           </div>
-            <div class="row">
+        </div>
+        <div class="card  shadow p-3 product-book-index-card">
+          <div class="row d-flex" style="position: absolute;">
+            <div class="mt-3 ml-3">
               <% if check_can_download_pdf(@module_permission)%>
-                <button class="form-control btn btn-danger float-right mr-2 ml-3" style="width: 100px;" name="submit_pdf_staff_with" type="submit" value="Products PDF A4" formtarget="_blank">PDF &nbsp;<i class="fa fa-file-pdf"></i></button>
-                <button class="form-control btn btn-danger float-right mr-2" style="width: 120px;" name="submit_pdf_staff_barcode" type="submit" value="Products PDF A4" formtarget="_blank">Barcode </button>
+                <button class="form-control btn btn-danger file-btn-color  mr-2" style="width: 80px;" name="submit_pdf_staff_with" type="submit" value="Products PDF A4" formtarget="_blank">PDF</button>
+                <button class="form-control btn btn-danger file-btn-color  mr-2" style="width: 100px;" name="submit_pdf_staff_barcode" type="submit" value="Products PDF A4" formtarget="_blank">Barcode </button>
               <% end %>
               <% if check_can_send_email(@module_permission)%>  
-                <button class="form-control btn btn-info d-flex justify-content-center float-right mr-2" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-1 mt-1"></i>&nbsp;Mail</button>
-                  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                          </div>
-                          <div class="modal-body">
-                            <% @pos_setting = PosSetting.first %>
-                            <label>Email:</label>
-                            <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
-                            <br />
-                            <label>Subject:</label>
-                            <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Products Detail report from MunshiOnClick", class: 'form-control email-fields'%>
-                            <br />
-                            <label>Body:</label><br />
-                            <%= text_area_tag 'body', nil, class: 'form-control'%>
-                            <br />
-                            <label>Please select one of them.</label>
-                            <div>
-                              <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
-                              <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
-                              <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
-                            </div>
-                          </div>
-                          <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                            <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
-                          </div>
+                <button class="form-control btn btn-info file-btn-color   mr-2" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:80px">Mail</button>
+                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <% @pos_setting = PosSetting.first %>
+                        <label>Email:</label>
+                        <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
+                        <br />
+                        <label>Subject:</label>
+                        <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Products Detail report from MunshiOnClick", class: 'form-control email-fields'%>
+                        <br />
+                        <label>Body:</label><br />
+                        <%= text_area_tag 'body', nil, class: 'form-control'%>
+                        <br />
+                        <label>Please select one of them.</label>
+                        <div>
+                          <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
+                          <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
+                          <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
                         </div>
                       </div>
-                  </div>
-              <% end %>
-            </div>
-        <% end %>
-      </div>
-      <div class="tab-pane card shadow-sm mt-2 border-radius-1 mb-3" id="import-export" role="tabpanel">
-        <p>
-          <%= search_form_for @q, url: products_path, class: "admin-controls", method: "get" do |f| %>
-            <div class="d-flex">
-              <button class="btn btn-danger ml-4" name="export_data" type="submit" value="export_data">Export Data</button>
-              <button class="btn btn-info ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
-            </div>
-          <% end %>
-        </p>
-      </div>
-      <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="logs" role="tabpanel">
-        <p>
-          <div class="d-flex">
-            <%= link_to view_history_products_path, class: "btn btn-success d-none", id: "product-logs", remote:true do %>
-              show logs
-            <% end %>
-            <div id = "show-logs"></div>
-          </div>
-        </p>
-      </div>
-    </div>
-
-    <div class="card border-radius-1 shadow p-2 product-book-index-card">
-      <table data-toggle="table" data-search="true" id="product_table">
-        <thead>
-          <th>Image</th>
-          <th>Item Type<div class='float-right'><%= sort_link(@q, :item_type_title, '', {}, class: 'sorting-button') %></div></th>
-          <th>Code<div class='float-right'><%= sort_link(@q, :code, '', {}, class: 'sorting-button') %></div></th>
-          <th class="urdu-font">Title<div class='float-right'><%= sort_link(@q, :tile, '', {}, class: 'sorting-button') %></div></th>
-          <th class="urdu-font">Pdt-ctgy<div class='float-right'><%= sort_link(@q, :product_category_title, '', {}, class: 'sorting-button') %></div></th>
-          <th class="urdu-font">Pdt-sub-ctgy<div class='float-right'><%= sort_link(@q, :product_sub_category_title, '', {}, class: 'sorting-button') %></div></th>
-          <th>Stock<div class='float-right'><%= sort_link(@q, :stock, '', {}, class: 'sorting-button') %></div></th>
-          <th>Cost<div class='float-right'><%= sort_link(@q, :cost, '', {}, class: 'sorting-button') %></div></th>
-          <th>Sale<div class='float-right'><%= sort_link(@q, :sale, '', {}, class: 'sorting-button') %></div></th>
-          <th>Total Cost<div class='float-right'><%= sort_link(@q, :cost, '', {}, class: 'sorting-button') %></div></th>
-          <th>Total Sale<div class='float-right'><%= sort_link(@q, :sale, '', {}, class: 'sorting-button') %></div></th>
-          <th>Serial<div class='float-right'><%= sort_link(@q, :with_serial, '', {}, class: 'sorting-button') %></div></th>
-          <% if pos_setting_sys_type=="batha"%>
-          <th>Raw Product<div class='float-right'><%= sort_link(@q, :raw_product_title, '', {}, class: 'sorting-button') %></div></th>
-          <%end%>
-          <th>Action</th>
-
-        </thead>
-
-        <tbody>
-          <%@products.each do |product|%>
-          <tr>
-            <td>
-            <% if  product.profile_image.attached? %>
-              <%= image_tag product.profile_image.service_url, width: 100 %>
-            <% end %>
-            </td>
-            <td><%= product.item_type&.title%></td>
-            <td><%= product.code%></td>
-            <td><%= product.title%></td>
-            <td><%= product.product_category&.title%></td>
-            <td><%= product.product_sub_category&.title%></td>
-            <%if current_user.superAdmin&.company_type=="batamega"%>
-              <td><%= product.stock %> || <%= product.size_1 %>,<%= product.size_2 %>,<%= product.size_3 %>,<%= product.size_4 %>,<%= product.size_5 %>,<%= product.size_6 %>,<%= product.size_7 %>,<%= product.size_8 %>,<%= product.size_9 %>,<%= product.size_10 %>,<%= product.size_11 %>,<%= product.size_12 %>,<%= product.size_13 %></td>
-            <%elsif%>
-              <td><%= product.stock %></td>
-            <%end%>
-            <td><%= number_with_delimiter(product.cost.to_f.round(2)) %></td>
-            <td><%= number_with_delimiter(product.sale.to_f.round(2)) %></td>
-            <td><%=number_with_delimiter((product.cost.to_f*product.stock.to_f).round(2)) %></td>
-            <td><%= number_with_delimiter((product.sale.to_f*product.stock.to_f).round(2))%></td>
-            <%if pos_setting_sys_type=="batha"%>
-              <td><%= product.raw_product&.title %></td>
-            <%end%>
-            <td><%=product.with_serial%></td>
-            <td class="p-2">
-              <div class="icon-container-1">
-                <div class="my-icon-1 my-view-1">
-                  <div class="my-tooltip-1">
-                    <div class="icon-container">
-                      <div class="my-icon my-view">
-                        <div class="my-tooltip">
-                          Edit
-                        </div>
-                        <%if (check_can_update(@module_permission))%>
-                          <%= link_to edit_product_path(product), class:"icon-div" do %>
-                            <i class="fa fa-edit mt-2" aria-hidden="true"></i>
-                          <%end %>
-                        <% end %>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                        <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
                       </div>
-                      <div class="my-icon my-view">
-                        <div class="my-tooltip">
-                          Delete
-                        </div>
-                        <%if (check_can_delete(@module_permission))%>
-                          <%= link_to product, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
-                            <i class="fa fa-trash mt-2" aria-hidden="true"></i>
-                          <%end %>
-                        <% end %> 
-                      </div>
-                      <div class="my-icon my-view">
-                        <div class="my-tooltip">
-                          Show
-                        </div>
-                        <%if (check_can_read(@module_permission))%>
-                          <%= link_to product_path(product), class:"icon-div" do %>
-                            <i class="fa fa-eye mt-2" aria-hidden="true"></i>
-                          <%end %>
-                        <%end%>
-                      </div>
-                      <div class="my-icon my-view">
-                        <div class="my-tooltip">
-                          Barcode
-                        </div>
-                        <%if (check_can_read(@module_permission))%>
-                          <%= link_to product_path(id:product,barcode: true), class:"icon-div" do %>
-                            <i class="fa fa-barcode mt-2" aria-hidden="true"></i>
-                          <%end %>
-                        <%end%>
-                      </div>
-
                     </div>
                   </div>
-                  <span class="icon-div-1">
-                        <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
-                  </span>
                 </div>
-              </div>
-            </td>
-          </tr>
-          <%end%>
-        <tr>
-          <td><h5>Total</h5></td>
-          <td><h5></h5></td>
-          <td><h5></h5></td>
-          <td><h5></h5></td>
-          <td><h5></h5></td>
-          <td><h5></h5></td>
-          <td><h5><%= number_with_delimiter(@total.to_f.round(2)) %></h5></td>
-
-        </tr>
-        </tbody>
-      </table>
-      <div class="row product-book-index-card">
-        <div class="col-lg-4 col-sm-4">
-          <%= page_entries_info @products %>
+              <% end %>
+            </div>
+          </div>
+          <div class="mt-2">
+            <table data-toggle="table" data-search="true" id="product_table">
+              <thead>
+                <th>Image</th>
+                <th>Item Type<div class='float-right'><%= sort_link(@q, :item_type_title, '', {}, class: 'sorting-button') %></div></th>
+                <th>Code<div class='float-right'><%= sort_link(@q, :code, '', {}, class: 'sorting-button') %></div></th>
+                <th class="urdu-font">Title<div class='float-right'><%= sort_link(@q, :tile, '', {}, class: 'sorting-button') %></div></th>
+                <th class="urdu-font">Pdt-ctgy<div class='float-right'><%= sort_link(@q, :product_category_title, '', {}, class: 'sorting-button') %></div></th>
+                <th class="urdu-font">Pdt-sub-ctgy<div class='float-right'><%= sort_link(@q, :product_sub_category_title, '', {}, class: 'sorting-button') %></div></th>
+                <th>Stock<div class='float-right'><%= sort_link(@q, :stock, '', {}, class: 'sorting-button') %></div></th>
+                <th>Cost<div class='float-right'><%= sort_link(@q, :cost, '', {}, class: 'sorting-button') %></div></th>
+                <th>Sale<div class='float-right'><%= sort_link(@q, :sale, '', {}, class: 'sorting-button') %></div></th>
+                <th>Total Cost<div class='float-right'><%= sort_link(@q, :cost, '', {}, class: 'sorting-button') %></div></th>
+                <th>Total Sale<div class='float-right'><%= sort_link(@q, :sale, '', {}, class: 'sorting-button') %></div></th>
+                <th>Serial<div class='float-right'><%= sort_link(@q, :with_serial, '', {}, class: 'sorting-button') %></div></th>
+                <% if pos_setting_sys_type=="batha"%>
+                <th>Raw Product<div class='float-right'><%= sort_link(@q, :raw_product_title, '', {}, class: 'sorting-button') %></div></th>
+                <%end%>
+                <th>Action</th>
+              </thead>
+              <tbody>
+                <%@products.each do |product|%>
+                <tr>
+                  <td>
+                  <% if  product.profile_image.attached? %>
+                    <%= image_tag product.profile_image.service_url, width: 100 %>
+                  <% end %>
+                  </td>
+                  <td><%= product.item_type&.title%></td>
+                  <td><%= product.code%></td>
+                  <td><%= product.title%></td>
+                  <td><%= product.product_category&.title%></td>
+                  <td><%= product.product_sub_category&.title%></td>
+                  <%if current_user.superAdmin&.company_type=="batamega"%>
+                    <td><%= product.stock %> || <%= product.size_1 %>,<%= product.size_2 %>,<%= product.size_3 %>,<%= product.size_4 %>,<%= product.size_5 %>,<%= product.size_6 %>,<%= product.size_7 %>,<%= product.size_8 %>,<%= product.size_9 %>,<%= product.size_10 %>,<%= product.size_11 %>,<%= product.size_12 %>,<%= product.size_13 %></td>
+                  <%elsif%>
+                    <td><%= product.stock %></td>
+                  <%end%>
+                  <td><%= number_with_delimiter(product.cost.to_f.round(2)) %></td>
+                  <td><%= number_with_delimiter(product.sale.to_f.round(2)) %></td>
+                  <td><%=number_with_delimiter((product.cost.to_f*product.stock.to_f).round(2)) %></td>
+                  <td><%= number_with_delimiter((product.sale.to_f*product.stock.to_f).round(2))%></td>
+                  <%if pos_setting_sys_type=="batha"%>
+                    <td><%= product.raw_product&.title %></td>
+                  <%end%>
+                  <td><%=product.with_serial%></td>
+                  <td class="p-2">
+                    <div class="icon-container-1">
+                      <div class="my-icon-1 my-view-1">
+                        <div class="my-tooltip-1">
+                          <div class="icon-container">
+                            <div class="my-icon my-view">
+                              <div class="my-tooltip">
+                                Edit
+                              </div>
+                              <%if (check_can_update(@module_permission))%>
+                                <%= link_to edit_product_path(product), class:"icon-div" do %>
+                                  <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+                                <%end %>
+                              <% end %>
+                            </div>
+                            <div class="my-icon my-view">
+                              <div class="my-tooltip">
+                                Delete
+                              </div>
+                              <%if (check_can_delete(@module_permission))%>
+                                <%= link_to product, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+                                  <i class="fa fa-trash mt-2" aria-hidden="true"></i>
+                                <%end %>
+                              <% end %> 
+                            </div>
+                            <div class="my-icon my-view">
+                              <div class="my-tooltip">
+                                Show
+                              </div>
+                              <%if (check_can_read(@module_permission))%>
+                                <%= link_to product_path(product), class:"icon-div" do %>
+                                  <i class="fa fa-eye mt-2" aria-hidden="true"></i>
+                                <%end %>
+                              <%end%>
+                            </div>
+                            <div class="my-icon my-view">
+                              <div class="my-tooltip">
+                                Barcode
+                              </div>
+                              <%if (check_can_read(@module_permission))%>
+                                <%= link_to product_path(id:product,barcode: true), class:"icon-div" do %>
+                                  <i class="fa fa-barcode mt-2" aria-hidden="true"></i>
+                                <%end %>
+                              <%end%>
+                            </div>
+                          </div>
+                        </div>
+                        <span class="icon-div-1">
+                              <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <%end%>
+                <tr>
+                 <td><h5>Total</h5></td>
+                 <td><h5></h5></td>
+                 <td><h5></h5></td>
+                 <td><h5></h5></td>
+                 <td><h5></h5></td>
+                 <td><h5></h5></td>
+                 <td><h5><%= number_with_delimiter(@total.to_f.round(2)) %></h5></td>
+               </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="row product-book-index-card">
+            <div class="col-lg-4 col-sm-4">
+              <%= page_entries_info @products %>
+            </div>
+            <div class="col-lg-8 col-sm-8 pagination-left">
+              <%= paginate @products %>
+            </div>
+          </div>
         </div>
-        <div class="col-lg-8 col-sm-8 pagination-left">
-          <%= paginate @products %>
+      <% end %>
+    </div>
+    <div class="tab-pane card shadow-sm mt-2 p-3 mb-3" id="import-export" role="tabpanel">
+      <p>
+        <%= search_form_for @q, url: products_path, class: "admin-controls", method: "get" do |f| %>
+          <div class="d-flex">
+            <button class="btn btn-danger ml-4" name="export_data" type="submit" value="export_data">Export Data</button>
+            <button class="btn btn-info ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
+          </div>
+        <% end %>
+      </p>
+    </div>
+    <div class="tab-pane card shadow-sm mt-2 p-2" id="logs" role="tabpanel">
+      <p>
+        <div class="d-flex">
+          <%= link_to view_history_products_path, class: "btn btn-success d-none", id: "product-logs", remote:true do %>
+            show logs
+          <% end %>
+          <div id = "show-logs"></div>
         </div>
-      </div>
-    </div>  
+      </p>
+    </div>
+  </div>
+  
 </div>
-
-
 <%= form_for :bulk_import, url: bulk_import_data_path, method: :post, html: {class: "bulk-import-form"} do |f| %>
   <div class="modal fade" id="importFile" tabindex="-1" role="dialog" aria-labelledby="importFileTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -281,7 +283,6 @@
     </div>
   </div>
 <% end %>
-
 <script>
   $(document).ready(function() {
      var sortingButtons = $('.sorting-button')

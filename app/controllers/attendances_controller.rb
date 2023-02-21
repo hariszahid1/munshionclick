@@ -6,7 +6,7 @@ class AttendancesController < ApplicationController
 
   before_action :check_access
   before_action :set_attendance, only: %i[show edit update destroy]
-  before_action :set_staff, only: %i[edit new index]
+  before_action :set_staff, only: %i[edit new index show_staff]
 
   require 'tempfile'
   require 'csv'
@@ -14,10 +14,19 @@ class AttendancesController < ApplicationController
   # GET /attendances.json
   def index
     if params[:q].present?
-      params[:q][:date_gteq] = params[:q][:date_gteq].to_date.beginning_of_day
-      params[:q][:date_lteq] = params[:q][:date_lteq].to_date.end_of_day
+      params[:q][:date_gteq] = params[:q][:date_gteq]&.to_date&.beginning_of_day
+      params[:q][:date_lteq] = params[:q][:date_lteq]&.to_date&.end_of_day
     end
     @q = Attendance.includes(daily_attendances: :staff).order('date desc').ransack(params[:q])
+    @attendances = @q.result.page(params[:page]).per(@custom_pagination)
+  end
+
+  def show_staff
+    if params[:q].present?
+      params[:q][:attendance_date_gteq] = params[:q][:attendance_date_gteq]&.to_date&.beginning_of_day
+      params[:q][:attendance_date_lteq] = params[:q][:attendance_date_lteq]&.to_date&.end_of_day
+    end
+    @q = DailyAttendance.includes(:attendance).all.order('attendances.date desc').ransack(params[:q])
     @attendances = @q.result.page(params[:page]).per(@custom_pagination)
   end
 

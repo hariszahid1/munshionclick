@@ -135,14 +135,14 @@
     </table>
           <table class="table1 pdf_font">
             <tr class="lite-gray">
-              <td></td>
+              <td>SR #</td>
               <th>Delivery Detail</th>
               <th>Received</th>
               <th>Date/Time</th>
               <th>Comment</th>
             </tr>
             <tr>
-              <td></td>
+              <td><%= @order.id %></td>
               <td>Booking</td>
               <td><%= @order.amount%></td>
               <td><%= @order.created_at.present? ? @order.created_at.strftime("%d%b%y at %I:%M%p") : '' %> </td>

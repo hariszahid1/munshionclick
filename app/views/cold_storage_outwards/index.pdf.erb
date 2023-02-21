@@ -151,26 +151,6 @@
           <th class="text-right"><%= @pdf_orders_total %></th>
         </tr>
       </table>
-      <table style='margin-top: 30px'>
-        <thead class="lite-gray">
-          <tr>
-            <th class='text-left' style="padding-left: 20px;">Marka Wise</th>
-            <th class="text-right"> Out Qty </th>
-          </tr>
-        </thead>
-        <% if @pdf_marka_total.present? %>
-          <% @pdf_marka_total.each do |order| %>
-            <tr>
-              <td class='text-left' style="padding-left: 20px;"><%= order.first %></td>
-              <td class="text-right"><%= order.second&.to_f %></td>
-            </tr>
-          <% end %>
-        <% end %>
-        <tr>
-          <th class='text-left' style="padding-left: 20px;">Total</th>
-          <th class="text-right"><%= @pdf_orders_total %></th>
-        </tr>
-      </table>
     </div>
   </body>
 </html>
