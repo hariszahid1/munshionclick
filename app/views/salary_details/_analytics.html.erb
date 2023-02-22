@@ -6,10 +6,10 @@
 <%= hidden_field_tag "salaries_date_amount", @salaries_date.values, { id: "salaries_date_amount" } %>
 
 <%= search_form_for @q, url: analytics_salary_details_path, class: "admin-controls col-12 row", remote: true, method: "get" do |f| %>
-  <%= link_to 'Daily', analytics_salary_details_path(type: 'daily'), class: 'btn btn-info ml-3 mb-2', remote: true %>
-  <%= link_to 'Weekly', analytics_salary_details_path(type: 'weekly'), class: 'btn btn-danger ml-2 mb-2', remote: true %>
-  <%= link_to 'Monthly', analytics_salary_details_path(type: 'monthly'), class: 'btn btn-success ml-2 mb-2', remote: true %>
-  <%= link_to 'Yearly', analytics_salary_details_path(type: 'yearly'), class: 'btn btn-warning ml-2 mb-2', remote: true %>
+  <%= link_to 'Daily', analytics_salary_details_path(type: 'daily'), class: 'btn btn-info file-btn-color ml-3 mb-2', remote: true %>
+  <%= link_to 'Weekly', analytics_salary_details_path(type: 'weekly'), class: 'btn btn-danger file-btn-color ml-2 mb-2', remote: true %>
+  <%= link_to 'Monthly', analytics_salary_details_path(type: 'monthly'), class: 'btn btn-success file-btn-color ml-2 mb-2', remote: true %>
+  <%= link_to 'Yearly', analytics_salary_details_path(type: 'yearly'), class: 'btn btn-warning file-btn-color ml-2 mb-2', remote: true %>
 
   <div class="col-lg-2">
     <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker mb-2', datepicker: true, placeholder: "YYYY-MM-DD" %>

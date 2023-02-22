@@ -12,9 +12,9 @@
 <%= hidden_field_tag "advance_paid_amount_date", @advance_date_paid.values, { id: "advance_paid_amount_date" } %>
 
 <%= search_form_for @q, url: analytics_salaries_path, class: "admin-controls col-12 row mb-3", remote: true, method: "get" do |f| %>
-  <%= link_to 'Weekly', analytics_salaries_path(type: 'weekly'), class: 'btn btn-danger ml-2 mb-2', remote: true %>
-  <%= link_to 'Monthly', analytics_salaries_path(type: 'monthly'), class: 'btn btn-success ml-2 mb-2', remote: true %>
-  <%= link_to 'Yearly', analytics_salaries_path(type: 'yearly'), class: 'btn btn-warning ml-2 mb-2', remote: true %>
+  <%= link_to 'Weekly', analytics_salaries_path(type: 'weekly'), class: 'btn btn-danger file-btn-color ml-2 mb-2', remote: true %>
+  <%= link_to 'Monthly', analytics_salaries_path(type: 'monthly'), class: 'btn btn-success file-btn-color ml-2 mb-2', remote: true %>
+  <%= link_to 'Yearly', analytics_salaries_path(type: 'yearly'), class: 'btn btn-warning file-btn-color ml-2 mb-2', remote: true %>
 
   <div class="col-lg-2">
     <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker mb-2', datepicker: true, placeholder: "YYYY-MM-DD" %>
