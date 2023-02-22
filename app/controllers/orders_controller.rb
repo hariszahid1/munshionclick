@@ -369,7 +369,14 @@ class OrdersController < ApplicationController
     @suppliers = SysUser.where(user_group: %w[Supplier Both Own])
     @customers = SysUser.where(user_group: %w[Customer Both Salesman])
     @items = Item.all
-    @products = Product.all
+    if pos_setting_sys_type.eql?('HousingScheme')
+      products_not_used_in_orders = Product.left_outer_joins(:order_items).where(order_items: { id: nil })
+      products_used_in_canceled_orders = Product.joins(order_items: :order).where(orders: { status: 'Cancel' })
+      @products = products_not_used_in_orders + products_used_in_canceled_orders
+      @products = @products.uniq.sort_by(&:id)
+    else
+      @products = Product.all
+    end
     @accounts = Account.all
     @account = current_user.user_account
   end
@@ -380,7 +387,14 @@ class OrdersController < ApplicationController
     @items = Item.all
     @item_types = ItemType.all
     @customers = SysUser.where(user_group: %w[Customer Both Salesman])
-    @products = Product.all
+    if pos_setting_sys_type == 'HousingScheme'
+      products_not_used_in_orders = Product.left_outer_joins(:order_items).where('order_items.id IS NULL OR products.id = ?', @order.order_items.first.product_id)
+      products_used_in_canceled_orders = Product.joins(order_items: :order).where(orders: { status: 'Cancel' })
+      @products = products_not_used_in_orders + products_used_in_canceled_orders
+      @products = @products.uniq.sort_by(&:id)
+    else
+      @products = Product.all
+    end
     @accounts = Account.all
     @order.order_items.build if @pos_setting.sys_type == 'FastFood'
   end
