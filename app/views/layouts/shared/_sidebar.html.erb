@@ -16,7 +16,80 @@
             <span class="link-text">CRM</span>
           </a>
         </li>
-      <% end %>  
+      <% end %>
+      <li class="mb-2">
+        <a href="#SalePurchaseSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+          <i class="fas fa-percent ml-3"></i>
+          <span class="link-text ml-1">Sale/Purchase</span>
+        </a>
+        <ul class="collapse list-unstyled" id="SalePurchaseSubmenu">
+          <li>
+            <a href="#SaleSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+             <i class="fas fa fa-plus"></i>
+             <span class="link-text">Sale</span>
+           </a>
+            <ul class="collapse list-unstyled" id="SaleSubmenu">
+              <% if check_is_hidden_by_module('purchase_sale_details') %>
+                <li>
+                  <%= link_to new_purchase_sale_detail_path(transaction_type: :sale,product: true) do %>
+                    <i class="fas fa-minus ml-3 mr-1"></i>
+                    <span class="link-text">Add Invoice</span>
+                  <% end %>
+                </li>
+                <li>
+                  <%= link_to purchase_sale_details_path(sale: true) do %>
+                    <i class="fas fa-minus ml-3 mr-1"></i>
+                    <span class="link-text">List of Sale</span>
+                  <% end %>
+                </li>
+              <% end %>
+              <% if check_is_hidden_by_module('purchase_sale_details') %>
+                <li>
+                  <%= link_to daily_sales_path do %>
+                    
+                    <i class="fas fa-minus ml-3 mr-1"></i>
+                    <span class="link-text">Daily Day Out</span>
+                  <% end %>
+                </li>
+              <% end %>  
+              <% if check_is_hidden_by_module('purchase_sale_details') %>
+                <li>
+                  <%= link_to purchase_sale_details_return_purchase_sale_details_path(return: true) do %>
+                    
+                    <i class="fas fa-minus ml-3 mr-1"></i>
+                    <span class="link-text">SaleReturn</span>
+                  <% end %>
+                </li>
+              <% end %>  
+           </ul>
+          </li>
+          <% if check_is_hidden_by_module('orders') %>
+           <% if pos_setting_sys_type == "POS" %>
+             <li class="activ-link">
+               <a href="<%=order_sales_path(sale: true)%>", class="activ-link">
+                 <i class="fas fa fa-plus"></i>
+                 <span class="link-text">Order</span>
+               </a>
+             </li>
+           <% else %>
+           <li class="activ-link">
+              <a href="<%=orders_path(sale: true)%>", class="activ-link">
+                <i class="fas fa fa-cart-arrow-down"></i>
+                <span class="link-text">Order</span>
+              </a>
+           </li>
+           <% end %>
+          <% end %> 
+          <% if check_is_hidden_by_module('purchase_sale_details') %>
+           <li class="activ-link">
+             <%= link_to purchase_sale_details_path, class:"activ-link" do %>
+               <i class="fas fa-plus"></i>             
+               <span class="link-text">Purchase</span>
+             <% end %>
+           </li>
+          <% end %>
+        </ul>
+      </li>  
       <li class="mb-2">
         <a href="#AccountSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
           <i class="fas fa fa-book ml-3"></i>
@@ -31,23 +104,6 @@
               </a>
             </li>
           <% end %>
-          <% if check_is_hidden_by_module('orders') %>
-           <% if pos_setting_sys_type == "POS" %>
-             <li class="activ-link">
-               <a href="<%=order_sales_path(sale: true)%>", class="activ-link">
-                 <i class="fas fa fa-cart-arrow-down"></i>
-                 <span class="link-text">Order</span>
-               </a>
-             </li>
-           <% else %>
-           <li class="activ-link">
-              <a href="<%=orders_path(sale: true)%>", class="activ-link">
-                <i class="fas fa fa-cart-arrow-down"></i>
-                <span class="link-text">Order</span>
-              </a>
-           </li>
-          <% end %>
-         <% end %> 
           <% if check_is_hidden_by_module('payments') %>    
             <li class="activ-link">
               <%= link_to payments_path, class:"activ-link" do %>
@@ -120,60 +176,124 @@
               <% end %>
             </li>
           <% end %>
-          <li>
-           <a href="#SaleSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-             <i class="fas fa fa-percent"></i>
-             <span class="link-text">Sale</span>
-           </a>
-           <ul class="collapse list-unstyled" id="SaleSubmenu">
-             <% if check_is_hidden_by_module('purchase_sale_details') %>
-               <li>
-                 <%= link_to new_purchase_sale_detail_path(transaction_type: :sale,product: true) do %>
-                   <i class="fas fa-minus ml-3 mr-1"></i>
-                   <span class="link-text">Add Invoice</span>
-                 <% end %>
-               </li>
-               <li>
-                 <%= link_to purchase_sale_details_path(sale: true) do %>
-                   <i class="fas fa-minus ml-3 mr-1"></i>
-                   <span class="link-text">List of Sale</span>
-                 <% end %>
-               </li>
-             <% end %>
-             <% if check_is_hidden_by_module('purchase_sale_details') %>
-               <li>
-                 <%= link_to daily_sales_path do %>
-                   
-                   <i class="fas fa-minus ml-3 mr-1"></i>
-                   <span class="link-text">Daily Day Out</span>
-                 <% end %>
-               </li>
-             <% end %>  
-             <% if check_is_hidden_by_module('purchase_sale_details') %>
-               <li>
-                 <%= link_to purchase_sale_details_return_purchase_sale_details_path(return: true) do %>
-                   
-                   <i class="fas fa-minus ml-3 mr-1"></i>
-                   <span class="link-text">SaleReturn</span>
-                 <% end %>
-               </li>
-             <% end %>  
-           </ul>
-         </li>
-         <% if check_is_hidden_by_module('purchase_sale_details') %>
-           <li class="activ-link">
-             <%= link_to purchase_sale_details_path, class:"activ-link" do %>
-               <i class="fas fa-plus"></i>             
-               <span class="link-text">Purchase</span>
-             <% end %>
-           </li>
+        </ul>
+      </li>
+      <li class="mb-2">
+        <a href="#PayrollSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+          <i class="fa fa-money-bill-alt ml-3"></i>
+          <span class="link-text ml-1">Payroll</span>
+        </a>
+        <ul class="collapse list-unstyled" id="PayrollSubmenu">
+          <% if check_is_hidden_by_module('salaries') %>  
+            <li>
+              <a href="<%=salaries_path%>" class="activ-link">
+                <i class="fa fa-plus ml-3 mr-1"></i>
+                <span class="link-text">Salary Debit detail</span>
+              </a>
+            </li>
           <% end %>
+          <% if check_is_hidden_by_module('salary_details') %>  
+            <li>
+              <a href="<%=salary_details_path%>" class="activ-link">
+                <i class="fa fa-plus ml-3 mr-1"></i>
+                <span class="link-text">Salary Credit detail</span>
+              </a>
+            </li>
+          <% end %>            
         </ul>
       </li> 
       <li class="mb-2">
+        <a href="#AllUserSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+          <i class="fas fa-users ml-3"></i>
+          <span class="link-text ml-1">Users</span>
+        </a>
+        <ul class="collapse list-unstyled" id="AllUserSubmenu">
+          <li>
+            <a href="#theUserSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+              <i class="fas fa-plus ml-2"></i>
+              <span class="link-text ml-1">All Users</span>
+            </a>
+            <ul class="collapse list-unstyled" id="theUserSubmenu">
+              <li>
+                <% if check_is_hidden_by_module('sys_users') %>
+                  <li>
+                    <%= link_to sys_users_path, class:"activ-link" do %>
+                      <i class="fas fa-minus ml-3 mr-1"></i>
+                      <span class="link-text">Users List</span>
+                    <% end %>
+                  </li>
+                <% end %> 
+                <% if check_is_hidden_by_module('user_types') %>
+                  <li>
+                    <%= link_to user_types_path, class:"activ-link" do %>
+                      <i class="fas fa-minus ml-3 mr-1"></i>
+                      <span class="link-text">User Types</span>
+                    <% end %>
+                  </li>
+                <% end %>
+                <% if check_is_hidden_by_module('user_groups') %>
+                  <li>
+                    <%= link_to user_groups_path, class:"activ-link" do %>
+                      <i class="fas fa-minus ml-3 mr-1"></i>
+                      <span class="link-text">User Groups</span>
+                    <% end %>
+                  </li>
+                <% end %>
+                <% if check_is_hidden_by_module('sys_users') %>
+                  <li>
+                    <% SysUser.user_groups.each do |value, index|%>
+                      <%= link_to sys_users_path('q[user_group_eq]': index), class:"activ-link" do %>
+                        <i class="fas fa-minus ml-3 mr-1"></i>
+                        <span class="link-text"><%= value%></span>
+                      <% end %>
+                    <% end %>
+                  </li>
+                <% end %>  
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <ul class="collapse list-unstyled" id="AllUserSubmenu">
+          <li>
+            <% if check_is_hidden_by_module('staffs') %>  
+              <li>
+                <a href="<%=staffs_path%>" class="activ-link">
+                  <i class="fa fa-plus ml-2 mr-1"></i>
+                  <span class="link-text">Staffs List</span>
+                </a>
+              </li>
+            <% end %>   
+            <% if check_is_hidden_by_module('cities') %>
+            <li>
+              <%= link_to cities_path, class:"activ-link" do %>
+                <i class="fas fa-plus ml-2"></i>
+                <span class="link-text">City</span>
+              <% end %>
+            </li>
+            <% end %> 
+            <% if check_is_hidden_by_module('countries') %>    
+              <li>
+                <%= link_to countries_path, class:"activ-link" do %>
+                  <i class="fas fa-plus ml-2"></i>
+                  <span class="link-text">Country</span>
+                <% end %>
+              </li>
+            <% end %>    
+            <% if check_is_hidden_by_module('departments') %>
+              <li>
+                <%= link_to departments_path, class:"activ-link" do %>
+                  <i class="fas fa-plus ml-2"></i>
+                  <span class="link-text">Department</span>
+                <% end %>
+              </li>
+            <% end %>            
+          </li>
+        </ul>
+      </li>
+      <li class="mb-2">
         <a href="#UnitSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
           <i class="fas fa-stream ml-3"></i>
-          <span class="link-text ml-1">Product</span>
+          <span class="link-text ml-1">Products</span>
         </a>
         <ul class="collapse list-unstyled" id="UnitSubmenu">
           <% if check_is_hidden_by_module('products')%>
@@ -252,118 +372,6 @@
               <% end %>
            </li>
           <% end %> 
-        </ul>
-      </li>
-      <li class="mb-2">
-        <a href="#AllUserSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-          <i class="fas fa-users ml-3"></i>
-          <span class="link-text ml-1">Users</span>
-        </a>
-        <ul class="collapse list-unstyled" id="AllUserSubmenu">
-          <li>
-            <a href="#theUserSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-              <i class="fas fa-plus ml-2"></i>
-              <span class="link-text ml-1">All Users</span>
-            </a>
-            <ul class="collapse list-unstyled" id="theUserSubmenu">
-              <li>
-                <% if check_is_hidden_by_module('sys_users') %>
-                  <li>
-                    <%= link_to sys_users_path, class:"activ-link" do %>
-                      <i class="fas fa-minus ml-3 mr-1"></i>
-                      <span class="link-text">Users List</span>
-                    <% end %>
-                  </li>
-                <% end %> 
-                <% if check_is_hidden_by_module('user_types') %>
-                  <li>
-                    <%= link_to user_types_path, class:"activ-link" do %>
-                      <i class="fas fa-minus ml-3 mr-1"></i>
-                      <span class="link-text">User Types</span>
-                    <% end %>
-                  </li>
-                <% end %>
-                <% if check_is_hidden_by_module('user_groups') %>
-                  <li>
-                    <%= link_to user_groups_path, class:"activ-link" do %>
-                      <i class="fas fa-minus ml-3 mr-1"></i>
-                      <span class="link-text">User Groups</span>
-                    <% end %>
-                  </li>
-                <% end %>
-                <% if check_is_hidden_by_module('sys_users') %>
-                  <li>
-                    <% SysUser.user_groups.each do |value, index|%>
-                      <%= link_to sys_users_path('q[user_group_eq]': index), class:"activ-link" do %>
-                        <i class="fas fa-minus ml-3 mr-1"></i>
-                        <span class="link-text"><%= value%></span>
-                      <% end %>
-                    <% end %>
-                  </li>
-                <% end %>  
-              </li>
-            </ul>
-          </li>
-        </ul>
-        <ul class="collapse list-unstyled" id="AllUserSubmenu">
-          <li>
-            <a href="#StaffSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-              <i class="fas fa-plus ml-2"></i>
-              <span class="link-text ml-1">All Staffs</span>
-            </a>
-            <ul class="collapse list-unstyled" id="StaffSubmenu">
-              <li>
-                <% if check_is_hidden_by_module('staffs') %>  
-                  <li>
-                    <a href="<%=staffs_path%>" class="activ-link">
-                      <i class="fa fa-minus ml-3 mr-1"></i>
-                      <span class="link-text">Staffs List</span>
-                    </a>
-                  </li>
-                <% end %>
-                <% if check_is_hidden_by_module('salaries') %>  
-                  <li>
-                    <a href="<%=salaries_path%>" class="activ-link">
-                      <i class="fa fa-minus ml-3 mr-1"></i>
-                      <span class="link-text">Salary Debit detail</span>
-                    </a>
-                  </li>
-                <% end %>
-                <% if check_is_hidden_by_module('salary_details') %>  
-                  <li>
-                    <a href="<%=salary_details_path%>" class="activ-link">
-                      <i class="fa fa-minus ml-3 mr-1"></i>
-                      <span class="link-text">Salary Credit detail</span>
-                    </a>
-                  </li>
-                <% end %>  
-              </li>                    
-            </ul>
-            <% if check_is_hidden_by_module('cities') %>
-            <li>
-              <%= link_to cities_path, class:"activ-link" do %>
-                <i class="fas fa-plus ml-2"></i>
-                <span class="link-text">City</span>
-              <% end %>
-            </li>
-            <% end %> 
-            <% if check_is_hidden_by_module('countries') %>    
-              <li>
-                <%= link_to countries_path, class:"activ-link" do %>
-                  <i class="fas fa-plus ml-2"></i>
-                  <span class="link-text">Country</span>
-                <% end %>
-              </li>
-            <% end %>    
-            <% if check_is_hidden_by_module('departments') %>
-              <li>
-                <%= link_to departments_path, class:"activ-link" do %>
-                  <i class="fas fa-plus ml-2"></i>
-                  <span class="link-text">Department</span>
-                <% end %>
-              </li>
-            <% end %>            
-          </li>
         </ul>
       </li>
       <% if check_is_hidden_by_module('reports') %>    
@@ -445,7 +453,7 @@
               <li class="mb-2">
                 <%= link_to users_path, class:"activ-link" do %>
                   <i class="fas fa-user ml-3"></i>
-                  <span class="link-text">System Opeartors</span>
+                  <span class="link-text">System Operators</span>
                 <% end %>
               </li>
             <%else%>
