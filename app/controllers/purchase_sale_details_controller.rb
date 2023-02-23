@@ -22,31 +22,31 @@ class PurchaseSaleDetailsController < ApplicationController
     end
     @transaction_type_logs = params[:sale].present? ? 'Sale' : 'Purchase'
 
-    @orders=Order.all
-    if params[:purchase_sale_details].present?
+    @orders = Order.all
+    if pos_setting_sys_type == 'HousingScheme'
       if params[:sale].present?
-        @q = PurchaseSaleDetail.includes(:purchase_sale_items).joins(:purchase_sale_items).where(:transaction_type=>"Sale").ransack(params[:q])
-        @k = PurchaseSaleDetail.includes(:purchase_sale_items).joins(:purchase_sale_items).where(:transaction_type=>"Sale").ransack(params[:q])
+        @q = PurchaseSaleDetail.includes(:purchase_sale_items).where(transaction_type: 'Sale').ransack(params[:q])
+        @k = PurchaseSaleDetail.includes(:purchase_sale_items).where(transaction_type: 'Sale').ransack(params[:q])
       elsif params[:return].present?
-        @q = PurchaseSaleDetail.includes(:purchase_sale_items).joins(:purchase_sale_items).where(:transaction_type=>"SaleReturn").ransack(params[:q])
-        @k = PurchaseSaleDetail.includes(:purchase_sale_items).joins(:purchase_sale_items).where(:transaction_type=>"SaleReturn").ransack(params[:q])
+        @q = PurchaseSaleDetail.includes(:purchase_sale_items).where(transaction_type: 'SaleReturn').ransack(params[:q])
+        @k = PurchaseSaleDetail.includes(:purchase_sale_items).where(transaction_type: 'SaleReturn').ransack(params[:q])
       else
-        @q = PurchaseSaleDetail.includes(:purchase_sale_items).joins(:purchase_sale_items).where(:transaction_type=>"Purchase").ransack(params[:q])
-        @k = PurchaseSaleDetail.includes(:purchase_sale_items).joins(:purchase_sale_items).where(:transaction_type=>"Purchase").ransack(params[:q])
+        @q = PurchaseSaleDetail.includes(:purchase_sale_items).where(transaction_type: 'Purchase').ransack(params[:q])
+        @k = PurchaseSaleDetail.includes(:purchase_sale_items).where(transaction_type: 'Purchase').ransack(params[:q])
       end
     else
       if params[:sale].present?
-        @q = PurchaseSaleDetail.includes(:purchase_sale_items).joins(:purchase_sale_items).where(:transaction_type=>"Sale").ransack(params[:q])
-        @k = PurchaseSaleDetail.includes(:purchase_sale_items).joins(:purchase_sale_items).where(:transaction_type=>"Sale").ransack(params[:q])
+        @q = PurchaseSaleDetail.includes(:purchase_sale_items).joins(:purchase_sale_items).where(transaction_type: 'Sale').ransack(params[:q])
+        @k = PurchaseSaleDetail.includes(:purchase_sale_items).joins(:purchase_sale_items).where(transaction_type: 'Sale').ransack(params[:q])
       elsif params[:return].present?
-        @q = PurchaseSaleDetail.includes(:purchase_sale_items).joins(:purchase_sale_items).where(:transaction_type=>"SaleReturn").ransack(params[:q])
-        @k = PurchaseSaleDetail.includes(:purchase_sale_items).joins(:purchase_sale_items).where(:transaction_type=>"SaleReturn").ransack(params[:q])
+        @q = PurchaseSaleDetail.includes(:purchase_sale_items).joins(:purchase_sale_items).where(transaction_type: 'SaleReturn').ransack(params[:q])
+        @k = PurchaseSaleDetail.includes(:purchase_sale_items).joins(:purchase_sale_items).where(transaction_type: 'SaleReturn').ransack(params[:q])
       else
-        @q = PurchaseSaleDetail.includes(:purchase_sale_items).joins(:purchase_sale_items).where(:transaction_type=>"Purchase").ransack(params[:q])
-        @k = PurchaseSaleDetail.includes(:purchase_sale_items).joins(:purchase_sale_items).where(:transaction_type=>"Purchase").ransack(params[:q])
+        @q = PurchaseSaleDetail.includes(:purchase_sale_items).joins(:purchase_sale_items).where(transaction_type: 'Purchase').ransack(params[:q])
+        @k = PurchaseSaleDetail.includes(:purchase_sale_items).joins(:purchase_sale_items).where(transaction_type: 'Purchase').ransack(params[:q])
       end
-      @accounts=Account.all
     end
+    @accounts=Account.all
       if @q.result.count > 0
         @q.sorts = 'id desc' if @q.sorts.empty?
       end
