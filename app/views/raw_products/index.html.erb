@@ -1,24 +1,34 @@
 <p id="notice"><%= notice %></p>
-
-<div class="hidden " id="raw_product_list">
-  <h1 class="ml-2">Raw Product</h1>
-  <div class="ml-2">
-    <div id="new_raw" >
-      <% if can?(:add, :all) %>
-      <%= link_to new_raw_product_path, remote: true,class: "btn btn-success my-4" do %>
-      <i class="fa fa-plus" aria-hidden="true"></i>
-      Create Product
+<div class="hidden m-4" id="raw_product_list">
+  <div class="float-left">
+    <h2 class="ml-2 logo-back"><i class="fas fa-boxes mr-2"></i>Raw Product</h2>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<%= root_path %>">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active">
+        <a href="<%= raw_products_path %>">Raw Product</a>
+      </li>
+    </ol>
+  </div>
+  <div id="new_raw" >
+    <% if can?(:add, :all) %>
+      <%= link_to new_raw_product_path, remote: true,style: "width:150px;" ,class: "btn btn-success float-right my-4" do %>
+        <i class="fa fa-plus-circle" aria-hidden="true"></i>
+        Create
       <% end %>
-      <% end %>      
-  <ul class="nav nav-pills  mt-2" role="tablist">
-    <li class="nav-item">
-      <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab">Search</a>
-    </li>		
- </ul>
-    </div>
+    <% end %>      
   </div>
   <div class="clearfix"></div>
-  <div class="row card border-radius-1 shadow mx-2 p-3">
+  <div class="row">
+    <ul class="nav nav-tabs ml-3  mt-2" role="tablist">
+     <li class="nav-item">
+       <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab">Search</a>
+     </li>		
+    </ul>
+  </div>
+  <div class="clearfix"></div>
+  <div class="row card shadow mx-1 p-3">
     <div class="col-lg-12 col-sm-12">
       <%= search_form_for @q, url: raw_products_path, class: "admin-controls", method: "get" do |f| %>
         <div class="col-lg-3 form-group float-left">
@@ -30,32 +40,26 @@
       <% end %>
     </div>
   </div>
-
-<div class="card border-radius-1 shadow my-4 p-2">
-  <table data-toggle="table" data-search="true", id="raw_table">
-    <thead>
-      <th>Code</th>
-      <th>Title</th>
-      <th>Stock</th>
-      <th>Acquire type</th>
-      <th>Cost</th>
-      <th>Sale</th>
-      <th>Minimum</th>
-      <th>Optimal</th>
-      <th>Maximum</th>
-      <th>Action</th>
-
-
-
-    </thead>
-
-    <tbody>
-    <%= render partial: 'raw_product', collection: @raw_products %>
-    </tbody>
-  </table>
+  <div class="card shadow my-4 p-3">
+    <table data-toggle="table" data-search="true", id="raw_table">
+      <thead>
+        <th>Code</th>
+        <th>Title</th>
+        <th>Stock</th>
+        <th>Acquire type</th>
+        <th>Cost</th>
+        <th>Sale</th>
+        <th>Minimum</th>
+        <th>Optimal</th>
+        <th>Maximum</th>
+        <th>Action</th>
+      </thead>
+      <tbody>
+      <%= render partial: 'raw_product', collection: @raw_products %>
+      </tbody>
+    </table>
   </div>
 </div>
-
 <div class="clearfix"></div>
 <div class="row">
   <div class="col-lg-4 col-sm-4">
@@ -65,7 +69,6 @@
     <%= paginate @raw_products %>
   </div>
 </div>
-
 <script>
   $(document).ready(function() {
     if ($(".bootstrap-table").length == 0){

@@ -69,15 +69,14 @@
     <br>
   <hr>
   <div class="row ">
-
-          <div class="col-lg-6 form-group float-left">
-            <%= link_to raw_products_path do %>
-            <i class="fa fa-arrow-left " aria-hidden="true"></i>
-            <% end %>
-          </div>
-              <div class="col-lg-6 form-group float-left">
-                <%=f.object.id.nil? ? (f.submit class: "btn btn-success", style: "float: left")  :  (f.submit class: "btn btn-warning", style: "float: left")%>
-              </div>
-          <% end %>
+    <div class="col-lg-6 form-group float-left">
+      <%= link_to raw_products_path ,class:"btn-light btn-outline-secondary p-2"  do %>
+      Cancel
+      <% end %>
+    </div>
+        <div class="col-lg-6 form-group float-left">
+          <%=f.object.id.nil? ? (f.submit "Save" ,class: "btn btn-success", style: "float: right")  :  (f.submit "Update" ,class: "btn btn-warning", style: "float: right")%>
+        </div>
+    <% end %>
 </div>
 <%= javascript_include_tag 'hover', 'data-turbolinks-track': 'reload' %>
