@@ -369,6 +369,18 @@
                                       <% end %>
                                     <% end %>
                                   </div>
+
+                                  <div class="my-icon my-view">
+                                    <div class="my-tooltip">
+                                      Add Commission
+                                    </div>
+                                    <% unless purchase_sale_detail.staff_id.present? %>
+                                      <%= link_to edit_purchase_sale_detail_path(purchase_sale_detail,product: true,commission: true), class:"icon-div" do %>
+                                        <i class="fa fa-percentage mt-2" aria-hidden="true"></i>
+                                      <% end %>
+                                    <% end %>
+                                  </div>
+
                                   <div class="my-icon my-view">
                                     <div class="my-tooltip">
                                       Edit
