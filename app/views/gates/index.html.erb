@@ -1,97 +1,119 @@
-<div class="hidden" id="gate_list">
-  <h1 class="ml-2">Gates</h1>
+<div class="hidden m-4" id="gate_list">
+  <div class="float-left">
+    <h2 class="ml-2 logo-back"><i class="fa fa-th mr-2"></i>Gates</h2>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<%= root_path %>">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active">
+        <a href="<%= gates_path %>">Gates</a>
+      </li>
+    </ol>
+  </div>
   <div id="new_investment">
     <% if can?(:add, :all) %>
-      <%= link_to new_gate_path, class: "btn btn-success ml-2" do %>
-      <i class="fa fa-plus" aria-hidden="true"></i>
-        Create Gate
+      <%= link_to new_gate_path, style: "width:150px;" ,class: "btn btn-success float-right mt-4" do %>
+      <i class="fa fa-plus-circle"></i>
+        Create
       <% end %>
     <% end %>
   </div>
-
+  <div class="clearfix"></div>
+  <div class="row">
+    <ul class="nav nav-tabs ml-3" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab"><i class="fa fa-search mr-2"></i>Search</a>
+      </li>
+    </ul>
+  </div>
   <div class="clearfix"></div>
   <%= search_form_for @q, url: gates_path, class: "admin-controls", method: "get" do |f| %>
-  <div class="row">
-    <div class="col-lg-12 col-sm-12">
-      <div class="col-lg-6 form-group float-left">
-        <%= f.search_field :pather_from_gteq, class: 'form-control input-sm datepicker',placeholder: "Pather YYYY-MM-DD" %>
-        <%= f.search_field :id_eq, class: 'hidden'%>
-      </div>
-      <div class="col-lg-6 form-group float-left">
-        <%= f.search_field :pather_to_lteq,class: 'form-control input-sm datepicker' ,placeholder: "Pather YYYY-MM-DD"%>
-      </div>
-      <div class="col-lg-6 form-group float-left">
-        <%= f.search_field :kharkar_from_gteq, class: 'form-control input-sm datepicker',placeholder: "Khakar YYYY-MM-DD" %>
-      </div>
-      <div class="col-lg-6 form-group float-left">
-        <%= f.search_field :kharkar_to_lteq,class: 'form-control input-sm datepicker' ,placeholder: "Khakar YYYY-MM-DD"%>
-      </div>
-      <div class="col-lg-6 form-group float-left">
-        <%= f.search_field :bhari_from_gteq, class: 'form-control input-sm datepicker',placeholder: "Bhari YYYY-MM-DD" %>
-      </div>
-      <div class="col-lg-6 form-group float-left">
-        <%= f.search_field :bhari_to_lteq,class: 'form-control input-sm datepicker' ,placeholder: "Bhari YYYY-MM-DD"%>
-      </div>
-      <div class="col-lg-6 form-group float-left">
-        <%= f.search_field :jalai_from_gteq, class: 'form-control input-sm datepicker',placeholder: "Jalai YYYY-MM-DD" %>
-      </div>
-      <div class="col-lg-6 form-group float-left">
-        <%= f.search_field :jalai_to_lteq,class: 'form-control input-sm datepicker' ,placeholder: "Jalai YYYY-MM-DD"%>
-      </div>
-      <div class="col-lg-6 form-group float-left">
-        <%= f.search_field :nakasi_from_gteq,class: 'form-control input-sm datepicker' ,placeholder: "Nakasi YYYY-MM-DD"%>
-      </div>
-      <div class="col-lg-6 form-group float-left">
-        <%= f.search_field :nakasi_to_lteq,class: 'form-control input-sm datepicker' ,placeholder: "Nakasi YYYY-MM-DD"%>
-      </div>
-      <div class="col-lg-6 form-group float-left">
-        <%= f.search_field :purchase_from_gteq,class: 'form-control input-sm datepicker' ,placeholder: "Purchase YYYY-MM-DD"%>
-      </div>
-      <div class="col-lg-6 form-group float-left">
-        <%= f.search_field :purchase_to_lteq,class: 'form-control input-sm datepicker' ,placeholder: "Purchase YYYY-MM-DD"%>
-      </div>
-      <div class="col-lg-6 form-group float-left">
-        <%= f.search_field :sale_from_gteq,class: 'form-control input-sm datepicker' ,placeholder: "Sale YYYY-MM-DD"%>
-      </div>
-      <div class="col-lg-6 form-group float-left">
-        <%= f.search_field :sale_to_lteq,class: 'form-control input-sm datepicker' ,placeholder: "Sale YYYY-MM-DD"%>
-      </div>
-      <div class="col-lg-6 form-group float-left">
-        <%= f.search_field :expense_from_gteq,class: 'form-control input-sm datepicker' ,placeholder: "Expense YYYY-MM-DD"%>
-      </div>
-      <div class="col-lg-6 form-group float-left">
-        <%= f.search_field :expense_to_lteq,class: 'form-control input-sm datepicker' ,placeholder: "Expense YYYY-MM-DD"%>
-      </div>
-      <div class="col-lg-6 form-group float-left">
-        <%= f.search_field :salary_from_gteq,class: 'form-control input-sm datepicker' ,placeholder: "Salary YYYY-MM-DD"%>
-      </div>
-      <div class="col-lg-6 form-group float-left">
-        <%= f.search_field :salary_to_lteq,class: 'form-control input-sm datepicker' ,placeholder: "Salary YYYY-MM-DD"%>
-      </div>
-      <div class="col-lg-6 form-group float-left">
-        <%= f.search_field :created_at_gteq,class: 'form-control input-sm datepicker' ,placeholder: "Created Date YYYY-MM-DD"%>
-      </div>
-      <div class="col-lg-6 form-group float-left">
-        <%= f.search_field :created_at_lteq,class: 'form-control input-sm datepicker' ,placeholder: "Created Date YYYY-MM-DD"%>
-      </div>
-      
-      <div class="col-lg-2 form-group float-left">
-        <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search "></i>Search</button>
-      </div>
-      <% if can?(:delete, :all) %>
-        <div class="col-lg-1 form-group float-right">
-          <button class="form-control btn-danger" name="submit_pdf_a4" type="submit" value="Investment PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mr-2"></i>PDF</button>
+    <div class="tab-content">
+      <div class="tab-pane active no-tab-border mb-3 mt-2" id="search" role="tabpanel">
+        <div class="card shadow mb-3 p-3">
+          <div class="row">
+            <div class="col-lg-12 col-sm-12">
+              <div class="col-lg-3 form-group float-left">
+                <%= f.search_field :pather_from_gteq, class: 'form-control input-sm datepicker',placeholder: "Pather YYYY-MM-DD" %>
+                <%= f.search_field :id_eq, class: 'hidden'%>
+              </div>
+              <div class="col-lg-3 form-group float-left">
+                <%= f.search_field :pather_to_lteq,class: 'form-control input-sm datepicker' ,placeholder: "Pather YYYY-MM-DD"%>
+              </div>
+              <div class="col-lg-3 form-group float-left">
+                <%= f.search_field :kharkar_from_gteq, class: 'form-control input-sm datepicker',placeholder: "Khakar YYYY-MM-DD" %>
+              </div>
+              <div class="col-lg-3 form-group float-left">
+                <%= f.search_field :kharkar_to_lteq,class: 'form-control input-sm datepicker' ,placeholder: "Khakar YYYY-MM-DD"%>
+              </div>
+              <div class="col-lg-3 form-group float-left">
+                <%= f.search_field :bhari_from_gteq, class: 'form-control input-sm datepicker',placeholder: "Bhari YYYY-MM-DD" %>
+              </div>
+              <div class="col-lg-3 form-group float-left">
+                <%= f.search_field :bhari_to_lteq,class: 'form-control input-sm datepicker' ,placeholder: "Bhari YYYY-MM-DD"%>
+              </div>
+              <div class="col-lg-3 form-group float-left">
+                <%= f.search_field :jalai_from_gteq, class: 'form-control input-sm datepicker',placeholder: "Jalai YYYY-MM-DD" %>
+              </div>
+              <div class="col-lg-3 form-group float-left">
+                <%= f.search_field :jalai_to_lteq,class: 'form-control input-sm datepicker' ,placeholder: "Jalai YYYY-MM-DD"%>
+              </div>
+              <div class="col-lg-3 form-group float-left">
+                <%= f.search_field :nakasi_from_gteq,class: 'form-control input-sm datepicker' ,placeholder: "Nakasi YYYY-MM-DD"%>
+              </div>
+              <div class="col-lg-3 form-group float-left">
+                <%= f.search_field :nakasi_to_lteq,class: 'form-control input-sm datepicker' ,placeholder: "Nakasi YYYY-MM-DD"%>
+              </div>
+              <div class="col-lg-3 form-group float-left">
+                <%= f.search_field :purchase_from_gteq,class: 'form-control input-sm datepicker' ,placeholder: "Purchase YYYY-MM-DD"%>
+              </div>
+              <div class="col-lg-3 form-group float-left">
+                <%= f.search_field :purchase_to_lteq,class: 'form-control input-sm datepicker' ,placeholder: "Purchase YYYY-MM-DD"%>
+              </div>
+              <div class="col-lg-3 form-group float-left">
+                <%= f.search_field :sale_from_gteq,class: 'form-control input-sm datepicker' ,placeholder: "Sale YYYY-MM-DD"%>
+              </div>
+              <div class="col-lg-3 form-group float-left">
+                <%= f.search_field :sale_to_lteq,class: 'form-control input-sm datepicker' ,placeholder: "Sale YYYY-MM-DD"%>
+              </div>
+              <div class="col-lg-3 form-group float-left">
+                <%= f.search_field :expense_from_gteq,class: 'form-control input-sm datepicker' ,placeholder: "Expense YYYY-MM-DD"%>
+              </div>
+              <div class="col-lg-3 form-group float-left">
+                <%= f.search_field :expense_to_lteq,class: 'form-control input-sm datepicker' ,placeholder: "Expense YYYY-MM-DD"%>
+              </div>
+              <div class="col-lg-3 form-group float-left">
+                <%= f.search_field :salary_from_gteq,class: 'form-control input-sm datepicker' ,placeholder: "Salary YYYY-MM-DD"%>
+              </div>
+              <div class="col-lg-3 form-group float-left">
+                <%= f.search_field :salary_to_lteq,class: 'form-control input-sm datepicker' ,placeholder: "Salary YYYY-MM-DD"%>
+              </div>
+              <div class="col-lg-3 form-group float-left">
+                <%= f.search_field :created_at_gteq,class: 'form-control input-sm datepicker' ,placeholder: "Created Date YYYY-MM-DD"%>
+              </div>
+              <div class="col-lg-3 form-group float-left">
+                <%= f.search_field :created_at_lteq,class: 'form-control input-sm datepicker' ,placeholder: "Created Date YYYY-MM-DD"%>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search "></i>Search</button>
+              </div>
+              <% if can?(:delete, :all) %>
+                <div class="col-lg-1 form-group float-right">
+                  <button class="form-control btn-danger file-btn-color" name="submit_pdf_a4" type="submit" value="Investment PDF A4" formtarget="_blank">PDF</button>
+                </div>
+              <% end %>
+            </div>
+          </div>
         </div>
-      <% end %>
+      </div>
     </div>
-  </div>
   <% end %>
-  <div class="row">
+  <div class="row card p-3 mx-1">
     <div class="col-lg-12 col-sm-12">
       <table data-toggle="table" data-search="true">
         <thead>
           <tr>
-            <th class="border_none">Action</th>
+            <th><%= sort_link(@q, :created_at, 'Date') %></th>
             <th><%= sort_link(@q, :pather_from, 'Pather=>') %></th>
             <th><%= sort_link(@q, :pather_to, '<=Pather') %></th>
             <th><%= sort_link(@q, :kharkar_from, 'Khakar=>') %></th>
@@ -111,7 +133,7 @@
             <th><%= sort_link(@q, :sale_from, 'Salary=>') %></th>
             <th><%= sort_link(@q, :sale_to, '<=Salary') %></th>
             <th><%= sort_link(@q, :comment, 'Comment') %></th>
-            <th><%= sort_link(@q, :created_at, 'Date') %></th>
+            <th class="border_none">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -130,9 +152,7 @@
       </table>
     </div>
   </div>
-
 </div>
-
 <div class="clearfix"></div>
 <div class="row">
   <div class="col-lg-4 col-sm-4">
@@ -142,8 +162,6 @@
     <%= paginate @gates %>
   </div>
 </div>
-
-
 <script>
   $(document).ready(function() {
     if ($(".bootstrap-table").length == 0){
