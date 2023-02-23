@@ -2,7 +2,7 @@
   <div class="d-flex justify-content-center">
     <h1 ><%= params[:transaction_type].present? ? "Booking Details" : "Purchase Details"%></h1>
   </div>
-  <div class="row-lg-12  m-3">
+  <div class="row-lg-12  m-3  <%= 'd-none' if params[:commission].present?%>">
     <div class="col p-1">
       <div class="card border-radius-1 shadow mb-3">
         <div class="row">
@@ -53,7 +53,7 @@
     </div>
   <% end %>
 
-  <div class="row m-3">
+  <div class="row m-3  <%= 'd-none' if params[:commission].present?%>">
     <div class="col card m-1 p-3 border-radius-1 shadow">
       <div class="row p-3">
         <div class='hidden'>
@@ -127,7 +127,7 @@
     </div>
   <% end %>
 
-  <div class="row no-gutters align-items-center m-3">
+  <div class="row no-gutters align-items-center m-3  <%= 'd-none' if params[:commission].present?%>">
     <div class="col mr-2">
      
       <%= f.fields_for :purchase_sale_items do |purchase_sale_item| %>
@@ -137,7 +137,7 @@
   </div>  
   
   <%if @purchase_sale_detail.transaction_type!='Sale' || params[:transaction_type]!='sale'%>
-    <div class="card border-radius-1 shadow p-2 m-3">
+    <div class="card border-radius-1 shadow p-2 m-3  <%= 'd-none' if params[:commission].present?%>">
       <div class="row no-gutters align-items-center p-3">
         <div class="col mr-2">
           <div class="row col-lg-12">
@@ -157,7 +157,7 @@
     </div>      
   <%end%>
 
-  <div class= 'row ml-2'>
+  <div class= "row ml-2  <%= 'd-none' if params[:commission].present?%>">
       <h4 class="card-header col-lg-12 mb-4">
           Follow Up
       </h4>
@@ -229,7 +229,7 @@
         <%= f.number_field :loading,hide_label:true, required: true, readonly:true%>
       </div>
     </div>
-    <div class="col card border-radius-1 shadow p-3 m-4">
+    <div class="col card border-radius-1 shadow p-3 m-4 <%= 'd-none' if params[:commission].present?%>" >
       <div class="font-weight-bold"><%= f.datetime_select :created_at%></div>
       <% if f.object.persisted? && f.object.purchase_sale_images.present? %>
         <% f.object.purchase_sale_images.each do |image| %>

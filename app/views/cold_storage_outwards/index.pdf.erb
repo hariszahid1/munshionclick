@@ -22,7 +22,7 @@
     <% @time = Time.zone.now %>
     <div>
       <p class="border-bottom"></p>
-      <h1 class="text-center">Outward List With Racking</h1>
+      <h1 class="text-center">Outward List</h1>
       <h2 class="text-left">Outward Date</h1>
       <h3 class="text-left">
         <b><span>From: <%= @pdf_orders.first&.created_at&.strftime("%d-%b-%y at %I:%M %p") %></span>
@@ -43,8 +43,6 @@
           <th class="text-center">Marka No</th>
           <th class="text-center">Challan No</th>
           <th class="text-center">Product Name</th>
-          <th class="text-center">Room No</th>
-          <th class="text-center">Rack No</th>
           <th class="text-center">Out Qty</th>
           <th class="text-center">In Date</th>
           <th class="text-center">Close Date</th>
@@ -62,8 +60,6 @@
                 <td class="text-center"><%= item['marka'] %></td>
                 <td class="text-center"><%= item['challan_no'] %></td>
                 <td class="text-center"><%= item['product'] %></td>
-                <td class="text-center"><%= item['room_num'] %></td>
-                <td class="text-center"><%= item['rack_num'] %></td>
                 <td class="text-center"><%= item['quantity'] %></td>
                 <td class="text-center"><%= item['in_date'] %></td>
                 <td class="text-center"><%= item['close_date'] %></td>
@@ -79,8 +75,6 @@
             <th></th>
             <th></th>
             <th></th>
-            <th></th>
-            <th></th>
             <th>Sub Total: </th>
             <th><%=  @pdf_orders_total  %></th>
             <th></th>
@@ -91,8 +85,6 @@
             <th><%=  @pdf_orders_total_bill %></th>
           </tr>
           <tr>
-            <th></th>
-            <th></th>
             <th></th>
             <th></th>
             <th></th>

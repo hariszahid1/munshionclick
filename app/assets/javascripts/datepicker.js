@@ -11,11 +11,16 @@ function initializeDatepicker() {
   }, 50);
 
 }
-  
+
 $(document).on('turbolinks:load', function() {
   initializeDatepicker();
 });
 
 $(document).ready(function() {
   initializeDatepicker();
+});
+
+$(document).on('turbolinks:before-cache', function() {
+  $('.chosen-select').chosen('destroy');
+  $('.chosen-container').remove();
 });
