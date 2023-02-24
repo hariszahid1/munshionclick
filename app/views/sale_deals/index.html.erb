@@ -115,9 +115,10 @@
           </div>
         </div>
         <div class="mt-3">
-          <table data-toggle="table mt-3" data-search="true" class="content-table">
+          <table data-toggle="table mt-3" data-search="true" class="table" style='overflow: hidden;'>
             <thead>
               <tr>
+                <th>Sr#</th>
                 <th>Date</th>
                 <th>Agent</th>
                 <th>Project</th>
@@ -131,7 +132,10 @@
               </tr>
             </thead>
             <tbody>
-              <%= render partial: 'sale_deal', collection: @sale_deals %>
+              <% @sale_deals.each_with_index do |sale_deal, index| %>
+                <%= render partial: 'sale_deal', locals: { sale_deal: sale_deal, index: index } %>
+              <% end %>
+              <%#= render partial: 'sale_deal', collection: @sale_deals %>
             </tbody>
           </table>
           <div class="row">

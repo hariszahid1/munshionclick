@@ -1,4 +1,10 @@
-<tr class= <%= (sale_deal.transaction_type.eql?('NewSaleDeal') && sale_deal.purchase_sale_items.first.size_2.present? && sale_deal.purchase_sale_items.first.size_11.present?) ? "cms-table-row2" : (sale_deal.transaction_type.eql?('ReSaleDeal')) ? '' : "cms-table-row1" %>>
+<% color_class = '' %>
+<% color_class = 'seller_stamp_color' if sale_deal.purchase_sale_items&.first&.status.eql?(0) %>
+<% color_class = 'buyer_stamp_color' if sale_deal.purchase_sale_items&.first&.status.eql?(1) %>
+<% color_class = 'both_stamp_color' if sale_deal.purchase_sale_items&.first&.status.eql?(3) %>
+
+<tr class="<%= color_class %>">
+	<td><%= index.to_i + 1 %></td>
 	<td><%= sale_deal.created_at.strftime('%d/%m/%y')%></td>
 	<td>
 		<%= @all_agents.to_h.invert[sale_deal&.user_name.to_i].to_s%>
@@ -83,5 +89,3 @@ $(document).ready(function() {
   FontAwesome.dom.i2svg();
 });
 </script>
-
- 
