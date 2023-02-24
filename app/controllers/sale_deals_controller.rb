@@ -133,10 +133,10 @@ class SaleDealsController < ApplicationController
     @deal_count = PurchaseSaleDetail.joins(:purchase_sale_items).where(transaction_type: %w[NewSaleDeal ReSaleDeal]).group('purchase_sale_items.size_4').count
     @payment_status_count = PurchaseSaleDetail.joins(:purchase_sale_items).where(transaction_type: %w[NewSaleDeal ReSaleDeal]).group('purchase_sale_items.size_7').count
 
-    @seller_stamps_count = PurchaseSaleDetail.joins(:purchase_sale_items).where(transaction_type: %w[NewSaleDeal ReSaleDeal], purchase_sale_items: { status: 0 }).count
-    @buyer_stamps_count = PurchaseSaleDetail.joins(:purchase_sale_items).where(transaction_type: %w[NewSaleDeal ReSaleDeal], purchase_sale_items: { status: 1 }).count
-    @no_stamps_count = PurchaseSaleDetail.joins(:purchase_sale_items).where(transaction_type: %w[NewSaleDeal ReSaleDeal], purchase_sale_items: { status: 2 }).count
-    @both_count = PurchaseSaleDetail.joins(:purchase_sale_items).where(transaction_type: %w[NewSaleDeal ReSaleDeal], purchase_sale_items: { status: 3 }).count
+    @seller_stamps_count = PurchaseSaleDetail.joins(:purchase_sale_items).where(transaction_type: %w[ReSaleDeal], purchase_sale_items: { status: 0 }).count
+    @buyer_stamps_count = PurchaseSaleDetail.joins(:purchase_sale_items).where(transaction_type: %w[ReSaleDeal], purchase_sale_items: { status: 1 }).count
+    @no_stamps_count = PurchaseSaleDetail.joins(:purchase_sale_items).where(transaction_type: %w[ReSaleDeal], purchase_sale_items: { status: 2 }).count
+    @both_count = PurchaseSaleDetail.joins(:purchase_sale_items).where(transaction_type: %w[ReSaleDeal], purchase_sale_items: { status: 3 }).count
   end
 
   def qr_link_generator
