@@ -40,28 +40,31 @@ background: none;
     </div>
   </div>
   <div class="d-flex mx-auto">
-      <%# <div class="navbar-tabs d-none d-lg-block">
-        <strong class="text-danger">
-          <%# Hosting Expiry Date <span id="expiryDateDisplay"><%=check_expiry_date(@pos_setting)%>
-        <%# </strong>
-      </div> %>
-      <div class="d-none d-block d-lg-none col mr-auto mb-2 mt-2">
-        <span>
-          <div class="dropdown my-nav-dropdown">
-            <button type="button" class="p-3 card d-flex" style="width: 350px; background-color: #f2f2f7; color: black;"><span class="d-flex mx-auto"><span class="mr-2"><i class="fas fa-hand-holding-usd fa-1x mr-2" aria-hidden="true"></i>Cash in Hand:</span><b><%=@account_amount_total.to_i%></b></span></button>
-            <div class="dropdown-content my-nav-dropdown-content p-3 border-radius-1">
-                <span>Account Balance:<%= @total_cash %></span><br>
-                <%@account_balance.each do |account|%>
-                    <i class="fas fa-check" aria-hidden="true"></i>
-                      <%=account&.first%> <%=account&.last%><br>
-                <%end%>
-            </div>
+    <div class="d-none d-block d-lg-none col mr-auto mb-2 mt-2">
+      <span>
+        <div class="dropdown my-nav-dropdown">
+          <button type="button" class="p-3 card d-flex" style="width: 350px; background-color: #f2f2f7; color: black;"><span class="d-flex mx-auto"><span class="mr-2"><i class="fas fa-hand-holding-usd fa-1x mr-2" aria-hidden="true"></i>Cash in Hand:</span><b><%=@account_amount_total.to_i%></b></span></button>
+          <div class="dropdown-content my-nav-dropdown-content p-3 border-radius-1">
+              <% if ((check_expiry_date(@pos_setting).to_date -  DateTime.now.to_date).to_i) <= 30 %>
+                <span class="text-danger">Hosting Expiry Date<%= check_expiry_date(@pos_setting) %></span>
+              <% end %>
+              <span>Account Balance:<%= @total_cash %></span><br>
+              <%@account_balance.each do |account|%>
+                  <i class="fas fa-check" aria-hidden="true"></i>
+                    <%=account&.first%> <%=account&.last%><br>
+              <%end%>
           </div>
-        </span>
-      </div>
+        </div>
+      </span>
+    </div>
   </div>
-  <div class="d-flex ml-auto mt-1"> 
-    <span class="mt-3 mr-3">
+  <div class="d-flex ml-auto mt-1">
+    <% if ((check_expiry_date(@pos_setting).to_date -  DateTime.now.to_date).to_i) <= 30 %>
+      <div class="d-none d-lg-block ml-auto mb-2 mr-2" style="cursor: pointer;">
+        <span class="text-danger mt-2 px-3 py-2 mr-3" style="border: 1px solid #e5e4e2; background: #f5f5f5; border-radius: 18px; color: dark;"><i class="fa fa-hourglass-end mr-2"></i>Hosting Expiry Date <span><%= check_expiry_date(@pos_setting) %></span>
+      </div>
+    <% end %>
+    <span class="mt-3 mr-4">
       <%= link_to edit_pos_setting_path(@pos_setting) do %>
         <i class="fa fa-cog text-secondary mr-2" style="width: 23px; height: 24px; margin-top: 1px;"></i>
       <% end %>
@@ -71,27 +74,59 @@ background: none;
         <% if @follow_up_unread_count&.positive? %>
           <span class = "notification-dot my_blinker mt-2 ml-3" ></span>
         <% end %>
-        <span class="mt-3 mr-4"> 
+        <span class="mt-3 mr-3"> 
         <%= image_tag("bell_icon.png", height: '25', width: '20', title:'Follow Up', class:'')%>
         </span>
       </div>
     <% end %>
-    <div class="ml-auto mb-2 mt-1 mr-3">
+    <div class="ml-auto mb-2 mt-1 mr-2">
       <span>
-        <div class="dropdown my-nav-dropdown ">
-          <button type="button" class="profile-btn p-2 d-flex" style="width: 200px; background-color: #f2f2f7; color: black;"> 
+        <div class="profile-dropdown">
+          <button type="button" class="profile-btn p-2 d-flex" style="width: 80px; background-color: #f2f2f7; color: black;"> 
             <span class="d-flex mx-auto">
               <%= image_tag("profile_icon.png", height: '35', width: '35')%>
-              <span class="mr-2 mt-1 text-dark py-1 px-2"><span><%= current_user.name %></span></span>
             </span>
           </button>
-          <div class="dropdown-content my-nav-dropdown-content dropdown-content-1 p-3 border-radius-1 mr-auto">
+          <div class="profile-dropdown-content border-radius-1 p-3 1 mr-5">
+              <div class="row">
+                <div class="col-sm-1 mr-4">
+                  <div class="mx-auto"><%= image_tag("profile_icon.png", height: '50', width: '50')%></div>
+                </div>
+                <div class="col">
+                  <span style="font-size: 1.25em; font-family: sans-serif; color: rgb(54, 54, 54);"><b><%= current_user.name %></b></span>
+                  <span class="text-muted"><%= current_user.email %></span>
+                </div>
+              </div>
+              <hr>
               <% if check_is_hidden_by_module('pos_settings') %>
-                <%= link_to edit_user_path(current_user.id), style:"width: 200px;", class: "btn file-btn-color mb-2" do %>
-                  <span class="link-text">Edit Profile</span>
+                <%= link_to user_path(current_user.id), class:'p-2' do %>
+                  <div class="profile-section-hover p-1">
+                    <i class="fa fa-eye profile-section-links mr-2"></i>
+                    <span class="link-text profile-section-links">View Profile</span>
+                  </div> 
                 <% end %>
               <% end %>
-               <%= link_to 'Logout', destroy_user_session_path, method: :delete, style:"width: 200px;", class: "btn file-btn-color" %>
+              <% if check_is_hidden_by_module('pos_settings') %>
+                <%= link_to edit_user_path(current_user.id), class:'p-2' do %>
+                  <div class="profile-section-hover p-1">
+                    <i class="fa fa-edit profile-section-links mr-2"></i>
+                    <span class="link-text profile-section-links">Edit Profile</span>
+                  </div>
+                <% end %>
+              <% end %>
+              <%= link_to helps_path, class:'p-2' do %>
+                <div class="profile-section-hover p-1">
+                  <i class="fa fa-question-circle profile-section-links mr-2"></i>
+                  <span class="link-text profile-section-links">Help</span>
+                </div> 
+              <% end %>
+              <hr>
+              <%= link_to destroy_user_session_path, method: :delete, class:'p-2' do %>
+                <div class="profile-section-hover p-1">
+                  <i class="fas fa-sign-out-alt profile-section-logout mr-2"></i>
+                  <span class="link-text profile-section-logout">Log out</span>
+                </div>
+              <% end %>
           </div>
         </div>
       </span>

@@ -1,93 +1,17 @@
 <div class="row mb-4 ml-1 mr-1">
   <div class="col-lg-12">
     <div class="row">
-      <div class="col-xl-3 col-sm-6 mb-2">
-        <%= link_to sale_deals_path('q[purchase_sale_items_size_7_eq]': 'Token Payment') do %>
+      <div class="col-xl-4 col-sm-6">
+        <%= link_to sale_deals_path(q: {transaction_type_eq: params['q'].try(:[], 'transaction_type_eq')},'q[purchase_sale_items_status_in]': [2]) do %>
           <div class="card shadow">
             <div class="card-content">
-              <div class="card-body">
+              <div class="card-body seller_stamp_card">
                 <div class="media d-flex">
                   <div class="align-self-center">
-                    <i class="fa fa-coins fa-3x logo-back float-left"></i>
+                    <i class="fa fa-receipt logo-back fa-3x float-left seller_stamp_card"></i>
                   </div>
                   <div class="media-body text-right">
-                    <h3><%= @payment_status_count['Token Payment'] || 0 %></h3>
-                    <span>Token Payments</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        <% end %>
-      </div>
-      <div class="col-xl-3 col-sm-6 mb-2">
-        <%= link_to sale_deals_path('q[purchase_sale_items_size_7_eq]': 'Advance Payment') do %>
-          <div class="card shadow">
-            <div class="card-content">
-              <div class="card-body">
-                <div class="media d-flex">
-                  <div class="align-self-center">
-                    <i class="fa fa-money-check-alt logo-back fa-3x float-left"></i>
-                  </div>
-                  <div class="media-body text-right">
-                    <h3><%=  @payment_status_count['Advance Payment'] || 0 %></h3>
-                    <span>Advance Payments</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        <% end %>  
-      </div>
-      <div class="col-xl-3 col-sm-6 mb-2">
-        <%= link_to sale_deals_path('q[purchase_sale_items_size_7_eq]': 'Full Payment') do %>
-          <div class="card shadow">
-            <div class="card-content">
-              <div class="card-body">
-                <div class="media d-flex">
-                  <div class="align-self-center">
-                    <i class="fa fa-money-bill-alt logo-back fa-3x float-left"></i>
-                  </div>
-                  <div class="media-body text-right">
-                    <h3><%= @payment_status_count['Full Payment'] || 0 %></h3>
-                    <span>Full Payments</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        <% end %>  
-      </div>
-      <div class="col-xl-3 col-sm-6">
-        <%= link_to sale_deals_path('q[purchase_sale_items_size_4_eq]': 'Transfer') do %>
-          <div class="card shadow">
-            <div class="card-content">
-              <div class="card-body">
-                <div class="media d-flex">
-                  <div class="align-self-center">
-                    <i class="fa fa-exchange-alt logo-back fa-3x float-left"></i>
-                  </div>
-                  <div class="media-body text-right">
-                    <h3><%= @deal_count['Transfer'] || 0 %></h3>
-                    <span>Transfer</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        <% end %>
-      </div>
-      <div class="col-xl-3 col-sm-6">
-        <%= link_to sale_deals_path('q[purchase_sale_items_size_4_eq]': 'Seller Free') do %>
-          <div class="card shadow">
-            <div class="card-content">
-              <div class="card-body">
-                <div class="media d-flex">
-                  <div class="align-self-center">
-                    <i class="fa fa-receipt logo-back fa-3x float-left"></i>
-                  </div>
-                  <div class="media-body text-right">
-                    <h3><%= @deal_count['Seller Free'] || 0 %></h3>
+                    <h3><%= @no_stamps_count %></h3>
                     <span>Seller Free</span>
                   </div>
                 </div>
@@ -97,14 +21,14 @@
         <% end %>  
       </div>
 
-      <div class="col-xl-3 col-sm-6">
-        <%= link_to sale_deals_path('q[purchase_sale_items_status_in]': [0, 3]) do %>
+      <div class="col-xl-4 col-sm-6">
+        <%= link_to sale_deals_path(q: {transaction_type_eq: params['q'].try(:[], 'transaction_type_eq')}, 'q[purchase_sale_items_status_in]': [0, 3]) do %>
           <div class="card shadow">
             <div class="card-content">
-              <div class="card-body">
+              <div class="card-body buyer_stamp_card">
                 <div class="media d-flex">
                   <div class="align-self-center">
-                    <i class="fa fa-user-tie logo-back fa-3x float-left"></i>
+                    <i class="fa fa-user-tie logo-back fa-3x float-left buyer_stamp_card"></i>
                   </div>
                   <div class="media-body text-right">
                     <h3><%= @seller_stamps_count.to_i + @both_count.to_i %></h3>
@@ -117,14 +41,14 @@
         <% end %>  
       </div>
 
-      <div class="col-xl-3 col-sm-6">
-        <%= link_to sale_deals_path('q[purchase_sale_items_status_in]': [1, 3]) do %>
+      <div class="col-xl-4 col-sm-6">
+        <%= link_to sale_deals_path(q: {transaction_type_eq: params['q'].try(:[], 'transaction_type_eq')}, 'q[purchase_sale_items_status_in]': [1, 3]) do %>
           <div class="card shadow">
             <div class="card-content">
-              <div class="card-body">
+              <div class="card-body both_stamp_card">
                 <div class="media d-flex">
                   <div class="align-self-center">
-                    <i class="fa fa-user logo-back fa-3x float-left"></i>
+                    <i class="fa fa-user logo-back fa-3x float-left both_stamp_card"></i>
                   </div>
                   <div class="media-body text-right">
                     <h3><%= @buyer_stamps_count.to_i + @both_count.to_i %></h3>
@@ -137,25 +61,6 @@
         <% end %>  
       </div>
 
-      <div class="col-xl-3 col-sm-6">
-        <%= link_to sale_deals_path('q[purchase_sale_items_status_in]': [2]) do %>
-          <div class="card shadow">
-            <div class="card-content">
-              <div class="card-body">
-                <div class="media d-flex">
-                  <div class="align-self-center">
-                    <i class="fa fa-ban logo-back fa-3x float-left"></i>
-                  </div>
-                  <div class="media-body text-right">
-                    <h3><%= @no_stamps_count %></h3>
-                    <span>No Stamp</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        <% end %>  
-      </div>
     </div>
   </div>
 </div>

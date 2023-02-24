@@ -17,6 +17,18 @@
       </li>
     </ol>
   </div>
+  <div id="new_city">
+    <% if check_can_create(@module_permission) %>
+      <%= link_to new_attendance_path,class: "btn btn-success mt-3 ml-3" do %>
+        <i class="fa fa-plus" aria-hidden="false"></i>
+        Create
+      <% end %>
+    <% end %>
+    <%= link_to attendances_path,class: "btn btn-primary mt-3 ml-3" do %>
+      <i class="fa fa-users" aria-hidden="false"></i>
+      Attendance by date
+    <% end %>
+  </div>
   <ul class="mt-4 nav nav-pills" role="tablist">
 		<li class="nav-item">
 			<a class="nav-link tab-label cms-search-exp-tab active" data-toggle="tab" href="#search" role="tab">Search</a>

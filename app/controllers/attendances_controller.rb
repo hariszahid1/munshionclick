@@ -52,7 +52,7 @@ class AttendancesController < ApplicationController
     @attendance = Attendance.new(attendance_params)
     respond_to do |format|
       if @attendance.save
-        format.html { redirect_to attendances_path, notice: 'Attendance was successfully marked.' }
+        format.html { redirect_to show_staff_attendances_path, notice: 'Attendance was successfully marked.' }
       else
         format.html { redirect_to request.referrer, alert: @attendance.errors.full_messages[0] }
       end
