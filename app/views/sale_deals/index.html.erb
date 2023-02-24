@@ -14,7 +14,7 @@
         <a href="<%= root_path %>">Dashboard</a>
       </li>
       <li class="breadcrumb-item active">
-        <a href="<%= sale_deals_path %>">Sale Deals</a>
+        <a href="<%= sale_deals_path(q: {transaction_type_eq: params['q'].try(:[], 'transaction_type_eq')}) %>">Sale Deals</a>
       </li>
     </ol>
   </div>
@@ -37,7 +37,7 @@
   <%= link_to 'Follow Ups', follow_ups_path('q[reminder_type_eq]': 'sale_deals'), class: "btn btn-primary file-btn-color mr-1 float-right" %>
   <% if current_user&.super_admin? %>
     <%= link_to requested_sale_deals_path, class: "btn btn-warning file-btn-color mr-1 float-right position-relative" do %>
-      Requested (<%= @requested_count %>) <span class='requested-blink'></span>
+      Requested (<%= @requested_count %>) <span class=  <%= 'requested-blink' if @requested_count.positive?%> ></span>
     <% end %>
   <% end %>
 </div>
@@ -45,8 +45,6 @@
 
 <% if params['q'].try(:[], 'transaction_type_eq') == '8' %>
   <%= render partial: 'transaction_type_8_row' %>
-<% else %>
-  <%= render partial: 'transaction_type_row' %>
 <% end %>
 
 <div class="row mb-3"></div>
@@ -79,16 +77,8 @@
           <div class="col-lg-3 form-group float-left">
             <%= f.select :sys_user_id_eq, options_for_select(@sys_users.map{ |p| [p.name , p.id]}, f.object.sys_user_id_eq),{:include_blank => "Select Customer Name"},:class=>"form-control chosen-select" %>
           </div>
-          <div class="col-lg-2 form-group float-left">
-            <%= f.select :user_name_eq, options_for_select(@all_agents.map{ |key, value| [key , value]}, f.object.user_name_eq),{:include_blank => "Select Agent Name"},:class=>"form-control chosen-select" %>          </div>
           <div class="col-lg-3 form-group float-left">
-            <%= f.select :purchase_sale_items_size_12_eq, options_for_select(@transaction_type, f.object.purchase_sale_items_size_12_eq),  {:include_blank => "Select Transaction Type"}, class: "form-control chosen-select" %>
-          </div>
-          <div class="col-lg-2 form-group float-left">
-            <%= f.select :purchase_sale_items_size_7_eq, options_for_select(@payment_status, f.object.purchase_sale_items_size_7_eq),  {:include_blank => "Select Payment Status"}, class: "form-control chosen-select" %>
-          </div>
-          <div class="col-lg-2 form-group float-left">
-            <%= f.select :purchase_sale_items_size_4_eq, options_for_select(@deal, f.object.purchase_sale_items_size_4_eq),  {:include_blank => "Select Deal"}, class: "form-control chosen-select" %>
+            <%= f.select :user_name_eq, options_for_select(@all_agents.map{ |key, value| [key , value]}, f.object.user_name_eq),{:include_blank => "Select Agent Name"},:class=>"form-control chosen-select" %>
           </div>
           <div class="col-lg-2 form-group float-left">
             <%= f.select :sys_user_cms_data_cont, options_for_select(@project_name, f.object.sys_user_cms_data_cont), {:include_blank => "Select Project Name"}, class: "form-control chosen-select" %>
@@ -101,9 +91,6 @@
           </div>
           <div class="col-lg-2 form-group float-left">
             <%= f.search_field :purchase_sale_items_size_2_cont, class: "form-control chosen-select", placeholder: "Search MS No" %>
-          </div>
-          <div class='col-lg-2 form-group float-left'>
-            <%= f.search_field :sys_user_ntn_cont, class: "form-control chosen-select", placeholder: "Search Plot Size" %>
           </div>
           <div class="col-lg-3 form-group float-left d-flex">
             <%= f.search_field :created_at, id: "reportrange", class: 'form-control' %>
