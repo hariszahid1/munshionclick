@@ -65,7 +65,7 @@
           <%= f.select :status, PurchaseSaleDetail.statuses.map { |key, value| [key.humanize, key] },{hide_label:true,class: "form-control", required: true} %>
         </div>
         <%if params[:transaction_type].present? or @purchase_sale_detail.transaction_type=='Sale'%>
-          <div class="font-weight-bold ">
+          <div class="font-weight-bold col-12">
             <h3><%=f.object.sys_user.name if f.object.sys_user%></h3>
             <div class="hidden">
             <%=f.select :sys_user_id, options_from_collection_for_select(@customers, 'id', 'name', f.object.sys_user_id), {label:'User',prompt: "Select the Customer"}, required: true,'data-rule-chosen-required':"true",:class=>"form-control",onchange:"set_sys_user_balance(this.value,'sys_user_balance')",onkeyup:"set_sys_user_balance(this.value,'sys_user_balance')"%>
@@ -175,7 +175,7 @@
 
   <div class="row">
     <div class="col card border-radius-1 shadow p-3 m-4">
-      <div class="font-weight-bold"><%= f.text_field :bill_no%></div>
+      <div class="font-weight-bold"><%= f.text_field :bill_no, label:'Bill/Po no'%></div>
       <div class="font-weight-bold"><%= f.select :staff_id, options_from_collection_for_select(@staffs, 'id', 'name', f.object.staff_id), {label: "Dealer",prompt: "Select Dealer"}%></div>
       <ul class="nav nav-pills" role="tablist">
         <li class="nav-item">

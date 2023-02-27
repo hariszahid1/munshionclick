@@ -10,8 +10,15 @@ class SaleDealsController < ApplicationController
   # GET /sale_deals
   # GET /sale_deals.json
   def index
-    @q = PurchaseSaleDetail.includes(:sys_user, :purchase_sale_items).order('id desc').where(
+    if params[:q].present? && (params[:q][:created_at_gteq].present? || params[:q][:created_at_lteq].present?)
+      params[:q][:created_at_gteq] = params[:q][:created_at_gteq]&.to_date&.beginning_of_day
+      params[:q][:created_at_lteq] = params[:q][:created_at_lteq]&.to_date&.end_of_day
+      @q = PurchaseSaleDetail.includes(:sys_user, :purchase_sale_items).order('id desc').where(
       transaction_type: %w[NewSaleDeal ReSaleDeal]).ransack(params[:q])
+    else
+      @q = PurchaseSaleDetail.includes(:sys_user, :purchase_sale_items).order('id desc').where(
+        transaction_type: %w[NewSaleDeal ReSaleDeal], created_at:DateTime.now.to_date&.beginning_of_month..DateTime.now.to_date&.end_of_month).ransack(params[:q])
+    end
     download_sale_deals_pdf_file if params[:pdf].present?
     download_sale_deals_csv_file if params[:csv].present?
     @sale_deals = @q.result.page(params[:page])

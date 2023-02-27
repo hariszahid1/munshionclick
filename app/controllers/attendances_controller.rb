@@ -25,8 +25,10 @@ class AttendancesController < ApplicationController
     if params[:q].present?
       params[:q][:attendance_date_gteq] = params[:q][:attendance_date_gteq]&.to_date&.beginning_of_day
       params[:q][:attendance_date_lteq] = params[:q][:attendance_date_lteq]&.to_date&.end_of_day
+      @q = DailyAttendance.includes(:attendance).all.order('attendances.date desc').ransack(params[:q])
+    else
+      @q = DailyAttendance.includes(:attendance).all.order('attendances.date desc').where('attendances.date': DateTime.now.beginning_of_day..DateTime.now.to_date&.end_of_day).ransack(params[:q])
     end
-    @q = DailyAttendance.includes(:attendance).all.order('attendances.date desc').ransack(params[:q])
     @attendances = @q.result.page(params[:page]).per(@custom_pagination)
   end
 
