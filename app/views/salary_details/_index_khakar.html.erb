@@ -1,91 +1,99 @@
-<h1>Salaries Book by Khakar</h1>
-
-<div class="row ml-2 my-4">
-  
-    <%= link_to pather_salary_details_path, class: "btn btn-info mr-2" do %>
-      <i class="fa fa-male" aria-hidden="true"></i>
+<div class="m-4">
+  <div class="main-content-header float-left">
+    <h2 class="ml-2 logo-back"><i class="fa fa-money-check mr-2"></i>Salaries Book by Khakar</h2>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<%= root_path %>">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active">
+        <a href="<%= khakar_salary_details_path %>">Salaries Book by Khakar</a>
+      </li>
+    </ol>
+  </div>
+  <div class="row float-right mt-4 mr-2">
+    <%= link_to pather_salary_details_path, class: "btn btn-info file-btn-color mr-2" do %>
       Pather Book
     <% end %>
-   
-    <%= link_to nakasi_salary_details_path, class: "btn btn-warning mr-2" do %>
-      <i class="fa fa-align-justify" aria-hidden="true"></i>
+    <%= link_to nakasi_salary_details_path, class: "btn btn-warning file-btn-color  mr-2" do %>
       Nakasi Book
     <% end %>
-
-    <%= link_to vehicle_salary_details_path, class: "btn btn-success " do %>
-      <i class="fa fa-truck" aria-hidden="true"></i>
+    <%= link_to vehicle_salary_details_path, class: "btn btn-success file-btn-color  " do %>
       Vehicle Book
     <% end %>
-  
-</div>
-
-  <ul class="nav nav-pills" role="tablist">
-     
-      <li class="nav-item">
-        <a class="nav-link tab-label active ml-2 " data-toggle="tab" href="#search" role="tab">Search</a>
-      </li>			
-	</ul>
-
-<div class="clearfix"></div>
-<div class="row card border-radius-1 shadow m-2 p-3">
-    <%= search_form_for @q, url: khakar_salary_details_path, class: "admin-controls", method: "get" do |f| %>
-      <div class="row d-flex p-2">
-          <div style="width:200px;" class="mr-2">
-             <%= f.select :id_in, options_from_collection_for_select(@salary_searchs, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code}"},f.object.id_in),{:include_blank => "Select Staff"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Staff"}}%>
-          </div>
-          <div style="width:180px;" class="mr-2">
-               <%= f.search_field :salary_details_created_at_gteq, class: 'form-control input-sm datepicker', value: @created_at_gteq,'datepicker' => true,placeholder: "YYYY-MM-DD" %>
-          </div>
-          <div style="width:180px;" class="mr-2">
-               <%= f.search_field :salary_details_created_at_lteq, class: 'form-control input-sm datepicker',value: @created_at_lteq, 'datepicker' => true ,placeholder: "YYYY-MM-DD"%>
-          </div>
-          <div class="">
-              <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
-          </div>
-          <div class="dropdown my-dropdown mr-2 ml-auto">
-               <button type="button" class="form-control bg-danger text-light"><i class="fa fa-file-pdf mr-2"></i>PDF List</button>
-            <div style="width:160px;" class="dropdown-content my-dropdown-content p-1">
-               <button class="form-control btn-danger my-2" name="submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank"><i class="fa fa-file-pdf"></i> Full</button>
-               <button class="form-control btn-danger my-2" name="submit_pdf_staff_with" type="submit" value="With Price PDF A4" formtarget="_blank"><i class="fa fa-file-pdf"></i> With Price</button>
-               <button class="form-control btn-danger my-2" name="submit_pdf_staff_without" type="submit" value="Without Price PDF A8" formtarget="_blank"><i class="fa fa-file-pdf"></i> Without Price</button>
-               <button class="form-control btn-danger my-2" name="submit_pdf_staff_rate" type="submit" value="Without Price PDF A8" formtarget="_blank"><i class="fa fa-file-pdf"></i> Daily</button>
-               <button class="form-control btn-danger my-2" name="submit_pdf_work" type="submit" value="Without Price PDF A8" formtarget="_blank"><i class="fa fa-file-pdf"></i>Full Work</button>              
-            </div>
-          </div>
-               <button style="width:100px;" class="form-control btn btn-info" name="email" type="submit" value="Email"><i class="fas fa-envelope mr-2"></i>Email</button>
-      </div> 
-    <% end %>
- </div>
-
+  </div>
   <div class="clearfix"></div>
-  <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-    <li class="nav-item" onclick="updatetabs('pills-home')">
-      <a class="<%=params[:from_tabe]=='pills-home' ? 'nav-link active' : 'nav-link'%>" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true"><b>Khakar Full</b></a>
-    </li>
-    <li class="nav-item" onclick="updatetabs('pills-profile')">
-      <a class="<%=params[:from_tabe]=='pills-profile' ? 'nav-link active' : 'nav-link'%>" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false"><b>khakar</b></a>
-    </li>
-  </ul>
-
-  <div class="tab-content" id="pills-tabContent">
-    <div class= "<%=params[:from_tabe]=='pills-home' ? 'tab-pane fade show active' : 'tab-pane fade show active '%> p-2" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-      <%= render partial: "khakar_full", locals: {} %>
-
-    </div>
-    <div class= "<%=params[:from_tabe]=='pills-profile' ? 'tab-pane fade show active' : 'tab-pane fade '%> p-2" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-      <%= render partial: "khakar", locals: {} %>
+  <div class="row">
+    <ul class="nav nav-tabs ml-4" role="tablist">
+      <li class="nav-item ">
+        <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab"><i class="fa fa-search mr-2"></i>Search</a>
+      </li>			
+  	</ul>
+  </div>
+  <div class="clearfix"></div>
+  <div class="tab-content">
+    <div class="tab-pane active no-tab-border mt-2" id="search" role="tabpanel">
+      <div class="row card  shadow m-1 p-4">
+        <%= search_form_for @q, url: khakar_salary_details_path, class: "admin-controls", method: "get" do |f| %>
+          <div class="row d-flex p-2">
+            <div style="width:200px;" class="mr-2">
+               <%= f.select :id_in, options_from_collection_for_select(@salary_searchs, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code}"},f.object.id_in),{:include_blank => "Select Staff"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Staff"}}%>
+            </div>
+            <div style="width:180px;" class="mr-2">
+              <%= f.search_field :salary_details_created_at_gteq, class: 'form-control input-sm datepicker', value: @created_at_gteq,'datepicker' => true,placeholder: "YYYY-MM-DD" %>
+            </div>
+            <div style="width:180px;" class="mr-2">
+              <%= f.search_field :salary_details_created_at_lteq, class: 'form-control input-sm datepicker',value: @created_at_lteq, 'datepicker' => true ,placeholder: "YYYY-MM-DD"%>
+            </div>
+            <div class="">
+              <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+            </div>
+            <div class="dropdown my-dropdown mr-2 ml-auto">
+              <button type="button" class="form-control  btn btn-danger file-btn-color ">PDF List</button>
+              <div style="width:80px;" class="dropdown-content my-dropdown-content p-1">
+                <button class="form-control btn-danger file-btn-color  my-2" name="submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank">Full</button>
+                <button class="form-control btn-danger file-btn-color  my-2" name="submit_pdf_staff_with" type="submit" value="With Price PDF A4" formtarget="_blank">With Price</button>
+                <button class="form-control btn-danger file-btn-color  my-2" name="submit_pdf_staff_without" type="submit" value="Without Price PDF A8" formtarget="_blank">Without Price</button>
+                <button class="form-control btn-danger file-btn-color  my-2" name="submit_pdf_staff_rate" type="submit" value="Without Price PDF A8" formtarget="_blank">Daily</button>
+                <button class="form-control btn-danger file-btn-color  my-2" name="submit_pdf_work" type="submit" value="Without Price PDF A8" formtarget="_blank">Full Work</button>              
+              </div>
+            </div>
+            <button style="width:80px;" class="form-control btn btn-info file-btn-color " name="email" type="submit" value="Email">Mail</button>
+          </div> 
+        <% end %>
+      </div>
     </div>
   </div>
-<div class="clearfix"></div>
-<div class="row">
-  <div class="col-lg-4 col-sm-4">
-    <%= page_entries_info @salary_details %>
+  <div class="clearfix"></div>
+  <div class=" card">
+    <div class="row">
+      <ul class="nav nav-tabs p-2 m-4" id="pills-tab" role="tablist">
+        <li class="nav-item" onclick="updatetabs('pills-home')">
+          <a class="<%=params[:from_tabe]=='pills-home' ? 'nav-link active' : 'nav-link'%>" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true"><b>Khakar Full</b></a>
+        </li>
+        <li class="nav-item" onclick="updatetabs('pills-profile')">
+          <a class="<%=params[:from_tabe]=='pills-profile' ? 'nav-link active' : 'nav-link'%>" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false"><b>khakar</b></a>
+        </li>
+      </ul>
+    </div>
+    <div class="tab-content m-2" id="pills-tabContent">
+      <div class= "<%=params[:from_tabe]=='pills-home' ? 'tab-pane fade show active' : 'tab-pane fade show active '%> p-2" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+        <%= render partial: "khakar_full", locals: {} %>
+      </div>
+      <div class= "<%=params[:from_tabe]=='pills-profile' ? 'tab-pane fade show active' : 'tab-pane fade '%> p-2" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+        <%= render partial: "khakar", locals: {} %>
+      </div>
+    </div>
   </div>
-  <div class="col-lg-8 col-sm-8 pagination-left">
-    <%= paginate @salary_details %>
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-lg-4 col-sm-4">
+      <%= page_entries_info @salary_details %>
+    </div>
+    <div class="col-lg-8 col-sm-8 pagination-left">
+      <%= paginate @salary_details %>
+    </div>
   </div>
 </div>
-
 <script>
   $(document).ready(function() {
     if ($(".bootstrap-table").length == 0){

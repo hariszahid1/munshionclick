@@ -1,161 +1,165 @@
-<h1>Salaries Book By <%= @departments.first.title%></h1>
-
-
-<div class="row ml-2 mt-4">
-    
-        <%= link_to khakar_salary_details_path, class: "btn btn-primary mr-2" do %>
-          <i class="fa fa-truck" aria-hidden="true"></i>
-          <%= @departments.second.title%> Book
-        <% end %>
-       
-        <%= link_to nakasi_salary_details_path, class: "btn btn-success mr-2" do %>
-           <i class="fa fa-align-justify" aria-hidden="true"></i>
-           Nakasi Book
-        <% end %>
-       
-      <%= link_to vehicle_salary_details_path, class: "btn btn-warning mr-2" do %>
-      <i class="fa fa-truck" aria-hidden="true"></i>
-      <%= @departments.fourth.title%> Book
-     <% end %>   
-    
-       <%= link_to salary_details_path, class: "btn btn-info" do %>
-        <i class="fa fa-book" aria-hidden="true"></i>
-        Staff Book
-       <% end %>   
-</div>
- <div class="my-4 ml-2">
-    <%= link_to advance_all_salary_details_path, class: "btn btn-success" do %>
-     <i class="fa fa-plus" aria-hidden="true"></i>
-     Credit Staff
-    <% end %>
- </div>
-
-  <ul class="nav nav-pills" role="tablist">
-     
-      <li class="nav-item">
-        <a class="nav-link tab-label active ml-2" data-toggle="tab" href="#search" role="tab">Search</a>
-      </li>		
-	</ul>
-
-<div class="clearfix"></div>
-  <div class="row card shadow border-radius-1 m-2 p-3">
-     <%= search_form_for @q, url: pather_salary_details_path, class: "admin-controls", method: "get" do |f| %>
-        <div class="row d-flex p-2">
-          <div style="width:200px;" class="mr-2">
-            <%= f.select :id_in, options_from_collection_for_select(@salary_searchs, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code}"},f.object.id_in),{:include_blank => "Select Staff"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Staff"}}%>
-          </div>
-          <div style="width:180px;" class="mr-2">
-             <%= f.search_field :salary_details_created_at_gteq, class: 'form-control input-sm datepicker',value: @created_at_gteq,placeholder: "YYYY-MM-DD" %>
-          </div>
-          <div style="width:180px;" class="mr-2">
-            <%= f.search_field :salary_details_created_at_lteq, class: 'form-control input-sm datepicker',value: @created_at_lteq,placeholder: "YYYY-MM-DD"%>
-          </div>
-         <div class="">
-           <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
-         </div>
-         <div class="dropdown my-dropdown mr-2 ml-auto">
-             <button type="button" class="form-control bg-danger text-light"><i class="fa fa-file-pdf mr-2"></i>PDF List</button>
-            <div style="width:160px;" class="dropdown-content my-dropdown-content p-1">
-                <button class="form-control btn-danger my-2" name="submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mr-2"></i>Full</button>
-                <button class="form-control btn-danger my-2" name="submit_pdf_staff_with" type="submit" value="With Price PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mr-2"></i>With Price</button>
-                <button class="form-control btn-danger my-2" name="submit_pdf_staff_without" type="submit" value="Without Price PDF A8" formtarget="_blank"><i class="fa fa-print mr-2"></i>WithoutPrice </button>
-                <button class="form-control btn-danger my-2" name="submit_pdf_rate" type="submit" value="Daily PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mr-2"></i>Daily</button>
-               <button class="form-control btn-danger my-2 " name="submit_pdf_work" type="submit" value="Daily PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mr-2"></i>Full work</button>             
-            </div>
-         </div>
-           <button  style="width:100px;" class="form-control btn btn-info" name="email" type="submit" value="Email"><i class="fas fa-envelope mr-2"></i>Email</button>
-      </div>
-   <% end %>
-</div>
-<div class="card shadow border-radius-1 m-2 p-3">
-<table data-toggle="table" data-search="true">
-  <thead>
-    <tr>
-      <th><%= sort_link(@q, :code, 'code') %></th>
-      <th><%= sort_link(@q, :name, 'Staff') %></th>
-      <th><%= sort_link(@q, :name, 'Raw-P') %></th>
-      <th><%= sort_link(@q, :salary_details_raw_quantity, 'kachi') %></th>
-      <th><%= sort_link(@q, :salary_details_quantity, 'paaki') %></th>
-      <th><%= sort_link(@q, :salary_details_extra, 'wast') %></th>
-      <th><%= sort_link(@q, :salary_details_wage_rate, 'k-Rate') %></th>
-      <th><%= sort_link(@q, :salary_details_wage_rate, 'p-Rate') %></th>
-      <th><%= sort_link(@q, :salary_details_gift_pay, 'gift') %></th>
-      <th><%= sort_link(@q, :salary_details_coverge_pay, 'coverge') %></th>
-      <th><%= sort_link(@q, :salary_details_remarks, 'Debit/Benam') %></th>
-      <th><%= sort_link(@q, :salary_details_remarks, 'Credit/Jama') %></th>
-      <th><%= sort_link(@q, :salary_details_remarks, 'Total Balance') %></th>
-      <th><%= sort_link(@q, :salary_details_created_at, 'Date') %></th>
-      <th class="border_none">Actions</th>
-
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @salary_details.each do |staff| %>
-      <%wage_debit=0%>
-      <%wage_credit=0%>
-      <% staff.salary_details.each do |salary_detail| %>
-        <tr>
-          <td><%= salary_detail.staff.code %></td>
-          <td><%= salary_detail.staff_full_name %></td>
-          <td><%= salary_detail.raw_product_title %></td>
-          <td><%= salary_detail.raw_quantity.to_f.round(0) %></td>
-          <td><%= salary_detail.quantity.to_f.round(0) %></td>
-          <td><%= salary_detail.extra.to_f.round(0) %></td>
-          <td><<%= salary_detail.raw_wage_rate.to_f.round(2)*1000 %>> <%= salary_detail.wage_debit.to_f.round(2) %> </td>
-          <td><<%= salary_detail.wage_rate.to_f.round(2)*1000 %>> <%= salary_detail.amount.to_f.round(2) %></td>
-          <td><<%= salary_detail.gift_rate.to_f.round(2)*1000 %>> <%= salary_detail.gift_pay.to_f.round(2) %></td>
-          <td><<%= salary_detail.coverge_rate.to_f.round(2)*1000 %>> <%= salary_detail.coverge_pay.to_f.round(2) %></td>
-          <td><%= wage_debit+=salary_detail.wage_debit.to_f.round(0) %></td>
-          <td><%= wage_credit+=salary_detail.amount.to_f.round(0) %></td>
-          <td><%= salary_detail.total_balance.to_f.round(0) %></td>
-          <td><%= salary_detail.created_at.strftime("%A,  %d-%b-%y") if salary_detail.created_at%></td>
-          <td>
-            <% if can?(:update, :all) %>
-            <%= link_to edit_salary_detail_path(salary_detail) do %>
-                       <i class="fa fa-edit" aria-hidden="true"></i> |
-            <% end %>
-            <% end %>
-            <% if can?(:delete, :all) %>
-             <%= link_to salary_detail, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
-                        <i class="fa fa-trash" aria-hidden="true"></i> |
-            <% end %>
-            <% end %>
-
-            <%= link_to salary_detail do %>
-                       <i class="fa fa-eye" aria-hidden="true"></i>
-           <% end %>
-          </td>
-        </tr>
-      <%end%>
-    <% end %>
-    <tr>
-      <td><h5>Total</h5></td>
-      <td></td>
-      <td></td>
-      <td><h5><%= @raw_quantity_sum %></h5></td>
-      <td><h5><%= @quantity_sum %></h5></td>
-      <td><h5><%= @wast_sum %></h5></td>
-      <td><h5><%= @wage_debit_sum %></h5></td>
-      <td><h5><%= @amount_sum %></h5></td>
-      <td><h5><%= @gift_pay_sum %></h5></td>
-      <td><h5><%= @coverge_pay_sum %></h5></td>
-      <td><h5><%= @remarks_sum %></h5></td>
-      <td><h5></h5></td>
-      <td><h5></h5></td>
-      <td><h5></h5></td>
-      <td><h5></h5></td>
-    </tr>
-
-  </tbody>
-</table>
-</div>
-<div class="clearfix"></div>
-<div class="row">
-  <div class="col-lg-4 col-sm-4">
-    <%= page_entries_info @salary_details %>
+<div class="m-4">
+  <div class="main-content-header float-left">
+    <h2 class="ml-2 logo-back"><i class="fa fa-credit-card mr-2"></i>Salaries Book By <%= @departments.first.title%></h2>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<%= root_path %>">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active">
+        <a href="<%= pather_salary_details_path %>">Salaries Book By <%= @departments.first.title%></a>
+      </li>
+    </ol>
   </div>
-  <div class="col-lg-8 col-sm-8 pagination-left">
-    <%= paginate @salary_details %>
+  <div class="mt-4 ml-2 float-right">
+    <%= link_to advance_all_salary_details_path, style:"width:150px;", class: "btn btn-success" do %>
+     <i class="fa fa-plus-circle"></i>
+     Credit 
+    <% end %>
+  </div>
+  <div class="float-right ml-2 mt-4">
+    <%= link_to khakar_salary_details_path, class: "btn btn-primary file-btn-color mr-1" do %>
+      <%= @departments.second.title%> Book
+    <% end %>
+    <%= link_to nakasi_salary_details_path, class: "btn btn-success file-btn-color mr-1" do %>
+       Nakasi Book
+    <% end %>
+    <%= link_to vehicle_salary_details_path, class: "btn btn-warning file-btn-color mr-1" do %>
+      <%= @departments.fourth.title%> Book
+    <% end %>   
+    <%= link_to salary_details_path, class: "btn btn-info file-btn-color" do %>
+     Staff Book
+    <% end %>   
+  </div> 
+  <div class="clearfix"></div>
+  <div class="row">
+    <ul class="nav nav-tabs ml-3" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab"><i class="fa fa-search mr-2"></i>Search</a>
+      </li>		
+  	</ul>
+  </div>
+  <div class="clearfix"></div>
+  <%= search_form_for @q, url: pather_salary_details_path, class: "admin-controls", method: "get" do |f| %>
+    <div class="tab-content">
+      <div class="tab-pane active no-tab-border mt-2" id="search" role="tabpanel">
+        <div class="row card shadow  m-1 p-3">
+          <div class="row d-flex p-3">
+            <div style="width:200px;" class="mr-2">
+              <%= f.select :id_in, options_from_collection_for_select(@salary_searchs, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code}"},f.object.id_in),{:include_blank => "Select Staff"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Staff"}}%>
+            </div>
+            <div style="width:180px;" class="mr-2">
+              <%= f.search_field :salary_details_created_at_gteq, class: 'form-control input-sm datepicker',value: @created_at_gteq,placeholder: "YYYY-MM-DD" %>
+            </div>
+            <div style="width:180px;" class="mr-2">
+              <%= f.search_field :salary_details_created_at_lteq, class: 'form-control input-sm datepicker',value: @created_at_lteq,placeholder: "YYYY-MM-DD"%>
+            </div>
+            <div class="">
+             <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+            </div>
+          </div>
+        </div>
+        <div class="card shadow mt-2 m-1 p-3">
+          <div class="row d-flex ml-1 mt-2" style="position: absolute;">
+            <div class="dropdown my-dropdown mr-2 ml-auto">
+             <button type="button" class="form-control btn btn-danger file-btn-color">PDF List</button>
+             <div style="width:80px;" class="dropdown-content my-dropdown-content p-1">
+               <button class="form-control btn-danger file-btn-color my-2" name="submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank">Full</button>
+               <button class="form-control btn-danger file-btn-color my-2" name="submit_pdf_staff_with" type="submit" value="With Price PDF A4" formtarget="_blank">With Price</button>
+               <button class="form-control btn-danger file-btn-color my-2" name="submit_pdf_staff_without" type="submit" value="Without Price PDF A8" formtarget="_blank">WithoutPrice </button>
+               <button class="form-control btn-danger file-btn-color my-2" name="submit_pdf_rate" type="submit" value="Daily PDF A4" formtarget="_blank">Daily</button>
+               <button class="form-control btn-danger file-btn-color my-2 " name="submit_pdf_work" type="submit" value="Daily PDF A4" formtarget="_blank">Full work</button>             
+             </div>
+            </div>
+            <button  style="width:80px;" class="form-control btn btn-info file-btn-color" name="email" type="submit" value="Email">Mail</button>
+          </div>
+          <table data-toggle="table" data-search="true">
+            <thead>
+              <tr>
+                <th><%= sort_link(@q, :code, 'code') %></th>
+                <th><%= sort_link(@q, :name, 'Staff') %></th>
+                <th><%= sort_link(@q, :name, 'Raw-P') %></th>
+                <th><%= sort_link(@q, :salary_details_raw_quantity, 'kachi') %></th>
+                <th><%= sort_link(@q, :salary_details_quantity, 'paaki') %></th>
+                <th><%= sort_link(@q, :salary_details_extra, 'wast') %></th>
+                <th><%= sort_link(@q, :salary_details_wage_rate, 'k-Rate') %></th>
+                <th><%= sort_link(@q, :salary_details_wage_rate, 'p-Rate') %></th>
+                <th><%= sort_link(@q, :salary_details_gift_pay, 'gift') %></th>
+                <th><%= sort_link(@q, :salary_details_coverge_pay, 'coverge') %></th>
+                <th><%= sort_link(@q, :salary_details_remarks, 'Debit/Benam') %></th>
+                <th><%= sort_link(@q, :salary_details_remarks, 'Credit/Jama') %></th>
+                <th><%= sort_link(@q, :salary_details_remarks, 'Total Balance') %></th>
+                <th><%= sort_link(@q, :salary_details_created_at, 'Date') %></th>
+                <th class="border_none">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @salary_details.each do |staff| %>
+                <%wage_debit=0%>
+                <%wage_credit=0%>
+                <% staff.salary_details.each do |salary_detail| %>
+                  <tr>
+                    <td><%= salary_detail.staff.code %></td>
+                    <td><%= salary_detail.staff_full_name %></td>
+                    <td><%= salary_detail.raw_product_title %></td>
+                    <td><%= salary_detail.raw_quantity.to_f.round(0) %></td>
+                    <td><%= salary_detail.quantity.to_f.round(0) %></td>
+                    <td><%= salary_detail.extra.to_f.round(0) %></td>
+                    <td><<%= salary_detail.raw_wage_rate.to_f.round(2)*1000 %>> <%= salary_detail.wage_debit.to_f.round(2) %> </td>
+                    <td><<%= salary_detail.wage_rate.to_f.round(2)*1000 %>> <%= salary_detail.amount.to_f.round(2) %></td>
+                    <td><<%= salary_detail.gift_rate.to_f.round(2)*1000 %>> <%= salary_detail.gift_pay.to_f.round(2) %></td>
+                    <td><<%= salary_detail.coverge_rate.to_f.round(2)*1000 %>> <%= salary_detail.coverge_pay.to_f.round(2) %></td>
+                    <td><%= wage_debit+=salary_detail.wage_debit.to_f.round(0) %></td>
+                    <td><%= wage_credit+=salary_detail.amount.to_f.round(0) %></td>
+                    <td><%= salary_detail.total_balance.to_f.round(0) %></td>
+                    <td><%= salary_detail.created_at.strftime("%d%b%y , %I:%M") if salary_detail.created_at%></td>
+                    <td>
+                      <% if can?(:update, :all) %>
+                      <%= link_to edit_salary_detail_path(salary_detail) do %>
+                        <i class="fa fa-edit" aria-hidden="true"></i> |
+                      <% end %>
+                      <% end %>
+                      <% if can?(:delete, :all) %>
+                       <%= link_to salary_detail, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+                        <i class="fa fa-trash" aria-hidden="true"></i> |
+                      <% end %>
+                      <% end %>
+                      <%= link_to salary_detail do %>
+                        <i class="fa fa-eye" aria-hidden="true"></i>
+                     <% end %>
+                    </td>
+                  </tr>
+                <%end%>
+              <% end %>
+              <tr>
+                <td><h5>Total</h5></td>
+                <td></td>
+                <td></td>
+                <td><h5><%= @raw_quantity_sum %></h5></td>
+                <td><h5><%= @quantity_sum %></h5></td>
+                <td><h5><%= @wast_sum %></h5></td>
+                <td><h5><%= @wage_debit_sum %></h5></td>
+                <td><h5><%= @amount_sum %></h5></td>
+                <td><h5><%= @gift_pay_sum %></h5></td>
+                <td><h5><%= @coverge_pay_sum %></h5></td>
+                <td><h5><%= @remarks_sum %></h5></td>
+                <td><h5></h5></td>
+                <td><h5></h5></td>
+                <td><h5></h5></td>
+                <td><h5></h5></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  <% end %>
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-lg-4 col-sm-4">
+      <%= page_entries_info @salary_details %>
+    </div>
+    <div class="col-lg-8 col-sm-8 pagination-left">
+      <%= paginate @salary_details %>
+    </div>
   </div>
 </div>

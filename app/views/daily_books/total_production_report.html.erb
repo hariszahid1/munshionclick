@@ -33,51 +33,45 @@
 <%n_lines=0%>
 <%n_total_bricks=0%>
 
-
-<div class="hidden" id="daily_books_list">
-  <div class="row">
-    
-      <h1 class="ml-4">Total Production Report</h1>
-      <div class="ml-4 my-4">
-     
-        <%= link_to daily_books_path(department_id: @departments.first.title), class: "btn btn-primary" do %>
-                  <i class="fas fa-male" aria-hidden="true"></i>
-                  <%=@departments.first.title%> Daily book
-        <% end %>
-    
-      
-        <%= link_to khakar_daily_books_path(department_id: @departments.second.title), class: "btn btn-warning" do %>
-          <i class="fas fa-truck" aria-hidden="true"></i>
-          <%=@departments.second.title%> Daily book
-        <% end %>
-    
-     
-        <%= link_to production_cycles_path, class: "btn btn-success" do %>
-          <i class="fas fa-sign-language" aria-hidden="true"></i>
-          Bhari Daily Book
-        <% end %>
-     
-      
-      <%= link_to jalai_production_cycles_path, class: "btn btn-info" do %>
-         <i class="fas fa-fire" aria-hidden="true"></i>
-         Jalai Daily Book
-       <% end %>
-    
-      
-        <%= link_to nakasi_production_cycles_path(department_id: @departments.third.title), class: "btn btn-danger" do %>
-                  <i class="fas fa-align-justify" aria-hidden="true"></i>
-                  <%=@departments.third.title%> Daily Book
-        <% end %>
-    
-    </div>
+<div class="hidden m-4" id="daily_books_list">
+  <div class="float-left">
+    <h2 class="ml-2 logo-back"><i class="fas fa-file-excel mr-2"></i>Total Production Report</h2>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<%= root_path %>">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active">
+        <a href="<%= total_production_report_daily_books_path  %>">Total Production Report</a>
+      </li>
+    </ol>
   </div>
-  <ul class="nav nav-pills ml-2 mb-2" role="tablist">
-    <li class="nav-item">
-      <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab">Search</a>
-    </li>		
-  </ul>
+  <div class="float-right mt-4">
+    <%= link_to daily_books_path(department_id: @departments.first.title), class: "btn btn-primary file-btn-color" do %>
+      <%=@departments.first.title%> Daily book
+    <% end %>
+    <%= link_to khakar_daily_books_path(department_id: @departments.second.title), class: "btn btn-warning file-btn-color" do %>
+      <%=@departments.second.title%> Daily book
+    <% end %>
+    <%= link_to production_cycles_path, class: "btn btn-success file-btn-color" do %>
+      Bhari Daily Book
+    <% end %>
+    <%= link_to jalai_production_cycles_path, class: "btn btn-info file-btn-color" do %>
+       Jalai Daily Book
+    <% end %>
+    <%= link_to nakasi_production_cycles_path(department_id: @departments.third.title), class: "btn btn-danger file-btn-color" do %>
+      <%=@departments.third.title%> Daily Book
+    <% end %>
+  </div>
   <div class="clearfix"></div>
-  <div class="row card border-radius-1 shadow mx-2 p-3 ">
+  <div class="row">
+    <ul class="nav nav-tabs ml-4 " role="tablist">
+      <li class="nav-item">
+        <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab"><i class="fas fa-search mr-2"></i>Search</a>
+      </li>		
+    </ul>
+  </div>
+  <div class="clearfix"></div>
+  <div class="row card  shadow mx-2 p-3 ">
     <div class="col-lg-12 col-sm-12">
       <%= search_form_for @q, url: total_production_report_daily_books_path, class: "admin-controls", method: "get" do |f| %>
         <div class="col-lg-2 form-group float-left">
@@ -94,12 +88,12 @@
         <div class="col-lg-2 form-group float-left">
         </div>
         <div class="col-lg-2 form-group float-left">
-          <button style="width:100px;" class="form-control btn-danger" name="submit_pdf" type="submit" value="Daily Production Details PDF A4" formtarget="_blank" ><i class="fa fa-file-pdf"></i> Daily</button>
+          <button style="width:80px;" class="form-control btn-danger file-btn-color" name="submit_pdf" type="submit" value="Daily Production Details PDF A4" formtarget="_blank" >Daily</button>
         </div>
       <% end %>
     </div>
   </div>
-  <div class="row card border-radius-1 shadow p-3 m-2">
+  <div class="row card  shadow p-3 m-2">
   <table data-toggle="table" >
     <thead>
       <h4 class="mb-3">Pathair</h4>
@@ -113,7 +107,6 @@
         <th><%= sort_link(@q, :salary_details_raw_quantity, 'P Tile') %></th>
       </tr>
     </thead>
-
     <tbody>
       <% @daily_books.each do |daily_book| %>
         <tr>
@@ -137,9 +130,6 @@
       </tr>
     </tbody>
   </table>
- 
-
-
   <table data-toggle="table">
     <thead>
       <h4 class="mb-3">Khakar</h4>
@@ -158,7 +148,6 @@
         <th><%= sort_link(@q, :department, 'Wast') %></th>
       </tr>
     </thead>
-
     <tbody>
       <% @khakar_daily_books.each do |khakar_daily_book| %>
         <tr>
@@ -172,7 +161,6 @@
           <% khakar_daily_book.salary_details_pather_remaning_quanity_chapa%><%@salary_details_pather_remaning_quanity_chapa += khakar_daily_book.salary_details_pather_remaning_quanity_chapa.round(0) %>
           <% khakar_daily_book.salary_details_khakar_remaning %> <%@daily_book_salary_details_wast += khakar_daily_book.salary_details_khakar_remaning %>
           <% khakar_daily_book.salary_details_khakar_wast.to_f.round(2) %> <%@daily_book_salary_details_quantity_rate += khakar_daily_book.salary_details_khakar_wast %>
-
         </tr>
       <% end %>
       <tr>
@@ -188,11 +176,9 @@
         <td><h5><%=@salary_details_pather_remaning_quanity_chapa%></h5></td>
         <td><h5><%=@daily_book_salary_details_wast %></h5></td>
         <td><h5><%=@daily_book_salary_details_quantity_rate %></h5></td>
-
       </tr>
     </tbody>
   </table>
-
   <table data-toggle="table">
     <thead>
       <h4 class="mb-3">Bharai</h4>
@@ -203,19 +189,14 @@
         <th><%= sort_link(@p, :production_blocks_tiles_quantity, 'Total') %></th>
       </tr>
     </thead>
-
     <tbody>
       <% @production_cycles.each do |production_cycle| %>
         <tr>
           <% production_cycle.start_date.strftime("%d-%b-%y") %>
-
             <% production_cycle.production_blocks_bricks_quantity_with_date %>
             <% production_cycle.production_blocks_bricks_quantity %><% production_blocks_bricks_quantity+=production_cycle.production_blocks_bricks_quantity %>
-
-
             <% production_cycle.production_blocks_tiles_quantity_with_date %>
           <% production_cycle.production_blocks_tiles_quantity %><% production_blocks_tiles_quantity+=production_cycle.production_blocks_tiles_quantity %>
-
         </tr>
       <% end %>
       <tr>
@@ -226,7 +207,6 @@
       </tr>
     </tbody>
   </table>
-
   <table data-toggle="table" >
     <thead>
       <h4 class="mb-3">Jalai</h4>
@@ -242,33 +222,20 @@
       <th><%= sort_link(@j, :per_ton_bricks, 'Bricks/Ton') %></th>
       <th> <%= sort_link(@j, :total_item_quantity, 'Quantiity/Bricks') %></th>
     </thead>
-
     <tbody>
       <% @jalai_production_cycles.each do |jalai_production_cycle| %>
         <tr>
           <% jalai_production_cycle.start_date.strftime("%d-%b-%y") %>
-
             <%jalai_production_cycle.lines %><% lines+=jalai_production_cycle.lines %>
-
-
             <%jalai_production_cycle.total_bricks.to_i %><% total_bricks+=jalai_production_cycle.total_bricks.to_i %>
-
             <%jalai_production_cycle.total_cost.to_i %><% total_cost+=jalai_production_cycle.total_cost %>
-
             <%jalai_production_cycle.cost_per_line.to_i %><% cost_per_line+=jalai_production_cycle.cost_per_line %>
-
             <%jalai_production_cycle.per_thousand_product_cost.to_i %><% per_thousand_product_cost+=jalai_production_cycle.per_thousand_product_cost %>
-
             <%jalai_production_cycle.per_product_cost%><% per_product_cost+=jalai_production_cycle.per_product_cost%>
-
             <%jalai_production_cycle.total_item_quantity.to_i %><% total_item_quantity+=jalai_production_cycle.total_item_quantity %>
-
             <%jalai_production_cycle.item_quantity_per_line.to_i %><% item_quantity_per_line+=jalai_production_cycle.item_quantity_per_line %>
-
             <%jalai_production_cycle.per_ton_bricks.to_i %><% per_ton_bricks+=jalai_production_cycle.per_ton_bricks %>
-
             <%(jalai_production_cycle.total_item_quantity.to_f/jalai_production_cycle.total_bricks.to_f).round(4) %>
-
         </tr>
       <% end %>
       <tr>
@@ -284,10 +251,8 @@
         <td><h6><%=((total_bricks/total_item_quantity)*1000.to_i).round(0)  if @production_cycles.present?%></h6></td>
         <td><h6><%=(total_item_quantity/total_bricks).round(3) if total_item_quantity.positive?%></h6></td>
       </tr>
-
     </tbody>
   </table>
-
   <table data-toggle="table" >
     <thead>
       <h5 class="mb-3">Nakasi</h5>
@@ -295,16 +260,12 @@
       <th><%= sort_link(@j, :lines, 'Lines') %></th>
       <th><%= sort_link(@j, :total_bricks, 'T Bricks') %></th>
     </thead>
-
     <tbody>
       <% @nkasi_production_cycles.each do |nkasi_production_cycle| %>
         <tr>
           <% nkasi_production_cycle.start_date.strftime("%d-%b-%y") %>
-
-            <%nkasi_production_cycle.lines %><% n_lines+=nkasi_production_cycle.lines %>
-
-            <%nkasi_production_cycle.total_bricks.to_i %><% n_total_bricks+=nkasi_production_cycle.total_bricks.to_i %>
-
+          <%nkasi_production_cycle.lines %><% n_lines+=nkasi_production_cycle.lines %>
+          <%nkasi_production_cycle.total_bricks.to_i %><% n_total_bricks+=nkasi_production_cycle.total_bricks.to_i %>
         </tr>
       <% end %>
       <tr>
@@ -312,17 +273,11 @@
         <td><h6><%=n_lines.to_i%></h6></td>
         <td><h6><%=n_total_bricks.to_i%></h6></td>
       </tr>
-
     </tbody>
   </table>
 </div>
 </div>
-
 <div class="clearfix"></div>
-
-
-
-
 <script>
   $(document).ready(function() {
     if ($(".bootstrap-table").length == 0){

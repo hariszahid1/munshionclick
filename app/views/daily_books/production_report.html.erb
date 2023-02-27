@@ -34,303 +34,282 @@
 <%n_total_bricks=0%>
 
 
-<div class="hidden" id="daily_books_list">
-  <div class="row">
-   
-      <h1 class="ml-4">Production Report</h1>
-       <div class="ml-4 my-4">
-      
-        <%= link_to daily_books_path(department_id: @departments.first.title), class: "btn btn-primary" do %>
-                  <i class="fas fa-male" aria-hidden="true"></i>
-                  <%=@departments.first.title%> Daily book
-        <% end %>
-     
-     
-        <%= link_to khakar_daily_books_path(department_id: @departments.second.title), class: "btn btn-success" do %>
-          <i class="fas fa-truck" aria-hidden="true"></i>
-          <%=@departments.second.title%> Daily book
-        <% end %>
-    
-     
-        <%= link_to production_cycles_path, class: "btn btn-warning" do %>
-          <i class="fas fa-sign-language" aria-hidden="true"></i>
-          Bhari Daily Book
-        <% end %>
-     
-     
-      <%= link_to jalai_production_cycles_path, class: "btn btn-danger" do %>
-         <i class="fas fa-fire" aria-hidden="true"></i>
-         Jalai Daily Book
-       <% end %>
-     
-     
-        <%= link_to nakasi_production_cycles_path(department_id: @departments.third.title), class: "btn btn-info" do %>
-                  <i class="fas fa-align-justify" aria-hidden="true"></i>
-                  <%=@departments.third.title%> Daily Book
-        <% end %>
-    
-    </div>
+<div class="hidden m-4" id="daily_books_list">
+  <div class="float-left">
+    <h2 class="ml-2 logo-back"><i class="fas fa-file-excel mr-2"></i>Production Report</h2>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<%= root_path %>">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active">
+        <a href="<%= production_report_daily_books_path  %>">Production Report</a>
+      </li>
+    </ol>
   </div>
-  <ul class="nav nav-pills ml-2 mb-2" role="tablist">
-    <li class="nav-item">
-      <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab">Search</a>
-    </li>		
-  </ul>
+  <div class="float-right mt-4">
+    <%= link_to daily_books_path(department_id: @departments.first.title), class: "btn btn-primary file-btn-color" do %>
+      <%=@departments.first.title%> Daily book
+    <% end %>
+    <%= link_to khakar_daily_books_path(department_id: @departments.second.title), class: "btn btn-success file-btn-color" do %>
+      <%=@departments.second.title%> Daily book
+    <% end %>    
+    <%= link_to production_cycles_path, class: "btn btn-warning file-btn-color" do %>
+      Bhari Daily Book
+    <% end %>
+    <%= link_to jalai_production_cycles_path, class: "btn btn-danger file-btn-color" do %>
+      Jalai Daily Book
+    <% end %>
+    <%= link_to nakasi_production_cycles_path(department_id: @departments.third.title), class: "btn btn-info file-btn-color" do %>
+      <%=@departments.third.title%> Daily Book
+    <% end %>
+  </div>
   <div class="clearfix"></div>
-  <div class="row card border-radius-1 shadow mx-2 p-3 ">
-    <div class="col-lg-12 col-sm-12">
-      <%= search_form_for @q, url: production_report_daily_books_path, class: "admin-controls", method: "get" do |f| %>
-        <div class="col-lg-2 form-group float-left">
-          <%= f.search_field :book_date_gteq, class: 'form-control input-sm datepicker',value: @book_date_gteq, 'datepicker' => true,placeholder: "YYYY-MM-DD" %>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <%= f.search_field :book_date_lteq, class: 'form-control input-sm datepicker',value: @book_date_lteq, 'datepicker' => true ,placeholder: "YYYY-MM-DD"%>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
-        </div>
-        
-        
-        <div class="col-lg-2 form-group float-right">
-          <button style="width:100px;" class="form-control btn-danger" name="submit_pdf" type="submit" value="Daily Production Details PDF A4" formtarget="_blank" ><i class="fa fa-file-pdf mr-2"></i> Daily</button>
-        </div>
-      <% end %>
-    </div>
+  <div class="row">
+    <ul class="nav nav-tabs ml-3 " role="tablist">
+      <li class="nav-item">
+        <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab"><i class="fas fa-search mr-2"></i>Search</a>
+      </li>		
+    </ul>
   </div>
-  <div class="row card border-radius-1 shadow p-3 m-2">
-  <table data-toggle="table" data-search="true">
-    <thead>
-      <h4>Pathair</h4>
-      <tr>
-        <th><%= sort_link(@q, :book_date, 'Date') %></th>
-        <th><%= sort_link(@q, :salary_details_raw_quantity, 'Kachi') %></th>
-        <th><%= sort_link(@q, :salary_details_raw_quantity, 'K Bricks') %></th>
-        <th><%= sort_link(@q, :salary_details_raw_quantity, 'K Tile') %></th>
-        <th><%= sort_link(@q, :salary_details_quantity, 'Paaki') %></th>
-        <th><%= sort_link(@q, :salary_details_raw_quantity, 'P Bricks') %></th>
-        <th><%= sort_link(@q, :salary_details_raw_quantity, 'P Tile') %></th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <% @daily_books.each do |daily_book| %>
+  <div class="clearfix"></div>
+  <%= search_form_for @q, url: production_report_daily_books_path, class: "admin-controls", method: "get" do |f| %>
+    <div class="tab-pane active no-tab-border mt-2" id="search" role="tabpanel">
+      <div class="row card  shadow mx-1 my-2 p-4">
+        <div class="col-lg-12 col-sm-12">
+          <div class="col-lg-2 form-group float-left">
+            <%= f.search_field :book_date_gteq, class: 'form-control input-sm datepicker',value: @book_date_gteq, 'datepicker' => true,placeholder: "YYYY-MM-DD" %>
+          </div>
+          <div class="col-lg-2 form-group float-left">
+            <%= f.search_field :book_date_lteq, class: 'form-control input-sm datepicker',value: @book_date_lteq, 'datepicker' => true ,placeholder: "YYYY-MM-DD"%>
+          </div>
+          <div class="col-lg-2 form-group float-left">
+            <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+          </div>
+          <div class="col-lg-2 form-group float-right">
+            <button style="width:80px;" class="form-control btn-danger file-btn-color float-right" name="submit_pdf" type="submit" value="Daily Production Details PDF A4" formtarget="_blank" >Daily</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+  <div class="row card shadow p-3 m-1">
+    <table data-toggle="table" data-search="true">
+      <thead>
+        <h4>Pathair</h4>
         <tr>
-          <td><%= daily_book.book_date.strftime("%A,  %d-%b-%y") if daily_book.book_date%></td>
-          <td><%= daily_book.salary_details_raw_quantity.round(0) %><%@daily_book_salary_details_raw_quantity += daily_book.salary_details_raw_quantity %></td>
-          <td><%= daily_book.salary_details_f99_raw_quantity.round(0)%> <%@daily_book_salary_details_f99_raw_quantity += daily_book.salary_details_f99_raw_quantity %></td>
-          <td><%= daily_book.salary_details_tile_raw_quantity.round(0)%> <%@daily_book_salary_details_tile_raw_quantity += daily_book.salary_details_tile_raw_quantity %></td>
-          <td><%= daily_book.salary_details_quantity.round(0) %> <%@daily_book_salary_details_quantity += daily_book.salary_details_quantity %></td>
-          <td><%= daily_book.salary_details_f99_quantity.round(0)%> <%@daily_book_salary_details_f99_quantity += daily_book.salary_details_f99_quantity %></td>
-          <td><%= daily_book.salary_details_tile_quantity.round(0)%> <%@daily_book_salary_details_tile_quantity += daily_book.salary_details_tile_quantity %></td>
+          <th><%= sort_link(@q, :book_date, 'Date') %></th>
+          <th><%= sort_link(@q, :salary_details_raw_quantity, 'Kachi') %></th>
+          <th><%= sort_link(@q, :salary_details_raw_quantity, 'K Bricks') %></th>
+          <th><%= sort_link(@q, :salary_details_raw_quantity, 'K Tile') %></th>
+          <th><%= sort_link(@q, :salary_details_quantity, 'Paaki') %></th>
+          <th><%= sort_link(@q, :salary_details_raw_quantity, 'P Bricks') %></th>
+          <th><%= sort_link(@q, :salary_details_raw_quantity, 'P Tile') %></th>
         </tr>
-      <% end %>
-      <tr>
-        <td><h5>Total</h5></td>
-        <td><h5><%=@daily_book_salary_details_raw_quantity%></h5></td>
-        <td><h5><%=@daily_book_salary_details_f99_raw_quantity%></h5></td>
-        <td><h5><%=@daily_book_salary_details_tile_raw_quantity%></h5></td>
-        <td><h5><%=@daily_book_salary_details_quantity%></h5></td>
-        <td><h5><%=@daily_book_salary_details_f99_quantity%></h5></td>
-        <td><h5><%=@daily_book_salary_details_tile_quantity%></h5></td>
-      </tr>
-    </tbody>
-  </table>
-
-
-  <table data-toggle="table" data-search="true">
-    <thead>
-      <h4>Khakar</h4>
-      <tr>
-        <th><%= sort_link(@q, :book_date, 'Date') %></th>
-        <th><%= sort_link(@q, :created_at, 'Pick up') %></th>
-        <th><%= sort_link(@q, :created_at, 'From Pather') %></th>
-        <th><%= sort_link(@q, :created_at, 'From Stock') %></th>
-        <th><%= sort_link(@q, :department, 'Bricks') %></th>
-        <th><%= sort_link(@q, :department, 'Tiles') %></th>
-        <th><%= sort_link(@q, :department, 'Quantity') %></th>
-        <th><%= sort_link(@q, :department, 'To Bhari') %></th>
-        <th><%= sort_link(@q, :department, 'To Stock') %></th>
-        <th><%= sort_link(@q, :department, 'To Chapa') %></th>
-        <th><%= sort_link(@q, :department, 'Total') %></th>
-        <th><%= sort_link(@q, :department, 'Wast') %></th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <% @khakar_daily_books.each do |khakar_daily_book| %>
+      </thead>
+      <tbody>
+        <% @daily_books.each do |daily_book| %>
+          <tr>
+            <td><%= daily_book.book_date.strftime("%d%b%y , %I:%M") if daily_book.book_date%></td>
+            <td><%= daily_book.salary_details_raw_quantity.round(0) %><%@daily_book_salary_details_raw_quantity += daily_book.salary_details_raw_quantity %></td>
+            <td><%= daily_book.salary_details_f99_raw_quantity.round(0)%> <%@daily_book_salary_details_f99_raw_quantity += daily_book.salary_details_f99_raw_quantity %></td>
+            <td><%= daily_book.salary_details_tile_raw_quantity.round(0)%> <%@daily_book_salary_details_tile_raw_quantity += daily_book.salary_details_tile_raw_quantity %></td>
+            <td><%= daily_book.salary_details_quantity.round(0) %> <%@daily_book_salary_details_quantity += daily_book.salary_details_quantity %></td>
+            <td><%= daily_book.salary_details_f99_quantity.round(0)%> <%@daily_book_salary_details_f99_quantity += daily_book.salary_details_f99_quantity %></td>
+            <td><%= daily_book.salary_details_tile_quantity.round(0)%> <%@daily_book_salary_details_tile_quantity += daily_book.salary_details_tile_quantity %></td>
+          </tr>
+        <% end %>
         <tr>
-          <td><%= khakar_daily_book.book_date.strftime("%A,  %d-%b-%y") if khakar_daily_book.book_date%></td>
-          <td><%= khakar_daily_book.created_at.strftime("%A,  %d-%b-%y") if khakar_daily_book.created_at%></td>
-          <td><%= khakar_daily_book.salary_details_khakar_quantity_from_pather.round(0)%> <%@salary_details_khakar_quantity_from_pather +=khakar_daily_book.salary_details_khakar_quantity_from_pather.round(0)%></td>
-          <td><%= khakar_daily_book.salary_details_khakar_quantity_from_stock.round(0)%> <%@salary_details_khakar_quantity_from_stock +=khakar_daily_book.salary_details_khakar_quantity_from_stock.round(0)%></td>
-          <td><%= khakar_daily_book.salary_details_khakar_f99_raw_quantity.round(0)%> <%@salary_details_khakar_f99_raw_quantity +=khakar_daily_book.salary_details_khakar_f99_raw_quantity.round(0)%></td>
-          <td><%= khakar_daily_book.salary_details_khakar_tile_raw_quantity.round(0)%> <%@salary_details_khakar_tile_raw_quantity +=khakar_daily_book.salary_details_khakar_tile_raw_quantity.round(0)%></td>
-          <td><%= khakar_daily_book.salary_details_khakar_quantity %> <%@daily_book_salary_details_khakar_raw_quantity += khakar_daily_book.salary_details_khakar_quantity.round(0) %></td>
-          <td><%= khakar_daily_book.salary_details_pather_remaning_quanity_bhari%><%@salary_details_pather_remaning_quanity_bhari += khakar_daily_book.salary_details_pather_remaning_quanity_bhari.round(0) %></td>
-          <td><%= khakar_daily_book.salary_details_pather_remaning_quanity_stock%><%@salary_details_pather_remaning_quanity_stock += khakar_daily_book.salary_details_pather_remaning_quanity_stock.round(0) %></td>
-          <td><%= khakar_daily_book.salary_details_pather_remaning_quanity_chapa%><%@salary_details_pather_remaning_quanity_chapa += khakar_daily_book.salary_details_pather_remaning_quanity_chapa.round(0) %></td>
-          <td><%= khakar_daily_book.salary_details_khakar_remaning %> <%@daily_book_salary_details_wast += khakar_daily_book.salary_details_khakar_remaning %></td>
-          <td><% khakar_daily_book.salary_details_khakar_wast.to_f.round(2) %> <%@daily_book_salary_details_quantity_rate += khakar_daily_book.salary_details_khakar_wast %></td>
-
+          <td><h5>Total</h5></td>
+          <td><h5><%=@daily_book_salary_details_raw_quantity%></h5></td>
+          <td><h5><%=@daily_book_salary_details_f99_raw_quantity%></h5></td>
+          <td><h5><%=@daily_book_salary_details_tile_raw_quantity%></h5></td>
+          <td><h5><%=@daily_book_salary_details_quantity%></h5></td>
+          <td><h5><%=@daily_book_salary_details_f99_quantity%></h5></td>
+          <td><h5><%=@daily_book_salary_details_tile_quantity%></h5></td>
         </tr>
-      <% end %>
-      <tr>
-        <td><h5>Total</h5></td>
-        <td></td>
-        <td><h5><%=@salary_details_khakar_quantity_from_pather%></h5></td>
-        <td><h5><%=@salary_details_khakar_quantity_from_stock%></h5></td>
-        <td><h5><%=@salary_details_khakar_f99_raw_quantity%></h5></td>
-        <td><h5><%=@salary_details_khakar_tile_raw_quantity%></h5></td>
-        <td><h5><%=@daily_book_salary_details_khakar_raw_quantity%></h5></td>
-        <td><h5><%=@salary_details_pather_remaning_quanity_bhari%></h5></td>
-        <td><h5><%=@salary_details_pather_remaning_quanity_stock%></h5></td>
-        <td><h5><%=@salary_details_pather_remaning_quanity_chapa%></h5></td>
-        <td><h5><%=@daily_book_salary_details_wast %></h5></td>
-        <td><h5><%=@daily_book_salary_details_quantity_rate %></h5></td>
-      </tr>
-    </tbody>
-  </table>
-
-  <table data-toggle="table" data-search="true">
-    <thead>
-      <h4>Bharai</h4>
-      <tr>
-        <th><%= sort_link(@p, :start_date, 'Start Date') %></th>
-        <th><%= sort_link(@p, :end_date, 'End Date') %></th>
-        <th><%= sort_link(@p, :production_blocks_bricks_quantity, 'Bricks') %></th>
-        <th><%= sort_link(@p, :production_blocks_tiles_quantity, 'Tiles') %></th>
-        <th><%= sort_link(@p, :production_blocks_tiles_quantity, 'Total') %></th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <% @production_cycles.each do |production_cycle| %>
+      </tbody>
+    </table>
+    <table data-toggle="table" data-search="true">
+      <thead>
+        <h4>Khakar</h4>
         <tr>
-          <td><%= production_cycle.start_date.strftime("%A,  %d-%b-%y") if production_cycle.start_date%></td>
-          <td><%= production_cycle.end_date %></td>
-          <td>
-            <%= production_cycle.production_blocks_bricks_quantity_with_date %>
-            <h6><%= production_cycle.production_blocks_bricks_quantity %><% production_blocks_bricks_quantity+=production_cycle.production_blocks_bricks_quantity %></h6>
-          </td>
-          <td>
-            <%= production_cycle.production_blocks_tiles_quantity_with_date %>
-            <h6><%= production_cycle.production_blocks_tiles_quantity %><% production_blocks_tiles_quantity+=production_cycle.production_blocks_tiles_quantity %></h6>
-          </td>
+          <th><%= sort_link(@q, :book_date, 'Date') %></th>
+          <th><%= sort_link(@q, :created_at, 'Pick up') %></th>
+          <th><%= sort_link(@q, :created_at, 'From Pather') %></th>
+          <th><%= sort_link(@q, :created_at, 'From Stock') %></th>
+          <th><%= sort_link(@q, :department, 'Bricks') %></th>
+          <th><%= sort_link(@q, :department, 'Tiles') %></th>
+          <th><%= sort_link(@q, :department, 'Quantity') %></th>
+          <th><%= sort_link(@q, :department, 'To Bhari') %></th>
+          <th><%= sort_link(@q, :department, 'To Stock') %></th>
+          <th><%= sort_link(@q, :department, 'To Chapa') %></th>
+          <th><%= sort_link(@q, :department, 'Total') %></th>
+          <th><%= sort_link(@q, :department, 'Wast') %></th>
         </tr>
-      <% end %>
-      <tr>
-        <td><h5>Total</h5></td>
-        <td></td>
-        <td><h5><%=production_blocks_bricks_quantity%></h5></td>
-        <td><h5><%=production_blocks_tiles_quantity%></h5></td>
-        <td><h5><%=production_blocks_tiles_quantity.to_i+production_blocks_bricks_quantity.to_i%></h5></td>
-      </tr>
-    </tbody>
-  </table>
-
-  <table data-toggle="table" data-search="true">
-    <thead>
-      <h4>Jalai</h4>
-      <th><%= sort_link(@j, :start_date, 'Date') %></th>
-      <th><%= sort_link(@j, :lines, 'Lines') %></th>
-      <th><%= sort_link(@j, :total_bricks, 'T Bricks') %></th>
-      <th><%= sort_link(@j, :total_cost, 'T Cost') %></th>
-      <th><%= sort_link(@j, :cost_per_line, 'Cost/Line') %></th>
-      <th><%= sort_link(@j, :per_thousand_product_cost, 'Cost/1000') %></th>
-      <th><%= sort_link(@j, :per_product_cost, 'Cost/Brick') %></th>
-      <th><%= sort_link(@j, :total_item_quantity, 'Total Quantity') %></th>
-      <th><%= sort_link(@j, :item_quantity_per_line, 'Qunatity/Line') %></th>
-      <th><%= sort_link(@j, :per_ton_bricks, 'Bricks/Ton') %></th>
-      <th> <%= sort_link(@j, :total_item_quantity, 'Quantiity/Bricks') %></th>
-    </thead>
-
-    <tbody>
-      <% @jalai_production_cycles.each do |jalai_production_cycle| %>
+      </thead>
+      <tbody>
+        <% @khakar_daily_books.each do |khakar_daily_book| %>
+          <tr>
+            <td><%= khakar_daily_book.book_date.strftime("%d%b%y , %I:%M") if khakar_daily_book.book_date%></td>
+            <td><%= khakar_daily_book.created_at.strftime("%d%b%y , %I:%M") if khakar_daily_book.created_at%></td>
+            <td><%= khakar_daily_book.salary_details_khakar_quantity_from_pather.round(0)%> <%@salary_details_khakar_quantity_from_pather +=khakar_daily_book.salary_details_khakar_quantity_from_pather.round(0)%></td>
+            <td><%= khakar_daily_book.salary_details_khakar_quantity_from_stock.round(0)%> <%@salary_details_khakar_quantity_from_stock +=khakar_daily_book.salary_details_khakar_quantity_from_stock.round(0)%></td>
+            <td><%= khakar_daily_book.salary_details_khakar_f99_raw_quantity.round(0)%> <%@salary_details_khakar_f99_raw_quantity +=khakar_daily_book.salary_details_khakar_f99_raw_quantity.round(0)%></td>
+            <td><%= khakar_daily_book.salary_details_khakar_tile_raw_quantity.round(0)%> <%@salary_details_khakar_tile_raw_quantity +=khakar_daily_book.salary_details_khakar_tile_raw_quantity.round(0)%></td>
+            <td><%= khakar_daily_book.salary_details_khakar_quantity %> <%@daily_book_salary_details_khakar_raw_quantity += khakar_daily_book.salary_details_khakar_quantity.round(0) %></td>
+            <td><%= khakar_daily_book.salary_details_pather_remaning_quanity_bhari%><%@salary_details_pather_remaning_quanity_bhari += khakar_daily_book.salary_details_pather_remaning_quanity_bhari.round(0) %></td>
+            <td><%= khakar_daily_book.salary_details_pather_remaning_quanity_stock%><%@salary_details_pather_remaning_quanity_stock += khakar_daily_book.salary_details_pather_remaning_quanity_stock.round(0) %></td>
+            <td><%= khakar_daily_book.salary_details_pather_remaning_quanity_chapa%><%@salary_details_pather_remaning_quanity_chapa += khakar_daily_book.salary_details_pather_remaning_quanity_chapa.round(0) %></td>
+            <td><%= khakar_daily_book.salary_details_khakar_remaning %> <%@daily_book_salary_details_wast += khakar_daily_book.salary_details_khakar_remaning %></td>
+            <td><% khakar_daily_book.salary_details_khakar_wast.to_f.round(2) %> <%@daily_book_salary_details_quantity_rate += khakar_daily_book.salary_details_khakar_wast %></td>
+          </tr>
+        <% end %>
         <tr>
-          <td><%= jalai_production_cycle.start_date.strftime("%A,  %d-%b-%y") if jalai_production_cycle.start_date%></td>
-          <td>
-            <h7><%=jalai_production_cycle.lines %><% lines+=jalai_production_cycle.lines %></h7>
-          </td>
-          <td>
-            <h7><%=jalai_production_cycle.total_bricks.to_i %><% total_bricks+=jalai_production_cycle.total_bricks.to_i %></h7>
-          </td>
-          <td>
-            <h7><%=jalai_production_cycle.total_cost.to_i %><% total_cost+=jalai_production_cycle.total_cost %></h7>
-          </td>
-          <td>
-            <h7><%=jalai_production_cycle.cost_per_line.to_i %><% cost_per_line+=jalai_production_cycle.cost_per_line %></h7>
-          </td>
-          <td>
-            <h7><%=jalai_production_cycle.per_thousand_product_cost.to_i %><% per_thousand_product_cost+=jalai_production_cycle.per_thousand_product_cost %></h7>
-          </td>
-          <td>
-            <h7><%=jalai_production_cycle.per_product_cost%><% per_product_cost+=jalai_production_cycle.per_product_cost%></h7>
-          </td>
-          <td>
-            <h7><%=jalai_production_cycle.total_item_quantity.to_i %><% total_item_quantity+=jalai_production_cycle.total_item_quantity %></h7>
-          </td>
-          <td>
-            <h7><%=jalai_production_cycle.item_quantity_per_line.to_i %><% item_quantity_per_line+=jalai_production_cycle.item_quantity_per_line %></h7>
-          </td>
-          <td>
-            <h7><%=jalai_production_cycle.per_ton_bricks.to_i %><% per_ton_bricks+=jalai_production_cycle.per_ton_bricks %></h7>
-          </td>
-          <td>
-            <h7><%=(jalai_production_cycle.total_item_quantity.to_f/jalai_production_cycle.total_bricks.to_f).round(4) %></h7>
-          </td>
+          <td><h5>Total</h5></td>
+          <td></td>
+          <td><h5><%=@salary_details_khakar_quantity_from_pather%></h5></td>
+          <td><h5><%=@salary_details_khakar_quantity_from_stock%></h5></td>
+          <td><h5><%=@salary_details_khakar_f99_raw_quantity%></h5></td>
+          <td><h5><%=@salary_details_khakar_tile_raw_quantity%></h5></td>
+          <td><h5><%=@daily_book_salary_details_khakar_raw_quantity%></h5></td>
+          <td><h5><%=@salary_details_pather_remaning_quanity_bhari%></h5></td>
+          <td><h5><%=@salary_details_pather_remaning_quanity_stock%></h5></td>
+          <td><h5><%=@salary_details_pather_remaning_quanity_chapa%></h5></td>
+          <td><h5><%=@daily_book_salary_details_wast %></h5></td>
+          <td><h5><%=@daily_book_salary_details_quantity_rate %></h5></td>
         </tr>
-      <% end %>
-      <tr>
-        <td><h6>Total</h6></td>
-        <td><h6><%=lines.to_i%></h6></td>
-        <td><h6><%=total_bricks.to_i%></h6></td>
-        <td><h6><%=total_cost.to_i%></h6></td>
-        <td><h6><%=(total_cost/lines).to_i  if @production_cycles.present?%></h6></td>
-        <td><h6><%=(total_cost/total_bricks).round(2)*1000 if total_cost!=total_bricks%></h6></td>
-        <td><h6><%=(total_cost/total_bricks).round(2) if total_cost!=total_bricks%></h6></td>
-        <td><h6><%=total_item_quantity.to_i%></h6></td>
-        <td><h6><%=(total_item_quantity/lines.to_i).to_i  if @production_cycles.present?%></h6></td>
-        <td><h6><%=((total_bricks/total_item_quantity)*1000.to_i).round(0)  if @production_cycles.present?%></h6></td>
-        <td><h6><%=(total_item_quantity/total_bricks).round(3) if total_item_quantity.positive?%></h6></td>
-      </tr>
-
-    </tbody>
-  </table>
-
-  <table data-toggle="table" data-search="true">
-    <thead>
-      <h5>Nakasi</h5>
-      <th><%= sort_link(@j, :start_date, 'Date') %></th>
-      <th><%= sort_link(@j, :lines, 'Lines') %></th>
-      <th><%= sort_link(@j, :total_bricks, 'T Bricks') %></th>
-    </thead>
-
-    <tbody>
-      <% @nkasi_production_cycles.each do |nkasi_production_cycle| %>
+      </tbody>
+    </table>
+    <table data-toggle="table" data-search="true">
+      <thead>
+        <h4>Bharai</h4>
         <tr>
-          <td><%= nkasi_production_cycle.start_date.strftime("%A,  %d-%b-%y") if nkasi_production_cycle.start_date%></td>
-          <td>
-            <h7><%=nkasi_production_cycle.lines %><% n_lines+=nkasi_production_cycle.lines %></h7>
-          </td>
-          <td>
-            <h7><%=nkasi_production_cycle.total_bricks.to_i %><% n_total_bricks+=nkasi_production_cycle.total_bricks.to_i %></h7>
-          </td>
+          <th><%= sort_link(@p, :start_date, 'Start Date') %></th>
+          <th><%= sort_link(@p, :end_date, 'End Date') %></th>
+          <th><%= sort_link(@p, :production_blocks_bricks_quantity, 'Bricks') %></th>
+          <th><%= sort_link(@p, :production_blocks_tiles_quantity, 'Tiles') %></th>
+          <th><%= sort_link(@p, :production_blocks_tiles_quantity, 'Total') %></th>
         </tr>
-      <% end %>
-      <tr>
-        <td><h6>Total</h6></td>
-        <td><h6><%=n_lines.to_i%></h6></td>
-        <td><h6><%=n_total_bricks.to_i%></h6></td>
-      </tr>
-
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        <% @production_cycles.each do |production_cycle| %>
+          <tr>
+            <td><%= production_cycle.start_date.strftime("%d%b%y , %I:%M") if production_cycle.start_date%></td>
+            <td><%= production_cycle.end_date %></td>
+            <td>
+              <%= production_cycle.production_blocks_bricks_quantity_with_date %>
+              <h6><%= production_cycle.production_blocks_bricks_quantity %><% production_blocks_bricks_quantity+=production_cycle.production_blocks_bricks_quantity %></h6>
+            </td>
+            <td>
+              <%= production_cycle.production_blocks_tiles_quantity_with_date %>
+              <h6><%= production_cycle.production_blocks_tiles_quantity %><% production_blocks_tiles_quantity+=production_cycle.production_blocks_tiles_quantity %></h6>
+            </td>
+          </tr>
+        <% end %>
+        <tr>
+          <td><h5>Total</h5></td>
+          <td></td>
+          <td><h5><%=production_blocks_bricks_quantity%></h5></td>
+          <td><h5><%=production_blocks_tiles_quantity%></h5></td>
+          <td><h5><%=production_blocks_tiles_quantity.to_i+production_blocks_bricks_quantity.to_i%></h5></td>
+        </tr>
+      </tbody>
+    </table>
+    <table data-toggle="table" data-search="true">
+      <thead>
+        <h4>Jalai</h4>
+        <th><%= sort_link(@j, :start_date, 'Date') %></th>
+        <th><%= sort_link(@j, :lines, 'Lines') %></th>
+        <th><%= sort_link(@j, :total_bricks, 'T Bricks') %></th>
+        <th><%= sort_link(@j, :total_cost, 'T Cost') %></th>
+        <th><%= sort_link(@j, :cost_per_line, 'Cost/Line') %></th>
+        <th><%= sort_link(@j, :per_thousand_product_cost, 'Cost/1000') %></th>
+        <th><%= sort_link(@j, :per_product_cost, 'Cost/Brick') %></th>
+        <th><%= sort_link(@j, :total_item_quantity, 'Total Quantity') %></th>
+        <th><%= sort_link(@j, :item_quantity_per_line, 'Qunatity/Line') %></th>
+        <th><%= sort_link(@j, :per_ton_bricks, 'Bricks/Ton') %></th>
+        <th> <%= sort_link(@j, :total_item_quantity, 'Quantiity/Bricks') %></th>
+      </thead>
+      <tbody>
+        <% @jalai_production_cycles.each do |jalai_production_cycle| %>
+          <tr>
+            <td><%= jalai_production_cycle.start_date.strftime("%d%b%y , %I:%M") if jalai_production_cycle.start_date%></td>
+            <td>
+              <h7><%=jalai_production_cycle.lines %><% lines+=jalai_production_cycle.lines %></h7>
+            </td>
+            <td>
+              <h7><%=jalai_production_cycle.total_bricks.to_i %><% total_bricks+=jalai_production_cycle.total_bricks.to_i %></h7>
+            </td>
+            <td>
+              <h7><%=jalai_production_cycle.total_cost.to_i %><% total_cost+=jalai_production_cycle.total_cost %></h7>
+            </td>
+            <td>
+              <h7><%=jalai_production_cycle.cost_per_line.to_i %><% cost_per_line+=jalai_production_cycle.cost_per_line %></h7>
+            </td>
+            <td>
+              <h7><%=jalai_production_cycle.per_thousand_product_cost.to_i %><% per_thousand_product_cost+=jalai_production_cycle.per_thousand_product_cost %></h7>
+            </td>
+            <td>
+              <h7><%=jalai_production_cycle.per_product_cost%><% per_product_cost+=jalai_production_cycle.per_product_cost%></h7>
+            </td>
+            <td>
+              <h7><%=jalai_production_cycle.total_item_quantity.to_i %><% total_item_quantity+=jalai_production_cycle.total_item_quantity %></h7>
+            </td>
+            <td>
+              <h7><%=jalai_production_cycle.item_quantity_per_line.to_i %><% item_quantity_per_line+=jalai_production_cycle.item_quantity_per_line %></h7>
+            </td>
+            <td>
+              <h7><%=jalai_production_cycle.per_ton_bricks.to_i %><% per_ton_bricks+=jalai_production_cycle.per_ton_bricks %></h7>
+            </td>
+            <td>
+              <h7><%=(jalai_production_cycle.total_item_quantity.to_f/jalai_production_cycle.total_bricks.to_f).round(4) %></h7>
+            </td>
+          </tr>
+        <% end %>
+        <tr>
+          <td><h6>Total</h6></td>
+          <td><h6><%=lines.to_i%></h6></td>
+          <td><h6><%=total_bricks.to_i%></h6></td>
+          <td><h6><%=total_cost.to_i%></h6></td>
+          <td><h6><%=(total_cost/lines).to_i  if @production_cycles.present?%></h6></td>
+          <td><h6><%=(total_cost/total_bricks).round(2)*1000 if total_cost!=total_bricks%></h6></td>
+          <td><h6><%=(total_cost/total_bricks).round(2) if total_cost!=total_bricks%></h6></td>
+          <td><h6><%=total_item_quantity.to_i%></h6></td>
+          <td><h6><%=(total_item_quantity/lines.to_i).to_i  if @production_cycles.present?%></h6></td>
+          <td><h6><%=((total_bricks/total_item_quantity)*1000.to_i).round(0)  if @production_cycles.present?%></h6></td>
+          <td><h6><%=(total_item_quantity/total_bricks).round(3) if total_item_quantity.positive?%></h6></td>
+        </tr>
+      </tbody>
+    </table>
+    <table data-toggle="table" data-search="true">
+      <thead>
+        <h5>Nakasi</h5>
+        <th><%= sort_link(@j, :start_date, 'Date') %></th>
+        <th><%= sort_link(@j, :lines, 'Lines') %></th>
+        <th><%= sort_link(@j, :total_bricks, 'T Bricks') %></th>
+      </thead>
+      <tbody>
+        <% @nkasi_production_cycles.each do |nkasi_production_cycle| %>
+          <tr>
+            <td><%= nkasi_production_cycle.start_date.strftime("%d%b%y ,%I:%M") if nkasi_production_cycle.start_date%></td>
+            <td>
+              <h7><%=nkasi_production_cycle.lines %><% n_lines+=nkasi_production_cycle.lines %></h7>
+            </td>
+            <td>
+              <h7><%=nkasi_production_cycle.total_bricks.to_i %><% n_total_bricks+=nkasi_production_cycle.total_bricks.to_i %></h7>
+            </td>
+          </tr>
+        <% end %>
+        <tr>
+          <td><h6>Total</h6></td>
+          <td><h6><%=n_lines.to_i%></h6></td>
+          <td><h6><%=n_total_bricks.to_i%></h6></td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
-
 <div class="clearfix"></div>
-
-
 <script>
   $(document).ready(function() {
     if ($(".bootstrap-table").length == 0){
