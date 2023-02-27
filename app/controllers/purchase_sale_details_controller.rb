@@ -606,6 +606,7 @@ class PurchaseSaleDetailsController < ApplicationController
   end
   # GET /purchase_sale_details/new
   def new
+    session[:redirect_url] = request.referrer
     @purchase_sale_details=PurchaseSaleDetail.all
     @account=current_user.user_account
     @pos_setting=PosSetting.first
@@ -651,6 +652,7 @@ class PurchaseSaleDetailsController < ApplicationController
   end
   # GET /purchase_sale_details/1/edit
   def edit
+    session[:redirect_url] = request.referrer
     @account=@purchase_sale_detail.account_id
     @pos_setting=PosSetting.first
     @pos_type_batha=pos_type_batha
@@ -789,9 +791,9 @@ class PurchaseSaleDetailsController < ApplicationController
             end
           end
           if @pos_setting.sys_type!="FastFood"
-            format.html { redirect_to new_purchase_sale_detail_path(transaction_type: :sale,product: true), notice: 'Sale was successfully created.' }
+            format.html { redirect_to session.delete(:redirect_url) || request.referer, notice: 'Sale was successfully created.' }
           else
-            format.html { redirect_to biller_orders_path, notice: 'Sale was successfully created.' }
+            format.html { redirect_to session.delete(:redirect_url) || request.referer, notice: 'Sale was successfully created.' }
           end
         else
           @purchase_sale_detail.purchase_sale_items.each do |purchase|
@@ -967,9 +969,9 @@ class PurchaseSaleDetailsController < ApplicationController
             return redirect_to purchase_sale_detail_path(@purchase_sale_detail)
           end
           if @pos_setting.sys_type!="FastFood"
-            format.html { redirect_to new_purchase_sale_detail_path(transaction_type: :sale,product: true), notice: 'Sale was successfully created.' }
+            format.html { redirect_to session.delete(:redirect_url) || request.referer, notice: 'Sale was successfully created.' }
           else
-            format.html { redirect_to biller_orders_path, notice: 'Sale detail was successfully updated.' }
+            format.html { redirect_to session.delete(:redirect_url) || request.referer, notice: 'Sale detail was successfully updated.' }
           end
         else
           @purchase_sale_detail.purchase_sale_items.each do |purchase|

@@ -358,6 +358,7 @@ class OrdersController < ApplicationController
 
   # GET /orders/new
   def new
+    session[:redirect_url] = request.referrer
     @order = if params[:order].present?
                Order.new(order_params)
              else
@@ -383,6 +384,7 @@ class OrdersController < ApplicationController
 
   # GET /orders/1/edit
   def edit
+    session[:redirect_url] = request.referrer
     @suppliers = SysUser.where(user_group: %w[Supplier Both Own])
     @items = Item.all
     @item_types = ItemType.all
@@ -465,14 +467,14 @@ class OrdersController < ApplicationController
             @ledger_book.save!
           end
           format.html do
-            redirect_to new_order_path(transaction_type: :sale, product: true),
+            redirect_to session.delete(:redirect_url) || request.referer,
                         notice: 'Sale Order was successfully created.'
           end
         else
           @ledger_book = LedgerBook.new(sys_user_id: @sysuser.id, debit: 0, credit: order_params[:amount].to_i,
                                         balance: fullbalance, comment: 'Booking #' + psd.to_s + '  ||  ' + order_params['created_at(3i)'] + '/' + order_params['created_at(2i)'] + '/' + order_params['created_at(1i)'] + ' ' + @time.strftime('at %I:%M%p'), order_id: @order.id, account_id: @order.account_id)
           @ledger_book.save!
-          format.html { redirect_to orders_path, notice: 'Purchase Order was successfully created.' }
+          format.html { redirect_to session.delete(:redirect_url) || request.referer, notice: 'Purchase Order was successfully created.' }
         end
         format.json { render :show, status: :created, location: @order }
         if @pos_setting.sms_templates.present? && @pos_setting.sms_templates['new_order'].present?
@@ -520,14 +522,14 @@ class OrdersController < ApplicationController
               redirect_to biller_orders_path(sale: :true), notice: 'Sale order detail was successfully updated.'
             end
           else
-            format.html { redirect_to orders_path(sale: :true), notice: 'Sale order detail was successfully updated.' }
+            format.html { redirect_to session.delete(:redirect_url) || request.referer, notice: 'Sale order detail was successfully updated.' }
           end
           if @pos_setting.sms_templates.present? && @pos_setting.sms_templates['update_order'].present?
             send_sms(@order.sys_user&.contact&.phone_with_comma, @pos_setting.sms_templates['update_order'], '',
                      '')
           end
         else
-          format.html { redirect_to orders_path, notice: 'Purchase order detail was successfully updated.' }
+          format.html { redirect_to session.delete(:redirect_url) || request.referer, notice: 'Purchase order detail was successfully updated.' }
         end
         format.json { render :show, status: :ok, location: @order }
       else
