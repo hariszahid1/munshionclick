@@ -28,7 +28,11 @@ class StaffLedgerBooksController < ApplicationController
     @staff = Staff.all
     @debit = @q.result.sum(:debit)
     @credit = @q.result.sum(:credit)
-    staff_list = @q.result.order('staffs.name asc', 'staff_ledger_books.created_at desc')
+    if @pos_setting.sys_type =="HousingScheme"
+      staff_list = @q.result.order('staff_ledger_books.created_at desc')
+    else
+      staff_list = @q.result.order('staffs.name asc', 'staff_ledger_books.created_at desc')
+    end
     @quantity = StaffLedgerBook.joins(:staff,
                                       :salary_detail).ransack(params[:q]).result.sum(:quantity) + StaffLedgerBook.joins(:staff,
                                                                                                                         :salary_detail).ransack(params[:q]).result.sum(:khakar_remaning)

@@ -13,7 +13,7 @@
     </tr>
     <tbody>
       <% @attendance.daily_attendances.each do |daily| %>
-        <tr>
+        <tr class= <%= daily.check_in.blank? ? "table-danger text-dark" : "" %> >
           <td class="text-center"><%=daily.staff&.name%></td>
           <td class="text-center"><%=daily.check_in&.strftime('%I:%M %p')%></td>
           <td class="text-center"><%=daily.check_out&.strftime('%I:%M %p')%></td>

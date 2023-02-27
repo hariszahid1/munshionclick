@@ -106,6 +106,9 @@
             <div class="col-lg-3 form-group float-left">
               <%= f.text_field :id_eq, class: "form-control",placeholder: "Voucher Number"%>
             </div>
+            <div class="col-lg-3 form-group float-left">
+              <%= f.text_field :bill_no_eq, class: "form-control",placeholder: "Bill Number"%>
+            </div>
             <div class="col-lg-1 form-group float-left">
               <button class="form-control btn btn-primary" name="search_submit" type="submit" style="width:100px" value="Search"><i class="fa fa-search"></i></button>
             </div>
@@ -200,6 +203,7 @@
           <th><%= sort_link(@q, :created_at, 'Status') %></th>
           <th><%= sort_link(@q, :created_at, 'Time') %></th>
           <th><%= sort_link(@q, :comment, 'Comment') %></th>
+          <th><%= sort_link(@q, :receipt_no, 'bill#') %></th>
           <th>Action</th>
         </tr>
       </thead>
@@ -243,6 +247,7 @@
               <%end%>
             </td>
             <td><%= purchase_sale_detail.comment %></td>
+            <td><%= purchase_sale_detail.bill_no %></td>
             <td>
               <div class="icon-container-1">
                 <div class="my-icon-1 my-view-1">
