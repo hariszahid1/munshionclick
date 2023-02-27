@@ -7,6 +7,8 @@
     <%= render 'index_batha'%>
   <%elsif pos_setting_sys_type=="HousingScheme"%>
     <%= render 'staff_ledger_books/hscheme/index'%>
+  <%elsif pos_setting_sys_type=="ColdStorage"%>
+    <%= render 'cold_storage_index'%>
   <%else%>
     <%= render 'index'%>
   <%end%>

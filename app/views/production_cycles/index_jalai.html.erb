@@ -1,60 +1,82 @@
 <p id="notice"><%= notice %></p>
-<div class="topnav ml-2">
-  <%= link_to daily_books_path() do %>
-    <i class="fa fa-male" aria-hidden="true"></i>
-    <%=@departments.first.title%> Daily
-  <% end %>
-  <%= link_to khakar_daily_books_path(department_id: @departments.second.title) do %>
-    <i class="fas fa-truck" aria-hidden="true"></i>
-    <%=@departments.second.title%> Daily book
-  <% end %>
-  <%= link_to production_cycles_path do %>
-    <i class="fa fa-sign-language" aria-hidden="true"></i>
-    Bhari Daily Book
-  <% end %>
-  <%= link_to jalai_production_cycles_path do %>
-    <i class="fa fa-fire" aria-hidden="true"></i>
-    Jalai Daily Book
-  <% end %>
-  <%= link_to nakasi_production_cycles_path do %>
-    <i class="fa fa-align-justify" aria-hidden="true"></i>
-    <%=@departments.third.title%> Daily Book
-  <% end %>
-</div>
+
 <%production_blocks_bricks_quantity=0%>
 <%production_blocks_tiles_quantity=0%>
-<div class="hidden" id="production_cycle_list">
-  <h1 class="my-3 ml-1">Jalai Daily Book</h1>
-
- <ul class="nav nav-pills ml-2 mb-2" role="tablist">
-    <li class="nav-item">
-      <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab">Search</a>
-    </li>		
- </ul>
-  <div class="clearfix"></div>
-  <div class="row card border-radius-1 shadow m-2 p-3">
-    <div class="">
-      <%= search_form_for @q, url: jalai_production_cycles_path, class: "admin-controls", method: "get" do |f| %>
-        <div class="col-lg-2 form-group float-left">
-          <%= f.search_field :start_date_gteq, class: 'form-control input-sm datepicker',value: @book_date_gteq, 'datepicker' => true,placeholder: "YYYY-MM-DD" %>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <%= f.search_field :start_date_lteq, class: 'form-control input-sm datepicker',value: @book_date_lteq, 'datepicker' => true ,placeholder: "YYYY-MM-DD"%>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <%= f.select :production_blocks_purchase_sale_detail_id_eq, options_from_collection_for_select(@purchase_sale_detail_list, 'id', 'comment',f.object.production_blocks_purchase_sale_detail_id_eq),{:include_blank => "Select Loader"},class: 'form-control chosen-select'%>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <%= f.search_field :comment_cont, value: @title, placeholder: "Comment", title: "Comment" ,:class=>"form-control" %>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
-        </div>
-        <div class="d-flex float-right">
-          <button style="width:100px;" class="form-control btn-danger mr-2" name="submit_pdf_staff_with" type="submit" value="Jalai PDF A4" formtarget="_blank"> <i class="fa fa-file-pdf mr-1"></i>PDF</button>
-          <button  style="width:100px;" class="form-control btn btn-info" name="email" type="submit" value="Email"><i class="fas fa-envelope"></i> Email</button>
-        </div>      
+<div class="hidden m-4" id="production_cycle_list">
+  <div class="float-left">
+    <h2 class="ml-2 logo-back"><i class="fas fa-money-check-alt mr-2"></i>Jalai Daily Book</h2>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<%= jalai_production_cycles_path root_path %>">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active">
+        <a href="<%=  %>">Jalai Daily Book</a>
+      </li>
+    </ol>
+  </div>
+  <div class=" d-flex mt-4 float-right ml-4">
+    <div class=" btn btn-info file-btn-color mr-2">
+      <%= link_to daily_books_path() do %>
+        <%=@departments.first.title%> Daily
       <% end %>
+    </div>
+    <div class=" btn btn-danger file-btn-color mr-2">
+      <%= link_to khakar_daily_books_path(department_id: @departments.second.title) do %>
+        <%=@departments.second.title%> Daily book
+      <% end %>
+    </div>
+    <div class=" btn btn-success file-btn-color mr-2">
+      <%= link_to production_cycles_path do %>
+        Bhari Daily Book
+      <% end %>
+    </div>
+    <div class=" btn btn-primary file-btn-color mr-2">
+    <%= link_to jalai_production_cycles_path do %>
+      Jalai Daily Book
+    <% end %>
+    </div>
+    <div class=" btn btn-warning file-btn-color">
+      <%= link_to nakasi_production_cycles_path do %>
+        <%=@departments.third.title%> Daily Book
+      <% end %>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+  <div class="row">
+    <ul class="nav nav-tabs ml-4 mb-2" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab"><i class="fa fa-search mr-2"></i>Search</a>
+      </li>		
+    </ul>
+  </div>
+  <div class="clearfix"></div>
+  <div class="tab-content">
+    <div class="tab-pane active no-tab-border mt-2" id="search" role="tabpanel">
+      <div class="row card shadow mx-1 p-3">
+        <div class="">
+          <%= search_form_for @q, url: jalai_production_cycles_path, class: "admin-controls", method: "get" do |f| %>
+            <div class="col-lg-2 form-group float-left">
+              <%= f.search_field :start_date_gteq, class: 'form-control input-sm datepicker',value: @book_date_gteq, 'datepicker' => true,placeholder: "YYYY-MM-DD" %>
+            </div>
+            <div class="col-lg-2 form-group float-left">
+              <%= f.search_field :start_date_lteq, class: 'form-control input-sm datepicker',value: @book_date_lteq, 'datepicker' => true ,placeholder: "YYYY-MM-DD"%>
+            </div>
+            <div class="col-lg-2 form-group float-left">
+              <%= f.select :production_blocks_purchase_sale_detail_id_eq, options_from_collection_for_select(@purchase_sale_detail_list, 'id', 'comment',f.object.production_blocks_purchase_sale_detail_id_eq),{:include_blank => "Select Loader"},class: 'form-control chosen-select'%>
+            </div>
+            <div class="col-lg-2 form-group float-left">
+              <%= f.search_field :comment_cont, value: @title, placeholder: "Comment", title: "Comment" ,:class=>"form-control" %>
+            </div>
+            <div class="col-lg-2 form-group float-left">
+              <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+            </div>
+            <div class="d-flex float-right">
+              <button style="width:80px;" class="form-control btn-danger file-btn-color mr-2" name="submit_pdf_staff_with" type="submit" value="Jalai PDF A4" formtarget="_blank">PDF</button>
+              <button  style="width:80px;" class="form-control btn btn-info file-btn-color " name="email" type="submit" value="Email">Mail</button>
+            </div>      
+          <% end %>
+        </div>
+      </div>
     </div>
   </div>
   <div class="clearfix"></div>
@@ -83,72 +105,70 @@
   </div>
   <div class="clearfix"></div>
   <div class="card shadow mb-4">
-       <!-- Card Header - Accordion -->
-       <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
-         <h6 class="m-0 font-weight-bold text-primary"><h5> Ready For Jalai</h5></h6>
-       </a>
-       <!-- Card Content - Collapse -->
-       <div class="collapse show" id="collapseCardExample" style="">
-         <div class="card-body">
-          <form action=<%= new_jalai_production_cycles_path%> method='get'>
-            <table>
-              <thead>
-                <th>Action</th>
-                <th>Date</th>
-                <th>Chamber No</th>
-                <th>Bricks</th>
-                <th>Tile</th>
-                <th>Status</th>
-              </thead>
-              <tbody>
-                <% @bhari_daily_bricks.each do |bhari_daily| %>
-                  <tr>
-                    <td>
-                      <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="customCheck_<%= bhari_daily.id%>" name="bhari_daily[<%= bhari_daily.id%>]">
-                        <label class="custom-control-label" for="customCheck_<%= bhari_daily.id %>"><span class="text-hide">Check</span></label>
-                      </div>
-                    </td>
-                    <td><%= bhari_daily.date.strftime("%A,  %d-%b-%y") if bhari_daily.date%></td>
-                    <td><%= bhari_daily.title %></td>
-                    <td>
-                      <% if (@jalai_uncomplete_daily_bricks.include? bhari_daily.id)%>
-                        <%=bhari_daily.bricks_quantity.to_f/2%>
-                      <%else%>
-                        <%=bhari_daily.bricks_quantity%>
-                      <%end%>
-                    </td>
-                    <td>
-                      <% if (@jalai_uncomplete_daily_bricks.include? bhari_daily.id)%>
-                        <%= bhari_daily.tiles_quantity.to_f/2%>
-                      <%else%>
-                        <%= bhari_daily.tiles_quantity%>
-                      <%end%>
-
-                    </td>
-                    <td>
-                      <% production_status=""%>
-                      <%= production_status="Uncomplete" if @jalai_uncomplete_daily_bricks.include? bhari_daily.id%>
-                      <input type="hidden" id="status_<%= bhari_daily.id%>" name="status[<%= bhari_daily.id%>]" value=<%=production_status%>>
-                    </td>
-
-                  </tr>
-                <%end%>
-                <tr>
-                  <td><button type="submit" class="btn btn-success">Jalai Phase <i class="fa fa-plus"></i></button></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-              </tbody>
-            </table>
-          </form>
-        </div>
-      </div>
-  </div>
-  <div class="clearfix"></div>
-  <div class="row">
+    <!-- Card Header - Accordion -->
+    <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+      <h6 class="m-0 font-weight-bold text-primary"><h5> Ready For Jalai</h5></h6>
+    </a>
+    <!-- Card Content - Collapse -->
+     <div class="collapse show" id="collapseCardExample" style="">
+       <div class="card-body">
+         <form action=<%= new_jalai_production_cycles_path%> method='get'>
+           <table>
+             <thead>
+               <th>Action</th>
+               <th>Date</th>
+               <th>Chamber No</th>
+               <th>Bricks</th>
+               <th>Tile</th>
+               <th>Status</th>
+             </thead>
+             <tbody>
+               <% @bhari_daily_bricks.each do |bhari_daily| %>
+                 <tr>
+                   <td>
+                     <div class="custom-control custom-checkbox">
+                       <input type="checkbox" class="custom-control-input" id="customCheck_<%= bhari_daily.id%>" name="bhari_daily[<%= bhari_daily.id%>]">
+                       <label class="custom-control-label" for="customCheck_<%= bhari_daily.id %>"><span class="text-hide">Check</span></label>
+                     </div>
+                   </td>
+                   <td><%= bhari_daily.date.strftime("%d%b%y , %I:%M") if bhari_daily.date%></td>
+                   <td><%= bhari_daily.title %></td>
+                   <td>
+                     <% if (@jalai_uncomplete_daily_bricks.include? bhari_daily.id)%>
+                       <%=bhari_daily.bricks_quantity.to_f/2%>
+                     <%else%>
+                       <%=bhari_daily.bricks_quantity%>
+                     <%end%>
+                   </td>
+                   <td>
+                     <% if (@jalai_uncomplete_daily_bricks.include? bhari_daily.id)%>
+                       <%= bhari_daily.tiles_quantity.to_f/2%>
+                     <%else%>
+                       <%= bhari_daily.tiles_quantity%>
+                     <%end%>
+                   </td>
+                   <td>
+                     <% production_status=""%>
+                     <%= production_status="Uncomplete" if @jalai_uncomplete_daily_bricks.include? bhari_daily.id%>
+                     <input type="hidden" id="status_<%= bhari_daily.id%>" name="status[<%= bhari_daily.id%>]" value=<%=production_status%>>
+                   </td>
+                 </tr>
+               <%end%>
+               <tr>
+                 <td><button type="submit" class="btn btn-success">Jalai Phase <i class="fa fa-plus-circle"></i></button></td>
+                 <td></td>
+                 <td></td>
+                 <td></td>
+                 <td></td>
+               </tr>
+             </tbody>
+           </table>
+         </form>
+       </div>
+     </div>
+    </div>
+    <div class="clearfix"></div>
+  <div class="row card p-2 mx-1">
     <div class="col-lg-12">
       <%total_cost=0%>
       <%cost_per_line=0%>

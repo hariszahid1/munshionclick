@@ -84,20 +84,21 @@
           <%= search_form_for @q, url: sys_users_path, class: "admin-controls", method: "get" do |f| %>
             <div class="card shadow mb-3">
               <div class="row ml-1 mr-1 mb-2 p-2 d-flex">
-                <div class="col-lg-7 mt-4">
-                  <span class="col-lg-4 form-group float-left">
-                    <%= f.select :id_eq, options_from_collection_for_select(@all_user, "id", ->(st){"#{st.name} \u{27F6} \u{27F6} #{st.code} "},f.object.id_eq),{:include_blank => "Select Name/Code"},:class=>"form-control chosen-select " %>
-                  </span>
-                  <span class='col-lg-3 form-group float-left'>
-                    <%= f.select :user_group_eq, options_for_select(SysUser.user_groups, f.object.user_group_eq), {:include_blank => "Select User Group"},:class=>"form-control chosen-select" %>
-                  </span>
-                  <span class="col-lg-3 form-group float-left">
-                    <%= f.select :status_eq, SysUser.statuses.map { |key, value| [key.humanize, value] },{include_blank: "Select Status", hide_label:true, required: true },:class=>"form-control chosen-select" %>
-                  </span>
-                  <span class="col-lg-2 form-group float-left">
-                    <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:80px"><i class="fa fa-search"></i></button>
-                  </span>
-                </div>
+                <span class="col-lg-3 form-group float-left">
+                  <%= f.select :id_eq, options_from_collection_for_select(@all_user, "id", ->(st){"#{st.name} \u{27F6} \u{27F6} #{st.code} "},f.object.id_eq),{:include_blank => "Select Name/Code"},:class=>"form-control chosen-select " %>
+                </span>
+                <span class='col-lg-2 form-group float-left'>
+                  <%= f.select :user_group_eq, options_for_select(SysUser.user_groups, f.object.user_group_eq), {:include_blank => "Select User Group"},:class=>"form-control chosen-select" %>
+                </span>
+                <span class="col-lg-3 form-group float-left">
+                  <%= f.search_field :cnic_eq, class: "form-control chosen-select", placeholder: "Search by Cnic" %>
+                </span>
+                <span class="col-lg-2 form-group float-left">
+                  <%= f.select :status_eq, SysUser.statuses.map { |key, value| [key.humanize, value] },{include_blank: "Select Status", hide_label:true, required: true },:class=>"form-control chosen-select" %>
+                </span>
+                <span class="col-lg-2 form-group float-left">
+                  <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:80px"><i class="fa fa-search"></i></button>
+                </span>
               </div>
             </div>
             <div class='card shadow p-4 sys-user-book-index-card'>
@@ -166,6 +167,7 @@
                         <th>DP</th>
                         <th>Code<%= sort_link(@q, :code, "", {}, class: 'sorting-button ml-3') %></th>
                         <th>Name<div class='float-right'><%= sort_link(@q, :cnic, "", {}, class: 'sorting-button') %></div></th>
+                        <th>Cnic</th>
                         <th>Group<%= sort_link(@q, :user_group, "", {}, class: 'sorting-button ml-3') %></th>
                         <th>Status</th>
                         <th>Occupation</th>
@@ -195,6 +197,7 @@
                             <%end %>
                           </td>
                         </td>
+                        <td><%= sys_user.cnic %></td>
                         <td><%= link_to sys_user.user_group, user_groups_path() %></td>
                         <td><%= sys_user.status %></td>
                         <td><%= sys_user.occupation %></td>
@@ -309,7 +312,7 @@
                       </tr>
                       <% end %>
                       <tr>
-                        <td colspan="9"><h5>Total</h5></td>
+                        <td colspan="10"><h5>Total</h5></td>
                         <td colspan="3"><b><%=number_with_delimiter(@sys_user_balance.to_f.round(2)) %></b></td>
                       </tr>
                     </tbody>
