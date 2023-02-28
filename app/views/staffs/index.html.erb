@@ -319,6 +319,7 @@
                     <% end %>
                     <tr>
                       <td colspan="6"><h5>Total</h5></td>
+                      <td></td>
                       <td><h4><%= number_with_delimiter(@monthly_wage.to_i.round(2)) if @monthly_wage.present?%><h4></td>
                       <td><h4><%= number_with_delimiter(@total.first.first.to_i.round(2)) if @total.first.present?%><h4></td>
                       <td><h4><%= number_with_delimiter(@total.first.last.to_i.round(2)) %><h4></td>

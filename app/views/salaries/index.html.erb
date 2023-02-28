@@ -11,17 +11,17 @@
     </ol>
   </div>
   <div class="float-right mt-4">
-    <%= link_to advance_salaries_path, class: "btn btn-info file-btn-color  mt-3 mr-2" do %>
+    <%= link_to advance_salaries_path, class: "btn btn-info file-btn-color  mt-4 " do %>
       Pay Salary
     <% end %>
-    <%= link_to loan_salaries_path, class: "btn btn-danger file-btn-color  mt-3 mr-2" do %>
+    <%= link_to loan_salaries_path, class: "btn btn-danger file-btn-color mt-4 " do %>
       Loan/pashgyi
     <% end %>
     <%if @pos_setting.sys_type=="batha"  or pos_setting_sys_type=="Factory"%>
-      <%= link_to advance_all_salaries_path, class: "btn btn-primary file-btn-color mr-2",style: "width:250" do %>
+      <%= link_to advance_all_salaries_path, class: "btn btn-primary file-btn-color mt-4 ",style: "width:250" do %>
         Weekly Labour Kharcha
       <% end %>
-      <%= link_to work_detail_salaries_path, class: "btn btn-primary file-btn-color mr-2",style: "width:250" do %>
+      <%= link_to work_detail_salaries_path, class: "btn btn-primary file-btn-color mt-4 ",style: "width:250" do %>
         Work/Salary Detail
       <% end %>
     <%end%>
@@ -186,6 +186,7 @@
                 <% end %>
                 <tr>
                   <td><h5>Total</h5></td>
+                  <td></td>
                   <td></td>
                   <td><h5><%= number_with_delimiter(@salaries.sum(:paid_salary)+@salaries.sum(:advance))%></h5></td>
                   <td></td>
