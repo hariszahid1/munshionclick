@@ -4,48 +4,81 @@
     <span aria-hidden="true">×</span>
   </button>
 </div>
-<div class="hidden m-4" id="city_list">
-  <div class='d-flex'>
-    <div>
-      <div class="row mb-1">
-        <h2 class="ml-4 logo-back"><i class="fa fa-users mr-2"></i>Customer Relation Management</h2>
-      </div>
-      <div class="row mb-2">
-        <div class="col-lg-12 col-sm-12">
-          <div class="main-content-header">
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item">
-                <a href="<%= root_path %>">Dashboard</a>
-              </li>
-              <li class="breadcrumb-item active">
-                <a href="<%= crms_path %>">CRM</a>
-              </li>
-            </ol>
-          </div>
-          <div class="row mb-4">
-            <% if check_can_create(@module_permission) %>
-              <div id="new_crm">
-                <%= link_to new_crm_path, style:"width: 150px;", class: "btn btn-success mt-3 ml-3" do %>
-                    <i class="fa fa-plus-circle"></i>
-                    Create
-                <% end %>
+<div class="row-lg-12 m-5">
+  <div class="float-left">
+    <h2 class="ml-2 logo-back"><i class="fas fa-users mr-2"></i>Customer Relation Management</h2>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<%= root_path %>">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active">
+        <a href="<%= crms_path %>">Customer Relation Management</a>
+      </li>
+    </ol>
+  </div>
+  <% if check_can_create(@module_permission) %>
+    <div class="float-right mt-3">
+      <%= link_to 'Follow Ups', follow_ups_path('q[followable_type_eq]': 'SysUser'), class: "btn btn-primary file-btn-color mt-3 ml-2" %>
+      <%= link_to new_crm_path, style:"width: 150px;", class: "btn btn-success mt-3" do %>
+          <i class="fa fa-plus-circle"></i>
+          Create
+      <% end %>
+    </div>
+  <% end %>
+</div>
+<div class="hidden m-5" id="city_list">
+  <div class="clearfix"></div>
+  <div class="row mb-4">
+    <div class="col-xl-4 col-sm-4 col-12 mb-2">
+        <div class="card shadow" >
+          <div class="card-content">
+            <div class="card-body">
+              <div class="media d-flex">
+                <div class="align-self-center">
+                  <i class="fa fa-cog fa-3x logo-back float-left" style="color: #0bda51;"></i>
+                </div>
+                <div class="media-body text-right">
+                  <h2><%= @in_process_count %></h2>
+                  <span>IN PROCESS DEALS</span>
+                </div>
               </div>
-            <% end %>
-            <%= link_to 'Follow Ups', follow_ups_path('q[followable_type_eq]': 'SysUser'), class: "btn btn-primary file-btn-color mt-3 ml-2" %>
+            </div>
           </div>
         </div>
-      </div>
     </div>
-    <div class="d-flex ml-auto">
-      <div class="card shadow text-dark mr-3 p-1 close-card" style="border: 10px solid rgba(102, 255, 51, 0.3); border-radius: 50%;">
-        <span><h2 class="mt-2"><b><%= @in_process_count %></b></h2><p>IN PROCESS</p></span>
-      </div>
-      <div class="card shadow text-dark mr-3 p-1 close-card" style="border: 10px solid rgba(255, 255, 0, 0.3); border-radius: 50%;">
-        <span><h2 class="mt-2"><b><%= @closed_count %></b></h2><p>CLOSED</p></span>
-      </div>
-      <div class="card shadow text-dark mr-3 p-1 close-card" style="border: 10px solid rgba(255, 51, 0, 0.3); border-radius: 50%;">
-        <span><h2 class="mt-2"><b><%= @dead_count %></b></h2><p>DEAD DEAL</p></span>
-      </div>
+    <div class="col-xl-4 col-sm-4 col-12 mb-2">
+        <div class="card shadow">
+          <div class="card-content">
+            <div class="card-body">
+              <div class="media d-flex">
+                <div class="align-self-center">
+                  <i class="fa fa-lock logo-back fa-3x float-left" style="color: #e4d00a;"></i>
+                </div>
+                <div class="media-body text-right">
+                  <h2><%= @closed_count %></h2>
+                  <span>CLOSED DEALS</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="col-xl-4 col-sm-4 col-12 mb-2">
+        <div class="card shadow">
+          <div class="card-content">
+            <div class="card-body">
+              <div class="media d-flex">
+                <div class="align-self-center">
+                  <i class="fa fa-ban logo-back fa-3x float-left" style="color: #ff6961;"></i>
+                </div>
+                <div class="media-body text-right">
+                  <h2><%= @dead_count %></h2>
+                  <span>DEAD DEALS</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
     </div>
   </div>
 
