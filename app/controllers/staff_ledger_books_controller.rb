@@ -41,6 +41,11 @@ class StaffLedgerBooksController < ApplicationController
     @custom_pagination = params[:limit].present? ? params[:limit] : 25
     @custom_pagination = @pos_setting.custom_pagination['staff_ledger_books'] if @pos_setting&.custom_pagination.present? && @pos_setting&.custom_pagination['staff_ledger_books'].present?
     @staff_ledger_books = staff_list.page(params[:page]).per(@custom_pagination)
+
+    if params.dig(:q, :staff_id_eq).present? && @staff_ledger_books.blank?
+      st_id = params[:q][:staff_id_eq]
+      @total_b = StaffLedgerBook.where(staff_id:st_id).last&.balance.to_f
+    end
     if params[:staff_ledger_book_asc_op].present?
       @staff_ledger_books = @q.result.reorder('created_at asc', 'id asc')
       print_pdf("ASC-OP-StaffLedgerBook -" + @created_at_gteq.to_s + ' to ' + @created_at_lteq.to_s, 'pdf.html', 'A4')

@@ -313,6 +313,7 @@ class SysUsersController < ApplicationController
       :nom_cnic,
       :nom_relation,
       :for_crms,
+      :suffix,
       contact_attributes: %i[
         id
         address
