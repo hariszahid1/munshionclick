@@ -881,7 +881,7 @@ input[type='checkbox'] {
   color: black;
 }
 .scroll-td {
-  height: 100px;
+  height: 50px;
   overflow-y: scroll;
 }
 
@@ -893,4 +893,28 @@ input[type='checkbox'] {
 .scroll-td::-webkit-scrollbar-thumb {
   background-color: lightgray;
   border-radius: 15px;
+}
+
+/* Customize the scrollbar */
+.side-scroll::-webkit-scrollbar {
+  width: 12px;
+  cursor: pointer;
+  /* Set the width of the scrollbar */
+}
+
+.side-scroll::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+  /* Set the background color of the track */
+}
+
+.side-scroll::-webkit-scrollbar-thumb {
+  background-color: #888;
+  /* Set the background color of the thumb */
+  border-radius: 5px;
+  /* Round the corners of the thumb */
+}
+
+.side-scroll::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+  /* Set the background color of the thumb on hover */
 }

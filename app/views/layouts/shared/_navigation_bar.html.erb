@@ -19,11 +19,11 @@ background: none;
     <div class="d-none d-lg-block mr-auto mb-2" style="cursor: pointer;">
       <span>
         <div class="dropdown my-nav-dropdown">
-          <span class="mt-2 px-3 py-2 mr-3" style="border: 1px solid #e5e4e2; background: #f5f5f5; border-radius: 18px; color: dark;">Cash in Hand: <span><%= @account_amount_total.to_i %></span>
+          <span class="mt-2 px-3 py-2 mr-3" style="border: 1px solid #e5e4e2; background: #f5f5f5; border-radius: 18px; color: dark;">Cash in Hand: <span><%= number_with_delimiter(@account_amount_total.to_i) %></span>
           <div class="dropdown-content my-nav-dropdown-content p-3 border-radius-1 mt-3">
             <%@account_balance.each do |account|%>
               <i class="fas fa-check" aria-hidden="true"></i>
-              <%=account&.first%> <%=account&.last%><br>
+              <%= number_with_delimiter(account&.first)%> <%= number_with_delimiter(account&.last)%><br>
             <%end%>
           </div>
         </div>
@@ -34,7 +34,7 @@ background: none;
     <div class="d-none d-lg-block mb-2">
       <span>
         <div class="dropdown my-nav-dropdown">
-          <span class="mt-2 px-3 py-2 mr-3" style="border: 1px solid #e5e4e2; background: #f5f5f5; border-radius: 18px; color: dark;">Account Balance: <span><%= @total_cash %></span>
+          <span class="mt-2 px-3 py-2 mr-3" style="border: 1px solid #e5e4e2; background: #f5f5f5; border-radius: 18px; color: dark;">Account Balance: <span><%= number_with_delimiter(@total_cash) %></span>
         </div>
       </span>
     </div>
