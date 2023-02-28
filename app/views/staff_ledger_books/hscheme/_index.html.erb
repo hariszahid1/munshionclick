@@ -208,9 +208,9 @@
           <td><%= check_box_tag 'object_ids[]', staff_ledger_book.id %></td>
           <td><%= staff_ledger_book.id %></td>
           <td><%= link_to staff_ledger_book.staff.code+' '+staff_ledger_book.staff.full_name , staffs_path('q[id_eq]': staff_ledger_book.staff.id) %></td>
-          <td><%= staff_ledger_book.debit %></td>
-          <td><%= staff_ledger_book.credit %></td>
-          <td><%= staff_ledger_book.balance %></td>
+          <td><%= number_with_delimiter(staff_ledger_book.debit) %></td>
+          <td><%= number_with_delimiter(staff_ledger_book.credit) %></td>
+          <td><%= number_with_delimiter(staff_ledger_book.balance) %></td>
           <td>
             <%if staff_ledger_book.balance.to_f > 0  %>
                      <b style="font-size:20px;color:blue;">Credit/Jama</b>
@@ -365,11 +365,12 @@
       <tr>
         <td></td>
         <td><b>Total<b></td>
-        <td><b><%=@debit.to_i%></b></td>
-        <td><b><%=@credit.to_i%></b></td>
-        <td><b><%=@credit.to_i-@debit.to_i%></b></td>
-        <td><b><%=@staff_ledger_books.sum(:balance).to_f.round(2)%></b></td>
-        <td><b><%=@quantity.to_f.round(2)%></b></td>
+        <td><b><b></td>
+        <td><b><%= number_with_delimiter(@debit.to_i)%></b></td>
+        <td><b><%= number_with_delimiter(@credit.to_i)%></b></td>
+        <td><b><%= number_with_delimiter(@credit.to_i-@debit.to_i)%></b></td>
+        <td><b><%= number_with_delimiter(@total_b.present? ? @total_b : @staff_ledger_books.sum(:balance).to_f.round(2))%></b></td>
+        <td><b><%= number_with_delimiter(@quantity.to_f.round(2))%></b></td>
         <td></td>
         <td></td>
       </tr>

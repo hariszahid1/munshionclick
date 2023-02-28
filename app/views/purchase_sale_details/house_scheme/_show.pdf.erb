@@ -45,7 +45,13 @@
     </tr>
     <tr>
       <td style="font-weight: bold;">Member Name:</td>
-      <td><%=@purchase_sale_detail.order&.sys_user&.name.to_s + ' ' + @purchase_sale_detail&.order&.sys_user&.father.to_s %></td>
+      <td>
+        <% if @purchase_sale_detail&.sys_user&.father.present? %>
+          <%= @purchase_sale_detail&.sys_user&.name.to_s+ ' ' +@purchase_sale_detail&.sys_user&.suffix.to_s+ ' ' +@purchase_sale_detail&.sys_user&.father.to_s %>
+        <% else %>
+          <%= @purchase_sale_detail&.sys_user&.name.to_s %>
+        <% end %>
+      </td>
       <td></td>
       <td></td>
       <td></td>
@@ -238,7 +244,13 @@
     </tr>
     <tr>
       <td style="font-weight: bold;">Member Name:</td>
-      <td><%=@purchase_sale_detail.order&.sys_user&.name.to_s + ' ' + @purchase_sale_detail&.order&.sys_user&.father.to_s %></td>
+      <td>
+        <% if @purchase_sale_detail&.sys_user&.father.present? %>
+          <%= @purchase_sale_detail&.sys_user&.name.to_s+ ' ' +@purchase_sale_detail&.sys_user&.suffix.to_s+ ' ' +@purchase_sale_detail&.sys_user&.father.to_s %>
+        <% else %>
+          <%= @purchase_sale_detail&.sys_user&.name.to_s %>
+        <% end %>
+      </td>
       <td></td>
       <td></td>
       <td></td>

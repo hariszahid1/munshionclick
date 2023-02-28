@@ -362,6 +362,11 @@ class LedgerBooksController < ApplicationController
       @q.sorts = ['created_at desc', 'id desc'] if @q.sorts.empty?
     end
     @ledger_books = @q.result.page(params[:page])
+    
+    if params.dig(:q, :sys_user_id_eq).present? && @q.result.blank?
+      sys_id = params[:q][:sys_user_id_eq]
+      @total_b = LedgerBook.where(sys_user_id: sys_id).last&.balance.to_f
+    end
     if params[:ledger_book_asc_op].present?
       @ledger_books = @q.result.reorder('created_at asc', 'id asc')
       print_pdf("ASC-OP-LedgerBook -" + @created_at_gteq.to_s + ' to ' + @created_at_lteq.to_s, 'pdf.html', 'A4')

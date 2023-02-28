@@ -85,6 +85,9 @@
                 <div class="col-lg-2 form-group float-left">
                   <%= f.select :product_type_eq, [['OnCash','0'],['OnInstallment','1']],{:include_blank => "Select Unit Type"}, { class: "form-control chosen-select", prompt: 'Select Unit Type' } %>
                 </div>
+                <div class="col-lg-4 form-group float-left">
+                  <%= f.select :orders_purchase_sale_details_staff_id_eq, options_for_select(Staff.all.map {|i| [i.name, i.id]}, f.object.orders_purchase_sale_details_staff_id_eq),{:include_blank => "Select Dealer"},{:class=>"form-control chosen-select", :data => {:placeholder => "Select Dealer"}} %>
+                </div>
                 <div class='col-lg-2 form-group float-left'>
                   <%= text_field_tag 'paid_in_per', params[:paid_in_per], class: 'form-control', placeholder: 'Paid in % >=' %>
                 </div>
@@ -283,7 +286,7 @@
                   <tr>
                     <td><h5>Total</h5></td>
                     <td colspan='6'><h5><%= @products.count %></h5></td>
-                    <td><h5><%= @product_price.to_f.round(2) %></h5></td>
+                    <td><h5><%= number_with_delimiter(@product_price.to_f.round(2)) %></h5></td>
                     <td colspan='3'><h5>Marla: <%= @total_marla %>, Sq.Ft: <%= @total_square_feet %></h5></td>
                   </tr>
                 </tbody>

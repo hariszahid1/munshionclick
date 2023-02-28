@@ -475,7 +475,7 @@
           <td></td>
           <td><h5><%=number_with_delimiter(@ledger_books_all&.first&.sum_debit)%></h5></td>
           <td><h5><%=number_with_delimiter(@ledger_books_all&.first&.sum_credit)%></h5></td>
-          <td><h5><%=number_with_delimiter(@ledger_books_all&.first&.mean_sum)%></h5></td>
+          <td><h5><%= @total_b.present? ? number_with_delimiter(@total_b) : number_with_delimiter(@ledger_books_all&.first&.mean_sum)%></h5></td>
           <td></td>
           <td></td>
           <td></td>
