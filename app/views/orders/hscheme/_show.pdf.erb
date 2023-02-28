@@ -23,7 +23,13 @@
     </tr>
     <tr>
       <td style="font-weight: bold;">Member Name:</td>
-      <td><%=@order.sys_user.name.to_s + ' ' + @order&.sys_user&.father.to_s %></td>
+      <td>
+        <% if order&.sys_user&.father.present? %>
+          <%= order&.sys_user&.name.to_s+ ' ' +order&.sys_user&.suffix.to_s+ ' ' +order&.sys_user&.father.to_s %>
+        <% else %>
+          <%= order&.sys_user&.name.to_s %>
+        <% end %>
+      </td>
       <td></td>
       <td></td>
     </tr>

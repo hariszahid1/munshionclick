@@ -368,7 +368,7 @@
         <td><b><%=@debit.to_i%></b></td>
         <td><b><%=@credit.to_i%></b></td>
         <td><b><%=@credit.to_i-@debit.to_i%></b></td>
-        <td><b><%=@staff_ledger_books.sum(:balance).to_f.round(2)%></b></td>
+        <td><b><%= @total_b.present? ? @total_b : @staff_ledger_books.sum(:balance).to_f.round(2)%></b></td>
         <td><b><%=@quantity.to_f.round(2)%></b></td>
         <td></td>
         <td></td>

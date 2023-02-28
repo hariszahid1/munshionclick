@@ -116,7 +116,11 @@
               <td>
                 <b style="font-size:20px;color:blue;">
                   <%= link_to sys_users_path('q[id_eq]':order.sys_user) do %>
-                    <%= order.sys_user.name.to_s + ' ' + order&.sys_user&.father.to_s %>
+                    <% if order&.sys_user&.father.present? %>
+                      <%= order&.sys_user&.name.to_s+ ' ' +order&.sys_user&.suffix.to_s+ ' ' +order&.sys_user&.father.to_s %>
+                    <% else %>
+                      <%= order&.sys_user&.name.to_s %>
+                    <% end %>
                   <%end %>
                 </b>
               </td>
@@ -374,7 +378,7 @@
                                     <div class="my-tooltip">
                                       Add Commission
                                     </div>
-                                    <% unless purchase_sale_detail.staff_id.present? %>
+                                    <% unless !current_user.super_admin? && purchase_sale_detail.staff_id.present? %>
                                       <%= link_to edit_purchase_sale_detail_path(purchase_sale_detail,product: true,commission: true), class:"icon-div" do %>
                                         <i class="fa fa-percentage mt-2" aria-hidden="true"></i>
                                       <% end %>
@@ -385,7 +389,7 @@
                                     <div class="my-tooltip">
                                       Edit
                                     </div>
-                                    <% unless purchase_sale_detail.staff_id.present? && purchase_sale_detail.carriage.positive? %>
+                                    <% unless !current_user.super_admin? && (purchase_sale_detail.staff_id.present? && purchase_sale_detail.carriage.positive?) %>
                                       <% if purchase_sale_detail.purchase_sale_items.present? &&
                                         purchase_sale_detail.purchase_sale_items.first.product.present? &&
                                         check_can_update(@module_permission) %>
