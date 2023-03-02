@@ -42,9 +42,10 @@ class PaymentsController < ApplicationController
     #  @t_dabit=@payments.sum(:debit)
     end
   
-    if params.dig(:q, :account_id_in).present? && @q.result.blank?
+    if params.dig(:q, :account_id_in).present? && params.dig(:q, :created_at_gteq).present? && @q.result.blank?
       acc_id = params[:q][:account_id_in]
-      @total_b = Payment.where(account_id: acc_id).last&.amount.to_f
+      acc_date = params[:q][:created_at_gteq]
+      @total_b = Payment.where('created_at < ?', acc_date).where(account_id: acc_id).last&.amount.to_f
     end
     if params[:asc_email].present? or  params[:desc_email].present? and @q.result.count > 0
       @pdf_index=render_to_string(:pdf => "Asc - Payment",:template => 'payments/index.pdf.erb',:filename => 'Asc - Payments')

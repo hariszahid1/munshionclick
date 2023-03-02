@@ -59,6 +59,9 @@
               <div class="col-lg-2 form-group float-left">
                 <h5>Remaining Stock</h5>
               </div>
+              <div class="col-lg-2 form-group float-left">
+                <button class="btn btn-primary add-count" name="get_data" type="button" value="get_data">Get all Data</button>
+              </div>
             </div>
 
             <%if @order.order_items.present?%>
@@ -116,8 +119,49 @@
 <script>
   $(document).ready(function() {
       $('.add-new-outward').on('click', function(){
-    products_call($("#party-name").val(), true);
+        if (!$(this).hasClass('product-call-not')){
+          products_call($("#party-name").val(), true);
+        }
   })
 
 });
+</script>
+
+<script>
+$(document).ready(function(){
+    $('.add-count').on('click', e => {
+
+      var party_id = $('#party-name').val()
+      var marka_no =  $('.marka-outward').val()
+      var product_id = $('.product-outward').val()
+      var prod =  $('.product-outward option:selected').text()
+      $.ajax({
+        url: '/order_outwards/get_outward_challan_data',
+        type: 'GET',
+        data: { marka_id: marka_no, party_id: party_id, product_id: product_id },
+        dataType: 'script',
+        success: function (result) {
+          var result_data = JSON.parse(result)
+          var options = []
+          for(var i = 0; i < result_data.length; i++){
+            options += "<option value='" + result_data[i] + "'>" + result_data[i] + "</option>";
+          }
+          for(var i = 0; i < result_data.length-1; i++){
+            $('.add-new-outward').addClass('product-call-not')
+            $('.add-new-outward').trigger('click')
+          }
+        var prod_options = "<option value='" + product_id + "'>" + prod + "</option>";
+        var marka_options = "<option value='" + marka_no + "'>" + marka_no + "</option>";
+        $('.add-new-outward').removeClass('product-call-not')
+        $('.marka-outward').html(marka_options)
+        $('.product-outward').html(prod_options)
+        $('.challan-outward').html(options)
+      },
+      error: function (){
+          window.alert("something went wrong!");
+      }
+      });
+    });
+
+})
 </script>
