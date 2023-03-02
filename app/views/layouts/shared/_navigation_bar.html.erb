@@ -8,13 +8,23 @@ background: none;
 </style>
 <nav class="navbar navbar-top py-3 justify-content-center" style="background-color: #f2f2f7">
   <h4 class="ml-3"><%= admin_name_on_nav %></h4>
-  <svg version="1.1" id="Layer_1" class="cursor-pointer sidebar-toggle-icon d-none d-lg-block mx-5" style="margin-top: -10px;" height="50px" width="40px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-    viewBox="0 0 455 455" style="enable-background:new 0 0 455 455;" xml:space="preserve"><g><rect y="312.5" width="455" height="50"/><rect y="212.5" width="455" height="50"/><rect y="112.5" width="455" height="50"/></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g>
+  <svg version="1.1" id="Layer_1" class="cursor-pointer sidebar-toggle-icon d-none d-lg-block mx-5" style="margin-top: -2px;" height="50px" width="40px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+    viewBox="0 0 455 455" style="enable-background:new 0 0 455 455;" xml:space="preserve">
+    <g>
+      <rect y="110" width="240" height="35"/>
+      <rect y="206" width="370" height="35"/>
+      <rect y="310" width="500" height="35"/>
+    </g>
   </svg>
-  <svg version="1.1" id="Layer_1" class="cursor-pointer sidebar-toggle-icon-mobile d-block d-lg-none mx-3" style="margin-top: -10px;" height="50px" width="40px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-    viewBox="0 0 455 455" style="enable-background:new 0 0 455 455;" xml:space="preserve"><g><rect y="312.5" width="455" height="50"/><rect y="212.5" width="455" height="50"/><rect y="112.5" width="455" height="50"/></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g>
-  </svg>   
-
+  <svg version="1.1" id="Layer_1" class="cursor-pointer sidebar-toggle-icon-mobile d-block d-lg-none mx-3" style="margin-top: -2px;" height="50px" width="40px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+    viewBox="0 0 455 455" style="enable-background:new 0 0 455 455;" xml:space="preserve">
+    <g>
+      <rect  y="110" width="240" height="35"/>
+      <rect  y="206" width="370" height="35"/>
+      <rect  y="310" width="500" height="35"/>
+    </g>
+  </svg>
+   
   <div class="d-flex">
     <div class="d-none d-lg-block mr-auto mb-2" style="cursor: pointer;">
       <span>
@@ -51,7 +61,7 @@ background: none;
               <span>Account Balance:<%= @total_cash %></span><br>
               <%@account_balance.each do |account|%>
                   <i class="fas fa-check" aria-hidden="true"></i>
-                    <%=account&.first%> <%=account&.last%><br>
+                    <%= number_with_delimiter(account&.first)%> <%= number_with_delimiter(account&.last) %><br>
               <%end%>
           </div>
         </div>
@@ -70,7 +80,7 @@ background: none;
       <% end %>
     </span>  
     <% if check_is_hidden_by_module('crms')%>
-      <div onclick="openNav()" style="cursor: pointer;" class="">
+      <div onclick="toggleNav()" style="cursor: pointer;" class="">
         <% if @follow_up_unread_count&.positive? %>
           <span class = "notification-dot my_blinker mt-2 ml-3" ></span>
         <% end %>
@@ -82,7 +92,7 @@ background: none;
     <div class="ml-auto mb-2 mt-1 mr-2">
       <span>
         <div class="profile-dropdown">
-          <button type="button" class="profile-btn p-2 d-flex" style="width: 80px; background-color: #f2f2f7; color: black;"> 
+          <button type="button" class="profile-btn p-2 d-flex profile-section-hover" style="width: 60px; background-color: #f2f2f7; color: black;"> 
             <span class="d-flex mx-auto">
               <%= image_tag("profile_icon.png", height: '35', width: '35')%>
             </span>
@@ -140,7 +150,7 @@ background: none;
       <h3 class="float-left mt-2">Follow Up</h3>
     </div>
     <div class="col">
-      <button class="form-control border-radius-1 bg-danger text-light closebtn sideclose float-right mt-2" style="width: 100px;" onclick="closeNav()">Close</button>
+      <button class="form-control bg-outline-secondary text-dark closebtn sideclose float-right mt-2" style="width: 100px;" onclick="toggleNav()">Close</button>
     </div>
   </div>  
   <div class="clearfix"></div>
@@ -174,55 +184,60 @@ background: none;
   </ul>
   <div class="tab-content mb-3" >
     <div class="tab-pane active" style="outline: none !important; border: none;" id="all" role="tabpanel">
-      <% @follow_up_all&.each do |follow_up|%>
-        <%= link_to read_follow_up_path(follow_up_id: follow_up.id) do %>
-          <div class="text-decoration-none text-left pl-2 py-3 d-flex border-bottom <%= follow_up.is_read? ? '' : 'bg-unread-color'%>">
-            <div class='col-3 mt-2'>
-              <span class="badge badge-info p-2 mb-2"><%= follow_up&.reminder_type %></span><br>
-              <span class="badge badge-danger p-2 mb-2"><%= follow_up.priority %></span><br>
-              <span class="badge badge-primary p-2"><%= follow_up.task_type %></span>
-            </div>
-            <div class='col-5'>
-              <span class="h6"><%= follow_up&.followable.name if follow_up.followable_type == 'SysUser' %></span><br>
-              <%= follow_up.comment %><br>
-              <span><%= follow_up.date.strftime('%d/%m/%Y %H:%M %p')%></span>
-        <% end %>
-              
-            </div>
-            <div class= 'col-4'>
-                <%= check_box_tag 'object_id', follow_up.id, false, class: 'testclass mx-2 follow-check-input ml-auto', checked: follow_up.is_complete %>
-                <br>
-                <%= label_tag nil, 'Is Completed ', class:"font-bold ml-auto" %>
-              </div>
-          </div>
-      <% end %>
+      <table>
+        <thead>
+          <tr>
+            <th>Reminder</th>
+            <th>Priority</th>
+            <th>Task Type</th>
+            <th>Summary</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <% @follow_up_all&.each do |follow_up|%>
+          <%= link_to read_follow_up_path(follow_up_id: follow_up.id) do %>
+            <tr class="<%= follow_up.is_read? ? '' : 'bg-unread-color'%>">
+              <td><span><%= follow_up&.reminder_type %></span></td>
+              <td><span><%= follow_up.priority %></span></td>
+              <td><span><%= follow_up.task_type %></span></td>
+              <td>
+                <span><%= follow_up&.followable.name if follow_up.followable_type == 'SysUser' %></span><br>
+                <%= follow_up.comment %>
+                <span><%= follow_up.date.strftime('%d/%m/%Y %H:%M %p')%></span>
+              </td>
+              <td><%= check_box_tag 'object_id', follow_up.id, false, class: 'testclass mx-2 follow-check-input ml-auto', checked: follow_up.is_complete %></td>
+            </tr> 
+          <% end %> 
+        <% end %>    
+      </table>
     </div>
     <div class="tab-pane" style="outline: none !important; border: none;" id="unread" role="tabpanel">
-      <% @follow_up_unread&.each do |follow_up|%>
-        <%= link_to read_follow_up_path(follow_up_id: follow_up.id) do %>
-          <div class="text-decoration-none text-left pl-2 py-3 d-flex border-bottom bg-unread-color unread-data-container">
-            <div class='col-3 mt-2'>
-              <span class="badge badge-info p-2 mb-2"><%= follow_up.reminder_type %></span><br>
-              <span class="badge badge-danger p-2 mb-2"><%= follow_up.priority %></span><br>
-              <span class="badge badge-primary p-2"><%= follow_up.task_type %></span>
-            </div>
-            <div class='col-5'>
-              <span class="h6"><%= follow_up&.followable&.name if follow_up.followable_type == 'SysUser' %></span><br>
-              <%= follow_up.comment %><br>
-              <span><%= follow_up.date.strftime('%d/%m/%Y %H:%M %p')%></span>
-        <% end %>
-            
-            </div>
-              <div class= 'col-4 float-right'>
-                <%= check_box_tag 'object_id', follow_up.id, false, class: 'testclass mx-2 follow-check-input float-right', checked: follow_up.is_complete %>
-                <br>
-                <%= label_tag nil, 'Is Completed ', class:"font-bold float-right" %>
-              </div>
-          </div>
-      <% end %>
-      <% unless @follow_up_unread.present? %>
-        <h4 class='text-danger mt-3 ml-2'><i class="fa fa-exclamation-circle mr-1" aria-hidden="true"></i>No unread follow ups exists.</h4>
-      <% end %>
+      <table>
+        <thead>
+          <tr>
+            <th>Reminder</th>
+            <th>Priority</th>
+            <th>Task Type</th>
+            <th>Summary</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <% @follow_up_unread&.each do |follow_up|%>
+          <%= link_to read_follow_up_path(follow_up_id: follow_up.id) do %>
+            <tr class="bg-unread-color unread-data-container">
+              <td><span><%= follow_up.reminder_type %></span></td>
+              <td><span><%= follow_up.priority %></span></td>
+              <td><span><%= follow_up.task_type %></span></td>
+              <td>
+                <span class="h6"><%= follow_up&.followable&.name if follow_up.followable_type == 'SysUser' %></span><br>
+                <%= follow_up.comment %>
+                <span><%= follow_up.date.strftime('%d/%m/%Y %H:%M %p')%></span>
+              </td>
+              <td><%= check_box_tag 'object_id', follow_up.id, false, class: 'testclass mx-2 follow-check-input float-right', checked: follow_up.is_complete %></td>
+            </tr> 
+          <% end %> 
+        <% end %> 
+      </table>
     </div>
   </div>
 </div>
@@ -246,11 +261,13 @@ background: none;
       }
     });
   })
-  function openNav() {
-      document.getElementById("mySidenav_sc").style.width = "500px";
+  function toggleNav() {
+    var sidenav = document.getElementById("mySidenav_sc");
+    if (sidenav.style.width === "700px") {
+      sidenav.style.width = "0";
+    } else {
+      sidenav.style.width = "700px";
     }
-  function closeNav() {
-    document.getElementById("mySidenav_sc").style.width = "0";
   }
 
   $(document).ready(function(){
@@ -268,6 +285,42 @@ background: none;
       });
     })
   })
+// Get the profile icon and the profile dropdown
+const profileIcon = document.querySelector(".profile-btn");
+const profileDropdown = document.querySelector(".profile-dropdown-content");
+
+// Create a variable to hold the timeout ID
+let timeoutId;
+
+// Add event listeners to the profile icon
+profileIcon.addEventListener("mouseover", function() {
+  // Show the profile dropdown
+  profileDropdown.style.display = "block";
+  
+  // Clear any existing timeouts
+  clearTimeout(timeoutId);
+});
+
+profileIcon.addEventListener("mouseout", function() {
+  // Set a timeout to hide the profile dropdown after 2 seconds
+  timeoutId = setTimeout(function() {
+    profileDropdown.style.display = "none";
+  }, 300);
+});
+
+// Add event listeners to the profile dropdown
+profileDropdown.addEventListener("mouseover", function() {
+  // Clear any existing timeouts
+  clearTimeout(timeoutId);
+});
+
+profileDropdown.addEventListener("mouseout", function() {
+  // Set a timeout to hide the profile dropdown after 2 seconds
+  timeoutId = setTimeout(function() {
+    profileDropdown.style.display = "none";
+  }, 300);
+});
 
 </script>
+
 
