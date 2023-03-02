@@ -363,9 +363,10 @@ class LedgerBooksController < ApplicationController
     end
     @ledger_books = @q.result.page(params[:page])
     
-    if params.dig(:q, :sys_user_id_eq).present? && @q.result.blank?
+    if params.dig(:q, :sys_user_id_eq).present? && params.dig(:q, :created_at_gteq).present? && @q.result.blank?
       sys_id = params[:q][:sys_user_id_eq]
-      @total_b = LedgerBook.where(sys_user_id: sys_id).last&.balance.to_f
+      sys_date = params[:q][:created_at_gteq]
+      @total_b = LedgerBook.where('created_at < ? AND sys_user_id = ?', sys_date, sys_id).order('created_at asc').last&.balance.to_f
     end
     if params[:ledger_book_asc_op].present?
       @ledger_books = @q.result.reorder('created_at asc', 'id asc')
