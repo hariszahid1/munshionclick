@@ -42,9 +42,11 @@ class StaffLedgerBooksController < ApplicationController
     @custom_pagination = @pos_setting.custom_pagination['staff_ledger_books'] if @pos_setting&.custom_pagination.present? && @pos_setting&.custom_pagination['staff_ledger_books'].present?
     @staff_ledger_books = staff_list.page(params[:page]).per(@custom_pagination)
 
-    if params.dig(:q, :staff_id_eq).present? && @staff_ledger_books.blank?
+    if params.dig(:q, :staff_id_eq).present? && params.dig(:q, :created_at_gteq).present? && @staff_ledger_books.blank?
       st_id = params[:q][:staff_id_eq]
-      @total_b = StaffLedgerBook.where(staff_id:st_id).last&.balance.to_f
+      st_date = params[:q][:created_at_gteq]
+      staff_led = StaffLedgerBook.joins(:staff).where('credit>0 or debit>0 or credit<0 or debit<0')
+      @total_b = staff_led.where('staff_ledger_books.created_at < ? AND staff_ledger_books.staff_id = ?', st_date, st_id).order('staff_ledger_books.created_at asc').last&.balance.to_f
     end
     if params[:staff_ledger_book_asc_op].present?
       @staff_ledger_books = @q.result.reorder('created_at asc', 'id asc')

@@ -163,12 +163,9 @@ class ColdStorageOutwardsController < ApplicationController
     marka_no = params[:marka_no]
     challan_no = params[:challan_no]
     product_id = params[:product_id]
-    rem_stock = PurchaseSaleItem.joins(:purchase_sale_detail).where('purchase_sale_details.sys_user_id': sys_user_id, 'purchase_sale_details.transaction_type': "OutWard", 'product_id': product_id, 'size_13': marka_no, 'size_10': challan_no).last&.size_6
-    if rem_stock.present?
-      stock = rem_stock
-    else
-      stock = PurchaseSaleItem.joins(:purchase_sale_detail).where('purchase_sale_details.sys_user_id': sys_user_id, 'purchase_sale_details.transaction_type': "InWard", 'product_id': product_id, 'size_13': marka_no, 'size_10': challan_no).pluck(:size_9)
-    end
+    out_stock = PurchaseSaleItem.joins(:purchase_sale_detail).where('purchase_sale_details.sys_user_id': sys_user_id, 'purchase_sale_details.transaction_type': "OutWard", 'product_id': product_id, 'size_13': marka_no, 'size_10': challan_no).sum(:size_9)
+    in_stock = PurchaseSaleItem.joins(:purchase_sale_detail).where('purchase_sale_details.sys_user_id': sys_user_id, 'purchase_sale_details.transaction_type': "InWard", 'product_id': product_id, 'size_13': marka_no, 'size_10': challan_no).sum(:size_9)
+    stock = in_stock.to_f-out_stock.to_f
     respond_to do |format|
       format.json { render json: stock }
     end

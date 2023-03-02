@@ -1,28 +1,43 @@
-<h1 class="mt-2 mb-4 ml-1">General Settings</h1>
-<div class="card shadow border-radius-1 p-4">
-  <div class="mt-3">
-    <table  id="pos_table" style="overflow: hidden;">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Display name</th>
-          <th>Account</th>
-          <th>Phone</th>
-          <th>Logo</th>
-          <th>Address</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-
-      <tbody>
-      <%= render partial: 'pos_setting', collection: @pos_settings %>
-      </tbody>
-    </table>
-  </div>  
+<div class="row-lg-12 m-4">
+  <div class="float-left">
+    <h2 class="ml-2 logo-back"><i class="fa fa-cogs mr-2"></i>General Settings</h2>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<%= root_path %>">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active">
+        <a href="<%= pos_settings_path %>">General Settings</a>
+      </li>
+    </ol>
+  </div>
 </div>
-<br>
-<%if @pos_settings.blank?%>
-<%end%>
+<div class="clearfix"></div>
+<div class="m-3">
+  <div class="card shadow p-4">
+    <div class="mt-3">
+      <table  id="pos_table" style="overflow: hidden;">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Display name</th>
+            <th>Account</th>
+            <th>Phone</th>
+            <th>Logo</th>
+            <th>Address</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+        <%= render partial: 'pos_setting', collection: @pos_settings %>
+        </tbody>
+      </table>
+    </div>  
+  </div>
+  <br>
+  <%if @pos_settings.blank?%>
+  <%end%>
+</div>
 <script>
   $(document).ready(function() {
     if ($(".bootstrap-table").length == 0){

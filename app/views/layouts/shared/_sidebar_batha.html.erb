@@ -1,485 +1,508 @@
-<nav id="sidebar" class="col-lg-2 col-6 p-0">
-    <% if can?(:view, :sys_user) %>
-    <ul class="list-unstyled components">
-        <li class=" active activ-link">
-          <%= link_to dashboard_path do %>
-              <i class="fas fa-home" aria-hidden="true"></i>
-              <span class="link-text">Dashboard</span>
-          <% end %>
-        </li>
-        <h5 class="mt-3 mb-3 text-secondary ml-2">Menu</h5> 
-        <% if check_is_hidden_by_module('crms') %>
-         <li class="activ-link">
-           <a href="<%=crms_path%>", class="activ-link">
-             <i class="fas fa-user-plus ml-3"></i>
-             <span class="link-text">CRM</span>
-           </a>
-         </li>
-        <% end %>
-        <li class="mb-2">
-          <a href="#SPSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-            <i class="fas fa fa-cart-arrow-down ml-3"></i>
-            <span class="link-text ml-1">Sale/Purchase</span>
-          </a>
-          <ul class="collapse list-unstyled border-radius-1" id="SPSubmenu">          
-            <% if can?(:view, :purchase_sale_detail) %>
-              <li>
-                <a href="#SaleSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                    <i class="fas fa fa-plus ml-2"></i>
-                    <span class="link-text ml-1">Sale</span>
-                </a>
-                <ul class="collapse list-unstyled" id="SaleSubmenu">
-                  <li>
-                    <a href="<%=orders_path(sale: true)%>">
-                      <i class="fa fa-minus ml-3"></i>
-                      <span class="link-text ml-1">Order Book</span>
-                    </a>
-                  </li>
-                  <li>
-                    <%= link_to new_purchase_sale_detail_path(transaction_type: :sale,product: true) do %>
-                       <i class="fas fa-minus ml-3"></i>
-                       <span class="link-text ml-1">Add Invoice</span>
-                    <% end %>
-                  </li>
-                  <li>
-                    <%= link_to purchase_sale_details_path(sale: true) do %>
-                      <i class="fas fa-minus ml-3"></i>
-                      <span class="link-text ml-1">List of Sale</span>
-                    <% end %>
-                  </li>
-                </ul>
-              </li>
-            <% end %>
-            <li>
-             <a href="<%=purchase_sale_details_path%>">
-                 <i class="fa fa-plus ml-2"></i>
-                 <span class="link-text ml-1"> Purchase</span>
-             </a>
-            </li>
-          </ul>
-        </li>       
-        <li class="mb-2">
-          <a href="#AccountSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-            <i class="fas fa fa-book ml-3"></i>
-            <span class="link-text ml-1">Accounts</span>
-          </a>
-          <ul class="collapse list-unstyled border-radius-1" id="AccountSubmenu">
-            <% if check_is_hidden_by_module('accounts') %>
-              <li class="activ-link">
-                <a href="<%= accounts_path%>" class="activ-link">
-                  <i class="fas fa-plus"></i>
-                  <span class="link-text">Account Details</span>
-                </a>
-              </li>
-            <% end %>
-            <li>
-              <a href="<%=staff_ledger_books_path%>">
-                <i class="fa fa-plus"></i>
-                <span class="link-text">Staff Ledger Book</span>
-              </a>
-            </li>
-            <li>
-              <%= link_to ledger_books_path do %>
-                <i class="fas fa-plus"></i>
-                <span class="link-text">User Ledger Book</span>
-              <% end %>
-            </li>
-            <li>
-              <%= link_to payments_path do %>
-                  <i class="fas fa-plus"></i>
-                  <span class="link-text">Day Book</span>
-              <% end %>
-            </li>
-            <li>
-              <%= link_to investments_path do %>
-                <i class="fas fa-plus"></i>
-                <span class="link-text">Investment</span>
-              <%end%>
-            </li>
-            <li class="activ-link">
-                <%= link_to loans_path, class:"activ-link" do %>
-                  <i class="fas fa-plus"></i>
-                  <span class="link-text">Loan</span>
-                <% end %>
-            </li>
-            <a href="#OrderSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-              <i class="fas fa-plus"></i>
-              <span class="link-text">Expense</span>
+<nav id="sidebar" class="col-lg-2 col-6 p-1">
+  <% if can?(:view, :sys_user) %>
+  <input type="text" id="search-bar" class="form-control mt-3 bg-light text-dark" style="border-radius: 20px" placeholder="Search">
+  <ul class="list-unstyled components">
+    <li class=" <%= 'active' if request.path.start_with?(dashboard_path) %>">
+      <%= link_to dashboard_path do %>
+        <i class="fas fa-home" aria-hidden="true"></i>
+        <span class="link-text">Dashboard</span>
+      <% end %>
+    </li>
+    <h5 class="mt-3 mb-3 text-secondary ml-2">Menu</h5> 
+    <% if check_is_hidden_by_module('crms') %>
+     <li class="<%= 'active' if request.path.start_with?(crms_path) %>">
+       <a href="<%=crms_path%>" >
+         <i class="fas fa-user-plus ml-3"></i>
+         <span class="link-text">CRM</span>
+       </a>
+     </li>
+    <% end %>
+    <li class="mb-2">
+      <a href="#SPSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+        <i class="fas fa fa-cart-arrow-down ml-3"></i>
+        <span class="link-text ml-1">Sale/Purchase</span>
+      </a>
+      <ul class="collapse list-unstyled border-radius-1 <%= 'show' if request.path.start_with?(orders_path, new_purchase_sale_detail_path, purchase_sale_details_path ) %> " id="SPSubmenu">          
+        <% if can?(:view, :purchase_sale_detail) %>
+          <li>
+            <a href="#SaleSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+              <i class="fas fa fa-plus ml-2"></i>
+              <span class="link-text ml-1">Sale</span>
             </a>
-            <ul class="collapse list-unstyled" id="OrderSubmenu">
-              <li class="activ-link">
-                <%= link_to expense_vouchers_path, class:"activ-link" do %>
-                  <i class="fas fa-minus"></i>
-                  <span class="link-text">Expense Voucher</span>
+            <ul class="collapse list-unstyled <%= 'show' if request.path.start_with?(orders_path, new_purchase_sale_detail_path, purchase_sale_details_path ) %>" id="SaleSubmenu">
+              <li class="<%= 'active' if request.path.start_with?(orders_path) %>">
+                <a href="<%=orders_path(sale: true)%>">
+                  <i class="fa fa-minus ml-3"></i>
+                  <span class="link-text ml-1">Order Book</span>
+                </a>
+              </li>
+              <li class="<%= 'active' if request.path.start_with?(new_purchase_sale_detail_path) %>">
+                <%= link_to new_purchase_sale_detail_path(transaction_type: :sale,product: true) do %>
+                   <i class="fas fa-minus ml-3"></i>
+                   <span class="link-text ml-1">Add Invoice</span>
                 <% end %>
               </li>
-              <li class="activ-link">
-                <%= link_to expenses_path, class:"activ-link" do %>
-                  <i class="fas fa-minus"></i>
-                  <span class="link-text">Expense Bill</span>
-                <% end %>
-              </li>
-              <li>
-                <%= link_to expense_types_path do %>
-                  <i class="fas fa-minus"></i>
-                  <span class="link-text">Expense Type</span>
+              <li class="<%= 'active' if request.path.start_with?(purchase_sale_details_path) %>">
+                <%= link_to purchase_sale_details_path(sale: true) do %>
+                  <i class="fas fa-minus ml-3"></i>
+                  <span class="link-text ml-1">List of Sale</span>
                 <% end %>
               </li>
             </ul>
+          </li>
+        <% end %>
+        <li class="<%= 'active' if request.path.start_with?(purchase_sale_details_path) %>">
+         <a href="<%=purchase_sale_details_path%>">
+            <i class="fa fa-plus ml-2"></i>
+            <span class="link-text ml-1"> Purchase</span>
+         </a>
+        </li>
+      </ul>
+    </li>       
+    <li class="mb-2">
+      <a href="#AccountSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+        <i class="fas fa fa-book ml-3"></i>
+        <span class="link-text ml-1">Accounts</span>
+      </a>
+      <ul class="collapse list-unstyled border-radius-1 <%= 'show' if request.path.start_with?(accounts_path, staff_ledger_books_path,ledger_books_path, payments_path, investments_path, loans_path, expense_vouchers_path, expenses_path, expense_types_path) %>" id="AccountSubmenu">
+        <% if check_is_hidden_by_module('accounts') %>
+          <li class="<%= 'active' if request.path.start_with?(accounts_path) %>">
+            <a href="<%= accounts_path%>" >
+              <i class="fas fa-plus"></i>
+              <span class="link-text">Account Details</span>
+            </a>
+          </li>
+        <% end %>
+        <li class="<%= 'active' if request.path.start_with?(staff_ledger_books_path) %>">
+          <a href="<%=staff_ledger_books_path%>">
+            <i class="fa fa-plus"></i>
+            <span class="link-text">Staff Ledger Book</span>
+          </a>
+        </li>
+        <li class="<%= 'active' if request.path.start_with?(ledger_books_path) %>">
+          <%= link_to ledger_books_path do %>
+            <i class="fas fa-plus"></i>
+            <span class="link-text">User Ledger Book</span>
+          <% end %>
+        </li>
+        <li class="<%= 'active' if request.path.start_with?(payments_path) %>">
+          <%= link_to payments_path do %>
+            <i class="fas fa-plus"></i>
+            <span class="link-text">Day Book</span>
+          <% end %>
+        </li>
+        <li class="<%= 'active' if request.path.start_with?(investments_path) %>">
+          <%= link_to investments_path do %>
+            <i class="fas fa-plus"></i>
+            <span class="link-text">Investment</span>
+          <%end%>
+        </li>
+        <li class="<%= 'active' if request.path.start_with?(loans_path) %>">
+          <%= link_to loans_path, class:"activ-link" do %>
+            <i class="fas fa-plus"></i>
+            <span class="link-text">Loan</span>
+          <% end %>
+        </li>
+        <a href="#OrderSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+          <i class="fas fa-plus"></i>
+          <span class="link-text">Expense</span>
+        </a>
+        <ul class="collapse list-unstyled <%= 'show' if request.path.start_with?(expense_vouchers_path, expenses_path, expense_types_path) %>" id="OrderSubmenu">
+          <li class="<%= 'active' if request.path.start_with?(expense_vouchers_path) %>">
+            <%= link_to expense_vouchers_path do %>
+              <i class="fas fa-minus"></i>
+              <span class="link-text">Expense Voucher</span>
+            <% end %>
+          </li>
+          <li class="<%= 'active' if request.path.start_with?(expenses_path) %>">
+            <%= link_to expenses_path do %>
+              <i class="fas fa-minus"></i>
+              <span class="link-text">Expense Bill</span>
+            <% end %>
+          </li>
+          <li class="<%= 'active' if request.path.start_with?(expense_types_path) %>">
+            <%= link_to expense_types_path do %>
+              <i class="fas fa-minus"></i>
+              <span class="link-text">Expense Type</span>
+            <% end %>
+          </li>
+        </ul>
+      </ul>
+    </li>
+    <li class="mb-2">
+      <a href="#AllUserSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+        <i class="fas fa-users ml-3"></i>
+        <span class="link-text ml-1">Users</span>
+      </a>
+      <ul class="collapse list-unstyled <%= 'show' if request.path.start_with?(sys_users_path, user_types_path, user_groups_path, staffs_path, departments_path, countries_path, cities_path ) %>" id="AllUserSubmenu">
+        <li>
+          <a href="#theUserSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+            <i class="fas fa-plus ml-2"></i>
+            <span class="link-text ml-1">All Users</span>
+          </a>
+          <ul class="collapse list-unstyled <%= 'show' if request.path.start_with?(sys_users_path, user_types_path, user_groups_path) %> " id="theUserSubmenu">
+            <li>
+              <% if check_is_hidden_by_module('sys_users') %>
+                <li class="<%= 'active' if request.path.start_with?(sys_users_path) %>">
+                  <%= link_to sys_users_path do %>
+                    <i class="fas fa-minus ml-3 mr-1"></i>
+                    <span class="link-text">Users List</span>
+                  <% end %>
+                </li>
+              <% end %> 
+              <% if check_is_hidden_by_module('user_types') %>
+                <li class="<%= 'active' if request.path.start_with?(user_types_path) %>">
+                  <%= link_to user_types_path, class:"activ-link" do %>
+                    <i class="fas fa-minus ml-3 mr-1"></i>
+                    <span class="link-text">User Types</span>
+                  <% end %>
+                </li>
+              <% end %>
+              <% if check_is_hidden_by_module('user_groups') %>
+                <li class="<%= 'active' if request.path.start_with?(user_groups_path) %>">
+                  <%= link_to user_groups_path do %>
+                    <i class="fas fa-minus ml-3 mr-1"></i>
+                    <span class="link-text">User Groups</span>
+                  <% end %>
+                </li>
+              <% end %>
+              <% if check_is_hidden_by_module('sys_users') %>
+                <li>
+                  <% SysUser.user_groups.each do |value, index|%>
+                    <%= link_to sys_users_path('q[user_group_eq]': index), class:"activ-link" do %>
+                      <i class="fas fa-minus ml-3 mr-1"></i>
+                      <span class="link-text"><%= value%></span>
+                    <% end %>
+                  <% end %>
+                </li>
+              <% end %>  
+            </li>
           </ul>
         </li>
-        <li class="mb-2">
-          <a href="#AllUserSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-            <i class="fas fa-users ml-3"></i>
-            <span class="link-text ml-1">Users</span>
-          </a>
-          <ul class="collapse list-unstyled" id="AllUserSubmenu">
-           <li>
-             <a href="#theUserSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-               <i class="fas fa-plus ml-2"></i>
-               <span class="link-text ml-1">All Users</span>
-             </a>
-             <ul class="collapse list-unstyled" id="theUserSubmenu">
-               <li>
-                 <% if check_is_hidden_by_module('sys_users') %>
-                   <li>
-                     <%= link_to sys_users_path, class:"activ-link" do %>
-                       <i class="fas fa-minus ml-3 mr-1"></i>
-                       <span class="link-text">Users List</span>
-                     <% end %>
-                   </li>
-                 <% end %> 
-                 <% if check_is_hidden_by_module('user_types') %>
-                   <li>
-                     <%= link_to user_types_path, class:"activ-link" do %>
-                       <i class="fas fa-minus ml-3 mr-1"></i>
-                       <span class="link-text">User Types</span>
-                     <% end %>
-                   </li>
-                 <% end %>
-                 <% if check_is_hidden_by_module('user_groups') %>
-                   <li>
-                     <%= link_to user_groups_path, class:"activ-link" do %>
-                       <i class="fas fa-minus ml-3 mr-1"></i>
-                       <span class="link-text">User Groups</span>
-                     <% end %>
-                   </li>
-                 <% end %>
-                 <% if check_is_hidden_by_module('sys_users') %>
-                   <li>
-                     <% SysUser.user_groups.each do |value, index|%>
-                       <%= link_to sys_users_path('q[user_group_eq]': index), class:"activ-link" do %>
-                         <i class="fas fa-minus ml-3 mr-1"></i>
-                         <span class="link-text"><%= value%></span>
-                       <% end %>
-                     <% end %>
-                   </li>
-                 <% end %>  
-               </li>
-              </ul>
-            </li>
-            <li>
-             <a href="#labourSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-               <i class="fas fa fa-plus ml-2"></i>
-               <span class="link-text ml-1">Labour</span>
-             </a>
-             <ul class="collapse list-unstyled" id="labourSubmenu">               
-                <li>
-                  <a href="<%=staffs_path%>">
-                    <i class="fa fa-minus ml-3 mr-1"></i>
-                    <span class="link-text">Labour list</span>
-                  </a>
-                </li>               
-                <li>
-                  <%= link_to salary_detail_edit_bulk_path do %>
-                    <i class="fas fa-minus ml-3 mr-1"></i>
-                    <span class="link-text">Kharcha Jumerat</span>
-                  <% end %>
-                </li>
-                <li>
-                    <a href="<%=salaries_path%>">
-                      <i class="fa fa-minus ml-3 mr-1"></i>
-                      <span class="link-text">  Salary Debit detail</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="<%=salary_details_path%>">
-                      <i class="fa fa-minus ml-3 mr-1"></i>
-                      <span class="link-text">  Salary Credit detail</span>
-                    </a>
-                </li>
-              </ul>
-              <li>
-               <%= link_to departments_path do %>
-                 <i class="fas fa-plus ml-2"></i>
-                 <span class="link-text ml-1">Department</span>
-               <% end %>
-              </li>
-              <li>
-                <%= link_to countries_path do %>
-                  <i class="fas fa-plus ml-2"></i>    
-                  <span class="link-text ml-1">Country</span>
-                <% end %>
-              </li>                   
-              <li>
-                  <%= link_to cities_path do %>
-                    <i class="fas fa-plus ml-2"></i>                   
-                    <span class="link-text ml-1">City</span>
-                  <% end %>
-              </li>
-           </li>
-          </ul>         
+        <li>
+          <li class="<%= 'active' if request.path.start_with?(staffs_path) %>">
+            <a href="<%=staffs_path%>">
+              <i class="fa fa-plus ml-3 mr-1"></i>
+              <span class="link-text">Labour list</span>
+            </a>
+          </li>               
+          <li class="<%= 'active' if request.path.start_with?(departments_path) %>">
+           <%= link_to departments_path do %>
+             <i class="fas fa-plus ml-2"></i>
+             <span class="link-text ml-1">Department</span>
+           <% end %>
+          </li>
+          <li class="<%= 'active' if request.path.start_with?(countries_path) %>">
+            <%= link_to countries_path do %>
+              <i class="fas fa-plus ml-2"></i>    
+              <span class="link-text ml-1">Country</span>
+            <% end %>
+          </li>                   
+          <li class="<%= 'active' if request.path.start_with?(cities_path) %>">
+            <%= link_to cities_path do %>
+              <i class="fas fa-plus ml-2"></i>                   
+              <span class="link-text ml-1">City</span>
+            <% end %>
+          </li>
         </li>
-        <li class="mb-2">
-         <% if can?(:view, :product) %>
-           <li>
-             <a href="#ProductSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                 <i class="fas fa-stream ml-3"></i>
-                 <span class="link-text ml-1">Products</span>
-             </a>
-             <ul class="collapse list-unstyled" id="ProductSubmenu">
-               <li>
-                  <%= link_to products_path do %>
-                    <i class="fas fa-plus"></i>
-                    <span class="link-text">Products Details</span>
+      </ul>         
+    </li>
+    <li class="mb-2">
+      <a href="#PayrollSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+        <i class="fa fa-money-bill-alt ml-3"></i>
+        <span class="link-text ml-1">Payroll</span>
+      </a>
+      <ul class="collapse list-unstyled <%= 'show' if request.path.start_with?(salaries_path, salary_details_path, salary_detail_edit_bulk_path) %>" id="PayrollSubmenu">
+        <% if check_is_hidden_by_module('salaries') %>  
+          <li class="<%= 'active' if request.path.start_with?(salaries_path) %>">
+            <a href="<%=salaries_path%>">
+              <i class="fa fa-plus ml-3 mr-1"></i>
+              <span class="link-text">Salary Debit detail</span>
+            </a>
+          </li>
+        <% end %>
+        <% if check_is_hidden_by_module('salary_details') %>  
+          <li class="<%= 'active' if request.path.start_with?(salary_details_path) %>">
+            <a href="<%=salary_details_path%>">
+              <i class="fa fa-plus ml-3 mr-1"></i>
+              <span class="link-text">Salary Credit detail</span>
+            </a>
+          </li>
+        <% end %>
+        <li class="<%= 'active' if request.path.start_with?(salary_detail_edit_bulk_path) %>">
+          <%= link_to salary_detail_edit_bulk_path do %>
+            <i class="fas fa-plus ml-3 mr-1"></i>
+            <span class="link-text">Kharcha Jumerat</span>
+          <% end %>
+        </li>            
+      </ul>
+    </li>
+    <li class="mb-2">
+      <% if can?(:view, :product) %>
+        <li>
+          <a href="#ProductSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+            <i class="fas fa-stream ml-3"></i>
+            <span class="link-text ml-1">Products</span>
+          </a>
+          <ul class="collapse list-unstyled <%= 'show' if request.path.start_with?(products_path, product_categories_path, product_sub_categories_path, raw_products_path, items_path, item_types_path,production_block_types_path, product_stocks_path, product_stock_exchanges_path ) %>" id="ProductSubmenu">
+            <li class="<%= 'active' if request.path.start_with?(products_path) %>">
+              <%= link_to products_path do %>
+                <i class="fas fa-plus"></i>
+                <span class="link-text">Products Details</span>
+              <% end %>
+            </li>
+            <li class="<%= 'active' if request.path.start_with?(product_categories_path) %>">
+              <%= link_to product_categories_path do %>
+                <i class="fas fa-plus"></i>
+                <span class="link-text">Product Categories</span>
+              <% end %>
+            </li>
+            <li class="<%= 'active' if request.path.start_with?(product_sub_categories_path) %>">
+              <%= link_to product_sub_categories_path do %>
+                <i class="fas fa-plus"></i>
+                <span class="link-text">Product Sub Categories</span>
+              <% end %>
+            </li>
+            <li class="<%= 'active' if request.path.start_with?(raw_products_path) %>">
+              <%= link_to raw_products_path do %>
+                <i class="fas fa-plus"></i>
+                <span class="link-text">Raw Products</span>
+              <% end %>
+            </li>
+            <li class="<%= 'active' if request.path.start_with?(items_path) %>">
+              <%= link_to items_path do %>
+                <i class="fas fa-plus"></i>
+                <span class="link-text">Raw Materials</span>
+              <% end %>
+            </li>
+            <li class="<%= 'active' if request.path.start_with?(item_types_path) %>">
+             <%= link_to item_types_path do %>
+               <i class="fas fa-plus"></i>
+               <span class="link-text">Line Item Type</span>
+             <% end %>
+            </li>                
+            <li class="<%= 'active' if request.path.start_with?(production_block_types_path) %>">
+              <%= link_to production_block_types_path do %>
+                <i class="fas fa-plus"></i>
+                <span class="link-text">Production Block Types</span>
+              <% end %>
+            </li> 
+            <li>
+              <a href="#StockSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                <i class="fas fa-plus"></i>
+                <span class="link-text">Stock Details</span>
+              </a>
+              <ul class="collapse list-unstyled <%= 'show' if request.path.start_with?(product_stocks_path, product_stock_exchanges_path ) %>" id="StockSubmenu">
+                <li class="<%= 'active' if request.path.start_with?(product_stocks_path) %>">
+                  <%= link_to product_stocks_path do %>
+                    <i class="fas fa-minus ml-3"></i>
+                    <span class="link-text ml-1">Stocks</span>
                   <% end %>
-               </li>
-               <li>
-                  <%= link_to product_categories_path do %>
-                    <i class="fas fa-plus"></i>
-                    <span class="link-text">Product Categories</span>
+                </li>
+                <li class="<%= 'active' if request.path.start_with?(product_stock_exchanges_path) %>">
+                  <%= link_to product_stock_exchanges_path do %>
+                    <i class="fas fa-minus ml-3"></i>
+                    <span class="link-text ml-1">Stock Exchange</span>
                   <% end %>
-               </li>
-               <li>
-                  <%= link_to product_sub_categories_path do %>
-                    <i class="fas fa-plus"></i>
-                    <span class="link-text">Product Sub Categories</span>
-                  <% end %>
-               </li>
-               <li>
-                  <%= link_to raw_products_path do %>
-                    <i class="fas fa-plus"></i>
-                    <span class="link-text">Raw Products</span>
-                  <% end %>
-               </li>
-               <li>
-                  <%= link_to items_path do %>
-                    <i class="fas fa-plus"></i>
-                    <span class="link-text">Raw Materials</span>
-                  <% end %>
-               </li>
-               <li>
-                 <%= link_to item_types_path do %>
-                   <i class="fas fa-plus"></i>
-                   <span class="link-text">Line Item Type</span>
-                 <% end %>
-                </li>                
-                <li>
-                  <%= link_to production_block_types_path do %>
-                    <i class="fas fa-plus"></i>
-                    <span class="link-text">Production Block Types</span>
-                  <% end %>
-                </li> 
-                <li>
-                  <a href="#StockSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                      <i class="fas fa-plus"></i>
-                      <span class="link-text">Stock Details</span>
-                  </a>
-                  <ul class="collapse list-unstyled" id="StockSubmenu">
-                    <li>
-                      <%= link_to product_stocks_path do %>
-                        <i class="fas fa-minus ml-3"></i>
-                        <span class="link-text ml-1">Stocks</span>
-                      <% end %>
-                    </li>
-                    <li>
-                      <%= link_to product_stock_exchanges_path do %>
-                        <i class="fas fa-minus ml-3"></i>
-                        <span class="link-text ml-1">Stock Exchange</span>
-                      <% end %>
-                    </li>                   
-                  </ul>
-               </li>              
-             </ul>
-           </li>
+                </li>                   
+              </ul>
+            </li>              
+          </ul>
+       </li>
+     <% end %>
+    </li>
+    <li class="mb-2">
+      <% if can?(:add, :all) %>
+        <li class="<%= 'active' if request.path.start_with?(gates_path) %>">
+          <a href="<%=gates_path%>">
+            <i class="fas fa fa-barcode ml-3"></i>
+            <span class="link-text ml-1">Gate/Progress</span>
+          </a>
+        </li>
+      <% end %>
+    </li>
+    <li>
+      <a href="#ReportsSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+        <i class="fas fa fa-eye ml-3"></i>
+        <span class="link-text ml-1">Reports</span>
+      </a>
+      <ul class="collapse list-unstyled <%= 'show' if request.path.start_with?(reports_chart_path, reports_trial_balance_path, reports_chart_of_account_path, reports_sale_report_path, reports_product_report_path, reports_stock_report_path, production_report_daily_books_path, total_production_report_daily_books_path ) %>" id="ReportsSubmenu">
+        <li class="<%= 'active' if request.path.start_with?(reports_chart_path) %>">
+         <%= link_to reports_chart_path do %>
+            <i class="fas fa-plus"></i>
+            <span class="link-text ml-1">Chart/Graph</span>
          <% end %>
         </li>
-        <li class="mb-2">
-         <% if can?(:add, :all) %>
-           <li>
-             <a href="<%=gates_path%>">
-                <i class="fas fa fa-barcode ml-3"></i>
-                <span class="link-text ml-1">Gate/Progress</span>
-             </a>
-           </li>
-          <% end %>
-        </li>
-        <li>
-         <a href="#ReportsSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-            <i class="fas fa fa-eye ml-3"></i>
-            <span class="link-text ml-1">Reports</span>
-         </a>
-         <ul class="collapse list-unstyled" id="ReportsSubmenu">
-            <li>
-             <%= link_to reports_chart_path do %>
-                 <i class="fas fa-plus"></i>
-                 <span class="link-text ml-1">Chart/Graph</span>
-             <% end %>
-            </li>
-            <li>
-             <%= link_to reports_trial_balance_path do %>
-                 <i class="fas fa-plus"></i>
-                 <span class="link-text ml-1">Trial Balance</span>
-             <% end %>
-            </li>
-            <li>
-              <%= link_to reports_chart_of_account_path do %>
-                  <i class="fas fa-plus"></i>
-                  <span class="link-text ml-1">Chart of Account</span>
-              <% end %>
-            </li>
-            <li>
-              <%= link_to reports_sale_report_path do %>
-                  <i class="fas fa-plus"></i>
-                  <span class="link-text ml-1">Income Statement</span>
-              <% end %>
-            </li>
-            <li>
-              <%= link_to reports_product_report_path do %>
-                  <i class="fas fa-plus"></i>
-                  <span class="link-text ml-1">Profit Report</span>
-              <% end %>
-            </li>
-            <li>
-               <%= link_to reports_stock_report_path do %>
-                   <i class="fas fa-plus"></i>
-                   <span class="link-text ml-1">Sale/Purchase/Stock</span>
-               <% end %>
-            </li>
-            <li>
-              <%= link_to production_report_daily_books_path do %>
-                <i class="fas fa-plus" ></i>
-                <span class="link-text ml-1">Production Report</span>
-              <% end %>
-            </li>
-            <li>
-              <%= link_to total_production_report_daily_books_path do %>
-                <i class="fas fa-plus" ></i>
-                <span class="link-text ml-1">Production total Report</span>
-              <% end %>
-            </li>
-          </ul>
-        </li>        
-        <!-- only Developer can start-->
-        <li>
-          <a href="#LabourWorkmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-              <i class="fas fa fa-barcode ml-3"></i>
-              <span class="link-text">Labour Work</span>
-          </a>
-          <ul class="collapse list-unstyled" id="LabourWorkmenu">
-            <li>
-              <a href="<%=daily_books_path%>">
-                <i class="fa fa-plus"></i>
-                <span class="link-text ml-1">Work</span>
-              </a>
-            </li>
-            <li>
-              <a href="<%=pather_salary_details_path%>">
-                 <i class="fas fa-plus"></i>
-                 <span class="link-text ml-1">Work detail</span>
-              </a>
-            </li>
-          </ul>
-        </li>  
-        <h5 class="mt-3 mb-3 text-secondary ml-2">System Settings</h5>                  
-        <% if can?(:update, :all) %>          
-          <li>
-            <%= link_to edit_pos_setting_path(@pos_setting) do %>
-              <i class="fas fa-tasks ml-3" aria-hidden="true"></i>
-              <span class="link-text">General Setting</span>
-            <% end %>
-          </li>                                      
-          <% if can?(:delete, :all) %>
-            <li>
-              <%= link_to users_path do %>
-                <i class="fas fa-th-list ml-3"></i>
-                <span class="link-text">System Operators</span>
-              <% end %>
-            </li>                   
-          <%end%>                          
-        <%end%>
-        <li>
-          <%= link_to bd_backups_path do %>
-              <i class="fas fa-question ml-3"></i>
-              <span class="link-text">Import/Export</span>
-          <% end %>
-        </li>
-        <li>
-          <%= link_to helps_path do %>
-              <i class="fas fa-question ml-3"></i>
-              <span class="link-text">Help</span>
-          <% end %>
-        </li>
-        <li>
-            <a href="#">
-                <i class="fas fa-paper-plane ml-3"></i>
-                <span class="link-text">Contact</span>
-            </a>
-        </li>
-    </ul>
-    <%else%>
-    <ul class="list-unstyled components">
-        <li class="active">
-          <%= link_to dashboard_path do %>
-              <i class="fas fa-tasks" aria-hidden="true"></i>
-              <span class="link-text">Booking</span>
-          <% end %>
-        </li>
-        <li>
-          <a  href="#UserSubMenu"  data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-              <i class="fas fa-user-plus"></i>
-              <span class="link-text">User</span>
-          </a>
-          <ul class="collapse list-unstyled" id="UserSubMenu">
-            <li>
-                <%= link_to ledger_books_path do %>
-                    <i class="fas fa-book"></i>
-                    <span class="link-text">Ledger Book</span>
-                <% end %>
-            </li>
-              <li>
-                  <%= link_to sys_users_path do %>
-                      <i class="fas fa-plus"></i>
-                      <span class="link-text">All Users</span>
-                  <% end %>
-              </li>
-              <li>
-                  <%= link_to customer_sys_users_path do %>
-                      <i class="fas fa-plus"></i>
-                      <span class="link-text">Customer</span>
-                  <% end %>
-              </li>
-              <li>
-                  <%= link_to supplier_sys_users_path do %>
-                      <i class="fas fa-plus"></i>
-                      <span class="link-text">Supplier</span>
-                  <% end %>
-              </li>
-              <li>
-                  <%= link_to own_sys_users_path do %>
-                      <i class="fas fa-plus"></i>
-                      <span class="link-text">own</span>
-                  <% end %>
-              </li>
-          </ul>
-        </li>
-        <li>
-          <%= link_to edit_user_path(current_user) do %>
+        <li class="<%= 'active' if request.path.start_with?(reports_trial_balance_path) %>">
+         <%= link_to reports_trial_balance_path do %>
             <i class="fas fa-plus"></i>
-            <i class="fas fa-th-list"></i>
-            <span class="link-text">Profile</span>
+            <span class="link-text ml-1">Trial Balance</span>
+         <% end %>
+        </li>
+        <li class="<%= 'active' if request.path.start_with?(reports_chart_of_account_path) %>">
+          <%= link_to reports_chart_of_account_path do %>
+            <i class="fas fa-plus"></i>
+            <span class="link-text ml-1">Chart of Account</span>
+          <% end %>
+        </li>
+        <li class="<%= 'active' if request.path.start_with?(reports_sale_report_path) %>">
+          <%= link_to reports_sale_report_path do %>
+            <i class="fas fa-plus"></i>
+            <span class="link-text ml-1">Income Statement</span>
+          <% end %>
+        </li>
+        <li class="<%= 'active' if request.path.start_with?(reports_product_report_path) %>">
+          <%= link_to reports_product_report_path do %>
+            <i class="fas fa-plus"></i>
+            <span class="link-text ml-1">Profit Report</span>
+          <% end %>
+        </li>
+        <li class="<%= 'active' if request.path.start_with?(reports_stock_report_path) %>">
+          <%= link_to reports_stock_report_path do %>
+            <i class="fas fa-plus"></i>
+            <span class="link-text ml-1">Sale/Purchase/Stock</span>
+          <% end %>
+        </li>
+        <li class="<%= 'active' if request.path.start_with?(production_report_daily_books_path) %>">
+          <%= link_to production_report_daily_books_path do %>
+            <i class="fas fa-plus" ></i>
+            <span class="link-text ml-1">Production Report</span>
+          <% end %>
+        </li>
+        <li class="<%= 'active' if request.path.start_with?(total_production_report_daily_books_path) %>">
+          <%= link_to total_production_report_daily_books_path do %>
+            <i class="fas fa-plus" ></i>
+            <span class="link-text ml-1">Production total Report</span>
           <% end %>
         </li>
       </ul>
+    </li>        
+    <!-- only Developer can start-->
+    <li>
+      <a href="#LabourWorkmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+        <i class="fas fa fa-barcode ml-3"></i>
+        <span class="link-text">Labour Work</span>
+      </a>
+      <ul class="collapse list-unstyled <%= 'show' if request.path.start_with?(daily_books_path, pather_salary_details_path) %>" id="LabourWorkmenu">
+        <li class="<%= 'active' if request.path.start_with?(daily_books_path) %>">
+          <a href="<%=daily_books_path%>">
+            <i class="fa fa-plus"></i>
+            <span class="link-text ml-1">Work</span>
+          </a>
+        </li>
+        <li class="<%= 'active' if request.path.start_with?(pather_salary_details_path) %>">
+          <a href="<%=pather_salary_details_path%>">
+            <i class="fas fa-plus"></i>
+            <span class="link-text ml-1">Work detail</span>
+          </a>
+        </li>
+      </ul>
+    </li>  
+    <h5 class="mt-3 mb-3 text-secondary ml-2">System Settings</h5>                  
+    <% if can?(:update, :all) %>          
+      <li class="<%= 'active' if request.path.start_with?(pos_settings_path) %>">
+        <%= link_to edit_pos_setting_path(@pos_setting) do %>
+          <i class="fas fa-tasks ml-3" aria-hidden="true"></i>
+          <span class="link-text">General Setting</span>
+        <% end %>
+      </li>                                      
+      <% if can?(:delete, :all) %>
+        <li class="<%= 'active' if request.path.start_with?(users_path) %>">
+          <%= link_to users_path do %>
+            <i class="fas fa-th-list ml-3"></i>
+            <span class="link-text">System Operators</span>
+          <% end %>
+        </li>                   
+      <%end%>                          
     <%end%>
+    <li class="<%= 'active' if request.path.start_with?(bd_backups_path) %>">
+      <%= link_to bd_backups_path do %>
+        <i class="fas fa-question ml-3"></i>
+        <span class="link-text">Import/Export</span>
+      <% end %>
+    </li>
+    <li class="<%= 'active' if request.path.start_with?(helps_path) %>">
+      <%= link_to helps_path do %>
+        <i class="fas fa-question ml-3"></i>
+        <span class="link-text">Help</span>
+      <% end %>
+    </li>
+    <li class="<%= 'active' if request.path.start_with?(sms_index_path) %>">
+      <a href="#">
+        <i class="fas fa-paper-plane ml-3"></i>
+        <span class="link-text">Contact</span>
+      </a>
+    </li>
+  </ul>
+  <%else%>
+    <ul class="list-unstyled components">
+      <li class="active">
+        <%= link_to dashboard_path do %>
+          <i class="fas fa-tasks" aria-hidden="true"></i>
+          <span class="link-text">Booking</span>
+        <% end %>
+      </li>
+      <li>
+        <a  href="#UserSubMenu"  data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+           <i class="fas fa-user-plus"></i>
+           <span class="link-text">User</span>
+        </a>
+        <ul class="collapse list-unstyled" id="UserSubMenu">
+          <li>
+            <%= link_to ledger_books_path do %>
+              <i class="fas fa-book"></i>
+              <span class="link-text">Ledger Book</span>
+            <% end %>
+          </li>
+          <li>
+            <%= link_to sys_users_path do %>
+              <i class="fas fa-plus"></i>
+              <span class="link-text">All Users</span>
+            <% end %>
+          </li>
+          <li>
+            <%= link_to customer_sys_users_path do %>
+              <i class="fas fa-plus"></i>
+              <span class="link-text">Customer</span>
+            <% end %>
+          </li>
+          <li>
+            <%= link_to supplier_sys_users_path do %>
+              <i class="fas fa-plus"></i>
+              <span class="link-text">Supplier</span>
+            <% end %>
+          </li>
+          <li>
+            <%= link_to own_sys_users_path do %>
+              <i class="fas fa-plus"></i>
+              <span class="link-text">own</span>
+            <% end %>
+          </li>
+        </ul>
+      </li>
+      <li class="<%= 'active' if request.path.start_with?(users_path) %>">
+        <%= link_to edit_user_path(current_user) do %>
+          <i class="fas fa-plus"></i>
+          <i class="fas fa-th-list"></i>
+          <span class="link-text">Profile</span>
+        <% end %>
+      </li>
+    </ul>
+  <%end%>
 </nav>
+
+<script>
+  $('#search-bar').keyup(function(){
+    var value = $(this).val().toLowerCase();
+    $('#mylist li').each(function(){
+      var search = $(this).text().toLowerCase();
+      if(search.indexOf(value)>-1){
+          $(this).show();
+      }
+      else{
+          $(this).hide();
+      }
+    });
+  });
+</script>
+
