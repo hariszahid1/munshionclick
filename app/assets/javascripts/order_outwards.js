@@ -65,7 +65,7 @@ function markas_call(product_id, id){
         var options = "<option value='0'>Please select a challan</option>";
         var result_data = JSON.parse(result)
         for(var i = 0; i < result_data.length; i++){
-          options += "<option value='" + result_data[i] + "'>" + result_data[i] + "</option>";
+          options += "<option value='" + result_data[i][0] + "'>" + result_data[i] + "</option>";
         }
         $(target.closest('.challan-stock-container')).find('.challan-outward').html(options);
      },
