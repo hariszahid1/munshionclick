@@ -11,7 +11,7 @@
       <%= f.text_field :destination,  placeholder: "Enter Client ID Card #", label: "Client ID Card #" %>
     </div>
     <div class="col-lg-6 form-group">
-      <%= f.select :l_c, options_for_select(@project_name), {:include_blank => "Select Project Name", label: 'Project Name'}, class: "form-control chosen-select disable-sys-users" %>
+      <%= f.select :l_c, options_for_select(@project_name, f.object.l_c), {:include_blank => "Select Project Name", label: 'Project Name'}, class: "form-control chosen-select disable-sys-users" %>
     </div>
     <div class="col-lg-6 form-group">
       <%= f.text_field :bill_no,  placeholder: "Enter Plot Size", label: "Plot Size" %>

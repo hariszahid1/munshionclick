@@ -26,17 +26,17 @@
         <tr>
           <td><%= sale_deal.created_at.strftime('%d/%m/%y at %I:%M%p')%></td>
           <td>
-		        <%= @all_agents.to_h.invert[sale_deal&.user_name.to_i].to_s%>
+		        <%= sale_deal.staff&.name %>
           </td>
-          <td><%= sale_deal&.sys_user&.cms_data&.try(:[], 'project_name')&.titleize %></td>
-          <td><%= sale_deal&.sys_user&.cms_data&.try(:[], 'category')&.titleize %></td>
-          <td><%= sale_deal&.purchase_sale_items&.first&.size_9 %></td>
-          <td><%= sale_deal.sys_user.name %></td>
+          <td><%= sale_deal.l_c&.titleize %></td>
+          <td><%= sale_deal&.g_d_type %></td>
+          <td><%= sale_deal&.g_d %></td>
+          <td><%= sale_deal.sys_user&.name %></td>
           <td> <%= link_to sale_deal_path(id: sale_deal.id, 'approve': true), method: :put, class: "btn btn-success mt-3 ml-2" do %>
               Approve
             <% end %>
           </td>
-          <td> <%= link_to edit_sale_deal_path(sale_deal),class: "btn btn-info mt-3 ml-2" do %>
+          <td> <%= link_to edit_sale_deal_path(sale_deal, type: sale_deal.transaction_type),class: "btn btn-info mt-3 ml-2" do %>
               Edit
             <% end %>
           </td>
