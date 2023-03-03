@@ -2,7 +2,6 @@
   <% if expense_entry.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(expense_entry.errors.count, "error") %> prohibited this expense_entry from being saved:</h2>
-
       <ul>
       <% expense_entry.errors.full_messages.each do |message| %>
         <li><%= message %></li>
@@ -10,55 +9,52 @@
       </ul>
     </div>
   <% end %>
-
-<div class="row">
-  <div class="col-lg-6">
-    <div class="field">
-      <%= form.label :amount %><br>
-      <%= form.text_field :amount, placeholder:"Enter Amount" %>
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="field form-group">
+        <%= form.label :amount %><br>
+        <%= form.text_field :amount, placeholder:"Enter Amount" , class: "form-control" %>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="field">
+        <%= form.label :expense_id %><br>
+        <%= form.text_field :expense_id , class: "form-control"%>
+      </div>
+    </div>  
+  </div>
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="field">
+        <%= form.label :expense_type_id %><br>
+        <%= form.text_field :expense_type_id , class: "form-control" %>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="field">
+        <%= form.label :account_id %><br>
+        <%= form.text_field :account_id , class: "form-control" %>
+      </div>
     </div>
   </div>
-  <div class="col-lg-6">
-    <div class="field">
-      <%= form.label :expense_id %><br>
-      <%= form.text_field :expense_id %>
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="field">
+        <%= form.label :status %>
+        <%= form.number_field :status , class: "form-control" %>
+      </div>
     </div>
-  </div>  
-</div>
-
-<div class="row">
-  <div class="col-lg-6">
-    <div class="field">
-      <%= form.label :expense_type_id %><br>
-      <%= form.text_field :expense_type_id %>
-    </div>
-  </div>
-  <div class="col-lg-6">
-    <div class="field">
-      <%= form.label :account_id %><br>
-      <%= form.text_field :account_id %>
+    <div class="col-lg-6">
+      <div class="field">
+        <%= form.label :comment %><br>
+        <%= form.text_area :comment , class: "form-control" %>
+      </div>
     </div>
   </div>
-</div>
-
-<div class="row">
-  <div class="col-lg-6">
-    <div class="field">
-      <%= form.label :status %>
-      <%= form.number_field :status %>
-    </div>
-  </div>
-  <div class="col-lg-6">
-    <div class="field">
-      <%= form.label :comment %><br>
-      <%= form.text_area :comment %>
-    </div>
-  </div>
-</div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+    <button type="button" class="btn btn-light btn-outline-secondary mb-2" data-dismiss="modal">Cancel</button>
     <div class="actions">
-      <%= form.submit class:"bg-warning p-2 mt-1", style:"border-radius: 3px; border: none; " %>
+      <%= form.submit "Update" ,class:"bg-warning p-2 ", style:"border-radius: 3px; border: none; " %>
     </div>
   </div>
   

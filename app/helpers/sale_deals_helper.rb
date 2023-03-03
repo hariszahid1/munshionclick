@@ -24,17 +24,25 @@ module SaleDealsHelper
 		temp = []
     @sale_deals.each do |d|
       data = [
-        d.purchase_sale_items&.first&.expiry_date&.strftime('%d-%m-%Y'),
+        d.id,
+        d.created_at.strftime('%d/%m/%y'),
         d.sys_user&.name,
-        d.sys_user&.occupation,
-        d.sys_user&.cms_data&.fetch('category', ''),
-        d.sys_user&.ntn,
-        d.sys_user&.cms_data&.fetch('project_name', ''),
-        d.purchase_sale_items&.first&.size_11,
-        d.purchase_sale_items&.first&.size_2,
         d.destination,
-        d.l_c,
-        d.transaction_type
+        d.sys_user&.occupation,
+        d.l_c&.titleize,
+        d.bill_no,
+        d.g_d_type,
+        d.g_d,
+        d.dispatched_to,
+        d.job_no,
+        @stamps[d.payment_method.to_s],
+        d.total_bill,
+        d.carriage,
+        d.amount,
+        d.remaining_balance,
+        d.staff&.name,
+        d.comment,
+        d.payment_detail
       ]
       temp.push(data)
     end

@@ -71,28 +71,31 @@ class User < ApplicationRecord
   end
 
 	def create_user_permission
-		pos_all_modules=["accounts","cities","compaigns","contacts","countries","daily_books","daily_sales","dashboard","departments","expense_entries",
-										 "expense_types","expenses","gates","helps","home","investments","item_types","items","ledger_books",
-									   "logs","map_columns","materials","order_items","orders","payments","pos_settings","product_categories",
-								"product_stock_excahanges","product_stocks","product_sub_categories","product_warranties","production_block_types",
-							"production_blocks","production_cycles","productions","products","property_plans","purchase_sale_details",
-						"purchase_sale_items","raw_products","remarks","reports","salaries","salary_details","sms","staff_deals","staff_ledger_books",
-					"staff_raw_products","staffs","sys_users","sys_users/customer","sys_users/supplier","sys_users/own","user_types","users","warranties","user_groups","crms",
-          "loans", "expense_vouchers", 'mobile_shop_product_purchases', 'sticky_notes', 'profit_reports', 'attendances']
+    pos_all_modules = ['dashboard', 'helps', 'home', 'logs', 'reports', 'accounts', 'active_storage_attachments',
+                       'active_storage_blobs', 'active_storage_variant_records', 'activities', 'ar_internal_metadata',
+                       'attendances', 'cities', 'compaign_entries', 'compaigns', 'contacts', 'countries', 'crontests',
+                       'daily_attendances', 'daily_books', 'daily_sales', 'db_backup_files', 'departments',
+                       'expense_entries', 'expense_entry_vouchers', 'expense_types', 'expense_vouchers', 'expenses',
+                       'follow_ups', 'gates', 'import_mappings', 'investments', 'item_types', 'items', 'ledger_books',
+                       'links', 'loans', 'map_columns', 'materials', 'notes', 'order_items', 'orders', 'payments',
+                       'pdf_template_elements', 'pdf_templates', 'pos_settings', 'product_categories',
+                       'product_stock_exchanges', 'product_stocks', 'product_sub_categories', 'product_warranties',
+                       'production_block_types', 'production_blocks', 'production_cycles', 'productions', 'products',
+                       'profit_reports', 'property_installments', 'property_plans', 'purchase_sale_details',
+                       'purchase_sale_items', 'raw_products', 'remarks', 'salaries', 'salary_detail_product_quantities',
+                       'salary_details', 'schema_migrations', 'sms_logs', 'staff_deals', 'staff_ledger_books',
+                       'staff_raw_products', 'staffs', 'sticky_notes', 'sys_users', 'user_abilities', 'user_groups',
+                       'user_permissions', 'user_types', 'users', 'versions', 'warranties', 'sms', 'sys_users/customer',
+                       'sys_users/supplier', 'sys_users/own', 'crms', 'mobile_shop_product_purchases']
 
-                    # "accounts","cities","compaigns","contacts","countries","daily_books","daily_sales","dashboard","departments","expense_entries",
-                    # "expense_types","expenses","gates","helps","home","investments","item_types","items","ledger_books",
-                    # "logs","map_columns","materials","order_items","orders","payments","pos_settings","product_categories",
-                    # "product_stock_excahanges","product_stocks","product_sub_categories","product_warranties","production_block_types","production_blocks","production_cycles","productions","products","property_plans","purchase_sale_details","purchase_sale_items","raw_products","remarks","reports","salaries","salary_details","sms","staff_deals","staff_ledger_books","staff_raw_products","staffs","sys_users","user_types","users","warranties", "user_groups", "crm"]
-
-		pos_all_modules.each do |item|
-			UserPermission.create(module: item, can_create: true,can_read: true, can_update: true, can_delete: true, user_id: id) if super_admin?
-			UserPermission.create(module: item, can_create: true,can_read: true, can_update: true, can_delete: false, user_id: id) if admin?
-			UserPermission.create(module: item, can_create: true,can_read: true, can_update: false, can_delete: false, user_id: id) if staff?
-			UserPermission.create(module: item, can_create: true,can_read: true, can_update: false, can_delete: false, user_id: id) if salesman?
-			UserPermission.create(module: item, can_create: true,can_read: true, can_update: false, can_delete: false, user_id: id) if editor?
-			UserPermission.create(module: item, can_create: false,can_read: true, can_update: false, can_delete: false, user_id: id) if visitor?
-		end
+    pos_all_modules.each do |item|
+      UserPermission.create(module: item, can_create: true,can_read: true, can_update: true, can_delete: true, user_id: id, is_hidden: true) if super_admin?
+      UserPermission.create(module: item, can_create: true,can_read: true, can_update: true, can_delete: false, user_id: id, is_hidden: true) if admin?
+      UserPermission.create(module: item, can_create: true,can_read: true, can_update: false, can_delete: false, user_id: id, is_hidden: true) if staff?
+      UserPermission.create(module: item, can_create: true,can_read: true, can_update: false, can_delete: false, user_id: id, is_hidden: true) if salesman?
+      UserPermission.create(module: item, can_create: true,can_read: true, can_update: false, can_delete: false, user_id: id, is_hidden: true) if editor?
+      UserPermission.create(module: item, can_create: false,can_read: true, can_update: false, can_delete: false, user_id: id, is_hidden: true) if visitor?
+    end
   end
 
   def allowed_valid_roles

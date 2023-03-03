@@ -13,10 +13,12 @@ function initializeDatepicker() {
 }
 
 $(document).on('turbolinks:load', function() {
+  FontAwesome.dom.i2svg();
   initializeDatepicker();
 });
 
 $(document).ready(function() {
+  FontAwesome.dom.i2svg();
   initializeDatepicker();
 });
 
