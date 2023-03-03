@@ -53,7 +53,7 @@
               <div class="col-lg-2 form-group float-left">
                 <h5>Marka</h5>
               </div>
-              <div class="col-lg-2 form-group float-left">
+              <div class="col-lg-3 form-group float-left">
                 <h5>Challan No.</h5>
               </div>
               <div class="col-lg-2 form-group float-left">
@@ -104,7 +104,7 @@
             </div>
             <div class="actions">
               <div class="col-lg-6" style="float:left">
-                <%= f.submit class: "btn btn-success col-lg-12", style: "float: right",value: "Save", onclick:"save_sale_order()" %>
+                <%= f.submit class: "btn btn-success col-lg-12", style: "float: right",value: "Save" %>
               </div>
             </div>
           </div>
@@ -144,7 +144,7 @@ $(document).ready(function(){
           var result_data = JSON.parse(result)
           var options = []
           for(var i = 0; i < result_data.length; i++){
-            options += "<option value='" + result_data[i] + "'>" + result_data[i] + "</option>";
+            options += "<option value='" + result_data[i][0] + "'>" + result_data[i] + "</option>";
           }
           for(var i = 0; i < result_data.length-1; i++){
             $('.add-new-outward').addClass('product-call-not')

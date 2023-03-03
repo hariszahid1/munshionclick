@@ -28,7 +28,7 @@
               <%= f.select :status, Order.statuses.map { |key, value| [key.humanize, key] },{hide_label:true,class: "form-control", required: true} %>
             </div>
             <div class="col-lg-4 form-group float-left">
-              <%= f.select :sys_user_id, options_from_collection_for_select(@suppliers, 'id', 'name', f.object.sys_user_id), {hide_label:true,prompt: "Select the Supplier"},class:"form-control chosen-select", required: true %>
+              <%= f.select :sys_user_id, options_from_collection_for_select(@suppliers, 'id', 'name', f.object.sys_user_id), {hide_label:true,prompt: "Select the Supplier"},class:"form-control chosen-select inward-party-name", required: true %>
             </div>
             <div class="col-lg-4 form-group float-left">
               <%= f.select :account_id , options_from_collection_for_select(@accounts, 'id', 'title', (f.object.account_id.present? ? f.object.account_id : @account)), {hide_label:true},class:"form-control"%>
@@ -110,7 +110,7 @@
             </div>
             <div class="actions">
               <div class="col-lg-6" style="float:left">
-                <%= f.submit class: "btn btn-success col-lg-12", style: "float: right",value: "Save", onclick:"save_sale_order()" %>
+                <%= f.submit class: "btn btn-success col-lg-12", style: "float: right",value: "Save" %>
               </div>
             </div>
           </div>

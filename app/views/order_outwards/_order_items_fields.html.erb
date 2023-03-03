@@ -21,11 +21,11 @@
           </div>
         <% end %>
         <% if f.object.product_id.present? %>
-          <div class="col-lg-2 from-group float-left">
+          <div class="col-lg-3 from-group float-left">
             <%= f.select :challan_no, options_for_select(@challans, f.object.challan_no), {hide_label:true, prompt: "Select a marka."}, onchange: 'remainimg_stocks_call(event); return false;', class:"form-control challan-outward", required: true %>
           </div>
         <% else %>
-          <div class="col-lg-2 from-group float-left">
+          <div class="col-lg-3 from-group float-left">
             <%= f.select :challan_no, options_for_select([]), {hide_label:true,  prompt: "Select a marka first."}, {onchange: 'remainimg_stocks_call(event); return false;', class: "challan-outward", required: true} %>
           </div>
         <% end %>
