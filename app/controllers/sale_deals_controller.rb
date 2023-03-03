@@ -24,6 +24,11 @@ class SaleDealsController < ApplicationController
     @sale_deals = @q.result.page(params[:page])
     @requested_count = PurchaseSaleDetail.includes(:sys_user, :purchase_sale_items).where(transaction_type:
                                                     %w[ReSaleDeal NewSaleDeal], status: 'UnClear').count
+
+    @seller_stamps_count = @q.result.where(payment_method: 0).count
+    @buyer_stamps_count = @q.result.where(payment_method: 1).count
+    @no_stamps_count = @q.result.where(payment_method: 2).count
+    @both_count = @q.result.where(payment_method: 3).count
   end
 
   # GET /sale_deals/1
@@ -46,8 +51,7 @@ class SaleDealsController < ApplicationController
   # POST /sale_deals.json
   def create
     @sale_deal = PurchaseSaleDetail.new(sale_deal_params)
-    create_sys_user if params[:purchase_sale_detail][:sys_user_id].blank? &&
-                       params[:purchase_sale_detail][:sys_users].present?
+    create_sys_user
 
     respond_to do |format|
       if @sale_deal.save
@@ -78,6 +82,7 @@ class SaleDealsController < ApplicationController
     respond_to do |format|
       @before_update_carriage_loading = @sale_deal.carriage + @sale_deal.loading
       if @sale_deal.update(sale_deal_params)
+        update_sys_user
         type = params[:purchase_sale_detail]['transaction_type'] == 'ReSaleDeal' ? 8 : 9
         modify_update_salary_details if @sale_deal.staff_id.present?
         format.html { redirect_to sale_deals_path('q[transaction_type_eq]': type), notice: 'Sale Deal was successfully updated.' }
@@ -114,10 +119,12 @@ class SaleDealsController < ApplicationController
 
   def create_sys_user
     code = 'AGC-' + '%.4i' % (SysUser.maximum(:id).present? ? SysUser.maximum(:id).next : 1)
-    user = params[:purchase_sale_detail][:sys_users]
-    user_id = SysUser.create(name: user[:name], code: code, user_type_id: UserType.first.id, ntn: user[:ntn],
-                             occupation: user[:occupation], cms_data: user[:cms_data])
+    user_id = SysUser.create(code: code, name: params[:purchase_sale_detail][:sys_users][:name], occupation: params[:purchase_sale_detail][:sys_users][:occupation], user_type_id: UserType.first.id)
     @sale_deal[:sys_user_id] = user_id.id
+  end
+
+  def update_sys_user
+    @sale_deal.sys_user.update(name: params[:purchase_sale_detail][:sys_users][:name], occupation: params[:purchase_sale_detail][:sys_users][:occupation])
   end
 
   def set_data
@@ -139,11 +146,6 @@ class SaleDealsController < ApplicationController
                                                       created_by_ids)
     @deal_count = PurchaseSaleDetail.joins(:purchase_sale_items).where(transaction_type: %w[NewSaleDeal ReSaleDeal]).group('purchase_sale_items.size_4').count
     @payment_status_count = PurchaseSaleDetail.joins(:purchase_sale_items).where(transaction_type: %w[NewSaleDeal ReSaleDeal]).group('purchase_sale_items.size_7').count
-
-    @seller_stamps_count = PurchaseSaleDetail.joins(:purchase_sale_items).where(transaction_type: %w[ReSaleDeal], purchase_sale_items: { status: 0 }).count
-    @buyer_stamps_count = PurchaseSaleDetail.joins(:purchase_sale_items).where(transaction_type: %w[ReSaleDeal], purchase_sale_items: { status: 1 }).count
-    @no_stamps_count = PurchaseSaleDetail.joins(:purchase_sale_items).where(transaction_type: %w[ReSaleDeal], purchase_sale_items: { status: 2 }).count
-    @both_count = PurchaseSaleDetail.joins(:purchase_sale_items).where(transaction_type: %w[ReSaleDeal], purchase_sale_items: { status: 3 }).count
   end
 
   def qr_link_generator
@@ -163,20 +165,11 @@ class SaleDealsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def sale_deal_params
     params.require(:purchase_sale_detail).permit(:sys_user_id, :transaction_type, :total_bill, :amount, :discount_price,
-                                                  :status, :comment, :voucher_id, :created_at, :account_id, :carriage,
-                                                  :loading, :order_id, :created_at, :staff_id, :bill_no, :user_name,
-                                                  :destination, :l_c, :g_d, :g_d_type, :g_d_date, :quantity, :dispatched_to,
-                                                  :despatch_date, :job_no, :reference_no, :company_name, :with_gst, :remaining_balance,
-                                                  purchase_sale_items_attributes: %i[id purchase_sale_detail_id item_id
-                                                                                    product_id quantity cost_price sale_price status comment
-                                                                                    total_cost_price total_sale_price transaction_type
-                                                                                    size_1 size_2 size_3 size_4 size_5 size_6 size_7 size_8
-                                                                                    size_9 size_10 size_11 size_12 size_13
-        discount_price purchase_sale_type created_at expiry_date extra_expence extra_quantity gst gst_amount],
-                                                  follow_ups_attributes: %i[id reminder_type task_type priority created_by
-                                                                            assigned_to_id date comment followable_id
-                                                                            followable_type]
-      )
+                                                 :status, :comment, :voucher_id, :created_at, :account_id, :carriage,
+                                                 :loading, :order_id, :created_at, :staff_id, :bill_no, :user_name,
+                                                 :destination, :l_c, :g_d, :g_d_type, :g_d_date, :quantity,
+                                                 :dispatched_to, :despatch_date, :job_no, :reference_no, :company_name,
+                                                 :with_gst, :remaining_balance, :payment_detail, :payment_method)
   end
 
   def download_sale_deals_pdf_file
@@ -187,8 +180,9 @@ class SaleDealsController < ApplicationController
 
   def download_sale_deals_csv_file
     @sale_deals = @q.result
-    header_for_csv = %w[deal_date name number type_of_plot plot_size project_name form_no ms_no
-                        purchased_from deal_share type]
+    header_for_csv = %w[ID Date Customer_Name CNIC PH# Project Size Type Category Form#
+                        MS# Stamp Booking_Price Rebat/Profit Received_Amount Remaining_Balance
+                        Agent External_Remarks Internal_Remarks]
     data_for_csv = get_data_for_sale_deals_csv
     generate_csv(data_for_csv, header_for_csv, 'SaleDeals')
   end
@@ -227,6 +221,6 @@ class SaleDealsController < ApplicationController
   end
 
   def set_stamps
-    @stamps = { '0' => 'Seller', '1' => 'Buyer', '2' => 'No Stamp', '3' => 'Seller & Buyer' }
+    @stamps = { '0' => 'Seller', '1' => 'Buyer', '2' => 'Seller Free', '3' => 'Seller & Buyer' }
   end
 end

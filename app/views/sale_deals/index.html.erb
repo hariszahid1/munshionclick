@@ -20,12 +20,9 @@
   </div>
   <div id="new_sale_deal">
     <% if params['q'].try(:[], 'transaction_type_eq') == '8' %>
-      <%= link_to new_sale_deal_path, class: "btn btn-success mr-1 float-right", style:"width: 200px;" do %>
+      <%= link_to new_sale_deal_path('type': 'ReSaleDeal'), class: "btn btn-success mr-1 float-right", style:"width: 200px;" do %>
         <i class="fa fa-plus-circle" aria-hidden="false"></i>
         Re-Sale Deal
-      <% end %>
-      <%= link_to new_sale_deal_path('type': 'ReSaleDeal'), class: "btn btn-success file-btn-color mr-1 float-right" do %>
-        Re-Sale with New User
       <% end %>
     <% else %>
       <%= link_to new_sale_deal_path('type': 'NewSaleDeal'), class: "btn btn-success mr-1 float-right", style:"width: 150px;" do %>
@@ -34,7 +31,6 @@
       <% end %>
     <% end %>
   </div>
-  <%= link_to 'Follow Ups', follow_ups_path('q[reminder_type_eq]': 'sale_deals'), class: "btn btn-primary file-btn-color mr-1 float-right" %>
   <% if current_user&.super_admin? %>
     <%= link_to requested_sale_deals_path, class: "btn btn-warning file-btn-color mr-1 float-right position-relative" do %>
       Requested (<%= @requested_count %>) <span class=  <%= 'requested-blink' if @requested_count.positive?%> ></span>
@@ -78,20 +74,33 @@
             <%= f.select :sys_user_id_eq, options_for_select(@sys_users.map{ |p| [p.name , p.id]}, f.object.sys_user_id_eq),{:include_blank => "Select Customer Name"},:class=>"form-control chosen-select" %>
           </div>
           <div class="col-lg-3 form-group float-left">
-            <%= f.select :user_name_eq, options_for_select(@all_agents.map{ |key, value| [key , value]}, f.object.user_name_eq),{:include_blank => "Select Agent Name"},:class=>"form-control chosen-select" %>
+            <%= f.select :staff_id_eq, options_for_select(Staff.all.map{ |s| [s.name , s.id]}, f.object.staff_id_eq),{:include_blank => "Select Agent Name"},:class=>"form-control chosen-select" %>
           </div>
           <div class="col-lg-2 form-group float-left">
-            <%= f.select :sys_user_cms_data_cont, options_for_select(@project_name, f.object.sys_user_cms_data_cont), {:include_blank => "Select Project Name"}, class: "form-control chosen-select" %>
+            <%= f.select :l_c_cont, options_for_select(@project_name, f.object.l_c_cont), {:include_blank => "Select Project Name"}, class: "form-control chosen-select" %>
+          </div>
+          <% if params.dig(:q, :transaction_type_eq).eql?('8')%>
+            <div class="col-lg-2 form-group float-left">
+              <%= f.select :payment_method_in, options_for_select(@stamps.map{ |key, value| [value , key]}, f.object.payment_method_in),{:include_blank => "Select Stamp"},:class=>"form-control chosen-select" %>
+            </div>
+          <% end %>
+          <div class="col-lg-2 form-group float-left">
+            <%= f.search_field :bill_no_eq, class: "form-control chosen-select", placeholder: "Search Size" %>
           </div>
           <div class="col-lg-2 form-group float-left">
-            <%= f.select :purchase_sale_items_status_in, options_for_select(@stamps.map{ |key, value| [value , key]}, f.object.purchase_sale_items_status_in),{:include_blank => "Select Stamp"},:class=>"form-control chosen-select", :multiple => true %>
+            <%= f.search_field :g_d_type_eq, class: "form-control chosen-select", placeholder: "Search Type" %>
           </div>
           <div class="col-lg-2 form-group float-left">
-            <%= f.search_field :purchase_sale_items_size_11_cont, class: "form-control chosen-select", placeholder: "Search Form No" %>
+            <%= f.search_field :g_d_cont, class: "form-control chosen-select", placeholder: "Search Category" %>
           </div>
           <div class="col-lg-2 form-group float-left">
-            <%= f.search_field :purchase_sale_items_size_2_cont, class: "form-control chosen-select", placeholder: "Search MS No" %>
+            <%= f.search_field :job_no_eq, class: "form-control chosen-select", placeholder: "Search MS #" %>
           </div>
+          <% if params.dig(:q, :transaction_type_eq).eql?('9')%>
+            <div class="col-lg-2 form-group float-left">
+              <%= f.search_field :reference_no_eq, class: "form-control chosen-select", placeholder: "Search Allotment Letter" %>
+            </div>
+          <% end %>
           <div class="col-lg-3 form-group float-left d-flex">
             <%= f.search_field :created_at, id: "reportrange", class: 'form-control' %>
           </div>
@@ -110,43 +119,15 @@
       <div class="card shadow p-4">
         <div class="row d-flex" style="position: absolute;">
           <div class="mt-4 ml-3">
-            <button class="btn btn-danger file-btn-color mr-1" formtarget="_blank" style="width: 80px;" title= "download expense vouchers pdf" name="pdf" type="submit" value="pdf">PDF</button>
+            <button class="btn btn-danger file-btn-color mr-1" formtarget="_blank" style="width: 80px;" title= "Download Sale Deals PDF" name="pdf" type="submit" value="pdf">PDF</button>
             <button class="btn btn-warning file-btn-color mr-1" style="width: 80px;" title= "download expense vouchers csv" name="csv" type="submit" value="csv">CSV</button>
           </div>
         </div>
-        <div class="mt-3">
-          <table data-toggle="table mt-3" data-search="true" class="table" style='overflow: hidden;'>
-            <thead>
-              <tr>
-                <th>Sr#</th>
-                <th>Date</th>
-                <th>Agent</th>
-                <th>Project</th>
-                <th>Plot Type</th>
-                <th>Category</th>
-                <th>Customer</th>
-                <th>Stamp</th>
-                <th>Internal Remarks</th>
-                <th>External Remarks</th>
-                <th class="border_none">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% @sale_deals.each_with_index do |sale_deal, index| %>
-                <%= render partial: 'sale_deal', locals: { sale_deal: sale_deal, index: index } %>
-              <% end %>
-              <%#= render partial: 'sale_deal', collection: @sale_deals %>
-            </tbody>
-          </table>
-          <div class="row">
-            <div class="col-lg-4 col-sm-4">
-              <%= page_entries_info @sale_deals %>
-            </div>
-            <div class="col-lg-8 col-sm-8 pagination-left text-dark">
-              <%= paginate @sale_deals %>
-            </div>
-          </div>
-        </div>  
+        <% if params.dig(:q, :transaction_type_eq).eql?('9') %>
+          <%= render partial: 'fresh_sale_deal_data'%>
+        <% else %>
+          <%= render partial: 'resale_deal_data'%>
+        <% end %>
       </div>
     </div>
   </div>

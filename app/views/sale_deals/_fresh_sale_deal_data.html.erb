@@ -1,0 +1,130 @@
+<div class="mt-3">
+  <table data-toggle="table mt-3" data-search="true" class="table" style='overflow: hidden;'>
+    <thead>
+      <tr>
+        <th>Sr#</th>
+        <th>Date</th>
+        <th>Customer</th>
+        <th>PH #</th>
+        <th>Project</th>
+        <th>Size</th>
+        <th>Type</th>
+        <th>Category</th>
+        <th>Form #</th>
+        <th>MS #</th>
+        <th>Agent</th>
+        <th class="border_none">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @sale_deals.each_with_index do |sale_deal, index| %>
+        <% color_class = '' %>
+        <% color_class = 'seller_stamp_color' if sale_deal.purchase_sale_items&.first&.status.eql?(0) %>
+        <% color_class = 'buyer_stamp_color' if sale_deal.purchase_sale_items&.first&.status.eql?(1) %>
+        <% color_class = 'both_stamp_color' if sale_deal.purchase_sale_items&.first&.status.eql?(3) %>
+
+        <tr class="<%= color_class %>">
+          <td>
+            <% if sale_deal.job_no.eql?('') || sale_deal.reference_no.eql?('') %>
+              <span class='blinker-index'></span>
+            <% end %>
+            <%= index.to_i + 1 %>
+          </td>
+          <td><%= sale_deal.created_at.strftime('%d/%m/%y')%></td>
+          <td>
+            <%= sale_deal.sys_user&.name %>
+          </td>
+          <td>
+            <%= sale_deal.sys_user&.occupation %>
+          </td>
+            <% if sale_deal.l_c&.titleize == 'Lahore Smart City' %>
+              <% project_name = 'LSC' %>
+            <% elsif sale_deal.l_c&.titleize == 'Capital Smart City' %>
+              <% project_name = 'CSC' %>
+            <% elsif sale_deal.l_c&.titleize == 'One Capital Residences' %>
+              <% project_name = 'OCR' %>
+            <% else %>
+              <% project_name = sale_deal.l_c&.titleize %>
+            <% end %>
+          <td><%= project_name %></td>
+          <td><%= sale_deal.bill_no %></td>
+          <td><%= sale_deal.g_d_type %></td>
+          <td><%= sale_deal.g_d %></td>
+          <td><%= sale_deal.dispatched_to %></td>
+          <td><%= sale_deal.job_no %></td>
+          <td><%= sale_deal.staff&.name %></td>
+          <td>
+          <div class="icon-container-1">
+            <% if current_user.super_admin? || sale_deal.status == 'Clear'%>
+            <div class="my-icon-1 my-view-1">
+              <div class="my-tooltip-1">
+                <div class="icon-container">
+                  <div class="my-icon my-view">
+                    <div class="my-tooltip">
+                      Edit
+                    </div>
+                      <%= link_to edit_sale_deal_path(id: sale_deal.id, type: 'NewSaleDeal'), class:"icon-div" do %>
+                        <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+                      <%end %>
+                  </div>
+                  <div class="my-icon my-view">
+                    <div class="my-tooltip">
+                      Show
+                    </div>
+                      <%= link_to sale_deal_path(sale_deal), class:"icon-div" do %>
+                        <i class="fa fa-eye mt-2" aria-hidden="true"></i>
+                      <% end %>
+                  </div>
+                  <div class="my-icon my-view">
+                    <div class="my-tooltip">
+                      Delete
+                    </div>
+                      <%= link_to sale_deal_path(sale_deal), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+                        <i class="fa fa-trash mt-2" aria-hidden="true"></i>
+                      <%end %>
+                  </div>
+                  <div class="my-icon my-view">
+                    <div class="my-tooltip">
+                      PDF
+                    </div>
+                      <%= link_to sale_deal_path(id: sale_deal.id, 'pdf': true, type: 'NewSaleDeal'), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
+                        <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
+                      <%end %>
+                  </div>
+                  <div class="my-icon my-view">
+                    <div class="my-tooltip">
+                      CSV
+                    </div>
+                    <%= link_to sale_deals_path('q[id_eq]':sale_deal.id,'csv':true), title: 'Download CSV', class:"icon-div" do%>
+                      <i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
+                    <%end %>
+                    </div>
+                </div>
+              </div>
+              <span class="icon-div-1">
+                    <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+              </span>
+            </div>
+          <% else %>
+          <p>Requested</p>
+          <% end %>
+          </div>
+          </td>
+        </tr>
+      <% end %>
+  </table>
+  <div class="row">
+    <div class="col-lg-4 col-sm-4">
+      <%= page_entries_info @sale_deals %>
+    </div>
+    <div class="col-lg-8 col-sm-8 pagination-left text-dark">
+      <%= paginate @sale_deals %>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    FontAwesome.dom.i2svg();
+  });
+</script>

@@ -30,42 +30,11 @@
       </table>
     </div>
     <div>
-      <table>
-        <thead class="lite-gray">
-          <th class="text-center"></th>
-          <th class="text-center">Deal Date</th>
-          <th class="text-center">Client Name</th>
-          <th class="text-center">Client Number</th>
-          <th class="text-center">Type of Plot</th>
-          <th class="text-center">Plot Size</th>
-          <th class="text-center">Project Name</th>
-          <th class="text-center">MS No</th>
-          <th class="text-center">Form No</th>
-          <th class="text-center">Purchased From</th>
-          <th class="text-center">Deal Share</th>
-          <th class="text-center">Booking Type</th>
-          <th class="text-center">Stamp</th>
-        </thead>
-        <tbody>
-          <% data.each_with_index do |s, index| %>
-            <tr>
-              <th class="text-center"><%= index + 1 %></th>
-              <td class="text-center"><%= s['deal_date'] %></td>
-              <td class="text-center"><%= s['name'] %></td>
-              <td class="text-center"><%= s['contact'] %></td>
-              <td class="text-center"><%= s['plot_type'] %></td>
-              <td class="text-center"><%= s['plot_size'] %></td>
-              <td class="text-center"><%= s['project'] %></td>
-              <td class="text-center"><%= s['ms'] %></td>
-              <td class="text-center"><%= s['form_no'] %></td>
-              <td class="text-center"><%= s['purchase_from'] %></td>
-              <td class="text-center"><%= s['share'] %></td>
-              <td class="text-center"><%= s['type'] %></td>
-              <td class="text-center"><%= @stamps[s['stamp'].to_s] %></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
+      <% if params.dig(:q, :transaction_type_eq).eql?(9)%>
+        <%= render partial: 'index_fresh_resale'%>
+      <% else %>
+        <%= render partial: 'index_resale'%>
+      <% end %>
     </div>
   </body>
 </html>

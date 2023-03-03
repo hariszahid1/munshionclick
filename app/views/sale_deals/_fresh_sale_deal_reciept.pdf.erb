@@ -1,0 +1,165 @@
+
+<table>
+  <tr>
+    <th class='text-left'>
+      <img src="<%= @pos_setting&.logo_images&.first&.service_url%>" height="150px" width= "150px"/>
+      <img
+        style=" position: fixed;
+                top: <%= @pos_setting.extra_settings.try(:[], "jr_image_watermark").try(:[], 2) %>%;
+                left: <%= @pos_setting.extra_settings.try(:[], "jr_image_watermark").try(:[], 3) %>%;
+                opacity: <%= @pos_setting.extra_settings.try(:[], "jr_image_watermark").try(:[], 4) %>"
+        src="<%= @pos_setting&.images&.first&.service_url%>"
+        class='watermark'
+        height="<%= @pos_setting.extra_settings.try(:[], "jr_image_watermark").try(:[], 0)%>px"
+        width="<%= @pos_setting.extra_settings.try(:[], "jr_image_watermark").try(:[], 1) %>px"
+      />
+    </th>
+    <th style="vertical-align: bottom;" class='text-center'>
+      <h1 style='padding-left: 70px;'>Sale Reciept</h1>
+    </th>
+    <th style="vertical-align: top;" class='text-right'>
+      <p>Ref: <%= @sale_deal&.id%></p>
+      <p>Date: <%= Time.zone.now.strftime('%d-%m-%Y')%></p>
+    </th>
+  </tr>
+</table>
+<div class='d-flex mr-4' style = "margin-top: 20px;">
+  <div class='col-3 px-20 font-size-custom'><b>Client Name:</b></div>
+  <div class='col-3 border-bottom font-size-custom'><%= @sale_deal.sys_user&.name%></div>
+  <div class='col-3 px-20 font-size-custom'><b>Client Number:</b></div>
+  <div class='col-3 border-bottom font-size-custom'><%= @sale_deal.sys_user&.occupation %></div>
+</div>
+
+<div class='d-flex mr-4'>
+  <div class='col-3 px-20 font-size-custom'><b>Client ID Card#:</b></div>
+  <div class='col-3 border-bottom font-size-custom'><%= @sale_deal.destination %></div>
+  <div class='col-3 px-20 font-size-custom'><b>Project Name:</b></div>
+  <div class='col-3 border-bottom font-size-custom'><%= @sale_deal.l_c&.titleize %></div>
+</div>
+
+<div class='d-flex mr-4'>
+  <div class='col-3 px-20 font-size-custom'><b>Plot Size:</b></div>
+  <div class='col-3 border-bottom font-size-custom'><%= @sale_deal.bill_no %></div>
+  <div class='col-3 px-20 font-size-custom'><b>Category:</b></div>
+  <div class='col-3 border-bottom font-size-custom'><%= @sale_deal.g_d %></div>
+</div>
+
+<div class='d-flex mr-4'>
+  <div class='col-3 px-20 font-size-custom'><b>Plot Type:</b></div>
+  <div class='col-3 border-bottom font-size-custom'><%= @sale_deal.g_d_type %></div>
+  <div class='col-3 px-20 font-size-custom'><b>Form #:</b></div>
+  <div class='col-3 border-bottom font-size-custom'><%= @sale_deal.dispatched_to %></div>
+</div>
+
+<div class='d-flex mr-4'>
+  <div class='col-3 px-20 font-size-custom'><b>Booking Price:</b></div>
+  <div class='col-3 border-bottom font-size-custom'><%= @sale_deal.total_bill %></div>
+  <div class='col-3 px-20 font-size-custom'><b>Rebate/Profit:</b></div>
+  <div class='col-3 border-bottom font-size-custom'><%= @sale_deal.carriage %></div>
+</div>
+
+<div class='d-flex mr-4'>
+  <div class='col-3 px-20 font-size-custom'><b>Recieved Amount:</b></div>
+  <div class='col-3 border-bottom font-size-custom'><%= @sale_deal.amount %></div>
+  <div class='col-3 px-20 font-size-custom'><b>Remaining Balance:</b></div>
+  <div class='col-3 border-bottom font-size-custom'><%= @sale_deal.remaining_balance %></div>
+</div>
+
+<div class='d-flex mr-4'>
+  <div class='col-3 px-20 font-size-custom'><b>MS #:</b></div>
+  <div class='col-3 border-bottom font-size-custom'><%= @sale_deal.job_no %></div>
+  <div class='col-3 px-20 font-size-custom'><b>Allotment Letter:</b></div>
+  <div class='col-3 border-bottom font-size-custom'><%= @sale_deal.reference_no %></div>
+</div>
+
+<div class='d-flex mr-4'>
+  <div class='col-3 px-20 font-size-custom'><b>Agent Name:</b></div>
+  <div class='col-3 border-bottom font-size-custom'><%= @sale_deal.staff&.name%></div>
+</div>
+
+<div class='d-flex'>
+  <div class='font-size-custom col-3 px-20'><b>Remarks:</b></div>
+  <div style='width: 75%;'>
+    <textarea rows='5' class='font-size-custom' style='width: 100%; padding: 5px;'><%= @sale_deal&.comment %></textarea>
+  </div>
+</div>
+
+<% custome_width = 77 %>
+<% custome_margin_1 = 0 %>
+<% custome_margin_2 = 0 %>
+<h2 style='color: red;'><%= @pos_setting&.extra_settings.try(:[], "verification_message")%></h2>
+<div class='d-flex' style= 'margin-top: 25px;'>
+    <% if @pos_setting&.qr_links.try(:[], 'jr_qr').present?%>
+      <div style='width: 33%;'>
+          <% custome_width = 33 %>
+          <% custome_margin_1 = 25 %>
+          <% custome_margin_2 = 150 %>
+          <%
+            require "rqrcode"
+            qrcode = RQRCode::QRCode.new(@pos_setting.qr_links['jr_qr'])
+            @svg = qrcode.as_svg(
+                color: "000",
+                shape_rendering: "crispEdges",
+                module_size: 11,
+                standalone: true,
+                use_path: true
+              )
+              @str=Base64.encode64(@svg ).gsub("\n", '')
+          %>
+        <img width="180px" height="150px" class="figure" style=""src=<%="data:image/svg+xml;base64,"+@str%> >
+        <p style= 'margin-top: 5%; margin-left: 12%;'><%= @pos_setting&.qr_links.try(:[], "qr_title")%></p>
+      </div>
+    <% end %>
+
+  <div style="width: <%= custome_width %>%; margin-left: <%= custome_margin_1 %>px;">
+    <h4 class='font-size-custom'>For verification of your Sale Receipt:</h4>
+    <p class='font-size-custom'> 1) Open Camrea/QRScaner app on your phone.</p>
+    <p class='font-size-custom'> 2) Point your phone to this QRCODE to capture the code.</p>
+    <p class='font-size-custom'> 3) After capturing you will redirect to our Sale Deal Invoice.</p>
+  </div>
+  <div style='width: 33%;  margin-left: <%= custome_margin_2 %>px;'>
+    <% @sale_deal.links.each do |link| %>
+      <% if link.qrcode.present? %>
+        <%
+          require "rqrcode"
+          qrcode = RQRCode::QRCode.new(link.qrcode)
+          @svg = qrcode.as_svg(
+              color: "000",
+              shape_rendering: "crispEdges",
+              module_size: 11,
+              standalone: true,
+              use_path: true
+            )
+            @str=Base64.encode64(@svg ).gsub("\n", '')
+        %>
+        <img width="180px" height="150px" class="figure" style=""src=<%="data:image/svg+xml;base64,"+@str%>>
+        <p style= 'margin-left: 15%; margin-top: 5%;'>Sale Deal QR</p>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+<p style="border-bottom: 2px solid black"></p>
+
+<div class='d-flex'>
+  <div style='width: 33%; margin-top: 20px; color: green'>
+    <% if  @pos_setting&.extra_settings.try(:[], "address_1").present? %>
+      <h3><%= @pos_setting&.extra_settings.try(:[], "address_1").try(:[], 0) %><img src="<%= image_url('pin-location.svg') %>" height='20px' width='20px'></h3>
+      <p class='font-size-custom'><%= @pos_setting&.extra_settings.try(:[], "address_1").try(:[], 1)%></p>
+      <p class='font-size-custom'><%= @pos_setting&.extra_settings.try(:[], "address_1").try(:[], 2) %></p>
+    <% end %>
+  </div>
+  <div style='width: 33%;  margin-top: 20px; color: green'>
+    <% if  @pos_setting&.extra_settings.try(:[], "address_3").present? %>
+      <h3><%= @pos_setting&.extra_settings.try(:[], "address_3").try(:[], 0) %> <img src="<%= image_url('pin-location.svg') %>" height='20px' width='20px'></h3>
+      <p class='font-size-custom'><%= @pos_setting&.extra_settings.try(:[], "address_3").try(:[], 1) %></p>
+      <p class='font-size-custom'><%= @pos_setting&.extra_settings.try(:[], "address_3").try(:[], 2) %></p>
+    <% end %>
+  </div>
+  <div style='width: 33%; margin-left: 7%; margin-top: 20px; color: green'>
+    <% if  @pos_setting&.extra_settings.try(:[], "address_2").present? %>
+      <h3><%= @pos_setting&.extra_settings.try(:[], "address_2").try(:[], 0) %> <img src="<%= image_url('pin-location.svg') %>" height='20px' width='20px'></h3>
+      <p class='font-size-custom'><%= @pos_setting&.extra_settings.try(:[], "address_2").try(:[], 1) %></p>
+      <p class='font-size-custom'><%= @pos_setting&.extra_settings.try(:[], "address_2").try(:[], 2) %></p>
+    <% end%>
+  </div>
+</div>
