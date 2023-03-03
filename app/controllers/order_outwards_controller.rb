@@ -128,8 +128,8 @@ class OrderOutwardsController < ApplicationController
     marka = params[:marka_id]
     product_id = params[:product_id]
     sys_user_id = params[:party_id]
-
-    challan_no = PurchaseSaleItem.joins(:purchase_sale_detail).where('purchase_sale_details.sys_user_id': sys_user_id, 'purchase_sale_details.transaction_type': "InWard", 'product_id': product_id,'size_13': marka).pluck(:size_10).uniq
+    p_item = PurchaseSaleItem.joins(:purchase_sale_detail).where('purchase_sale_details.sys_user_id': sys_user_id, 'purchase_sale_details.transaction_type': "InWard", 'product_id': product_id,'size_13': marka)
+    challan_no = p_item.map{ |item| [item.size_10, "(#{item.purchase_sale_detail.created_at.to_date})"] }.uniq
     respond_to do |format|
       format.json { render json: challan_no }
     end

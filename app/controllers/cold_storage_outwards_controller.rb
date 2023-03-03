@@ -28,10 +28,10 @@ class ColdStorageOutwardsController < ApplicationController
       order = Order.find(params[:order_id])
       order.order_items.each do |ord|
         p_in_item = PurchaseSaleItem.find_by(product_id: ord.product_id, size_13: ord.marka,size_10: ord.challan_no, transaction_type: "Purchase")
-        room_num = p_in_item.size_8
-        rack_num = p_in_item.size_7
-        in_date = p_in_item.purchase_sale_detail.created_at
-        close_date = p_in_item.closed_date
+        room_num = p_in_item&.size_8
+        rack_num = p_in_item&.size_7
+        in_date = p_in_item&.purchase_sale_detail&.created_at
+        close_date = p_in_item&.closed_date
         @purchase_sale_detail.purchase_sale_items.build(product_id: ord.product_id, size_13: ord.marka, size_10: ord.challan_no, size_8: room_num, size_7: rack_num, inward_date: in_date, closed_date: close_date)
       end
     end
