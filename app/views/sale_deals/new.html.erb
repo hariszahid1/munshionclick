@@ -1,9 +1,8 @@
-
 <div class="card">
   <div class="card-header">
     <h3><%= params[:type].eql?('NewSaleDeal') ? 'Fresh Sale Deals' : 'Re Sale Deals' %></h3>
   </div>
   <div class="card-body">
-    <%= render params[:type].present? ? 'form_new' : 'form', sale_deal: @sale_deal, model: @sale_deal, local: true,  method: :post, url: sale_deals_path(@sale_deal) %>
+    <%= render params[:type].eql?('NewSaleDeal') ? 'form_fresh_sale' : 'form_resale', sale_deal: @sale_deal, model: @sale_deal, local: true,  method: :post, url: sale_deals_path(@sale_deal) %>
   </div>
 </div>

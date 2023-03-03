@@ -1,9 +1,8 @@
-
-<div class="card shadow border-radius-1 m-2">
+<div class="card">
   <div class="card-header">
-    <h3>Edit <%= params[:type] %></h3>
+    <h3><%= params[:type].eql?('NewSaleDeal') ? 'Edit Fresh Sale Deals' : 'Edit Re Sale Deals' %></h3>
   </div>
   <div class="card-body">
-    <%= render 'form', sale_deal: @sale_deal, model: @sale_deal, local: true,  method: :put, url: sale_deal_path(@sale_deal) %>
+    <%= render params[:type].eql?('NewSaleDeal') ? 'form_fresh_sale' : 'form_resale', sale_deal: @sale_deal, model: @sale_deal, local: true,  method: :put, url: sale_deal_path(@sale_deal) %>
   </div>
 </div>

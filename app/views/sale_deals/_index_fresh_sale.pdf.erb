@@ -1,0 +1,51 @@
+<table data-toggle="table mt-3" data-search="true" class="table" style='overflow: hidden;'>
+    <thead>
+      <tr>
+        <th>Sr#</th>
+        <th>Date</th>
+        <th>Customer</th>
+        <th>PH #</th>
+        <th>Project</th>
+        <th>Size</th>
+        <th>Type</th>
+        <th>Category</th>
+        <th>Form #</th>
+        <th>MS #</th>
+        <th>Agent</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @sale_deals.each_with_index do |sale_deal, index| %>
+        <% color_class = '' %>
+        <% color_class = 'seller_stamp_color' if sale_deal.purchase_sale_items&.first&.status.eql?(0) %>
+        <% color_class = 'buyer_stamp_color' if sale_deal.purchase_sale_items&.first&.status.eql?(1) %>
+        <% color_class = 'both_stamp_color' if sale_deal.purchase_sale_items&.first&.status.eql?(3) %>
+
+        <tr class="<%= color_class %>">
+          <td><%= index.to_i + 1 %></td>
+          <td><%= sale_deal.created_at.strftime('%d/%m/%y')%></td>
+          <td>
+            <%= sale_deal.sys_user&.name %>
+          </td>
+          <td>
+            <%= sale_deal.sys_user&.occupation %>
+          </td>
+            <% if sale_deal.l_c&.titleize == 'Lahore Smart City' %>
+              <% project_name = 'LSC' %>
+            <% elsif sale_deal.l_c&.titleize == 'Capital Smart City' %>
+              <% project_name = 'CSC' %>
+            <% elsif sale_deal.l_c&.titleize == 'One Capital Residences' %>
+              <% project_name = 'OCR' %>
+            <% else %>
+              <% project_name = sale_deal.l_c&.titleize %>
+            <% end %>
+          <td><%= project_name %></td>
+          <td><%= sale_deal.bill_no %></td>
+          <td><%= sale_deal.g_d_type %></td>
+          <td><%= sale_deal.g_d %></td>
+          <td><%= sale_deal.dispatched_to %></td>
+          <td><%= sale_deal.job_no %></td>
+          <td><%= sale_deal.staff&.name %></td>
+        </tr>
+      <% end %>
+  </table>

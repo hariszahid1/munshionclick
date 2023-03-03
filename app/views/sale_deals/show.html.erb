@@ -7,96 +7,73 @@
   <div class="collapse show" id="collapseCardExample" style="">
     <div class="card-body">
       <div class="row">
-        <div class="col-lg-12 col-sm-12">
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Agent Name:<h5 class='urdu-font'> <%= @all_agents.to_h.invert[@sale_deal&.user_name.to_i].to_s %></h5></h3>
-          </div>
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Name:<h5 class='urdu-font'><%= @sale_deal&.sys_user&.name %></h5></h3>
-          </div>
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Customer Contact:<h5><%= @sale_deal&.sys_user&.occupation %></h5> </h3>
-          </div>
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Transaction Type:<h5 class='urdu-font'> <%= @sale_deal&.purchase_sale_items.first.size_12 %></h5></h3>
-          </div>
+        <div class="col-lg-3 card mb-4 py-3 border-left-primary shadow">
+          <h3>Client Name:<h5 class='urdu-font'> <%= @sale_deal.sys_user&.name %></h5></h3>
         </div>
-      </div>
-
-      <div class="row">
-        <div class="col-lg-12 col-sm-12">
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Project Name:<h5 class='urdu-font'><%= @sale_deal&.sys_user&.cms_data&.try(:[], 'project_name')&.titleize %></h5></h3>
-          </div>
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Form No:<h5><%= @sale_deal&.purchase_sale_items.first.size_11  %></h5> </h3>
-          </div>
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>MS No:<h5 class='urdu-font'> <%= @sale_deal&.purchase_sale_items.first.size_2 %></h5></h3>
-          </div>
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Plot Size:<h5><%= @sale_deal&.sys_user&.ntn %></h5></h3>
-          </div>
+        <div class="col-lg-3 card mb-4 py-3 border-left-primary shadow">
+          <h3>Client Number:<h5 class='urdu-font'><%= @sale_deal.sys_user&.occupation %></h5></h3>
         </div>
-      </div>
-
-      <div class="row">
-        <div class="col-lg-12 col-sm-12">
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Type of Plot:<h5 class='urdu-font'> <%= @sale_deal&.sys_user&.cms_data&.try(:[], 'category')&.titleize %></h5></h3>
-          </div>
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Plot Quantity:<h5 class='urdu-font'><%= @sale_deal&.purchase_sale_items.first.size_10 %></h5></h3>
-          </div>
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Plot Category:<h5><%= @sale_deal&.purchase_sale_items.first.size_9  %></h5> </h3>
-          </div>
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Price per Plot:<h5><%= @sale_deal&.purchase_sale_items.first.size_8 %></h5></h3>
-          </div>
+        <div class="col-lg-3 card mb-4 py-3 border-left-primary shadow">
+          <h3>Client ID Card#:<h5><%= @sale_deal.destination %></h5> </h3>
         </div>
-      </div>
-
-      <div class="row">
-        <div class="col-lg-12 col-sm-12">
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Payment Type:<h5><%= @sale_deal&.purchase_sale_items.first.size_7 %></h5></h3>
-          </div>
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Deal Date:<h5 class='urdu-font'> <%= @sale_deal&.purchase_sale_items&.first&.expiry_date&.strftime('%d-%m-%Y') %></h5></h3>
-          </div>
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Down Payment:<h5 class='urdu-font'><%= @sale_deal&.purchase_sale_items.first.size_6 %></h5></h3>
-          </div>
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Profit/Loss:<h5><%= @sale_deal&.purchase_sale_items.first.size_5 %></h5> </h3>
-          </div>
+        <div class="col-lg-3 card mb-4 py-3 border-left-primary shadow">
+          <h3>Project Name:<h5 class='urdu-font'> <%= @sale_deal.l_c&.titleize %></h5></h3>
         </div>
-      </div>
 
-      <div class="row">
-        <div class="col-lg-12 col-sm-12">
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Received Amount:<h5 class='urdu-font'> <%= @sale_deal&.amount%></h5></h3>
-          </div>
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Balance Amount:<h5 class='urdu-font'><%= @sale_deal&.remaining_balance %></h5></h3>
-          </div>
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Total Amount:<h5><%= @sale_deal&.total_bill %></h5> </h3>
-          </div>
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Trx No:<h5><%= @sale_deal&.purchase_sale_items.first.size_1 %></h5></h3>
-          </div>
+        <div class="col-lg-3 card mb-4 py-3 border-left-primary shadow">
+          <h3>Plot Size:<h5 class='urdu-font'> <%= @sale_deal.bill_no %></h5></h3>
+        </div>
+        <div class="col-lg-3 card mb-4 py-3 border-left-primary shadow">
+          <h3>Category:<h5 class='urdu-font'> <%= @sale_deal.g_d %></h5></h3>
+        </div>
+        <div class="col-lg-3 card mb-4 py-3 border-left-primary shadow">
+          <h3>Plot Type:<h5 class='urdu-font'> <%= @sale_deal.g_d_type %></h5></h3>
+        </div>
+        <div class="col-lg-3 card mb-4 py-3 border-left-primary shadow">
+          <h3>Form #:<h5 class='urdu-font'> <%= @sale_deal.dispatched_to %></h5></h3>
+        </div>
+        <div class="col-lg-3 card mb-4 py-3 border-left-primary shadow">
+          <h3>Booking Price:<h5 class='urdu-font'> <%= @sale_deal.total_bill %></h5></h3>
+        </div>
+        <div class="col-lg-3 card mb-4 py-3 border-left-primary shadow">
+          <h3>Rebate/Profit:<h5 class='urdu-font'> <%= @sale_deal.carriage %></h5></h3>
+        </div>
+        <div class="col-lg-3 card mb-4 py-3 border-left-primary shadow">
+          <h3>Recieved Amount:<h5 class='urdu-font'> <%= @sale_deal.amount %></h5></h3>
+        </div>
+        <div class="col-lg-3 card mb-4 py-3 border-left-primary shadow">
+          <h3>Remaining Balance:<h5 class='urdu-font'> <%= @sale_deal.remaining_balance %></h5></h3>
+        </div>
+        <div class="col-lg-3 card mb-4 py-3 border-left-primary shadow">
+          <h3>MS #:<h5 class='urdu-font'> <%= @sale_deal.job_no %></h5></h3>
+        </div>
+
+        <div class="col-lg-3 card mb-4 py-3 border-left-primary shadow">
+          <h3>Allotment Letter:<h5 class='urdu-font'> <%= @sale_deal.reference_no %></h5></h3>
+        </div>
+        <div class="col-lg-3 card mb-4 py-3 border-left-primary shadow">
+          <h3>Agent Name:<h5 class='urdu-font'> <%= @sale_deal.staff&.name %></h5></h3>
+        </div>
+        <div class="col-lg-3 card mb-4 py-3 border-left-primary shadow">
+          <h3>Internal Remarks:<h5 class='urdu-font'> <%= @sale_deal.payment_detail %></h5></h3>
+        </div>
+        <div class="col-lg-3 card mb-4 py-3 border-left-primary shadow">
+          <h3>External Remarks:<h5 class='urdu-font'> <%= @sale_deal.comment %></h5></h3>
         </div>
       </div>
 
       <br>
       <div class="row">
         <div class="col-lg-1 float-left">
-          <%= link_to sale_deals_path do %>
-          <i class="fa fa-arrow-left " aria-hidden="true"></i>
+        <%if @sale_deal.transaction_type.eql?('NewSaleDeal') %>
+          <%= link_to sale_deals_path(q: {transaction_type_eq: '9'}) do %>
+            <i class="fa fa-arrow-left " aria-hidden="true"></i>
           <% end %>
+        <% else %>
+          <%= link_to sale_deals_path(q: {transaction_type_eq: '8'}) do %>
+            <i class="fa fa-arrow-left " aria-hidden="true"></i>
+          <% end %>
+        <% end %>
         </div>
       </div>
     </div>
