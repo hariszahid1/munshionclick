@@ -1,92 +1,108 @@
-<div class="hidden" id="city_list">
-  <div class="row">
-    <div class="col-lg-12 col-sm-12">
-      <h1>Transfer</h1>
-    </div>
+<div class="hidden m-4" id="city_list">
+  <div class="float-left">
+    <h2 class="ml-2 logo-back"><i class="fas fa-exchange-alt mr-2"></i>Transfer</h2>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<%= root_path %>">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active">
+        <a href="<%= remarks_path %>">Transfer</a>
+      </li>
+    </ol>
   </div>
   <div class="clearfix"></div>
-  <div class="row">
-    <div class="col-lg-12 col-sm-12">
-      <%= search_form_for @q, url: remarks_path, class: "admin-controls", method: "get" do |f| %>
-        <div class="col-lg-2 form-group float-left">
-          <%= f.search_field :body, placeholder: "title", title: "title" ,:class=>"form-control" %>
+  <div class="row ">
+    <ul class="nav nav-tabs ml-3  mt-2" role="tablist">
+     <li class="nav-item">
+       <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab"><i class="fa fa-search mr-2"></i>Search</a>
+     </li>		
+    </ul>
+  </div>
+  <div class="tab-content">
+    <div class="tab-pane active no-tab-border mt-2 m-3 " id="search" role="tabpanel">
+      <div class="row card shadow  mb-3 p-4">
+        <div class="col-lg-12 col-sm-12">
+          <%= search_form_for @q, url: remarks_path, class: "admin-controls", method: "get" do |f| %>
+            <div class="col-lg-2 form-group float-left">
+              <%= f.search_field :body, placeholder: "title", title: "title" ,:class=>"form-control" %>
+            </div>
+            <div class="col-lg-2 form-group float-left">
+              <%= f.search_field :message, placeholder: "city comment", title: "City comment" ,:class=>"form-control" %>
+            </div>
+            <div class="col-lg-2 form-group float-left">
+              <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+            </div>
+            <div class="col-lg-1 form-group float-right">
+              <button class="form-control btn  btn-danger file-btn-color" name="submit_pdf_staff_with" type="submit" value="Products PDF A4" formtarget="_blank">PDF</button>
+            </div>
+          <% end %>
         </div>
-        <div class="col-lg-2 form-group float-left">
-          <%= f.search_field :message, placeholder: "city comment", title: "City comment" ,:class=>"form-control" %>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
-        </div>
-        <div class="col-lg-1 form-group float-right">
-          <button class="form-control btn  badge badge-pill badge-danger" name="submit_pdf_staff_with" type="submit" value="Products PDF A4" formtarget="_blank"><i class="fa fa-file-pdf"></i></button>
-        </div>
-      <% end %>
+      </div>
+    </div>
+    <div class="card shadow p-3">
+      <table data-toggle="table" data-search="true" id="city_table">
+        <thead>
+          <tr>
+            <th><%= sort_link(@q, :remarkable, 'Booking')%></th>
+            <th><%= sort_link(@q, :body, 'From') %></th>
+            <th><%= sort_link(@q, :comment, 'To') %></th>
+            <th><%= sort_link(@q, :message, 'By') %></th>
+            <th><%= sort_link(@q, :created_at, 'DateTime') %></th>
+            <th class="border_none">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%@remarks.each do |remark|%>
+            <tr>
+              <td>
+                <%= link_to order_path(remark.remarkable) do %>
+                <i class="fa fa-eye" aria-hidden="true"></i>
+                <% end %>
+                <%if remark.remarkable.order_items_names_and_quantity!=0%>
+                  <%remark.remarkable.order_items_names_and_quantity.each do |name_quantity|%>
+                    <%=name_quantity.first%> <%=name_quantity[5]%>
+                    <%=name_quantity.second%>
+                    <%= remark.remarkable.amount.to_f.round(2) rescue 0%>
+                  <%end%>
+                <%end%>
+              </td>
+              <td><b style="font-size:20px;color:blue;"><%=remark.comment%></b></td>
+              <td><b style="font-size:20px;color: #c30059 ;"><%=remark.body%></b></td>
+              <td><b style="font-size:20px;color: #7386d5 ;"><%=remark.message%></b></td>
+              <td><b style="font-size:20px;color: #7286d5 ;"><%= remark.created_at.strftime("%d%b%y , %I:%M ") %></b></td>
+              <td>
+                <% if can?(:update, :all) %>
+                  <%= link_to edit_remark_path(remark) do %>
+                    <i class="fa fa-edit " aria-hidden="true"></i> |
+                  <%end %>
+                <% end %>
+                <% if can?(:delete, :all) %>
+                  <%= link_to remark, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+                    <i class="fa fa-trash " aria-hidden="true"></i> |
+                  <%end %>
+                <% end %>
+                <% if can?(:view, :all) %>
+                  <%= link_to remark do %>
+                    <i class="fa fa-eye " aria-hidden="true"></i>
+                  <%end %>
+                <%end%>
+              </td>
+            </tr>
+          <%end%>
+        </tbody>
+      </table>
+    </div>
+    <div class="row">
+      <div class="col-lg-4 col-sm-4">
+        <%= page_entries_info @remarks %>
+      </div>
+      <div class="col-lg-8 col-sm-8 pagination-left">
+        <%= paginate @remarks %>
+      </div>
     </div>
   </div>
-  <table data-toggle="table" data-search="true" id="city_table">
-    <thead>
-      <tr>
-        <th><%= sort_link(@q, :remarkable, 'Booking')%></th>
-        <th><%= sort_link(@q, :body, 'From') %></th>
-        <th><%= sort_link(@q, :comment, 'To') %></th>
-        <th><%= sort_link(@q, :message, 'By') %></th>
-        <th><%= sort_link(@q, :created_at, 'DateTime') %></th>
-        <th class="border_none">Action</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <%@remarks.each do |remark|%>
-        <tr>
-          <td>
-            <%= link_to order_path(remark.remarkable) do %>
-            <i class="fa fa-eye" aria-hidden="true"></i>
-            <% end %>
-            <%if remark.remarkable.order_items_names_and_quantity!=0%>
-              <%remark.remarkable.order_items_names_and_quantity.each do |name_quantity|%>
-                <%=name_quantity.first%> <%=name_quantity[5]%>
-                <%=name_quantity.second%>
-                <%= remark.remarkable.amount.to_f.round(2) rescue 0%>
-              <%end%>
-            <%end%>
-          </td>
-          <td><b style="font-size:20px;color:blue;"><%=remark.comment%></b></td>
-          <td><b style="font-size:20px;color: #c30059 ;"><%=remark.body%></b></td>
-          <td><b style="font-size:20px;color: #7386d5 ;"><%=remark.message%></b></td>
-          <td><b style="font-size:20px;color: #7286d5 ;"><%= remark.created_at.strftime("%d%b%y at %I:%M %p") %></b></td>
-          <td>
-            <% if can?(:update, :all) %>
-              <%= link_to edit_remark_path(remark) do %>
-                <i class="fa fa-edit " aria-hidden="true"></i> |
-              <%end %>
-            <% end %>
-            <% if can?(:delete, :all) %>
-              <%= link_to remark, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
-                <i class="fa fa-trash " aria-hidden="true"></i> |
-              <%end %>
-            <% end %>
-            <% if can?(:view, :all) %>
-              <%= link_to remark do %>
-                <i class="fa fa-eye " aria-hidden="true"></i>
-              <%end %>
-            <%end%>
-          </td>
-
-        </tr>
-      <%end%>
-    </tbody>
-  </table>
 </div>
-
 <div class="clearfix"></div>
-<div class="row">
-  <div class="col-lg-4 col-sm-4">
-    <%= page_entries_info @remarks %>
-  </div>
-  <div class="col-lg-8 col-sm-8 pagination-left">
-    <%= paginate @remarks %>
-  </div>
-</div>
 
 <script>
   $(document).ready(function() {

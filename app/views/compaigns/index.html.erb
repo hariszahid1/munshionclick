@@ -1,29 +1,26 @@
-<div class="hidden" id="compaign_list">
-  <div class="row mb-4 ">
-    <div class="col-lg-12 col-sm-12">
-      <div class="main-content-header">
-        <h1>Compaigns</h1>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item">
-            <a href="<%= root_path %>">Dashboard</a>
-          </li>
-          <li class="breadcrumb-item active">
-            <a href="<%= compaigns_path %>">Compaigns</a>
-          </li>
-        </ol>
-      </div>
-      <% if check_can_create(@module_permission) %>
-        <div id="new_compaign">
-          <%= link_to new_compaign_path, class: "btn btn-success" do %>
-             <i class="fa fa-plus" aria-hidden="true"></i>
-             Create
-             <% end %>
-        </div>
+<div class="hidden m-4" id="compaign_list">
+  <div class="float-left">
+    <h2 class="ml-2 logo-back"><i class="fas fa-bullhorn mr-2"></i>Compaigns</h2>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<%= root_path %>">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active">
+        <a href="<%= compaigns_path %>">Compaigns</a>
+      </li>
+    </ol>
+  </div>
+  <% if check_can_create(@module_permission) %>
+    <div id="new_compaign">
+      <%= link_to new_compaign_path, style:"width: 150px;", class: "btn btn-success float-right mt-4" do %>
+        <i class="fa fa-plus-circle"></i>
+        Create
       <% end %>
     </div>
-  </div>
-    <div class="float-right">
-    <div class="dropdown ml-auto mr-4">
+  <% end %>
+  <div class="clearfix"></div>
+  <div class="float-right">
+    <div class="dropdown ml-auto ">
      <span class="btn btn-info" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
       <div class="dropdown-content">
         <% if @help.present? %>
@@ -34,22 +31,24 @@
       </div>
     </div>
   </div>
-
-  <ul class="nav nav-pills" role="tablist">
-    <li class="nav-item">
-      <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab">Search</a>
-    </li>
-    <%if (check_can_import_export(@module_permission))%>
-			<li class="nav-item">
-				<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
-			</li>
-		<%end%>
-	</ul>
+  <div class="row">
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab"><i class=" fa fa-search mr-2"></i>Search</a>
+      </li>
+      <%if (check_can_import_export(@module_permission))%>
+	  		<li class="nav-item">
+	  			<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab"><i class=" fa fa-exchange-alt mr-2"></i>Import/Export</a>
+	  		</li>
+	  	<%end%>
+	  </ul>
+  </div>
   <div class="tab-content">
-      <div class="tab-pane active mb-3 card shadow-sm mt-2 p-3 border-radius-1" id="search" role="tabpanel">
-        <div class="row mt-3">
-          <div class="col-lg-12 col-sm-12">
-            <%= search_form_for @q, url: compaigns_path, class: "admin-controls", method: "get" do |f| %>
+    <div class="tab-pane active no-tab-border mt-2 " id="search" role="tabpanel">
+      <%= search_form_for @q, url: compaigns_path, class: "admin-controls", method: "get" do |f| %>
+        <div class="card shadow mb-3 p-3">
+          <div class="row mt-3">
+            <div class="col-lg-12 col-sm-12">
               <div class="col-lg-2 form-group float-left">
                 <%= f.search_field :title_cont, placeholder: "title", title: "title" ,:class=>"form-control" %>
               </div>
@@ -65,59 +64,55 @@
               <div class="col-lg-1 form-group float-left">
                 <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
               </div>
-              <button class="form-control btn btn-danger float-right mr-2" style="width: 100px;" name="submit_pdf_a4" type="submit" value="Total Expense PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mr-2"></i>PDF</button>
-            <% end %>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="tab-pane card shadow-sm mt-2 border-radius-1 mb-3" id="import-export" role="tabpanel">
-        <p>
-          <div class="d-flex">
-          <button class="btn btn-danger ml-4" name="export_data" type="submit" value="export_data">Export Data</button>
-          <button class="btn btn-info ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
+        <div class="card  shadow p-3">
+          <%= render 'map_columns/map_column_partials' %>
+          <div class="row d-flex ml-1 mt-2" style="position: absolute;">
+            <%if (check_can_delete(@module_permission))%>
+	            <button class="btn btn-danger file-btn-color delete-selected mr-2" type='button' value='City'>
+	            	<i class="fa fa-trash"></i>
+	            </button>		
+            <%end%>
+            <button class="form-control btn btn-danger file-btn-color float-right mr-2" style="width: 80px;" name="submit_pdf_a4" type="submit" value="Total Expense PDF A4" formtarget="_blank">PDF</button>
           </div>
-        </p>
-      </div>
+          <table data-toggle="table" data-search="true" id="compaign_table">
+            <thead>
+              <tr>
+              <th><input type="checkbox" id="master" class='select-all-checkbox' style="cursor: pointer;">
+                <th><%= sort_link(@q, :id, 'ID') %></th>
+                <th><%= sort_link(@q, :title, 'Title') %></th>
+                <th><%= sort_link(@q, :comment, 'Comment') %></th>
+                <th><%= sort_link(@q, :created_at, 'Date') %></th>
+                <th class="border_none">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <%= render partial: 'compaign', collection: @compaigns %>
+            </tbody>
+          </table>
+          <div class="row">
+            <div class="col-lg-4 col-sm-4">
+              <%= page_entries_info @compaigns %>
+            </div>
+            <div class="col-lg-8 col-sm-8 pagination-left">
+              <%= paginate @compaigns %>
+            </div>
+          </div>
+        </div>  
+      <% end %>
+    </div>
+    <div class="tab-pane card shadow-sm mt-2  mb-3" id="import-export" role="tabpanel">
+      <p>
+        <div class="d-flex">
+        <button class="btn btn-danger ml-4" name="export_data" type="submit" value="export_data">Export Data</button>
+        <button class="btn btn-info ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
+        </div>
+      </p>
+    </div>
   </div>    
   <div class="clearfix"></div>
-  <div class="card border-radius-1 shadow p-3">
-  <%= render 'map_columns/map_column_partials' %>
-    <table data-toggle="table" data-search="true" id="compaign_table">
-      <thead>
-        <tr>
-        <th><input type="checkbox" id="master" class='select-all-checkbox' style="cursor: pointer;">
-				<%if (check_can_delete(@module_permission))%>
-					<div class="icon-container float-center">
-						<span class="ml-2 mt-2">
-          		<div class="my-icon my-view">
-								<button class="icon-div btn delete-selected p-2 " type='button' value='Compaign'>
-									<i class="fa fa-trash mb-2" title="Deleted Selected" aria-hidden="true"></i>
-								</button>
-							</div>
-						</span>
-					</div>
-				<%end%>
-          <th><%= sort_link(@q, :id, 'ID') %></th>
-          <th><%= sort_link(@q, :title, 'Title') %></th>
-          <th><%= sort_link(@q, :comment, 'Comment') %></th>
-          <th><%= sort_link(@q, :created_at, 'Date') %></th>
-          <th class="border_none">Action</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <%= render partial: 'compaign', collection: @compaigns %>
-      </tbody>
-    </table>
-    <div class="row">
-      <div class="col-lg-4 col-sm-4">
-        <%= page_entries_info @compaigns %>
-      </div>
-      <div class="col-lg-8 col-sm-8 pagination-left">
-        <%= paginate @compaigns %>
-      </div>
-    </div>
-  </div>  
 </div>
 <%= form_for :bulk_import, url: bulk_import_data_path, method: :post, html: {class: "bulk-import-form"} do |f| %>
   <div class="modal fade" id="importFile" tabindex="-1" role="dialog" aria-labelledby="importFileTitle" aria-hidden="true">
@@ -142,7 +137,6 @@
   </div>
 <% end %>
 <div class="show-data"></div>
-
 <script>
   $(document).ready(function() {
     if ($(".bootstrap-table").length == 0){

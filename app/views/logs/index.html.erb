@@ -1,73 +1,85 @@
 
-<div class="hidden" id="account_list">
-  <div class="row">
-    <div class="col-lg-12 col-sm-12">
-      <h1>Logs</h1>
-    </div>
+<div class="hidden m-4" id="account_list">
+  <div class="float-left">
+    <h2 class="ml-2 logo-back"><i class="fa fa-history mr-2"></i>Logs</h2>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<%= root_path %>">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active">
+        <a href="<%= logs_path  %>">Logs</a>
+      </li>
+    </ol>
   </div>
   <div class="clearfix"></div>
-  <div class="row">
-    <div class="col-lg-12 col-sm-12">
-      <%= search_form_for @q, url: logs_path, class: "admin-controls", method: "get" do |f| %>
-        <div class="col-lg-3 form-group float-left">
-          <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker',placeholder: "YYYY-MM-DD", required: true %>
+   <div class="row ml-1">
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab"><i class="fa fa-search mr-2"></i>Search</a>
+      </li>
+	  </ul>
+  </div>
+  <div class="tab-content">
+    <div class="tab-pane active no-tab-border mt-2 mx-3 " id="search" role="tabpanel">
+      <div class="row card shadow mb-3 p-4 ">
+        <div class="col-lg-12 col-sm-12">
+          <%= search_form_for @q, url: logs_path, class: "admin-controls", method: "get" do |f| %>
+            <div class="col-lg-2 form-group float-left">
+              <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker',placeholder: "YYYY-MM-DD", required: true %>
+            </div>
+            <div class="col-lg-2 form-group float-left">
+              <%= f.search_field :created_at_lteq,class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD", required: true%>
+            </div>
+            <div class="col-lg-2 form-group float-left">
+              <%= f.select :event_eq, options_for_select(@event, f.object.event_eq), {:include_blank => "Select Event"},:class=>"form-control chosen-select" %>
+            </div>
+            <div class="col-lg-2 form-group float-left">
+              <%= f.select :item_type_eq, options_for_select(@tables, f.object.item_type_eq), {:include_blank => "Select Record Of"},:class=>"form-control chosen-select" %>
+            </div>
+            <div class="col-lg-2 form-group float-left">
+              <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+            </div>
+            <div class="col-lg-1.5 form-group float-right">
+              <button class="form-control btn-danger file-btn-color" name="submit_pdf" type="submit" value="Logs PDF A4" formtarget="_blank">PDF</button>
+            </div>
+          <% end %>
         </div>
-        <div class="col-lg-3 form-group float-left">
-          <%= f.search_field :created_at_lteq,class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD", required: true%>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <%= f.select :event_eq, options_for_select(@event, f.object.event_eq), {:include_blank => "Select Event"},:class=>"form-control chosen-select" %>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <%= f.select :item_type_eq, options_for_select(@tables, f.object.item_type_eq), {:include_blank => "Select Record Of"},:class=>"form-control chosen-select" %>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-        </div>
-        <div class="col-lg-2 form-group float-left">
-        </div>
-        <div class="col-lg-1.5 form-group float-right">
-          <button class="form-control btn  badge badge-pill badge-danger" name="submit_pdf" type="submit" value="Logs PDF A4" formtarget="_blank">Logs &nbsp;<i class="fa fa-file-pdf"></i></button>
-        </div>
-      <% end %>
+      </div>
+    </div>
+    <div class="card p-3">
+      <table data-toggle="table" data-search="true">
+        <thead>
+          <tr>
+            <th>Log</th>
+            <th>Event</th>
+            <th>Who Done it</th>
+            <th>Date</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @logs.each do |log| %>
+            <tr>
+              <td class="urdu-font">
+                <%= link_to sys_users_path(id:log.item_id) do %>
+                  <%=log.item_type %>
+                <%end%>
+              </td>
+              <td class="urdu-font"><%=log.event %></td>
+              <td class="urdu-font"><%=log&.whodunnit %> <%=@users[log&.whodunnit.to_i] %></td>
+              <td class="urdu-font"><%= log.created_at.present? ? log.created_at.strftime("%d%b%y at %I:%M %p") : '' %></td>
+              <td class="urdu-font">
+                <%= link_to log_path(id:log.id) do %>
+                  <i class="fa fa-eye " aria-hidden="true"></i>
+                <%end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
     </div>
   </div>
-  <table data-toggle="table" data-search="true">
-    <thead>
-      <tr>
-        <th>Log</th>
-        <th>Event</th>
-        <th>Who Done it</th>
-        <th>Date</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <% @logs.each do |log| %>
-        <tr>
-          <td class="urdu-font">
-            <%= link_to sys_users_path(id:log.item_id) do %>
-              <%=log.item_type %>
-            <%end%>
-          </td>
-          <td class="urdu-font"><%=log.event %></td>
-          <td class="urdu-font"><%=log&.whodunnit %> <%=@users[log&.whodunnit.to_i] %></td>
-          <td class="urdu-font"><%= log.created_at.present? ? log.created_at.strftime("%d%b%y at %I:%M %p") : '' %></td>
-          <td class="urdu-font">
-            <%= link_to log_path(id:log.id) do %>
-              <i class="fa fa-eye " aria-hidden="true"></i>
-            <%end %>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
 </div>
-
-<div class="clearfix"></div>
 <div class="clearfix"></div>
 <div class="row">
   <div class="col-lg-4 col-sm-4">
