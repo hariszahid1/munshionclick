@@ -2,7 +2,6 @@
   <% if remark.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(remark.errors.count, "error") %> prohibited this remark from being saved:</h2>
-
       <ul>
         <% remark.errors.each do |error| %>
           <li><%= error.full_message %></li>
@@ -10,38 +9,50 @@
       </ul>
     </div>
   <% end %>
-
-  <div class="field">
-    <%= form.label :user %>
-    <%= form.text_field :user %>
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="field">
+        <%= form.label :user %>
+        <%= form.text_field :user, class: "form-control" %>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="field">
+        <%= form.label :body %>
+        <%= form.text_area :body, class: "form-control" %>
+      </div>
+    </div>
   </div>
-
-  <div class="field">
-    <%= form.label :body %>
-    <%= form.text_area :body %>
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="field">
+        <%= form.label :message %>
+        <%= form.text_area :message, class: "form-control" %>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="field">
+        <%= form.label :comment %>
+        <%= form.text_area :comment, class: "form-control" %>
+      </div>
+    </div>
   </div>
-
-  <div class="field">
-    <%= form.label :message %>
-    <%= form.text_area :message %>
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="field">
+        <%= form.label :remark_type %>
+        <%= form.text_field :remark_type, class: "form-control" %>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="field">
+        <%= form.label :remarkable_id %>
+        <%= form.text_field :remarkable_id, class: "form-control" %>
+      </div>
+    </div>
   </div>
-
-  <div class="field">
-    <%= form.label :comment %>
-    <%= form.text_area :comment %>
-  </div>
-
-  <div class="field">
-    <%= form.label :remark_type %>
-    <%= form.text_field :remark_type %>
-  </div>
-
-  <div class="field">
-    <%= form.label :remarkable_id %>
-    <%= form.text_field :remarkable_id %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit %>
-  </div>
+ <div class="actions">
+   <%= form.submit "Update", class: "btn btn-warning float-right" %>
+   <%= link_to 'Cancel', remarks_path, class: "btn btn-light btn-outline-secondary float-right mx-2" %>
+ </div>
 <% end %>

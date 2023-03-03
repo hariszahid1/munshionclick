@@ -5,9 +5,9 @@
   <td><%= compaign.comment %></td>
   <td>
     <%if compaign.created_at.strftime("%d%b%y")!=compaign.updated_at.strftime("%d%b%y")%>
-      <%= compaign.created_at.present? ? compaign.created_at.strftime("%d%b%y at %H:%M%p") : '' %> | <%= compaign.updated_at.present? ? compaign.updated_at.strftime("%d%b%y at %H:%M%p") : '' %>
+      <%= compaign.created_at.present? ? compaign.created_at.strftime("%d%b%y , %I:%M") : '' %> | <%= compaign.updated_at.present? ? compaign.updated_at.strftime("%d%b%y , %I:%M") : '' %>
     <%else%>
-      <%= compaign.created_at.present? ? compaign.created_at.strftime("%A,  %d-%b-%y at %H:%M%p") : '' %>
+      <%= compaign.created_at.present? ? compaign.created_at.strftime("%d%b%y , %I:%M") : '' %>
     <%end%>
   </td>
   <td>
