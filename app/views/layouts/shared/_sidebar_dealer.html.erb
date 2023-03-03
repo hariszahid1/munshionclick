@@ -1,6 +1,6 @@
 <nav id="sidebar" class="col-lg-2 col-4 p-0">
     <% if can?(:view, :sys_user) %>
-    <input type="text" id="search-bar" class="form-control mt-2 bg-dark text-light" style="border-radius: 20px" placeholder="Search">
+    <input type="text" id="search-bar" class="form-control py-3 bg-dark text-light" style="border: 1px solid black" placeholder="Search">
     <ul class="list-unstyled components" id="mylist">
         <li class="active activ-link">
           <%= link_to dashboard_path, class:"activ-link" do%>

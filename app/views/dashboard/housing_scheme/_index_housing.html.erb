@@ -159,7 +159,7 @@
         <h6 class="ml-5">Today Paid(Credit)</h6>
           <div class="ml-5 d-flex">
             <i class="mr-1" aria-hidden="true">Rs.</i>
-            <i class="h4 mb-0 font-weight-bold text-gray-800 "><%= number_with_delimiter(@t_debit.to_f.round(2)) %></i>
+            <i class="h5 mb-0 font-weight-bold text-gray-800 "><%= number_with_delimiter(@t_debit.to_f.round(2)) %></i>
           </div>
         <% end %>
       </div>
@@ -168,7 +168,7 @@
         <h6 class="ml-5">Today Received(Debit)</h6>
           <div class="ml-5 d-flex">
           <i class="mr-1" aria-hidden="true">Rs.</i>
-          <i class="h4 mb-0 font-weight-bold text-gray-800"><%= number_with_delimiter(@t_credit.to_f.round(2)) %></i>
+          <i class="h5 mb-0 font-weight-bold text-gray-800"><%= number_with_delimiter(@t_credit.to_f.round(2)) %></i>
         </div>
       <% end %>
       </div>
@@ -177,7 +177,7 @@
         <h6 class="ml-5">Net Payable</h6>
         <div class="ml-5 d-flex">
           <i class="mr-1" aria-hidden="true">Rs.</i>
-          <i class="h4 mb-0 font-weight-bold text-gray-800"><%=number_with_delimiter(@payable)%></i>
+          <i class="h5 mb-0 font-weight-bold text-gray-800"><%=number_with_delimiter(@payable)%></i>
         </div>
       <% end %>
       </div>
@@ -186,7 +186,7 @@
         <h6 class="ml-5">Net Receivable</h6>
         <div class="ml-5 d-flex">
             <i class="mr-1" aria-hidden="true">Rs.</i>
-            <i class="h4 mb-0 font-weight-bold text-gray-800"><%=number_with_delimiter(@receivable)%></i>
+            <i class="h5 mb-0 font-weight-bold text-gray-800"><%=number_with_delimiter(@receivable)%></i>
         </div>
       <% end %>
       </div>
@@ -229,716 +229,697 @@
 
     <div class="tab-content">
       <div class="tab-pane active mb-5 mt-4 card mt-2 text-primary" style="border: none; background-color: #F5F5F5;" id="categories" role="tabpanel">
-            <div class="row">
-              <% if check_is_hidden_by_module('crms') %>
-                <div class="col-xl-3 col-sm-6 col-12 mb-3">
-                  <div class="card border-left-primary shadow py-2 border-radius-1">
-                    <div class="card-body">
-                      <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                          <div class="text-xs font-weight-bold text-success text-uppercase mb-1 d-flex">
-                            <%= link_to crms_path do %>
-                              <i class="fas fa-users logo-back fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
-                            <% end %>
-                            <%= link_to crms_path, class:"ml-3" do %>
-                              <h5  style="text-align: left; color:black;font-weight: bold;">CRM</h5>
-                              <h5 class="text-primary"><%= @cms_user_count %></h5>
-                            <% end %>
-                          </div>
-                          <hr>
-                          <%= link_to crms_path do %>
-                            <span class="h5 mb-0  text-gray-800 btn btn-outline-info"><i class="fas fa-eye mr-1"></i>List</span>
-                          <%end%>
-                          <%= link_to new_crm_path do %>
-                            <span class="h5 mb-0  text-gray-800 btn btn-outline-danger" style="float: right;"><i class="fas fa-plus mr-1"></i>Add</span>
-                          <%end%>
+        <div class="row">
+          <% if check_is_hidden_by_module('crms') %>
+            <div class="col-xl-3 col-sm-6 col-12 mb-4">
+              <div class="card border-left-primary shadow py-2 border-radius-1 d-flex align-items-stretch flex-wrap h-100">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center w-100">
+                    <div class="col-auto">
+                      <%= link_to crms_path do %>
+                        <div class="rounded-circle bg-light p-2">
+                          <i class="fas fa-user logo-back fa-2x"></i>
                         </div>
-                      </div>
+                      <% end %>  
+                    </div>
+                    <div class="col ml-2">
+                      <%= link_to crms_path do %>
+                        <div class="text-xs font-weight-bold text-uppercase mb-1 logo-back">CRM</div>
+                        <div class="h6 mb-0 font-weight-bold text-muted"><%= @cms_user_count %></div>
+                      <% end %>
+                    </div>
+                    <div class="col-auto">
+                      <%= link_to new_crm_path, class: "btn btn-outline-primary rounded-pill btn-sm" do %>
+                        <i class="fas fa-plus mr-1"></i>Add
+                      <% end %>
                     </div>
                   </div>
                 </div>
-              <% end %> 
-              <% if check_is_hidden_by_module('crms') %>
-                <div class="col-xl-3 col-sm-6 col-12 mb-3">
-                  <div class="card border-left-primary shadow h-100 py-2 border-radius-1">
-                    <div class="card-body">
-                      <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                          <div class="text-xs font-weight-bold text-success text-uppercase mb-1 d-flex">
-                            <%= link_to follow_ups_path do %>
-                              <i class="fas fa-user-check logo-back fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
-                            <% end %>
-                            <%= link_to follow_ups_path, class:"ml-3" do %>
-                              <h5  style="text-align: left; color:black;font-weight: bold;">Follow Ups</h5>
-                              <h5 class="text-primary"><%= @total_follow_ups %></h5>
-                            <% end %>
-                          </div>
-                          <hr>
-                          <%= link_to follow_ups_path do %>
-                            <span class="h5 mb-0  text-gray-800 btn btn-outline-info"><i class="fas fa-eye mr-1"></i>List</span>
-                          <%end%>
-                          <%= link_to new_crm_path do %>
-                            <span class="h5 mb-0  text-gray-800 btn btn-outline-danger" style="float: right;"><i class="fas fa-plus mr-1"></i>Add</span>
-                          <%end%>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              <% end %> 
-              <% if check_is_hidden_by_module('products') %> 
-                <div class="col-xl-3 col-sm-6 col-12 mb-3">
-                  <div class="card border-left-primary shadow h-100 py-2 border-radius-1">
-                    <div class="card-body">
-                      <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                          <div class="text-xs font-weight-bold text-success text-uppercase mb-1 d-flex">
-                            <%= link_to products_path do %>
-                              <i class="fas fa-shopping-basket logo-back fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
-                            <% end %>
-                            <%= link_to products_path, class:"ml-3" do %>
-                              <h5  style="text-align: left; color:black;font-weight: bold;">Unit/Inventory</h5>
-                              <h5 class="text-primary"><%=@product_count%></h5>
-                            <% end %>
-                          </div>
-                          <hr>
-                          <%= link_to products_path do %>
-                            <span class="h5 mb-0  text-gray-800 btn btn-outline-info"><i class="fas fa-eye mr-1"></i>List</span>
-                          <%end%>
-                          <%= link_to new_product_path do %>
-                            <span class="h5 mb-0  text-gray-800 btn btn-outline-danger" style="float: right;"><i class="fas fa-plus mr-1"></i>Add</span>
-                          <%end%>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              <% end %>  
-              <% if check_is_hidden_by_module('sys_users') %>
-                <div class="col-xl-3 col-sm-6 col-12 mb-3">
-                  <div class="card border-left-primary shadow h-100 py-2 border-radius-1">
-                    <div class="card-body">
-                      <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                          <div class="text-xs font-weight-bold text-success text-uppercase mb-1 d-flex">
-                            <%= link_to sys_users_path do %>
-                              <i class="fas fa-users logo-back fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
-                            <% end %>
-                            <%= link_to sys_users_path, class:"ml-3" do %>
-                              <h5  style="text-align: left; color:black;font-weight: bold;">Users</h5>
-                              <h5 class="text-primary"><%=@sys_user_count%></h5>
-                            <% end %>
-                          </div>
-                          <hr>
-                          <%= link_to sys_users_path do %>
-                            <span class="h5 mb-0  text-gray-800 btn btn-outline-info"><i class="fas fa-eye mr-1"></i>List</span>
-                          <%end%>
-                          <%= link_to new_sys_user_path do %>
-                            <span class="h5 mb-0  text-gray-800 btn btn-outline-danger" style="float: right;"><i class="fas fa-plus mr-1"></i>Add</span>
-                          <%end%>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              <% end %>	
-              <% if check_is_hidden_by_module('staffs') %>
-                <div class="col-xl-3 col-sm-6 col-12 mb-3">
-                  <div class="card border-left-primary shadow h-100 py-2 border-radius-1">
-                    <div class="card-body">
-                      <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                          <div class="text-xs font-weight-bold text-success text-uppercase mb-1 d-flex">
-                            <%= link_to staffs_path do %>
-                              <i class="fas fa-users-cog logo-back fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
-                            <% end %>
-                            <%= link_to staffs_path, class:"ml-3" do %>
-                              <h5  style="text-align: left; color:black;font-weight: bold;">Staff</h5>
-                              <h5 class="text-primary"><%=@staff_count%></h5>
-                            <% end %>
-                          </div>
-                          <hr>
-                          <%= link_to staffs_path do %>
-                            <span class="h5 mb-0  text-gray-800 btn btn-outline-info"><i class="fas fa-eye mr-1"></i>List</span>
-                          <%end%>
-                          <%= link_to new_staff_path do %>
-                            <span class="h5 mb-0  text-gray-800 btn btn-outline-danger" style="float: right;"><i class="fas fa-plus mr-1"></i>Add</span>
-                          <%end%>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              <% end %>
-              <% if check_is_hidden_by_module('orders') %>
-                <div class="col-xl-3 col-sm-6 col-12 mb-3">
-                  <div class="card border-left-primary shadow h-100 py-2 border-radius-1">
-                    <div class="card-body">
-                      <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                          <div class="text-xs font-weight-bold text-success text-uppercase mb-1 d-flex">
-                            <%= link_to orders_path(sale: true) do %>
-                              <i class="fas fa-cart-arrow-down logo-back fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
-                            <% end %>
-                            <%= link_to orders_path(sale: true), class:"ml-3" do %>
-                              <h5  style="text-align: left; color:black;font-weight: bold;">Booking</h5>
-                              <h5 class="text-primary"><%=@total_booked.count.to_f.round(2) rescue 0%></h5>
-                            <% end %>
-                          </div>
-                          <hr>
-                          <%= link_to orders_path(sale: true) do %>
-                            <span class="h5 mb-0  text-gray-800 btn btn-outline-info"><i class="fas fa-eye mr-1"></i>List</span>
-                          <%end%>
-                          <%= link_to new_order_path(product: true,transaction_type: 'sale') do %>
-                            <span class="h5 mb-0  text-gray-800 btn btn-outline-danger" style="float: right;"><i class="fas fa-plus mr-1"></i>Add</span>
-                          <%end%>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div> 
-              <% end %>  
-              <% if check_is_hidden_by_module('purchase_sale_details') %> 
-                <div class="col-xl-3 col-sm-6 col-12 mb-3">
-                  <div class="card border-left-primary shadow h-100 py-2 border-radius-1">
-                    <div class="card-body">
-                      <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                          <div class="text-xs font-weight-bold text-success text-uppercase mb-1 d-flex">
-                            <%= link_to purchase_sale_details_path(sale: true) do %>
-                              <i class="fas fa-shopping-cart logo-back fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
-                            <% end %>
-                            <%= link_to purchase_sale_details_path(sale: true), class:"ml-3" do %>
-                              <h5  style="text-align: left; color:black;font-weight: bold;">Installment</h5>
-                              <h5 class="text-primary"><%=@total_sale_slips%></h5>
-                            <% end %>
-                          </div>
-                          <hr>
-                          <%= link_to purchase_sale_details_path(sale: true) do %>
-                            <span class="h5 mb-0  text-gray-800 btn btn-outline-info"><i class="fas fa-eye mr-1"></i>List</span>
-                          <%end%>
-                          <%= link_to new_purchase_sale_detail_path(transaction_type: :sale,product: true) do %>
-                            <span class="h5 mb-0  text-gray-800 btn btn-outline-danger" style="float: right;"><i class="fas fa-plus mr-1"></i>Add</span>
-                          <%end%>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              <% end %>  
-              <% if check_is_hidden_by_module('expenses') %>
-                <div class="col-xl-3 col-sm-6 col-12 mb-3">
-                  <div class="card border-left-primary shadow h-100 py-2 border-radius-1">
-                    <div class="card-body">
-                      <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                          <div class="text-xs font-weight-bold text-success text-uppercase mb-1 d-flex">
-                            <%= link_to expenses_path do %>
-                              <i class="fas fa-hand-holding-usd logo-back fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
-                            <% end %>
-                            <%= link_to expenses_path, class:"ml-3" do %>
-                              <h5  style="text-align: left; color:black;font-weight: bold;">Expense</h5>
-                              <h5 class="text-primary"><%=@total_expense_slips%></h5>
-                            <% end %>
-                          </div>
-                          <hr>
-                          <%= link_to expenses_path do %>
-                            <span class="h5 mb-0  text-gray-800 btn btn-outline-info"><i class="fas fa-eye mr-1"></i>List</span>
-                          <%end%>
-                          <%= link_to new_expense_path do %>
-                            <span class="h5 mb-0  text-gray-800 btn btn-outline-danger" style="float: right;"><i class="fas fa-plus mr-1"></i>Add</span>
-                          <%end%>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              <% end %>  
-              <% if check_is_hidden_by_module('compaigns') %>
-                <div class="col-xl-3 col-sm-6 col-12 mb-3">
-                  <div class="card border-left-primary shadow h-100 py-2 border-radius-1">
-                    <div class="card-body">
-                      <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                          <div class="text-xs font-weight-bold text-success text-uppercase mb-1 d-flex">
-                            <%= link_to compaigns_path do %>
-                              <i class="fas fa-address-card logo-back fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
-                            <% end %>
-                            <%= link_to compaigns_path, class: "ml-2" do %>
-                              <h5  style="text-align: left; color:black;font-weight: bold;">Compaign</h5>
-                              <h5 class="text-primary"><%=@total_compaigns %></h5>
-                            <% end %>
-                          </div>
-                          
-                          <hr>
-                          <%= link_to compaigns_path do %>
-                            <span class="h5 mb-0  text-gray-800 btn btn-outline-info"><i class="fas fa-eye mr-1"></i>List</span>
-                          <%end%>
-                          <%= link_to new_compaign_path do %>
-                            <span class="h5 mb-0  text-gray-800 btn btn-outline-danger" style="float: right;"><i class="fas fa-plus mr-1"></i>Add</span>
-                          <%end%>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              <% end %>  
-              <% if check_is_hidden_by_module('ledger_books') %>
-                <div class="col-xl-3 col-sm-6 col-12 mb-3">
-                  <div class="card border-left-primary shadow h-100 py-2 border-radius-1">
-                    <div class="card-body">
-                      <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                          <div class="text-xs font-weight-bold text-success text-uppercase mb-1 d-flex">
-                              <i class="fas fa-book logo-back fa-3x p-2 card mb-3" style="border-radius: 50%;" aria-hidden="true"></i>
-                              <h5  style="text-align: left; color:black;font-weight: bold;" class="ml-2">User Ledger</h5>
-                          </div>
-                          <hr>
-                          <div class="row d-flex">
-                            <%= link_to new_ledger_book_path(Sjama:true), class: "col float-left" do %>
-                            <span class="h5 mb-0  text-gray-800 btn btn-outline-success"><i class="fas fa-coins mr-1"></i>Credit/J</span>
-                            <% end %>
-                            <%= link_to new_ledger_book_path(Sbenam:true), class: "col float-right" do %>
-                              <span class="h5 mb-0  text-gray-800 btn btn-outline-danger ml-4"><i class="fas fa-money-bill mr-1"></i>Debit/B</span>
-                            <% end %>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              <% end %>
-              <% if check_is_hidden_by_module('salary_details') %>
-                <div class="col-xl-3 col-sm-6 col-12 mb-3">
-                  <div class="card border-left-primary shadow h-100 py-2 border-radius-1">
-                    <div class="card-body">
-                      <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                          <div class="text-xs font-weight-bold text-success text-uppercase mb-1 d-flex">
-                            <i class="fas fa-book logo-back fa-3x p-2 card mb-3" style="border-radius: 50%;" aria-hidden="true"></i>
-                            <h5  style="text-align: left; color:black;font-weight: bold;" class="ml-2">Staff Ledger</h5>
-                          </div>
-                          <hr>
-                          <div class="row d-flex">
-                            <%= link_to advance_all_salary_details_path, class: "col float-left" do %>
-                              <span class="h5 mb-0  text-gray-800 btn btn-outline-success"><i class="fas fa-coins mr-1"></i>Credit/J</span>
-                            <% end %>
-                            <%= link_to advance_salaries_path, class: "col float-right" do %>
-                              <span class="h5 mb-0  text-gray-800 btn btn-outline-danger ml-4"><i class="fas fa-money-bill mr-1"></i>Debit/B</span>
-                            <% end %>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>  
-              <% end %>  
-              <% if check_is_hidden_by_module('ledger_books') %>
-                <div class="col-xl-3 col-sm-6 col-12 mb-3">
-                  <div class="card border-left-primary shadow h-100 py-2 border-radius-1">
-                    <div class="card-body">
-                      <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                          <div class="text-xs font-weight-bold text-success text-uppercase mb-1 d-flex">
-                            <%= link_to ledger_books_path do %>
-                              <i class="fas fa-address-book logo-back fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
-                            <% end %>
-                            <%= link_to ledger_books_path, class:"ml-3" do %>
-                              <h5  style="text-align: left; color:black;font-weight: bold;">Ledger</h5>
-                            <% end %>
-                          </div>
-                          <hr>
-                          <div class="row d-flex">
-                            <%= link_to ledger_books_path, class: "col float-right" do %>
-                              <i class="fa fa-calculator fa-2x text-success" aria-hidden="true"></i>
-                              <p>User</p>
-                            <% end %>
-                            <%= link_to staff_ledger_books_path, class: "col float-right" do %>
-                              <i class="fas fa-calculator fa-2x text-danger" aria-hidden="true"></i>
-                              <p>Staff</p>
-                            <% end %>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              <% end %>  
-              <% if check_is_hidden_by_module('payments') %>
-                <div class="col-xl-3 col-sm-6 col-12 mb-3">
-                  <div class="card border-left-primary shadow h-100 py-2 border-radius-1">
-                    <div class="card-body">
-                      <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                          <div class="text-xs font-weight-bold text-success text-uppercase mb-1 d-flex">
-                            <%= link_to payments_path do %>
-                              <i class="fas fa-info-circle logo-back fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
-                            <% end %>
-                            <%= link_to payments_path, class:"ml-3" do %>
-                              <h5  style="text-align: left; color:black;font-weight: bold;">Details</h5>
-                            <% end %>
-                          </div>
-                          <hr>
-                          <div class="row d-flex">
-                            <%= link_to payments_path, class: "col float-right" do %>
-                              <i class="fa fa-book fa-2x text-success" aria-hidden="true"></i>
-                              <p>Day Book</p>
-                            <% end %>
-                            <%= link_to reports_day_out_report_path, class: "col float-right" do %>
-                              <i class="fas fa-balance-scale fa-2x text-danger" aria-hidden="true"></i>
-                              <p>Day Check</p>
-                            <% end %>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              <% end %>  
-              <% if check_is_hidden_by_module('products') %>
-                <div class="col-xl-3 col-sm-6 col-12 mb-3">
-                  <div class="card border-left-primary shadow h-100 py-2 border-radius-1">
-                    <div class="card-body">
-                      <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                          <div class="text-xs font-weight-bold text-success text-uppercase mb-1 d-flex">
-                            <i class="fas fa-info-circle logo-back fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
-                            <h5  style="text-align: left; color:black;font-weight: bold;" class="ml-2">Unit Detail</h5>
-                          </div>
-                          <hr>
-                          <div class="row d-flex">
-                            <div class="col">
-                              <%= link_to products_path('q[size_6_in]':0) do %>
-                                <i class="fas fa-calendar fa-2x text-success" aria-hidden="true" style="color: #6c757d;"></i>
-                                <i class="h5 mb-0 font-weight-bold text-gray-800" style="color: #6c757d;">
-                                  <%=@total_booked.count.to_f.round(2) rescue 0%>
-                                </i>
-                                <p>Booked</p>
-                              <% end %>
-                            </div>
-
-                            <div class="col">
-                              <%= link_to products_path('q[size_6_in]':1) do %>
-                                <i class="fas fa-calendar fa-2x text-danger" aria-hidden="true" style="color: #6c757d;"></i>
-                                <i class="h5 mb-0 font-weight-bold text-gray-800" style="color: #6c757d;">
-                                  <%=@total_remaning.count.to_f.round(2) rescue 0%>
-                                </i>
-                                <p>Open</p>
-                              <% end %>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              <% end %>  
-              <% if check_is_hidden_by_module('products') %>
-                <div class="col-xl-3 col-sm-6 col-12 mb-3">
-                  <div class="card border-left-primary shadow h-100 py-2 border-radius-1">
-                    <div class="card-body">
-                      <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                          <div class="text-xs font-weight-bold text-success text-uppercase mb-1 d-flex">
-                            <i class="fas fa-user-shield logo-back fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
-                            <h5  style="text-align: left; color:black;font-weight: bold;" class="ml-2">Secure Unit</h5>
-                          </div>
-                          <hr>
-                          <div class="row d-flex">
-                            <div class="col">
-                              <%= link_to products_path('q[size_6_in]':2) do %>
-                                <i class="fas fa-calendar fa-2x text-success" aria-hidden="true" style="color: #6c757d;"></i>
-                                <i class="h5 mb-0 font-weight-bold text-gray-800" style="color: #6c757d;">
-                                  <%=@total_reserved.count.to_f.round(2) rescue 0%>
-                                </i>
-                                <p>Secure</p>
-                              <% end %>
-                            </div>
-
-                            <div class="col">
-                              <%= link_to products_path('q[size_6_in]':3) do %>
-                                <i class="fas fa-calendar fa-2x text-danger" aria-hidden="true" style="color: #6c757d;"></i>
-                                <i class="h5 mb-0 font-weight-bold text-gray-800" style="color: #6c757d;">
-                                  <%=@total_only_booked.count.to_f.round(2) rescue 0%>
-                                </i>
-                                <p>Only Booked</p>
-                              <% end %>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              <% end %> 
-              <% if check_is_hidden_by_module('property_plans') %>  
-                <div class="col-xl-3 col-sm-6 col-12">
-                  <div class="card border-left-primary shadow h-100 py-2 border-radius-1">
-                    <div class="card-body">
-                      <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                          <div class="text-xs font-weight-bold text-success text-uppercase mb-1 d-flex">
-                              <i class="fas fa-credit-card logo-back fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
-                              <h5  style="text-align: left; color:black;font-weight: bold;">Short Payments</h5>
-                          </div>
-                          <hr>
-                          <div class="row d-flex">
-                            <%= link_to property_plans_path('short_advance': true,'q[due_date_lteq]':Date.today), class: "col float-right" do %>
-                              <i class="fa fa-money-check-alt fa-2x text-success mr-1" aria-hidden="true"></i><b><%=@due_advance.to_f.round(2) rescue 0%></b>
-                              <p>Down Payment</p>
-                            <% end %>
-                            <%= link_to property_installment_property_plans_path('short_advance': true,'q[property_installments_due_date_lteq]':Date.today), class: "col float-right" do %>
-                              <i class="fas fa-receipt fa-2x text-danger mr-1" aria-hidden="true"></i><b><%=@due_installment.to_f.round(2) rescue 0%></b>
-                              <p>Installment</p>
-                            <% end %>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
               </div>
-              <% end %> 
-              <% if check_is_hidden_by_module('sms') %>
-                <%if pos_setting_is_sms.present?%>
-                  <div class="col-xl-3 col-sm-6 col-12">
-                    <div class="card border-left-primary shadow h-100 py-2 border-radius-1">
-                      <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                          <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1 d-flex">
-                              <%= link_to sms_index_path do %>
-                                <i class="fas fa-comment logo-back fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
-                              <% end %>
-                              <%= link_to sms_index_path, class:"ml-3" do %>
-                                <h5  style="text-align: left; color:black;font-weight: bold;">SMS</h5>
-                              <% end %>
-                            </div>
-                            <hr>
-                            <div class="row d-flex">
-                              <%= link_to sms_index_path, class: "col float-right" do %>
-                                <i class="fa fa-comment fa-2x text-success" aria-hidden="true"></i>
-                                <p>SMS to User</p>
-                              <% end %>
-                              <%= link_to sms_index_path('from_tabe':'pills-staff-tab'), class: "col float-right" do %>
-                                <i class="fas fa-comments fa-2x text-danger" aria-hidden="true"></i>
-                                <p>SMS to Staff</p>
-                              <% end %>
-                            </div>
-                          </div>
+            </div>
+          <% end %> 
+          <% if check_is_hidden_by_module('crms') %>
+            <div class="col-xl-3 col-sm-6 col-12 mb-4">
+              <div class="card border-left-primary shadow py-2 border-radius-1 d-flex align-items-stretch flex-wrap h-100">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col-auto">
+                      <%= link_to follow_ups_path do %>
+                        <div class="rounded-circle bg-light p-2">
+                          <i class="fas fa-user-check logo-back fa-2x"></i>
                         </div>
-                      </div>
+                      <% end %>  
+                    </div>
+                    <div class="col ml-2">
+                      <%= link_to follow_ups_path do %>
+                        <div class="text-xs font-weight-bold text-uppercase mb-1 logo-back">Follow Up</div>
+                        <div class="h6 mb-0 font-weight-bold text-muted"><%= @total_follow_ups %></div>
+                      <% end %>
+                    </div>
+                    <div class="col-auto">
+                      <%= link_to new_crm_path, class: "btn btn-outline-primary rounded-pill btn-sm" do %>
+                        <i class="fas fa-plus mr-1"></i>Add
+                      <% end %>
                     </div>
                   </div>
-                <% end %>
-              <% end %>  
-              <% if check_is_hidden_by_module('remarks') %>
-                <div class="col-xl-3 col-sm-6 col-12">
-                  <div class="card border-left-primary shadow h-100 py-2 border-radius-1">
-                    <div class="card-body">
-                      <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                          <div class="text-xs font-weight-bold text-success text-uppercase mb-1 d-flex">
-                            <%= link_to remarks_path(transfer:true) do %>
-                              <i class="fas fa-exchange-alt logo-back fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
-                            <% end %>
-                            <%= link_to remarks_path(transfer:true), class: "ml-2" do %>
-                              <h5  style="text-align: left; color:black;font-weight: bold;">Transfer</h5>
-                            <% end %>
-                          </div>
-                          <hr>
-                          <div class="row d-flex ml-2">
-                            <%= link_to remarks_path(transfer:true) do %>
-                              <h5 class="text-dark">Total Transfer</h5>
-                              <span class="h4 mt-2"><%=@total_transfer.count%></span>
-                            <% end %>
-                          </div>
+                </div>
+              </div>
+            </div>
+          <% end %> 
+          <% if check_is_hidden_by_module('products') %> 
+            <div class="col-xl-3 col-sm-6 col-12 mb-4">
+              <div class="card border-left-primary shadow py-2 border-radius-1 d-flex align-items-stretch flex-wrap h-100">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col-auto">
+                      <%= link_to products_path do %>
+                        <div class="rounded-circle bg-light p-2">
+                          <i class="fas fa-stream logo-back fa-2x"></i>
                         </div>
+                      <% end %>  
+                    </div>
+                    <div class="col ml-2">
+                      <%= link_to products_path do %>
+                        <div class="text-xs font-weight-bold text-uppercase mb-1 logo-back">Units</div>
+                        <div class="h6 mb-0 font-weight-bold text-muted"><%= @product_count %></div>
+                      <% end %>
+                    </div>
+                    <div class="col-auto">
+                      <%= link_to new_product_path, class: "btn btn-outline-primary rounded-pill btn-sm" do %>
+                        <i class="fas fa-plus mr-1"></i>Add
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>  
+          <% if check_is_hidden_by_module('sys_users') %>
+            <div class="col-xl-3 col-sm-6 col-12 mb-4">
+              <div class="card border-left-primary shadow py-2 border-radius-1 d-flex align-items-stretch flex-wrap h-100">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col-auto">
+                      <%= link_to sys_users_path do %>
+                        <div class="rounded-circle bg-light p-2">
+                          <i class="fas fa-users logo-back fa-2x"></i>
+                        </div>
+                      <% end %>  
+                    </div>
+                    <div class="col ml-2">
+                      <%= link_to sys_users_path do %>
+                        <div class="text-xs font-weight-bold text-uppercase mb-1 logo-back">Users</div>
+                        <div class="h6 mb-0 font-weight-bold text-muted"><%= @sys_user_count %></div>
+                      <% end %>
+                    </div>
+                    <div class="col-auto">
+                      <%= link_to new_sys_user_path, class: "btn btn-outline-primary rounded-pill btn-sm" do %>
+                        <i class="fas fa-plus mr-1"></i>Add
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>	
+          <% if check_is_hidden_by_module('staffs') %>
+            <div class="col-xl-3 col-sm-6 col-12 mb-4">
+              <div class="card border-left-primary shadow py-2 border-radius-1 d-flex align-items-stretch flex-wrap h-100">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col-auto">
+                      <%= link_to staffs_path do %>
+                        <div class="rounded-circle bg-light p-2">
+                          <i class="fas fa-users-cog logo-back fa-2x"></i>
+                        </div>
+                      <% end %>  
+                    </div>
+                    <div class="col ml-2">
+                      <%= link_to staffs_path do %>
+                        <div class="text-xs font-weight-bold text-uppercase mb-1 logo-back">Staffs</div>
+                        <div class="h6 mb-0 font-weight-bold text-muted"><%= @staff_count %></div>
+                      <% end %>
+                    </div>
+                    <div class="col-auto">
+                      <%= link_to new_staff_path, class: "btn btn-outline-primary rounded-pill btn-sm" do %>
+                        <i class="fas fa-plus mr-1"></i>Add
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+          <% if check_is_hidden_by_module('orders') %>
+            <div class="col-xl-3 col-sm-6 col-12 mb-4">
+              <div class="card border-left-primary shadow py-2 border-radius-1 d-flex align-items-stretch flex-wrap h-100">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col-auto">
+                      <%= link_to orders_path(sale: true) do %>
+                        <div class="rounded-circle bg-light p-2">
+                          <i class="fas fa-cart-arrow-down logo-back fa-2x"></i>
+                        </div>
+                      <% end %>  
+                    </div>
+                    <div class="col ml-2">
+                      <%= link_to orders_path(sale: true) do %>
+                        <div class="text-xs font-weight-bold text-uppercase mb-1 logo-back">Bookings</div>
+                        <div class="h6 mb-0 font-weight-bold text-muted"><%= @total_booked.count.to_f.round(2) rescue 0 %></div>
+                      <% end %>
+                    </div>
+                    <div class="col-auto">
+                      <%= link_to new_order_path(product: true,transaction_type: 'sale'), class: "btn btn-outline-primary rounded-pill btn-sm" do %>
+                        <i class="fas fa-plus mr-1"></i>Add
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> 
+          <% end %>  
+          <% if check_is_hidden_by_module('purchase_sale_details') %> 
+            <div class="col-xl-3 col-sm-6 col-12 mb-4">
+              <div class="card border-left-primary shadow py-2 border-radius-1 d-flex align-items-stretch flex-wrap h-100">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col-auto">
+                      <%= link_to purchase_sale_details_path(sale: true) do %>
+                        <div class="rounded-circle bg-light p-2">
+                          <i class="fas fa-receipt logo-back fa-2x"></i>
+                        </div>
+                      <% end %>  
+                    </div>
+                    <div class="col ml-2">
+                      <%= link_to purchase_sale_details_path(sale: true) do %>
+                        <div class="text-xs font-weight-bold text-uppercase mb-1 logo-back">Installments</div>
+                        <div class="h6 mb-0 font-weight-bold text-muted"><%= @total_sale_slips %></div>
+                      <% end %>
+                    </div>
+                    <div class="col-auto">
+                      <%= link_to new_purchase_sale_detail_path(transaction_type: :sale, product: true), class: "btn btn-outline-primary rounded-pill btn-sm" do %>
+                        <i class="fas fa-plus mr-1"></i>Add
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>  
+          <% if check_is_hidden_by_module('expenses') %>
+            <div class="col-xl-3 col-sm-6 col-12 mb-4">
+              <div class="card border-left-primary shadow py-2 border-radius-1 d-flex align-items-stretch flex-wrap h-100">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col-auto">
+                      <%= link_to expenses_path do %>
+                        <div class="rounded-circle bg-light p-2">
+                          <i class="fas fa-money-bill logo-back fa-2x"></i>
+                        </div>
+                      <% end %>  
+                    </div>
+                    <div class="col ml-2">
+                      <%= link_to expenses_path do %>
+                        <div class="text-xs font-weight-bold text-uppercase mb-1 logo-back">Expenses</div>
+                        <div class="h6 mb-0 font-weight-bold text-muted"><%= @total_expense_slips %></div>
+                      <% end %>
+                    </div>
+                    <div class="col-auto">
+                      <%= link_to new_expense_path, class: "btn btn-outline-primary rounded-pill btn-sm" do %>
+                        <i class="fas fa-plus mr-1"></i>Add
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>  
+          <% if check_is_hidden_by_module('compaigns') %>
+            <div class="col-xl-3 col-sm-6 col-12 mb-4">
+              <div class="card border-left-primary shadow py-2 border-radius-1 d-flex align-items-stretch flex-wrap h-100">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col-auto">
+                      <%= link_to compaigns_path do %>
+                        <div class="rounded-circle bg-light p-2">
+                          <i class="fas fa-address-card logo-back fa-2x"></i>
+                        </div>
+                      <% end %>  
+                    </div>
+                    <div class="col ml-2">
+                      <%= link_to compaigns_path do %>
+                        <div class="text-xs font-weight-bold text-uppercase mb-1 logo-back">Compaigns</div>
+                        <div class="h6 mb-0 font-weight-bold text-muted"><%= @total_compaigns %></div>
+                      <% end %>
+                    </div>
+                    <div class="col-auto">
+                      <%= link_to new_compaign_path, class: "btn btn-outline-primary rounded-pill btn-sm" do %>
+                        <i class="fas fa-plus mr-1"></i>Add
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>  
+          <% if check_is_hidden_by_module('ledger_books') %>
+            <div class="col-xl-3 col-sm-6 col-12 mb-4">
+              <div class="card border-left-primary shadow py-2 border-radius-1 d-flex align-items-stretch flex-wrap h-100">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col-auto">
+                      <%= link_to ledger_books_path do %>
+                        <div class="rounded-circle bg-light p-2">
+                          <i class="fas fa-book logo-back fa-2x"></i>
+                        </div>
+                      <% end %>  
+                    </div>
+                    <div class="col ml-2">
+                      <%= link_to ledger_books_path do %>
+                        <div class="text-xs font-weight-bold text-uppercase mb-1 logo-back">Ledger<br>Book</div>
+                      <% end %>
+                    </div>
+                    <div class="col-auto">
+                      <%= link_to ledger_books_path, class: "btn btn-outline-primary rounded-pill btn-sm" do %>
+                        User
+                      <% end %>
+                      <%= link_to staff_ledger_books_path, class: "btn btn-outline-danger rounded-pill btn-sm" do %>
+                        Staff
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>  
+          <% if check_is_hidden_by_module('ledger_books') %>
+            <div class="col-xl-3 col-sm-6 col-12 mb-4">
+              <div class="card border-left-primary shadow py-2 border-radius-1 d-flex align-items-stretch flex-wrap h-100">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col-auto">
+                      <%= link_to ledger_books_path do %>
+                        <div class="rounded-circle bg-light p-2">
+                          <i class="fas fa-address-book logo-back fa-2x"></i>
+                        </div>
+                      <% end %>  
+                    </div>
+                    <div class="col ml-2">
+                      <%= link_to ledger_books_path do %>
+                        <div class="text-xs font-weight-bold text-uppercase mb-1 logo-back">User<br>Ledger</div>
+                      <% end %>
+                    </div>
+                    <div class="col-auto">
+                      <%= link_to new_ledger_book_path(Sjama:true), class: "btn btn-outline-primary rounded-pill btn-sm" do %>
+                        <span style="font-size: 0.75em">Credit/J</span>
+                      <% end %>
+                      <%= link_to new_ledger_book_path(Sbenam:true), class: "btn btn-outline-danger rounded-pill btn-sm" do %>
+                        <span style="font-size: 0.75em">Debit/B</span>
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+          <% if check_is_hidden_by_module('salary_details') %>
+            <div class="col-xl-3 col-sm-6 col-12 mb-4">
+              <div class="card border-left-primary shadow py-2 border-radius-1 d-flex align-items-stretch flex-wrap h-100">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col-auto">
+                      <%= link_to staff_ledger_books_path do %>
+                        <div class="rounded-circle bg-light p-2">
+                          <i class="fas fa-address-book logo-back fa-2x"></i>
+                        </div>
+                      <% end %>  
+                    </div>
+                    <div class="col ml-2">
+                      <%= link_to staff_ledger_books_path do %>
+                        <div class="text-xs font-weight-bold text-uppercase mb-1 logo-back">Staff<br>Ledger</div>
+                      <% end %>
+                    </div>
+                    <div class="col-auto">
+                      <%= link_to advance_all_salary_details_path, class: "btn btn-outline-primary rounded-pill btn-sm" do %>
+                        <span style="font-size: 0.75em">Credit/J</span>
+                      <% end %>
+                      <%= link_to advance_salaries_path, class: "btn btn-outline-danger rounded-pill btn-sm" do %>
+                        <span style="font-size: 0.75em">Debit/B</span>
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>  
+          <% end %>  
+          <% if check_is_hidden_by_module('payments') %>
+            <div class="col-xl-3 col-sm-6 col-12 mb-4">
+              <div class="card border-left-primary shadow py-2 border-radius-1 d-flex align-items-stretch flex-wrap h-100">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col-auto">
+                      <div class="rounded-circle bg-light p-2">
+                        <i class="fas fa-info-circle logo-back fa-2x"></i>
+                      </div>  
+                    </div>
+                    <div class="col ml-2">
+                      <div class="text-xs font-weight-bold text-uppercase mb-1 logo-back">General Details</div>
+                    </div>
+                  </div>
+                  <div class="row ml-2 mt-2">
+                    <%= link_to payments_path, class: "btn btn-outline-primary rounded-pill btn-sm mr-1" do %>
+                      Day Book
+                    <% end %>
+                    <%= link_to reports_day_out_report_path, class: "btn btn-outline-danger rounded-pill btn-sm" do %>
+                      Day Check
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>  
+          <% if check_is_hidden_by_module('products') %>
+            <div class="col-xl-3 col-sm-6 col-12 mb-4">
+              <div class="card border-left-primary shadow py-2 border-radius-1 d-flex align-items-stretch flex-wrap h-100">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col-auto">
+                      <div class="rounded-circle bg-light p-2">
+                        <i class="fas fa-info-circle logo-back fa-2x"></i>
+                      </div>  
+                    </div>
+                    <div class="col ml-2">
+                      <div class="text-xs font-weight-bold text-uppercase mb-1 logo-back">Unit Details</div>
+                    </div>
+                  </div>
+                  <div class="row ml-2 mt-2">
+                    <%= link_to products_path('q[size_6_in]':0), class: "btn btn-outline-primary rounded-pill btn-sm mr-1" do %>
+                      Booked:
+                      <i class="text-xs mb-0 font-weight-bold">
+                        <%=@total_booked.count.to_f.round(2) rescue 0%>
+                      </i>
+                    <% end %>
+                    <%= link_to products_path('q[size_6_in]':1), class: "btn btn-outline-danger rounded-pill btn-sm" do %>
+                      Open:
+                      <i class="text-xs mb-0 font-weight-bold">
+                        <%=@total_remaning.count.to_f.round(2) rescue 0%>
+                      </i>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>  
+          <% if check_is_hidden_by_module('products') %>
+            <div class="col-xl-3 col-sm-6 col-12 mb-4">
+              <div class="card border-left-primary shadow py-2 border-radius-1 d-flex align-items-stretch flex-wrap h-100">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col-auto">
+                      <div class="rounded-circle bg-light p-2">
+                        <i class="fas fa-user-shield logo-back fa-2x"></i>
+                      </div>  
+                    </div>
+                    <div class="col ml-2">
+                      <div class="text-xs font-weight-bold text-uppercase mb-1 logo-back">Secure Unit</div>
+                    </div>
+                  </div>
+                  <div class="row ml-2 mt-2">
+                    <%= link_to products_path('q[size_6_in]':0), class: "btn btn-outline-primary rounded-pill btn-sm mr-1" do %>
+                      Secure:
+                      <i class="text-xs mb-0 font-weight-bold">
+                        <%=@total_reserved.count.to_f.round(2) rescue 0%>
+                      </i>
+                    <% end %>
+                    <%= link_to products_path('q[size_6_in]':1), class: "btn btn-outline-danger rounded-pill btn-sm" do %>
+                      Only Booked:
+                      <i class="text-xs mb-0 font-weight-bold">
+                        <%=@total_only_booked.count.to_f.round(2) rescue 0%>
+                      </i>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %> 
+          <% if check_is_hidden_by_module('property_plans') %>  
+            <div class="col-xl-3 col-sm-6 col-12 mb-4">
+              <div class="card border-left-primary shadow py-2 border-radius-1 d-flex align-items-stretch flex-wrap h-100">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col-auto">
+                      <div class="rounded-circle bg-light p-2">
+                        <i class="fas fa-credit-card fa-2x logo-back"></i>
+                      </div>  
+                    </div>
+                    <div class="col ml-2">
+                      <div class="text-xs font-weight-bold text-uppercase mb-1 logo-back">Short Payments</div>
+                    </div>
+                  </div>
+                  <div class="row ml-2" style="font-size: 0.8em;">
+                    <%= link_to property_installment_property_plans_path('short_advance': true,'q[property_installments_due_date_lteq]':Date.today), class: "text-primary mt-1 mb-0 py-1 px-2", style:"border: 0.8px solid blue; border-radius: 15px;" do %>
+                      Down Payment:
+                      <i class=" mb-0 font-weight-bold">
+                        <%= number_with_delimiter(@due_advance.to_f.round(2)) rescue 0 %>
+                      </i>
+                    <% end %>
+                  </div>
+                  <div class="row ml-2" style="font-size: 0.8em;">
+                    <%= link_to property_installment_property_plans_path('short_advance': true,'q[property_installments_due_date_lteq]':Date.today), class: "text-danger mt-2 mb-0 py-1 px-2", style:"border: 0.8px solid red; border-radius: 15px;" do %>
+                      Installment:
+                      <i class=" mb-0 font-weight-bold">
+                        <%= number_with_delimiter(@due_installment.to_f.round(2)) rescue 0%>
+                      </i>
+                    <% end %>
+                  </div>  
+                </div>
+              </div>
+          </div>
+          <% end %> 
+          <% if check_is_hidden_by_module('sms') %>
+            <%if pos_setting_is_sms.present?%>
+              <div class="col-xl-3 col-sm-6 col-12 mb-4">
+                <div class="card border-left-primary shadow py-2 border-radius-1 d-flex align-items-stretch flex-wrap h-100">
+                  <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                      <div class="col-auto">
+                        <%= link_to sms_index_path do %>
+                          <div class="rounded-circle bg-light p-2">
+                            <i class="fas fa-comment logo-back fa-2x"></i>
+                          </div>
+                        <% end %>  
+                      </div>
+                      <div class="col ml-2">
+                        <%= link_to sms_index_path do %>
+                          <div class="text-xs font-weight-bold text-uppercase mb-1 logo-back">SMS</div>
+                        <% end %>
+                      </div>
+                      <div class="col-auto">
+                        <%= link_to sms_index_path, class: "btn btn-outline-primary rounded-pill btn-sm" do %>
+                          User
+                        <% end %>
+                        <%= link_to sms_index_path('from_tabe':'pills-staff-tab'), class: "btn btn-outline-danger rounded-pill btn-sm" do %>
+                          Staff
+                        <% end %>
                       </div>
                     </div>
                   </div>
                 </div>
-              <% end %>
-              <% if check_is_hidden_by_module('sticky_notes') %>
-                <div class="col-xl-3 col-sm-6 col-12">
-                  <%= link_to sticky_notes_path do %>
-                    <div class="card border-left-primary shadow h-100 py-2 border-radius-1">
-                      <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                          <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1 d-flex">
-                              <i class="fas fa-sticky-note logo-back fa-3x p-2 card" style="border-radius: 50%;" aria-hidden="true"></i>
-                              <h5  style="text-align: left; color:black;font-weight: bold;">Sticky Notes</h5>
-                            </div>
-                            <hr>
-                            <div class="ml-2">
-                              <h5 class="text-dark">Total Sticky Notes</h5>
-                              <span class="h4 mt-2"><%=@sticky_notes.count%></span>
-                            </div>
-                          </div>
+              </div>
+            <% end %>
+          <% end %>  
+          <% if check_is_hidden_by_module('remarks') %>
+            <div class="col-xl-3 col-sm-6 col-12 mb-4">
+              <div class="card border-left-primary shadow py-2 border-radius-1 d-flex align-items-stretch flex-wrap h-100">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col-auto">
+                      <%= link_to remarks_path(transfer: true) do %>
+                        <div class="rounded-circle bg-light p-2">
+                          <i class="fas fa-exchange-alt logo-back fa-2x"></i>
                         </div>
+                      <% end %>  
+                    </div>
+                    <div class="col ml-2">
+                      <%= link_to remarks_path(transfer: true) do %>
+                        <div class="text-xs font-weight-bold text-uppercase mb-1 logo-back">Transfer</div>
+                        <div class="h6 mb-0 font-weight-bold text-muted"><%= @total_transfer.count %></div>
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+          <% if check_is_hidden_by_module('sticky_notes') %>
+            <div class="col-xl-3 col-sm-6 col-12 mb-4">
+              <%= link_to sticky_notes_path do %>
+                <div class="card border-left-primary shadow py-2 border-radius-1 d-flex align-items-stretch flex-wrap h-100">
+                  <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                      <div class="col-auto">
+                        <%= link_to sticky_notes_path do %>
+                          <div class="rounded-circle bg-light p-2">
+                            <i class="fas fa-sticky-note logo-back fa-2x"></i>
+                          </div>
+                        <% end %>  
+                      </div>
+                      <div class="col ml-2">
+                        <%= link_to sticky_notes_path do %>
+                          <div class="text-xs font-weight-bold text-uppercase mb-1 logo-back">Sticky Notes</div>
+                          <div class="h6 mb-0 font-weight-bold text-muted"><%= @sticky_notes.count %></div>
+                        <% end %>
                       </div>
                     </div>
-                  <% end %>
+                  </div>
                 </div>
               <% end %>
             </div>
-        
+          <% end %>
+        </div>
       </div>
 
-      <div class="tab-pane card mt-2 p-3 border-radius-1" style="border: none; background-color: #F5F5F5;" id="analytics" role="tabpanel">
-        <p>
-            <div class="col-lg-12 col-sm-12">
-
-              <% if check_is_hidden_by_module('reports') %>
-                <div class="col-lg-3 col-md-6 mb-4 form-group float-left">
-                  <%= link_to reports_chart_of_account_path do %>
-                    <div class="card border-left-primary shadow h-100 py-2 border-radius-1">
-                      <div class="card-body" >
-                        <div class="row no-gutters align-items-center">
-                          <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                              <i class="fas fa-chart-line logo-back fa-2x" aria-hidden="true"></i>
-                            </div>
-                            <div class="h5 mb-0  text-gray-800">
-                                Chart of Account 
-                            </div>
-                          </div>
+      <div class="tab-pane card mt-4 border-radius-1" style="border: none; background-color: #F5F5F5;" id="analytics" role="tabpanel">
+        <div class="row">
+          <% if check_is_hidden_by_module('reports') %>
+            <div class="col-lg-3 col-md-6 mb-4 form-group float-left">
+              <%= link_to reports_chart_of_account_path do %>
+                <div class="card border-left-primary shadow h-100 py-2 border-radius-1">
+                  <div class="card-body" >
+                    <div class="row no-gutters align-items-center">
+                      <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                          <i class="fas fa-chart-line logo-back fa-2x" aria-hidden="true"></i>
+                        </div>
+                        <div class="h5 mb-0  text-gray-800">
+                            Chart of Account 
                         </div>
                       </div>
                     </div>
-                  <% end %>
-                </div>
-              <% end %>  
-
-              <% if check_is_hidden_by_module('reports') %>  
-                <div class="col-lg-3 col-md-6 mb-4 form-group float-left">
-                  <%= link_to reports_product_report_path do %>
-                    <div class="card border-left-primary shadow h-100 py-2 border-radius-1">
-                      <div class="card-body" >
-                        <div class="row no-gutters align-items-center">
-                          <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                              <i class="fas fa-info-circle logo-back fa-2x" aria-hidden="true"></i>
-                            </div>
-                            <div class="h5 mb-0  text-gray-800">
-                                Profit Info
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  <% end %>
-                </div>
-              <% end %>  
-
-              <% if check_is_hidden_by_module('logs') %>  
-                <div class="col-lg-3 col-md-6 mb-4 form-group float-left">
-                  <%= link_to logs_path do %>
-                    <div class="card border-left-primary shadow h-100 py-2 border-radius-1">
-                      <div class="card-body" >
-                        <div class="row no-gutters align-items-center">
-                          <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                <i class="fas fa-boxes logo-back fa-2x" aria-hidden="true"></i>
-                            </div>
-                            <div class="h5 mb-0  text-gray-800">
-                                Log Statement
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  <% end %>
-                </div>
-              <% end %> 
-
-              <% if check_is_hidden_by_module('reports') %>  
-                <div class="col-lg-3 col-md-6 mb-4 form-group float-left">
-                  <%= link_to reports_sale_report_path do %>
-                    <div class="card border-left-primary shadow h-100 py-2 border-radius-1">
-                      <div class="card-body" >
-                        <div class="row no-gutters align-items-center">
-                          <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                              <i class="fas fa-industry logo-back fa-2x" aria-hidden="true"></i>
-                            </div>
-                            <div class="h5 mb-0  text-gray-800">
-                              Income Statement
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  <% end %>
-                </div>
-              <% end %>  
-            </div>
-          
-
-          
-            <div class="col-lg-12 col-sm-12">
-              <% if check_is_hidden_by_module('staff_deals') %>
-                <div class="col-lg-3 col-md-6 mb-4 form-group float-left">
-                  <%= link_to staff_deals_path do %>
-                    <div class="card border-left-primary shadow h-100 py-2 border-radius-1">
-                      <div class="card-body" >
-                        <div class="row no-gutters align-items-center">
-                          <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                              <i class="fas fa-handshake logo-back fa-2x" aria-hidden="true"></i>
-                            </div>
-                            <div class="h5 mb-0  text-gray-800">
-                              Staff Deals
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  <% end %>
-                </div>
-              <% end %>  
-
-              <% if check_is_hidden_by_module('reports') %>  
-                <div class="col-lg-3 col-md-6 mb-4 form-group float-left">
-                  <%= link_to reports_trial_balance_path do %>
-                    <div class="card border-left-primary shadow h-100 py-2 border-radius-1">
-                      <div class="card-body" >
-                        <div class="row no-gutters align-items-center">
-                          <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                              <i class="fas fa-balance-scale logo-back fa-2x" aria-hidden="true"></i>
-                            </div>
-                            <div class="h5 mb-0  text-gray-800">Trial Balance</div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  <% end %>
+                  </div>
                 </div>
               <% end %>
-
             </div>
-          <div class="clearfix"></div>
-          <div class="row d-flex">
-            <div class="col-lg-6">
-              <div class="my-chart-Container">
-                <div class="mychartBox card border-radius-1">
-                  <canvas id="myChart"></canvas>
-                </div> 
-              </div>
-            </div>  
-            <div class="col-lg-6">
-              <div class="my-chart-Container">
-                <div class="mychartBox card border-radius-1">
-                  <canvas id="myChart1"></canvas>
-                </div> 
-              </div>
-            </div>  
+          <% end %>  
+          <% if check_is_hidden_by_module('reports') %>  
+            <div class="col-lg-3 col-md-6 mb-4 form-group float-left">
+              <%= link_to reports_product_report_path do %>
+                <div class="card border-left-primary shadow h-100 py-2 border-radius-1">
+                  <div class="card-body" >
+                    <div class="row no-gutters align-items-center">
+                      <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                          <i class="fas fa-info-circle logo-back fa-2x" aria-hidden="true"></i>
+                        </div>
+                        <div class="h5 mb-0  text-gray-800">
+                            Profit Info
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          <% end %>  
+          <% if check_is_hidden_by_module('logs') %>  
+            <div class="col-lg-3 col-md-6 mb-4 form-group float-left">
+              <%= link_to logs_path do %>
+                <div class="card border-left-primary shadow h-100 py-2 border-radius-1">
+                  <div class="card-body" >
+                    <div class="row no-gutters align-items-center">
+                      <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            <i class="fas fa-boxes logo-back fa-2x" aria-hidden="true"></i>
+                        </div>
+                        <div class="h5 mb-0  text-gray-800">
+                            Log Statement
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          <% end %> 
+          <% if check_is_hidden_by_module('reports') %>  
+            <div class="col-lg-3 col-md-6 mb-4 form-group float-left">
+              <%= link_to reports_sale_report_path do %>
+                <div class="card border-left-primary shadow h-100 py-2 border-radius-1">
+                  <div class="card-body" >
+                    <div class="row no-gutters align-items-center">
+                      <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                          <i class="fas fa-industry logo-back fa-2x" aria-hidden="true"></i>
+                        </div>
+                        <div class="h5 mb-0  text-gray-800">
+                          Income Statement
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          <% end %>  
+          <% if check_is_hidden_by_module('staff_deals') %>
+            <div class="col-lg-3 col-md-6 mb-4 form-group float-left">
+              <%= link_to staff_deals_path do %>
+                <div class="card border-left-primary shadow h-100 py-2 border-radius-1">
+                  <div class="card-body" >
+                    <div class="row no-gutters align-items-center">
+                      <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                          <i class="fas fa-handshake logo-back fa-2x" aria-hidden="true"></i>
+                        </div>
+                        <div class="h5 mb-0  text-gray-800">
+                          Staff Deals
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          <% end %>  
+          <% if check_is_hidden_by_module('reports') %>  
+            <div class="col-lg-3 col-md-6 mb-4 form-group float-left">
+              <%= link_to reports_trial_balance_path do %>
+                <div class="card border-left-primary shadow h-100 py-2 border-radius-1">
+                  <div class="card-body" >
+                    <div class="row no-gutters align-items-center">
+                      <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                          <i class="fas fa-balance-scale logo-back fa-2x" aria-hidden="true"></i>
+                        </div>
+                        <div class="h5 mb-0  text-gray-800">Trial Balance</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+        <div class="clearfix"></div>
+        <div class="row d-flex">
+          <div class="col-lg-6">
+            <div class="my-chart-Container">
+              <div class="mychartBox card border-radius-1">
+                <canvas id="myChart"></canvas>
+              </div> 
+            </div>
           </div>  
-        </p>
+          <div class="col-lg-6">
+            <div class="my-chart-Container">
+              <div class="mychartBox card border-radius-1">
+                <canvas id="myChart1"></canvas>
+              </div> 
+            </div>
+          </div>  
+        </div>  
       </div>
 
-      <div class="tab-pane card mt-4 p-3 border-radius-1" style="border: none; background-color: #F5F5F5;" id="accounts" role="tabpanel">
+      <div class="tab-pane card mt-4 border-radius-1" style="border: none; background-color: #F5F5F5;" id="accounts" role="tabpanel">
         <div class="card shadow mb-4 border-radius-1 mt-3">
           <!-- Card Header - Accordion -->
           <a href="#collapseCard" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
@@ -990,7 +971,7 @@
         </div>
       </div>
 
-      <div class="tab-pane card mt-2 p-3 border-radius-1" style="border: none; background-color: #F5F5F5;" id="installment" role="tabpanel">
+      <div class="tab-pane card mt-4 border-radius-1" style="border: none; background-color: #F5F5F5;" id="installment" role="tabpanel">
         <div class="card shadow mb-4">
           <a href="#collapseCardExample1" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
             <h6 class="m-0 font-weight-bold text-primary"><h1 style= "text-align : center">Installment Report</h1></h6>
@@ -1027,7 +1008,7 @@
         </div>
       </div>
 
-      <div class="tab-pane card mt-2 p-3 border-radius-1" style="border: none; background-color: #F5F5F5;" id="report" role="tabpanel">
+      <div class="tab-pane card mt-4 border-radius-1" style="border: none; background-color: #F5F5F5;" id="report" role="tabpanel">
         <div class="card shadow mb-4">
           <a href="#collapseCardExample2" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
             <h6 class="m-0 font-weight-bold text-primary"><h1 style= "text-align : center">Purchase Report</h1></h6>
@@ -1067,8 +1048,6 @@
   </div>
 </div>
 
-
-
 <script>
   $(document).ready(function() {
     if ($(".bootstrap-table").length == 0){
@@ -1097,4 +1076,3 @@
     }, 50);
   });
 </script>
-
