@@ -110,6 +110,28 @@ class SaleDealsController < ApplicationController
       %w[ReSaleDeal NewSaleDeal], status: 'UnClear')
   end
 
+  def check_ms_no
+    ms_no = params[:ms_no]
+    id = params[:id].present? ? params[:id] : nil
+
+    if ms_no.present? && PurchaseSaleDetail.where.not(id: id).exists?(job_no: ms_no)
+      render json: { status: 'exists' }
+    else
+      render json: { status: 'not_exists' }
+    end
+  end
+
+  def check_form_no
+    form_no = params[:form_no]
+    id = params[:id].present? ? params[:id] : nil
+
+    if form_no.present? && PurchaseSaleDetail.where.not(id: id).exists?(dispatched_to: form_no)
+      render json: { status: 'exists' }
+    else
+      render json: { status: 'not_exists' }
+    end
+  end
+
   private
 
   # Use callbacks to share common setup or constraints between actions.
