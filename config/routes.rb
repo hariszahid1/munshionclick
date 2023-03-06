@@ -279,6 +279,8 @@ Rails.application.routes.draw do
   resources :sale_deals do
     collection do
       get :requested
+      post :check_ms_no
+      post :check_form_no
     end
   end
   resources :db_backup_files

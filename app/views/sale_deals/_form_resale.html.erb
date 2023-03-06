@@ -1,4 +1,4 @@
-<%= bootstrap_form_with(model: @sale_deal, method: method, url: url, local: true) do |f| %>
+<%= bootstrap_form_with(model: @sale_deal, method: method, url: url, local: true, class: 'sale_deals_form', disable_with: false) do |f| %>
   <%= f.hidden_field :transaction_type, value: params[:type] %>
   <%= f.hidden_field :user_name, value: current_user.id %>
   <%= f.hidden_field :account_id, value: Account.first.id %>
@@ -23,7 +23,7 @@
       <%= f.text_field :g_d_type,  placeholder: "Res / Com", label: "Plot Type" %>
     </div>
     <div class="col-lg-6 form-group">
-      <%= f.text_field :job_no,  placeholder: "Enter MS #", label: "MS #" %>
+      <%= f.text_field :job_no,  placeholder: "Enter MS #", label: "MS #", class: 'ms_no' %>
     </div>
 
     <div class="col-lg-6 form-group">
@@ -54,10 +54,42 @@
       <%= f.select :staff_id, options_from_collection_for_select(@staffs, 'id', 'name', f.object&.staff_id), {label: "Select Agent Name",prompt: "Select Agent Name"}, class: 'chosen-select form-control'%>
     </div>
   </div>
+  <span class='id-span d-none'><%= params[:id] %></span>
   <div class="clearfix"></div>
   <div class="modal-footer mt-2">
     <%= link_to 'Close', sale_deals_path(q: {transaction_type_eq: 8}), class: 'link-text btn btn-danger' %>
-    <%=f.object.id.nil? ? (f.submit 'Create sale deal', class: "btn btn-success mr-2", style: "float: right")  :  (f.submit 'Update sale Deal', class: "btn btn-warning mr-2", style: "float: right")%>
+    <%=f.object.id.nil? ? (f.submit 'Create sale deal', class: "btn btn-success mr-2 submit-btn", style: "float: right")  :  (f.submit 'Update sale Deal', class: "btn btn-warning mr-2 submit-btn", style: "float: right")%>
   </div>
 <% end %>
 
+<script>
+  $(document).ready(function() {
+    $('.sale_deals_form').submit(function(event) {
+      event.preventDefault();
+
+      var msNo = $('.ms_no').val();
+      var id = $('.id-span').text();
+
+      $.ajax({
+        url: '/sale_deals/check_ms_no',
+        type: 'POST',
+        dataType: 'json',
+        data: { ms_no: msNo, id: id },
+        success: function(response) {
+          if (response.status == 'exists') {
+            if (confirm('MS number already exists. Do you want to continue with the submission?')) {
+              $('.sale_deals_form').unbind('submit').submit();
+            }
+            else{
+              const submitButton = document.querySelector('.submit-btn');
+              submitButton.disabled = false;
+            }
+          } else {
+            $('.sale_deals_form').unbind('submit').submit();
+          }
+        }
+      });
+
+    });
+  });
+</script>
