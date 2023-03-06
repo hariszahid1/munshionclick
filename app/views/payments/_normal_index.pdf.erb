@@ -1,3 +1,8 @@
+<style>
+.text-center{
+  text-align: center;
+}
+</style>
 <% @date = Date.today  %>
 <% @time = DateTime.now %>
 <% @time = Time.zone.now %>
@@ -25,11 +30,11 @@
 
     <% @payments.each do |payment| %>
       <tr>
-        <td><%= payment.account&.title %></td>
-        <td><%= number_with_delimiter(payment.debit) %></td>
-        <td><%= number_with_delimiter(payment.credit) %></td>
-        <td><%= number_with_delimiter(payment.amount) %></td>
-        <td>
+        <td class='text-center'><%= payment.account&.title %></td>
+        <td class='text-center'><%= number_with_delimiter(payment.debit) %></td>
+        <td class='text-center'><%= number_with_delimiter(payment.credit) %></td>
+        <td class='text-center'><%= number_with_delimiter(payment.amount) %></td>
+        <td class='text-center'>
           <%= payment.comment %>
           <% if payment.paymentable.present? and payment.paymentable_type=="Order" %>
             <%=payment.paymentable&.comment%>
@@ -94,7 +99,7 @@
             </p>
           <%end%>
         </td>
-        <td>
+        <td class='text-center'>
           <%if payment.created_at.strftime("%d%b%y")!=payment.updated_at.strftime("%d%b%y")%>
             <%= payment.created_at.present? ? payment.created_at.strftime("%d%b%y at %H:%M%p") : '' %> | <%= payment.updated_at.present? ? payment.updated_at.strftime("%d%b%y at %H:%M%p") : '' %>
           <%else%>
@@ -104,30 +109,34 @@
       </tr>
     <%end%>
     <tr>
-      <td class="short-column"><h4>Total</h4></td>
-      <td class="short-column">
+      <td class="short-column text-center"><h4>Total</h4></td>
+      <td class="short-column text-center">
         <h4>
           <%@debit=@payments.pluck(:debit).compact.sum%>
           <%=number_with_delimiter(@debit)%>
         </h4>
       </td>
-      <td class="short-column">
+      <td class="short-column text-center">
         <h4>
           <%@credit=@payments.pluck(:credit).compact.sum%>
           <%=number_with_delimiter(@credit)%>
         </h4>
       </td>
-      <td class="short-column">
+      <td class="short-column text-center">
+        <h4>
+          <% if @total_b.present?%>
+            <%= number_with_delimiter(@total_b) %>
+          <% else %>
+            <%=number_with_delimiter(@credit)%> - <%=number_with_delimiter(@debit)%> = <%=number_with_delimiter(@credit-@debit)%>
+          <% end %>
+        </h4>
+      </td>
+      <td class="short-column text-center">
         <h4>
           <%=number_with_delimiter(@payments.last.amount) if @payments.last.present?%>
         </h4>
       </td>
-      <td class="short-column">
-        <h4>
-          <%=number_with_delimiter(@credit)%> - <%=number_with_delimiter(@debit)%> = <%=number_with_delimiter(@credit-@debit)%>
-        </h4>
-      </td>
-      <td class="short-column"></td>
+      <td class="short-column text-center"></td>
     </tr>
   </table>
 </div>

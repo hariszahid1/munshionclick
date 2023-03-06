@@ -57,6 +57,9 @@
             <div class="col-lg-3 form-group float-left">
               <%= f.text_field :id_eq, class: "form-control",placeholder: "Voucher Number"%>
             </div>
+            <div class="col-lg-3 form-group float-left">
+              <%= f.text_field :sys_user_cnic_eq, class: "form-control",placeholder: "Customer CNIC"%>
+            </div>
             <div class="col=lg-3 form-group float-left">
               <%order_status = {"Clear"=>0, "Cancel"=>5}%>
               <%= f.select :status_eq, order_status.map { |key, value| [key.humanize, value] },{include_blank: "Select Status", hide_label:true,class: 'form-control'}, class:"form-control chosen-select" %>
@@ -172,7 +175,7 @@
                       <% if @pos_setting&.extra_settings.present? && @pos_setting&.extra_settings['ghouse5'].present? %>
                         <div class="my-icon my-view">
                           <div class="my-tooltip">
-                            Booking Reciept
+                            Booking Receipt
                           </div>
                           <%if (check_can_download_pdf(@module_permission))%>
                             <%= link_to booking_reciept_orders_path(order_id: order), target: "_blank", title: "Download legal size print", class:"icon-div" do %>

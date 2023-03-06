@@ -12,6 +12,7 @@
     <thead>
       <tr>
         <th>Date</th>
+        <th>Sale Type</th>
         <th>Agent</th>
         <th>Project</th>
         <th>Plot Type</th>
@@ -25,6 +26,7 @@
       <% @requested.each do |sale_deal| %>
         <tr>
           <td><%= sale_deal.created_at.strftime('%d/%m/%y at %I:%M%p')%></td>
+          <td><%= sale_deal.transaction_type.eql?('ReSaleDeal') ? 'Resale Deal' : 'Fresh Sale Deal' %></td>
           <td>
 		        <%= sale_deal.staff&.name %>
           </td>
