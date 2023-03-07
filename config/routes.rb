@@ -46,6 +46,7 @@ Rails.application.routes.draw do
     collection do
       get :get_order_inward_product_data, to: 'order_inwards#get_order_inward_product_data'
       get :get_order_inward_supplier_data, to: 'order_inwards#get_order_inward_supplier_data'
+      get :check_duplicate_challan, to: 'order_inwards#check_duplicate_challan'
     end
   end
 
