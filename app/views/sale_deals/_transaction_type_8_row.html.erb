@@ -8,7 +8,9 @@
               <div class="card-body">
                 <div class="media d-flex">
                   <div class="align-self-center">
-                    <i class="fa fa-receipt logo-back fa-3x float-left no_stamp_card"></i>
+                    <div class="circle-icon">
+                      <i class="fa fa-receipt fa-2x circle-margin no_stamp_card"></i>
+                    </div>                  
                   </div>
                   <div class="media-body text-right">
                     <h2><%= @no_stamps_count %></h2>
@@ -28,7 +30,9 @@
               <div class="card-body">
                 <div class="media d-flex">
                   <div class="align-self-center">
-                    <i class="fa fa-user-tie logo-back fa-3x float-left seller_stamp_card"></i>
+                    <div class="circle-icon">
+                      <i class="fa fa-user-tie fa-2x circle-margin seller_stamp_card"></i>
+                    </div>                   
                   </div>
                   <div class="media-body text-right">
                     <h2><%= @seller_stamps_count.to_i + @both_count.to_i %></h2>
@@ -48,7 +52,9 @@
               <div class="card-body">
                 <div class="media d-flex">
                   <div class="align-self-center">
-                    <i class="fa fa-user logo-back fa-3x float-left buyer_stamp_card"></i>
+                    <div class="circle-icon">
+                      <i class="fa fa-user fa-2x circle-margin buyer_stamp_card"></i>
+                    </div>                  
                   </div>
                   <div class="media-body text-right">
                     <h2><%= @buyer_stamps_count.to_i + @both_count.to_i %></h2>

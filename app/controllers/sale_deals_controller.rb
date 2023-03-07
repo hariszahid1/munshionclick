@@ -56,11 +56,11 @@ class SaleDealsController < ApplicationController
     respond_to do |format|
       if @sale_deal.save
         modify_salary_details if @sale_deal.staff_id.present?
-        @ledger_book = LedgerBook.new(sys_user_id: @sale_deal&.sys_user.id, debit: @sale_deal&.total_bill.to_f, credit: @sale_deal&.amount.to_f,
-                                      balance: (@sale_deal&.sys_user&.balance.to_f - @sale_deal&.remaining_balance.to_f),
-                                      comment: 'Voucher #' + @sale_deal&.id.to_s,
-                                      purchase_sale_detail_id: @sale_deal.id, account_id: @sale_deal&.account_id)
-        @ledger_book.save!
+        # @ledger_book = LedgerBook.new(sys_user_id: @sale_deal&.sys_user.id, debit: @sale_deal&.total_bill.to_f, credit: @sale_deal&.amount.to_f,
+        #                               balance: (@sale_deal&.sys_user&.balance.to_f - @sale_deal&.remaining_balance.to_f),
+        #                               comment: 'Voucher #' + @sale_deal&.id.to_s,
+        #                               purchase_sale_detail_id: @sale_deal.id, account_id: @sale_deal&.account_id)
+        # @ledger_book.save!
         type = params[:purchase_sale_detail]['transaction_type'] == 'ReSaleDeal' ? 8 : 9
         qr_link_generator
 
@@ -84,7 +84,7 @@ class SaleDealsController < ApplicationController
       if @sale_deal.update(sale_deal_params)
         update_sys_user
         type = params[:purchase_sale_detail]['transaction_type'] == 'ReSaleDeal' ? 8 : 9
-        modify_update_salary_details if @sale_deal.staff_id.present?
+        # modify_update_salary_details if @sale_deal.staff_id.present?
         format.html { redirect_to sale_deals_path('q[transaction_type_eq]': type), notice: 'Sale Deal was successfully updated.' }
         format.json { render :show, status: :ok, location: @sale_deal }
       else
@@ -203,7 +203,7 @@ class SaleDealsController < ApplicationController
   def download_sale_deals_csv_file
     @sale_deals = @q.result
     header_for_csv = %w[ID Date Customer_Name CNIC PH# Project Size Type Category Form#
-                        MS# Stamp Booking_Price Rebat/Profit Received_Amount Remaining_Balance
+                        MS# Stamp Booking_Price Rebate/Own Received_Amount Remaining_Balance
                         Agent External_Remarks Internal_Remarks]
     data_for_csv = get_data_for_sale_deals_csv
     generate_csv(data_for_csv, header_for_csv, 'SaleDeals')

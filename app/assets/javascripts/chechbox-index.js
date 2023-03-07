@@ -42,9 +42,29 @@ $( document ).ready(function() {
   });
 
   $(document).on('keyup', '.challan-no-value', function () {
-    debugger;
+    var party_id = $('.inward-party-name').val()
+    var product_id = $(this).closest('.challan-stock-container').find('.inward-product').val()
+    var marka_no = $(this).closest('.challan-stock-container').find('.inward-marka').val()
+    var challan_no = $(this).val()
+
+    $.ajax({
+      url: '/order_inwards/check_duplicate_challan',
+      type: 'GET',
+      data: { challan_no: challan_no, marka_no: marka_no, product_id: product_id, party_id: party_id },
+      dataType: 'script',
+      success: function (result) {
+        var result_data = JSON.parse(result).toString()
+        if (result_data.length > 0)
+        {
+          window.alert("Same challan already present!");
+        }
+     },
+     error: function (){
+     }
+    });
+
     if($(this).val().includes('/')){
-      value_for_stocks = $(this).val().split('/')[1]
+      value_for_stocks = $(this).val().split('/')[1].split('(')[0]
       $(this).closest('.challan-stock-container').find('.stock-value').val(value_for_stocks)
     }
     else{

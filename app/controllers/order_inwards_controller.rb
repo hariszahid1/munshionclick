@@ -119,6 +119,17 @@ class OrderInwardsController < ApplicationController
     end
   end
 
+  def check_duplicate_challan
+    sys_user_id = params[:party_id]
+    marka_no = params[:marka_no]
+    challan_no = params[:challan_no]
+    product_id = params[:product_id]
+    in_stock = PurchaseSaleItem.joins(:purchase_sale_detail).where('purchase_sale_details.sys_user_id': sys_user_id, 'purchase_sale_details.transaction_type': "InWard", 'product_id': product_id, 'size_13': marka_no, 'size_10': challan_no).pluck(:size_10)
+    respond_to do |format|
+      format.json { render json: in_stock }
+    end
+  end
+
   private
 
   # Use callbacks to share common setup or constraints between actions.

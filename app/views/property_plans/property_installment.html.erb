@@ -112,7 +112,7 @@
           <td><%= property_plan&.property_installments.pluck(:due_date).map { |date| date&.strftime("%d%b%y") } %></td>
         </tr>
         <tr>
-          <td colspan='8' class="hiddenRow">
+          <td colspan='9' class="hiddenRow">
             <div class="accordian-body collapse card shadow-lg m-4" style="border-radius: 18px;" id="<%= collapse_id %>">
               <table>
                 <tr class='bg-info text-light'>

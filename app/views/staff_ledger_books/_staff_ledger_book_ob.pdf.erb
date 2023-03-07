@@ -38,7 +38,7 @@
     <tr>
       <th class='text-left'>Date</th>
       <th class='text-left'>Staff</th>
-      <th class='text-right'>Prev. Balance</th>
+      <th class='text-left'>Remarks</th>
       <th class='text-right'>Debit</th>
       <th class='text-right'>Credit</th>
       <th class='text-right'>Balance</th>
@@ -47,7 +47,30 @@
       <tr>
         <td class='text-left'><%= ledger_book.created_at.strftime("%d/%m/%Y") %></td>
         <td class='text-left'><%= ledger_book.staff&.name %></td>
-        <td class='text-right'><%= number_with_delimiter(ledger_book.balance.to_i+ledger_book.debit.to_i-ledger_book.credit.to_i) %></td>
+        <td>
+          <%= ledger_book.comment %>
+          <%if ledger_book.salary_detail.present?%>
+            <%= 'Salary' if ledger_book.salary_detail.present? %>
+            <%=ledger_book.salary_detail.wage_rate%> X <%=ledger_book.salary_detail.quantity%>
+          <%end%>
+
+          <% if ledger_book.salary.present? %>
+            <%= ledger_book.salary.comment%>
+            <%='Salary' if ledger_book.salary.present? and ledger_book.salary.paid_salary.present?%>
+            <%='Wage Salary' if ledger_book.salary.present? and ledger_book.salary.advance.present?%>
+          <%end%>
+          <%if ledger_book.salary_detail.present? %>
+            <%if ledger_book.salary_detail.staff.department.present? and ledger_book.salary_detail.staff.department&.id==@departments.first&.id%>
+              <%if ledger_book.salary_detail.quantity.to_i>0%>
+                <%= 'Pather Daily' if ledger_book.salary_detail.daily_book.present? %>
+                <p>
+                  <span><%= ledger_book.salary_detail.raw_product_title %></span>
+                  Qty: <span><%= ledger_book.salary_detail.quantity.to_f.round(0) %></span>
+                </p>
+              <%end%>
+            <%end%>
+          <%end%>
+        </td>
         <td class='text-right'><%= number_with_delimiter(ledger_book.debit.to_i) %></td>
         <td class='text-right'><%= number_with_delimiter(ledger_book.credit.to_i) %></td>
         <td class='text-right'><%= number_with_delimiter(ledger_book.balance.to_i) %></td>

@@ -1,9 +1,11 @@
 <% @date, @time, total_and_extra_sum = [Date.today, Time.zone.now, 0.0]  %>
 <% @time = Time.zone.now %>
-<p style="border-bottom: double 4px;  margin: 0;"></p>
+<p style="border-bottom: double 4px;  margin: 10px 0px;"></p>
 <h1 style="text-align: center; margin: 0;">Unit/Inventory Detail</h1>
-<p style="border-bottom: double 4px;  margin: 0;"></p>
+<p style="border-bottom: double 4px;  margin: 10px 0px;"></p>
 <p style="text-align: center;margin: 0;">Report by: <%=current_user&.name%></p>
+<p style="border-bottom: double 4px;  margin: 10px 0px;"></p>
+<p style="text-align: center;margin: 0;">Printing Date: <%= DateTime.now.strftime("%d %b %y at %I:%M %p") %></p>
 <div >
   <table>
     <thead class="lite-gray">
