@@ -1,35 +1,3 @@
-<div class="topnav">
-  <%= link_to daily_books_path() do %>
-    <i class="fa fa-male" aria-hidden="true"></i>
-    <%=@departments.first.title%> Daily
-  <% end %>
-  <%= link_to khakar_daily_books_path(department_id: @departments.second.title) do %>
-    <i class="fas fa-truck" aria-hidden="true"></i>
-    <%=@departments.second.title%> Daily book
-  <% end %>
-  <% if pos_setting_sys_type=="batha"%>
-    <%= link_to production_cycles_path do %>
-      <i class="fa fa-sign-language" aria-hidden="true"></i>
-      Bhari Daily Book
-    <% end %>
-    <%= link_to jalai_production_cycles_path do %>
-      <i class="fa fa-fire" aria-hidden="true"></i>
-      Jalai Daily Book
-    <% end %>
-    <%= link_to nakasi_production_cycles_path do %>
-      <i class="fa fa-align-justify" aria-hidden="true"></i>
-      <%=@departments.third.title%> Daily Book
-    <% end %>
-
-  <%else%>
-    <%= link_to nakasi_daily_books_path(department_id: @departments.third.title) do %>
-      <i class="fa fa-align-justify" aria-hidden="true"></i>
-      <%=@departments.third.title%> Daily book
-    <% end %>
-  <% end%>
-
-
-</div>
 
 <%@daily_book_salary_details_raw_quantity = 0 %>
 <%@daily_book_salary_details_quantity = 0 %>
@@ -39,44 +7,94 @@
 <%@daily_book_salary_details_coverge_rate=0%>
 <%@daily_book_salary_details_gift_rate=0%>
 
-<div class="hidden" id="daily_books_list">
-  <div class="row">
-    <div class="col-lg-12 col-sm-12">
-      <h1>Nakasi Daily books</h1>
-
-      <div class="col-lg-3 form-group float-left">
-        <%= link_to "Assigment To Nakasi Walai", new_nakasi_daily_books_path(department_id: @departments.third.id), class: "btn btn-success" %>
-      </div>
-    </div>
+<div class="hidden m-4" id="daily_books_list">
+  <div class="float-left">
+    <h2 class="ml-2 logo-back"><i class="fas fa-home mr-2"></i>Nakasi Daily books</h2>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<%= root_path %>">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active">
+        <a href="<%= nakasi_daily_books_path %>">Nakasi Daily books</a>
+      </li>
+    </ol>
   </div>
-  <div class="clearfix"></div>
-  <div class="row">
-    <div class="col-lg-12 col-sm-12">
-      <%= search_form_for @q, url: nakasi_daily_books_path, class: "admin-controls", method: "get" do |f| %>
-        <div class="col-lg-3 form-group float-left">
-          <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker',value: @book_date_gteq, 'datepicker' => true,placeholder: "YYYY-MM-DD" %>
-        </div>
-        <div class="col-lg-3 form-group float-left">
-          <%= f.search_field :created_at_lteq, class: 'form-control input-sm datepicker',value: @book_date_lteq, 'datepicker' => true ,placeholder: "YYYY-MM-DD"%>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i> </button>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn  badge badge-pill badge-danger" name="submit_pdf" type="submit" value="Daily Production Details PDF A4" formtarget="_blank" ><i class="fa fa-file-pdf"></i> Daily</button>
-        </div>
-        <div class="col-lg-2 form-group float-left">
-          <button class="form-control btn btn-info" name="email" type="submit" value="Email"><i class="fas fa-envelope"></i> email</button>
-        </div>
+  <div class="row mb-4 d-flex float-right">
+    <div> 
+     <%= link_to "Assigment To Nakasi Walai", new_nakasi_daily_books_path(department_id: @departments.third.id), class: "btn btn-success" %>
+    </div>
+    <div>
+      <%= link_to daily_books_path() , class: " btn btn-primary file-btn-color mx-1" do %>
+       <%=@departments.first.title%> Daily
       <% end %>
     </div>
+    <div>
+      <%= link_to khakar_daily_books_path(department_id: @departments.second.title), class: " btn btn-danger file-btn-color mx-1" do %>
+        <%=@departments.second.title%> Daily book
+      <% end %>
+    </div>
+    <div>
+      <% if pos_setting_sys_type=="batha"%>
+        <%= link_to production_cycles_path , class: " btn btn-warning file-btn-color mx-1" do %>
+        Bhari Daily Book
+      <% end %>
+    </div>
+    <div>
+      <%= link_to jalai_production_cycles_path , class: " btn btn-success file-btn-color mx-1" do %>
+          Jalai Daily Book
+      <% end %>
+    </div>
+    <div>
+      <%= link_to nakasi_production_cycles_path , class: " btn btn-info file-btn-color mx-1" do %>
+          <%=@departments.third.title%> Daily Book
+      <% end %>
+      <%else%>
+        <%= link_to nakasi_daily_books_path(department_id: @departments.third.title) do %>
+          <%=@departments.third.title%> Daily book
+        <% end %>
+      <% end%>
+    </div>
   </div>
   <div class="clearfix"></div>
-    <div class="col-xl-12 col-md-6 mb-4">
+  <div class="row">
+    <ul class="nav nav-tabs ml-3" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab"><i class="fa fa-search mr-2"></i>Search</a>
+      </li>
+	  </ul>
+  </div>
+  <div class="tab-content">
+    <div class="tab-pane active no-tab-border mb-3 mt-2" id="search" role="tabpanel">
+      <div class="card shadow mb-3 p-3">
+        <div class="row">
+          <div class="col-lg-12 col-sm-12">
+            <%= search_form_for @q, url: nakasi_daily_books_path, class: "admin-controls", method: "get" do |f| %>
+              <div class="col-lg-3 form-group float-left">
+                <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker',value: @book_date_gteq, 'datepicker' => true,placeholder: "YYYY-MM-DD" %>
+              </div>
+              <div class="col-lg-3 form-group float-left">
+                <%= f.search_field :created_at_lteq, class: 'form-control input-sm datepicker',value: @book_date_lteq, 'datepicker' => true ,placeholder: "YYYY-MM-DD"%>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i> </button>
+              </div>
+              <div class="float-right">
+                <button class="form-control ml-2 btn btn-info file-btn-color" name="email" type="submit" value="Email">Mail</button>
+              </div>
+              <div class="float-right">
+                <button class="form-control  btn btn-danger file-btn-color" name="submit_pdf" type="submit" value="Daily Production Details PDF A4" formtarget="_blank" > Daily</button>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class=" mb-4">
         <div class="card border-left-primary shadow h-100 py-2">
           <div class="card-body">
             <div class="row no-gutters align-items-center">
-              <div class="col mr-2">
+              <div class="col ">
                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1"><h5>Nakasi Stock</h5></div>
                 <%@raw_products.each do |row_product|%>
                 <div class="h5 mb-0 font-weight-bold text-gray-800"><%=row_product.title%> = <%=row_product.nakasi_stock%>  </div>
@@ -86,128 +104,124 @@
           </div>
         </div>
       </div>
-   <div>
-  <table data-toggle="table" data-search="true"  data-sticky-header="true" id="nakasi">
-    <thead>
-      <tr>
-        <th><%= sort_link(@q, :created_at, 'Date') %></th>
-        <%if pos_setting_sys_type=='batha'%>
-          <%@products.each do |product|%>
-            <th><%=product.title%></th>
-          <%end%>
-        <%else%>
-        <%@products.each do |product|%>
-          <th><%=product.title%> <%=product.product_category.title%></th>
-        <%end%>
-        <%end%>
-        <th>Bricks Rohra</th>
-        <th>Tile Rohra</th>
-        <th>Total</th>
-        <th><%= sort_link(@q, :comment, 'Comment') %></th>
-        <th>Action</th>
-
-      </tr>
-    </thead>
-
-    <tbody>
-      <%@total_count=0%>
-      <% @daily_books.each do |daily_book| %>
-        <%@count=0%>
-        <tr>
-          <td><%= daily_book.created_at.strftime("%d-%b-%y") if daily_book.created_at.present?%></td>
-          <%product_quantity_function(daily_book).each do |product|%>
-            <td><%=product.last.round(0)%><%@count+=product.last%></td>
-          <%end%>
-          <td><%= daily_book.brick_rohra.to_i.round(0) %></td>
-          <td><%= daily_book.tile_rohra.to_i.round(0) %> </td>
-          <td><%= @count%></td>
-          <td><%= daily_book.comment %></td>
-
-          <td>
-              <% if can?(:update, :all) %>
-            <%= link_to edit_nakasi_daily_book_path(daily_book) do %>
-              <i class="fa fa-edit" aria-hidden="true"></i> |
-            <% end %>
-            <% end %>
-              <% if can?(:delete, :all) %>
-            <%= link_to daily_book, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
-              <i class="fa fa-trash" aria-hidden="true"></i> |
-            <% end %>
-            <% end %>
-
-            <%= link_to show_khakar_daily_book_path(daily_book) do %>
-            <i class="fas fa-eye" aria-hidden="true"></i>
-            <% end %>
-          </td>
-        </tr>
-        <tr>
-          <%@total_count+=@count%>
-          <td></td>
-          <%total=0%>
-          <%product_quantity_function(daily_book).each do |product|%>
-            <td class="table-active"><b>
-              <%if (product.last!=0 && @count!=0) %>
-                <%=((product.last/@count)*100).to_f.round(2)%>
-                <%total+=((product.last/@count)*100).to_f.round(2)%>
-              <%else%>
-                0
+    <div>
+    <div class="card p-3">
+      <table data-toggle="table" data-search="true"  data-sticky-header="true" id="nakasi">
+        <thead>
+          <tr>
+            <th><%= sort_link(@q, :created_at, 'Date') %></th>
+            <%if pos_setting_sys_type=='batha'%>
+              <%@products.each do |product|%>
+                <th><%=product.title%></th>
               <%end%>
-              %</b>
-            </td>
-          <%end%>
-          <td></td>
-          <td></td>
-          <td class="table-active"><b><%=total.round(0)%>%</b></td>
-          <td></td>
-
-        </tr>
-      <% end %>
-      <tr>
-        <td><h5>Total Bricks</h5></td>
-          <%product_quantity_all_function(@book_date_gteq,@book_date_lteq).each do |product_quantity|%>
-          <td><h5><%=product_quantity.last.to_i%></h5></td>
-        <%end%>
-        <td><h5><%=@rohra=@daily_books.sum(:brick_rohra)%><%@total_count+=@daily_books.sum(:brick_rohra)%></h5></td>
-        <td><h5><%=@tile_rohra=@daily_books.sum(:tile_rohra)%><%@total_count+=@daily_books.sum(:tile_rohra)%></h5></td>
-        <td><h5><%=@total_count.to_i.round(0)%></h5></td>
-        <td><h5></h5></td>
-
-      </tr>
-      <tr>
-        <%total_avg=0%>
-        <td><h5>Total percent</h5></td>
-        <%product_quantity_all_function(@book_date_gteq,@book_date_lteq).each do |product_quantity|%>
-          <td class="table-active">
-            <%if (product_quantity.last!=0 && @total_count!=0) %>
-              <h5><b><%=total=((product_quantity.last/@total_count)*100).to_f.round(1)%> %</b></h5>
-              <%total_avg+=total%>
             <%else%>
-              <h5>0</h5>
+            <%@products.each do |product|%>
+              <th><%=product.title%> <%=product.product_category.title%></th>
             <%end%>
-          </td>
-        <%end%>
-        <td>
-          <%if (@rohra!=0 && @total_count!=0) %>
-            <h5><%=total=((@rohra/@total_count)*100).to_f.round(1)%></h5>
-            <%total_avg+=total%>
-          <%else%>
-            <h5>0</h5>
-          <%end%>
-          </td>
-        <td>
-          <%if (@tile_rohra!=0 && @total_count!=0) %>
-            <h5><%=total=((@tile_rohra/@total_count)*100).to_f.round(1)%></h5>
-            <%total_avg+=total%>
-          <%else%>
-            <h5>0</h5>
-          <%end%>
-          </td>
-        <td class="table-active"><h5><b><%=total_avg.round(0)%> %</b></h5></td>
-        <td><h5></h5></td>
-
-      </tr>
-    </tbody>
-  </table>
+            <%end%>
+            <th>Bricks Rohra</th>
+            <th>Tile Rohra</th>
+            <th>Total</th>
+            <th><%= sort_link(@q, :comment, 'Comment') %></th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%@total_count=0%>
+          <% @daily_books.each do |daily_book| %>
+            <%@count=0%>
+            <tr>
+              <td><%= daily_book.created_at.strftime("%d-%b-%y") if daily_book.created_at.present?%></td>
+              <%product_quantity_function(daily_book).each do |product|%>
+                <td><%=product.last.round(0)%><%@count+=product.last%></td>
+              <%end%>
+              <td><%= daily_book.brick_rohra.to_i.round(0) %></td>
+              <td><%= daily_book.tile_rohra.to_i.round(0) %> </td>
+              <td><%= @count%></td>
+              <td><%= daily_book.comment %></td>
+              <td>
+                  <% if can?(:update, :all) %>
+                <%= link_to edit_nakasi_daily_book_path(daily_book) do %>
+                  <i class="fa fa-edit" aria-hidden="true"></i> |
+                <% end %>
+                <% end %>
+                  <% if can?(:delete, :all) %>
+                <%= link_to daily_book, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+                  <i class="fa fa-trash" aria-hidden="true"></i> |
+                <% end %>
+                <% end %>
+                <%= link_to show_khakar_daily_book_path(daily_book) do %>
+                <i class="fas fa-eye" aria-hidden="true"></i>
+                <% end %>
+              </td>
+            </tr>
+            <tr>
+              <%@total_count+=@count%>
+              <td></td>
+              <%total=0%>
+              <%product_quantity_function(daily_book).each do |product|%>
+                <td class="table-active"><b>
+                  <%if (product.last!=0 && @count!=0) %>
+                    <%=((product.last/@count)*100).to_f.round(2)%>
+                    <%total+=((product.last/@count)*100).to_f.round(2)%>
+                  <%else%>
+                    0
+                  <%end%>
+                  %</b>
+                </td>
+              <%end%>
+              <td></td>
+              <td></td>
+              <td class="table-active"><b><%=total.round(0)%>%</b></td>
+              <td></td>
+            </tr>
+          <% end %>
+          <tr>
+            <td><h5>Total Bricks</h5></td>
+              <%product_quantity_all_function(@book_date_gteq,@book_date_lteq).each do |product_quantity|%>
+              <td><h5><%=product_quantity.last.to_i%></h5></td>
+            <%end%>
+            <td><h5><%=@rohra=@daily_books.sum(:brick_rohra)%><%@total_count+=@daily_books.sum(:brick_rohra)%></h5></td>
+            <td><h5><%=@tile_rohra=@daily_books.sum(:tile_rohra)%><%@total_count+=@daily_books.sum(:tile_rohra)%></h5></td>
+            <td><h5><%=@total_count.to_i.round(0)%></h5></td>
+            <td><h5></h5></td>
+          </tr>
+          <tr>
+            <%total_avg=0%>
+            <td><h5>Total percent</h5></td>
+            <%product_quantity_all_function(@book_date_gteq,@book_date_lteq).each do |product_quantity|%>
+              <td class="table-active">
+                <%if (product_quantity.last!=0 && @total_count!=0) %>
+                  <h5><b><%=total=((product_quantity.last/@total_count)*100).to_f.round(1)%> %</b></h5>
+                  <%total_avg+=total%>
+                <%else%>
+                  <h5>0</h5>
+                <%end%>
+              </td>
+            <%end%>
+            <td>
+              <%if (@rohra!=0 && @total_count!=0) %>
+                <h5><%=total=((@rohra/@total_count)*100).to_f.round(1)%></h5>
+                <%total_avg+=total%>
+              <%else%>
+                <h5>0</h5>
+              <%end%>
+              </td>
+            <td>
+              <%if (@tile_rohra!=0 && @total_count!=0) %>
+                <h5><%=total=((@tile_rohra/@total_count)*100).to_f.round(1)%></h5>
+                <%total_avg+=total%>
+              <%else%>
+                <h5>0</h5>
+              <%end%>
+              </td>
+            <td class="table-active"><h5><b><%=total_avg.round(0)%> %</b></h5></td>
+            <td><h5></h5></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
 
 <div class="clearfix"></div>
