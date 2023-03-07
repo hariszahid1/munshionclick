@@ -11,12 +11,12 @@
         <% if check_is_hidden_by_module('attendances') %>
             <li class="activ-link">
                 <a href="<%= show_staff_attendances_path%>" class="activ-link">
-                  <i class="fas fa-users ml-3"></i>
+                  <i class="fas fa-user-check ml-3"></i>
                   <span class="link-text">Attendance</span>
                 </a>
             </li>
         <% end %>
-        <h5 class="mt-4 mb-2 text-secondary ml-2">Menu</h5>
+        <span class="mt-4 mb-3 text-secondary ml-2" style="font-size: 1.2em;">Menu</span>
         <% if check_is_hidden_by_module('crms') %>
             <li class="mt-4 mb-3 <%= 'active' if request.path.start_with?(crms_path) %>">
                 <a href="<%=crms_path%>" class="">
@@ -181,101 +181,99 @@
            </ul>
         </li> 
         <li class="mb-2">
-           <a href="#AllUserSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-             <i class="fas fa-users ml-3"></i>
-             <span class="link-text ml-1">Users</span>
-           </a>
-           <ul class="collapse list-unstyled <%= 'show' if request.path.start_with?(sys_users_path, user_types_path, user_groups_path) %>" id="AllUserSubmenu">
-                <li>
-                   <a href="#theUserSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle <%= 'show' if request.path.start_with?(sys_users_path) %>">
-                     <i class="fas fa-plus ml-2"></i>
-                     <span class="link-text ml-1">All Users</span>
-                   </a>
-                   <ul class="collapse list-unstyled <%= 'show' if request.path.start_with?(sys_users_path, user_types_path, user_groups_path) %>" id="theUserSubmenu">
-                       <li class="<%= 'active' if request.path.start_with?(users_path) %>">
-                           <% if check_is_hidden_by_module('user_types') %>
-                             <li class="<%= 'active' if request.path.start_with?(user_types_path) %>">
-                               <%= link_to user_types_path do %>
-                                 <i class="fas fa-minus ml-3 mr-1"></i>
-                                 <span class="link-text">User Types</span>
-                               <% end %>
-                             </li>
-                           <% end %>
-                           <% if check_is_hidden_by_module('user_groups') %>
-                               <li class="<%= 'active' if request.path.start_with?(user_groups_path) %>">
-                                   <%= link_to user_groups_path do %>
-                                     <i class="fas fa-minus ml-3 mr-1"></i>
-                                     <span class="link-text">User Groups</span>
-                                   <% end %>
-                               </li>
-                           <% end %>
-                           <% if check_is_hidden_by_module('sys_users') %>
-                               <li class="<%= 'active' if request.path.start_with?(sys_users_path) %>">
-                                  <%= link_to sys_users_path do %>
-                                      <i class="fas fa-minus ml-3 mr-1"></i>
-                                      <span class="link-text">Users List</span>
-                                  <% end %>
-                                </li>
-                           <% end %> 
-                            <% if check_is_hidden_by_module('sys_users') %>
-                                <% SysUser.user_groups.each do |value, index|%>
-                                 <% group_path = sys_users_path('q[user_group_eq]': index) %>
-                                   <li>
-                                       <%= link_to group_path do %>
-                                           <i class="fas fa-minus ml-3 mr-1"></i>
-                                           <span class="link-text"><%= value%></span>
-                                       <% end %>
-                                   </li>
-                                <% end %>
-                           <% end %>  
-                       </li>
-                   </ul>
-                </li>
-           </ul>
-           <ul class="collapse list-unstyled <%= 'show' if request.path.start_with?(staffs_path, cities_path, countries_path, departments_path, property_plans_path) %>" id="AllUserSubmenu">
-                <li>
-                  <% if check_is_hidden_by_module('staffs') %>  
-                    <li class="<%= 'active' if request.path.start_with?(staffs_path) %>">
-                      <a href="<%=staffs_path%>" class="">
-                        <i class="fa fa-plus ml-2"></i>
-                        <span class="link-text">All Staffs</span>
-                      </a>
+          <a href="#AllUserSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+            <i class="fas fa-users ml-3"></i>
+            <span class="link-text ml-1">Users</span>
+          </a>
+          <ul class="collapse list-unstyled <%= 'show' if request.path.start_with?(sys_users_path, user_types_path, user_groups_path, staffs_path, cities_path, countries_path, departments_path, property_plans_path) %>" id="AllUserSubmenu">
+            <li>
+              <a href="#theUserSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle <%= 'show' if request.path.start_with?(sys_users_path) %>">
+                <i class="fas fa-plus ml-2"></i>
+                <span class="link-text ml-1">All Users</span>
+              </a>
+              <ul class="collapse list-unstyled <%= 'show' if request.path.start_with?(sys_users_path, user_types_path, user_groups_path) %>" id="theUserSubmenu">
+                <li class="<%= 'active' if request.path.start_with?(users_path) %>">
+                  <% if check_is_hidden_by_module('user_types') %>
+                    <li class="<%= 'active' if request.path.start_with?(user_types_path) %>">
+                      <%= link_to user_types_path do %>
+                        <i class="fas fa-minus ml-3 mr-1"></i>
+                        <span class="link-text">User Types</span>
+                      <% end %>
                     </li>
                   <% end %>
-                  <% if check_is_hidden_by_module('cities') %>
-                  <li class="<%= 'active' if request.path.start_with?(cities_path) %>">
-                    <%= link_to cities_path do %>
-                      <i class="fas fa-plus ml-2"></i>
-                      <span class="link-text">City</span>
-                    <% end %>
-                  </li>
-                  <% end %> 
-                  <% if check_is_hidden_by_module('countries') %>    
-                    <li class="<%= 'active' if request.path.start_with?(countries_path) %>">
-                      <%= link_to countries_path do %>
-                        <i class="fas fa-plus ml-2"></i>
-                        <span class="link-text">Country</span>
+                  <% if check_is_hidden_by_module('user_groups') %>
+                    <li class="<%= 'active' if request.path.start_with?(user_groups_path) %>">
+                      <%= link_to user_groups_path do %>
+                        <i class="fas fa-minus ml-3 mr-1"></i>
+                        <span class="link-text">User Groups</span>
                       <% end %>
                     </li>
-                  <% end %>    
-                  <% if check_is_hidden_by_module('departments') %>
-                    <li class="<%= 'active' if request.path.start_with?(departments_path) %>">
-                      <%= link_to departments_path do %>
-                        <i class="fas fa-plus ml-2"></i>
-                        <span class="link-text">Department</span>
+                  <% end %>
+                  <% if check_is_hidden_by_module('sys_users') %>
+                    <li class="<%= 'active' if request.path.start_with?(sys_users_path) %>">
+                      <%= link_to sys_users_path do %>
+                        <i class="fas fa-minus ml-3 mr-1"></i>
+                        <span class="link-text">Users List</span>
                       <% end %>
                     </li>
                   <% end %> 
-                  <% if check_is_hidden_by_module('property_plans') %>
-                    <li class="<%= 'active' if request.path.start_with?(property_plans_path) %>">
-                      <%= link_to property_plans_path do %>
-                        <i class="fas fa-plus ml-2"></i>
-                        <span class="link-text">Property Plan</span>
+                  <% if check_is_hidden_by_module('sys_users') %>
+                      <% SysUser.user_groups.each do |value, index|%>
+                        <% group_path = sys_users_path('q[user_group_eq]': index) %>
+                          <li>
+                          <%= link_to group_path do %>
+                            <i class="fas fa-minus ml-3 mr-1"></i>
+                            <span class="link-text"><%= value%></span>
+                          <% end %>
+                          </li>
                       <% end %>
-                    </li>
-                  <% end %> 
+                  <% end %>  
                 </li>
-            </ul>
+              </ul>
+            </li>
+            <li>
+              <% if check_is_hidden_by_module('staffs') %>  
+                <li class="<%= 'active' if request.path.start_with?(staffs_path) %>">
+                  <a href="<%=staffs_path%>" class="">
+                    <i class="fa fa-plus ml-2"></i>
+                    <span class="link-text">All Staffs</span>
+                  </a>
+                </li>
+              <% end %>
+              <% if check_is_hidden_by_module('cities') %>
+              <li class="<%= 'active' if request.path.start_with?(cities_path) %>">
+                <%= link_to cities_path do %>
+                  <i class="fas fa-plus ml-2"></i>
+                  <span class="link-text">City</span>
+                <% end %>
+              </li>
+              <% end %> 
+              <% if check_is_hidden_by_module('countries') %>    
+                <li class="<%= 'active' if request.path.start_with?(countries_path) %>">
+                  <%= link_to countries_path do %>
+                    <i class="fas fa-plus ml-2"></i>
+                    <span class="link-text">Country</span>
+                  <% end %>
+                </li>
+              <% end %>    
+              <% if check_is_hidden_by_module('departments') %>
+                <li class="<%= 'active' if request.path.start_with?(departments_path) %>">
+                  <%= link_to departments_path do %>
+                    <i class="fas fa-plus ml-2"></i>
+                    <span class="link-text">Department</span>
+                  <% end %>
+                </li>
+              <% end %> 
+              <% if check_is_hidden_by_module('property_plans') %>
+                <li class="<%= 'active' if request.path.start_with?(property_plans_path) %>">
+                  <%= link_to property_plans_path do %>
+                    <i class="fas fa-plus ml-2"></i>
+                    <span class="link-text">Property Plan</span>
+                  <% end %>
+                </li>
+              <% end %> 
+            </li>
+          </ul>
         </li>
         <li class="mb-2">
            <a href="#PayrollSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
@@ -405,7 +403,7 @@
                </ul>
             </li>
         <% end %>       
-        <h5 class="mt-5 mb-3 text-secondary ml-2">System Settings</h5>
+        <span class="mt-4 mb-3 text-secondary ml-2" style="font-size: 1.2em;">System Settings</span>   
           <% if can?(:view, :all) %>  
             <% if check_is_hidden_by_module('pos_settings') %>
               <% if can?(:delete, :all) %>
