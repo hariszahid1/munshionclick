@@ -38,7 +38,7 @@
     <tr>
       <th class='text-left'>Date</th>
       <th class='text-left'>Account</th>
-      <th class='text-right'>Prev. Balance</th>
+      <th class='text-left'>Remarks</th>
       <th class='text-right'>Debit</th>
       <th class='text-right'>Credit</th>
       <th class='text-right'>Balance</th>
@@ -47,7 +47,70 @@
       <tr>
         <td class='text-left'><%= payment.created_at.strftime("%d/%m/%Y") %></td>
         <td class='text-left'><%= payment.account&.title %></td>
-        <td class='text-right'><%= number_with_delimiter(payment.amount.to_i+payment.debit.to_i-payment.credit.to_i) %></td>
+        <td class='text-left'>
+          <%= payment.comment %>
+          <% if payment.paymentable.present? and payment.paymentable_type=="Order" %>
+            <%=payment.paymentable.comment%>
+            <br>
+            <%if payment.paymentable.order_items_names_and_quantity!=0%>
+              <%payment.paymentable.order_items_names_and_quantity.each do |name_quantity|%>
+              <p>
+                <span><%=name_quantity.first%></span>
+                Qty: <span><%=name_quantity.second%></span>
+                Rate:<span><%=name_quantity.third%></span>
+                Total:<span><%=name_quantity.fourth%></span>
+              </p>
+              <%end%>
+              <p>
+                Total: <span><%=payment.paymentable.total_bill%></span>
+              </p>
+            <%end%>
+          <%elsif payment.paymentable.present? and payment.paymentable_type=="PurchaseSaleDetail"%>
+            <%=payment.paymentable.comment%>
+            <%if payment.paymentable.purchase_sale_items_names_and_quantity!=0%>
+              <% payment.paymentable.purchase_sale_items_names_and_quantity.each do |name_quantity|%>
+                <p>
+                  <span><%=name_quantity.first%></span>
+                  Qty:  <span><%=name_quantity.second%></span>
+                </p>
+              <%end%>
+            <%end%>
+            <p>
+              <span class="h4 text-gray">Total:</span> <span class="h4 text-gray font-weight-bold"><%=payment.paymentable.total_bill%></span>
+            </p>
+          <%elsif payment.paymentable.present? and payment.paymentable_type=="ExpenseEntry"%>
+            <%=payment.paymentable.comment%>
+            <%=payment.paymentable.expense.comment if payment.paymentable.expense.present?%>
+            <br>
+            <p>
+              <span>
+                <%if payment.paymentable.expense_type.present?%>
+                  <%=payment.paymentable.expense_type.title%>
+                <%end%>
+              </span>
+            </p>
+          <%elsif payment.paymentable.present? and payment.paymentable_type=="Salary"%>
+            <%=payment.paymentable.comment%>
+            <br>
+            <p>
+              <span>
+                <%if payment.paymentable.staff.present?%>
+                  <%=payment.paymentable.staff.full_name%>
+                <%end%>
+              </span>
+            </p>
+          <%elsif payment.paymentable.present? and payment.paymentable_type=="LedgerBook"%>
+            <%=payment.paymentable.comment%>
+            <br>
+            <p>
+              <span>
+                <%if payment.paymentable.sys_user.present?%>
+                  <%=payment.paymentable.sys_user.name%>
+                <%end%>
+              </span>
+            </p>
+          <%end%>
+        </td>
         <td class='text-right'><%= number_with_delimiter(payment.debit.to_i) %></td>
         <td class='text-right'><%= number_with_delimiter(payment.credit.to_i) %></td>
         <td class='text-right'><%= number_with_delimiter(payment.amount.to_i) %></td>

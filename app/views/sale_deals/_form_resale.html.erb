@@ -27,16 +27,16 @@
     </div>
 
     <div class="col-lg-6 form-group">
-      <%= f.number_field :total_bill,  placeholder: "Enter Booking Price", label: "Booking Price", value: f.object&.total_bill || 0, class: "text-field", id: "total"%>
+      <%= f.number_field :total_bill,  placeholder: "Enter Booking Price", label: "Booking Price", value: f.object&.total_bill || 0, class: "text-field", id: "total-field"%>
     </div>
     <div class="col-lg-6 form-group">
-      <%= f.number_field :carriage, placeholder: "Enter Rebat/Profit", label: "Rebat/Profit"%>
+      <%= f.number_field :carriage, placeholder: "Enter Rebate/Own", label: "Rebate/Own", id: 'rebate-own-field' %>
     </div>
     <div class="col-lg-6 form-group">
-      <%= f.number_field :amount,  placeholder: "Received Amount", label: "Received Amount",  value: f.object&.amount || 0, class: "text-field", id: "received" %>
+      <%= f.number_field :amount,  placeholder: "Received Amount", label: "Received Amount",  value: f.object&.amount || 0, class: "text-field", id: "received-field" %>
     </div>
     <div class="col-lg-6 form-group">
-      <%= f.number_field :remaining_balance,  placeholder: "Remaining Balance", label: "Remaining Balance", class: "text-field", id: "balance", readonly: true %>
+      <%= f.number_field :remaining_balance,  placeholder: "Remaining Balance", label: "Remaining Balance", class: "text-field", id: "balance-field", readonly: true %>
     </div>
     <div class="col-lg-8 form-group">
       <%= f.text_area :comment,  placeholder: "External Remarks", label: "External Remarks" %>

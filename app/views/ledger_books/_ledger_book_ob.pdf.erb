@@ -38,7 +38,7 @@
     <tr>
       <th class='text-left'>Date</th>
       <th class='text-left'>Customer/Supplier</th>
-      <th class='text-right'>Prev. Balance</th>
+      <th class='text-left'>Remarks</th>
       <th class='text-right'>Debit</th>
       <th class='text-right'>Credit</th>
       <th class='text-right'>Balance</th>
@@ -47,7 +47,46 @@
       <tr>
         <td class='text-left'><%= ledger_book.created_at.strftime("%d/%m/%Y") %></td>
         <td class='text-left'><%= ledger_book.sys_user&.name %></td>
-        <td class='text-right'><%= number_with_delimiter(ledger_book.balance.to_i+ledger_book.debit.to_i-ledger_book.credit.to_i) %></td>
+        <td class='text-left'>
+          <%= ledger_book.comment %>
+          <% if ledger_book.account.present?%>
+            <p>
+              <span><%=ledger_book.account.title%></span>
+            </p>
+          <%end%>
+          <% if ledger_book.order.present? %>
+            <%if ledger_book.order.order_items_names_and_quantity!=0%>
+              <%ledger_book.order.order_items_names_and_quantity.each do |name_quantity|%>
+              <p>
+                <span><%=name_quantity[8].to_s+'-'+name_quantity.first%></span>
+                Qty: <span><%=name_quantity.second%></span>
+                Rate:<span><%=name_quantity.third%></span>
+                Total:<span><%=name_quantity.fourth%></span>
+              </p>
+              <%end%>
+              <p>
+                Total: <span><%=ledger_book.order.total_bill%></span>
+              </p>
+            <%end%>
+          <%elsif ledger_book.purchase_sale_detail.present?%>
+            <p>Comment:   <%= ledger_book.purchase_sale_detail.comment %></p>
+            <p>Version: <span><%=ledger_book.purchase_sale_detail.versions.count%></span></p>
+            <%if ledger_book.purchase_sale_detail.purchase_sale_items_names_and_quantity!=0%>
+              <% ledger_book.purchase_sale_detail.purchase_sale_items_names_and_quantity.each do |name_quantity|%>
+                <p>
+                  <span><%=name_quantity[8].to_s+'-'+name_quantity.first%></span>
+                  Qty:  <span><%=name_quantity.second%></span>
+                </p>
+              <%end%>
+              <%if ledger_book.purchase_sale_detail.with_gst.present?%>
+                <p>
+                  GST: <span><%= ledger_book.purchase_sale_detail.purchase_sale_items.sum(:gst_amount)%></span>
+                </p>
+              <%end%>
+            <%end%>
+            <p><span>PO#: </span> <%=ledger_book&.purchase_sale_detail&.bill_no%></p>
+          <%end%>
+        </td>
         <td class='text-right'><%= number_with_delimiter(ledger_book.debit.to_i) %></td>
         <td class='text-right'><%= number_with_delimiter(ledger_book.credit.to_i) %></td>
         <td class='text-right'><%= number_with_delimiter(ledger_book.balance.to_i) %></td>
