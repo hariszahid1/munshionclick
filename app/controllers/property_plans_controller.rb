@@ -90,6 +90,7 @@ class PropertyPlansController < ApplicationController
   # GET /property_plans/1.json
   def show
     respond_to do |format|
+      format.html
       format.js
     end
   end
