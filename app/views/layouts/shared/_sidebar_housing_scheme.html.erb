@@ -8,7 +8,7 @@
             <span class="link-text ml-1">Dashboard</span>
         <% end %>
       </li>
-      <h5 class="mt-4 mb-3 text-secondary ml-2">Menu</h5>
+      <span class="mt-4 mb-3 text-secondary ml-2" style="font-size: 1.2em;">Menu</span>
       <% if check_is_hidden_by_module('crms') %>
         <li class="mb-2 <%= 'active' if request.path.start_with?(crms_path) %>">
           <a href="<%=crms_path%>" class="">
@@ -149,10 +149,10 @@
       </li>
       <li class="mb-2">
         <a href="#AllUserSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-          <i class="fas fa-users ml-3"></i>
+          <i class="fas fa fa-users ml-3"></i>
           <span class="link-text ml-1">Users</span>
         </a>
-        <ul class="collapse list-unstyled <%= 'show' if request.path.start_with?(sys_users_path, user_types_path, user_groups_path) %>" id="AllUserSubmenu">
+        <ul class="collapse list-unstyled border-radius-1 <%= 'show' if request.path.start_with?(sys_users_path, user_types_path, user_groups_path, staffs_path, cities_path, countries_path, departments_path, property_plans_path) %>" id="AllUserSubmenu">
           <li>
             <a href="#theUserSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle <%= 'show' if request.path.start_with?(sys_users_path) %>">
               <i class="fas fa-plus ml-2"></i>
@@ -198,8 +198,6 @@
               </li>
             </ul>
           </li>
-        </ul>
-        <ul class="collapse list-unstyled <%= 'show' if request.path.start_with?(staffs_path, cities_path, countries_path, departments_path, property_plans_path) %>" id="AllUserSubmenu">
           <li>
             <% if check_is_hidden_by_module('staffs') %>  
               <li class="<%= 'active' if request.path.start_with?(staffs_path) %>">
@@ -402,7 +400,7 @@
           </ul>
         </li>
       <% end %>    
-      <h5 class="mt-5 mb-3 text-secondary ml-2">System Settings</h5>
+      <span class="mt-4 mb-3 text-secondary ml-2" style="font-size: 1.2em;">System Settings</span>
       <% if can?(:view, :all) %>  
         <% if check_is_hidden_by_module('pos_settings') %>
           <% if can?(:delete, :all) %>
