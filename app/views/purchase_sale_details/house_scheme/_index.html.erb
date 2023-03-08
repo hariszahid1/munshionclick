@@ -1,175 +1,409 @@
 <%@total_pro=0%>
 <%@total_discont=0%>
-<div class="hidden" id="purchase_sale_detail_list">
+<div class="hidden m-4" id="purchase_sale_detail_list">
   <% if params[:sale].present?%>
-    <div class="main-content-header">
-        <h1 class="ml-2">Deposits</h1>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item">
-            <a href="<%= root_path %>">Dashboard</a>
-          </li>
-          <li class="breadcrumb-item active">
-            <a href="<%= purchase_sale_details_path(sale: true) %>">Deposits</a>
-          </li>
-        </ol>
-      </div>
+    <div class="float-left">
+      <h2 class="ml-2 logo-back"><i class="fas fa-money-check-alt mr-2"></i>Deposits</h2>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="<%= root_path %>">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">
+          <a href="<%= purchase_sale_details_path(sale: true) %>">Deposits</a>
+        </li>
+      </ol>
+    </div>
+    <div class="clearfix"></div>
   <% else %>
-      <div class="main-content-header">
-        <h1 class="ml-2">Purchases</h1>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item">
-            <a href="<%= root_path %>">Dashboard</a>
-          </li>
-          <li class="breadcrumb-item active">
-            <a href="<%= purchase_sale_details_path %>">Purchases</a>
-          </li>
-        </ol>
+    <div class="float-left">
+      <h2 class="ml-2 logo-back"><i class="fas fa-shopping-cart mr-2"></i>Purchases</h2>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="<%= root_path %>">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">
+          <a href="<%= purchase_sale_details_path %>">Purchases</a>
+        </li>
+      </ol>
+    </div>
+    <div class="row float-right mt-4">
+      <div class="mr-1 ">
+        <%= link_to new_purchase_sale_detail_path, class: "btn btn-success file-btn-color col-lg-12" do %>
+          Raw Material/Lane Purchase
+        <% end %>
       </div>
-      <div class="row mb-3">
-        <div class="col-lg-12">
-          <div class="col-lg-3 form-group float-left ">
-            <%= link_to new_purchase_sale_detail_path, class: "btn btn-success col-lg-12" do %>
-              <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-              Raw Material/Lane Purchase
-            <% end %>
-          </div>
-          <div class="col-lg-3 form-group float-left">
-            <%= link_to new_purchase_sale_detail_path(product: true), class: "btn btn-success col-lg-12" do %>
-              <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-              Place Purchase
-            <% end %>
-          </div>
-          <div class="col-lg-3 form-group float-left">
-            <%= link_to follow_ups_path('q[followable_type_eq]': 'PurchaseSaleDetail'), class: "btn btn-info" do %>
-              Follow Up
-            <% end %>
-          </div>
-        </div>
+      <div class="mr-1">
+        <%= link_to new_purchase_sale_detail_path(product: true), class: "btn btn-success file-btn-color col-lg-12" do %>
+          Place Purchase
+        <% end %>
       </div>
-    <%end%>
-    <div class="float-right">
-    <div class="dropdown ml-auto mr-4">
-     <span class="btn btn-info" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
-      <div class="dropdown-content">
-        <% if @help.present? %>
-        <% @help&.help_links.each do |link| %>
-        <a type="button" class="" target="_blank" href="<%= link[1] %>" >Help in <%= link[0] %></a>
-         <% end %>
+      <div class="">
+        <%= link_to follow_ups_path('q[followable_type_eq]': 'PurchaseSaleDetail'), class: "btn btn-info file-btn-color" do %>
+          Follow Up
         <% end %>
       </div>
     </div>
-  </div>
-  <ul class="nav nav-pills ml-3" role="tablist">
-    <li class="nav-item">
-      <a class="nav-link tab-label active purchase-sale-search-exp-tab" data-toggle="tab" href="#search" role="tab">Search</a>
-    </li>
-		<li class="nav-item">
-			<a class="nav-link tab-label purchase-sale-search-exp-tab" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
-		</li>
-    <li class="nav-item">
-      <a class="nav-link tab-label purchase-sale-logs-tab" data-toggle="tab" href="#logs" role="tab">Logs</a>
-    </li>
-	</ul>
+    <div class="clearfix"></div>
+    <%end%>
+    <div class="float-right">
+      <div class="dropdown ml-auto ">
+       <span class="btn btn-info" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
+        <div class="dropdown-content">
+          <% if @help.present? %>
+          <% @help&.help_links.each do |link| %>
+          <a type="button" class="" target="_blank" href="<%= link[1] %>" >Help in <%= link[0] %></a>
+           <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <ul class="nav nav-tabs ml-" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link tab-label active purchase-sale-search-exp-tab" data-toggle="tab" href="#search" role="tab"><i class="fa fa-search mr-2"></i>Search</a>
+        </li>
+	    	<li class="nav-item">
+	    		<a class="nav-link tab-label purchase-sale-search-exp-tab" data-toggle="tab" href="#import-export" role="tab"><i class="fa fa-exchange-alt mr-2"></i>Import/Export</a>
+	    	</li>
+        <li class="nav-item">
+          <a class="nav-link tab-label purchase-sale-logs-tab" data-toggle="tab" href="#logs" role="tab"><i class="fa fa-history mr-2"></i>Logs</a>
+        </li>
+	    </ul>
+    </div>
   <div class="clearfix"></div>
   <div class="tab-content">
-    <div class="tab-pane active mb-3 card shadow-sm mt-2 p-3 border-radius-1" id="search" role="tabpanel">
+    <div class="tab-pane active mt-2 no-tab-border " id="search" role="tabpanel">
       <%= search_form_for @q, url: purchase_sale_details_path, class: "admin-controls", method: "get" do |f| %>  
         <div class="clearfix"></div>
-        <div class="row">
-          <div class="col-lg-12 collapse show" id="multiCollapseExample1">
-            <div class="col-lg-3 form-group float-left">
-              <%= f.select :purchase_sale_items_product_id_eq, options_from_collection_for_select(@products, 'id', 'title',@title),{:include_blank => "Select Unit"}, class: "chosen-select"%>
-            </div>
-            <div class="col-lg-3 form-group float-left">
-              <%= f.select :purchase_sale_items_item_id_eq, options_from_collection_for_select(@items, 'id', 'title',@item_title),{:include_blank => "Select Raw Material/Land"}, class: "chosen-select"%>
-            </div>
-            <div class="col-lg-3 form-group float-left">
-              <%= f.select :sys_user_id_eq, options_from_collection_for_select(@customers, 'id', 'name', @name),{:include_blank => "Select Customer/Supplier"},class: 'form-control chosen-select'%>
-            </div>
-            <% if params[:sale].present?%>
-              <%=hidden_field_tag 'sale', 'true'%>
-            <% end %>
-            <%if @pos_type_batha.present?%>
+        <div class="card shadow mb-3 p-4">
+          <div class="row">
+            <div class="col-lg-12 collapse show" id="multiCollapseExample1">
               <div class="col-lg-3 form-group float-left">
-                <%= f.select :staff_id_eq, options_from_collection_for_select(@staffs, 'id', 'name', @staff),{:include_blank => "Select Loader's"},class: 'form-control chosen-select'%>
+                <%= f.select :purchase_sale_items_product_id_eq, options_from_collection_for_select(@products, 'id', 'title',@title),{:include_blank => "Select Unit"}, class: "chosen-select"%>
               </div>
-            <%end%>
-            <div class="col-lg-3 form-group float-left">
-              <%= f.search_field :created_at_gteq,class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
-            </div>
-            <div class="col-lg-3 form-group float-left">
-              <%= f.search_field :created_at_lteq,class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
-            </div>
-            <div class="col-lg-3 form-group float-left">
-              <%= f.select :user_name_eq, @users,{:include_blank => "Select Creater"},class: 'form-control chosen-select'%>
-            </div>
-            <div class="col-lg-3 form-group float-left">
-              <%= f.text_field :id_eq, class: "form-control",placeholder: "Voucher Number"%>
-            </div>
-            <div class="col-lg-3 form-group float-left">
-              <%= f.text_field :bill_no_eq, class: "form-control",placeholder: "Bill Number"%>
-            </div>
-            <div class="col-lg-1 form-group float-left">
-              <button class="form-control btn btn-primary" name="search_submit" type="submit" style="width:100px" value="Search"><i class="fa fa-search"></i></button>
-            </div>
-            <button class="form-control btn btn-info d-flex justify-content-center float-right mr-2" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:100px"><i class="fa fa-envelope mr-1 mt-1"></i>&nbsp;Mail</button>
-            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                      </div>
-                      <div class="modal-body">
-                        <% @pos_setting = PosSetting.first %>
-                        <label>Email:</label>
-                        <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
-                        <br />
-                        <label>Subject:</label>
-                        <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Purchase Sale Detail Report from MunshiOnClick", class: 'form-control email-fields'%>
-                        <br />
-                        <label>Body:</label><br />
-                        <%= text_area_tag 'body', nil, class: 'form-control'%>
-                        <br />
-                        <label>Please select one of them.</label>
-                        <div>
-                          <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
-                          <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
-                          <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
-                        </div>
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
-                      </div>
-                    </div>
-                  </div>
+              <div class="col-lg-3 form-group float-left">
+                <%= f.select :purchase_sale_items_item_id_eq, options_from_collection_for_select(@items, 'id', 'title',@item_title),{:include_blank => "Select Raw Material/Land"}, class: "chosen-select"%>
               </div>
-            <div class="dropdown my-dropdown mr-2 float-right">
-              <button type="button" class="form-control bg-danger text-light">PDF List</button>
-              <div class="dropdown-content my-dropdown-content p-2">
-                <% if params[:sale].present?%>
-                  <button class="form-control btn btn-danger mr-2 mt-2" style="width: 120px;" name="sale_submit" type="submit" value="Total Sale PDF A8" formtarget="_blank"><i class="fa fa-file-pdf"></i> PDF A8</button>
-                <%else%>
-                  <button class="form-control btn btn-danger mr-2 mt-2" style="width: 120px;" name="purchase_submit" type="submit" value="Total Purchase PDF A8" formtarget="_blank"><i class="fa fa-file-pdf"></i> PDF A8</button>
-                <%end%>
-                <% if params[:sale].present?%>
-                  <button class="form-control btn btn-danger mr-2 mt-2" style="width: 120px;" name="sale_submit" type="submit" value="Total Sale PDF A4" formtarget="_blank"><i class="fa fa-file-pdf"></i> PDF A4</button>
-                <%else%>
-                  <button class="form-control btn btn-danger mr-2 mt-2" style="width: 120px;" name="purchase_submit" type="submit" value="Total Purchase PDF A4" formtarget="_blank"><i class="fa fa-file-pdf"></i> PDF A4</button>
-                <%end%>
-                <% if params[:sale].present?%>
-                  <button class="form-control btn btn-danger mr-2 mt-2" style="width: 120px;" name="submit_pdf_staff_without" type="submit" value="Total Sale PDF A8" formtarget="_blank"><i class="fa fa-file-pdf"></i> Sale list</button>
-                <%end%>
+              <div class="col-lg-3 form-group float-left">
+                <%= f.select :sys_user_id_eq, options_from_collection_for_select(@customers, 'id', 'name', @name),{:include_blank => "Select Customer/Supplier"},class: 'form-control chosen-select'%>
+              </div>
+              <% if params[:sale].present?%>
+                <%=hidden_field_tag 'sale', 'true'%>
+              <% end %>
+              <%if @pos_type_batha.present?%>
+                <div class="col-lg-3 form-group float-left">
+                  <%= f.select :staff_id_eq, options_from_collection_for_select(@staffs, 'id', 'name', @staff),{:include_blank => "Select Loader's"},class: 'form-control chosen-select'%>
+                </div>
+              <%end%>
+              <div class="col-lg-3 form-group float-left">
+                <%= f.search_field :created_at_gteq,class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
+              </div>
+              <div class="col-lg-3 form-group float-left">
+                <%= f.search_field :created_at_lteq,class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <%= f.select :user_name_eq, @users,{:include_blank => "Select Creater"},class: 'form-control chosen-select'%>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <%= f.text_field :id_eq, class: "form-control",placeholder: "Voucher Number"%>
+              </div>
+              <div class="col-lg-3 form-group float-left">
+                <%= f.text_field :bill_no_eq, class: "form-control",placeholder: "Bill Number"%>
+              </div>
+              <div class="col-lg-1 form-group float-left">
+                <button class="form-control btn btn-primary" name="search_submit" type="submit" style="width:100px" value="Search"><i class="fa fa-search"></i></button>
               </div>
             </div>
           </div>
         </div>
+        <div class="card  shadow p-3 purchase-sale-book-index-card">
+          <div class="row d-flex" style="position: absolute;">
+            <div class="dropdown my-dropdown mr-2 ml-3 mt-2 float-right">
+              <button type="button" class="form-control btn btn-danger file-btn-color">PDF List</button>
+              <div class="dropdown-content my-dropdown-content p-2">
+                <% if params[:sale].present?%>
+                  <button class="form-control btn btn-danger file-btn-color mr-2 mt-2" style="width: 100px;" name="sale_submit" type="submit" value="Total Sale PDF A8" formtarget="_blank">PDF A8</button>
+                <%else%>
+                  <button class="form-control btn btn-danger file-btn-color mr-2 mt-2" style="width: 100px;" name="purchase_submit" type="submit" value="Total Purchase PDF A8" formtarget="_blank"> PDF A8</button>
+                <%end%>
+                <% if params[:sale].present?%>
+                  <button class="form-control btn btn-danger file-btn-color mr-2 mt-2" style="width: 100px;" name="sale_submit" type="submit" value="Total Sale PDF A4" formtarget="_blank"> PDF A4</button>
+                <%else%>
+                  <button class="form-control btn btn-danger file-btn-color mr-2 mt-2" style="width: 100px;" name="purchase_submit" type="submit" value="Total Purchase PDF A4" formtarget="_blank">PDF A4</button>
+                <%end%>
+                <% if params[:sale].present?%>
+                  <button class="form-control btn btn-danger file-btn-color mr-2 mt-2" style="width: 100px;" name="submit_pdf_staff_without" type="submit" value="Total Sale PDF A8" formtarget="_blank"> Sale list</button>
+                <%end%>
+              </div>
+            </div>
+            <button class="form-control btn btn-info  mt-2 file-btn-color float-right " type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:80px">Mail</button>
+            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <% @pos_setting = PosSetting.first %>
+                    <label>Email:</label>
+                    <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
+                    <br />
+                    <label>Subject:</label>
+                    <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Purchase Sale Detail Report from MunshiOnClick", class: 'form-control email-fields'%>
+                    <br />
+                    <label>Body:</label><br />
+                    <%= text_area_tag 'body', nil, class: 'form-control'%>
+                    <br />
+                    <label>Please select one of them.</label>
+                    <div>
+                      <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
+                      <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
+                      <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <table data-toggle="table" data-search="true">
+            <thead>
+              <tr>
+                <th></th>
+                <th>#</th>
+                <th><%= sort_link(@q, :sys_user_name, 'Customers') %></th>
+                <th><%= sort_link(@q, :purchase_sale_item_count, 'Plot') %></th>
+                <th><%= sort_link(@q, :total_bill, 'Total Bill') %></th>
+                <th><%= sort_link(@q, :amount, 'Received') %></th>
+                <th><%= sort_link(@q, :amount, 'Remaining') %></th>
+                <th><%= sort_link(@q, :created_at, 'Status') %></th>
+                <th><%= sort_link(@q, :created_at, 'Time') %></th>
+                <th><%= sort_link(@q, :comment, 'Comment') %></th>
+                <th><%= sort_link(@q, :bill_no, 'bill#') %></th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @purchase_sale_details.each_with_index do |purchase_sale_detail, index| %>
+                <% demo_id = "demo#{index}"%>
+                <tr>
+                  <td class="accordion-toggle acc-pointer" data-toggle="collapse" data-target="#<%= demo_id %>"><i class="fa fa-plus-circle ml-4"></i></td>
+                  <td><b><%= purchase_sale_detail.voucher_id.to_s+'#'+purchase_sale_detail.id.to_s %></b></td>
+                  <td class="urdu-font">
+                    <b>
+                      <%= link_to sys_users_path('q[id_eq]':purchase_sale_detail.sys_user) do %>
+                        <% if purchase_sale_detail&.sys_user&.father.present? %>
+                          <%= purchase_sale_detail&.sys_user&.name.to_s+ ' ' +purchase_sale_detail&.sys_user&.suffix.to_s+ ' ' +purchase_sale_detail&.sys_user&.father.to_s %>
+                        <% else %>
+                          <%= purchase_sale_detail&.sys_user&.name.to_s %>
+                        <% end %>
+                      <%end %>
+                    </b>
+                  </td>
+                  <td><b><%= purchase_sale_detail.purchase_sale_items.count rescue 0 %></b></td>
+                  <td><b><%= number_with_delimiter(purchase_sale_detail.total_bill.to_f.round(2)) rescue 0 %></b></td>
+                  <td><b><%= number_with_delimiter(purchase_sale_detail.amount.to_f.round(2)) rescue 0%></b></td>
+                  <td><b><%= number_with_delimiter(purchase_sale_detail.total_bill.to_f.round(2) - purchase_sale_detail.amount.to_f.round(2)) rescue 0%></b></td>
+                  <td>
+                    <b>
+                      <% if (purchase_sale_detail.total_bill.to_i - (purchase_sale_detail.amount.to_f+purchase_sale_detail.discount_price.to_f)) > 0 %>
+                        <p class="text-danger">
+                        Pending
+                        <br>
+                        </p>
+                        <h5 style="color:#FF0000"><%= number_with_delimiter((purchase_sale_detail.total_bill.to_i - (purchase_sale_detail.amount.to_f+purchase_sale_detail.discount_price.to_f))) %></h5>
+                      <% else %>
+                        <p class="text-success">
+                          <b><%= purchase_sale_detail.status  %></b>
+                        </p>
+                      <% end %>
+                    </b>
+                  </td>
+                  <td>
+                    <%if purchase_sale_detail.created_at.strftime("%d%b%y")!=purchase_sale_detail.updated_at.strftime("%d%b%y")%>
+                      <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d%b%y , %I:%M") : '' %> <br><br> <%= purchase_sale_detail.updated_at.present? ? purchase_sale_detail.updated_at.strftime("%d%b%y , %I:%M") : '' %>
+                    <%else%>
+                      <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d%b%y , %I:%M") : '' %>
+                    <%end%>
+                  </td>
+                  <td><%= purchase_sale_detail.comment %></td>
+                  <td><%= purchase_sale_detail.bill_no %></td>
+                  <td>
+                    <div class="icon-container-1">
+                      <div class="my-icon-1 my-view-1">
+                        <div class="my-tooltip-1">
+                          <div class="icon-container">
+                            <div class="my-icon my-view">
+                              <div class="my-tooltip">
+                                Edit
+                              </div>
+                                <%if purchase_sale_detail.purchase_sale_items.present?%>
+                                <%if purchase_sale_detail.purchase_sale_items.first.product.present? %>
+                                  <% if can?(:update, :all) %>
+                                    <%= link_to edit_purchase_sale_detail_path(purchase_sale_detail,product: true), class:"icon-div" do %>
+                                      <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+                                    <% end %>
+                                  <% end %>
+                                <%else%>
+                                <% if can?(:update, :all) %>
+                                  <%= link_to edit_purchase_sale_detail_path(purchase_sale_detail), class:"icon-div" do %>
+                                    <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+                                  <% end %>
+                                  <% end %>
+                                <%end%>
+                              <%end%>
+                            </div>
+                            <div class="my-icon my-view">
+                              <div class="my-tooltip">
+                                Delete
+                              </div>
+                                <% if can?(:destory, :all) %>
+                              <%= link_to purchase_sale_detail, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+                                <i class="fa fa-trash mt-2" aria-hidden="true"></i>
+                              <% end %>
+                            <% end %>
+                            </div>
+                            <div class="my-icon my-view">
+                              <div class="my-tooltip">
+                                Show
+                              </div>
+                                <%= link_to purchase_sale_detail_path(purchase_sale_detail), class:"icon-div" do %>
+                                  <i class="fa fa-eye mt-2" aria-hidden="true"></i>
+                                <%end %>
+                            </div>
+                            <% if purchase_sale_detail.purchase_sale_images.present?%>
+                              <div class="my-icon my-view">
+                                <div class="my-tooltip">
+                                  Pdf Download
+                                </div>
+                                  <%= link_to pdf_download_for_psd_path(id: purchase_sale_detail.id), class:"icon-div", remote: true do %>
+                                    <i class="fa fa-download mt-2" aria-hidden="true"></i>
+                                  <%end %>
+                              </div>
+                            <%end %>
+                            <div class="my-icon my-view">
+                              <div class="my-tooltip">
+                                PDF
+                              </div>
+                                <%= link_to purchase_sale_detail, target: '_blank', class:"icon-div" do %>
+                                  <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
+                                <%end %>  
+                            </div>
+                          </div>
+                        </div>
+                        <span class="icon-div-1">
+                          <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <td colspan="11" class="hiddenRow">
+                  <div class="accordian-body collapse card shadow m-5 p-4" style="border-radius: 5px;" id="<%= demo_id %>">
+                    <%if purchase_sale_detail.purchase_sale_items_names_and_quantity!=0%>
+                      <table>
+                      <tr class="bg-warning">
+                        <th>Unit</th>
+                        <th>Marla</th>
+                        <th>Rate</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                      </tr>
+                      <%if purchase_sale_detail.transaction_type=="Sale"%>
+                        <%purchase_sale_detail.purchase_sale_items_names_and_quantity.each do |name_quantity|%>
+                          <tr>
+                            <td><%=name_quantity.first%><%=name_quantity[8]%></td>
+                            <td><%= name_quantity.second%><% @total_pro += name_quantity.second %></td>
+                            <td><%= number_with_delimiter(name_quantity.third)%></td>
+                            <td><%= number_with_delimiter(name_quantity.fourth) %><% @total_discont += name_quantity.fourth if name_quantity.fourth.present? %></td>
+                            <td><%=name_quantity.fifth.strftime("%d%b%y") if name_quantity.fifth.present?%></td>
+                          </tr>
+                        <%end%>
+                      <%else%>
+                        <%purchase_sale_detail.purchase_sale_items_names_and_quantity.each do |name_quantity|%>
+                          <tr>
+                            <td><%=name_quantity.first%></td>
+                            <td><%=name_quantity.second%><% @total_pro += name_quantity.second %></td>
+                            <td><%=number_with_delimiter(name_quantity[5])%></td>
+                            <td><%=number_with_delimiter(name_quantity[6])%><% @total_discont += name_quantity[6] if name_quantity.fourth.present? %></td>
+                            <td><%=name_quantity.fifth.strftime("%d%b%y") if name_quantity.fifth.present?%></td>
+                          </tr>
+                        <%end%>
+                      <%end%>
+                      </table>
+                    <%end%>
+                  </div>
+                </td> 
+              <% end %>  
+              <tr>
+                <td></td>
+                <td></td>
+                <td class="table-active"><h5>Total Bill</h5></td>
+                <td class="table-active"><h5>Total Paid</h5></td>
+                <td class="table-active"><h5>Total Discount</h5></td>
+                <td class="table-active"><h5>Pending</h5></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td class="table-active"><h5>Total</h5><td>
+                <td></td>
+                <td><h5><%=number_with_delimiter(@total_bil.to_f.round(2))%></h5></td>
+                <td><h5><%=number_with_delimiter(@total_am.to_f.round(2))%></h5></td>
+                <td><h5><%=number_with_delimiter(@total_dis.to_f.round(2))%></h5></td>
+                <td><h5><%=number_with_delimiter((@total_bil.to_f-(@total_am+@total_dis)).to_f.round(2))%></h5></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td><h5></h5><td>
+                <td></td>
+                <td class="table-active"><h5>Total Quantity</h5></td>
+                <td></td>
+                <td><h4></h4></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td class="table-active"><h5>Product Sold</h5><td>
+                <td></td>
+                <td><h5><%=number_with_delimiter(@total_pro)%></h5></td>
+                <td></td>
+                <td><h4></h4></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>   
+            </tbody>
+          </table>
+          <div class="col-lg-12 digg_pagination mt-2">
+            <div class="float-left page_info">
+              <%= page_entries_info @purchase_sale_details %>
+            </div>
+            <div class="float-right">
+            <%= paginate @purchase_sale_details, :container => false %>
+            </div>
+          </div>
+        </div> 
       <% end %>
     </div>  
-    <div class="tab-pane card shadow-sm mt-2 border-radius-1 mb-3" id="import-export" role="tabpanel">
+    <div class="tab-pane card shadow-sm mt-2 p-4 mb-3" id="import-export" role="tabpanel">
       <p>
         <div class="d-flex">
         <button class="btn btn-danger ml-4" name="export_data" type="submit" value="export_data">Export Data</button>
@@ -177,7 +411,7 @@
         </div>
       </p>
     </div>
-    <div class="tab-pane card shadow-sm mt-2 border-radius-1" id="logs" role="tabpanel">
+    <div class="tab-pane card shadow-sm mt-2 " id="logs" role="tabpanel">
       <p>
         <div class="d-flex">
           <%= link_to view_history_purchase_sale_details_path(type: @transaction_type_logs), class: "btn btn-success d-none", id: "purchase-sale-logs", remote:true do %>
@@ -189,267 +423,29 @@
       </p>
     </div>
   </div>
-  <div class="card border-radius-1 shadow p-3 purchase-sale-book-index-card">
-    <table data-toggle="table" data-search="true">
-      <thead>
-        <tr>
-          <th></th>
-          <th>#</th>
-          <th><%= sort_link(@q, :sys_user_name, 'Customers') %></th>
-          <th><%= sort_link(@q, :purchase_sale_item_count, 'Plot') %></th>
-          <th><%= sort_link(@q, :total_bill, 'Total Bill') %></th>
-          <th><%= sort_link(@q, :amount, 'Received') %></th>
-          <th><%= sort_link(@q, :amount, 'Remaining') %></th>
-          <th><%= sort_link(@q, :created_at, 'Status') %></th>
-          <th><%= sort_link(@q, :created_at, 'Time') %></th>
-          <th><%= sort_link(@q, :comment, 'Comment') %></th>
-          <th><%= sort_link(@q, :bill_no, 'bill#') %></th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @purchase_sale_details.each_with_index do |purchase_sale_detail, index| %>
-          <% demo_id = "demo#{index}"%>
-          <tr>
-            <td class="accordion-toggle acc-pointer" data-toggle="collapse" data-target="#<%= demo_id %>"><i class="fa fa-plus-circle ml-4"></i></td>
-            <td><b><%= purchase_sale_detail.voucher_id.to_s+'#'+purchase_sale_detail.id.to_s %></b></td>
-            <td class="urdu-font">
-              <b>
-                <%= link_to sys_users_path('q[id_eq]':purchase_sale_detail.sys_user) do %>
-                  <% if purchase_sale_detail&.sys_user&.father.present? %>
-                    <%= purchase_sale_detail&.sys_user&.name.to_s+ ' ' +purchase_sale_detail&.sys_user&.suffix.to_s+ ' ' +purchase_sale_detail&.sys_user&.father.to_s %>
-                  <% else %>
-                    <%= purchase_sale_detail&.sys_user&.name.to_s %>
-                  <% end %>
-                <%end %>
-              </b>
-            </td>
-            <td><b><%= purchase_sale_detail.purchase_sale_items.count rescue 0 %></b></td>
-            <td><b><%= number_with_delimiter(purchase_sale_detail.total_bill.to_f.round(2)) rescue 0 %></b></td>
-            <td><b><%= number_with_delimiter(purchase_sale_detail.amount.to_f.round(2)) rescue 0%></b></td>
-            <td><b><%= number_with_delimiter(purchase_sale_detail.total_bill.to_f.round(2) - purchase_sale_detail.amount.to_f.round(2)) rescue 0%></b></td>
-            <td>
-              <b>
-                <% if (purchase_sale_detail.total_bill.to_i - (purchase_sale_detail.amount.to_f+purchase_sale_detail.discount_price.to_f)) > 0 %>
-                  <p class="text-danger">
-                  Pending
-                  <br>
-                  </p>
-                  <h5 style="color:#FF0000"><%= number_with_delimiter((purchase_sale_detail.total_bill.to_i - (purchase_sale_detail.amount.to_f+purchase_sale_detail.discount_price.to_f))) %></h5>
-                <% else %>
-                  <p class="text-success">
-                    <b><%= purchase_sale_detail.status  %></b>
-                  </p>
-                <% end %>
-              </b>
-            </td>
-            <td>
-              <%if purchase_sale_detail.created_at.strftime("%d%b%y")!=purchase_sale_detail.updated_at.strftime("%d%b%y")%>
-                <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d%b%y , %I:%M") : '' %> <br><br> <%= purchase_sale_detail.updated_at.present? ? purchase_sale_detail.updated_at.strftime("%d%b%y , %I:%M") : '' %>
-              <%else%>
-                <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d%b%y , %I:%M") : '' %>
-              <%end%>
-            </td>
-            <td><%= purchase_sale_detail.comment %></td>
-            <td><%= purchase_sale_detail.bill_no %></td>
-            <td>
-              <div class="icon-container-1">
-                <div class="my-icon-1 my-view-1">
-                  <div class="my-tooltip-1">
-                    <div class="icon-container">
-                      <div class="my-icon my-view">
-                        <div class="my-tooltip">
-                          Edit
-                        </div>
-
-                          <%if purchase_sale_detail.purchase_sale_items.present?%>
-                          <%if purchase_sale_detail.purchase_sale_items.first.product.present? %>
-                            <% if can?(:update, :all) %>
-                                  <%= link_to edit_purchase_sale_detail_path(purchase_sale_detail,product: true), class:"icon-div" do %>
-                                            <i class="fa fa-edit mt-2" aria-hidden="true"></i>
-                                  <% end %>
-                            <% end %>
-                          <%else%>
-                          <% if can?(:update, :all) %>
-                            <%= link_to edit_purchase_sale_detail_path(purchase_sale_detail), class:"icon-div" do %>
-                              <i class="fa fa-edit mt-2" aria-hidden="true"></i>
-                            <% end %>
-                            <% end %>
-                          <%end%>
-                        <%end%>
-
-                      </div>
-                      <div class="my-icon my-view">
-                        <div class="my-tooltip">
-                          Delete
-                        </div>
-
-                          <% if can?(:destory, :all) %>
-                        <%= link_to purchase_sale_detail, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
-                                  <i class="fa fa-trash mt-2" aria-hidden="true"></i>
-                        <% end %>
-                      <% end %>
-
-                      </div>
-                      <div class="my-icon my-view">
-                        <div class="my-tooltip">
-                          Show
-                        </div>
-
-                          <%= link_to purchase_sale_detail_path(purchase_sale_detail), class:"icon-div" do %>
-                            <i class="fa fa-eye mt-2" aria-hidden="true"></i>
-                          <%end %>
-
-                      </div>
-                      <% if purchase_sale_detail.purchase_sale_images.present?%>
-                        <div class="my-icon my-view">
-                          <div class="my-tooltip">
-                            Pdf Download
-                          </div>
-                            <%= link_to pdf_download_for_psd_path(id: purchase_sale_detail.id), class:"icon-div", remote: true do %>
-                              <i class="fa fa-download mt-2" aria-hidden="true"></i>
-                            <%end %>
-
-                        </div>
-                      <%end %>
-                      <div class="my-icon my-view">
-                        <div class="my-tooltip">
-                          PDF
-                        </div>
-
-                          <%= link_to purchase_sale_detail, target: '_blank', class:"icon-div" do %>
-                            <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
-                          <%end %>  
-
-                      </div>
-                    </div>
-                  </div>
-                  <span class="icon-div-1">
-                        <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
-                  </span>
-                </div>
-              </div>
-            </td>
-          </tr>
-          <td colspan="11" class="hiddenRow">
-            <div class="accordian-body collapse card shadow m-5 p-4" style="border-radius: 5px;" id="<%= demo_id %>">
-              <%if purchase_sale_detail.purchase_sale_items_names_and_quantity!=0%>
-                <table>
-                <tr class="bg-warning">
-                  <th>Unit</th>
-                  <th>Marla</th>
-                  <th>Rate</th>
-                  <th>Amount</th>
-                  <th>Date</th>
-                </tr>
-                <%if purchase_sale_detail.transaction_type=="Sale"%>
-                  <%purchase_sale_detail.purchase_sale_items_names_and_quantity.each do |name_quantity|%>
-                    <tr>
-                      <td><%=name_quantity.first%><%=name_quantity[8]%></td>
-                      <td><%= name_quantity.second%><% @total_pro += name_quantity.second %></td>
-                      <td><%= number_with_delimiter(name_quantity.third)%></td>
-                      <td><%= number_with_delimiter(name_quantity.fourth) %><% @total_discont += name_quantity.fourth if name_quantity.fourth.present? %></td>
-                      <td><%=name_quantity.fifth.strftime("%d%b%y") if name_quantity.fifth.present?%></td>
-                    </tr>
-                  <%end%>
-                <%else%>
-                  <%purchase_sale_detail.purchase_sale_items_names_and_quantity.each do |name_quantity|%>
-                    <tr>
-                      <td><%=name_quantity.first%></td>
-                      <td><%=name_quantity.second%><% @total_pro += name_quantity.second %></td>
-                      <td><%=number_with_delimiter(name_quantity[5])%></td>
-                      <td><%=number_with_delimiter(name_quantity[6])%><% @total_discont += name_quantity[6] if name_quantity.fourth.present? %></td>
-                      <td><%=name_quantity.fifth.strftime("%d%b%y") if name_quantity.fifth.present?%></td>
-                    </tr>
-                  <%end%>
-                <%end%>
-                </table>
-              <%end%>
-            </div>
-          </td> 
-        <% end %>  
-        <tr>
-          <td></td>
-          <td></td>
-          <td class="table-active"><h5>Total Bill</h5></td>
-          <td class="table-active"><h5>Total Paid</h5></td>
-          <td class="table-active"><h5>Total Discount</h5></td>
-          <td class="table-active"><h5>Pending</h5></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td class="table-active"><h5>Total</h5><td>
-          <td></td>
-          <td><h5><%=number_with_delimiter(@total_bil.to_f.round(2))%></h5></td>
-          <td><h5><%=number_with_delimiter(@total_am.to_f.round(2))%></h5></td>
-          <td><h5><%=number_with_delimiter(@total_dis.to_f.round(2))%></h5></td>
-          <td><h5><%=number_with_delimiter((@total_bil.to_f-(@total_am+@total_dis)).to_f.round(2))%></h5></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td><h5></h5><td>
-          <td></td>
-          <td class="table-active"><h5>Total Quantity</h5></td>
-          <td></td>
-          <td><h4></h4></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td class="table-active"><h5>Product Sold</h5><td>
-          <td></td>
-          <td><h5><%=number_with_delimiter(@total_pro)%></h5></td>
-          <td></td>
-          <td><h4></h4></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>   
-      </tbody>
-    </table>
-    <div class="col-lg-12 digg_pagination mt-2">
-      <div class="float-left page_info">
-        <%= page_entries_info @purchase_sale_details %>
-      </div>
-      <div class="float-right">
-      <%= paginate @purchase_sale_details, :container => false %>
-      </div>
-    </div>
-    <%= form_for :bulk_import, url: bulk_import_data_path, method: :post, html: {class: "bulk-import-form"} do |f| %>
-      <div class="modal fade" id="importFile" tabindex="-1" role="dialog" aria-labelledby="importFileTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLongTitle">Import file</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <%= f.file_field :file, required: true, accept: '.csv' %>
-              <%= f.hidden_field :table_name, value: 'Purchase Sale Details' %>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <%= f.submit 'Import', class: 'btn btn-primary' %>
-            </div>
+  <%= form_for :bulk_import, url: bulk_import_data_path, method: :post, html: {class: "bulk-import-form"} do |f| %>
+    <div class="modal fade" id="importFile" tabindex="-1" role="dialog" aria-labelledby="importFileTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Import file</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <%= f.file_field :file, required: true, accept: '.csv' %>
+            <%= f.hidden_field :table_name, value: 'Purchase Sale Details' %>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <%= f.submit 'Import', class: 'btn btn-primary' %>
           </div>
         </div>
       </div>
-    <% end %>
-  </div>  
+    </div>
+  <% end %>
+  
 </div>
 <div class='show-data'></div>
 
