@@ -281,6 +281,17 @@ class ProductsController < ApplicationController
       format.js
     end
   end
+
+  def bulk_update_price
+    product_ids = OrderItem.joins(:order).where(orders: { status: %w[Clear Order UnClear UnPrint Printed] })
+                           .select(:product_id).distinct.pluck(:product_id)
+    @products = Product.where.not(id: product_ids)
+    @products.update_all(sale: params[:bulk_update][:sale])
+    flash[:notice] = 'Sale rates are updated successfully.'
+    redirect_to products_url
+  end
+
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_product
