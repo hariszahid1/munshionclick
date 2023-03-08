@@ -13,6 +13,7 @@
   </div>
   <% if check_can_create(@module_permission) %>
     <div class="float-right mt-3">
+      <button class='btn btn-outline-danger mt-3 d-none' data-toggle="modal" data-target="#bult-update-price">Update Price</button>
       <%= link_to new_product_path, style:"width: 150px;", class: "btn btn-success mt-3" do %>
           <i class="fa fa-plus-circle"></i>
           Create
@@ -364,7 +365,7 @@
     </div>
 </div>
 <div class="clearfix"></div>
-          
+
 <%= form_for :bulk_import, url: bulk_import_data_path, method: :post, html: {class: "bulk-import-form"} do |f| %>
   <div class="modal fade" id="importFile" tabindex="-1" role="dialog" aria-labelledby="importFileTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -382,6 +383,30 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           <%= f.submit 'Import', class: 'btn btn-primary' %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<%= form_for :bulk_update, url: bulk_update_price_products_path, method: :post, html: {class: "bulk-import-form"} do |f| %>
+  <div class="modal fade" id="bult-update-price" tabindex="-1" role="dialog" aria-labelledby="importFileTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Update the price for not booked units.</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <label>Sale Price:</label>
+          <%= f.number_field :sale, class: 'form-control', required: true %>
+          <span class='text-danger pt-4'><b>Note: </b>The rate of all units which are not booked will be updated.<span>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <%= f.submit 'Update', class: 'btn btn-primary' %>
         </div>
       </div>
     </div>

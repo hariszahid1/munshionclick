@@ -36,7 +36,7 @@
                     <%else%>
                     <%= 'Resale Payment / Own' %>
                     <%end%>
-                    <%=staff_ledger_book.salary_detail.purchase_sale_detail.purchase_sale_items_names_and_quantity.first&.first%> X <%=staff_ledger_book.salary_detail.purchase_sale_detail.purchase_sale_items_names_and_quantity.first[11]%>-M <%=staff_ledger_book.salary_detail.purchase_sale_detail.purchase_sale_items_names_and_quantity.first[12]%>-sqr
+                    <%=staff_ledger_book.salary_detail&.purchase_sale_detail&.purchase_sale_items_names_and_quantity&.first&.first%> X <%=staff_ledger_book.salary_detail&.purchase_sale_detail&.purchase_sale_items_names_and_quantity&.first&.try(:[], 11)%>-M <%=staff_ledger_book.salary_detail&.purchase_sale_detail&.purchase_sale_items_names_and_quantity&.first&.try(:[], 12)%>-sqr
                 <%end%>
               <%else%>
                 <%= staff_ledger_book.salary_detail.comment %>

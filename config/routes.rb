@@ -182,6 +182,7 @@ Rails.application.routes.draw do
     collection do
       get 'get_product_data'
       get :view_history, to: 'products#view_history'
+      post :bulk_update_price
     end
   end
   resources :product_sub_categories do
