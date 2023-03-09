@@ -24,27 +24,27 @@
     </ol>
   </div>
   <div class=" d-flex float-right ">
-    <div class="mr-2 btn btn-primary file-btn-color">
+    <div class="mr-2 btn btn-outline-primary ">
       <%= link_to daily_books_path() do %>
         <%=@departments.first.title%> Daily
       <% end %>
     </div>
-    <div class="mr-2 btn btn-danger file-btn-color">
+    <div class="mr-2 btn btn-outline-danger ">
       <%= link_to khakar_daily_books_path(department_id: @departments.second.title) do %>
         <%=@departments.second.title%> Daily book
       <% end %>
     </div>
-    <div class="mr-2 btn btn-success file-btn-color">
+    <div class="mr-2 btn btn-outline-success ">
       <%= link_to production_cycles_path do %>
         Bhari Daily Book
       <% end %>
     </div>
-    <div class="mr-2 btn btn-info file-btn-color">
+    <div class="mr-2 btn btn-outline-info ">
       <%= link_to jalai_production_cycles_path do %>
         Jalai Daily Book
       <% end %>
     </div>
-    <div class="mr-2 btn btn-warning file-btn-color">
+    <div class="mr-2 btn btn-outline-warning ">
       <%= link_to nakasi_production_cycles_path do %>
         <%=@departments.third.title%> Daily Book
       <% end %>
