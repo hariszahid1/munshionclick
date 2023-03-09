@@ -57,6 +57,7 @@
               <div class="col-lg-2 form-group float-left">
                 <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
               </div>
+              <!--button type='submit' class='dynamic-submit-btn'></button-->
             </div>
           </div>
         </div>
@@ -71,7 +72,7 @@
               <%end%>
             </div>  
             <%if (check_can_download_pdf(@module_permission))%>
-              <button class="form-control btn btn-danger mt-4 ml-2 file-btn-color" title= "download salaries credit details pdf" name="submit_pdf" type="submit" value="Day Out Print" formtarget="_blank" style="width:80px">PDF</button>
+              <button class="form-control btn btn-danger mt-4 ml-2 file-btn-color files-download-btn" title= "download salaries credit details pdf" name="submit_pdf" type="submit" value="Day Out Print" formtarget="_blank" style="width:80px">PDF</button>
             <% end %>
             <%= search_form_for @q, url: salary_details_path, class: "admin-controls", method: "get" do |f| %>
               <div class="d-flex mt-4" style="width: 100%;">
@@ -158,7 +159,8 @@
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td><h5><%= number_with_delimiter(@salary_details.sum(:amount))%></h5></td>
+                  <td></td>
+                  <td><h5><%= number_with_delimiter(@salary_details&.pluck(:amount)&.compact&.sum)%></h5></td>
                   <td></td>
                 </tr>
               </tbody>
@@ -183,6 +185,14 @@
 
 <script>
   $(document).ready(function() {
+
+    // $('.files-download-btn').on('click', function(){
+    //   var name_btn = $(this).attr('name')
+    //   $('.dynamic-submit-btn').attr('name', name_btn)
+
+    //   // $('.dynamic-submit-btn').click()
+    // })
+
     if ($(".bootstrap-table").length == 0){
       $("table").bootstrapTable();
     }

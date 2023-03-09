@@ -51,7 +51,7 @@
                   ok
                 <%else%>
                   <i class="fa fa-trash"></i>
-                  <%=number_with_delimiter(balance-credit_debit)%>
+                  <%=number_with_delimiter((balance.to_f-credit_debit.to_f).round(2))%>
                 <%end%>
               </td>
             </tr>

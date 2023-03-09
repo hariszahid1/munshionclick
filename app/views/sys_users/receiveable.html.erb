@@ -81,42 +81,6 @@
                <div class=" ml-3 ">
                  <button style="width:80px;" class="form-control btn  btn-danger file-btn-color " title="Download customer pdf" name="submit_pdf_staff_with" type="submit" value="Accounts PDF A4" formtarget="_blank">PDF</button>                
                  <button style="width:80px;"  class="form-control btn btn-warning file-btn-color" title="Download receiveable csv" name="submit_csv_sys_user_receivable" type="submit" value="Accounts CSV A4">CSV </button>
-                 <button class="form-control btn btn-info file-btn-color" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="width:80px">Mail</button>
-                  <!-- Modal -->
-                 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                   <div class="modal-dialog modal-dialog-centered" role="document">
-                     <div class="modal-content">
-                       <div class="modal-header">
-                         <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
-                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                           <span aria-hidden="true">&times;</span>
-                         </button>
-                       </div>
-                       <div class="modal-body">
-                         <% @pos_setting = PosSetting.first %>
-                           <label>Email:</label>
-                           <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
-                           <br />
-                           <label>Subject:</label>
-                             <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Users List Detail report from MunshiOnClick", class: 'form-control email-fields'%>
-                           <br />
-                           <label>Body:</label><br />
-                             <%= text_area_tag 'body', nil, class: 'form-control'%>
-                           <br />
-                         <label>Please select one of them.</label>
-                         <div>
-                           <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
-                           <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
-                           <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
-                         </div>
-                       </div>
-                       <div class="modal-footer">
-                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                         <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
-                       </div>
-                     </div>
-                   </div>
-                 </div>
                </div>
               </div>
               <div class="mt-2">

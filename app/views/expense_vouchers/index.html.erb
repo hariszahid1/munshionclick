@@ -18,11 +18,11 @@
   </div>
   <% if check_can_create(@module_permission) %>
     <div class="float-right mt-3">
-      <%= link_to expense_entry_vouchers_path, class: "btn btn-outline-warning ml-2" do %>
-        Expense Entry Voucher
-      <% end %>
-      <%= link_to follow_ups_path('q[followable_type_eq]': 'ExpenseVoucher'), class: "btn btn-outline-info ml-" do %>
+      <%= link_to follow_ups_path('q[followable_type_eq]': 'ExpenseVoucher'), class: "btn btn-outline-info " do %>
         Follow Up
+      <% end %>
+      <%= link_to expense_entry_vouchers_path, class: "btn btn-outline-danger ml-" do %>
+        Expense Entry Voucher
       <% end %>
       <%= link_to new_expense_voucher_path, remote: true, style:"width: 150px;", class: "btn btn-success " do %>
           <i class="fa fa-plus-circle"></i>
