@@ -18,13 +18,13 @@
   </div>
   <% if check_can_create(@module_permission) %>
     <div class="float-right mt-3">
-      <%= link_to expense_entry_vouchers_path, class: "btn btn-primary file-btn-color ml-2" do %>
+      <%= link_to expense_entry_vouchers_path, class: "btn btn-outline-warning ml-2" do %>
         Expense Entry Voucher
       <% end %>
-      <%= link_to follow_ups_path('q[followable_type_eq]': 'ExpenseVoucher'), class: "btn btn-info file-btn-color ml-2" do %>
+      <%= link_to follow_ups_path('q[followable_type_eq]': 'ExpenseVoucher'), class: "btn btn-outline-info ml-" do %>
         Follow Up
       <% end %>
-      <%= link_to new_expense_voucher_path, remote: true, style:"width: 150px;", class: "btn btn-success mt-" do %>
+      <%= link_to new_expense_voucher_path, remote: true, style:"width: 150px;", class: "btn btn-success " do %>
           <i class="fa fa-plus-circle"></i>
           Create
       <% end %>
@@ -33,7 +33,7 @@
   <div class="clearfix"></div>
   <div class="float-right">
     <div class="dropdown ml-auto">
-      <span class="btn btn-info" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
+      <span class="btn btn-outline-info btn-sm mt-2 " title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
       <div class="dropdown-content">
         <% if @help.present? %>
           <% @help&.help_links.each do |link| %>

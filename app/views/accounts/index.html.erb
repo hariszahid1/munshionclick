@@ -26,14 +26,14 @@
   <% end %>
   <% if check_can_create(@module_permission) %>
     <div class="float-right mt-3">
-      <%= link_to payments_path, class: "btn btn-danger file-btn-color mr-2 mt-3" do %>
+      <%= link_to payments_path, class: "btn btn-outline-danger mr-2 mt-3" do %>
           Payments
       <% end %>
     </div>
   <% end %>
   <% if check_can_create(@module_permission) %>
     <div class="float-right mt-3">
-      <%= link_to transfer_payments_path, class: "btn btn-primary file-btn-color mr-2 mt-3" do %>
+      <%= link_to transfer_payments_path, class: "btn btn-outline-primary  mr-2 mt-3" do %>
           Transfer Payments
       <% end %>
     </div>
@@ -43,7 +43,7 @@
 <div class="hidden m-4" id="city_list">
   <div class="float-right">
     <div class="dropdown ml-auto">
-     <span class="btn btn-info" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
+     <span class="btn btn-outline-info btn-sm mt-2 " title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
       <div class="dropdown-content">
         <% if @help.present? %>
         <% @help&.help_links.each do |link| %>

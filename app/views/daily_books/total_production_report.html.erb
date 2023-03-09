@@ -46,19 +46,19 @@
     </ol>
   </div>
   <div class="float-right mt-4">
-    <%= link_to daily_books_path(department_id: @departments.first.title), class: "btn btn-primary file-btn-color" do %>
+    <%= link_to daily_books_path(department_id: @departments.first.title), class: "btn btn-outline-primary " do %>
       <%=@departments.first.title%> Daily book
     <% end %>
-    <%= link_to khakar_daily_books_path(department_id: @departments.second.title), class: "btn btn-warning file-btn-color" do %>
+    <%= link_to khakar_daily_books_path(department_id: @departments.second.title), class: "btn btn-outline-warning " do %>
       <%=@departments.second.title%> Daily book
     <% end %>
-    <%= link_to production_cycles_path, class: "btn btn-success file-btn-color" do %>
+    <%= link_to production_cycles_path, class: "btn btn-outline-success" do %>
       Bhari Daily Book
     <% end %>
-    <%= link_to jalai_production_cycles_path, class: "btn btn-info file-btn-color" do %>
+    <%= link_to jalai_production_cycles_path, class: "btn btn-outline-info" do %>
        Jalai Daily Book
     <% end %>
-    <%= link_to nakasi_production_cycles_path(department_id: @departments.third.title), class: "btn btn-danger file-btn-color" do %>
+    <%= link_to nakasi_production_cycles_path(department_id: @departments.third.title), class: "btn btn-outline-danger" do %>
       <%=@departments.third.title%> Daily Book
     <% end %>
   </div>
