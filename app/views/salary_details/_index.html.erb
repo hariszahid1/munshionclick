@@ -14,10 +14,10 @@
   </div>
   <div class="float-right mt-4">
     <% if (check_can_create(@module_permission)) %>
-      <%= link_to new_salary_detail_path, class: "btn btn-success file-btn-color mt-3 mr-2" do %>
+      <%= link_to new_salary_detail_path, class: "btn btn-outline-danger  mt-3 mr-2" do %>
         Return From Staff
       <% end %>
-      <%= link_to advance_all_salary_details_path, class: "btn btn-success file-btn-color mt-3" do %>
+      <%= link_to advance_all_salary_details_path, class: "btn btn-outline-success  mt-3" do %>
         Credit Salaries
       <% end %>
     <% end %>

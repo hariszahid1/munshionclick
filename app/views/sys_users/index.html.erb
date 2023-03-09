@@ -18,13 +18,13 @@
   </div>
   <% if check_can_create(@module_permission) %>
     <div class="float-right mt-3">
-      <%= link_to payable_sys_users_sys_users_path, class: "btn btn-primary file-btn-color mt-3 mr-2" do %>
+      <%= link_to payable_sys_users_sys_users_path, class: "btn btn-outline-primary mt-3 " do %>
           Payable
       <% end %>
-      <%= link_to receiveable_sys_users_path, class: "btn btn-danger file-btn-color mt-3 mr-2" do %>
+      <%= link_to receiveable_sys_users_path, class: "btn btn-outline-danger  mt-3 " do %>
           Receiveable
       <% end %>
-      <%= link_to transfer_ledger_books_path, class: "btn btn-info file-btn-color mt-3 mr-2" do %>
+      <%= link_to transfer_ledger_books_path, class: "btn btn-outline-info mt-3 " do %>
           Payment Transfer
       <% end %>
       <%= link_to new_sys_user_path, style:"width: 150px;", class: "btn btn-success mt-3 mr-1" do %>
@@ -41,7 +41,7 @@
       <div class="clearfix"></div>
       <div class="float-right">
         <div class="dropdown ml-auto">
-          <span class="btn btn-info" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
+          <span class="btn btn-outline-info btn-sm mt-2" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
           <div class="dropdown-content">
             <% if @help.present? %>
               <% @help&.help_links.each do |link| %>

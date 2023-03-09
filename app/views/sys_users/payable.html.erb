@@ -20,17 +20,17 @@
          </ol>
        </div>
        <div class="float-right  mt-3">
-          <%= link_to sys_users_path, class: "btn btn-success file-btn-color" do %>
+          <%= link_to sys_users_path, class: "btn btn-outline-success" do %>
              User's List
            <% end %>
-          <%= link_to receiveable_sys_users_path, class: "btn btn-danger file-btn-color" do %>
+          <%= link_to receiveable_sys_users_path, class: "btn btn-outline-danger" do %>
             Reciveable
           <% end %>
         </div>
         <div class="clearfix"></div>
         <div class="float-right">
           <div class="dropdown ml-auto ">
-           <span class="btn btn-info" title= "About This page">Help</span>
+           <span class="btn btn-outline-info btn-sm mt-4" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
             <div class="dropdown-content">
               <% if @help.present? %>
               <% @help&.help_links.each do |link| %>
