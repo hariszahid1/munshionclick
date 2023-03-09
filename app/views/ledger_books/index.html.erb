@@ -7,7 +7,7 @@
 <div class="m-4">
       <div class="d-flex">
         <div class="main-content-header">
-          <h1 class="ml-2">Ledger Book</h1>
+          <h2 class="ml-2  logo-back"><i class="fa fa-book mr-2"></i>Ledger Book</h2>
           <ol class="breadcrumb">
             <li class="breadcrumb-item">
               <a href="<%= root_path %>">Dashboard</a>
@@ -18,7 +18,6 @@
           </ol>
         </div>
       </div>
-
       <%if (check_can_create(@module_permission))%>
         <div class="row ml-1 d-flex mb-5" style="font-family: arial">
           <div class="col-lg-3 col-sm-3 stats-cards border-radius-1 shadow-lg p-4 mr-4" style="background:linear-gradient(45deg, #0f1d59 73%, white 8%); color:white;">
@@ -60,43 +59,42 @@
           </div>
         </div>
       <% end %>
-
       <div class="clearfix"></div>
       <div class="float-right">
-        <div class="dropdown ml-auto mr-4">
-          <span class="btn btn-info" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
-            <div class="dropdown-content">
-                <% if @help.present? %>
-                <% @help&.help_links.each do |link| %>
-                <a type="button" class="" target="_blank" href="<%= link[1] %>" >Help in <%= link[0] %></a>
-                <% end %>
-                <% end %>
-                </div>
-            </div>
-       </div>
+        <div class="dropdown ml-auto ">
+          <span class="btn btn-outline-info btn-sm mt-4" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
+          <div class="dropdown-content">
+            <% if @help.present? %>
+            <% @help&.help_links.each do |link| %>
+            <a type="button" class="" target="_blank" href="<%= link[1] %>" >Help in <%= link[0] %></a>
+            <% end %>
+            <% end %>
+          </div>
+        </div>
+      </div>
       <div class="float-right">
         <%if (check_can_create(@module_permission))%>
-           <%= link_to transfer_ledger_books_path, class: "btn btn-warning form-group mr-3" do %>
-            <i class="fa fa-exchange-alt text-dark mr-2" aria-hidden="true"></i>Payment Transfer
+           <%= link_to transfer_ledger_books_path, class: "btn btn-outline-danger form-group mr-2 mt-3" do %>
+            Payment Transfer
           <% end %> 
         <% end %> 
       </div>
-
-      <ul class="nav nav-pills mb-2 mt-2" role="tablist">
-        <li class="nav-item">
-          <a class="nav-link tab-label ledger-search-exp-tab active" data-toggle="tab" href="#search" role="tab">Search</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link tab-label sys-user-search-exp-tab" data-toggle="tab" href="#analytics" data-remote="true" role="tab">Analytics</a>
-        </li>
-        <li class="nav-item">
-        <a class="nav-link tab-label ledger-search-exp-tab" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link tab-label ledger-logs-tab" data-toggle="tab" href="#logs" role="tab">Logs</a>
-        </li> 
-      </ul>
-
+      <div class="row">
+        <ul class="nav nav-tabs mb-2 mt-2" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link tab-label ledger-search-exp-tab active" data-toggle="tab" href="#search" role="tab"><i class="fa fa-search mr-2"></i>Search</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link tab-label sys-user-search-exp-tab" data-toggle="tab" href="#analytics" data-remote="true" role="tab"><i class="fa fa-signal mr-2"></i>Analytics</a>
+          </li>
+          <li class="nav-item">
+          <a class="nav-link tab-label ledger-search-exp-tab" data-toggle="tab" href="#import-export" role="tab"><i class="fa fa-exchange-alt mr-2"></i>Import/Export</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link tab-label ledger-logs-tab" data-toggle="tab" href="#logs" role="tab"><i class="fa fa-history mr-2"></i>Logs</a>
+          </li> 
+        </ul>
+      </div>
       <%= hidden_field_tag "userCount", @user_count, { :id => "userCount" } %>
       <%= hidden_field_tag "balanceSum", @balance_sum, { :id => "balanceSum" } %>
       <%= hidden_field_tag "jamaKeys", @jama_keys, { :id => "jamaKeys" } %>
@@ -108,7 +106,7 @@
       <%= hidden_field_tag "creditValues", @credit_values, { :id => "creditValues" } %>
 
       <div class="tab-content mb-2">
-        <div class="tab-pane active mb-4 card shadow mt-2 p-4 border-radius-1" style="border-left: 12px solid #1e3494" id="search" role="tabpanel">
+        <div class="tab-pane active mb-4 card shadow mt-2 p-4 " style="border-left: 12px solid #1e3494" id="search" role="tabpanel">
           <%= search_form_for @q, url: ledger_books_path, class: "admin-controls mt-3", method: "get" do |f| %>
           <div class="row d-flex">
             <div class="col-lg-9">
@@ -130,60 +128,17 @@
               </div>
             </div>
             <div class="col-lg-3">
-              <%if (check_can_send_email(@module_permission))%>
-                <div class="dropdown my-dropdown float-right mr-2">
-                  <button type="button" class="form-control bg-info text-light">Mail List</button>
-                  <div class="dropdown-content my-dropdown-content p-2">
-                    <button class="form-control d-flex justify-content-center ml-2 mt-2 btn btn-info" style="width:120px" type="button" title="" name="asc_email" type="submit" value="Email" data-toggle="modal" data-target="#exampleModalCenter" ><i class="fa fa-envelope mr-1"></i>&nbsp;AscMail</button>
-                    <button class="form-control d-flex justify-content-center ml-2 mt-2 btn btn-info" style="width:120px" type="button" title="" name="desc_email" type="submit" value="Email" data-toggle="modal" data-target="#exampleModalCenter" ><i class="fa fa-envelope mr-1"></i>&nbsp;DescMail</button>
-                  </div>
-                </div>
-                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                  <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">Enter your email to recieve files.</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-                      <div class="modal-body">
-                        <% @pos_setting = PosSetting.first %>
-                        <label>Email:</label>
-                        <%= text_field_tag 'email_value',{}, value: current_user.email, class: 'form-control email-fields', type: 'email'%>
-                        <br />
-                        <label>Subject:</label>
-                        <%= text_field_tag 'subject', "#{@pos_setting.display_name} - Ledger Book Detail report from MunshiOnClick", class: 'form-control email-fields'%>
-                        <br />
-                        <label>Body:</label><br />
-                        <%= text_area_tag 'body', nil, class: 'form-control'%>
-                        <br />
-                        <label>Please select one of them.</label>
-                        <div>
-                          <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'CSV', required: 'required' %> CSV</label><br />
-                          <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'PDF', required: 'required' %> PDF</label><br />
-                          <label style="cursor: pointer"><%= radio_button_tag :email_choice, 'Both', required: 'required' %> Both(CSV + PDF)</label><br />
-                        </div>
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        <button name="email" type="submit" value="email" class="btn btn-primary email-send-btn">Send</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              <% end %>
               <%if (check_can_download_csv(@module_permission))%>
                 <div class="dropdown my-dropdown float-right mr-2">
                   <button type="button" class="form-control bg-warning text-dark">CSV List</button>
                   <div class="dropdown-content my-dropdown-content p-2">
-                    <button class="form-control d-flex justify-content-center ml-2 mt-2 btn btn-warning" style="width:120px" title="Download ledger book for single user in ascending order csv" name="submit_form_without_csv" type="submit" value="Ledger Book CSV" formtarget="_blank">1-Asc &nbsp; <i class="fa fa-file-excel"></i></button>
-                    <button class="form-control d-flex justify-content-center ml-2 mt-2 btn btn-warning" style="width:120px" title="Download ledger book for single user in descending order csv" name="submit_csv_without" type="submit" value="Ledger Book CSV A4" formtarget="_blank">1-Desc &nbsp;<i class="fa fa-file-excel"></i></button>
-                    <button class="form-control d-flex justify-content-center ml-2 mt-2 btn btn-warning" style="width:120px" title="Download ledger book for all user in ascending order csv" name="submit_form_csv" type="submit" value="Ledger Book CSV A4" formtarget="_blank">Asc &nbsp;<i class="fa fa-file-excel"></i></button>
-                    <button class="form-control d-flex justify-content-center ml-2 mt-2 btn btn-warning" style="width:120px" title="Download ledger book for all user in desending order csv" name="submit_csv" type="submit" value="Ledger Book CSV A4" formtarget="_blank">Desc &nbsp;<i class="fa fa-file-excel"></i></button>
-                    <button class="form-control d-flex justify-content-center ml-2 mt-2 btn btn-warning" style="width:120px" title="Download ledger book with short commenting csv" name="submit_csv_short" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Short &nbsp;<i class="fa fa-file-excel"></i></button>
-                    <button class="form-control d-flex justify-content-center ml-2 mt-2 btn btn-warning" style="width:120px" title="Download debit csv" name="submit_debit_csv" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Debit List &nbsp;<i class="fa fa-file-excel"></i></button>
-                    <button class="form-control d-flex justify-content-center ml-2 mt-2 btn btn-warning" style="width:120px" title="Download credit csv" name="submit_credit_csv" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Credit List &nbsp;<i class="fa fa-file-excel"></i></button>
+                    <button class="form-control d-flex justify-content-center ml-2 mt-2 btn btn-warning" style="width:100px" title="Download ledger book for single user in ascending order csv" name="submit_form_without_csv" type="submit" value="Ledger Book CSV" formtarget="_blank">1-Asc </button>
+                    <button class="form-control d-flex justify-content-center ml-2 mt-2 btn btn-warning" style="width:100px" title="Download ledger book for single user in descending order csv" name="submit_csv_without" type="submit" value="Ledger Book CSV A4" formtarget="_blank">1-Desc </button>
+                    <button class="form-control d-flex justify-content-center ml-2 mt-2 btn btn-warning" style="width:100px" title="Download ledger book for all user in ascending order csv" name="submit_form_csv" type="submit" value="Ledger Book CSV A4" formtarget="_blank">Asc </button>
+                    <button class="form-control d-flex justify-content-center ml-2 mt-2 btn btn-warning" style="width:100px" title="Download ledger book for all user in desending order csv" name="submit_csv" type="submit" value="Ledger Book CSV A4" formtarget="_blank">Desc</button>
+                    <button class="form-control d-flex justify-content-center ml-2 mt-2 btn btn-warning" style="width:100px" title="Download ledger book with short commenting csv" name="submit_csv_short" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Short </button>
+                    <button class="form-control d-flex justify-content-center ml-2 mt-2 btn btn-warning" style="width:100px" title="Download debit csv" name="submit_debit_csv" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Debit List </button>
+                    <button class="form-control d-flex justify-content-center ml-2 mt-2 btn btn-warning" style="width:100px" title="Download credit csv" name="submit_credit_csv" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Credit List </button>
                   </div>
                 </div>
               <% end %>
@@ -191,24 +146,24 @@
                 <div class="dropdown my-dropdown float-right mr-2">
                   <button type="button" class="form-control bg-danger text-light">PDF List</button>
                   <div class="dropdown-content my-dropdown-content p-2" style="width: 100px;">
-                    <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download ledger book pdf for single user in ascending order pdf" name="submit_form_without" type="submit" value="Ledger Book PDF A4" formtarget="_blank">1-Asc &nbsp;<i class="fa fa-file-pdf"></i></button>
-                    <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download ledger book pdf for single user in descending order pdf" name="submit_pdf_without" type="submit" value="Ledger Book PDF A4" formtarget="_blank">1-Desc &nbsp;<i class="fa fa-file-pdf"></i></button>
+                    <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download ledger book pdf for single user in ascending order pdf" name="submit_form_without" type="submit" value="Ledger Book PDF A4" formtarget="_blank">1-Asc</button>
+                    <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download ledger book pdf for single user in descending order pdf" name="submit_pdf_without" type="submit" value="Ledger Book PDF A4" formtarget="_blank">1-Desc </button>
                     <% if params.dig(:q, :sys_user_id_eq).present? %>
-                      <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download ledger book pdf for single user in ascending with OP order pdf" name="ledger_book_asc_op" type="submit" value="Ledger Book PDF A4" formtarget="_blank">1-ASC OP &nbsp;<i class="fa fa-file-pdf"></i></button>
-                      <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download ledger book pdf for single user in desending with OP order pdf" name="ledger_book_desc_op" type="submit" value="Ledger Book PDF A4" formtarget="_blank">1-Desc OP &nbsp;<i class="fa fa-file-pdf"></i></button>
+                      <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download ledger book pdf for single user in ascending with OP order pdf" name="ledger_book_asc_op" type="submit" value="Ledger Book PDF A4" formtarget="_blank">1-ASC OP </button>
+                      <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download ledger book pdf for single user in desending with OP order pdf" name="ledger_book_desc_op" type="submit" value="Ledger Book PDF A4" formtarget="_blank">1-Desc OP </button>
                     <% end %>
-                    <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download ledger book for all user in ascending order pdf" name="submit_form" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Asc &nbsp; <i class="fa fa-file-pdf"></i></button>
-                    <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download ledger book for all user in desending order pdf" name="submit_pdf" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Desc &nbsp; <i class="fa fa-file-pdf"></i></button>
-                    <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download ledger book with short commenting pdf" name="submit_pdf_short" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Short &nbsp;<i class="fa fa-file-pdf"></i></button>
-                    <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download debit pdf" name="submit_debit" type="submit" value="Ledger Book PDF A4" formtarget="_blank">DebitList &nbsp;<i class="fa fa-file-pdf"></i></button>
-                    <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download credit pdf" name="submit_credit" type="submit" value="Ledger Book PDF A4" formtarget="_blank">CreditList &nbsp;<i class="fa fa-file-pdf"></i></button>
+                    <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download ledger book for all user in ascending order pdf" name="submit_form" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Asc </button>
+                    <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download ledger book for all user in desending order pdf" name="submit_pdf" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Desc </button>
+                    <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download ledger book with short commenting pdf" name="submit_pdf_short" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Short </button>
+                    <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download debit pdf" name="submit_debit" type="submit" value="Ledger Book PDF A4" formtarget="_blank">DebitList </button>
+                    <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download credit pdf" name="submit_credit" type="submit" value="Ledger Book PDF A4" formtarget="_blank">CreditList </button>
                   </div>
                 </div>
               <% end %>
             </div>
           </div>
         </div>
-        <div class="tab-pane card shadow border-radius-1 p-5" id="analytics" role="tabpanel">
+        <div class="tab-pane card shadow  p-5" id="analytics" role="tabpanel">
           <div class="row d-flex">
             <div class="col-lg-6">
               <div class="my-chart-Container">
@@ -234,7 +189,7 @@
           </div>
         </div>
 
-        <div class="tab-pane mb-3 card shadow mt-2 border-radius-1 p-3" id="import-export" role="tabpanel">
+        <div class="tab-pane mb-3 card shadow mt-2  p-3" id="import-export" role="tabpanel">
           <p>
             <div class="d-flex ml-2">
               <button class="btn btn-danger ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
@@ -245,7 +200,7 @@
         <% end %>
 
 
-    <div class="tab-pane mb-3 card shadow mt-2 border-radius-1 p-3" id="logs" role="tabpanel">
+    <div class="tab-pane mb-3 card shadow mt-2  p-3" id="logs" role="tabpanel">
       <div class='ml-2 mt-2 mb-2'>
         <%= link_to view_history_ledger_books_path, class: "btn btn-success d-none", id: "ledger-logs", remote:true do %>
           show logs
@@ -256,17 +211,17 @@
     </div>
   </div>
  
-  <div class='card border-radius-1 shadow p-4 ledger-book-index-card' style="border-left: 12px solid #1e3494">
+  <div class='card  shadow p-4 ledger-book-index-card' style="border-left: 12px solid #1e3494">
   <div class="row d-flex" style="position: absolute;">
       <div>
         <%if (check_can_delete(@module_permission))%>
 	        <button class="btn btn-outline-danger delete-selected mt-4 ml-3" type='button' value='LedgerBook'>
-	        	Delete Selected
+	        	Delete Selected 
 	        </button>		
         <%end%>
       </div>  
       <%= search_form_for @q, url: ledger_books_path, class: "admin-controls ml-4", method: "get" do |f| %>
-        <div class="d-flex mt-4" style="width: 120%;">
+        <div class="d-flex mt-4" style="width: 100%;">
           <%= select_tag :limit, options_for_select(['Show Entries',5, 10, 15, 20, 25], selected: :limit), id: 'pagination-limit', title:'Show Entries', style:'cursor: pointer;' %>
         </div>
       <% end %>
