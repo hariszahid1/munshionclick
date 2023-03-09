@@ -57,11 +57,10 @@
               <div class="col-lg-2 form-group float-left">
                 <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
               </div>
-              <button type='submit' class='dynamic-submit-btn'></button>
+              <!--button type='submit' class='dynamic-submit-btn'></button-->
             </div>
           </div>
         </div>
-      <% end %>
         <div class="card shadow p-4 ">
           <%= render 'map_columns/map_column_partials' %>
           <div class="row d-flex" style="position: absolute;">
@@ -176,7 +175,7 @@
             </div>
           </div>
        </div>
-      <%# end %>
+      <% end %>
     </div>
     <div class="tab-pane mb-3 card shadow mt-4 p-4" id="analytics" role="tabpanel">
       <div id="show-analytics" class="row"></div>
@@ -187,11 +186,12 @@
 <script>
   $(document).ready(function() {
 
-    $('.files-download-btn').on('click', function(){
-      var name_btn = $(this).attr('name')
-      $('.dynamic-submit-btn').attr('name', name_btn)
-      $('.dynamic-submit-btn').click()
-    })
+    // $('.files-download-btn').on('click', function(){
+    //   var name_btn = $(this).attr('name')
+    //   $('.dynamic-submit-btn').attr('name', name_btn)
+
+    //   // $('.dynamic-submit-btn').click()
+    // })
 
     if ($(".bootstrap-table").length == 0){
       $("table").bootstrapTable();
