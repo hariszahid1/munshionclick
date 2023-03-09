@@ -40,7 +40,7 @@
               <% if balance == credit_debit%>
                 ok
               <%else%>
-                <%= number_with_delimiter(balance.to_f-credit_debit.to_f)%>
+                <%= number_with_delimiter((balance.to_f-credit_debit.to_f).round(2))%>
               <%end%>
             </td>
           </tr>

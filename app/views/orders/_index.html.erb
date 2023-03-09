@@ -257,197 +257,212 @@
               </div>
             </td>
           </tr>
-          <td colspan="13" class="hiddenRow">
-            <div class="accordian-body collapse"  id="<%= demo_id %>">  
-            <div class="card border-radius-1 m-5">
-              <table>
-                <tr><h5 class="font-weight-bold mt-4 mb-2 ml-2">Order Details</h5></tr>
-                <tr class="bg-warning" style="font-size: 1.3em;">
-                  <th>Product</th>
-                  <th>Quantity</th>
-                  <th>Rate</th>
-                  <th>Total</th>
-                  <th>Date</th>
-                </tr>
-                  <%if order.order_items_names_and_quantity!=0%>
-                    <%order.order_items_names_and_quantity.each do |name_quantity|%>
-                      <tr>
-                        <td class="urdu-font"><%=name_quantity.first%></td>
-                        <td><%= number_with_delimiter(name_quantity.second) %></td>
-                        <td><%= number_with_delimiter(name_quantity.third) %></td>
-                        <td><%= number_with_delimiter(name_quantity.fourth) %></td>
-                        <td>
-                          <% if name_quantity.fifth.present? %>
-                            <%=name_quantity.fifth.strftime("%d%b%y")%>
-                          <% end %>
-                        </td>
-                      </tr>  
-                    <%end%>
-                  <%end%>
-              </table>
-
-              <div class="mt-4 ml-2 mr-2">
-                <div class="float-left"><h5 class="font-weight-bold">Delievery Details</h5></div>
-                <div class="float-right">
-                  <%= link_to new_purchase_sale_detail_path(transaction_type: :sale,product: true,sys_user_id: order.sys_user_id, order_id: order.id), class: "btn btn-success mb-1", style:"width: 150px;" do %>
-                    <i class="fa fa-plus" aria-hidden="true"></i>
-                    Add Delivery
-                  <% end %>
-                </div>
-              </div>
-              <table>
-                <tr class="bg-primary text-light" style="font-size: 1.2em;">
-                  <th>#</th>
-                  <th>Items</th>
-                  <th>Total Bill</th>
-                  <th>Discount</th>
-                  <th>Paid</th>
-                  <th>Remaining</th>
-                  <th>Date/Time</th>
-                  <th>C/L</th>
-                  <th>Expiry</th>
-                  <th>Summary</th>
-                  <th>Action</th>
-                </tr>
-
-                <%if order.purchase_sale_details.present?%>
-                  <% order.purchase_sale_details.each do |purchase_sale_detail| %>
-                    <tr style="font-size: 1.2em;">
-                      <td><%= purchase_sale_detail.voucher_id.to_s+'#'+purchase_sale_detail.id.to_s %></td>
-                      <td><%= purchase_sale_detail.purchase_sale_items.count rescue 0 %></td>
-                      <td><%= number_with_delimiter(purchase_sale_detail.total_bill.to_f.round(2)) rescue 0 %></td>
-                      <td><%= number_with_delimiter(purchase_sale_detail.discount_price.to_f.round(2)) rescue 0%></td>
-                      <td><%= number_with_delimiter(purchase_sale_detail.amount.to_f.round(2)) rescue 0%></td>
-                      <td><%= number_with_delimiter(purchase_sale_detail.total_bill.to_f.round(2) - purchase_sale_detail.discount_price.to_f.round(2) - purchase_sale_detail.amount.to_f.round(2)) rescue 0%></td>
-                      <td>
-                        <%if purchase_sale_detail.created_at.strftime("%d%b%y")!=purchase_sale_detail.updated_at.strftime("%d%b%y")%>
-                          <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d/%b/%y at %I:%M%p") : '' %> <hr> <%= purchase_sale_detail.updated_at.present? ? purchase_sale_detail.updated_at.strftime("%d/%b/%y at %H:%M%p") : '' %>
-                        <%else%>
-                          <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d/%b/%y at %I:%M%p") : '' %>
-                        <%end%>
-                      </td>
-                      <td><%=purchase_sale_detail.carriage%> / <%=purchase_sale_detail.loading%></td>
-                      <td><%= purchase_sale_detail.purchase_sale_items.expiry rescue '' %> </td>
-                      <td><%= purchase_sale_detail.comment %></td>
-                      <td>
-                        <div class="icon-container-1">
-                          <div class="my-icon-1 my-view-1">
-                            <div class="my-tooltip-1">
-                              <div class="icon-container">
-                                <div class="my-icon my-view">
-                                  <div class="my-tooltip">
-                                    Edit
-                                  </div>
-                                  <%if purchase_sale_detail.purchase_sale_items.present?%>
-                                    <%if purchase_sale_detail.purchase_sale_items.first.product.present? %>
-                                      <%if (check_can_update(@module_permission))%>
-                                        <%= link_to edit_purchase_sale_detail_path(purchase_sale_detail,product: true), class:"icon-div" do %>
-                                          <i class="fa fa-edit mt-2" aria-hidden="true"></i>
-                                        <% end %>
-                                      <% end %>
-                                    <%else%>
-                                      <%if (check_can_update(@module_permission))%>
-                                        <%= link_to edit_purchase_sale_detail_path(purchase_sale_detail), class:"icon-div" do %>
-                                          <i class="fa fa-edit mt-2" aria-hidden="true"></i>
-                                        <% end %>
-                                      <% end %>
-                                    <%end%>
-                                  <%end%>
-                                </div>
-                                <div class="my-icon my-view">
-                                  <div class="my-tooltip">
-                                    Delete
-                                  </div>
-                                  <%if (check_can_delete(@module_permission))%>
-                                    <%= link_to purchase_sale_detail, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
-                                      <i class="fa fa-trash mt-2" aria-hidden="true"></i>
-                                    <% end %>
-                                  <% end %> 
-                                </div>
-                                <div class="my-icon my-view">
-                                  <div class="my-tooltip">
-                                    Show
-                                  </div>
-                                  <%if (check_can_read(@module_permission))%>
-                                    <%= link_to purchase_sale_detail, class:"icon-div" do %>
-                                      <i class="fa fa-eye mt-2" aria-hidden="true"></i>
-                                    <% end %>
-                                  <%end%>    
-                                </div>
-                                <div class="my-icon my-view">
-                                  <div class="my-tooltip">
-                                    PDF
-                                  </div>
-                                  <%if (check_can_download_pdf(@module_permission))%>
-                                    <%= link_to purchase_sale_detail,target: "_blank", class: "icon-div" do %>
-                                      <i class="fa fa-print mt-2" aria-hidden="true"></i>
-                                    <% end %> 
-                                  <% end %>    
-                                </div>
-                              </div>
-                            </div>
-                            <span class="icon-div-1">
-                                  <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </tr>
-                    <%if purchase_sale_detail.purchase_sale_items_names_and_quantity!=0%>
-                      <tr class="bg-warning" style="font-size: 1.3em;">
-                        <th colspan="3">Product</th>
-                        <th colspan="3">Quantity</th>
-                        <th colspan="3">Rate</th>
-                        <th>Total</th>
-                        <th>Date</th>
-                      </tr> 
-                      <%purchase_sale_detail.purchase_sale_items_names_and_quantity.each do |name_quantity|%> 
+          <tr>
+            <td colspan="12" class="hiddenRow">
+              <div class="accordian-body collapse"  id="<%= demo_id %>">  
+              <div class="card border-radius-1 m-5 p-2">
+                <table>
+                  <tr><h5 class="font-weight-bold mt-4 mb-2 ml-2">Order Details</h5></tr>
+                  <tr style="font-size: 1.3em; background-color: #e6e6e6;">
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Rate</th>
+                    <th>Total</th>
+                    <th>Date</th>
+                  </tr>
+                    <%if order.order_items_names_and_quantity!=0%>
+                      <%order.order_items_names_and_quantity.each do |name_quantity|%>
                         <tr>
-                          <td class="urdu-font" colspan="3"><%=name_quantity.first%></td>
-                          <td colspan="3"><%=name_quantity.second%></td>
-                          <td colspan="3"><%= number_with_delimiter(name_quantity.third) %></td>
+                          <td class="urdu-font"><%=name_quantity.first%></td>
+                          <td><%= number_with_delimiter(name_quantity.second) %></td>
+                          <td><%= number_with_delimiter(name_quantity.third) %></td>
                           <td><%= number_with_delimiter(name_quantity.fourth) %></td>
                           <td>
                             <% if name_quantity.fifth.present? %>
-                              <%=name_quantity.fifth.strftime("%d%b%y") %>
+                              <%=name_quantity.fifth.strftime("%d%b%y")%>
                             <% end %>
                           </td>
-                        </tr>
+                        </tr>  
                       <%end%>
                     <%end%>
-                  <% end %>
-                <% end %>
-              </table>
-              
-              <%if order.purchase_sale_details.present?%>
-                <table>
-                  <tr class="bg-success text-light" style="font-size: 1.3em;">
-                    <th>Order Total</th>
-                    <th>Delievery Total</th>
-                    <th>Order Remaining</th>
-                    <th>Balance</th>
-                    <th>Status</th>
-                  </tr>
-                  <tr>
-                    <td><%= number_with_delimiter(order.amount) %></td>
-                    <td><%= number_with_delimiter(order.purchase_sale_details.sum(:total_bill)) %></td>
-                    <td><%= number_with_delimiter(order.amount.to_i-order.purchase_sale_details.sum(:total_bill).to_i) %></td>
-                    <td><%= number_with_delimiter(order.sys_user.balance) rescue ''%></td>
-                    <td>
-                        <%if (order.sys_user.balance > 0 ) %>
-                          <b style="font-size:20px;color:blue;">Jama</b>
-                        <%elsif (order.sys_user.balance < 0 ) %>
-                          <b style="font-size:20px;color:red;">Benam</b>
-                        <%else%>
-                          <b style="font-size:20px;color: #6cec53 ;">Nill</b>
-                        <%end%>
-                    </td>
-                  </tr>
                 </table>
-              <%end%>
-            </div>
-            </div>
-          </td>    
+
+                <div class="mt-4 ml-2 mr-2">
+                  <div class="float-left"><h5 class="font-weight-bold">Delievery Details</h5></div>
+                  <div class="float-right">
+                    <%= link_to new_purchase_sale_detail_path(transaction_type: :sale,product: true,sys_user_id: order.sys_user_id, order_id: order.id), class: "btn btn-success mb-1", style:"width: 150px;" do %>
+                      <i class="fa fa-plus" aria-hidden="true"></i>
+                      Add Delivery
+                    <% end %>
+                  </div>
+                </div>
+                <table>
+                  <tr style="font-size: 1.2em; background-color: #9f9f9f9f;">
+                    <th></th>
+                    <th>#</th>
+                    <th>Items</th>
+                    <th>Total Bill</th>
+                    <th>Discount</th>
+                    <th>Paid</th>
+                    <th>Remaining</th>
+                    <th>Date/Time</th>
+                    <th>C/L</th>
+                    <th>Expiry</th>
+                    <th>Summary</th>
+                    <th>Action</th>
+                  </tr>
+
+                  <%if order.purchase_sale_details.present?%>
+                    <% order.purchase_sale_details.each do |purchase_sale_detail| %>
+                      <tr style="font-size: 1.2em;">
+                        <% psd_id = "psd_id#{purchase_sale_detail.id}"%>
+                        <td class="p-4 accordion-toggle acc-pointer" data-toggle="collapse" data-target="#<%= psd_id %>"><i class="fa fa-plus-circle"></i></td>
+                        <td><%= purchase_sale_detail.voucher_id.to_s+'#'+purchase_sale_detail.id.to_s %></td>
+                        <td><%= purchase_sale_detail.purchase_sale_items.count rescue 0 %></td>
+                        <td><%= number_with_delimiter(purchase_sale_detail.total_bill.to_f.round(2)) rescue 0 %></td>
+                        <td><%= number_with_delimiter(purchase_sale_detail.discount_price.to_f.round(2)) rescue 0%></td>
+                        <td><%= number_with_delimiter(purchase_sale_detail.amount.to_f.round(2)) rescue 0%></td>
+                        <td><%= number_with_delimiter(purchase_sale_detail.total_bill.to_f.round(2) - purchase_sale_detail.discount_price.to_f.round(2) - purchase_sale_detail.amount.to_f.round(2)) rescue 0%></td>
+                        <td>
+                          <%if purchase_sale_detail.created_at.strftime("%d%b%y")!=purchase_sale_detail.updated_at.strftime("%d%b%y")%>
+                            <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d/%b/%y at %I:%M%p") : '' %> <hr> <%= purchase_sale_detail.updated_at.present? ? purchase_sale_detail.updated_at.strftime("%d/%b/%y at %H:%M%p") : '' %>
+                          <%else%>
+                            <%= purchase_sale_detail.created_at.present? ? purchase_sale_detail.created_at.strftime("%d/%b/%y at %I:%M%p") : '' %>
+                          <%end%>
+                        </td>
+                        <td><%=purchase_sale_detail.carriage%> / <%=purchase_sale_detail.loading%></td>
+                        <td><%= purchase_sale_detail.purchase_sale_items.expiry rescue '' %> </td>
+                        <td><%= purchase_sale_detail.comment %></td>
+                        <td>
+                          <div class="icon-container-1">
+                            <div class="my-icon-1 my-view-1">
+                              <div class="my-tooltip-1">
+                                <div class="icon-container">
+                                  <div class="my-icon my-view">
+                                    <div class="my-tooltip">
+                                      Edit
+                                    </div>
+                                    <%if purchase_sale_detail.purchase_sale_items.present?%>
+                                      <%if purchase_sale_detail.purchase_sale_items.first.product.present? %>
+                                        <%if (check_can_update(@module_permission))%>
+                                          <%= link_to edit_purchase_sale_detail_path(purchase_sale_detail,product: true), class:"icon-div" do %>
+                                            <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+                                          <% end %>
+                                        <% end %>
+                                      <%else%>
+                                        <%if (check_can_update(@module_permission))%>
+                                          <%= link_to edit_purchase_sale_detail_path(purchase_sale_detail), class:"icon-div" do %>
+                                            <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+                                          <% end %>
+                                        <% end %>
+                                      <%end%>
+                                    <%end%>
+                                  </div>
+                                  <div class="my-icon my-view">
+                                    <div class="my-tooltip">
+                                      Delete
+                                    </div>
+                                    <%if (check_can_delete(@module_permission))%>
+                                      <%= link_to purchase_sale_detail, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+                                        <i class="fa fa-trash mt-2" aria-hidden="true"></i>
+                                      <% end %>
+                                    <% end %> 
+                                  </div>
+                                  <div class="my-icon my-view">
+                                    <div class="my-tooltip">
+                                      Show
+                                    </div>
+                                    <%if (check_can_read(@module_permission))%>
+                                      <%= link_to purchase_sale_detail, class:"icon-div" do %>
+                                        <i class="fa fa-eye mt-2" aria-hidden="true"></i>
+                                      <% end %>
+                                    <%end%>    
+                                  </div>
+                                  <div class="my-icon my-view">
+                                    <div class="my-tooltip">
+                                      PDF
+                                    </div>
+                                    <%if (check_can_download_pdf(@module_permission))%>
+                                      <%= link_to purchase_sale_detail,target: "_blank", class: "icon-div" do %>
+                                        <i class="fa fa-print mt-2" aria-hidden="true"></i>
+                                      <% end %> 
+                                    <% end %>    
+                                  </div>
+                                </div>
+                              </div>
+                              <span class="icon-div-1">
+                                    <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </tr>
+                      <tr>
+                        <td colspan="12" class="hiddenRow">
+                          <div class="accordian-body collapse"  id="<%= psd_id %>">  
+                            <div class="card border-radius-1 m-5">
+                              <%if purchase_sale_detail.purchase_sale_items_names_and_quantity!=0%>
+                                <table>
+                                  <tr style="font-size: 1.3em; background-color: #e6e6e6;">
+                                    <th colspan="3">Product</th>
+                                    <th colspan="3">Quantity</th>
+                                    <th colspan="3">Rate</th>
+                                    <th>Total</th>
+                                    <th>Date</th>
+                                  </tr> 
+                                  <%purchase_sale_detail.purchase_sale_items_names_and_quantity.each do |name_quantity|%> 
+                                    <tr>
+                                      <td class="urdu-font" colspan="3"><%=name_quantity.first%></td>
+                                      <td colspan="3"><%=name_quantity.second%></td>
+                                      <td colspan="3"><%= number_with_delimiter(name_quantity.third) %></td>
+                                      <td><%= number_with_delimiter(name_quantity.fourth) %></td>
+                                      <td>
+                                        <% if name_quantity.fifth.present? %>
+                                          <%=name_quantity.fifth.strftime("%d%b%y") %>
+                                        <% end %>
+                                      </td>
+                                    </tr>
+                                  <%end%>
+                                </table>
+                              <%end%>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    <% end %>
+                  <% end %>
+                </table>
+
+                <%if order.purchase_sale_details.present?%>
+                  <table>
+                    <tr style="font-size: 1.3em; background-color: #d6f5de;">
+                      <th>Order Total</th>
+                      <th>Delivery Total</th>
+                      <th>Order Remaining</th>
+                      <th>Balance</th>
+                      <th>Status</th>
+                    </tr>
+                    <tr>
+                      <td><%= number_with_delimiter(order.amount) %></td>
+                      <td><%= number_with_delimiter(order.purchase_sale_details.sum(:total_bill)) %></td>
+                      <td><%= number_with_delimiter(order.amount.to_i-order.purchase_sale_details.sum(:total_bill).to_i) %></td>
+                      <td><%= number_with_delimiter(order.sys_user.balance) rescue ''%></td>
+                      <td>
+                          <%if (order.sys_user.balance > 0 ) %>
+                            <b style="font-size:20px;color:blue;">Jama</b>
+                          <%elsif (order.sys_user.balance < 0 ) %>
+                            <b style="font-size:20px;color:red;">Benam</b>
+                          <%else%>
+                            <b style="font-size:20px;color: #6cec53 ;">Nill</b>
+                          <%end%>
+                      </td>
+                    </tr>
+                  </table>
+                <%end%>
+              </div>
+              </div>
+            </td>    
+          </tr>
         <% end %>
       </tbody>
     </table>

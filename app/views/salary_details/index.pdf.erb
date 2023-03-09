@@ -41,7 +41,7 @@
       <% @salary_details_pdf.each do |salary_detail| %>
         <%if salary_detail.product.present? %>
           <%if ((salary_detail.quantity.to_f*salary_detail.status.to_f) != 0 and salary_detail.amount != 0)%>
-            <tr>
+            <tr style='text-align: center;'>
               <td style="width:20vw;"><%= salary_detail.id %></td>
               <td style="width:20vw;"><%= salary_detail.staff.name %></td>
               <td style="width:20vw;"><%= salary_detail.product.present? ? salary_detail.product.title : "" %></td>
@@ -51,7 +51,7 @@
               <td style="width:20vw;"><%= salary_detail.created_at.strftime("%d-%b-%Y") %></td>
             </tr>
           <%elsif ( (salary_detail.quantity.to_f*salary_detail.status.to_f) == 0 and salary_detail.amount == 0)%>
-            <tr>
+            <tr style='text-align: center;'>
               <td style="width:20vw;"><%= salary_detail.id %></td>
               <td style="width:20vw;"><%= salary_detail.staff.name %></td>
               <td style="width:20vw;">Day OFF</td>
@@ -62,7 +62,7 @@
             </tr>
           <%end%>
         <%elsif (salary_detail.amount != 0 || salary_detail.khakar_credit != 0) && salary_detail.quantity.to_f>0%>
-          <tr>
+          <tr style='text-align: center;'>
             <td style="width:20vw;"><%= salary_detail.id %></td>
             <td style="width:20vw;"><%= salary_detail.staff.name %></td>
             <td style="width:20vw;"><%= salary_detail.wage_rate.present? ? salary_detail.wage_rate : "" %></td>
@@ -72,7 +72,7 @@
             <td style="width:20vw;"><%= salary_detail.created_at.strftime("%d-%b-%Y") %></td>
           </tr>
         <%elsif ( (salary_detail.quantity.to_f*salary_detail.status.to_f) == 0 and salary_detail.amount == 0)%>
-            <tr>
+            <tr style='text-align: center;'>
               <td style="width:20vw;"><%= salary_detail.id %></td>
               <td style="width:20vw;"><%= salary_detail.staff.name %></td>
               <td style="width:20vw;">Day OFF</td>
@@ -83,12 +83,13 @@
             </tr>
         <%end%>
       <% end %>
-      <tr>
+      <tr style='text-align: center;'>
         <td><h5>Total</h5></td>
         <td></td>
         <td></td>
         <td></td>
-        <td><h5><%=@salary_details.sum(:amount)%></h5></td>
+        <td><h5><%= number_with_delimiter(@salary_details_pdf&.pluck(:amount)&.compact&.sum) %></h5></td>
+        <td><h5><%= number_with_delimiter(@salary_details_pdf&.pluck(:remarks)&.map(&:to_f)&.sum&.round(2)) %></h5></td>
         <td></td>
       </tr>
     </tbody>
