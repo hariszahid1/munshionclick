@@ -95,7 +95,9 @@
         <% collapse_id = "collapse_id#{index}"%>
         <% sys_user = property_plan&.order&.sys_user %>
         <tr>
-          <td class="p-4 accordion-toggle acc-pointer" data-toggle="collapse" data-target="#<%= collapse_id %>"><i class="fa fa-plus-circle"></i></td>
+          <td class="p-4 accordion-toggle acc-pointer" data-toggle="collapse" data-target="#<%= collapse_id %>">
+            <i class="fas fa-chevron-circle-down"></i>
+          </td>
           <td><%= link_to sys_user&.name, orders_path('q[sys_user_id_eq]': sys_user.id.to_s,"sale":true) %></td>
           <td><%= sys_user&.contact&.phone %></td>
           <% order_items = property_plan&.order&.order_items_names_and_quantity %>
@@ -202,6 +204,11 @@
           .not(this)
           .collapse('toggle')
     })
+
+    $('.accordion-toggle').on('click', function(){
+      $(this).find('.fa-chevron-circle-down').toggleClass('rotate-icon')
+    })
+
   });
 
 </script>

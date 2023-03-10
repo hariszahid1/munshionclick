@@ -72,7 +72,9 @@
         <% @attendances.each_with_index do |atten, index|%>
           <tr calss= 'table-success'>
             <% demo_id = "demo#{index}"%>
-            <td class="p-4 accordion-toggle acc-pointer text-center" data-toggle="collapse" data-target="#<%= demo_id %>"><i class="fa fa-plus-circle"></i></td>
+            <td class="p-4 accordion-toggle acc-pointer text-center" data-toggle="collapse" data-target="#<%= demo_id %>">
+              <i class="fas fa-chevron-circle-down"></i>
+            </td>
             <td><%= atten.date&.strftime('%A, %d %B %Y')%></td>
             <td><%= atten.daily_attendances&.count%></td>
             <td>
@@ -163,6 +165,11 @@
   $(document).ready(function() {
     $("#city_list").removeClass('hidden');
     FontAwesome.dom.i2svg();
+
+    $('.accordion-toggle').on('click', function(){
+      $(this).find('.fa-chevron-circle-down').toggleClass('rotate-icon')
+    })
+
   });
   $(function() {
 
