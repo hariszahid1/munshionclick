@@ -77,7 +77,9 @@
       <% @purchase_sale_details.each_with_index do |purchase_sale_detail, index| %>
         <% demo_id = "demo#{index}"%>
         <tr class="table-success">
-          <td class="p-4 accordion-toggle acc-pointer" data-toggle="collapse" data-target="#<%= demo_id %>"><i class="fa fa-plus-circle"></i></td>
+          <td class="p-4 accordion-toggle acc-pointer" data-toggle="collapse" data-target="#<%= demo_id %>">
+            <i class="fas fa-chevron-circle-down"></i>
+          </td>
           <td><b><%= purchase_sale_detail.voucher_id.to_s+'#'+purchase_sale_detail.id.to_s %></b></td>
           <td class="urdu-font">
             <b>
@@ -262,6 +264,11 @@
     }
     $("#purchase_sale_detail_list").removeClass('hidden');
     FontAwesome.dom.i2svg();
+
+    $('.accordion-toggle').on('click', function(){
+      $(this).find('.fa-chevron-circle-down').toggleClass('rotate-icon')
+    })
+
   });
   $(document).ready(function() {
     setTimeout(function(){

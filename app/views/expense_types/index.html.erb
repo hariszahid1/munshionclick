@@ -49,24 +49,26 @@
 	  	<%end%>
     </ul>
   </div>
-  <%= search_form_for @q, url: expense_types_path, class: "admin-controls", method: "get" do |f| %>
     <div class="tab-content">
       <div class="tab-pane no-tab-border active  mt-2 " id="search" role="tabpanel">
-        <div class="card shadow mb-3  p-3 ">
-          <div class="row d-flex mt-3 mr-2">
-            <div class="col">
-              <div class='col-lg-3 form-group float-left'>
-                <%= f.select :id_eq, options_for_select(@options_for_select.map{ |p| [p.title , p.id]}, f.object.id_eq),{:include_blank => "Select Title"},:class=>"form-control chosen-select" %>
-              </div>
-              <div class='col-lg-4 form-group float-left'>
-                <%= f.search_field :title_or_comment_cont, placeholder: "Search Expense Type", title: "Expense Type" , class: "form-control" %>
-              </div>
-              <div class='col-lg-3 form-group float-left'>
-              <button class="form-control btn btn-primary" title="search expense type" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+        <%= search_form_for @q, url: expense_types_path, class: "admin-controls", method: "get" do |f| %>
+          <div class="card shadow mb-3  p-3 ">
+            <div class="row d-flex mt-3 mr-2">
+              <div class="col">
+                <div class='col-lg-3 form-group float-left'>
+                  <%= f.select :id_eq, options_for_select(@options_for_select.map{ |p| [p.title , p.id]}, f.object.id_eq),{:include_blank => "Select Title"},:class=>"form-control chosen-select" %>
+                </div>
+                <div class='col-lg-4 form-group float-left'>
+                  <%= f.search_field :title_or_comment_cont, placeholder: "Search Expense Type", title: "Expense Type" , class: "form-control" %>
+                </div>
+                <div class='col-lg-3 form-group float-left'>
+                  <button class="form-control btn btn-primary" title="search expense type" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+                  <button type='submit' class='dynamic-submit-btn d-none' formtarget='_blank'></button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        <% end %>
         <div class='card shadow p-4'>
           <div class="row d-flex" style="position: absolute;">
             <div>
@@ -78,10 +80,10 @@
             </div>
             <div class="mt-4 ml-3">  
               <%if (check_can_download_pdf(@module_permission))%>
-               <button class="form-control  file-btn-color  btn btn-danger  justify-content-center" style="width:80px" title= "download expense type pdf" name="pdf" type="submit" value="pdf" formtarget="_blank">PDF</button>
+               <button class="form-control files-download-btn file-btn-color  btn btn-danger  justify-content-center" style="width:80px" title= "download expense type pdf" name="pdf" type="submit" value="pdf" formtarget="_blank">PDF</button>
               <% end %>
               <%if (check_can_download_csv(@module_permission))%>
-               <button class="form-control  btn btn-warning file-btn-color " style="width:80px" title= "download expense type csv" name="csv" type="submit" value="csv">CSV</button>
+               <button class="form-control files-download-btn  btn btn-warning file-btn-color " style="width:80px" title= "download expense type csv" name="csv" type="submit" value="csv">CSV</button>
               <% end %>
             </div>
             <div>  
@@ -127,7 +129,6 @@
         </p>
       </div>
     </div>
-  <% end %>
 <%= form_for :bulk_import, url: bulk_import_data_path, method: :post, html: {class: "bulk-import-form"} do |f| %>
   <div class="modal fade" id="importFile" tabindex="-1" role="dialog" aria-labelledby="importFileTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -165,6 +166,12 @@
     $("#expense_types_list").removeClass('hidden');
     FontAwesome.dom.i2svg();
   });
+  $('.files-download-btn').on('click', function(){
+    var name_btn = $(this).attr('name')
+    $('.dynamic-submit-btn').attr('name', name_btn)
+    $('.dynamic-submit-btn').val($(this).val())
+    $('.dynamic-submit-btn').click()
+  })
 </script>
 
 <script>

@@ -174,7 +174,9 @@
         <% @purchase_sale_details.each_with_index do |purchase_sale_detail, index| %>
         <% demo_id = "demo#{index}"%>
           <tr>
-            <td class="accordion-toggle acc-pointer" data-toggle="collapse" data-target="#<%= demo_id %>"><i class="fa fa-plus-circle ml-4"></i></td>
+            <td class="accordion-toggle acc-pointer" data-toggle="collapse" data-target="#<%= demo_id %>">
+              <i class="fas fa-chevron-circle-down"></i>
+            </td>
             <td><b><%= purchase_sale_detail.voucher_id.to_s+'#'+purchase_sale_detail.id.to_s %></b></td>
             <td class="urdu-font">
               <b>
@@ -478,6 +480,11 @@
     $('.purchase-sale-search-exp-tab').on('click', function(){
       $('.purchase-sale-book-index-card').removeClass('d-none')
     })
+
+    $('.accordion-toggle').on('click', function(){
+      $(this).find('.fa-chevron-circle-down').toggleClass('rotate-icon')
+    })
+
   });
   $(document).ready(function() {
     setTimeout(function(){
