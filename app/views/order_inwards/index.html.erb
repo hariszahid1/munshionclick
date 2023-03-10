@@ -83,7 +83,9 @@
         <% @orders.each_with_index do |order, index| %>
           <% demo_id = "demo#{index}"%>
           <tr class="table-success">
-            <td class="p-4 accordion-toggle acc-pointer" data-toggle="collapse" data-target="#<%= demo_id %>"><i class="fa fa-plus-circle"></i></td>
+            <td class="p-4 accordion-toggle acc-pointer" data-toggle="collapse" data-target="#<%= demo_id %>">
+              <i class="fas fa-chevron-circle-down"></i>
+            </td>
             <td><b style="font-size:20px;color:blue;"><%= order.voucher_id.to_s+'#'+order.id.to_s %></b></td>
             <td>
               <b style="font-size:20px;color:blue;">
@@ -352,6 +354,9 @@
       $('.order-book-index-card').addClass('d-none')
     })
 
+    $('.accordion-toggle').on('click', function(){
+      $(this).find('.fa-chevron-circle-down').toggleClass('rotate-icon')
+    })
 
     $('.order-search-exp-tab').on('click', function(){
       $('.order-book-index-card').removeClass('d-none')

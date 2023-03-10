@@ -115,7 +115,6 @@
           <th><%= sort_link(@q, :discount_price, 'Discount') %></th>
           <th><%= sort_link(@q, :amount, 'Paid') %></th>
           <th><%= sort_link(@q, :amount, 'Remaining') %></th>
-          <!--th><%#= sort_link(@q, :status, 'Status') %></th-->
           <th><%= sort_link(@q, :created_at, 'Date/Time') %></th>
           <th><%= sort_link(@q, :comment, '') %></th>
           <th><%= sort_link(@q, :comment, 'Comment') %></th>
@@ -127,7 +126,9 @@
         <% @orders.each_with_index do |order, index| %>
           <% demo_id = "demo#{index}"%>
           <tr class="">
-            <td class="p-4 accordion-toggle acc-pointer" data-toggle="collapse" data-target="#<%= demo_id %>"><i class="fa fa-plus-circle"></i></td>
+            <td class="p-4 accordion-toggle acc-pointer" data-toggle="collapse" data-target="#<%= demo_id %>">
+              <i class="fas fa-chevron-circle-down"></i>
+            </td>
             <td><b style="font-size:20px;color:blue;"><%= order.voucher_id.to_s+'#'+order.id.to_s %></b></td>
             <td>
               <b style="font-size:20px;color:blue;">
@@ -170,7 +171,6 @@
                 <% end %>
               </div>
             </td>
-            <!--td><%#= order.status %></td-->
             <td>
               <%if order.created_at.strftime("%d%b%y")!=order.updated_at.strftime("%d%b%y")%>
                 <%= order.created_at.present? ? order.created_at.strftime("%d/%b/%y at %I:%M %p") : '' %> <hr> <%= order.updated_at.present? ? order.updated_at.strftime("%d%b%y at %H:%M%p") : '' %>
@@ -263,7 +263,7 @@
               <div class="card border-radius-1 m-5 p-2">
                 <table>
                   <tr><h5 class="font-weight-bold mt-4 mb-2 ml-2">Order Details</h5></tr>
-                  <tr style="font-size: 1.3em; background-color: #e6e6e6;">
+                  <tr class='order-details-th'>
                     <th>Product</th>
                     <th>Quantity</th>
                     <th>Rate</th>
@@ -288,7 +288,7 @@
                 </table>
 
                 <div class="mt-4 ml-2 mr-2">
-                  <div class="float-left"><h5 class="font-weight-bold">Delievery Details</h5></div>
+                  <div class="float-left"><h5 class="font-weight-bold">Delivery Details</h5></div>
                   <div class="float-right">
                     <%= link_to new_purchase_sale_detail_path(transaction_type: :sale,product: true,sys_user_id: order.sys_user_id, order_id: order.id), class: "btn btn-success mb-1", style:"width: 150px;" do %>
                       <i class="fa fa-plus" aria-hidden="true"></i>
@@ -297,7 +297,7 @@
                   </div>
                 </div>
                 <table>
-                  <tr style="font-size: 1.2em; background-color: #9f9f9f9f;">
+                  <tr class='delivery-details-th'>
                     <th></th>
                     <th>#</th>
                     <th>Items</th>
@@ -316,7 +316,9 @@
                     <% order.purchase_sale_details.each do |purchase_sale_detail| %>
                       <tr style="font-size: 1.2em;">
                         <% psd_id = "psd_id#{purchase_sale_detail.id}"%>
-                        <td class="p-4 accordion-toggle acc-pointer" data-toggle="collapse" data-target="#<%= psd_id %>"><i class="fa fa-plus-circle"></i></td>
+                        <td class="p-4 accordion-toggle acc-pointer" data-toggle="collapse" data-target="#<%= psd_id %>">
+                          <i class="fas fa-chevron-circle-down"></i>
+                        </td>
                         <td><%= purchase_sale_detail.voucher_id.to_s+'#'+purchase_sale_detail.id.to_s %></td>
                         <td><%= purchase_sale_detail.purchase_sale_items.count rescue 0 %></td>
                         <td><%= number_with_delimiter(purchase_sale_detail.total_bill.to_f.round(2)) rescue 0 %></td>
@@ -403,7 +405,7 @@
                             <div class="card border-radius-1 m-5">
                               <%if purchase_sale_detail.purchase_sale_items_names_and_quantity!=0%>
                                 <table>
-                                  <tr style="font-size: 1.3em; background-color: #e6e6e6;">
+                                  <tr class='order-details-th'>
                                     <th colspan="3">Product</th>
                                     <th colspan="3">Quantity</th>
                                     <th colspan="3">Rate</th>
@@ -435,7 +437,7 @@
 
                 <%if order.purchase_sale_details.present?%>
                   <table>
-                    <tr style="font-size: 1.3em; background-color: #d6f5de;">
+                    <tr class='order-total-th'>
                       <th>Order Total</th>
                       <th>Delivery Total</th>
                       <th>Order Remaining</th>
@@ -487,6 +489,10 @@
     }
     $("#order_list").removeClass('hidden');
     FontAwesome.dom.i2svg();
+
+    $('.accordion-toggle').on('click', function(){
+      $(this).find('.fa-chevron-circle-down').toggleClass('rotate-icon')
+    })
 
     $('.order-logs-tab').on('click', function(){
       $('#order-logs').click();
