@@ -70,19 +70,21 @@
 </div>  
 <%= hidden_field_tag "accountTitle", @account_title, { :id => "accountTitle" } %>
 <%= hidden_field_tag "accountAmount", @account_amount, { :id => "accountAmount" } %>
-<%= search_form_for @q, url: accounts_path, class: "admin-controls", method: "get" do |f| %>
   <div class="tab-content">
     <div class="tab-pane active mb-3 no-tab-border" id="search" role="tabpanel">
-      <div class="card shadow mt-2 mb-3 p-4">  
-        <div class="row d-flex mt-3 mr-2">
-          <div class="col-lg-4 form-group float-left">
-            <%= f.select :id_in, options_from_collection_for_select(@accounts, "id", ->(st){"#{st.title} \u{27F6} #{st.bank_name}"},f.object.id_in),{:include_blank => "Select the Title"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Title"} }%>
-          </div>
-          <div class="col-lg-2 form-group float-left">
-            <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+      <%= search_form_for @q, url: accounts_path, class: "admin-controls", method: "get" do |f| %>
+        <div class="card shadow mt-2 mb-3 p-4">  
+          <div class="row d-flex mt-3 mr-2">
+            <div class="col-lg-4 form-group float-left">
+              <%= f.select :id_in, options_from_collection_for_select(@accounts, "id", ->(st){"#{st.title} \u{27F6} #{st.bank_name}"},f.object.id_in),{:include_blank => "Select the Title"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Title"} }%>
+            </div>
+            <div class="col-lg-2 form-group float-left">
+              <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+              <button type='submit' class='dynamic-submit-btn d-none' formtarget='_blank'></button>
+            </div>
           </div>
         </div>
-      </div>
+      <% end %>
       <div class="card shadow p-4">
         <div class="row d-flex" style="position: absolute;">
           <div>
@@ -97,13 +99,13 @@
               <div class="dropdown my-dropdown mr-1 ml-auto">
                 <button type="button" class="btn btn-danger file-btn-color" style="width:80px">PDF</button>
                 <div class="dropdown-content my-dropdown-content p-3">
-                  <button class="btn btn-danger file-btn-color mr-1 ml-1 mt-2 mb-2" title= "download crm pdf" name="pdf_asc" type="submit" value="pdf_asc" formtarget="_blank" style="width:100px">ASC</button>
-                  <button class="btn btn-danger file-btn-color mr-1 ml-1 mt-2 mb-2" title= "download crm pdf" name="pdf_desc" type="submit" value="pdf_desc" formtarget="_blank" style="width:100px">DESC</button>
+                  <button class="btn btn-danger file-btn-color files-download-btn mr-1 ml-1 mt-2 mb-2" title= "download crm pdf" name="pdf_asc" type="submit" value="pdf_asc" formtarget="_blank" style="width:100px">ASC</button>
+                  <button class="btn btn-danger file-btn-color files-download-btn mr-1 ml-1 mt-2 mb-2" title= "download crm pdf" name="pdf_desc" type="submit" value="pdf_desc" formtarget="_blank" style="width:100px">DESC</button>
                 </div>
               </div>
             <% end %>
             <%if (check_can_download_csv(@module_permission))%>
-              <button class="btn btn-danger file-btn-color mr-1" name="csv" style="width:80px" type="submit" value="Accounts CSV">CSV</button>
+              <button class="btn btn-danger file-btn-color files-download-btn mr-1" name="csv" style="width:80px" type="submit" value="Accounts CSV">CSV</button>
             <% end %>
           </div>
         </div>
@@ -269,11 +271,11 @@
       </div>
     </div>
     <div class="tab-pane card mb-3 shadow mt-2 p-3" id="analytics" role="tabpanel">
-        <div class="my-chart-Container">
-          <div class="mychartBox">
-            <canvas id="myChart"></canvas>
-          </div> 
-        </div>   
+      <div class="my-chart-Container">
+        <div class="mychartBox">
+          <canvas id="myChart"></canvas>
+        </div> 
+      </div>   
     </div>
     <div class="tab-pane card mb-3 shadow mt-2 p-3" id="import-export" role="tabpanel">
       <p>
@@ -284,7 +286,6 @@
       </p>
     </div>
     </div>
-  <% end %>
   </div>
 <div>
 <%= form_for :bulk_import, url: bulk_import_data_path, method: :post, html: {class: "bulk-import-form"} do |f| %>
@@ -324,6 +325,12 @@
     $("#city_list").removeClass('hidden');
     FontAwesome.dom.i2svg();
   });
+  $('.files-download-btn').on('click', function(){
+      var name_btn = $(this).attr('name')
+      $('.dynamic-submit-btn').attr('name', name_btn)
+      $('.dynamic-submit-btn').val($(this).val())
+      $('.dynamic-submit-btn').click()
+  })
   $(document).ready(function() {
     setTimeout(function(){
       $(".chosen-select").chosen({

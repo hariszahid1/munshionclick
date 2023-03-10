@@ -58,24 +58,26 @@
   <%= hidden_field_tag "cityUser", @city_user, { :id => "cityUser" } %>
   <%= hidden_field_tag "cityTitle1", @city_title, { :id => "cityTitle1" } %>
   <%= hidden_field_tag "cityUser1", @city_user, { :id => "cityUser1" } %>
-  <%= search_form_for @q, url: cities_path, class: "admin-controls", id:"search-form", method: "get" do |f| %>
     <div class="tab-content">
       <div class="tab-pane active no-tab-border mb-3 mt-2" id="search" role="tabpanel">
-        <div class="card shadow mb-3 p-3">
-          <div class="row d-flex mt-3">
-            <div class="col">
-              <div class="col-lg-4 form-group float-left">
-                <%= f.select :id_eq, options_for_select(@options_for_select.map{ |p| [p.title , p.id]}, f.object.id_eq),{:include_blank => "Select Title"},:class=>"form-control chosen-select" %>
-              </div>
-              <div class="col-lg-4 form-group float-left">
-                <%= f.search_field :title_or_comment_cont, placeholder: "Search in city", title: "Enter city name" ,:class=>"form-control" %>
-              </div>
-              <div class="col-lg-3 form-group float-left">
-                <button class="form-control btn btn-primary" title="search cities" name="search_submit"type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+        <%= search_form_for @q, url: cities_path, class: "admin-controls", id:"search-form", method: "get" do |f| %>
+          <div class="card shadow mb-3 p-3">
+            <div class="row d-flex mt-3">
+              <div class="col">
+                <div class="col-lg-4 form-group float-left">
+                  <%= f.select :id_eq, options_for_select(@options_for_select.map{ |p| [p.title , p.id]}, f.object.id_eq),{:include_blank => "Select Title"},:class=>"form-control chosen-select" %>
+                </div>
+                <div class="col-lg-4 form-group float-left">
+                  <%= f.search_field :title_or_comment_cont, placeholder: "Search in city", title: "Enter city name" ,:class=>"form-control" %>
+                </div>
+                <div class="col-lg-3 form-group float-left">
+                  <button class="form-control btn btn-primary" title="search cities" name="search_submit"type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+                  <button type='submit' class='dynamic-submit-btn d-none' formtarget='_blank'></button>
+                </div>
               </div>
             </div>
           </div>
-        </div>  
+        <% end %>  
         <div class="card shadow p-4 content">
           <%= render 'map_columns/map_column_partials' %>
           <div class="row d-flex" style="position: absolute;">
@@ -91,15 +93,15 @@
                 <div class="dropdown my-dropdown">
                   <button type="button" class="btn btn-danger file-btn-color mr-1" style="width:80px;">PDF</button>
                   <div class="dropdown-content my-dropdown-content p-2">
-                    <button class="btn btn-danger file-btn-color mt-2 mb-2 ml-2" title= "download cities pdf" name="pdf" type="submit" value="pdf" formtarget="_blank" style="width:100px">General</button>
+                    <button class="btn btn-danger file-btn-color mt-2 mb-2 ml-2 files-download-btn" title= "download cities pdf" name="pdf" type="submit" value="pdf" formtarget="_blank" style="width:100px">General</button>
                     <%if @pdf_template.present? %>
-                      <button class="btn btn-danger file-btn-color mt-2 mb-2 ml-2" title= "download cities pdf" name="dynamic_pdf" type="submit" value="dynamic_pdf" formtarget="_blank" style="width:100px">Dynamic</button>
+                      <button class="btn btn-danger file-btn-color mt-2 mb-2 ml-2 files-download-btn" title= "download cities pdf" name="dynamic_pdf" type="submit" value="dynamic_pdf" formtarget="_blank" style="width:100px">Dynamic</button>
                     <% end %>
                   </div>
                 </div>
               <% end %>
               <%if (check_can_download_csv(@module_permission))%>
-                <button class="btn btn-warning file-btn-color mr-1" title= "download cities csv" name="csv" type="submit" value="csv" style="width:80px">CSV</button>
+                <button class="btn btn-warning file-btn-color files-download-btn mr-1" title= "download cities csv" name="csv" type="submit" value="csv" style="width:80px">CSV</button>
               <% end %>
             </div>  
             <%= search_form_for @q, url: cities_path, class: "admin-controls ml-2", method: "get" do |f| %>
@@ -162,8 +164,8 @@
         </p>
       </div>
       </div>
-    <% end %>
-  </div>
+    </div>
+  
 <div>
 <%= form_for :bulk_import, url: bulk_import_data_path, method: :post, html: {class: "bulk-import-form"} do |f| %>
   <div class="modal fade" id="importFile" tabindex="-1" role="dialog" aria-labelledby="importFileTitle" aria-hidden="true">
@@ -201,6 +203,12 @@
     $("#city_list").removeClass('hidden');
     FontAwesome.dom.i2svg();
   });
+  $('.files-download-btn').on('click', function(){
+      var name_btn = $(this).attr('name')
+      $('.dynamic-submit-btn').attr('name', name_btn)
+      $('.dynamic-submit-btn').val($(this).val())
+      $('.dynamic-submit-btn').click()
+  })
   $(document).ready(function() {
     setTimeout(function(){
       $(".chosen-select").chosen({
