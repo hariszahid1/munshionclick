@@ -108,68 +108,69 @@
             </div>
             <div class="col-lg-1 form-group float-left">
               <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+              <button type='submit' class='dynamic-submit-btn d-none' formtarget='_blank'></button>
             </div>
           </div>
-        </div>
-        <div class="card investment-book-index-card shadow p-4">
-          <%= render 'map_columns/map_column_partials' %>
-          <div class="row d-flex" style="position: absolute;">
-            <div>
-              <%if (check_can_delete(@module_permission))%>
-	              <button class="btn btn-danger file-btn-color delete-selected mt-4 ml-3" type='button' value='Investment'>
-	              	<i class="fa fa-trash"></i>
-	              </button>		
-              <%end%>
-            </div> 
-            <div class="mt-4 ml-3">
-              <%if (check_can_download_pdf(@module_permission))%>
-                <button class="btn btn-danger file-btn-color mr-1" style="width:80px" name="submit_pdf_staff_with" type="submit" value="Investment PDF A4" formtarget="_blank">PDF</button>
-              <% end %>
-              <%if (check_can_download_csv(@module_permission))%>
-                <button class="btn btn-warning file-btn-color mr-1" style="width:80px" title= "download investments csv" name="csv" type="submit" value="csv">CSV</button>
-              <% end %>
-            </div> 
-            <%= search_form_for @q, url: investments_path, class: "admin-controls ml-", method: "get" do |f| %>
-              <div class="d-flex mt-4" style="width: 100%;">
-                <%= select_tag :limit, options_for_select(['Show Entries',5, 10, 15, 20, 25], selected: :limit), id: 'pagination-limit', class:"file-btn-color", title:'Show Entries', style:'cursor: pointer;' %>
-              </div>
-            <% end %>
-          </div>
-          <div class="mt-3">
-            <table data-toggle="table" data-search="true" id="investment_table" class="content-table">
-              <thead>
-                <tr>
-                  <th><input type="checkbox" id="master" class='select-all-checkbox' style="cursor: pointer;"></th>
-                  <th><%= sort_link(@q, :id, 'ID') %></th>
-                  <th><%= sort_link(@q, :debit, 'Debit') %></th>
-                  <th><%= sort_link(@q, :credit, 'Credit') %></th>
-                  <th><%= sort_link(@q, :account_id, 'Paid By') %></th>
-                  <th class="urdu-font">Comment</th>
-                  <th><%= sort_link(@q, :created_at, 'Date') %></th>
-                  <th class="border_none">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <%= render partial: 'investment', collection: @investments %>
-                <tr>
-                  <td></td>
-                  <td><h5>Total</h5></td>
-                  <td><h5><%=number_with_delimiter(@total_investment&.first&.first) %></h5></td>
-                  <td><h5><%= number_with_delimiter(@total_investment&.first&.last) %></h5></td>
-                </tr>
-              </tbody>
-            </table>
-            <div class="col-lg-12 digg_pagination">
-              <div class="float-left page_info">
-                <%= page_entries_info @investments %>
-              </div>
-              <div class="float-right">
-              <%= paginate @investments, :container => false %>
-              </div>
-            </div>
-          </div>  
         </div>
       <% end %>
+      <div class="card investment-book-index-card shadow p-4">
+        <%= render 'map_columns/map_column_partials' %>
+        <div class="row d-flex" style="position: absolute;">
+          <div>
+            <%if (check_can_delete(@module_permission))%>
+	            <button class="btn btn-danger file-btn-color delete-selected mt-4 ml-3" type='button' value='Investment'>
+	            	<i class="fa fa-trash"></i>
+	            </button>		
+            <%end%>
+          </div> 
+          <div class="mt-4 ml-3">
+            <%if (check_can_download_pdf(@module_permission))%>
+              <button class="btn btn-danger file-btn-color files-download-btn mr-1" style="width:80px" name="submit_pdf_staff_with" type="submit" value="Investment PDF A4" formtarget="_blank">PDF</button>
+            <% end %>
+            <%if (check_can_download_csv(@module_permission))%>
+              <button class="btn btn-warning file-btn-color files-download-btn mr-1" style="width:80px" title= "download investments csv" name="csv" type="submit" value="csv">CSV</button>
+            <% end %>
+          </div> 
+          <%= search_form_for @q, url: investments_path, class: "admin-controls ml-", method: "get" do |f| %>
+            <div class="d-flex mt-4" style="width: 100%;">
+              <%= select_tag :limit, options_for_select(['Show Entries',5, 10, 15, 20, 25], selected: :limit), id: 'pagination-limit', class:"file-btn-color", title:'Show Entries', style:'cursor: pointer;' %>
+            </div>
+          <% end %>
+        </div>
+        <div class="mt-3">
+          <table data-toggle="table" data-search="true" id="investment_table" class="content-table">
+            <thead>
+              <tr>
+                <th><input type="checkbox" id="master" class='select-all-checkbox' style="cursor: pointer;"></th>
+                <th><%= sort_link(@q, :id, 'ID') %></th>
+                <th><%= sort_link(@q, :debit, 'Debit') %></th>
+                <th><%= sort_link(@q, :credit, 'Credit') %></th>
+                <th><%= sort_link(@q, :account_id, 'Paid By') %></th>
+                <th class="urdu-font">Comment</th>
+                <th><%= sort_link(@q, :created_at, 'Date') %></th>
+                <th class="border_none">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <%= render partial: 'investment', collection: @investments %>
+              <tr>
+                <td></td>
+                <td><h5>Total</h5></td>
+                <td><h5><%=number_with_delimiter(@total_investment&.first&.first) %></h5></td>
+                <td><h5><%= number_with_delimiter(@total_investment&.first&.last) %></h5></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="col-lg-12 digg_pagination">
+            <div class="float-left page_info">
+              <%= page_entries_info @investments %>
+            </div>
+            <div class="float-right">
+            <%= paginate @investments, :container => false %>
+            </div>
+          </div>
+        </div>  
+      </div>
     </div>
     <div class="tab-pane card shadow mt-2 p-5" id="analytics" role="tabpanel">
       <p>
@@ -268,7 +269,12 @@
       $('#investment-logs').click();
       $('.investment-book-index-card').addClass('d-none')
     })
-
+    $('.files-download-btn').on('click', function(){
+      var name_btn = $(this).attr('name')
+      $('.dynamic-submit-btn').attr('name', name_btn)
+      $('.dynamic-submit-btn').val($(this).val())
+      $('.dynamic-submit-btn').click()
+    })
 
     $('.investment-search-exp-tab').on('click', function(){
       $('.investment-book-index-card').removeClass('d-none')
