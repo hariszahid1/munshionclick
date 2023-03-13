@@ -129,7 +129,7 @@
                   <%end %>
                 </b>
               </td>
-              <td><%= order.purchase_sale_items.count rescue 0 %></td>
+              <td><%= order.order_items&.count %></td>
               <td><h6><%= number_with_delimiter(order.total_bill.to_f.round(2)) rescue 0 %></h6></td>
               <td><h6><%= number_with_delimiter(order.amount.to_i+order.purchase_sale_details.sum(:amount).to_i) %></h6></td>
               <td><h6><%= number_with_delimiter((order.total_bill.to_f.round(2))-(order.amount.to_i+order.purchase_sale_details.sum(:amount).to_i)) %></h6></td>

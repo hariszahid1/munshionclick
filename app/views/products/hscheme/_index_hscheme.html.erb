@@ -13,7 +13,7 @@
   </div>
   <% if check_can_create(@module_permission) %>
     <div class="float-right mt-3">
-      <button class='btn btn-outline-danger mt-3 d-none' data-toggle="modal" data-target="#bult-update-price">Update Price</button>
+      <button class='btn btn-outline-danger mt-3' data-toggle="modal" data-target="#bult-update-price">Update Price</button>
       <%= link_to new_product_path, style:"width: 150px;", class: "btn btn-success mt-3" do %>
         <i class="fa fa-plus-circle"></i>
         Create
@@ -203,7 +203,7 @@
                             <br><br>
                           <%end%>
                         <%end%>
-                      </div>  
+                      </div>
                       </td>
                       <td>
                         <div class="icon-container-1">
@@ -228,7 +228,7 @@
                                     <%= link_to product, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
                                       <i class="fa fa-trash mt-2" aria-hidden="true"></i>
                                     <%end %>
-                                  <% end %> 
+                                  <% end %>
                                 </div>
                                 <div class="my-icon my-view">
                                   <div class="my-tooltip">
@@ -238,12 +238,12 @@
                                     <%= link_to product_path(product), class:"icon-div" do %>
                                       <i class="fa fa-eye mt-2" aria-hidden="true"></i>
                                     <%end %>
-                                  <%end%>    
+                                  <%end%>
                                 </div>
                               </div>
                             </div>
                             <span class="icon-div-1">
-                                  <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+                              <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
                             </span>
                           </div>
                         </div>
@@ -252,9 +252,14 @@
                   <%end%>
                   <tr>
                     <td><h5>Total</h5></td>
-                    <td colspan='6'><h5><%= @products.count %></h5></td>
-                    <td><h5><%= number_with_delimiter(@product_price.to_f.round(2)) %></h5></td>
-                    <td colspan='3'><h5>Marla: <%= @total_marla %>, Sq.Ft: <%= @total_square_feet %></h5></td>
+                    <td colspan='7'><h5><%= @products.count %></h5></td>
+                    <td><h5><%= number_with_delimiter(@products_total_price.to_f.round(2)) %></h5></td>
+                    <td colspan='3'>
+                      <h5>Marla: <%= @products_total_marla %>, Sq.Ft: <%= @products_total_sq_ft %>
+                        <br>
+                        Total Marla = <%= (@products_total_marla.to_f + @products_total_sq_ft.to_f/225).round(2) %>
+                      </h5>
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -267,7 +272,7 @@
               <%= paginate @products, :container => false %>
               </div>
             </div>
-          </div>  
+          </div>
         <% end %>
       </div>
       <div class="tab-pane mb-3 card shadow mt-2 p-4" id="analytics" role="tabpanel">
@@ -363,8 +368,22 @@
           </button>
         </div>
         <div class="modal-body">
-          <label>Sale Price:</label>
-          <%= f.number_field :sale, class: 'form-control', required: true %>
+          <div class='my-2'>
+            <label>Unit Category:</label>
+            <%= f.select :product_category_id, options_for_select(@product_categories.map {|i| ["#{i.second} \u{27F6} #{i.last}", i.first]}),{:include_blank => "Select Unit category"},{class: "form-control chosen-select", data: {placeholder: "Select the Unit category"}, required: true} %>
+          </div>
+          <div class='my-2'>
+            <label>Unit Sub Category:</label>
+            <%= f.select :product_sub_category_id, options_for_select(@product_sub_categories.map {|i| ["#{i.second} \u{27F6} #{i.last}", i.first]}),{:include_blank => "Select Unit subcategory"},{class: "form-control chosen-select", data: {placeholder: "Select the Unit subcategory"}, required: true} %>
+          </div>
+          <div class='my-2'>
+            <label>Block:</label>
+            <%= f.select :item_type_id, options_for_select(@item_types.map {|i| ["#{i.second} \u{27F6} #{i.last}", i.first]}),{:include_blank => "Select the Block"},{class: "form-control chosen-select", data: {placeholder: "Select the Block"}, required: true}%>
+          </div>
+          <div class='my-2'>
+            <label>Sale Price:</label>
+            <%= f.number_field :sale, class: 'form-control', required: true %>
+          </div>
           <span class='text-danger pt-4'><b>Note: </b>The rate of all units which are not booked will be updated.<span>
         </div>
         <div class="modal-footer">
