@@ -86,7 +86,7 @@ class User < ApplicationRecord
                        'salary_details', 'schema_migrations', 'sms_logs', 'staff_deals', 'staff_ledger_books',
                        'staff_raw_products', 'staffs', 'sticky_notes', 'sys_users', 'user_abilities', 'user_groups',
                        'user_permissions', 'user_types', 'users', 'versions', 'warranties', 'sms', 'sys_users/customer',
-                       'sys_users/supplier', 'sys_users/own', 'crms', 'mobile_shop_product_purchases']
+                       'sys_users/supplier', 'sys_users/own', 'crms', 'mobile_shop_product_purchases', 'deals']
 
     pos_all_modules.each do |item|
       UserPermission.create(module: item, can_create: true,can_read: true, can_update: true, can_delete: true, user_id: id, is_hidden: true) if super_admin?

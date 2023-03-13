@@ -71,8 +71,13 @@
         <td><h5></h5></td>
         <td><h5></h5></td>
         <td><h5></h5></td>
-        <td><h5><%= number_with_delimiter @product_price.to_f.round(2)%></h5></td>
-        <td><h5>Marla: <%=@total_marla%>Square Feet: <%=@total_square_feet%></h5></td>
+        <td><h5><%= number_with_delimiter(@products_total_price.to_f.round(2)) %></h5></td>
+        <td>
+          <h5>Marla: <%= @products_total_marla %>, Sq.Ft: <%= @products_total_sq_ft %>
+            <br>
+            Total Marla = <%= (@products_total_marla.to_f + @products_total_sq_ft.to_f/225).round(2) %>
+          </h5>
+        </td>
         <td><h5></h5></td>
 
       </tr>

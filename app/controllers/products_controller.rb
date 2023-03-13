@@ -56,6 +56,9 @@ class ProductsController < ApplicationController
     end
     @products = @q.result.page(params[:page]).per(100)
     export_file if params[:export_data].present?
+    @products_total_price = @q.result.map { |result| result[:sale].to_f*(result[:marla].to_f + result[:square_feet].to_f / 225.0) }.sum
+    @products_total_marla = @q.result.sum(:marla)
+    @products_total_sq_ft = @q.result.sum(:square_feet)
 
     if @status != '1'
       @product_price = @products.select('SUM(sale*(products.marla+(products.square_feet/225 ))) as total_price')&.first&.total_price
@@ -286,11 +289,18 @@ class ProductsController < ApplicationController
     product_ids = OrderItem.joins(:order).where(orders: { status: %w[Clear Order UnClear UnPrint Printed] })
                            .select(:product_id).distinct.pluck(:product_id)
     @products = Product.where.not(id: product_ids)
-    @products.update_all(sale: params[:bulk_update][:sale])
-    flash[:notice] = 'Sale rates are updated successfully.'
+                       .where(product_category_id: params[:bulk_update][:product_category_id],
+                              product_sub_category_id: params[:bulk_update][:product_sub_category_id],
+                              item_type_id: params[:bulk_update][:item_type_id])
+    miniumum_sale = @products.minimum(:sale)
+    if miniumum_sale.to_f < params[:bulk_update][:sale].to_f || current_user.super_admin?
+      @products.update_all(sale: params[:bulk_update][:sale])
+      flash[:notice] = 'Sale rates are updated successfully.'
+    else
+      flash[:alert] = "You can't set the price less than #{miniumum_sale}"
+    end
     redirect_to products_url
   end
-
 
   private
     # Use callbacks to share common setup or constraints between actions.

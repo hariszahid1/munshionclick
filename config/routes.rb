@@ -158,6 +158,7 @@ Rails.application.routes.draw do
     end
   end
   resources :logs
+  resources :deals
   resources :investments do
     collection do
       get :view_history, to: 'investments#view_history'
