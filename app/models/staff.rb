@@ -11,6 +11,7 @@ class Staff < ApplicationRecord
   has_many :salaries
   has_many :staff_ledger_books
   has_many :pathera_salary_details, class_name: "SalaryDetail", foreign_key: "staff_pathera_id"
+  has_many :deals
   validates_uniqueness_of :code
   accepts_nested_attributes_for :staff_raw_products,reject_if: :all_blank, allow_destroy: true
   has_paper_trail ignore: [:updated_at]

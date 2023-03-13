@@ -369,63 +369,43 @@ class ApplicationController < ActionController::Base
   end
 
   def check_can_create(temp_module)
-    return true if temp_module.can_create == true
-
-    false
+    temp_module.can_create
   end
 
   def check_can_read(temp_module)
-    return true if temp_module.can_read == true
-
-    false
+    temp_module.can_read
   end
 
   def check_can_update(temp_module)
-    return true if temp_module.can_update == true
-
-    false
+    temp_module.can_update
   end
 
   def check_can_delete(temp_module)
-    return true if temp_module.can_delete == true
-
-    false
+    temp_module.can_delete
   end
 
   def check_can_download_csv(temp_module)
-    return true if temp_module.can_download_csv == true
-
-    false
+    temp_module.can_download_csv
   end
 
   def check_can_download_pdf(temp_module)
-    return true if temp_module.can_download_pdf == true
-
-    false
+    temp_module.can_download_pdf
   end
 
   def check_can_accessed(temp_module)
-    return false if temp_module.can_accessed == true
-
-    true
+    !temp_module.can_accessed
   end
 
   def check_is_hidden(temp_module)
-    return false if temp_module.is_hidden == false
-
-    true
+    temp_module.is_hidden
   end
 
   def check_can_import_export(temp_module)
-    return true if temp_module.can_import_export == true
-
-    false
+    temp_module.can_import_export
   end
 
   def check_can_send_email(temp_module)
-    return true if temp_module.can_send_email == true
-
-    false
+    temp_module.can_send_email
   end
 
   def default_accees

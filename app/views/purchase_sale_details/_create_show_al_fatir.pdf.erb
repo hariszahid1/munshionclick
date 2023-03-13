@@ -48,7 +48,7 @@
   </head>
 
   <body>
-    <%product = order.purchase_sale_items&.first&.product %>
+    <% product = order.order&.order_items&.first&.product %>
     <div style='padding-top: 130px;'>
       <div class='text-right' style='margin-bottom: 10px;'>
         <b>Serial No.</b>
