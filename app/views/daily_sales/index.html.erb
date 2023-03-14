@@ -61,115 +61,116 @@
               </div>
               <div class="col-lg-2 form-group float-left">
                 <button class="form-control btn btn-primary"   name="search_submit" type="submit" value="Search" style="width: 100px"><i class="fa fa-search"></i></button>
+                <button type='submit' class='dynamic-submit-btn d-none' formtarget='_blank'></button>
               </div>
             </div>
           </div>
-          <div class="card shadow p-3 mb-2">
-            <%= render 'map_columns/map_column_partials' %>
-            <div class="row d-flex" style="position: absolute;">
-              <div>
-                <%if (check_can_delete(@module_permission))%>
-	                <button class="btn btn-danger file-btn-color delete-selected mt-4 ml-3" type='button' value='DailySale'>
-	                	<i class="fa fa-trash"></i>
-	                </button>		
-                <%end%>
-                <button class="form-control btn btn-danger file-btn-color mt-4 ml-2" style="width: 80px;" title="Download Daily sales pdf" name="submit_pdf_staff_with" type="submit" value="Sale/Cash PDF A4" formtarget="_blank">PDF</button>
-              </div>  
-              <%= search_form_for @q, url: daily_sales_path, class: "admin-controls ml-3", method: "get" do |f| %>
-                <div class="d-flex mt-4" style="width: 100%;">
-                  <%= select_tag :limit, options_for_select(['Show Entries',5, 10, 15, 20, 25], selected: :limit), id: 'pagination-limit', class:"file-btn-color" ,title:'Show Entries', style:'cursor: pointer;' %>
-                </div>
-              <% end %>
-            </div>
-            <div class="mt-3">  
-              <table data-toggle="table" data-search="true">
-                <thead>
+        <%end %>
+        <div class="card shadow p-3 mb-2">
+          <%= render 'map_columns/map_column_partials' %>
+          <div class="row d-flex" style="position: absolute;">
+            <div>
+              <%if (check_can_delete(@module_permission))%>
+	              <button class="btn btn-danger file-btn-color delete-selected mt-4 ml-3" type='button' value='DailySale'>
+	              	<i class="fa fa-trash"></i>
+	              </button>		
+              <%end%>
+              <button class="form-control btn btn-danger file-btn-color files-download-btn mt-4 ml-2" style="width: 80px;" title="Download Daily sales pdf" name="submit_pdf_staff_with" type="submit" value="Sale/Cash PDF A4" formtarget="_blank">PDF</button>
+            </div>  
+            <%= search_form_for @q, url: daily_sales_path, class: "admin-controls ml-3", method: "get" do |f| %>
+              <div class="d-flex mt-4" style="width: 100%;">
+                <%= select_tag :limit, options_for_select(['Show Entries',5, 10, 15, 20, 25], selected: :limit), id: 'pagination-limit', class:"file-btn-color" ,title:'Show Entries', style:'cursor: pointer;' %>
+              </div>
+            <% end %>
+          </div>
+          <div class="mt-3">  
+            <table data-toggle="table" data-search="true">
+              <thead>
+                <tr>
+                  <th class="p-2"><input type="checkbox" id="master" class='select-all-checkbox'>
+                  </th>
+                  <th><%= sort_link(@q, :sale, 'Sale') %></th>
+                  <th><%= sort_link(@q, :cash_out, 'Cash out') %></th>
+                  <th><%= sort_link(@q, :shift, 'Shift') %></th>
+                  <th class="border_none">Created At</th>
+                  <th><%= sort_link(@q, :comment, 'Comment') %></th>
+                  <th class="border_none">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @daily_sales.each do |daily_sale| %>
                   <tr>
-                    <th class="p-2"><input type="checkbox" id="master" class='select-all-checkbox'>
-                    </th>
-                    <th><%= sort_link(@q, :sale, 'Sale') %></th>
-                    <th><%= sort_link(@q, :cash_out, 'Cash out') %></th>
-                    <th><%= sort_link(@q, :shift, 'Shift') %></th>
-                    <th class="border_none">Created At</th>
-                    <th><%= sort_link(@q, :comment, 'Comment') %></th>
-                    <th class="border_none">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% @daily_sales.each do |daily_sale| %>
-                    <tr>
-                      <td><%= check_box_tag 'object_ids[]', daily_sale.id %></td>
-                      <td><%= number_with_delimiter(daily_sale.sale.to_f.round(2)) %><% @total_sale+=daily_sale.sale.to_f.round(2)%></td>
-                      <td><%= number_with_delimiter(daily_sale.cash_out.to_f.round(2)) %><% @total_cash+=daily_sale.cash_out.to_f.round(2)%></td>
-                      <td><%= daily_sale.shift %></td>
-                      <td><%= daily_sale.created_at.strftime("%d%b%y , %I:%M") %> || <%= daily_sale.comment %></td>
-                      <td></td>
-                      <td class="p-3">
-                      <div class="icon-container-1">
-                        <div class="my-icon-1 my-view-1">
-                          <div class="my-tooltip-1">
-                            <div class="icon-container">
-                              <div class="my-icon my-view">
-                                <div class="my-tooltip">
-                                  Edit
-                                </div>
-                                <%if (check_can_update(@module_permission))%>
-                                  <%= link_to edit_daily_sale_path(daily_sale), class:"icon-div" do %>
-                                    <i class="fa fa-edit mt-2" aria-hidden="true"></i>
-                                  <%end %>
-                                <% end %>
+                    <td><%= check_box_tag 'object_ids[]', daily_sale.id %></td>
+                    <td><%= number_with_delimiter(daily_sale.sale.to_f.round(2)) %><% @total_sale+=daily_sale.sale.to_f.round(2)%></td>
+                    <td><%= number_with_delimiter(daily_sale.cash_out.to_f.round(2)) %><% @total_cash+=daily_sale.cash_out.to_f.round(2)%></td>
+                    <td><%= daily_sale.shift %></td>
+                    <td><%= daily_sale.created_at.strftime("%d%b%y , %I:%M") %> || <%= daily_sale.comment %></td>
+                    <td></td>
+                    <td class="p-3">
+                    <div class="icon-container-1">
+                      <div class="my-icon-1 my-view-1">
+                        <div class="my-tooltip-1">
+                          <div class="icon-container">
+                            <div class="my-icon my-view">
+                              <div class="my-tooltip">
+                                Edit
                               </div>
-                              <div class="my-icon my-view">
-                                <div class="my-tooltip">
-                                  Delete
-                                </div>
-                                <%if (check_can_delete(@module_permission))%>
-                                  <%= link_to daily_sale, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
-                                    <i class="fa fa-trash mt-2" aria-hidden="true"></i>
-                                  <%end %>
-                                <% end %> 
+                              <%if (check_can_update(@module_permission))%>
+                                <%= link_to edit_daily_sale_path(daily_sale), class:"icon-div" do %>
+                                  <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+                                <%end %>
+                              <% end %>
+                            </div>
+                            <div class="my-icon my-view">
+                              <div class="my-tooltip">
+                                Delete
                               </div>
-                              <div class="my-icon my-view">
-                                <div class="my-tooltip">
-                                  Show
-                                </div>
-                                <%if (check_can_read(@module_permission))%>
-                                  <%= link_to daily_sale_path(daily_sale), class:"icon-div" do %>
-                                    <i class="fa fa-eye mt-2" aria-hidden="true"></i>
-                                  <%end %>
-                                <%end%>    
+                              <%if (check_can_delete(@module_permission))%>
+                                <%= link_to daily_sale, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+                                  <i class="fa fa-trash mt-2" aria-hidden="true"></i>
+                                <%end %>
+                              <% end %> 
+                            </div>
+                            <div class="my-icon my-view">
+                              <div class="my-tooltip">
+                                Show
                               </div>
+                              <%if (check_can_read(@module_permission))%>
+                                <%= link_to daily_sale_path(daily_sale), class:"icon-div" do %>
+                                  <i class="fa fa-eye mt-2" aria-hidden="true"></i>
+                                <%end %>
+                              <%end%>    
                             </div>
                           </div>
-                          <span class="icon-div-1">
-                            <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
-                          </span>
                         </div>
-                      </div>               
-                      </td>
-                    </tr>
-                  <% end %>
-                  <tr>
-                    <td><h5>Total</h5></td>
-                    <td><h5><%=number_with_delimiter(@total_sale)%></h5></td>
-                    <td><h5><%=number_with_delimiter(@total_cash)%></h5></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                        <span class="icon-div-1">
+                          <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+                        </span>
+                      </div>
+                    </div>               
+                    </td>
                   </tr>
-               </tbody>
-             </table>
-           </div>  
-          <div class="row">
-            <div class="col-lg-4 col-sm-4">
-              <%= page_entries_info @daily_sales %>
-            </div>
-            <div class="col-lg-8 col-sm-8 pagination-left">
-              <%= paginate @daily_sales %>
-            </div>
-         </div>
-        <%end %>
+                <% end %>
+                <tr>
+                  <td><h5>Total</h5></td>
+                  <td><h5><%=number_with_delimiter(@total_sale)%></h5></td>
+                  <td><h5><%=number_with_delimiter(@total_cash)%></h5></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+             </tbody>
+           </table>
+         </div>  
+        <div class="row">
+          <div class="col-lg-4 col-sm-4">
+            <%= page_entries_info @daily_sales %>
+          </div>
+          <div class="col-lg-8 col-sm-8 pagination-left">
+            <%= paginate @daily_sales %>
+          </div>
+        </div>
       </div>  
     </div>
     <div class="tab-pane card shadow-sm mt-2 p-2 mb-3" id="import-export" role="tabpanel">
@@ -219,6 +220,14 @@
     $("#daily_list").removeClass('hidden');
     FontAwesome.dom.i2svg();
   });
+
+  $('.files-download-btn').on('click', function(){
+      var name_btn = $(this).attr('name')
+      $('.dynamic-submit-btn').attr('name', name_btn)
+      $('.dynamic-submit-btn').val($(this).val())
+      $('.dynamic-submit-btn').click()
+  })
+
   $(document).ready(function() {
     setTimeout(function(){
       $(".chosen-select").chosen({
