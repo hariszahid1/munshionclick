@@ -35,7 +35,7 @@
               <td></td>
               <td><b></td>
               <td><b>Total</b></td>
-              <td><b><%= @balance.round(2)%></b></td>
+              <td><b><%= number_with_delimiter(@balance.to_f.round(2))%></b></td>
               <%@last_group = sys_user.user_group%>
               <% @balance = 0%>
             </tr>
@@ -51,7 +51,7 @@
               <td></td>
               <td><b></td>
               <td><b>Total</b></td>
-              <td><b><%= number_with_delimiter @balance.round(2)%></b></td>
+              <td><b><%= number_with_delimiter(@balance.to_f.round(2))%></b></td>
               <% @balance = 0%>
             </tr>
           <% end %>
@@ -88,7 +88,7 @@
             <td></td>
             <td><b></td>
             <td><b>Total</b></td>
-            <td><b><%=number_with_delimiter @balance.round(2)%></b></td>
+            <td><b><%=number_with_delimiter(@balance.to_f.round(2))%></b></td>
             <%@last_department = staff.department%>
             <% @balance = 0.0%>
           </tr>
@@ -105,7 +105,7 @@
             <td></td>
             <td><b></td>
             <td><b>Total</b></td>
-            <td><b><%=number_with_delimiter @balance.round(2)%></b></td>
+            <td><b><%=number_with_delimiter(@balance.to_f.round(2))%></b></td>
             <%@last_department = staff.department%>
             <% @balance = 0.0%>
           </tr>
@@ -136,7 +136,7 @@
         <tr style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
           <%staffs.each do |staff|%>
             <td><%= staff.first %></td>
-            <td><%= number_with_delimiter staff.last.to_f.round(2) %></td>
+            <td><%= number_with_delimiter(staff.last.to_f.round(2)) %></td>
           <% end %>
         </tr>
       <% end %>
@@ -144,7 +144,7 @@
         <tr style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
           <%staffs.each do |staff|%>
             <td><%= staff.first %></td>
-            <td><%= number_with_delimiter staff.last.to_f.round(2) %></td>
+            <td><%= number_with_delimiter(staff.last.to_f.round(2)) %></td>
           <% end %>
         </tr>
       <% end %>
@@ -169,11 +169,11 @@
     <tbody>
         <tr style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
           <td>Investment</td>
-          <td><%= number_with_delimiter @investments_credit.to_f.round(2) %></td>
+          <td><%= number_with_delimiter(@investments_credit.to_f.round(2)) %></td>
         </tr>
       <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
         <td><h4>Total</h4></td>
-        <td><h4><%=number_with_delimiter @investments_credit&.round(2) %><h4></td>
+        <td><h4><%=number_with_delimiter(@investments_credit.to_f.round(2)) %><h4></td>
       </tr>
     </tbody>
   </table>
@@ -204,7 +204,7 @@
               <td></td>
               <td><b></td>
               <td><b>Total</b></td>
-              <td><b><%=number_with_delimiter @balance.round(2)%></b></td>
+              <td><b><%=number_with_delimiter(@balance.round(2))%></b></td>
               <%@last_group = sys_user.user_group%>
               <% @balance = 0%>
             </tr>
@@ -220,7 +220,7 @@
             <td></td>
             <td><b></td>
             <td><b>Total</b></td>
-            <td><b><%=number_with_delimiter @balance.round(2)%></b></td>
+            <td><b><%=number_with_delimiter(@balance.round(2))%></b></td>
             <% @balance = 0%>
           </tr>
         <% end %>
@@ -256,7 +256,7 @@
             <td></td>
             <td><b></td>
             <td><b>Total</b></td>
-            <td><b><%=number_with_delimiter @balance.round(2)%></b></td>
+            <td><b><%=number_with_delimiter(@balance.round(2))%></b></td>
             <%@last_department = staff.department%>
             <% @balance = 0.0%>
           </tr>
@@ -272,7 +272,7 @@
             <td></td>
             <td><b></td>
             <td><b>Total</b></td>
-            <td><b><%=number_with_delimiter @balance.round(2)%></b></td>
+            <td><b><%=number_with_delimiter(@balance.round(2))%></b></td>
             <% @balance = 0.0%>
           </tr>
         <% end %>
@@ -310,7 +310,7 @@
         <td><h4>Total : <%=@expense_list.count%></h4></td>
         <td></td>
         <td></td>
-        <td><h4><%=number_with_delimiter @expense_total&.round(2) %><h4></td>
+        <td><h4><%=number_with_delimiter(@expense_total.to_f.round(2)) %><h4></td>
       </tr>
     </tbody>
   </table>
@@ -327,11 +327,11 @@
     <tbody>
         <tr style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
           <td>Investment</td>
-          <td><%= number_with_delimiter @investments_debit.to_f.round(2) %></td>
+          <td><%= number_with_delimiter(@investments_debit.to_f.round(2)) %></td>
         </tr>
       <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
         <td><h4>Total</h4></td>
-        <td><h4><%=number_with_delimiter @investments_debit&.round(2) %><h4></td>
+        <td><h4><%=number_with_delimiter(@investments_debit.to_f.round(2)) %><h4></td>
       </tr>
     </tbody>
   </table>
@@ -352,7 +352,7 @@
         <tr style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
           <%staffs.each do |staff|%>
             <td><%= staff.first %></td>
-            <td><%= number_with_delimiter staff.last.to_f.round(2) %></td>
+            <td><%= number_with_delimiter(staff.last.to_f.round(2)) %></td>
           <% end %>
         </tr>
       <% end %>
@@ -360,7 +360,7 @@
         <tr style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
           <%staffs.each do |staff|%>
             <td><%= staff.first %></td>
-            <td><%= number_with_delimiter staff.last.to_f.round(2) %></td>
+            <td><%= number_with_delimiter(staff.last.to_f.round(2)) %></td>
           <% end %>
         </tr>
       <% end %>
@@ -387,19 +387,19 @@
         <tr style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
           <%if staff.last.to_f>0%>
           <td><%= staff.first %></td>
-          <td><%= number_with_delimiter staff.last.to_f.round(2) %></td>
+          <td><%= number_with_delimiter(staff.last.to_f.round(2)) %></td>
           <%end%>
         </tr>
       <% end %>
       <% if (@salary_detail_kharkar.to_f > 0) %>
         <tr style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
           <td> Kharkar </td>
-          <td><%= number_with_delimiter @salary_detail_kharkar.to_f.round(2) %></td>
+          <td><%= number_with_delimiter(@salary_detail_kharkar.to_f.round(2)) %></td>
         </tr>
       <% end %>
       <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
         <td><h4>Total : <%=@salary_detail_list.count.to_i%></h4></td>
-        <td><h4><%=number_with_delimiter @salary_detail_total&.round(2) %><h4></td>
+        <td><h4><%=number_with_delimiter(@salary_detail_total.to_f.round(2)) %><h4></td>
       </tr>
     </tbody>
   </table>
@@ -421,7 +421,7 @@
         <tr style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
           <%staffs.each do |staff|%>
             <td><%= staff.first %></td>
-            <td><%= number_with_delimiter staff.last.to_f.round(2) %></td>
+            <td><%= number_with_delimiter(staff.last.to_f.round(2)) %></td>
           <% end %>
         </tr>
       <% end %>
@@ -429,7 +429,7 @@
         <td><h4>Total : <%=@credit_salary_list.count.to_i%></h4></td>
         <td></td>
         <td></td>
-        <td><h4><%=number_with_delimiter @credit_salary&.round(2) %><h4></td>
+        <td><h4><%=number_with_delimiter(@credit_salary.to_f.round(2)) %><h4></td>
       </tr>
     </tbody>
   </table>
@@ -450,7 +450,7 @@
       <% @purchase_sale_detail_discount_list.each do |staff| %>
         <tr style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
           <td><%= staff.sys_user.name %></td>
-          <td><%= number_with_delimiter staff.discount_price.to_f.round(2) %></td>
+          <td><%= number_with_delimiter(staff.discount_price.to_f.round(2)) %></td>
         </tr>
       <% end %>
       <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
@@ -477,15 +477,15 @@
     <tbody>
       <tr style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif" >
          <td>Payable</td>
-          <td><b><%=number_with_delimiter @total_payable.to_f.round(2)%></b></td>
+          <td><b><%=number_with_delimiter(@total_payable.to_f.round(2))%></b></td>
       </tr>
       <tr style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif" >
          <td>Reciveable</td>
-         <td><b><%=number_with_delimiter @total_receiveable.to_f.round(2)%></b></td>
+         <td><b><%=number_with_delimiter(@total_receiveable.to_f.round(2))%></b></td>
       </tr>
       <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
         <td><h4>Total</h4></td>
-        <td><h4><%=number_with_delimiter(@total_payable-@total_receiveable).to_f.round(2)%></h4></td>
+        <td><h4><%=number_with_delimiter((@total_payable.to_f-@total_receiveable.to_f).round(2))%></h4></td>
       </tr>
     </tbody>
   </table>

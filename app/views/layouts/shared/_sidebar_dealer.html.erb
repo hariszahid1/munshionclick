@@ -16,6 +16,14 @@
                 </a>
             </li>
         <% end %>
+        <% if check_is_hidden_by_module('deals') %>
+            <li class="activ-link">
+                <a href="<%= deals_path%>" class="activ-link">
+                  <i class="fas fa-users ml-3"></i>
+                  <span class="link-text">Agent Deals</span>
+                </a>
+            </li>
+        <% end %>
         <span class="mt-4 mb-3 text-secondary ml-2" style="font-size: 1.2em;">Menu</span>
         <% if check_is_hidden_by_module('crms') %>
             <li class="mt-4 mb-3 <%= 'active' if request.path.start_with?(crms_path) %>">

@@ -4,9 +4,11 @@
     <span aria-hidden="true">×</span>
   </button>
 </div>
-<div class="m-4">
-  <div class="main-content-header">
-    <h1>Deals</h1>
+<div class="row-lg-12 m-4">
+  <div class="float-left">
+    <h2 class="ml-2 logo-back"><i class="fas fa-tag mr-2"></i>
+      Deals
+    </h2>
     <ol class="breadcrumb">
       <li class="breadcrumb-item">
         <a href="<%= root_path %>">Dashboard</a>
@@ -15,20 +17,78 @@
         <a href="<%= deals_path %>">Deals</a>
       </li>
     </ol>
-    <div>
-      <% if check_can_create(@module_permission) %>
-        <%= link_to new_deal_path,class: "btn btn-success mt-3 ml-3" do %>
-          <i class="fa fa-plus" aria-hidden="false"></i>
-          Create
-        <% end %>
-      <% end %>
+  </div>
+  <div id="new_sale_deal">
+    <%= link_to new_deal_path, class: "btn btn-success mr-1 float-right", style:"width: 150px;" do %>
+      <i class="fa fa-plus-circle" aria-hidden="false"></i>
+      Create
+    <% end %>
+  </div>
+</div>
+
+<div class='clearfix'></div>
+<div class="ml-3 mr-4">
+  <div class='row mb-4'>
+    <div class="col-xl-4 col-sm-4 col-12 mb-2">
+      <div class="card mt-2 shadow" >
+        <div class="card-content">
+          <div class="card-body">
+            <div class="media d-flex">
+              <div class="align-self-center">
+                <div class="circle-icon">
+                  <i class="fa fa-percent fa-2x logo-back circle-margin" style="color: #0f1d59;"></i>
+                </div>
+              </div>
+              <div class="media-body text-right">
+                <h3><%= number_with_delimiter(@total_commission) %></h3>
+                <span>Total Commission</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-4 col-sm-4 col-12 mb-2">
+      <div class="card mt-2 shadow" >
+        <div class="card-content">
+          <div class="card-body">
+            <div class="media d-flex">
+              <div class="align-self-center">
+                <div class="circle-icon">
+                  <i class="fas fa-money-bill-alt fa-2x logo-back circle-margin" style="color: #0f1d59;"></i>
+                </div>
+              </div>
+              <div class="media-body text-right">
+                <h3><%= number_with_delimiter(@office_commission) %></h3>
+                <span>Office Commission</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-  <ul class="mt-4 nav nav-pills" role="tablist">
-		<li class="nav-item">
-			<a class="nav-link tab-label cms-search-exp-tab active" data-toggle="tab" href="#search" role="tab">Search</a>
-		</li>
-  </ul>
+  <div class="float-right">
+    <div class="dropdown ml-auto">
+      <span class="btn btn-info " title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
+      <div class="dropdown-content">
+        <% if @help.present? %>
+          <% @help&.help_links.each do |link| %>
+            <a type="button" class="" target="_blank" href="<%= link[1] %>" >Help in <%= link[0] %></a>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <ul class="nav nav-tabs ml-1" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link tab-label cms-search-exp-tab active" data-toggle="tab" href="#search" role="tab"><i class="fa fa-search mr-1"></i>Search</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
   <div class="tab-content mb-3">
     <div class="tab-pane active card border-radius-1 shadow mt-3 p-4" id="search" role="tabpanel">
       <%= search_form_for @q, url: deals_path, class: "admin-controls", method: "get" do |f| %>
@@ -46,6 +106,9 @@
           <div class="col-lg-1 form-group float-left">
             <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search"><i class="fa fa-search"></i></button>
           </div>
+          <% if params.dig(:q, :staff_id_eq).present? %>
+            <div class='d-flex'><h3>Agent Earning => </h3><h5 class='mt-1 ml-2'><%= number_with_delimiter(@total_earning) %></h5></div>
+          <% end %>
         </div>
       <% end %>
     </div>
@@ -53,12 +116,12 @@
 <div>
 <div class='card p-4 border-radius-1 shadow cms-book-index-card'>
   <div class="mt-3 p-2">
-    <table>
+    <table data-toggle="table mt-3" data-search="true" class="table" style='overflow: hidden;'>
       <thead>
-        <tr>
+        <tr class='text-center'>
           <th>SR#</th>
           <th>Agent Name</th>
-          <th>Total Comission</th>
+          <th>Total Commission</th>
           <th>Office Share</th>
           <th>Deal Details</th>
           <th>Share</th>
@@ -70,14 +133,50 @@
       <tbody>
         <% @deals.each_with_index do |deal, index|%>
           <tr class='text-center'>
-            <td><%= index %></td>
+            <td><%= index+1 %></td>
             <td><%= deal.staff&.name %></td>
             <td><%= deal.comission %></td>
-            <td><%= deal.office_share %></td>
+            <td><%= deal.file_share %></td>
             <td><%= deal.deal_detail %></td>
             <td><%= deal.share %></td>
             <td><%= deal.agent_earning %></td>
-            <td></td>
+            <td>
+              <div class="icon-container-1">
+                <div class="my-icon-1 my-view-1">
+                  <div class="my-tooltip-1">
+                    <div class="icon-container">
+                      <div class="my-icon my-view">
+                        <div class="my-tooltip">
+                          Edit
+                        </div>
+                          <%= link_to edit_deal_path(id: deal.id), class:"icon-div" do %>
+                            <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+                          <%end %>
+                      </div>
+                      <div class="my-icon my-view">
+                        <div class="my-tooltip">
+                          Show
+                        </div>
+                          <%= link_to deal_path(deal), class:"icon-div" do %>
+                            <i class="fa fa-eye mt-2" aria-hidden="true"></i>
+                          <% end %>
+                      </div>
+                      <div class="my-icon my-view">
+                        <div class="my-tooltip">
+                          Delete
+                        </div>
+                          <%= link_to deal_path(deal), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :class => 'delete icon-div' do %>
+                            <i class="fa fa-trash mt-2" aria-hidden="true"></i>
+                          <%end %>
+                      </div>
+                    </div>
+                  </div>
+                  <span class="icon-div-1">
+                        <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+                  </span>
+                </div>
+              </div>
+            </td>
           </tr>
         <% end %>
       </tbody>
@@ -108,8 +207,8 @@
       $('#reportrange span').html(start.format('YYYY-MM-DD') + ' - ' + end.format('YYYY-MM-DD'));
     }
 
-    var gteq = $('#q_date_gteq').val()
-    var lteq = $('#q_date_lteq').val()
+    var gteq = $('#q_created_at_gteq').val()
+    var lteq = $('#q_created_at_lteq').val()
     if (gteq !== ''){
       start = moment(new Date(gteq))
     }
@@ -144,8 +243,8 @@
       var value = $(this).val()
       var greater_eq = value.split(' - ')[0]
       var less_eq = value.split(' - ')[1]
-      $('#q_date_gteq').val(greater_eq)
-      $('#q_date_lteq').val(less_eq)
+      $('#q_created_at_gteq').val(greater_eq)
+      $('#q_created_at_lteq').val(less_eq)
     })
 
   });

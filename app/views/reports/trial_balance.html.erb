@@ -67,6 +67,9 @@
        <li class="nav-item">
         <a class="nav-link tab-label " data-toggle="tab" href="#salary" role="tab"><i class="fa fa-money-bill-wave mr-2"></i>Salary</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link tab-label " data-toggle="tab" href="#commission" role="tab"><i class="fa fa-money-bill-wave mr-2"></i>Commissions</a>
+      </li>
 	  </ul>
   </div>
   <div class="tab-content">
@@ -197,6 +200,94 @@
         <!-- Card Content - Collapse -->
         <div class="collapse show" id="salary-col" style="">
           <div id='trial_balance_salary'></div>
+        </div>
+      </div>
+    </div>
+    <div class="tab-pane mb-3 card shadow-sm mt-2 p-4 " id="commission" role="tabpanel">
+      <div class="card shadow mb-4">
+        <!-- Card Header - Accordion -->
+        <a href="#commission-col" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample8">
+          <h6 class="m-0 font-weight-bold text-primary"><h1 style= "text-align : center">Commissions</h1></h6>
+        </a>
+        <!-- Card Content - Collapse -->
+        <div class="collapse show" id="commission-col" style="">
+          <div class="col-xl-12 col-md-12 mb-4">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <br>
+                <table data-toggle="table" data-search="true" class="trial-b-table">
+                  <thead>
+                    <tr class='text-center'>
+                      <th>Name</th>
+                      <th>Commission (C)</th>
+                      <th>Commission (D)</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <% @commissions_by_carriage.each do |com| %>
+                      <tr class='text-center'>
+                        <td><%= com[0] %></td>
+                        <td><%= number_with_delimiter(com[1].to_f.round(2)) %></td>
+                        <td><%= number_with_delimiter(@commissions_group_carriage[com[0]].to_f.round(2)) %></td>
+                        <% status_commission =  com[1].to_f.round(2) - @commissions_group_carriage[com[0]].to_f.round(2) %>
+                        <td>
+                          <% if status_commission.zero? %>
+                            <i class="fa fa-check"></i>
+                          <% else %>
+                            <%= number_with_delimiter(status_commission.to_f.round(2)) %>
+                          <% end %>
+                        </td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Card Header - Accordion -->
+        <a href="#own-col" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample8">
+          <h6 class="m-0 font-weight-bold text-primary"><h1 style= "text-align : center">OWN</h1></h6>
+        </a>
+        <!-- Card Content - Collapse -->
+        <div class="collapse show" id="own-col" style="">
+          <div class="col-xl-12 col-md-12 mb-4">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <br>
+                <table data-toggle="table" data-search="true" class="trial-b-table">
+                  <thead>
+                    <tr class='text-center'>
+                      <th>Name</th>
+                      <th>OWN (C)</th>
+                      <th>OWN (D)</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <% @commissions_by_loading.each do |com| %>
+                      <tr class='text-center'>
+                        <td><%= com[0] %></td>
+                        <td><%= number_with_delimiter(com[1].to_f.round(2)) %></td>
+                        <td><%= number_with_delimiter(@commissions_group_loading[com[0]].to_f.round(2)) %></td>
+                        <% status_commission =  com[1].to_f.round(2) - @commissions_group_loading[com[0]].to_f.round(2) %>
+                        <td>
+                          <% if status_commission.zero? %>
+                            <i class="fa fa-check"></i>
+                          <% else %>
+                            <%= number_with_delimiter(status_commission.to_f.round(2)) %>
+                          <% end %>
+                        </td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

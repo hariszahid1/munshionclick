@@ -10,7 +10,17 @@ class DealsController < ApplicationController
   # GET /deals
   # GET /deals.json
   def index
-    @q = Deal.ransack(params[:q])
+    if params.dig(:q, :created_at_gteq).present?
+      params[:q][:created_at_gteq] = params[:q][:created_at_gteq]&.to_date&.beginning_of_day
+      params[:q][:created_at_lteq] = params[:q][:created_at_lteq]&.to_date&.end_of_day
+      @q = Deal.ransack(params[:q])
+    else
+      @q = Deal.where(created_at: DateTime.now.to_date&.beginning_of_month..DateTime.now.to_date&.end_of_month)
+               .ransack(params[:q])
+    end
+    @total_commission = @q.result.sum(:comission)
+    @total_earning = @q.result.sum(:agent_earning)
+    @office_commission = @q.result.sum(:file_share)
     @deals = @q.result.page(params[:page])
     @staffs = Staff.all
   end
