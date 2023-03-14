@@ -66,214 +66,215 @@
     <div class="tab-content">
       <div class="tab-pane active no-tab-border" id="search" role="tabpanel">
         <%= search_form_for @q, url: products_path, class: "admin-controls", method: "get" do |f| %>
-            <div class="card shadow p-3 mt-2 mb-3">  
-              <div class="row d-flex mt-2 p-3">
-                <div class="col-lg-2 form-group float-left">
-                  <%= f.select :item_type_id_in, options_for_select(@item_types.map {|i| ["#{i.second} \u{27F6} #{i.last}", i.first]}, f.object.item_type_id_in),{:include_blank => "Select the Block"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Block"} }%>
-                </div>
-                <div class="col-lg-2 form-group float-left">
-                  <%= f.select :id_in, options_for_select(@product.map {|i| ["#{i.second} \u{27F6} #{i.last}", i.first]}, f.object.id_in),{:include_blank => "Select Title/Code"},{:multiple => true, :class=>"form-control chosen-select", :data => {:placeholder => "Select the Title/Code"}} %>
-                </div>
-                <div class="col-lg-2 form-group float-left">
-                  <%= f.select :product_category_id_in, options_for_select(@product_categories.map {|i| ["#{i.second} \u{27F6} #{i.last}", i.first]}, f.object.product_category_id_in),{:include_blank => "Select Unit category"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Unit category"}} %>
-                </div>
-                <div class="col-lg-2 form-group float-left">
-                  <%= f.select :product_sub_category_id_in, options_for_select(@product_sub_categories.map {|i| ["#{i.second} \u{27F6} #{i.last}", i.first]}, f.object.product_sub_category_id_in),{:include_blank => "Select Unit subcategory"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Unit subcategory"}} %>
-                </div>
-                <div class="col-lg-2 form-group float-left">
-                  <%= f.select :size_6_in, options_for_select(Product.plot_statuses.map { |key, value| [key.humanize, value] }, @status),{:include_blank => "Select Unit Status"}, { class: "form-control chosen-select", prompt: 'Select Unit Status' }%>
-                </div>
-                <div class="col-lg-2 form-group float-left">
-                  <%= f.select :product_type_eq, [['OnCash','0'],['OnInstallment','1']],{:include_blank => "Select Unit Type"}, { class: "form-control chosen-select", prompt: 'Select Unit Type' } %>
-                </div>
-                <div class="col-lg-4 form-group float-left">
-                  <%= f.select :orders_purchase_sale_details_staff_id_eq, options_for_select(Staff.all.map {|i| [i.name, i.id]}, f.object.orders_purchase_sale_details_staff_id_eq),{:include_blank => "Select Dealer"},{:class=>"form-control chosen-select", :data => {:placeholder => "Select Dealer"}} %>
-                </div>
-                <div class="col-lg-3 form-group float-left">
-                  <%= f.select :orders_status_eq, options_for_select({Cancel: 5}.map {|k, v| [k, v]}, f.object.orders_status_eq),{:include_blank => "Select Booking Status"},{:class=>"form-control chosen-select", :data => {:placeholder => "Select Booking Status"}} %>
-                </div>
-                <div class='col-lg-2 form-group float-left'>
-                  <%= text_field_tag 'paid_in_per', params[:paid_in_per], class: 'form-control', placeholder: 'Paid in % >=' %>
-                </div>
-                <div class='col-lg-2 form-group float-left'>
-                  <%= text_field_tag 'paid_in_per_less', params[:paid_in_per_less], class: 'form-control', placeholder: 'Paid in % <=' %>
-                </div>
-                <div class='col-lg-2 form-group float-left'>
-                  <%= text_field_tag 'commission_in_per', params[:commission_in_per], class: 'form-control', placeholder: 'Commission in % >=' %>
-                </div>
-                <div class='col-lg-2 form-group float-left'>
-                  <%= text_field_tag 'phone_number_in', params[:phone_number_in], class: 'form-control', placeholder: 'like Phone Number' %>
-                </div>
-                <div class='col-lg-3 form-group float-left'>
-                  <%= search_field_tag 'last_payment', params[:last_payment], class: 'datepicker form-control', placeholder: 'Last Payment to Today' %>
-                </div>
-                <div class="col-lg-1 form-group float-left">
-                  <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px;"><i class="fa fa-search"></i></button>
-                </div>                
+          <div class="card shadow p-3 mt-2 mb-3">  
+            <div class="row d-flex mt-2 p-3">
+              <div class="col-lg-2 form-group float-left">
+                <%= f.select :item_type_id_in, options_for_select(@item_types.map {|i| ["#{i.second} \u{27F6} #{i.last}", i.first]}, f.object.item_type_id_in),{:include_blank => "Select the Block"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Block"} }%>
               </div>
+              <div class="col-lg-2 form-group float-left">
+                <%= f.select :id_in, options_for_select(@product.map {|i| ["#{i.second} \u{27F6} #{i.last}", i.first]}, f.object.id_in),{:include_blank => "Select Title/Code"},{:multiple => true, :class=>"form-control chosen-select", :data => {:placeholder => "Select the Title/Code"}} %>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <%= f.select :product_category_id_in, options_for_select(@product_categories.map {|i| ["#{i.second} \u{27F6} #{i.last}", i.first]}, f.object.product_category_id_in),{:include_blank => "Select Unit category"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Unit category"}} %>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <%= f.select :product_sub_category_id_in, options_for_select(@product_sub_categories.map {|i| ["#{i.second} \u{27F6} #{i.last}", i.first]}, f.object.product_sub_category_id_in),{:include_blank => "Select Unit subcategory"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Unit subcategory"}} %>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <%= f.select :size_6_in, options_for_select(Product.plot_statuses.map { |key, value| [key.humanize, value] }, @status),{:include_blank => "Select Unit Status"}, { class: "form-control chosen-select", prompt: 'Select Unit Status' }%>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <%= f.select :product_type_eq, [['OnCash','0'],['OnInstallment','1']],{:include_blank => "Select Unit Type"}, { class: "form-control chosen-select", prompt: 'Select Unit Type' } %>
+              </div>
+              <div class="col-lg-4 form-group float-left">
+                <%= f.select :orders_purchase_sale_details_staff_id_eq, options_for_select(Staff.all.map {|i| [i.name, i.id]}, f.object.orders_purchase_sale_details_staff_id_eq),{:include_blank => "Select Dealer"},{:class=>"form-control chosen-select", :data => {:placeholder => "Select Dealer"}} %>
+              </div>
+              <div class="col-lg-3 form-group float-left">
+                <%= f.select :orders_status_eq, options_for_select({Cancel: 5}.map {|k, v| [k, v]}, f.object.orders_status_eq),{:include_blank => "Select Booking Status"},{:class=>"form-control chosen-select", :data => {:placeholder => "Select Booking Status"}} %>
+              </div>
+              <div class='col-lg-2 form-group float-left'>
+                <%= text_field_tag 'paid_in_per', params[:paid_in_per], class: 'form-control', placeholder: 'Paid in % >=' %>
+              </div>
+              <div class='col-lg-2 form-group float-left'>
+                <%= text_field_tag 'paid_in_per_less', params[:paid_in_per_less], class: 'form-control', placeholder: 'Paid in % <=' %>
+              </div>
+              <div class='col-lg-2 form-group float-left'>
+                <%= text_field_tag 'commission_in_per', params[:commission_in_per], class: 'form-control', placeholder: 'Commission in % >=' %>
+              </div>
+              <div class='col-lg-2 form-group float-left'>
+                <%= text_field_tag 'phone_number_in', params[:phone_number_in], class: 'form-control', placeholder: 'like Phone Number' %>
+              </div>
+              <div class='col-lg-3 form-group float-left'>
+                <%= search_field_tag 'last_payment', params[:last_payment], class: 'datepicker form-control', placeholder: 'Last Payment to Today' %>
+              </div>
+              <div class="col-lg-1 form-group float-left">
+                <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px;"><i class="fa fa-search"></i></button>
+                <button type='submit' class='dynamic-submit-btn d-none' formtarget='_blank'></button>
+              </div>                
             </div>
-          <div class="card shadow p-3 product-book-index-card">
-            <%= render 'map_columns/map_column_partials' %>
-            <div class="row d-flex" style="position: absolute;">
-              <div>
-                <%if (check_can_delete(@module_permission))%>
-                  <button class="btn btn-danger file-btn-color delete-selected mt-4 ml-3" type='button' value='Product'>
-                    <i class="fa fa-trash"></i>
-                  </button>		
-                <%end%>
-              </div>
-              <div class="mt-4 ml-3">
-                <% if check_can_download_pdf(@module_permission)%>
-                  <div class="dropdown my-dropdown">
-                    <button type="button" class="btn btn-danger file-btn-color mr-1" style="width:80px">PDF</button>
-                    <div class="dropdown-content my-dropdown-content p-2">
-                      <button class="btn btn-danger file-btn-color mr-1 mt-2" style="width: 120px;" name="submit_pdf_staff_with" type="submit" title="Download units pdf" value="Products PDF A4" formtarget="_blank">Units</button>
-                      <button class="btn btn-danger file-btn-color mr-1 mt-2" style="width: 120px;" name="submit_pdf_staff" type="submit" title="Download Accounts pdf" value="Products PDF A4" formtarget="_blank">Accounts</button>
-                    </div>
-                  </div>
-                <% end %>
-                <% if check_can_download_csv(@module_permission)%>
-                  <div class="dropdown my-dropdown">
-                    <button type="button" class="btn btn-warning file-btn-color mr-1" style="width:80px">CSV</button>
-                    <div class="dropdown-content my-dropdown-content p-2">
-                      <button class="btn btn-warning file-btn-color mr-1" style="width: 120px;"  name="csv_staff_with" type="submit" title="Download Units csv" value="Products PDF A4" formtarget="_blank">Units</button>
-                      <button class="btn btn-warning file-btn-color mr-1 mt-2" style="width: 120px;"  name="csv_staff" type="submit" title="Download Accounts csv" value="Products PDF A4" formtarget="_blank">Accounts</button>
-                    </div>
-                  </div>
-                <% end %>
-              </div>
+          </div>
+        <% end %>
+        <div class="card shadow p-3 product-book-index-card">
+          <%= render 'map_columns/map_column_partials' %>
+          <div class="row d-flex" style="position: absolute;">
+            <div>
+              <%if (check_can_delete(@module_permission))%>
+                <button class="btn btn-danger file-btn-color delete-selected mt-4 ml-3" type='button' value='Product'>
+                  <i class="fa fa-trash"></i>
+                </button>		
+              <%end%>
             </div>
-            <div class="mt-3">
-              <table data-toggle="table" data-search="true" id="product_table" class="content-table">
-                <thead>
-                  <th class="p-2"><input type="checkbox" id="master" class='select-all-checkbox' style="cursor: pointer;"></th>
-                  <th class="p-2">Block<%= sort_link(@q, :item_type_title, '', {}, class: 'sorting-button') %></th>
-                  <th class="p-2">Code<%= sort_link(@q, :code,'', {}, class: 'sorting-button') %></th>
-                  <th class="p-2">Title/MS No.<%= sort_link(@q, :tile, '', {}, class: 'sorting-button') %></th>
-                  <th class="p-2">Category<%= sort_link(@q, :product_category_title, '', {}, class: 'sorting-button') %></th>
-                  <th class="p-2">Sub-Ctgy<%= sort_link(@q, :product_sub_category_title, '', {}, class: 'sorting-button') %></th>
-                  <th class="p-2">Per-Marla<%= sort_link(@q, :cost, '', {}, class: 'sorting-button') %></th>
-                  <th class="p-2">Per-SFT<%= sort_link(@q, :cost, '', {}, class: 'sorting-button') %></th>
-                  <th class="p-2">Total<%= sort_link(@q, :sale, '', {}, class: 'sorting-button') %></th>
-                  <th class="p-2">Area<%= sort_link(@q, :area, '', {}, class: 'sorting-button') %></th>
-                  <th class="p-2">Status<%= sort_link(@q, :area, '', {}, class: 'sorting-button') %></th>
-                  <th class="p-2">Action</th>
-                </thead>
-                <tbody>
-                  <%@products.each do |product|%>
-                    <tr>
-                      <td><%= check_box_tag 'object_ids[]', product.id %></td>
-                      <td><%= product.item_type&.title %></td>
-                      <td><%= product.code %></td>
-                      <td><%= product.title %></td>
-                      <td><%= product.product_category&.title %></td>
-                      <td><%= product.product_sub_category&.title %></td>
-                      <td><%= number_with_delimiter(product.sale.to_f.round(2)) %></td>
-                      <td><%= number_with_delimiter((product.sale.to_f/225).round(2)) %></td>
-                      <td><%= number_with_delimiter((product.sale.to_f.round(2)*(product.marla.to_f+(product.square_feet.to_f/225))).to_f.round(2)) %></td>
-                      <td><%= product.marla.to_i %> M <%= product.square_feet.to_i%> Sq.Ft</td>
-                      <td>
-                      <div class="scroll-td">
-                        <% staff_deal_orders = product.orders%>
-                        <%if staff_deal_orders.present?%>
-                          <%staff_deal_orders.each do |booking|%>
-                            <b>Unit Commission to: </b>
-                              <%token = booking.purchase_sale_details&.first%>
-                              <%=token&.staff&.name%>
-                            <br>
-                            <%if booking&.status!='Cancel'%>
+            <div class="mt-4 ml-3">
+              <% if check_can_download_pdf(@module_permission)%>
+                <div class="dropdown my-dropdown">
+                  <button type="button" class="btn btn-danger file-btn-color mr-1" style="width:80px">PDF</button>
+                  <div class="dropdown-content my-dropdown-content p-2">
+                    <button class="btn btn-danger file-btn-color files-download-btn mr-1 mt-2" style="width: 120px;" name="submit_pdf_staff_with" type="submit" title="Download units pdf" value="Products PDF A4" formtarget="_blank">Units</button>
+                    <button class="btn btn-danger file-btn-color files-download-btn mr-1 mt-2" style="width: 120px;" name="submit_pdf_staff" type="submit" title="Download Accounts pdf" value="Products PDF A4" formtarget="_blank">Accounts</button>
+                  </div>
+                </div>
+              <% end %>
+              <% if check_can_download_csv(@module_permission)%>
+                <div class="dropdown my-dropdown">
+                  <button type="button" class="btn btn-warning file-btn-color mr-1" style="width:80px">CSV</button>
+                  <div class="dropdown-content my-dropdown-content p-2">
+                    <button class="btn btn-warning file-btn-color files-download-btn mr-1" style="width: 120px;"  name="csv_staff_with" type="submit" title="Download Units csv" value="Products PDF A4" formtarget="_blank">Units</button>
+                    <button class="btn btn-warning file-btn-color  files-download-btn mr-1 mt-2" style="width: 120px;"  name="csv_staff" type="submit" title="Download Accounts csv" value="Products PDF A4" formtarget="_blank">Accounts</button>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+          <div class="mt-3">
+            <table data-toggle="table" data-search="true" id="product_table" class="content-table">
+              <thead>
+                <th class="p-2"><input type="checkbox" id="master" class='select-all-checkbox' style="cursor: pointer;"></th>
+                <th class="p-2">Block<%= sort_link(@q, :item_type_title, '', {}, class: 'sorting-button') %></th>
+                <th class="p-2">Code<%= sort_link(@q, :code,'', {}, class: 'sorting-button') %></th>
+                <th class="p-2">Title/MS No.<%= sort_link(@q, :tile, '', {}, class: 'sorting-button') %></th>
+                <th class="p-2">Category<%= sort_link(@q, :product_category_title, '', {}, class: 'sorting-button') %></th>
+                <th class="p-2">Sub-Ctgy<%= sort_link(@q, :product_sub_category_title, '', {}, class: 'sorting-button') %></th>
+                <th class="p-2">Per-Marla<%= sort_link(@q, :cost, '', {}, class: 'sorting-button') %></th>
+                <th class="p-2">Per-SFT<%= sort_link(@q, :cost, '', {}, class: 'sorting-button') %></th>
+                <th class="p-2">Total<%= sort_link(@q, :sale, '', {}, class: 'sorting-button') %></th>
+                <th class="p-2">Area<%= sort_link(@q, :area, '', {}, class: 'sorting-button') %></th>
+                <th class="p-2">Status<%= sort_link(@q, :area, '', {}, class: 'sorting-button') %></th>
+                <th class="p-2">Action</th>
+              </thead>
+              <tbody>
+                <%@products.each do |product|%>
+                  <tr>
+                    <td><%= check_box_tag 'object_ids[]', product.id %></td>
+                    <td><%= product.item_type&.title %></td>
+                    <td><%= product.code %></td>
+                    <td><%= product.title %></td>
+                    <td><%= product.product_category&.title %></td>
+                    <td><%= product.product_sub_category&.title %></td>
+                    <td><%= number_with_delimiter(product.sale.to_f.round(2)) %></td>
+                    <td><%= number_with_delimiter((product.sale.to_f/225).round(2)) %></td>
+                    <td><%= number_with_delimiter((product.sale.to_f.round(2)*(product.marla.to_f+(product.square_feet.to_f/225))).to_f.round(2)) %></td>
+                    <td><%= product.marla.to_i %> M <%= product.square_feet.to_i%> Sq.Ft</td>
+                    <td>
+                    <div class="scroll-td">
+                      <% staff_deal_orders = product.orders%>
+                      <%if staff_deal_orders.present?%>
+                        <%staff_deal_orders.each do |booking|%>
+                          <b>Unit Commission to: </b>
+                            <%token = booking.purchase_sale_details&.first%>
+                            <%=token&.staff&.name%>
+                          <br>
+                          <%if booking&.status!='Cancel'%>
+                            <%= link_to edit_order_path(booking,product:true) do %>
+                              Name: <%=booking.sys_user&.name%>
+                              <%=booking.sys_user&.ledger_books&.pluck('SUM(debit)','SUM(credit)').map { |sys| "<br> <b>Total:</b> "+ number_with_delimiter(sys.first.to_s) + " <br><b>Paid:</b> "+ number_with_delimiter(sys.second.to_s) +" <br><b>In %</b> "+((sys.second.to_f/sys.first.to_f)*100).round(2).to_s+" <br><b>Remaining:</b> "+ number_with_delimiter((sys.first.to_i-sys.second.to_i).to_s)+" <br><b>Commission:</b> "+token&.carriage.to_s+"<br><b> In % </b>"+((token&.carriage.to_f/sys.first.to_f)*100).round(2).to_s}.join(',').html_safe%>
+                            <%end%>
+                            <%=booking.sys_user.contact.phone_with_comma%>
+                            <%= ("<br><b>Last Payment Date: </b>"+booking&.sys_user&.ledger_books&.last&.created_at&.strftime("%d/%b/%y,%I:%M")).html_safe if booking.present?%>
+                          <%else%>
+                            <span>
+                              <b>Booking-Canceled</b>
                               <%= link_to edit_order_path(booking,product:true) do %>
-                                Name: <%=booking.sys_user&.name%>
-                                <%=booking.sys_user&.ledger_books&.pluck('SUM(debit)','SUM(credit)').map { |sys| "<br> <b>Total:</b> "+ number_with_delimiter(sys.first.to_s) + " <br><b>Paid:</b> "+ number_with_delimiter(sys.second.to_s) +" <br><b>In %</b> "+((sys.second.to_f/sys.first.to_f)*100).round(2).to_s+" <br><b>Remaining:</b> "+ number_with_delimiter((sys.first.to_i-sys.second.to_i).to_s)+" <br><b>Commission:</b> "+token&.carriage.to_s+"<br><b> In % </b>"+((token&.carriage.to_f/sys.first.to_f)*100).round(2).to_s}.join(',').html_safe%>
+                                Name: <%=booking.sys_user.name%>
+                                <%=booking.sys_user.ledger_books.pluck('SUM(debit)','SUM(credit)').map { |sys| "<br> <b>Total:</b> "+ number_with_delimiter(sys.first.to_s) +" <br><b>Paid:</b> "+ number_with_delimiter(sys.second.to_s) +" <br><b>In %</b> "+((sys.second/sys.first)*100).round(2).to_s+"<br><b>Remaining:</b> "+ number_with_delimiter((sys.first.to_i-sys.second.to_i).to_s) +" <br><b>Commission:</b> "+token&.carriage.to_s+"<br><b> In % </b>"+((token&.carriage.to_f/sys.first)*100).round(2).to_s}.join(',').html_safe%>
                               <%end%>
                               <%=booking.sys_user.contact.phone_with_comma%>
                               <%= ("<br><b>Last Payment Date: </b>"+booking&.sys_user&.ledger_books&.last&.created_at&.strftime("%d/%b/%y,%I:%M")).html_safe if booking.present?%>
-                            <%else%>
-                              <span>
-                                <b>Booking-Canceled</b>
-                                <%= link_to edit_order_path(booking,product:true) do %>
-                                  Name: <%=booking.sys_user.name%>
-                                  <%=booking.sys_user.ledger_books.pluck('SUM(debit)','SUM(credit)').map { |sys| "<br> <b>Total:</b> "+ number_with_delimiter(sys.first.to_s) +" <br><b>Paid:</b> "+ number_with_delimiter(sys.second.to_s) +" <br><b>In %</b> "+((sys.second/sys.first)*100).round(2).to_s+"<br><b>Remaining:</b> "+ number_with_delimiter((sys.first.to_i-sys.second.to_i).to_s) +" <br><b>Commission:</b> "+token&.carriage.to_s+"<br><b> In % </b>"+((token&.carriage.to_f/sys.first)*100).round(2).to_s}.join(',').html_safe%>
-                                <%end%>
-                                <%=booking.sys_user.contact.phone_with_comma%>
-                                <%= ("<br><b>Last Payment Date: </b>"+booking&.sys_user&.ledger_books&.last&.created_at&.strftime("%d/%b/%y,%I:%M")).html_safe if booking.present?%>
-                                <b>Booking-Canceled</b>
-                              </span>
-                            <%end%>
-                            <br><br>
+                              <b>Booking-Canceled</b>
+                            </span>
                           <%end%>
+                          <br><br>
                         <%end%>
-                      </div>
-                      </td>
-                      <td>
-                        <div class="icon-container-1">
-                          <div class="my-icon-1 my-view-1">
-                            <div class="my-tooltip-1">
-                              <div class="icon-container">
-                                <div class="my-icon my-view">
-                                  <div class="my-tooltip">
-                                    Edit
-                                  </div>
-                                  <%if (check_can_update(@module_permission))%>
-                                    <%= link_to edit_product_path(product), class:"icon-div" do %>
-                                      <i class="fa fa-edit mt-2" aria-hidden="true"></i>
-                                    <%end %>
-                                  <% end %>
+                      <%end%>
+                    </div>  
+                    </td>
+                    <td>
+                      <div class="icon-container-1">
+                        <div class="my-icon-1 my-view-1">
+                          <div class="my-tooltip-1">
+                            <div class="icon-container">
+                              <div class="my-icon my-view">
+                                <div class="my-tooltip">
+                                  Edit
                                 </div>
-                                <div class="my-icon my-view">
-                                  <div class="my-tooltip">
-                                    Delete
-                                  </div>
-                                  <%if (check_can_delete(@module_permission))%>
-                                    <%= link_to product, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
-                                      <i class="fa fa-trash mt-2" aria-hidden="true"></i>
-                                    <%end %>
-                                  <% end %>
+                                <%if (check_can_update(@module_permission))%>
+                                  <%= link_to edit_product_path(product), class:"icon-div" do %>
+                                    <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+                                  <%end %>
+                                <% end %>
+                              </div>
+                              <div class="my-icon my-view">
+                                <div class="my-tooltip">
+                                  Delete
                                 </div>
-                                <div class="my-icon my-view">
-                                  <div class="my-tooltip">
-                                    Show
-                                  </div>
-                                  <%if (check_can_read(@module_permission))%>
-                                    <%= link_to product_path(product), class:"icon-div" do %>
-                                      <i class="fa fa-eye mt-2" aria-hidden="true"></i>
-                                    <%end %>
-                                  <%end%>
+                                <%if (check_can_delete(@module_permission))%>
+                                  <%= link_to product, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+                                    <i class="fa fa-trash mt-2" aria-hidden="true"></i>
+                                  <%end %>
+                                <% end %> 
+                              </div>
+                              <div class="my-icon my-view">
+                                <div class="my-tooltip">
+                                  Show
                                 </div>
+                                <%if (check_can_read(@module_permission))%>
+                                  <%= link_to product_path(product), class:"icon-div" do %>
+                                    <i class="fa fa-eye mt-2" aria-hidden="true"></i>
+                                  <%end %>
+                                <%end%>    
                               </div>
                             </div>
-                            <span class="icon-div-1">
-                              <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
-                            </span>
                           </div>
+                          <span class="icon-div-1">
+                                <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+                          </span>
                         </div>
-                      </td>
-                    </tr>
-                  <%end%>
-                  <tr>
-                    <td><h5>Total</h5></td>
-                    <td colspan='7'><h5><%= @products.count %></h5></td>
-                    <td><h5><%= number_with_delimiter(@products_total_price.to_f.round(2)) %></h5></td>
-                    <td colspan='3'>
+                      </div>
+                    </td>
+                  </tr>
+                <%end%>
+                <tr>
+                  <td><h5>Total</h5></td>
+                  <td colspan='7'><h5><%= @products.count %></h5></td>
+                  <td><h5><%= number_with_delimiter(@products_total_price.to_f.round(2)) %></h5></td>
+                  <td colspan='3'>
                       <h5>Marla: <%= @products_total_marla %>, Sq.Ft: <%= @products_total_sq_ft %>
                         <br>
                         Total Marla = <%= (@products_total_marla.to_f + @products_total_sq_ft.to_f/225).round(2) %>
                       </h5>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="col-lg-12 digg_pagination product-book-index-card mt-3">
+            <div class="float-left page_info">
+              <%= page_entries_info @products %>
             </div>
-            <div class="col-lg-12 digg_pagination product-book-index-card mt-3">
-              <div class="float-left page_info">
-                <%= page_entries_info @products %>
-              </div>
-              <div class="float-right">
-              <%= paginate @products, :container => false %>
-              </div>
+            <div class="float-right">
+            <%= paginate @products, :container => false %>
             </div>
           </div>
-        <% end %>
+        </div>  
       </div>
       <div class="tab-pane mb-3 card shadow mt-2 p-4" id="analytics" role="tabpanel">
         <div class="row d-flex m-2">
@@ -409,6 +410,12 @@
     $('.product-logs-tab').on('click', function(){
       $('#product-logs').click();
       $('.product-book-index-card').addClass('d-none')
+    })
+    $('.files-download-btn').on('click', function(){
+      var name_btn = $(this).attr('name')
+      $('.dynamic-submit-btn').attr('name', name_btn)
+      $('.dynamic-submit-btn').val($(this).val())
+      $('.dynamic-submit-btn').click()
     })
 
 

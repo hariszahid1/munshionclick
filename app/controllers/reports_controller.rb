@@ -130,7 +130,10 @@ class ReportsController < ApplicationController
     @sys_user_payable_ledger_book_debit_total = LedgerBook.where('debit > 0').where(sys_user_id: @sys_user_payable.ids).sum(:debit)
     @sys_user_payable_ledger_book_credit_total = LedgerBook.where('credit > 0').where(sys_user_id: @sys_user_payable.ids).sum(:credit)
 
-
+    @commissions_by_carriage = PurchaseSaleDetail.joins(:staff).where(transaction_type: 'Sale').group('staffs.name').sum(:carriage)
+    @commissions_group_carriage = SalaryDetail.joins(:staff).where(comment: 'Carriage').group('staffs.name').sum(:amount)
+    @commissions_by_loading = PurchaseSaleDetail.joins(:staff).where(transaction_type: 'Sale').group('staffs.name').sum(:Loading)
+    @commissions_group_loading = SalaryDetail.joins(:staff).where(comment: 'Loading').group('staffs.name').sum(:amount)
 
     @p =SysUser.where('balance < 0').ransack(params[:p])
     if @p.result.count > 0

@@ -28,23 +28,23 @@
                   <i class="fa fa-address-book"></i><%= staff.code %>
               </td>
               <td><%= staff.full_name %></td>
-              <td><%= staff.staff_salary_or_wage.to_f.round(2)%></td>
+              <td><%= number_with_delimiter(staff.staff_salary_or_wage.to_f.round(2))%></td>
               <td><%= staff.department.present? ? staff.department.title : ""%>:<%= staff.staff_raw_products.present? ? staff.staff_raw_products_titles : ""%></td>
               <td>
                 <% debit_sum  = staff&.staff_ledger_books&.sum(:debit) %>
                 <% total_debit = total_debit.to_f + debit_sum.to_f %>
-                <%= number_with_delimiter(debit_sum)%>
+                <%= number_with_delimiter(debit_sum.to_f.round(2))%>
               </td>
               <td>
                 <% credit_sum = staff&.staff_ledger_books&.sum(:credit) %>
                 <% total_credit = total_credit.to_f + credit_sum.to_f %>
-                <%= number_with_delimiter(credit_sum)%>
+                <%= number_with_delimiter(credit_sum.to_f.round(2))%>
               </td>
               <td>
                 <% balance = staff.balance.to_f.round(2)%>
                 <% credit_debit = credit_sum.to_i - debit_sum.to_i %>
                 <% total_balance = total_balance.to_i + balance.to_i %>
-                <%= number_with_delimiter(balance)%>
+                <%= number_with_delimiter(balance.to_f.round(2))%>
               </td>
               <td>
                 <% if balance == credit_debit%>
@@ -63,9 +63,9 @@
           <td></td>
           <td></td>
           <td></td>
-          <td><h4><%= number_with_delimiter(total_debit) %></h4></td>
-          <td><h4><%= number_with_delimiter(total_credit) %></h4></td>
-          <td><h4><%= number_with_delimiter(total_balance) %></h4></td>
+          <td><h4><%= number_with_delimiter(total_debit.to_f.round(2)) %></h4></td>
+          <td><h4><%= number_with_delimiter(total_credit.to_f.round(2)) %></h4></td>
+          <td><h4><%= number_with_delimiter(total_balance.to_f.round(2)) %></h4></td>
           <td></td>
         </tr>
       </tbody>

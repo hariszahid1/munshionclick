@@ -46,9 +46,9 @@
       <% end %>
     </ul>
   </div>  
-    <%= search_form_for @q, url: property_plans_path, class: "admin-controls", method: "get" do |f| %>
-      <div class="tab-content">
-        <div class="tab-pane active no-tab-border mt-2"  id="search" role="tabpanel">
+    <div class="tab-content">
+      <div class="tab-pane active no-tab-border mt-2"  id="search" role="tabpanel">
+        <%= search_form_for @q, url: property_plans_path, class: "admin-controls", method: "get" do |f| %>
           <div class="card shadow p-3 mb-3">
             <div class="row d-flex mt-3 mr-2">
               <div class="col">
@@ -64,179 +64,177 @@
                 </div>
                 <div class="col-lg-2 form-group float-left">
                   <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+                  <button type='submit' class='dynamic-submit-btn d-none' formtarget='_blank'></button>
                 </div>
               </div>
             </div>
           </div>
-          <div class='card shadow p-4'>
-            <%= render 'map_columns/map_column_partials' %>
-            <div class="row d-flex" style="position: absolute;">
-              <div>
-                <%if (check_can_delete(@module_permission))%>
-	                <button class="btn btn-danger file-btn-color delete-selected mt-4 ml-3" type='button' value='PropertyPlan'>
-	                	<i class="fa fa-trash"></i>
-	                </button>		
-                <%end%>
-              </div> 
-              <div class="mt-4 ml-3">
-                <%if (check_can_download_pdf(@module_permission))%>
-                  <button class="btn btn-danger file-btn-color mr-1" style="width:80px" title= "download plans pdf" name="pdf" type="submit" value="pdf" formtarget="_blank" >PDF</button>
-                <% end %>
-                <%if (check_can_download_csv(@module_permission))%>
-                  <button class="btn btn-warning file-btn-color mr-1" style="width:80px" title= "download plans csv" name="csv" type="submit" value="csv">CSV</button>
-                <% end %>
-              </div> 
-              <%= search_form_for @q, url: property_plans_path, class: "admin-controls ml-2", method: "get" do |f| %>
-                <div class="d-flex mt-4" style="width: 100%;">
-                  <%= select_tag :limit, options_for_select(['Show Entries',5, 10, 15, 20, 25], selected: :limit), id: 'pagination-limit', class:'file-btn-color', title:'Show Entries', style:'cursor: pointer;' %>
-                </div>
+        <% end %> 
+        <div class='card shadow p-4'>
+          <%= render 'map_columns/map_column_partials' %>
+          <div class="row d-flex" style="position: absolute;">
+            <div>
+              <%if (check_can_delete(@module_permission))%>
+	              <button class="btn btn-danger file-btn-color delete-selected mt-4 ml-3" type='button' value='PropertyPlan'>
+	              	<i class="fa fa-trash"></i>
+	              </button>		
+              <%end%>
+            </div> 
+            <div class="mt-4 ml-3">
+              <%if (check_can_download_pdf(@module_permission))%>
+                <button class="btn btn-danger file-btn-color files-download-btn mr-1" style="width:80px" title= "download plans pdf" name="pdf" type="submit" value="pdf" formtarget="_blank" >PDF</button>
               <% end %>
-            </div>
-            <div class="mt-3">  
-              <table data-toggle="table" data-search="true" class="overflow-hidden content-table">
-                <thead>
+              <%if (check_can_download_csv(@module_permission))%>
+                <button class="btn btn-warning file-btn-color files-download-btn mr-1" style="width:80px" title= "download plans csv" name="csv" type="submit" value="csv">CSV</button>
+              <% end %>
+            </div> 
+            <%= search_form_for @q, url: property_plans_path, class: "admin-controls ml-2", method: "get" do |f| %>
+              <div class="d-flex mt-4" style="width: 100%;">
+                <%= select_tag :limit, options_for_select(['Show Entries',5, 10, 15, 20, 25], selected: :limit), id: 'pagination-limit', class:'file-btn-color', title:'Show Entries', style:'cursor: pointer;' %>
+              </div>
+            <% end %>
+          </div>
+          <div class="mt-3">  
+            <table data-toggle="table" data-search="true" class="overflow-hidden content-table">
+              <thead>
+                <tr>
+                  <th class="p-2"><input type="checkbox" id="master" class='select-all-checkbox'>
+                  </th>
+                  <th><div class="d-flex">ID<%= sort_link(@q, :id,"", {}, class: 'sorting-button ml-auto') %></div></th>
+                  <th><div class="d-flex">User<%= sort_link(@q, :property_type, 'User',  {}, class: 'sorting-button ml-auto') %></div></th>
+                  <th><div class="d-flex">Phone<%= sort_link(@q, :property_type, 'Phone',  {}, class: 'sorting-button ml-auto') %></div></th>
+                  <th><div class="d-flex">Plot<%= sort_link(@q, :area_in_marla, 'Plot',  {}, class: 'sorting-button ml-auto') %></div></th>
+                  <th><div class="d-flex">Last Payment<%= sort_link(@q, :area_in_marla, 'Last Payment',  {}, class: 'sorting-button ml-auto') %></div></th>
+                  <th><div class="d-flex">Last Payment Date<%= sort_link(@q, :area_in_marla, 'Last Payment Date',  {}, class: 'sorting-button ml-auto') %></div></th>
+                  <th><div class="d-flex">Advance<%= sort_link(@q, :price_per_marla, 'Advance',  {}, class: 'sorting-button ml-auto') %></div></th>
+                  <th><div class="d-flex">Size<%= sort_link(@q, :area_in_marla, 'Size',  {}, class: 'sorting-button ml-auto') %></div></th>
+                  <th><div class="d-flex">Due Date<%= sort_link(@q, :area_in_marla, 'Due Date',  {}, class: 'sorting-button ml-auto') %></div></th>
+                  <th>Dealer</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @property_plans.each do |property_plan| %>
                   <tr>
-                    <th class="p-2"><input type="checkbox" id="master" class='select-all-checkbox'>
-                    </th>
-                    <th><div class="d-flex">ID<%= sort_link(@q, :id,"", {}, class: 'sorting-button ml-auto') %></div></th>
-                    <th><div class="d-flex">User<%= sort_link(@q, :property_type, 'User',  {}, class: 'sorting-button ml-auto') %></div></th>
-                    <th><div class="d-flex">Phone<%= sort_link(@q, :property_type, 'Phone',  {}, class: 'sorting-button ml-auto') %></div></th>
-                    <th><div class="d-flex">Plot<%= sort_link(@q, :area_in_marla, 'Plot',  {}, class: 'sorting-button ml-auto') %></div></th>
-                    <th><div class="d-flex">Last Payment<%= sort_link(@q, :area_in_marla, 'Last Payment',  {}, class: 'sorting-button ml-auto') %></div></th>
-                    <th><div class="d-flex">Last Payment Date<%= sort_link(@q, :area_in_marla, 'Last Payment Date',  {}, class: 'sorting-button ml-auto') %></div></th>
-                    <th><div class="d-flex">Advance<%= sort_link(@q, :price_per_marla, 'Advance',  {}, class: 'sorting-button ml-auto') %></div></th>
-                    <th><div class="d-flex">Size<%= sort_link(@q, :area_in_marla, 'Size',  {}, class: 'sorting-button ml-auto') %></div></th>
-                    <th><div class="d-flex">Due Date<%= sort_link(@q, :area_in_marla, 'Due Date',  {}, class: 'sorting-button ml-auto') %></div></th>
-                    <th>Dealer</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% @property_plans.each do |property_plan| %>
-                    <tr>
-                      <td><%= check_box_tag 'object_ids[]', property_plan.id %></td>
-                      <td><%= property_plan.id %></td>
-                      <td><%= link_to property_plan.order&.sys_user&.name, orders_path('q[sys_user_id_eq]': property_plan.order&.sys_user.id.to_s,"sale":true) if property_plan.order&.sys_user&.id.present?%></td>
-                      <td><%= property_plan.order&.sys_user&.contact&.phone %></td>
-                      <td><%= property_plan.order&.order_items_names_and_quantity&.first&.first %></td>
-                      <td><%= number_with_delimiter property_plan.order&.sys_user&.ledger_books.where('credit>0')&.last&.credit %></td>
-                      <td><%= property_plan.order&.sys_user&.ledger_books.where('credit>0')&.last&.created_at&.strftime("%d%b%y , %I:%M")%></td>
-                      <td><%= number_with_delimiter property_plan.advance %></td>
-                      <td><%= property_plan.order&.order_items_names_and_quantity&.first[8]%>-M <%= property_plan.order&.order_items_names_and_quantity&.first[9]%>-sqr</td>
-                      <td><%= property_plan.due_date.present? ? property_plan.due_date.strftime("%d%b%y , %I:%M") : '' %></td>
-                      <td><%= property_plan&.order&.order_plot_dealer&.first&.staff&.name%></td>
-                      <td>
-                        <div class="icon-container-1">
-                          <div class="my-icon-1 my-view-1">
-                            <div class="my-tooltip-1">
-                              <div class="icon-container">
-		                    				<%if (check_can_update(@module_permission))%>
-                                	<div class="my-icon my-view">
-                                	  <div class="my-tooltip">
-                                	    Edit
-                                	  </div>
-                                	    <%= link_to edit_property_plan_path(property_plan), remote: true, class:"icon-div" do %>
-                                	      <i class="fa fa-edit mt-2" aria-hidden="true"></i>
-                                	    <%end %>
-                                	</div>
-		                    				<% end %>
-		                    				<%if (check_can_delete(@module_permission))%>
-                                	<div class="my-icon my-view">
-                                	  <div class="my-tooltip">
-                                	    Delete
-                                	  </div>
-                                	    <%= link_to property_plan, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
-                                	      <i class="fa fa-trash mt-2" aria-hidden="true"></i>
-                                	    <%end %>
-                                	</div>
-		                    				<% end %> 
-		                    				<%if (check_can_read(@module_permission))%>
-                                	<div class="my-icon my-view">
-                                	  <div class="my-tooltip">
-                                	    Show
-                                	  </div>
-                                	    <%= link_to property_plan_path(property_plan), remote: true, class:"icon-div" do %>
-                                	      <i class="fa fa-eye mt-2" aria-hidden="true"></i>
-                                	    <%end %>
-                                	</div>
-		                    				<%end%>
-		                    				<%if (check_can_download_pdf(@module_permission))%>
-                                	<div class="my-icon my-view">
-                                	  <div class="my-tooltip">
-                                	    PDF
-                                	  </div>
-                                	    <%= link_to property_plans_path('q[id_eq]':property_plan.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
-                                	      <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
-                                	    <%end %>  
-                                	</div>
-		                    				<% end %>  
-		                    				<%if (check_can_download_csv(@module_permission))%>
-                                	<div class="my-icon my-view">
-                                	  <div class="my-tooltip">
-                                	    CSV
-                                	  </div>
-                                	    <%= link_to property_plans_path('q[id_eq]':property_plan.id,'csv':true), title: 'Download CSV', class:"icon-div" do%>
-                                	      <i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
-                                	    <%end %>
-                                	</div>
-		                    				<% end %>
-                              </div>
+                    <td><%= check_box_tag 'object_ids[]', property_plan.id %></td>
+                    <td><%= property_plan.id %></td>
+                    <td><%= link_to property_plan.order&.sys_user&.name, orders_path('q[sys_user_id_eq]': property_plan.order&.sys_user.id.to_s,"sale":true) if property_plan.order&.sys_user&.id.present?%></td>
+                    <td><%= property_plan.order&.sys_user&.contact&.phone %></td>
+                    <td><%= property_plan.order&.order_items_names_and_quantity&.first&.first %></td>
+                    <td><%= number_with_delimiter property_plan.order&.sys_user&.ledger_books.where('credit>0')&.last&.credit %></td>
+                    <td><%= property_plan.order&.sys_user&.ledger_books.where('credit>0')&.last&.created_at&.strftime("%d%b%y , %I:%M")%></td>
+                    <td><%= number_with_delimiter property_plan.advance %></td>
+                    <td><%= property_plan.order&.order_items_names_and_quantity&.first[8]%>-M <%= property_plan.order&.order_items_names_and_quantity&.first[9]%>-sqr</td>
+                    <td><%= property_plan.due_date.present? ? property_plan.due_date.strftime("%d%b%y , %I:%M") : '' %></td>
+                    <td><%= property_plan&.order&.order_plot_dealer&.first&.staff&.name%></td>
+                    <td>
+                      <div class="icon-container-1">
+                        <div class="my-icon-1 my-view-1">
+                          <div class="my-tooltip-1">
+                            <div class="icon-container">
+	                    				<%if (check_can_update(@module_permission))%>
+                              	<div class="my-icon my-view">
+                              	  <div class="my-tooltip">
+                              	    Edit
+                              	  </div>
+                              	    <%= link_to edit_property_plan_path(property_plan), remote: true, class:"icon-div" do %>
+                              	      <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+                              	    <%end %>
+                              	</div>
+	                    				<% end %>
+	                    				<%if (check_can_delete(@module_permission))%>
+                              	<div class="my-icon my-view">
+                              	  <div class="my-tooltip">
+                              	    Delete
+                              	  </div>
+                              	    <%= link_to property_plan, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
+                              	      <i class="fa fa-trash mt-2" aria-hidden="true"></i>
+                              	    <%end %>
+                              	</div>
+	                    				<% end %> 
+	                    				<%if (check_can_read(@module_permission))%>
+                              	<div class="my-icon my-view">
+                              	  <div class="my-tooltip">
+                              	    Show
+                              	  </div>
+                              	    <%= link_to property_plan_path(property_plan), remote: true, class:"icon-div" do %>
+                              	      <i class="fa fa-eye mt-2" aria-hidden="true"></i>
+                              	    <%end %>
+                              	</div>
+	                    				<%end%>
+	                    				<%if (check_can_download_pdf(@module_permission))%>
+                              	<div class="my-icon my-view">
+                              	  <div class="my-tooltip">
+                              	    PDF
+                              	  </div>
+                              	    <%= link_to property_plans_path('q[id_eq]':property_plan.id,'pdf':true), title: 'Download PDF', target: '_blank', class:"icon-div" do %>
+                              	      <i class="fa fa-file-pdf text-danger mt-2 " aria-hidden="true"></i>
+                              	    <%end %>  
+                              	</div>
+	                    				<% end %>  
+	                    				<%if (check_can_download_csv(@module_permission))%>
+                              	<div class="my-icon my-view">
+                              	  <div class="my-tooltip">
+                              	    CSV
+                              	  </div>
+                              	    <%= link_to property_plans_path('q[id_eq]':property_plan.id,'csv':true), title: 'Download CSV', class:"icon-div" do%>
+                              	      <i class="fa fa-file-excel mt-2 text-success" aria-hidden="true"></i>
+                              	    <%end %>
+                              	</div>
+	                    				<% end %>
                             </div>
-                            <span class="icon-div-1">
-                                  <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
-                            </span>
                           </div>
+                          <span class="icon-div-1">
+                                <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+                          </span>
                         </div>
-                      </td>
-                    </tr>
-                  <% end %>
-                  <tr>
-                    <td></td>          
-                    <td>Total</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td colspan="7"><h4><%= number_with_delimiter @total_advance%></h4></td>
+                      </div>
+                    </td>
                   </tr>
-                </tbody>
-              </table>
-            </div>  
-            <div class="col-lg-12 digg_pagination">
-              <div class="float-left page_info">
-                <%= page_entries_info @property_plans %>
-              </div>
-              <div class="float-right">
-              <%= paginate @property_plans, :container => false %>
-              </div>
+                <% end %>
+                <tr>
+                  <td></td>          
+                  <td>Total</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td colspan="7"><h4><%= number_with_delimiter @total_advance%></h4></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>  
+          <div class="col-lg-12 digg_pagination">
+            <div class="float-left page_info">
+              <%= page_entries_info @property_plans %>
+            </div>
+            <div class="float-right">
+            <%= paginate @property_plans, :container => false %>
             </div>
           </div>
         </div>
-
-          <!--div class="tab-pane" id="create" role="tabpanel">
-            <p>
-              <% if can?(:add, :all) %>
-                <div id="new_city">
-                  <%= link_to new_property_plan_path, remote: true,class: "btn btn-success ml-3" do %>
-                    <i class="fa fa-plus" aria-hidden="false"></i>
-                    Create Property Plan
-                  <% end %>
-                </div>
-              <% end %>
-            </p>
-          </div-->
-
-        <div class="tab-pane mb-3 card shadow mt-2 p-3" id="import-export" role="tabpanel">
-         <p>
-           <div class="d-flex ml-2">
-           <button class="btn btn-danger ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
-           <button class="btn btn-info ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
-           </div>
-         </p>
-       </div>
-       </div>
-    <% end %>
-      
+      </div>
+        <!--div class="tab-pane" id="create" role="tabpanel">
+          <p>
+            <% if can?(:add, :all) %>
+              <div id="new_city">
+                <%= link_to new_property_plan_path, remote: true,class: "btn btn-success ml-3" do %>
+                  <i class="fa fa-plus" aria-hidden="false"></i>
+                  Create Property Plan
+                <% end %>
+              </div>
+            <% end %>
+          </p>
+        </div-->
+      <div class="tab-pane mb-3 card shadow mt-2 p-3" id="import-export" role="tabpanel">
+       <p>
+         <div class="d-flex ml-2">
+         <button class="btn btn-danger ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
+         <button class="btn btn-info ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
+         </div>
+       </p>
+     </div>
+     </div>
     <%= form_for :bulk_import, url: bulk_import_data_path, method: :post, html: {class: "bulk-import-form"} do |f| %>
       <div class="modal fade" id="importFile" tabindex="-1" role="dialog" aria-labelledby="importFileTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -274,6 +272,13 @@
     $("#city_list").removeClass('hidden');
     FontAwesome.dom.i2svg();
   });
+  
+  $('.files-download-btn').on('click', function(){
+      var name_btn = $(this).attr('name')
+      $('.dynamic-submit-btn').attr('name', name_btn)
+      $('.dynamic-submit-btn').val($(this).val())
+      $('.dynamic-submit-btn').click()
+  })
   $('#pagination-limit').on('change', function(){
     $(this).closest('form').submit();
   })

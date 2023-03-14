@@ -56,7 +56,7 @@
                         <%= link_to purchase_sale_details_path(sale:true,'q[created_at_gteq]': (DateTime.now).strftime('%Y-%m-%d'),'q[created_at_lteq]': (DateTime.now).strftime('%Y-%m-%d')) do %>
                           <i aria-hidden="true" style="color: #6c757d;">Rs.</i>
                           <i class="h6 mb-0 font-weight-bold text-gray-800 mr-2" style="color: #6c757d;">
-                            <%=@total_sale_today.to_f.round(2) rescue 0%>
+                            <%=number_with_delimiter(@total_installment_today.to_f.round(2))%>
                           </i>
                         <% end %>
                         <%= link_to purchase_sale_details_path(sale:true,'q[created_at_gteq]': (DateTime.now).strftime('%Y-%m-%d'),'q[created_at_lteq]': (DateTime.now).strftime('%Y-%m-%d')) do %>
@@ -67,7 +67,7 @@
                         <%= link_to purchase_sale_details_path(sale:true,'q[created_at_gteq]': (DateTime.now).strftime('%Y-%m-%d'),'q[created_at_lteq]': (DateTime.now).strftime('%Y-%m-%d')) do %>
                           <i aria-hidden="true" style="color: #6c757d;">Rs.</i>
                           <i class="h6 mb-0 font-weight-bold text-gray-800 mr-2" style="color: #6c757d;">
-                            <%=@total_sale.to_f.round(2) rescue 0%>
+                            <%=number_with_delimiter(@total_installment.to_f.round(2))%>
                           </i>
                         <% end %>
                         <%= link_to purchase_sale_details_path(sale:true,'q[created_at_gteq]': (DateTime.now).strftime('%Y-%m-%d'),'q[created_at_lteq]': (DateTime.now).strftime('%Y-%m-%d')) do %>

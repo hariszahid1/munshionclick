@@ -19,7 +19,7 @@
   <% if check_can_create(@module_permission) %>
     <div id="new_product_sub_category" class="float-right mt-3">
       <%= link_to new_product_sub_category_path,remote: true , style:"width: 150px;",class: "btn btn-success" do %>
-      <i class="fas fa-plus" aria-hidden="true"></i>
+      <i class="fas fa-plus-circle" aria-hidden="true"></i>
       Create
       <% end %>
     </div>
@@ -27,7 +27,7 @@
   <div class="clearfix"></div>
   <div class="float-right">
     <div class="dropdown ml-auto">
-     <span class="btn btn-info" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
+     <span class="btn btn-outline-info btn-sm mt-2" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
      <div class="dropdown-content">
        <% if @help.present? %>
        <% @help&.help_links.each do |link| %>
@@ -49,9 +49,9 @@
 			<%end%>
 	  </ul>
   </div>
-  <%= search_form_for @q, url: product_sub_categories_path, class: "admin-controls", method: "get" do |f| %>
-    <div class="tab-content ">
-      <div class="tab-pane active no-tab-border mt-2" id="search" role="tabpanel">
+  <div class="tab-content ">
+    <div class="tab-pane active no-tab-border mt-2" id="search" role="tabpanel">
+      <%= search_form_for @q, url: product_sub_categories_path, class: "admin-controls", method: "get" do |f| %>
         <div class="card shadow mb-3 p-4">
           <div class="row p-3">
             <div class='col-lg-2 float-left'>
@@ -65,64 +65,69 @@
             </div>
             <div class="col-lg-1">
               <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px;"><i class="fa fa-search"></i></button>
+              <button type='submit' class='dynamic-submit-btn d-none' formtarget='_blank'></button>
             </div>
           </div>
         </div>
-        <%= render 'map_columns/map_column_partials' %>
-        <div class='card  p-4'>
-          <div class="row d-flex" style="position: absolute;">
-            <div>
-        	    <%if (check_can_delete(@module_permission))%>
-        	    	<button class="btn delete-selected btn btn-danger file-btn-color mt-4 ml-3 " type='button' value='ProductSubCategory'>
-        	    		<i class="fa fa-trash "></i>
-        	    	</button>
-        	    <%end%>
-            </div>
-            <div class="mt-4 ml-2">
-              <button class="btn btn-danger file-btn-color file-btn-color mr-2" title= "download subcategories pdf" style="width:80px;" name="pdf" type="submit" value="pdf" formtarget="_blank" >PDF</button>
-              <button class="btn btn-warning file-btn-color file-btn-color mr-2" title= "download sub categories csv" style="width:80px;" name="csv" type="submit" value="csv">CSV</button>
-            </div>
+      <% end %>
+      <%= render 'map_columns/map_column_partials' %>
+      <div class='card  p-4'>
+        <div class="row d-flex" style="position: absolute;">
+          <div>
+      	    <%if (check_can_delete(@module_permission))%>
+      	    	<button class="btn delete-selected btn btn-danger file-btn-color mt-4 ml-3 " type='button' value='ProductSubCategory'>
+      	    		<i class="fa fa-trash "></i>
+      	    	</button>
+      	    <%end%>
           </div>
-          <div class="mt-3">
-            <table data-toggle="table" data-search="true" id="product_sub_category_table" class=" overflow-hidden border-radius-1">
-              <thead>
-                <tr>
-                  <th><input type="checkbox" id="master" class='select-all-checkbox'>
-                  </th>
-                   <th>ID<div class='float-right'><%= sort_link(@q, :id, '', {}, class: 'sorting-button') %></div></th>
-                  <th>Category<div class='float-right'><%= sort_link(@q, :product_category, '', {}, class: 'sorting-button') %></div></th>
-                  <th>Title<div class='float-right'><%= sort_link(@q, :tile, '', {}, class: 'sorting-button') %></div></th>
-                  <th>Products</th>
-                  <th>Code<div class='float-right'><%= sort_link(@q, :code, '', {}, class: 'sorting-button') %></div></th>
-                  <th>Comment<div class='float-right'><%= sort_link(@q, :comment, '', {}, class: 'sorting-button') %></div></th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <%= render partial: 'product_sub_category', collection: @product_sub_categories %>
-              </tbody>
-            </table>
-          </div>
-          <div class="row">
-            <div class="col-lg-4 col-sm-4">
-              <%= page_entries_info @product_sub_categories %>
-            </div>
-            <div class="col-lg-8 col-sm-8 pagination-left">
-              <%= paginate @product_sub_categories %>
-            </div>
+          <div class="mt-4 ml-2">
+            <%if (check_can_download_pdf(@module_permission))%>
+            <button class="btn btn-danger file-btn-color files-download-btn " title= "download subcategories pdf" style="width:80px;" name="pdf" type="submit" value="pdf" formtarget="_blank" >PDF</button>
+            <%end%>
+            <%if (check_can_download_csv(@module_permission))%>
+            <button class="btn btn-warning file-btn-color files-download-btn mr-2" title= "download sub categories csv" style="width:80px;" name="csv" type="submit" value="csv">CSV</button>
+             <%end%>
           </div>
         </div>
-      </div>
-      <div class="tab-pane mb-3 card shadow-sm mt-2 p-3" id="import-export" role="tabpanel">
-        <p>
-          <div class="d-flex">
-          <button class="btn btn-info ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
-          <button class="btn btn-danger ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
+        <div class="mt-3">
+          <table data-toggle="table" data-search="true" id="product_sub_category_table" class=" overflow-hidden border-radius-1">
+            <thead>
+              <tr>
+                <th><input type="checkbox" id="master" class='select-all-checkbox'>
+                </th>
+                 <th>ID<div class='float-right'><%= sort_link(@q, :id, '', {}, class: 'sorting-button') %></div></th>
+                <th>Category<div class='float-right'><%= sort_link(@q, :product_category, '', {}, class: 'sorting-button') %></div></th>
+                <th>Title<div class='float-right'><%= sort_link(@q, :tile, '', {}, class: 'sorting-button') %></div></th>
+                <th>Products</th>
+                <th>Code<div class='float-right'><%= sort_link(@q, :code, '', {}, class: 'sorting-button') %></div></th>
+                <th>Comment<div class='float-right'><%= sort_link(@q, :comment, '', {}, class: 'sorting-button') %></div></th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <%= render partial: 'product_sub_category', collection: @product_sub_categories %>
+            </tbody>
+          </table>
+        </div>
+        <div class="row">
+          <div class="col-lg-4 col-sm-4">
+            <%= page_entries_info @product_sub_categories %>
           </div>
-        </p>
+          <div class="col-lg-8 col-sm-8 pagination-left">
+            <%= paginate @product_sub_categories %>
+          </div>
+        </div>
       </div>
     </div>
-  <% end %>
+    <div class="tab-pane mb-3 card shadow-sm mt-2 p-3" id="import-export" role="tabpanel">
+      <p>
+        <div class="d-flex">
+        <button class="btn btn-info ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
+        <button class="btn btn-danger ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
+        </div>
+      </p>
+    </div>
+  </div>
 <div class="show-data"></div>
 <%= form_for :bulk_import, url: bulk_import_data_path, method: :post, html: {class: "bulk-import-form"} do |f| %>
   <div class="modal fade" id="importFile" tabindex="-1" role="dialog" aria-labelledby="importFileTitle" aria-hidden="true">
@@ -159,4 +164,10 @@
     $("#product_sub_category_list").removeClass('hidden');
     FontAwesome.dom.i2svg();
   });
+  $('.files-download-btn').on('click', function(){
+      var name_btn = $(this).attr('name')
+      $('.dynamic-submit-btn').attr('name', name_btn)
+      $('.dynamic-submit-btn').val($(this).val())
+      $('.dynamic-submit-btn').click()
+  })
 </script>

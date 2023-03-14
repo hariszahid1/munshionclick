@@ -1,26 +1,30 @@
 <div class="card shadow mb-4">
   <!-- Card Header - Accordion -->
   <a href="#collapseCardExample" class="d-block card-header py-3 bg-info" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
-    <h6 class="m-0 font-weight-bold text-primary text-center"><h3>Attendance Sheet for <%= @attendance.date&.strftime('%A, %d %B %Y')%></h3></h6>
+    <h6 class="m-0 font-weight-bold text-primary text-center"><h3>Deal Detail</h3></h6>
   </a>
   <table>
-    <tr class="table-warning p-4 h5">
-      <th class="text-center">Staff</th>
-      <th class="text-center">Checkin</th>
-      <th class="text-center">Checkout</th>
-      <th class="text-center">Total Time</th>
-      <th class="text-center">Reason</th>
-    </tr>
+    <thead>
+      <tr class='text-center'>
+        <th>Agent Name</th>
+        <th>Total Commission</th>
+        <th>Office Share</th>
+        <th>Deal Details</th>
+        <th>Share</th>
+        <th>Agent Earning</th>
+      </tr>
+    </thead>
+
     <tbody>
-      <% @attendance.daily_attendances.each do |daily| %>
-        <tr class= <%= daily.check_in.blank? ? "table-danger text-dark" : "" %> >
-          <td class="text-center"><%=daily.staff&.name%></td>
-          <td class="text-center"><%=daily.check_in&.strftime('%I:%M %p')%></td>
-          <td class="text-center"><%=daily.check_out&.strftime('%I:%M %p')%></td>
-          <td class="text-center"><%=daily.total_time%></td>
-          <td class="text-center"><%=daily.comment%></td>
-        </tr>
-      <%end%>
+      <tr class='text-center'>
+        <td><%= @deal.staff&.name %></td>
+        <td><%= @deal.comission %></td>
+        <td><%= @deal.file_share %></td>
+        <td><%= @deal.deal_detail %></td>
+        <td><%= @deal.share %></td>
+        <td><%= @deal.agent_earning %></td>
+        <td></td>
+      </tr>
     </tbody>
   </table>
 </div>

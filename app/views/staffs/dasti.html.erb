@@ -21,7 +21,7 @@
     <%= link_to staffs_path, class: "btn btn-outline-danger  " do %>
       Staff
     <% end %>
-    <%= link_to payable_staffs_path, class: "btn btn-outline-warning " do %>
+    <%= link_to payable_staffs_path, class: "btn btn-outline-secondary " do %>
      Payable
     <% end %>
     <%= link_to receiveable_staffs_path, class: "btn btn-outline-primary " do %>
@@ -53,64 +53,65 @@
               </div>
               <div class="col-lg-1 form-group float-left">
                 <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+                <button type='submit' class='dynamic-submit-btn d-none' formtarget='_blank'></button>
               </div>
             </div>
           </div>
         </div>
-        <div class="card border-radius-1 shadow p-3 ">
-          <div class="row d-flex" style="position: absolute;">
-            <div class="col-lg-2 mt-2 form-group">
-              <button style="width:80px;" class="form-control btn-danger file-btn-color" name="submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank">PDF</button>
-            </div>
-          </div>
-          <table data-toggle="table" data-search="true">
-            <thead>
-              <tr>
-                <th><%= sort_link(@q, :staff_type, 'Status') %></th>
-                <th><%= sort_link(@q, :code, 'Code') %></th>
-                <th><%= sort_link(@q, :name, 'Name') %></th>
-                <th><%= sort_link(@q, :father, 'Father') %></th>
-                <th><%= sort_link(@q, :date_of_joining, 'Date of joining') %></th>
-                <th><%= sort_link(@q, :monthly_salary, 'Monthly/Wage') %></th>
-                <th><%= sort_link(@q, :advance_amount, 'Advance') %></th>
-                <th><%= sort_link(@q, :department_id, 'Department/Raw') %></th>
-                <th><%= sort_link(@q, :wage_debit, 'Short-Pay') %></th>
-                <th><%= sort_link(@q, :balance, 'Balance') %></th>        
-              </tr>
-            </thead>
-            <tbody>
-              <% @staffs.each do |staff| %>
-                <% if  staff.advance_amount > 0 %>
-                  <tr>
-                    <td><%= staff.staff_type %></td>
-                    <td><%= staff.code %></td>
-                    <td><%= staff.name %></td>
-                    <td><%= staff.father %></td>
-                    <td><%= staff.date_of_joining.strftime("%d%b%y , %I:%M") if staff.date_of_joining%></td>
-                    <td><%= number_with_delimiter staff.staff_salary_or_wage.to_f.round(2)%><% @monthly_wage += staff.staff_salary_or_wage.to_f.round(2) %></td>
-                    <td><%= number_with_delimiter staff.advance_amount.to_f.round(2) %><% @advance += staff.advance_amount.to_f.round(2) %></td>
-                    <td><%= number_with_delimiter staff.department.present? ? staff.department.title : ""%>:<%= staff.staff_raw_products.present? ? staff.staff_raw_products_titles : ""%></td>
-                    <td><%= number_with_delimiter staff.wage_debit.to_f.round(2) %><% @short_pay += staff.wage_debit.to_f.round(2) %></td>
-                    <td><%= number_with_delimiter staff.balance.to_f.round(2) %><% @balance += staff.balance.to_f.round(2) %></td>
-                  </tr>
-                <%end%>
-              <% end %>
-              <tr>
-                <td><h4>Total<h4></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><h4><%= number_with_delimiter @monthly_wage.round(2) %><h4></td>
-                <td><h4><%= number_with_delimiter @advance.round(2) %><h4></td>
-                <td></td>
-                <td><h4><%= number_with_delimiter @short_pay.round(2) %><h4></td>
-                <td><h4><%= number_with_delimiter @balance.round(2) %><h4></td>
-              </tr>
-            </tbody>
-          </table>
-       </div>
       <% end %>
+      <div class="card border-radius-1 shadow p-3 ">
+        <div class="row d-flex" style="position: absolute;">
+          <div class="col-lg-2 mt-2 form-group">
+            <button style="width:80px;" class="form-control btn-danger file-btn-color files-download-btn" name="submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank">PDF</button>
+          </div>
+        </div>
+        <table data-toggle="table" data-search="true">
+          <thead>
+            <tr>
+              <th><%= sort_link(@q, :staff_type, 'Status') %></th>
+              <th><%= sort_link(@q, :code, 'Code') %></th>
+              <th><%= sort_link(@q, :name, 'Name') %></th>
+              <th><%= sort_link(@q, :father, 'Father') %></th>
+              <th><%= sort_link(@q, :date_of_joining, 'Date of joining') %></th>
+              <th><%= sort_link(@q, :monthly_salary, 'Monthly/Wage') %></th>
+              <th><%= sort_link(@q, :advance_amount, 'Advance') %></th>
+              <th><%= sort_link(@q, :department_id, 'Department/Raw') %></th>
+              <th><%= sort_link(@q, :wage_debit, 'Short-Pay') %></th>
+              <th><%= sort_link(@q, :balance, 'Balance') %></th>        
+            </tr>
+          </thead>
+          <tbody>
+            <% @staffs.each do |staff| %>
+              <% if  staff.advance_amount > 0 %>
+                <tr>
+                  <td><%= staff.staff_type %></td>
+                  <td><%= staff.code %></td>
+                  <td><%= staff.name %></td>
+                  <td><%= staff.father %></td>
+                  <td><%= staff.date_of_joining.strftime("%d%b%y , %I:%M") if staff.date_of_joining%></td>
+                  <td><%= number_with_delimiter staff.staff_salary_or_wage.to_f.round(2)%><% @monthly_wage += staff.staff_salary_or_wage.to_f.round(2) %></td>
+                  <td><%= number_with_delimiter staff.advance_amount.to_f.round(2) %><% @advance += staff.advance_amount.to_f.round(2) %></td>
+                  <td><%= number_with_delimiter staff.department.present? ? staff.department.title : ""%>:<%= staff.staff_raw_products.present? ? staff.staff_raw_products_titles : ""%></td>
+                  <td><%= number_with_delimiter staff.wage_debit.to_f.round(2) %><% @short_pay += staff.wage_debit.to_f.round(2) %></td>
+                  <td><%= number_with_delimiter staff.balance.to_f.round(2) %><% @balance += staff.balance.to_f.round(2) %></td>
+                </tr>
+              <%end%>
+            <% end %>
+            <tr>
+              <td><h4>Total<h4></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td><h4><%= number_with_delimiter @monthly_wage.round(2) %><h4></td>
+              <td><h4><%= number_with_delimiter @advance.round(2) %><h4></td>
+              <td></td>
+              <td><h4><%= number_with_delimiter @short_pay.round(2) %><h4></td>
+              <td><h4><%= number_with_delimiter @balance.round(2) %><h4></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>  
 </div>
@@ -130,4 +131,11 @@
     }
     $("#staff_list").removeClass('hidden');
   });
+
+  $('.files-download-btn').on('click', function(){
+      var name_btn = $(this).attr('name')
+      $('.dynamic-submit-btn').attr('name', name_btn)
+      $('.dynamic-submit-btn').val($(this).val())
+      $('.dynamic-submit-btn').click()
+  })
 </script>

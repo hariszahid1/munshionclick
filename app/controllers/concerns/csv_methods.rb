@@ -432,8 +432,8 @@ module CsvMethods
       end
     end
     total = "Total #{@products&.count}"
-    area = "Marla: #{@total_marla} Square Feet: #{@total_square_feet}"
-    price = convert_to_delimiter(@product_price)
+    area = "Marla: #{@products_total_marla} Square Feet: #{@products_total_sq_ft}"
+    price = convert_to_delimiter(@products_total_price)
     csv.add_row [total, area, '', price, '', convert_to_delimiter(total_and_extra_sum).to_s]
   end
 
@@ -464,8 +464,8 @@ module CsvMethods
         csv.add_row row
       end
     end
-    price = convert_to_delimiter(@product_price).to_s
-    area = "Marla: #{@total_marla} Square Feet: #{@total_square_feet}"
+    price = convert_to_delimiter(@products_total_price).to_s
+    area = "Marla: #{@products_total_marla} Square Feet: #{@products_total_sq_ft}"
     csv.add_row ['Total', @products&.count, '', '', '', '', '', price, area]
   end
 

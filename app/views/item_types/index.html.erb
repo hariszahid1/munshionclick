@@ -39,36 +39,38 @@
       </div>
     </div>
   </div>
-<div class="row">  
-  <ul class="nav nav-tabs" role="tablist">
-  	<li class="nav-item">
-      <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab"><i class="fa fa-search mr-2"></i>Search</a>
-  	</li>
-  	<%if (check_can_import_export(@module_permission))%>
-  		<li class="nav-item">
-	  		<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab"><i class="fa fa-exchange-alt mr-2"></i>Import/Export</a>
-  		</li>
-  	<%end%>
-  </ul>
-</div>
-  <%= search_form_for @q, url: item_types_path, class: "admin-controls", method: "get" do |f| %>
+  <div class="row">  
+    <ul class="nav nav-tabs" role="tablist">
+    	<li class="nav-item">
+        <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab"><i class="fa fa-search mr-2"></i>Search</a>
+    	</li>
+    	<%if (check_can_import_export(@module_permission))%>
+    		<li class="nav-item">
+  	  		<a class="nav-link tab-label" data-toggle="tab" href="#import-export" role="tab"><i class="fa fa-exchange-alt mr-2"></i>Import/Export</a>
+    		</li>
+    	<%end%>
+    </ul>
+  </div>
   <div class="tab-content">
     <div class="tab-pane active no-tab-border mt-2" id="search" role="tabpanel">
-      <div class="card shadow p-3 mb-3">
-        <div class="row d-flex mt-3 mr-2">
-          <div class="col">
-            <div class='col-lg-4 form-group float-left'>
-              <%= f.select :id_eq, options_for_select(@options_for_select.map{ |p| [p.title , p.id]}, f.object.id_eq),{:include_blank => "Select Title"},:class=>"form-control chosen-select" %>
-            </div>
-            <div class='col-lg-4 form-group float-left'>
-              <%= f.search_field :title_or_comment_or_code_cont, placeholder: "Search in Item types", title: "Enter city name" ,:class=>"form-control" %>
-            </div>
-            <div class='col-lg-3 form-group float-left'>
-              <button class="form-control btn btn-primary" title="search item types" name="search_submit"type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+      <%= search_form_for @q, url: item_types_path, class: "admin-controls", method: "get" do |f| %>
+        <div class="card shadow p-3 mb-3">
+          <div class="row d-flex mt-3 mr-2">
+            <div class="col">
+              <div class='col-lg-4 form-group float-left'>
+                <%= f.select :id_eq, options_for_select(@options_for_select.map{ |p| [p.title , p.id]}, f.object.id_eq),{:include_blank => "Select Title"},:class=>"form-control chosen-select" %>
+              </div>
+              <div class='col-lg-4 form-group float-left'>
+                <%= f.search_field :title_or_comment_or_code_cont, placeholder: "Search in Item types", title: "Enter city name" ,:class=>"form-control" %>
+              </div>
+              <div class='col-lg-3 form-group float-left'>
+                <button class="form-control btn btn-primary" title="search item types" name="search_submit"type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+                <button type='submit' class='dynamic-submit-btn d-none' formtarget='_blank'></button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      <% end %>
       <div class='card shadow shadow p-4'>
         <%= render 'map_columns/map_column_partials' %>
         <div class="row d-flex" style="position: absolute;">
@@ -81,10 +83,10 @@
           </div>
           <div class="mt-4 ml-3">
             <%if (check_can_download_pdf(@module_permission))%>
-              <button class="btn btn-danger file-btn-color mr-1" style="width:80px" title= "download pdf" name="pdf" type="submit" value="pdf" formtarget="_blank" >PDF</button>
+              <button class="btn btn-danger file-btn-color files-download-btn mr-1" style="width:80px" title= "download pdf" name="pdf" type="submit" value="pdf" formtarget="_blank" >PDF</button>
             <% end %>
              <%if (check_can_download_csv(@module_permission))%>
-              <button class="btn btn-warning file-btn-color " style="width:80px" title= "download csv" name="csv" type="submit" value="csv">CSV</button>
+              <button class="btn btn-warning file-btn-color files-download-btn " style="width:80px" title= "download csv" name="csv" type="submit" value="csv">CSV</button>
             <% end %>
           </div>  
           <%= search_form_for @q, url: item_types_path, class: "admin-controls ml-2", method: "get" do |f| %>
@@ -129,8 +131,7 @@
         </div>
       </p>
     </div>
-    </div>
-  <% end %>
+  </div>
 </div>
 <%= form_for :bulk_import, url: bulk_import_data_path, method: :post, html: {class: "bulk-import-form"} do |f| %>
   <div class="modal fade" id="importFile" tabindex="-1" role="dialog" aria-labelledby="importFileTitle" aria-hidden="true">
@@ -168,6 +169,14 @@
     $("#item_types_list").removeClass('hidden');
     FontAwesome.dom.i2svg();
   });
+
+  $('.files-download-btn').on('click', function(){
+      var name_btn = $(this).attr('name')
+      $('.dynamic-submit-btn').attr('name', name_btn)
+      $('.dynamic-submit-btn').val($(this).val())
+      $('.dynamic-submit-btn').click()
+  })
+
   $(document).ready(function() {
     setTimeout(function(){
       $(".chosen-select").chosen({

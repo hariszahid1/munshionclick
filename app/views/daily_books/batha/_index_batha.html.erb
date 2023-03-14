@@ -29,7 +29,7 @@
   <div class="clearfix"></div>
   <div class="row d-flex float-left mr-1">
     <% if can?(:add, :all) %>
-     <%= link_to new_daily_book_path(department_id: @departments.first.id), style: "width:150px;" ,class: "btn btn-success ml-3" do %>
+     <%= link_to new_daily_book_path(department_id: @departments.first.id), style: "width:150px;" ,class: "btn btn-success ml-4" do %>
        <i class="fa fa-plus-circle" aria-hidden="true"></i>
        Create
      <% end %>
@@ -44,7 +44,7 @@
         <%=@departments.second.title%> Daily book
       <% end %>
     </div>
-    <div class="btn btn-outline-warning  mr-2">
+    <div class="btn btn-outline-secondary  mr-2">
       <%= link_to production_cycles_path do %>
         Bhari Daily Book
       <% end %>
@@ -62,33 +62,34 @@
   </div>
   <div class="clearfix"></div>
   <div class="row">
-    <ul class="nav nav-tabs ml-3 " role="tablist">
+    <ul class="nav nav-tabs ml-4 " role="tablist">
       <li class="nav-item">
         <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab"><i class="fa fa-search mr-2"></i>Search</a>
       </li>		
     </ul>
   </div>
   <div class="clearfix"></div>
-  <%= search_form_for @q, url: daily_books_path, class: "admin-controls", method: "get" do |f| %>
     <div class="tab-content">
       <div class="tab-pane active no-tab-border mt-2" id="search" role="tabpanel">
-        <div class=" card shadow  mx-1 mb-3 p-4">
-          <div class="row d-flex">
-            <div class="col-lg-3 form-group float-left">
-              <%= f.search_field :book_date_gteq, class: 'form-control input-sm datepicker',value: @book_date_gteq, 'datepicker' => true,placeholder: "YYYY-MM-DD" %>
-            </div>
-            <div class="col-lg-3 form-group float-left">
-              <%= f.search_field :book_date_lteq, class: 'form-control input-sm datepicker',value: @book_date_lteq, 'datepicker' => true ,placeholder: "YYYY-MM-DD"%>
-            </div>
-            <div class="col-lg-2 form-group float-left">
-              <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
-            </div> 
-          </div>    
-        </div>
+        <%= search_form_for @q, url: daily_books_path, class: "admin-controls", method: "get" do |f| %>
+          <div class=" card shadow  mx-1 mb-3 p-4">
+            <div class="row d-flex">
+              <div class="col-lg-3 form-group float-left">
+                <%= f.search_field :book_date_gteq, class: 'form-control input-sm datepicker',value: @book_date_gteq, 'datepicker' => true,placeholder: "YYYY-MM-DD" %>
+              </div>
+              <div class="col-lg-3 form-group float-left">
+                <%= f.search_field :book_date_lteq, class: 'form-control input-sm datepicker',value: @book_date_lteq, 'datepicker' => true ,placeholder: "YYYY-MM-DD"%>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+                <button type='submit' class='dynamic-submit-btn d-none' formtarget='_blank'></button>
+              </div> 
+            </div>    
+          </div>
+        <% end %>
         <div class="  card shadow my-4 mx-2 p-4 table-responsive ">
           <div class="row d-flex ml-1" style="position: absolute;">
-            <button style="width:80px;" class="form-control btn-danger file-btn-color float-right mr-1" name="submit_pdf" type="submit" value="Daily Production Details PDF A4" formtarget="_blank" >Daily</button>
-            <button style="width:80px;"  class="form-control btn btn-info file-btn-color float-right" name="email" type="submit" value="Email">Mail</button>
+            <button style="width:80px;" class="form-control btn-danger file-btn-color float-right files-download-btn mr-1" name="submit_pdf" type="submit" value="Daily Production Details PDF A4" formtarget="_blank" >Daily</button>
           </div>     
           <table data-toggle="table" data-search="true">
             <thead>
@@ -168,8 +169,7 @@
           </table>
        </div>
       </div>
-    </div>
-  <% end %>  
+    </div>  
 </div>
 <div class="clearfix"></div>
 <div class="row">
@@ -188,6 +188,13 @@
     $("#daily_books_list").removeClass('hidden');
     FontAwesome.dom.i2svg();
   });
+  
+  $('.files-download-btn').on('click', function(){
+      var name_btn = $(this).attr('name')
+      $('.dynamic-submit-btn').attr('name', name_btn)
+      $('.dynamic-submit-btn').val($(this).val())
+      $('.dynamic-submit-btn').click()
+  })
   $(document).ready(function() {
     setTimeout(function(){
       $(".chosen-select").chosen({

@@ -26,15 +26,15 @@
             <td><%= sys_user.status %></td>
             <td>
               <% debit_sum  = ledger_book_debit[sys_user.id].to_d%>
-              <%= number_with_delimiter(debit_sum)%>
+              <%= number_with_delimiter(debit_sum.to_f.round(2))%>
             </td>
             <td>
               <% credit_sum = ledger_book_credit[sys_user.id].to_d%>
-              <%= number_with_delimiter(credit_sum)%>
+              <%= number_with_delimiter(credit_sum.to_f.round(2))%>
             </td>
             <td>
               <% balance = sys_user.balance %> <%credit_debit = credit_sum.to_f-debit_sum.to_f%>
-              <%= number_with_delimiter(balance)%>
+              <%= number_with_delimiter(balance.to_f.round(2))%>
             </td>
             <td>
               <% if balance == credit_debit%>
@@ -51,9 +51,9 @@
         <td><%= %></td>
         <td><%= %></td>
         <td><%= %></td>
-        <td><%= number_with_delimiter(ledger_book_debit_total)%></td>
-        <td><%= number_with_delimiter(ledger_book_credit_total)%></td>
-        <td><%= number_with_delimiter(users&.pluck('balance')&.compact&.sum) %></td>
+        <td><%= number_with_delimiter(ledger_book_debit_total.to_f.round(2))%></td>
+        <td><%= number_with_delimiter(ledger_book_credit_total.to_f.round(2))%></td>
+        <td><%= number_with_delimiter(users&.pluck('balance')&.compact&.sum.to_f.round(2)) %></td>
         <td></td>
       </tr>
     </tbody>
