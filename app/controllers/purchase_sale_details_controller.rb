@@ -940,12 +940,12 @@ class PurchaseSaleDetailsController < ApplicationController
               staff.balance = ((@purchase_sale_detail.carriage+@purchase_sale_detail.loading)-before_update_carriage_loading+staff.balance)
               staff.save!
               if @purchase_sale_detail.salary_details.count == 2
-                @purchase_sale_detail.salary_details.first.update(staff_id: @purchase_sale_detail.staff_id, amount: @purchase_sale_detail.carriage, comment: “Carriage” , total_balance: staff.balance-@purchase_sale_detail.loading,quantity: @purchase_sale_detail.purchase_sale_items_quantities, created_at: @purchase_sale_detail.created_at)
-                @purchase_sale_detail.salary_details.last.update(staff_id: @purchase_sale_detail.staff_id, amount: @purchase_sale_detail.loading, comment: “Loading”, total_balance: staff.balance,created_at: @purchase_sale_detail.created_at)
+                @purchase_sale_detail.salary_details.first.update(staff_id: @purchase_sale_detail.staff_id, amount: @purchase_sale_detail.carriage, comment: 'Carriage' , total_balance: staff.balance-@purchase_sale_detail.loading,quantity: @purchase_sale_detail.purchase_sale_items_quantities, created_at: @purchase_sale_detail.created_at)
+                @purchase_sale_detail.salary_details.last.update(staff_id: @purchase_sale_detail.staff_id, amount: @purchase_sale_detail.loading, comment: 'Loading', total_balance: staff.balance,created_at: @purchase_sale_detail.created_at)
               else
                 @purchase_sale_detail.salary_details.destroy_all
-                @purchase_sale_detail.salary_details.build(staff_id: @purchase_sale_detail.staff_id, amount: @purchase_sale_detail.carriage, comment: “Carriage”, total_balance: staff.balance-@purchase_sale_detail.loading,quantity: @purchase_sale_detail.purchase_sale_items_quantities, created_at: @purchase_sale_detail.created_at)
-                @purchase_sale_detail.salary_details.build(staff_id: @purchase_sale_detail.staff_id, amount: @purchase_sale_detail.loading, comment: “Loading”, total_balance: staff.balance,created_at: @purchase_sale_detail.created_at)
+                @purchase_sale_detail.salary_details.build(staff_id: @purchase_sale_detail.staff_id, amount: @purchase_sale_detail.carriage, comment: 'Carriage', total_balance: staff.balance-@purchase_sale_detail.loading,quantity: @purchase_sale_detail.purchase_sale_items_quantities, created_at: @purchase_sale_detail.created_at)
+                @purchase_sale_detail.salary_details.build(staff_id: @purchase_sale_detail.staff_id, amount: @purchase_sale_detail.loading, comment: 'Loading', total_balance: staff.balance,created_at: @purchase_sale_detail.created_at)
               end
             end
           else
