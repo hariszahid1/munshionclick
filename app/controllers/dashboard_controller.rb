@@ -117,8 +117,10 @@ class DashboardController < ApplicationController
     @boot_today =Date.today
     @book_date_lteq = DateTime.now
     @total_sale=PurchaseSaleDetail.where(created_at: @boot_d.to_date.beginning_of_day..@boot_d.to_date.end_of_day ,:transaction_type=>"Sale").sum(:total_bill)
+    @total_installment=PurchaseSaleDetail.where(created_at: @boot_d.to_date.beginning_of_day..@boot_d.to_date.end_of_day ,:transaction_type=>"Sale").sum(:amount)
     @total_receipt=PurchaseSaleDetail.where(created_at: @boot_d.to_date.beginning_of_day..@boot_d.to_date.end_of_day ,:transaction_type=>"Sale").count()
     @total_sale_today=PurchaseSaleDetail.where(created_at: @boot_today.to_date.beginning_of_day..@boot_today.to_date.end_of_day ,:transaction_type=>"Sale").sum(:total_bill)
+    @total_installment_today=PurchaseSaleDetail.where(created_at: @boot_today.to_date.beginning_of_day..@boot_today.to_date.end_of_day ,:transaction_type=>"Sale").sum(:amount)
     @total_receipt_today=PurchaseSaleDetail.where(created_at: @boot_today.to_date.beginning_of_day..@boot_today.to_date.end_of_day ,:transaction_type=>"Sale").count()
 
     @total_purchase=PurchaseSaleDetail.where(created_at: @boot_d.to_date.beginning_of_day..@boot_d.to_date.end_of_day ,:transaction_type=>"Purchase").sum(:total_bill)

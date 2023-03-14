@@ -54,21 +54,27 @@ class ProductsController < ApplicationController
       end
       @q = @q.result.where(id: p_ids).ransack(params[:q])
     end
-    @products = @q.result.page(params[:page]).per(100)
-    export_file if params[:export_data].present?
-    @products_total_price = @q.result.map { |result| result[:sale].to_f*(result[:marla].to_f + result[:square_feet].to_f / 225.0) }.sum
-    @products_total_marla = @q.result.sum(:marla)
-    @products_total_sq_ft = @q.result.sum(:square_feet)
-
-    if @status != '1'
-      @product_price = @products.select('SUM(sale*(products.marla+(products.square_feet/225 ))) as total_price')&.first&.total_price
-      @total = @products.select('SUM(stock) as total_stock')&.first&.total_stock
-      @total_marla = @products.select('SUM(products.marla) as total_marla')&.first&.total_marla
-      @total_square_feet = @products.select('SUM(products.square_feet) as total_feet')&.first&.total_feet
+    if params.dig(:q, :size_6_in) == '1'
+      product_ids = OrderItem.joins(:order).where(orders: { status: %w[Clear Order UnClear UnPrint Printed] })
+                             .select(:product_id).distinct.pluck(:product_id)
+      params[:q][:size_6_in] = nil
+      @q = Product.where.not(id: product_ids).ransack(params[:q])
+      @products = @q.result.page(params[:page]).per(100)
+      export_file if params[:export_data].present?
+      @products_total_price = @q.result.map { |result| result[:sale].to_f*(result[:marla].to_f + result[:square_feet].to_f / 225.0) }.sum
+      @products_total_marla = @q.result.sum(:marla)
+      @products_total_sq_ft = @q.result.sum(:square_feet)
+      params[:q][:size_6_in] = 1
+    else
+      @products = @q.result.page(params[:page]).per(100)
+      export_file if params[:export_data].present?
+      @products_total_price = @q.result.map { |result| result[:sale].to_f*(result[:marla].to_f + result[:square_feet].to_f / 225.0) }.sum
+      @products_total_marla = @q.result.sum(:marla)
+      @products_total_sq_ft = @q.result.sum(:square_feet)
     end
+
     if params[:submit_pdf_staff_with].present? || params[:submit_pdf_staff].present?
-      @q.sorts = 'item_type_title desc' if @q.result.count.positive? && @q.sorts.empty?
-      @products = @q.result
+      # @q.sorts = 'item_type_title desc' if @q.result.count.positive? && @q.sorts.empty?
       print_pdf('products', 'pdf.html', 'A4')
     end
 
@@ -88,7 +94,6 @@ class ProductsController < ApplicationController
         @str << [code, name, Base64.encode64(files_content).gsub("\n", '')]
       end
       @q.sorts = 'item_type_title desc' if @q.result.count.positive? && @q.sorts.empty?
-      @products = @q.result
       print_pdf('index_bar', 'index_bar.pdf', 'A4')
     end
     
@@ -96,7 +101,6 @@ class ProductsController < ApplicationController
     
     return unless params[:csv_staff].present? || params[:csv_staff_with].present?
 
-    @products = @q.result
     csv_data = products_csv
     request.format = 'csv'
     respond_to do |format|

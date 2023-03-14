@@ -476,23 +476,23 @@
                     <i class="fa fa-address-book"></i><%= staff.code %>
                 </td>
                 <td><%= staff.full_name %></td>
-                <td><%= staff.staff_salary_or_wage.to_f.round(2)%></td>
+                <td><%= number_with_delimiter(staff.staff_salary_or_wage.to_f.round(2))%></td>
                 <td><%= staff.department.present? ? staff.department.title : ""%>:<%= staff.staff_raw_products.present? ? staff.staff_raw_products_titles : ""%></td>
                 <td>
                   <% debit_sum  = staff&.staff_ledger_books&.sum(:debit) %>
                   <% total_debit = total_debit.to_f + debit_sum.to_f %>
-                  <%= number_with_delimiter(debit_sum)%>
+                  <%= number_with_delimiter(debit_sum.to_f.round(2))%>
                 </td>
                 <td>
                   <% credit_sum = staff&.staff_ledger_books&.sum(:credit) %>
                   <% total_credit = total_credit.to_f + credit_sum.to_f %>
-                  <%= number_with_delimiter(credit_sum)%>
+                  <%= number_with_delimiter(credit_sum.to_f.round(2))%>
                 </td>
                 <td>
                   <% balance = staff.balance.to_f.round(2)%>
                   <% credit_debit = credit_sum.to_i - debit_sum.to_i %>
                   <% total_balance = total_balance.to_i + balance.to_i %>
-                  <%= number_with_delimiter(balance)%>
+                  <%= number_with_delimiter(balance.to_f.round(2))%>
                 </td>
                 <td>
                   <% if balance == credit_debit%>
@@ -510,9 +510,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td><h4><%= number_with_delimiter(total_debit) %></h4></td>
-              <td><h4><%= number_with_delimiter(total_credit) %></h4></td>
-              <td><h4><%= number_with_delimiter(total_balance) %></h4></td>
+              <td><h4><%= number_with_delimiter(total_debit.to_f.round(2)) %></h4></td>
+              <td><h4><%= number_with_delimiter(total_credit.to_f.round(2)) %></h4></td>
+              <td><h4><%= number_with_delimiter(total_balance.to_f.round(2)) %></h4></td>
               <td></td>
             </tr>
           </tbody>
@@ -545,15 +545,15 @@
           <td><%= account.bank_name %></td>
           <td>
             <% debit_sum  = @account_debit[account.title].to_d%>
-            <%= number_with_delimiter(debit_sum)%>
+            <%= number_with_delimiter(debit_sum.to_f.round(2))%>
           </td>
           <td>
             <% credit_sum = @account_credit[account.title].to_d%>
-            <%= number_with_delimiter(credit_sum)%>
+            <%= number_with_delimiter(credit_sum.to_f.round(2))%>
           </td>
           <td>
             <% balance = account.amount.to_f.round(2)%> <%credit_debit = credit_sum-debit_sum%>
-            <%= number_with_delimiter(balance)%>
+            <%= number_with_delimiter(balance.to_f.round(2))%>
           </td>
           <td>
             <% if balance == credit_debit%>
@@ -569,9 +569,9 @@
       <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
         <td><h4>Total<h4></td>
         <td><h4><%#=@accounts.count%></h4></td>
-        <td><h4><%=@account_debit_total.to_f.round(2)%></h4></td>
-        <td><h4><%=@account_credit_total.to_f.round(2)%></h4></td>
-        <td><h4><%=@accounts.sum(:amount).abs.to_f.round(2)%><h4></td>
+        <td><h4><%=number_with_delimiter(@account_debit_total.to_f.round(2))%></h4></td>
+        <td><h4><%=number_with_delimiter(@account_credit_total.to_f.round(2))%></h4></td>
+        <td><h4><%=number_with_delimiter(@accounts.sum(:amount)&.abs.to_f.round(2))%><h4></td>
         <td></td>
       </tr>
     </tbody>
@@ -596,11 +596,11 @@
           </td>
           <td>
             <% balance = exp.last.to_f.round(2) %>
-            <%= number_with_delimiter(balance)%>
+            <%= number_with_delimiter(balance.to_f.round(2))%>
           </td>
           <td>
             <% credit_expense = @credit_expense[exp&.first&.last].to_f.round(2)%>
-            <%= number_with_delimiter(credit_expense)%>
+            <%= number_with_delimiter(credit_expense.to_f.round(2))%>
           </td>
           <td>
             <% if balance == credit_expense%>
@@ -616,8 +616,8 @@
       <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
         <td><h4>Total</h4></td>
         <td><h4><%#=@expense_list.count%></h4></td>
-        <td><h4><%=@expense_total.abs.to_f.round(2)%><h4></td>
-        <td><h4><%=@total_credit_expense.abs.to_f.round(2)%><h4></td>
+        <td><h4><%=number_with_delimiter(@expense_total&.abs.to_f.round(2))%><h4></td>
+        <td><h4><%=number_with_delimiter(@total_credit_expense&.abs.to_f.round(2))%><h4></td>
         <td></td>
       </tr>
     </tbody>
@@ -636,13 +636,13 @@
       <% @purchase_item_list.each do |exp| %>
         <tr style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
           <td><%= exp.first %></td>
-          <td><%= exp.last.to_f.round(2) %></td>
+          <td><%= number_with_delimiter(exp.last.to_f.round(2)) %></td>
         </tr>
       <% end %>
       <% @purchase_product_list.each do |exp| %>
         <tr style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
           <td><%= exp.first %></td>
-          <td><%= exp.last.to_f.round(2) %></td>
+          <td><%= number_with_delimiter(exp.last.to_f.round(2)) %></td>
         </tr>
       <% end %>
       <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
@@ -666,13 +666,13 @@
       <% @sale_item_list.each do |exp| %>
         <tr style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
           <td><%= exp.first %></td>
-          <td><%= exp.last.to_f.round(2) %></td>
+          <td><%= number_with_delimiter(exp.last.to_f.round(2)) %></td>
         </tr>
       <% end %>
       <% @sale_product_list.each do |exp| %>
         <tr style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
           <td><%= exp.first %></td>
-          <td><%= exp.last.to_f.round(2) %></td>
+          <td><%= number_with_delimiter(exp.last.to_f.round(2)) %></td>
         </tr>
       <% end %>
       <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
@@ -695,20 +695,84 @@
       <% @salary_detail_list.each do |exp| %>
         <tr style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
           <td><%= exp.first %></td>
-          <td><%= exp.last.to_f.round(2) %></td>
+          <td><%= number_with_delimiter(exp.last.to_f.round(2)) %></td>
         </tr>
       <% end %>
 
       <% @khakar_salary_detail_list.each do |exp| %>
         <tr style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
           <td><%= exp.first %></td>
-          <td><%= exp.last.to_f.round(2) %></td>
+          <td><%= number_with_delimiter(exp.last.to_f.round(2)) %></td>
         </tr>
       <% end %>
       <tr class="lite-gray" style="text-align:center; font-size:15px;,font-family: Arial Black, Gadget, sans-serif">
         <td><h4>Total : <%=@salary_detail_list.count.to_i%></h4></td>
         <td><h4><%=@salary_detail_total.to_i%><h4></td>
       </tr>
+    </tbody>
+  </table>
+</div>
+
+<h2 style="text-align: center; margin: 10px 0px;">Commission</h2>
+<div >
+  <table>
+    <thead>
+      <tr class="lite-gray" style='text-align: center;'>
+        <th>Name</th>
+        <th>Commission (C)</th>
+        <th>Commission (D)</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @commissions_by_carriage.each do |com| %>
+        <tr style='text-align: center;'>
+          <td><%= com[0] %></td>
+          <td><%= number_with_delimiter(com[1].to_f.round(2)) %></td>
+          <td><%= number_with_delimiter(@commissions_group_carriage[com[0]].to_f.round(2)) %></td>
+          <% status_commission =  com[1].to_f.round(2) - @commissions_group_carriage[com[0]].to_f.round(2) %>
+          <td>
+            <% if status_commission.zero? %>
+              ok
+            <% else %>
+              <%= number_with_delimiter(status_commission.to_f.round(2)) %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<h2 style="text-align: center; margin: 10px 0px;">OWN</h2>
+<div >
+  <table>
+    <thead>
+      <tr class="lite-gray" style='text-align: center;'>
+        <th>Name</th>
+        <th>OWN (C)</th>
+        <th>OWN (D)</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @commissions_by_loading.each do |com| %>
+        <tr style='text-align: center;'>
+          <td><%= com[0] %></td>
+          <td><%= number_with_delimiter(com[1].to_f.round(2)) %></td>
+          <td><%= number_with_delimiter(@commissions_group_loading[com[0]].to_f.round(2)) %></td>
+          <% status_commission =  com[1].to_f.round(2) - @commissions_group_loading[com[0]].to_f.round(2) %>
+          <td>
+            <% if status_commission.zero? %>
+              ok
+            <% else %>
+              <%= number_with_delimiter(status_commission.to_f.round(2)) %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
     </tbody>
   </table>
 </div>
