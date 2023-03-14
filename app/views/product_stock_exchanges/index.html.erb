@@ -36,64 +36,64 @@
             </div>
             <div class="col-lg-2 form-group float-left">
               <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+              <button type='submit' class='dynamic-submit-btn d-none' formtarget='_blank'></button>
             </div>
             <div class="col-lg-2 form-group float-left">
             </div>
           </div>
         </div>
-        <div class="row card shadow m-1 p-3 ">
-          <div class="row d-flex" style="position: absolute;">
-            <div class="ml-3 mt-2">
-              <button style="width:80px;" class=" form-control btn-danger file-btn-color" name="submit_pdf" type="submit" value="PDF A4" formtarget="_blank">PDF</button>
-            </div>
-          </div>
-          <table data-toggle="table" data-search="true">
-            <thead>
-              <tr>
-                <th><%= sort_link(@q, :product_id, 'Product sent') %></th>
-                <th><%= sort_link(@q, :product_recipient_id, 'Product received') %></th>
-                <th><%= sort_link(@q, :quantity, 'Quantity') %></th>
-                <th><%= sort_link(@q, :created_at, 'Date') %></th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% @product_stock_exchanges.each do |product_stock_exchange| %>
-                <tr>
-                  <td><%= product_stock_exchange.product.title if product_stock_exchange.product.present? %></td>
-                  <td><%= product_stock_exchange.product_recipient.title if product_stock_exchange.product_recipient.present? %></td>
-                  <td><%= product_stock_exchange.quantity %></td>
-                  <td><%= product_stock_exchange.created_at.strftime("%d%b%y , %I:%M") %></td>
-                  <td>
-                    <% if can?(:update, :all) %>
-                      <%= link_to edit_product_stock_exchange_path(product_stock_exchange) do %>
-                        <i class="fa fa-edit " aria-hidden="true"></i> |
-                      <%end %>
-                    <% end %>
-                    <% if can?(:delete, :all) %>
-                      <%= link_to product_stock_exchange, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
-                        <i class="fa fa-trash " aria-hidden="true"></i> |
-                      <%end %>
-                    <% end %>
-                    <% if can?(:view, :all) %>
-                      <%= link_to product_stock_exchange do %>
-                        <i class="fa fa-eye " aria-hidden="true"></i>
-                      <%end %>
-                    <%end%>
-                  </td>
-          
-                </tr>
-              <% end %>
-              <tr>
-                <td><b>Total</b></td>
-                <td></td>
-                <td><b><%=@total_quantity.first %></b></td>
-                <td></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
       <% end %>
+      <div class="row card shadow m-1 p-3 ">
+        <div class="row d-flex" style="position: absolute;">
+          <div class="ml-3 mt-2">
+            <button style="width:80px;" class=" form-control btn-danger file-btn-color files-download-btn" name="submit_pdf" type="submit" value="PDF A4" formtarget="_blank">PDF</button>
+          </div>
+        </div>
+        <table data-toggle="table" data-search="true">
+          <thead>
+            <tr>
+              <th><%= sort_link(@q, :product_id, 'Product sent') %></th>
+              <th><%= sort_link(@q, :product_recipient_id, 'Product received') %></th>
+              <th><%= sort_link(@q, :quantity, 'Quantity') %></th>
+              <th><%= sort_link(@q, :created_at, 'Date') %></th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @product_stock_exchanges.each do |product_stock_exchange| %>
+              <tr>
+                <td><%= product_stock_exchange.product.title if product_stock_exchange.product.present? %></td>
+                <td><%= product_stock_exchange.product_recipient.title if product_stock_exchange.product_recipient.present? %></td>
+                <td><%= product_stock_exchange.quantity %></td>
+                <td><%= product_stock_exchange.created_at.strftime("%d%b%y , %I:%M") %></td>
+                <td>
+                  <% if can?(:update, :all) %>
+                    <%= link_to edit_product_stock_exchange_path(product_stock_exchange) do %>
+                      <i class="fa fa-edit " aria-hidden="true"></i> |
+                    <%end %>
+                  <% end %>
+                  <% if can?(:delete, :all) %>
+                    <%= link_to product_stock_exchange, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+                      <i class="fa fa-trash " aria-hidden="true"></i> |
+                    <%end %>
+                  <% end %>
+                  <% if can?(:view, :all) %>
+                    <%= link_to product_stock_exchange do %>
+                      <i class="fa fa-eye " aria-hidden="true"></i>
+                    <%end %>
+                  <%end%>
+                </td>
+              </tr>
+            <% end %>
+            <tr>
+              <td><b>Total</b></td>
+              <td></td>
+              <td><b><%=@total_quantity.first %></b></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>
@@ -105,4 +105,10 @@
     $("#staff_list").removeClass('hidden');
     FontAwesome.dom.i2svg();
   });
+  $('.files-download-btn').on('click', function(){
+      var name_btn = $(this).attr('name')
+      $('.dynamic-submit-btn').attr('name', name_btn)
+      $('.dynamic-submit-btn').val($(this).val())
+      $('.dynamic-submit-btn').click()
+  })
 </script>

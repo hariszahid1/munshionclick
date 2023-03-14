@@ -60,24 +60,26 @@
   <%= hidden_field_tag "userGroupCount", @user_group_count, { :id => "userGroupCount" } %>
   <%= hidden_field_tag "userGroupTitle1", @user_group_title, { :id => "userGroupTitle1" } %>
   <%= hidden_field_tag "userGroupCount1", @user_group_count, { :id => "userGroupCount1" } %>
-  <%= search_form_for @q, url: user_groups_path, class: "admin-controls", method: "get" do |f| %>
   <div class="tab-content">
     <div class="tab-pane active no-tab-border mt-2 " id="search" role="tabpanel">
-      <div class="card shadow mb-3 p-3">
-        <div class="row d-flex mt-3 mr-2">
-          <div class="col">
-            <div class='col-lg-4 form-group float-left'>
-              <%= f.select :id_eq, options_for_select(@options_for_select.map{ |p| [p.title , p.id]}, f.object.id_eq),{:include_blank => "Select Title"},:class=>"form-control chosen-select" %>
-            </div>
-            <div class='col-lg-4 form-group float-left'>
-              <%= f.search_field :title_or_comment_cont, placeholder: "Search in user group", title: "Enter user group" ,:class=>"form-control" %>
-            </div>
-            <div class='col-lg-3 form-group float-left'>
-              <button class="form-control btn btn-primary" title="search user groups" name="search_submit"type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+      <%= search_form_for @q, url: user_groups_path, class: "admin-controls", method: "get" do |f| %>
+        <div class="card shadow mb-3 p-3">
+          <div class="row d-flex mt-3 mr-2">
+            <div class="col">
+              <div class='col-lg-4 form-group float-left'>
+                <%= f.select :id_eq, options_for_select(@options_for_select.map{ |p| [p.title , p.id]}, f.object.id_eq),{:include_blank => "Select Title"},:class=>"form-control chosen-select" %>
+              </div>
+              <div class='col-lg-4 form-group float-left'>
+                <%= f.search_field :title_or_comment_cont, placeholder: "Search in user group", title: "Enter user group" ,:class=>"form-control" %>
+              </div>
+              <div class='col-lg-3 form-group float-left'>
+                <button class="form-control btn btn-primary" title="search user groups" name="search_submit"type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+                <button type='submit' class='dynamic-submit-btn d-none' formtarget='_blank'></button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      <% end %>
       <div class="card shadow  p-4 ">
         <%= render 'map_columns/map_column_partials' %>
         <div class="row d-flex" style="position: absolute;">
@@ -89,13 +91,13 @@
             <%end%>
           </div> 	
           <div class="mt-4 ml-3">        
-             <%if (check_can_download_pdf(@module_permission))%>
-              <button class="form-control btn btn-danger file-btn-color   " title= "download user groups pdf" name="pdf" type="submit" value="pdf" formtarget="_blank" style="width:80px">PDF</button>
-             <% end %>
-             <%if (check_can_download_csv(@module_permission))%>
-              <button class="form-control  btn btn-warning  file-btn-color " title= "download user groups csv" name="csv" type="submit" value="csv" style="width:80px">CSV</button>
-             <% end %>
-           </div>
+            <%if (check_can_download_pdf(@module_permission))%>
+             <button class="form-control btn btn-danger file-btn-color files-download-btn  " title= "download user groups pdf" name="pdf" type="submit" value="pdf" formtarget="_blank" style="width:80px">PDF</button>
+            <% end %>
+            <%if (check_can_download_csv(@module_permission))%>
+             <button class="form-control  btn btn-warning  file-btn-color files-download-btn  " title= "download user groups csv" name="csv" type="submit" value="csv" style="width:80px">CSV</button>
+            <% end %>
+          </div>
         </div>
         <div class="mt-3">
           <table data-toggle="table" data-search="true" id="city_table" class="content-table">
@@ -150,7 +152,6 @@
       </p>
     </div>
     </div>
-  <% end %>
   </div>
   <div>
 <%= form_for :bulk_import, url: bulk_import_data_path, method: :post, html: {class: "bulk-import-form"} do |f| %>
@@ -191,6 +192,14 @@
     $("#city_list").removeClass('hidden');
     FontAwesome.dom.i2svg();
   });
+
+  $('.files-download-btn').on('click', function(){
+      var name_btn = $(this).attr('name')
+      $('.dynamic-submit-btn').attr('name', name_btn)
+      $('.dynamic-submit-btn').val($(this).val())
+      $('.dynamic-submit-btn').click()
+  })
+
   $(document).ready(function() {
     setTimeout(function(){
       $(".chosen-select").chosen({

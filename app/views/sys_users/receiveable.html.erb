@@ -70,7 +70,8 @@
                   <%= f.select :status_eq, SysUser.statuses.map { |key, value| [key.humanize, value] },{hide_label:true,class: "form-control", required: true},:class=>"form-control chosen-select" %>
                   </span>
                   <span class="col-lg-1 form-group ">
-                     <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+                    <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+                    <button type='submit' class='dynamic-submit-btn d-none' formtarget='_blank'></button> 
                   </span>                
                 </div>
               <% end %>
@@ -79,8 +80,8 @@
               <div class="row d-flex mt-3 " style="position: absolute;">
                <button class='btn btn-danger file-btn-color  delete-selected  ml-3' type='button' value='SysUser' ><i class="fa fa-trash"></i></button>
                <div class=" ml-3 ">
-                 <button style="width:80px;" class="form-control btn  btn-danger file-btn-color " title="Download customer pdf" name="submit_pdf_staff_with" type="submit" value="Accounts PDF A4" formtarget="_blank">PDF</button>                
-                 <button style="width:80px;"  class="form-control btn btn-warning file-btn-color" title="Download receiveable csv" name="submit_csv_sys_user_receivable" type="submit" value="Accounts CSV A4">CSV </button>
+                 <button style="width:80px;" class="form-control btn  btn-danger file-btn-color files-download-btn " title="Download customer pdf" name="submit_pdf_staff_with" type="submit" value="Accounts PDF A4" formtarget="_blank">PDF</button> 
+                 <button style="width:80px;"  class="form-control btn btn-warning file-btn-color files-download-btn" title="Download receiveable csv" name="submit_csv_sys_user_receivable" type="submit" value="Accounts CSV A4">CSV </button>
                </div>
               </div>
               <div class="mt-2">
@@ -233,4 +234,10 @@
     $("#sys_users_list").removeClass('hidden');
     FontAwesome.dom.i2svg();
   });
+  $('.files-download-btn').on('click', function(){
+      var name_btn = $(this).attr('name')
+      $('.dynamic-submit-btn').attr('name', name_btn)
+      $('.dynamic-submit-btn').val($(this).val())
+      $('.dynamic-submit-btn').click()
+  })
 </script>

@@ -73,139 +73,140 @@
               </div>
             <div class="col-lg-3 form-group float-left">
               <button class="form-control btn btn-primary float-left" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
-            </div>
-          </div>
-        </div>
-        <div class="card border-radius-1 shadow p-4">
-          <div class="row d-flex" style="position: absolute;">
-            <div>
-              <%if (check_can_delete(@module_permission))%>
-          	    <button class="btn btn-danger file-btn-color delete-selected mt-4 ml-3 mr-2" type='button' value='Salary'>
-          	    	<i class="fa fa-trash"></i>
-          	    </button>		
-              <%end%>
-              <button class="form-control btn btn-danger file-btn-color mt-4" title= "download salaries pdf" name="submit_pdf" type="submit" value="Salaries Detail PDF A8" formtarget="_blank" style="width:80px">PDF</button>
-            </div> 
-            <div> 
-              <%= search_form_for @q, url: salaries_path, class: "admin-controls ml-3", method: "get" do |f| %>
-                <div class="d-flex mt-4" style="width: 100%;">
-                  <%= select_tag :limit, options_for_select(['Show Entries',5, 10, 15, 20, 25], selected: :limit), id: 'pagination-limit', class:"file-btn-color ml-2" ,title:'Show Entries', style:'cursor: pointer;' %>
-                </div>
-              <% end %>
-            </div>
-          </div>
-          <div class="mt-3">  
-            <table data-toggle="table" data-search="true" class="content-table">
-              <thead>
-                <tr>
-                  <th class="p-2"><input type="checkbox" id="master" class='select-all-checkbox'>
-                  </th>
-                  <th><%= sort_link(@q, :id, 'ID') %></th>
-                  <th><%= sort_link(@q, :staff_name, 'Name') %></th>
-                  <th><%= sort_link(@q, :paid_salary, 'Paid') %></th>
-                  <th><%= sort_link(@q, :staff_wage_debit, 'Balance') %></th>
-                  <th><%= sort_link(@q, :staff_balance, 'OutSt Balance') %></th>
-                  <th><%= sort_link(@q, :leaves_in_month, 'Leaves') %></th>
-                  <th><%= sort_link(@q, :account_id, 'Paid By') %></th>
-                  <th><%= sort_link(@q, :updated_at, 'Date/Time') %></th>
-                  <th><%= sort_link(@q, :comment, 'Comment') %></th>
-                  <th class="border_none">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <% @salaries.each do |salary| %>
-                  <tr>
-                    <td><%= check_box_tag 'object_ids[]', salary.id %></td>
-                    <td><%= salary.id %></td>
-                    <td><%= salary.staff.full_name %></td>
-                    <td><%= salary.paid_salary.present? ? number_with_delimiter(salary.paid_salary.to_f.round(2)) : "" %><%= salary.advance.present? ? number_with_delimiter(salary.advance.to_f.round(2)) : "" %> </td>
-                    <td><%= number_with_delimiter(salary.staff.wage_debit.to_f.round(2)) %></td>
-                    <td><%= number_with_delimiter(salary.total_balance.to_f.round(2)) %></td>
-                    <td><%= salary.leaves_in_month %></td>
-                    <td><%= salary.account_id.present? ? salary.account.title : '' %></td>
-                    <td>
-                      <%if salary.created_at.strftime("%d%b%y")!=salary.updated_at.strftime("%d%b%y")%>
-                        <%= salary.created_at.present? ? salary.created_at.strftime("%d%b%y , %I:%M") : '' %> | <%= salary.updated_at.present? ? salary.updated_at.strftime("%d%b%y , %I:%M") : '' %>
-                      <%else%>
-                        <%= salary.created_at.present? ? salary.created_at.strftime("%d%b%y , %I:%M") : '' %>
-                      <%end%>
-                    </td>
-                    <td><%= salary.comment %> | <%= salary.payment_type %></td>
-                    <td>
-                      <div class="icon-container-1">
-                        <div class="my-icon-1 my-view-1">
-                          <div class="my-tooltip-1">
-                            <div class="icon-container">
-                              <div class="my-icon my-view">
-                                <div class="my-tooltip">
-                                  Print
-                                </div>
-                                <%= link_to salary, target: "_blank", class:"icon-div" do %>
-                                  <i class="fa fa-print mt-2" aria-hidden="true"></i>
-                                <%end %>
-                              </div>
-                              <div class="my-icon my-view">
-                                <div class="my-tooltip">
-                                  Edit
-                                </div>
-                                <%if (check_can_update(@module_permission))%>
-                                  <%= link_to salary.Salary? ? edit_salary_path(salary) : edit_advance_salary_path(salary), class:"icon-div" do %>
-                                    <i class="fa fa-edit mt-2" aria-hidden="true"></i>
-                                  <%end %>
-                                <% end %>
-                              </div>
-                              <div class="my-icon my-view">
-                                <div class="my-tooltip">
-                                  Delete
-                                </div>
-                                <%if (check_can_delete(@module_permission))%>
-                                  <%= link_to salary, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, remote: true, class: 'icon-div' do %>
-                                    <i class="fa fa-trash mt-2" aria-hidden="true"></i>
-                                  <%end %>
-                                <% end %>
-                              </div>
-                              <div class="my-icon my-view">
-                                <div class="my-tooltip">
-                                  Show
-                                </div>
-                                <%if (check_can_read(@module_permission))%>
-                                  <%= link_to salary, class:"icon-div" do %>
-                                    <i class="fa fa-eye mt-2" aria-hidden="true"></i>
-                                  <%end %>
-                                <%end%>
-                              </div>
-                            </div>
-                          </div>
-                          <span class="icon-div-1">
-                            <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
-                          </span>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                <% end %>
-                <tr>
-                  <td><h5>Total</h5></td>
-                  <td></td>
-                  <td></td>
-                  <td><h5><%= number_with_delimiter(@salaries.sum(:paid_salary)+@salaries.sum(:advance))%></h5></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="col-lg-12 digg_pagination">
-            <div class="float-left page_info">
-              <%= page_entries_info @salaries %>
-            </div>
-            <div class="float-right">
-              <%= paginate @salaries, :container => false %>
+              <button type='submit' class='dynamic-submit-btn d-none' formtarget='_blank'></button>
             </div>
           </div>
         </div>
       <% end %>
+      <div class="card border-radius-1 shadow p-4">
+        <div class="row d-flex" style="position: absolute;">
+          <div>
+            <%if (check_can_delete(@module_permission))%>
+        	    <button class="btn btn-danger file-btn-color delete-selected mt-4 ml-3 mr-2" type='button' value='Salary'>
+        	    	<i class="fa fa-trash"></i>
+        	    </button>		
+            <%end%>
+            <button class="form-control btn btn-danger file-btn-color files-download-btn mt-4" title= "download salaries pdf" name="submit_pdf" type="submit" value="Salaries Detail PDF A8" formtarget="_blank" style="width:80px">PDF</button>
+          </div> 
+          <div> 
+            <%= search_form_for @q, url: salaries_path, class: "admin-controls ", method: "get" do |f| %>
+              <div class="d-flex mt-4" style="width: 100%;">
+                <%= select_tag :limit, options_for_select(['Show Entries',5, 10, 15, 20, 25], selected: :limit), id: 'pagination-limit', class:"file-btn-color ml-2" ,title:'Show Entries', style:'cursor: pointer;' %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+        <div class="mt-3">  
+          <table data-toggle="table" data-search="true" class="content-table">
+            <thead>
+              <tr>
+                <th class="p-2"><input type="checkbox" id="master" class='select-all-checkbox'>
+                </th>
+                <th><%= sort_link(@q, :id, 'ID') %></th>
+                <th><%= sort_link(@q, :staff_name, 'Name') %></th>
+                <th><%= sort_link(@q, :paid_salary, 'Paid') %></th>
+                <th><%= sort_link(@q, :staff_wage_debit, 'Balance') %></th>
+                <th><%= sort_link(@q, :staff_balance, 'OutSt Balance') %></th>
+                <th><%= sort_link(@q, :leaves_in_month, 'Leaves') %></th>
+                <th><%= sort_link(@q, :account_id, 'Paid By') %></th>
+                <th><%= sort_link(@q, :updated_at, 'Date/Time') %></th>
+                <th><%= sort_link(@q, :comment, 'Comment') %></th>
+                <th class="border_none">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @salaries.each do |salary| %>
+                <tr>
+                  <td><%= check_box_tag 'object_ids[]', salary.id %></td>
+                  <td><%= salary.id %></td>
+                  <td><%= salary.staff.full_name %></td>
+                  <td><%= salary.paid_salary.present? ? number_with_delimiter(salary.paid_salary.to_f.round(2)) : "" %><%= salary.advance.present? ? number_with_delimiter(salary.advance.to_f.round(2)) : "" %> </td>
+                  <td><%= number_with_delimiter(salary.staff.wage_debit.to_f.round(2)) %></td>
+                  <td><%= number_with_delimiter(salary.total_balance.to_f.round(2)) %></td>
+                  <td><%= salary.leaves_in_month %></td>
+                  <td><%= salary.account_id.present? ? salary.account.title : '' %></td>
+                  <td>
+                    <%if salary.created_at.strftime("%d%b%y")!=salary.updated_at.strftime("%d%b%y")%>
+                      <%= salary.created_at.present? ? salary.created_at.strftime("%d%b%y , %I:%M") : '' %> | <%= salary.updated_at.present? ? salary.updated_at.strftime("%d%b%y , %I:%M") : '' %>
+                    <%else%>
+                      <%= salary.created_at.present? ? salary.created_at.strftime("%d%b%y , %I:%M") : '' %>
+                    <%end%>
+                  </td>
+                  <td><%= salary.comment %> | <%= salary.payment_type %></td>
+                  <td>
+                    <div class="icon-container-1">
+                      <div class="my-icon-1 my-view-1">
+                        <div class="my-tooltip-1">
+                          <div class="icon-container">
+                            <div class="my-icon my-view">
+                              <div class="my-tooltip">
+                                Print
+                              </div>
+                              <%= link_to salary, target: "_blank", class:"icon-div" do %>
+                                <i class="fa fa-print mt-2" aria-hidden="true"></i>
+                              <%end %>
+                            </div>
+                            <div class="my-icon my-view">
+                              <div class="my-tooltip">
+                                Edit
+                              </div>
+                              <%if (check_can_update(@module_permission))%>
+                                <%= link_to salary.Salary? ? edit_salary_path(salary) : edit_advance_salary_path(salary), class:"icon-div" do %>
+                                  <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+                                <%end %>
+                              <% end %>
+                            </div>
+                            <div class="my-icon my-view">
+                              <div class="my-tooltip">
+                                Delete
+                              </div>
+                              <%if (check_can_delete(@module_permission))%>
+                                <%= link_to salary, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, remote: true, class: 'icon-div' do %>
+                                  <i class="fa fa-trash mt-2" aria-hidden="true"></i>
+                                <%end %>
+                              <% end %>
+                            </div>
+                            <div class="my-icon my-view">
+                              <div class="my-tooltip">
+                                Show
+                              </div>
+                              <%if (check_can_read(@module_permission))%>
+                                <%= link_to salary, class:"icon-div" do %>
+                                  <i class="fa fa-eye mt-2" aria-hidden="true"></i>
+                                <%end %>
+                              <%end%>
+                            </div>
+                          </div>
+                        </div>
+                        <span class="icon-div-1">
+                          <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              <% end %>
+              <tr>
+                <td><h5>Total</h5></td>
+                <td></td>
+                <td></td>
+                <td><h5><%= number_with_delimiter(@salaries.sum(:paid_salary)+@salaries.sum(:advance))%></h5></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="col-lg-12 digg_pagination">
+          <div class="float-left page_info">
+            <%= page_entries_info @salaries %>
+          </div>
+          <div class="float-right">
+            <%= paginate @salaries, :container => false %>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="tab-pane mb-3 card shadow mt-2 p-4" id="analytics" role="tabpanel">
       <div id="show-analytics" class="row p-3"></div>
@@ -219,6 +220,13 @@
     }
     $("#students_list").removeClass('hidden');
     FontAwesome.dom.i2svg();
+
+    $('.files-download-btn').on('click', function(){
+      var name_btn = $(this).attr('name')
+      $('.dynamic-submit-btn').attr('name', name_btn)
+      $('.dynamic-submit-btn').val($(this).val())
+      $('.dynamic-submit-btn').click()
+    })
 
     $('.analytics-tab').on('click', function(){
       $('#analytics-path').click();
