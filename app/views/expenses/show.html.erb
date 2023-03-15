@@ -46,10 +46,10 @@
             <th><h3>Ammount</h3></th>
             <th><h3>Comment</h3></th>
             <tbody>
-              <% @expense.expense_entries.each do |expense_entry| %>
+              <% @expense&.expense_entries&.each do |expense_entry| %>
                 <tr>
-                  <td><%= expense_entry.expense_type.title%></td>
-                  <td><%= expense_entry.account.title%></td>
+                  <td><%= expense_entry.expense_type&.title%></td>
+                  <td><%= expense_entry.account&.title%></td>
                   <td><%= expense_entry.amount%></td>
                   <td>  <%= expense_entry.comment%></td>
                 </tr>

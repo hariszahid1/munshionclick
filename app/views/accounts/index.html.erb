@@ -138,8 +138,14 @@
                   </td>
                   <td><%= account.id %></td>
                   <td class="urdu-font">
-                    <%= link_to payments_path('q[account_id_in]':account.id) do%>
-                      <i class="fa fa-address-book"></i><%= account.title %>
+                    <%if current_user.company_type.eql?('jr') %>
+                      <%= link_to account_payment_payments_path('q[account_id_eq]':account.id) do%>
+                        <i class="fa fa-address-book"></i><%= account.title %>
+                      <%end %>
+                    <% else %>
+                      <%= link_to payments_path('q[account_id_in]':account.id) do%>
+                        <i class="fa fa-address-book"></i><%= account.title %>
+                      <%end %>
                     <%end %>
                   </td>
                   <td class="urdu-font"><%= account.bank_name %></td>

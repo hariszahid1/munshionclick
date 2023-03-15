@@ -142,6 +142,14 @@
           </a>
           <ul class="collapse list-unstyled <%= 'show' if request.path.start_with?(sys_users_path, user_types_path, user_groups_path) %>" id="theUserSubmenu">
             <li class="<%= 'active' if request.path.start_with?(users_path) %>">
+              <% if check_is_hidden_by_module('sys_users') %>
+                <li class="<%= 'active' if request.path.start_with?(sys_users_path) %>">
+                  <%= link_to sys_users_path do %>
+                    <i class="fas fa-minus ml-3 mr-1"></i>
+                    <span class="link-text">Users List</span>
+                  <% end %>
+                </li>
+              <% end %>
               <% if check_is_hidden_by_module('user_types') %>
                 <li class="<%= 'active' if request.path.start_with?(user_types_path) %>">
                   <%= link_to user_types_path do %>
@@ -158,14 +166,6 @@
                   <% end %>
                 </li>
               <% end %>
-              <% if check_is_hidden_by_module('sys_users') %>
-                <li class="<%= 'active' if request.path.start_with?(sys_users_path) %>">
-                  <%= link_to sys_users_path do %>
-                    <i class="fas fa-minus ml-3 mr-1"></i>
-                    <span class="link-text">Users List</span>
-                  <% end %>
-                </li>
-              <% end %> 
               <% if check_is_hidden_by_module('sys_users') %>
                   <% SysUser.user_groups.each do |value, index|%>
                     <% group_path = sys_users_path('q[user_group_eq]': index) %>
