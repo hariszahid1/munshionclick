@@ -150,6 +150,7 @@ Rails.application.routes.draw do
     collection do
       get :transfer, to: 'payments#transfer'
       get :view_history, to: 'payments#view_history'
+      get :account_payment, to: 'payments#account_payment'
     end
   end
   resources :accounts do

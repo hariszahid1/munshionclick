@@ -58,11 +58,11 @@
           </tr>
         </thead>
         <tbody>
-          <% @expense.expense_entries.each do |entry|%>
+          <% @expense&.expense_entries&.each do |entry|%>
             <tr>
               <td class='text-center'><%= entry.id%></td>
               <td class='text-center'><%= entry.comment%></td>
-              <td class='text-center'><%= entry.expense_type.title%></td>
+              <td class='text-center'><%= entry.expense_type&.title%></td>
               <td class='text-center'><%= entry.account.title%></td>
               <td class='text-center'><%= entry.amount%></td>
             </tr>
