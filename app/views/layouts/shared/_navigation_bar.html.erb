@@ -74,8 +74,10 @@ background: none;
       </div>
     <% end %>
     <span class="mt-3 mr-4">
-      <%= link_to edit_pos_setting_path(@pos_setting) do %>
-        <i class="fa fa-cog text-secondary mr-2" style="width: 23px; height: 24px; margin-top: 1px;"></i>
+      <% if check_is_hidden_by_module('pos_settings') %>
+        <%= link_to edit_pos_setting_path(@pos_setting) do %>
+          <i class="fa fa-cog text-secondary mr-2" style="width: 23px; height: 24px; margin-top: 1px;"></i>
+        <% end %>
       <% end %>
     </span>  
     <% if check_is_hidden_by_module('crms')%>
