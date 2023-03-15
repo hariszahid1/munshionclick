@@ -286,6 +286,33 @@ class PaymentsController < ApplicationController
     end
   end
 
+  def account_payment
+    # Extract common expressions into variables
+    @account_id = params.dig(:q, :account_id_eq)
+
+    if params.dig(:q, :created_at_gteq).present?
+      @start_date = params[:q][:created_at_gteq].to_date.beginning_of_day
+      @end_date = params[:q][:created_at_lteq].to_date.end_of_day
+      params[:q][:created_at_lteq] = params[:q][:created_at_lteq].to_date.end_of_day
+      params[:q][:created_at_gteq] = params[:q][:created_at_gteq].to_date.beginning_of_day
+    else
+      @start_date = Time.now.beginning_of_month
+      @end_date = Time.now.end_of_day
+    end
+    @q = Payment.order(created_at: :desc).ransack(params[:q])
+
+    # Use a more concise syntax to filter records by date and account_id
+    @monthly_data = Payment.where(created_at: Time.now.beginning_of_month..DateTime.now.end_of_day, account_id: @account_id)
+    @previous_credit = Payment.order(created_at: :desc).where(account_id: @account_id).where.not(credit: nil).first&.credit&.round(2).to_f
+
+    # Use ActiveRecord's sum method to calculate totals
+    @t_dabit = @q.result.select('SUM(debit) as sum_debit', 'SUM(credit) as sum_credit', '(SUM(credit) - SUM(debit)) as mean_sum')
+
+    # Use instance variables only when needed
+    @account = Account.find_by(id: @account_id)
+    @payments = @q.result.page(params[:page])
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_payment

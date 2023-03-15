@@ -118,12 +118,12 @@
       </td>
       <td><%= number_with_delimiter(expense.expense)%></td>
       <td>
-        <% expense.expense_entries.each do |entry|  %>
-          <span class='ml-2'><%= entry.account.title %></span>
+        <% expense&.expense_entries&.each do |entry|  %>
+          <span class='ml-2'><%= entry.account&.title %></span>
         <% end %>
       </td>
       <td><%= expense.comment%></td>
-      <td><%= expense.created_at.strftime('%d-%a-%y')%></td>
+      <td><%= expense.created_at&.strftime('%d-%a-%y')%></td>
       <td></td>
     </tr>
   <% end %>
