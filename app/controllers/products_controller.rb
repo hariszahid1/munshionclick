@@ -74,7 +74,8 @@ class ProductsController < ApplicationController
     end
 
     if params[:submit_pdf_staff_with].present? || params[:submit_pdf_staff].present?
-      # @q.sorts = 'item_type_title desc' if @q.result.count.positive? && @q.sorts.empty?
+      @q.sorts = 'item_type_title desc' if @q.result.count.positive? && @q.sorts.empty?
+      @products = @q.result
       print_pdf('products', 'pdf.html', 'A4')
     end
 
@@ -94,13 +95,14 @@ class ProductsController < ApplicationController
         @str << [code, name, Base64.encode64(files_content).gsub("\n", '')]
       end
       @q.sorts = 'item_type_title desc' if @q.result.count.positive? && @q.sorts.empty?
+      @products = @q.result
       print_pdf('index_bar', 'index_bar.pdf', 'A4')
     end
     
     product_charts
     
     return unless params[:csv_staff].present? || params[:csv_staff_with].present?
-
+    @products = @q.result
     csv_data = products_csv
     request.format = 'csv'
     respond_to do |format|
