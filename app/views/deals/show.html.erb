@@ -6,24 +6,23 @@
   <table>
     <thead>
       <tr class='text-center'>
+        <th>Date</th>
         <th>Agent Name</th>
         <th>Total Commission</th>
         <th>Office Share</th>
         <th>Deal Details</th>
-        <th>Share</th>
-        <th>Agent Earning</th>
+        <th>Agent Share</th>
       </tr>
     </thead>
 
     <tbody>
       <tr class='text-center'>
+        <td><%= @deal.created_at.strftime('%d-%m-%Y') %></td>
         <td><%= @deal.staff&.name %></td>
-        <td><%= @deal.comission %></td>
-        <td><%= @deal.file_share %></td>
+        <td><%= number_with_delimiter(@deal.comission) %></td>
+        <td><%= number_with_delimiter(@deal.file_share) %></td>
         <td><%= @deal.deal_detail %></td>
-        <td><%= @deal.share %></td>
-        <td><%= @deal.agent_earning %></td>
-        <td></td>
+        <td><%= number_with_delimiter(@deal.agent_earning) %></td>
       </tr>
     </tbody>
   </table>

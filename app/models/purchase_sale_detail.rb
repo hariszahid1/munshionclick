@@ -110,21 +110,23 @@ class PurchaseSaleDetail < ApplicationRecord
   end
 
   def modify_account_balance
-    if self.transaction_type=="Purchase"
-      if self.account_id?
-        self.payments.create(account_id: self.account_id,debit:self.amount.to_f,comment: "Purchase Voucher #"+self.id.to_s+"  ||  "+self.created_at.strftime("%d/%b/%y at %I:%M%p"))
-      end
-    elsif self.transaction_type == 'InWard'
-      if self.account_id?
-        self.payments.create(account_id: self.account_id,debit:self.amount.to_f,comment: "Inward Voucher #"+self.id.to_s+"  ||  "+self.created_at.strftime("%d/%b/%y at %I:%M%p"))
-      end
-    elsif self.transaction_type == 'OutWard'
-      if self.account_id?
-        self.payments.create(account_id: self.account_id,credit:self.amount.to_f,comment:"Outward Voucher #"+self.id.to_s+"  ||  "+self.created_at.strftime("%d/%b/%y at %I:%M%p"))
-      end
-    else
-      if self.account_id?
-        self.payments.create(account_id: self.account_id,credit:self.amount.to_f,comment:"Sale Voucher #"+self.id.to_s+"  ||  "+self.created_at.strftime("%d/%b/%y at %I:%M%p"))
+    if PosSetting.last&.sys_type != 'Dealer'
+      if self.transaction_type=="Purchase"
+        if self.account_id?
+          self.payments.create(account_id: self.account_id,debit:self.amount.to_f,comment: "Purchase Voucher #"+self.id.to_s+"  ||  "+self.created_at.strftime("%d/%b/%y at %I:%M%p"))
+        end
+      elsif self.transaction_type == 'InWard'
+        if self.account_id?
+          self.payments.create(account_id: self.account_id,debit:self.amount.to_f,comment: "Inward Voucher #"+self.id.to_s+"  ||  "+self.created_at.strftime("%d/%b/%y at %I:%M%p"))
+        end
+      elsif self.transaction_type == 'OutWard'
+        if self.account_id?
+          self.payments.create(account_id: self.account_id,credit:self.amount.to_f,comment:"Outward Voucher #"+self.id.to_s+"  ||  "+self.created_at.strftime("%d/%b/%y at %I:%M%p"))
+        end
+      else
+        if self.account_id?
+          self.payments.create(account_id: self.account_id,credit:self.amount.to_f,comment:"Sale Voucher #"+self.id.to_s+"  ||  "+self.created_at.strftime("%d/%b/%y at %I:%M%p"))
+        end
       end
     end
   end

@@ -9,6 +9,8 @@
     <%= render partial: "create_show_ghouse", locals: {order: @purchase_sale_detail} %>
   <% elsif @pos_setting&.extra_settings.present? && @pos_setting&.extra_settings['al_fatir'].present? %>
     <%= render partial: "create_show_al_fatir", locals: {order: @purchase_sale_detail} %>
+  <% elsif @pos_setting&.extra_settings.present? && @pos_setting&.extra_settings['dynamic_installment_pdf'].present? %>
+    <%= render partial: "create_show_dynamic_pdf" %>
   <% else %>
     <%= render partial: "purchase_sale_details/house_scheme/show", locals: {order: @purchase_sale_detail} %>
   <% end %>
