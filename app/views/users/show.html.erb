@@ -1,73 +1,77 @@
-<div class="row">
-  <div class="col-sm-12"><h1><%= current_user.allowed_valid_roles.to_s.titleize %> Detail</h1></div>
-</div>
-
-<div class="show_content">
-  <div class="row form-group">
-    <div class="col-lg-6 col-sm-6">
-      <strong>Name: </strong>
-      <%= @user.name %>
+<div class="main-section shadow-lg px-5 py-4 m-4">
+  <div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12 image-section">
+      <%= image_tag("view-profile-img.png")%>    
     </div>
-    <div class="col-lg-6 col-sm-6">
-      <strong>User name: </strong>
-      <%= @user.user_name %>
+    <div class="row user-left-part ml-4">
+      <div class="col-md-3 col-sm-3 col-xs-12 user-profil-part">
+        <div class="row ">
+          <div class="col-md-12 col-md-12-sm-12 col-xs-12 user-image text-center">
+            <%= image_tag("profile_icon.png")%>
+          </div>
+          <div class="col-md-12 col-sm-12 col-xs-12 user-detail-section1 text-center mt-2">
+            <div class="btn" style="font-size: 1.3em"><i class="fa fa-user mr-2" aria-hidden="true"></i><%= @user.role_symbols.join(",") %></div>
+          </div>
+          <% if @user.id == current_user.id %>
+            <div class="col-md-12 col-sm-12 col-xs-12 user-detail-section1 text-center">
+              <%= link_to edit_user_path(current_user.id) do %>
+                <div class="profile-section-hover">
+                  <i class="fa fa-edit profile-section-links mr-2"></i>
+                  <span class="link-text profile-section-links">Edit Profile</span>
+                </div>
+              <% end %> 
+            </div>
+          <% else %>
+            <div class="col-md-12 col-sm-12 col-xs-12 user-detail-section1 text-center">
+              <%= link_to edit_user_path(@user.id) do %>
+                <div class="profile-section-hover">
+                  <i class="fa fa-edit profile-section-links mr-2"></i>
+                  <span class="link-text profile-section-links">Edit Profile</span>
+                </div>
+              <% end %> 
+            </div>  
+          <% end %>  
+          <div class="row user-detail-row mt-3">
+            <div class="col-md-12 col-sm-12 user-detail-section2">
+              <div class="mt-3"></div>
+                <h6>ABILITIES:</h6>
+                <div style="font-size: 1.2em;"><%= @user.role_symbols.join(",") %></div>
+                <%= link_to " #{current_user.allowed_valid_roles.to_s.titleize} List", users_path, class: "btn btn-info mt-3" %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <div class="col-md-9 col-sm-9 col-xs-12 pull-right profile-right-section">
+        <div class="row profile-right-section-row">
+          <div class="col-md-12 profile-header">
+            <div class="row">
+              <div class="col-md-8 col-sm-6 col-xs-6 profile-header-section1">
+                <h1><%= @user.name %></h1>
+                <p><%= @user.user_name %></p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-12 profile-tag-section text-center">
+                <div class="card">
+                  <div class="card-header text-left">
+                    <span style="font-size: 1em">PROFILE:</span>
+                  </div>
+                  <ul class="list-group list-group-flush text-left">
+                    <li class="list-group-item"><span class="h6 mr-3">Email:</span><%= @user.email %></li>
+                    <li class="list-group-item"><span class="h6 mr-3">Father Name:</span><%= @user.father_name %></li>
+                    <li class="list-group-item"><span class="h6 mr-3">City:</span><%= @user.city %></li>
+                    <li class="list-group-item"><span class="h6 mr-3">Address:</span><%= @user.address %></li>
+                    <li class="list-group-item"><span class="h6 mr-3">Phone:</span><%= @user.phone %></li>
+                    <li class="list-group-item"><span class="h6 mr-3">Fax:</span><%= @user.fax %></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-
-
-  <div class="row form-group">
-    <div class="col-lg-6 col-sm-6">
-      <strong>Email:</strong>
-      <%= @user.email %>
-    </div>
-    <div class="col-lg-6 col-sm-6">
-      <strong>Father name:</strong>
-      <%= @user.father_name %>
-    </div>
-  </div>
-
-  <div class="row form-group">
-    <div class="col-lg-6 col-sm-6">
-      <strong>City:</strong>
-      <%= @user.city %>
-    </div>
-  </div>
-
-  <div class="row form-group">
-    <div class="col-lg-6 col-sm-6">
-      <strong>Phone:</strong>
-      <%= @user.phone %>
-    </div>
-    <div class="col-lg-6 col-sm-6">
-      <strong>Fax:</strong>
-      <%= @user.fax %>
-    </div>
-  </div>
-
-  <div class="row form-group">
-    <div class="col-lg-6 col-sm-6">
-      <strong>Address:</strong>
-      <%= @user.address %>
-    </div>
-  <div class="row form-group">
-    <div class="col-lg-6 col-sm-6">
-      <strong>Role:</strong>
-      <%= @user.role_symbols.join(",") %>
-    </div>
-  </div>
-
-  <div class="row form-group">
-    <div class="col-lg-6 col-sm-6">
-      <strong><%= current_user.allowed_valid_roles.to_s.titleize %> Abilities:</strong>
-      <%= @user.user_ability.role_symbols.join(", ") %>
-    </div>
-  </div>
-</div>
-
-<div class="clearfix"></div>
-<div class="row form-group">
-  <div class="col-lg-6 col-sm-6">
-    <%= link_to " #{current_user.allowed_valid_roles.to_s.titleize} List", users_path, class: "btn btn-info" %>
-  </div>
-
+  </div>  
 </div>

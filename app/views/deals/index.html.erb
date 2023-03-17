@@ -107,7 +107,7 @@
             <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search"><i class="fa fa-search"></i></button>
           </div>
           <% if params.dig(:q, :staff_id_eq).present? %>
-            <div class='d-flex'><h3>Agent Earning => </h3><h5 class='mt-1 ml-2'><%= number_with_delimiter(@total_earning) %></h5></div>
+            <div class='d-flex mt-1'><h4>Agent Share => </h4><h5 class='mt-1 ml-2'><%= number_with_delimiter(@total_earning) %></h5></div>
           <% end %>
         </div>
       <% end %>
@@ -120,12 +120,12 @@
       <thead>
         <tr class='text-center'>
           <th>SR#</th>
+          <th>Date</th>
           <th>Agent Name</th>
           <th>Total Commission</th>
           <th>Office Share</th>
           <th>Deal Details</th>
-          <th>Share</th>
-          <th>Agent Earning</th>
+          <th>Agent Share</th>
           <th>Action</th>
         </tr>
       </thead>
@@ -134,12 +134,12 @@
         <% @deals.each_with_index do |deal, index|%>
           <tr class='text-center'>
             <td><%= index+1 %></td>
+            <td><%= deal.created_at.strftime('%d-%m-%Y') %></td>
             <td><%= deal.staff&.name %></td>
-            <td><%= deal.comission %></td>
-            <td><%= deal.file_share %></td>
+            <td><%= number_with_delimiter(deal.comission) %></td>
+            <td><%= number_with_delimiter(deal.file_share) %></td>
             <td><%= deal.deal_detail %></td>
-            <td><%= deal.share %></td>
-            <td><%= deal.agent_earning %></td>
+            <td><%= number_with_delimiter(deal.agent_earning) %></td>
             <td>
               <div class="icon-container-1">
                 <div class="my-icon-1 my-view-1">

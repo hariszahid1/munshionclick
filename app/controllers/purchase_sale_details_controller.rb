@@ -562,7 +562,9 @@ class PurchaseSaleDetailsController < ApplicationController
     @id=PurchaseSaleDetail.where(created_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).count
     request.format = 'pdf'
     if @pos_setting.sys_type=="industry" || @pos_setting.sys_type =="HousingScheme"
-      if @pos_setting&.extra_settings.present? && @pos_setting&.extra_settings.try(:[], 'ghouse5').present? || @pos_setting&.extra_settings.try(:[], 'al_fatir').present?
+      if @pos_setting&.extra_settings.present? && @pos_setting&.extra_settings.try(:[], 'ghouse5').present? || @pos_setting&.extra_settings.try(:[], 'al_fatir').present? || @pos_setting&.extra_settings.try(:[], 'dynamic_installment_pdf').present?
+        @pdf_template = PdfTemplate.find_by(title: 'installment', table_name: 'PurchaseSaleDetail',
+                                            method_name: 'create_show')
         respond_to do |format|
           format.pdf do
             print_pdf('installment_payment', nil,'A4')
@@ -752,7 +754,9 @@ class PurchaseSaleDetailsController < ApplicationController
             # @purchase_sale_detail.save!
           end
           if @pos_setting.sys_type=="industry" || @pos_setting.sys_type =="HousingScheme"
-            if @pos_setting&.extra_settings.present? && @pos_setting&.extra_settings.try(:[], 'ghouse5').present? || @pos_setting&.extra_settings.try(:[], 'al_fatir').present?
+            if @pos_setting&.extra_settings.present? && @pos_setting&.extra_settings.try(:[], 'ghouse5').present? || @pos_setting&.extra_settings.try(:[], 'al_fatir').present? || @pos_setting&.extra_settings.try(:[], 'dynamic_installment_pdf').present?
+              @pdf_template = PdfTemplate.find_by(title: 'installment', table_name: 'PurchaseSaleDetail',
+                                                  method_name: 'create_show')
               request.format = 'pdf'
                 format.pdf do
                   print_pdf('installment_payment', nil,'A4',false)

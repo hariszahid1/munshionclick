@@ -1,0 +1,21 @@
+<%= wicked_pdf_stylesheet_link_tag ("pdf") -%>
+<% ids = @purchase_sale_detail.order.purchase_sale_details.pluck(:id) %>
+<% @prev_order = @purchase_sale_detail.order.purchase_sale_details.where(id: ids[ids.find_index(@purchase_sale_detail.id)-1]) %>
+<% @product = @purchase_sale_detail.order&.order_items&.first&.product %>
+<% if @purchase_sale_detail&.sys_user&.father.present? %>
+  <% @customer_name = @purchase_sale_detail&.sys_user&.name.to_s+ ' ' +@purchase_sale_detail&.sys_user&.suffix.to_s+ ' ' +@purchase_sale_detail&.sys_user&.father.to_s %>
+<% else %>
+  <% @customer_name = @purchase_sale_detail&.sys_user&.name.to_s %>
+<% end %>
+<%= @pdf_template.content
+                 .gsub('[[serial_no]]', "#{@purchase_sale_detail.voucher_id.to_s+'#'+@purchase_sale_detail.id.to_s}")
+                 .gsub('[[customer_name]]', "#{@customer_name}")
+                 .gsub('[[current_received]]', "#{number_with_delimiter(@purchase_sale_detail.amount)}")
+                 .gsub('[[plot_info]]', "#{@product&.title.to_s+'-'+@product&.item_type&.title.to_s+' ,'+@product&.marla.to_s+'-M '+@product&.square_feet.to_s+' sqr'}")
+                 .gsub('[[prev_received]]', "#{@prev_order.present? ? number_with_delimiter(@prev_order[0].amount) : '0'}")
+                 .gsub('[[total_received]]', "#{number_with_delimiter(@purchase_sale_detail.order.purchase_sale_details.sum(:amount).to_i + @purchase_sale_detail.order.amount.to_i)}")
+                 .gsub('[[amount]]', "#{number_with_delimiter(@purchase_sale_detail.amount)}")
+                 .gsub('[[balance]]', "#{number_with_delimiter(@purchase_sale_detail.order&.sys_user&.balance.to_i&.abs)}")
+                 .gsub('[[amount_in_words]]', "#{number_to_words(@purchase_sale_detail.amount)}")
+                 .html_safe
+%>

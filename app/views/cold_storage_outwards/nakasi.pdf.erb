@@ -22,6 +22,10 @@
       .text-large{
         font-size: 1.5em;
       }
+      .d-flex{
+        display: flex;
+        display: -webkit-box;
+      }
     </style>
   </head>
   <body>
@@ -30,45 +34,46 @@
     <% @time = Time.zone.now %>
     <div>
       <p class="border-bottom"></p>
-      <h2 class="text-center text-large"> Nakasi Gate Pass OutWard with racking</h2>
-      <h3 class="text-center text-large">
-        OutWard Date: <b><span><%= data.first['date'] %></span></b>
-      </h3>
-      <h2 class= "text-right text-large">Gate Pass No: <%= data.first['id']%></h2>
-      <h3 class= "text-large">Party: <%= data.first['name']%></h3>
-      <h3 class= "text-large">Product: <%= data.first['items'].first['product']%></h3>
+      <h2 class="text-center text-large"> Nakasi Gate Pass OutWard</h2>
+      <h3 class= "text-large text-center">Party Name: <%= data.first['name']%></h3>
+      <div class='d-flex'>
+        <h3 class= "text-large" style='padding-left: 254px;'>Marka No: <%= data.first['items'].first['marka']%></h3>
+        <h3 class="text-large" style='padding-left: 80px;'>
+          <b><span><%= data.first['date'] %></span></b>
+        </h3>
+      </div>
       <p class="border-bottom"></p>
       <p class="text-center">Report by: <%=current_user.name%></p>
     </div>    
     <div>
       <table>
         <thead class="lite-gray">
-          <th class="text-center text-large">Serial No</th>
-          <th class="text-center text-large">Marka</th>
           <th class="text-center text-large">Challan No</th>
+          <th class="text-center text-large">Out Qty</th>
           <th class="text-center text-large">Room No</th>
           <th class="text-center text-large">Rack No</th>
-          <th class="text-center text-large">Product Qty</th>
         </thead>
         <tbody>
           <% data.each_with_index do |order, index| %>
             <% order['items'].each_with_index do |item, index| %>
               <tr>
-                <td class="text-center text-large"><%= index %></td>
-                <td class="text-center text-large"><%= item['marka'] %></td>
                 <td class="text-center text-large"><%= item['challan_no'] %></td>
+                <td class="text-center text-large"><%= item['quantity'] %></td>
                 <td class="text-center text-large"><%= item['room_num'] %></td>
                 <td class="text-center text-large"><%= item['rack_num'] %></td>
-                <td class="text-center text-large"><%= item['quantity'] %></td>
               </tr>
             <% end %>
           <% end %>
           <tr>
+            <th class="text-large">Sub Total: </th>
             <th></th>
             <th></th>
+            <th class="text-large"><%= data.first['total_quantity'] %></th>
+          </tr>
+          <tr>
+            <th class="text-large">Grand Total: </th>
             <th></th>
             <th></th>
-            <th class="text-large">Total: </th>
             <th class="text-large"><%= data.first['total_quantity'] %></th>
           </tr>
         </tbody>
