@@ -22,19 +22,8 @@ class LoansController < ApplicationController
     @loans = @q.result(distinct: true).page(params[:page]).per(@custom_pagination)
     download_loans_pdf_file if params[:pdf].present?
     download_loans_csv_file if params[:csv].present?
-
-    @today_debit_loan = @q.result.where(created_at: Time.current.all_day).sum(:debit).to_f
-    @today_credit_loan = @q.result.where(created_at: Time.current.all_day).sum(:credit).to_f
-    @yesterday_debit_loan = @q.result.where(created_at: 1.day.ago.all_day).sum(:debit).to_f
-    @yesterday_credit_loan = @q.result.where(created_at: 1.day.ago.all_day).sum(:credit).to_f
-    @percentage_debit_loan = ((@today_debit_loan - @yesterday_debit_loan) / (@yesterday_debit_loan.to_f.positive? ? @yesterday_debit_loan.to_f : 1 ) ).round(2)
-    @percentage_credit_loan = ((@today_credit_loan - @yesterday_credit_loan) / (@yesterday_credit_loan.to_f.positive? ? @yesterday_credit_loan.to_f : 1 )).round(2)
-    @loan_debit_count = @q.result.where(created_at: Time.current.all_day).count(:debit)
-    @loan_credit_count = @q.result.where(created_at: Time.current.all_day).count(:credit)
-    @monthly_debit_loan = @q.result.where(created_at: Time.current.all_month).sum(:debit).to_f
-    @monthly_credit_loan = @q.result.where(created_at: Time.current.all_month).sum(:credit).to_f
-
-
+    loans_credit_debit_report
+    
   end
 
   # GET /loans/1
@@ -114,6 +103,20 @@ class LoansController < ApplicationController
     respond_to do |format|
       format.js
     end
+  end
+
+  def loans_credit_debit_report
+    @today_debit_loan = @q.result.where(created_at: Time.current.all_day).sum(:debit).to_f.round(2)
+    @today_credit_loan = @q.result.where(created_at: Time.current.all_day).sum(:credit).to_f.round(2)
+    @loan_debit_count = @q.result.where(created_at: Time.current.all_day).count(:debit)
+    @loan_credit_count = @q.result.where(created_at: Time.current.all_day).count(:credit)
+    @monthly_debit_loan = @q.result.where(created_at: Time.current.all_month).sum(:debit).to_f.round(2)
+    @monthly_credit_loan = @q.result.where(created_at: Time.current.all_month).sum(:credit).to_f.round(2)
+    @yearly_debit_loan = @q.result.where(created_at: Time.current.all_year).sum(:debit).to_f.round(2)
+    @yearly_credit_loan = @q.result.where(created_at: Time.current.all_year).sum(:credit).to_f.round(2)
+    @yearly_debit_count_loan = @q.result.where(created_at: Time.current.all_year).count(:debit)
+    @yearly_credit_count_loan = @q.result.where(created_at: Time.current.all_year).count(:credit)
+    @yearly_report_loan = @yearly_debit_loan + @yearly_credit_loan
   end
 
   private

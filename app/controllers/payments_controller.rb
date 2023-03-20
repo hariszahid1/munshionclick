@@ -87,17 +87,7 @@ class PaymentsController < ApplicationController
       return redirect_to payments_path
     end
 
-    @today_debit_payment = @q.result.where(created_at: Time.current.all_day).sum(:debit).to_f
-    @today_credit_payment = @q.result.where(created_at: Time.current.all_day).sum(:credit).to_f
-    @yesterday_debit_payment = @q.result.where(created_at: 1.day.ago.all_day).sum(:debit).to_f
-    @yesterday_credit_payment = @q.result.where(created_at: 1.day.ago.all_day).sum(:credit).to_f
-    @percentage_debit_payment = ((@today_debit_payment - @yesterday_debit_payment) / (@yesterday_debit_payment.to_f.positive? ? @yesterday_debit_payment.to_f : 1 ) ).round(2)
-    @percentage_credit_payment = ((@today_credit_payment - @yesterday_credit_payment) / (@yesterday_credit_payment.to_f.positive? ? @yesterday_credit_payment.to_f : 1 )).round(2)
-    @payment_debit_count = @q.result.where(created_at: Time.current.all_day).count(:debit)
-    @payment_credit_count = @q.result.where(created_at: Time.current.all_day).count(:credit)
-    @monthly_debit_payment = @q.result.where(created_at: Time.current.all_month).sum(:debit).to_f
-    @monthly_credit_payment = @q.result.where(created_at: Time.current.all_month).sum(:credit).to_f
-
+    payment_credit_debit_report
 
   end
 
@@ -311,6 +301,20 @@ class PaymentsController < ApplicationController
     # Use instance variables only when needed
     @account = Account.find_by(id: @account_id)
     @payments = @q.result.page(params[:page])
+  end
+
+  def payment_credit_debit_report
+    @today_debit_payment = Payment.where(created_at: Time.current.all_day).sum(:debit).to_f.round(2)
+    @today_credit_payment = Payment.where(created_at: Time.current.all_day).sum(:credit).to_f.round(2)
+    @payment_debit_count = Payment.where(created_at: Time.current.all_day).count(:debit)
+    @payment_credit_count = Payment.where(created_at: Time.current.all_day).count(:credit)
+    @monthly_debit_payment = Payment.where(created_at: Time.current.all_month).sum(:debit).to_f.round(2)
+    @monthly_credit_payment = Payment.where(created_at: Time.current.all_month).sum(:credit).to_f.round(2)
+    @yearly_debit_payment = Payment.where(created_at: Time.current.all_year).sum(:debit).to_f.round(2)
+    @yearly_credit_payment = Payment.where(created_at: Time.current.all_year).sum(:credit).to_f.round(2)
+    @yearly_debit_count = Payment.where(created_at: Time.current.all_year).count(:debit)
+    @yearly_credit_count = Payment.where(created_at: Time.current.all_year).count(:credit)
+    @yearly_report = @yearly_debit_payment + @yearly_credit_payment
   end
 
   private

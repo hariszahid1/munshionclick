@@ -65,17 +65,8 @@ class LedgerBooksController < ApplicationController
     @debit_keys = @debit_by_date_sorted.keys
     @debit_values = @debit_by_date_sorted.values
     @credit_values = @credit_by_date_sorted.values
-    @today_debit_total = @q.result.where(created_at: Time.current.all_day).sum(:debit).to_f
-    @today_credit_total = @q.result.where(created_at: Time.current.all_day).sum(:credit).to_f
-    @yesterday_debit_total = @q.result.where(created_at: 1.day.ago.all_day).sum(:debit).to_f
-    @yesterday_credit_total = @q.result.where(created_at: 1.day.ago.all_day).sum(:credit).to_f
-    @percentage_debit = ((@today_debit_total - @yesterday_debit_total) / (@yesterday_debit_total.to_f.positive? ? @yesterday_debit_total.to_f : 1) ).round(2)
-    @percentage_credit = ((@today_credit_total - @yesterday_credit_total) / (@yesterday_credit_total.to_f.positive? ? @yesterday_credit_total.to_f : 1) ).round(2)
-    @ledger_debit_count = @q.result.where(created_at: Time.current.all_day).count(:debit)
-    @ledger_credit_count = @q.result.where(created_at: Time.current.all_day).count(:credit)
-    @monthly_debit_ledger = @q.result.where(created_at: Time.current.all_month).sum(:debit).to_f
-    @monthly_credit_ledger = @q.result.where(created_at: Time.current.all_month).sum(:credit).to_f
-
+    
+    ledger_credit_debit_report
 
     if params[:submit_pdf].present? or params[:submit_pdf_without].present? or params[:desc_email].present? or params[:submit_pdf_short].present? or params[:submit_csv_without].present? or params[:submit_csv].present? or params[:submit_csv_short].present?
       @sys_users = SysUser.all
@@ -563,6 +554,20 @@ class LedgerBooksController < ApplicationController
     respond_to do |format|
       format.js
     end
+  end
+
+  def ledger_credit_debit_report
+    @today_debit_total = @q.result.where(created_at: Time.current.all_day).sum(:debit).to_f.round(2)
+    @today_credit_total = @q.result.where(created_at: Time.current.all_day).sum(:credit).to_f.round(2)
+    @ledger_debit_count = @q.result.where(created_at: Time.current.all_day).count(:debit)
+    @ledger_credit_count = @q.result.where(created_at: Time.current.all_day).count(:credit)
+    @monthly_debit_ledger = @q.result.where(created_at: Time.current.all_month).sum(:debit).to_f.round(2)
+    @monthly_credit_ledger = @q.result.where(created_at: Time.current.all_month).sum(:credit).to_f.round(2)
+    @yearly_debit_ledger = @q.result.where(created_at: Time.current.all_year).sum(:debit).to_f.round(2)
+    @yearly_credit_ledger = @q.result.where(created_at: Time.current.all_year).sum(:credit).to_f.round(2)
+    @yearly_debit_count_ledger = @q.result.where(created_at: Time.current.all_year).count(:debit)
+    @yearly_credit_count_ledger = @q.result.where(created_at: Time.current.all_year).count(:credit)
+    @yearly_report_ledger = @yearly_debit_ledger + @yearly_credit_ledger
   end
 
   private
