@@ -57,6 +57,7 @@
             </div>
             <div class="col-1 form-group float-left">
               <button class="btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px;"><i class="fa fa-search"></i></button>
+              <button type='submit' class='dynamic-submit-btn d-none' formtarget='_blank'></button>
             </div>
             <div class='float-left col-5 pl-5'>
               <div><b>Total Credit => </b><%= number_with_delimiter(@payments.sum(:credit).to_f.round(2)) %></div>
@@ -73,104 +74,110 @@
 
 
   <div class="card shadow border-radius-1 p-4 ml-4 mr-5 payment-book-index-card">
-    <%= render 'map_columns/map_column_partials' %>
+    <div class="row d-flex" style="position: absolute;">
+      <div class="mt-4 ml-3">
+        <%if (check_can_download_pdf(@module_permission))%>
+          <button class="btn btn-danger file-btn-color files-download-btn mr-1" style="width: 80px;" title= "Download Sale Deals PDF" name="pdf" value="pdf">PDF</button>
+        <% end %>
+      </div>
+    </div>
     <table data-toggle="table" data-search="true" class=" overflow-hidden border-radius-1 content-table">
-    <thead>
-      <tr>
-        <th>SR#</th>
-        <th>Date Time</th>
-        <th>Debit</th>
-        <th>Credit</th>
-        <th>Summary</th>
-        <th>Balance</th>
-    </tr>
-    </thead>
-
-    <tbody>
-      <% @payments.each_with_index do |payment, index| %>
+      <thead>
         <tr>
-          <td><%= index+1 %></td>
-          <td><%= payment.created_at.strftime('%d/%b/%Y at %I:%M%p') %></td>
-          <td><%= number_with_delimiter(payment.debit) %></td>
-          <td><%= number_with_delimiter(payment.credit) %></td>
-          <td>
-            <%= payment.comment %>
-            <% if payment.paymentable.present? and payment.paymentable_type=="Order" %>
-              <%=payment.paymentable&.comment%>
-              <br>
-              <%if payment.paymentable.order_items_names_and_quantity!=0%>
-                <%payment.paymentable.order_items_names_and_quantity.each do |name_quantity|%>
-                <p>
-                  <span><%=name_quantity.first%></span>
-                  Qty: <span><%=name_quantity.second%></span>
-                  Rate:<span><%=name_quantity.third%></span>
-                  Total:<span><%=name_quantity.fourth%></span>
-                </p>
-                <%end%>
-                <p>
-                  Total: <span><%=payment.paymentable&.total_bill%></span>
-                </p>
-              <%end%>
-            <%elsif payment.paymentable.present? and payment.paymentable_type=="PurchaseSaleDetail"%>
-              <%=payment.paymentable&.comment%>
-              <%if payment.paymentable&.purchase_sale_items_names_and_quantity!=0%>
-                <% payment.paymentable&.purchase_sale_items_names_and_quantity.each do |name_quantity|%>
+          <th>SR#</th>
+          <th>Date Time</th>
+          <th>Debit</th>
+          <th>Credit</th>
+          <th>Summary</th>
+          <th>Balance</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @payments.each_with_index do |payment, index| %>
+          <tr>
+            <td><%= @starting_number + index %></td>
+            <td><%= payment.created_at.strftime('%d/%b/%Y at %I:%M%p') %></td>
+            <td><%= number_with_delimiter(payment.debit) %></td>
+            <td><%= number_with_delimiter(payment.credit) %></td>
+            <td>
+              <%= payment.comment %>
+              <% if payment.paymentable.present? and payment.paymentable_type=="Order" %>
+                <%=payment.paymentable&.comment%>
+                <br>
+                <%if payment.paymentable.order_items_names_and_quantity!=0%>
+                  <%payment.paymentable.order_items_names_and_quantity.each do |name_quantity|%>
                   <p>
                     <span><%=name_quantity.first%></span>
-                    Qty:  <span><%=name_quantity.second%></span>
+                    Qty: <span><%=name_quantity.second%></span>
+                    Rate:<span><%=name_quantity.third%></span>
+                    Total:<span><%=name_quantity.fourth%></span>
+                  </p>
+                  <%end%>
+                  <p>
+                    Total: <span><%=payment.paymentable&.total_bill%></span>
                   </p>
                 <%end%>
+              <%elsif payment.paymentable.present? and payment.paymentable_type=="PurchaseSaleDetail"%>
+                <%=payment.paymentable&.comment%>
+                <%if payment.paymentable&.purchase_sale_items_names_and_quantity!=0%>
+                  <% payment.paymentable&.purchase_sale_items_names_and_quantity.each do |name_quantity|%>
+                    <p>
+                      <span><%=name_quantity.first%></span>
+                      Qty:  <span><%=name_quantity.second%></span>
+                    </p>
+                  <%end%>
+                <%end%>
+                <hr>
+                <p>
+                  <span class="h4 text-gray">Total:</span> <span class="h4 text-gray font-weight-bold"><%=payment.paymentable&.total_bill%></span>
+                </p>
+              <%elsif payment.paymentable.present? and payment.paymentable_type=="ExpenseEntry"%>
+                <%=payment.paymentable&.comment%>
+                <%=payment.paymentable&.expense&.comment if payment.paymentable&.expense.present?%>
+                <br>
+                <p>
+                  <span>
+                    <%if payment.paymentable&.expense_type.present?%>
+                      <%=payment.paymentable&.expense_type.title%>
+                    <%end%>
+                  </span>
+                </p>
+              <%elsif payment.paymentable.present? and payment.paymentable_type=="Salary"%>
+                <%=payment.paymentable&.comment%>
+                <br>
+                <p>
+                  <span>
+                    <%if payment.paymentable&.staff.present?%>
+                      <%=payment.paymentable&.staff&.full_name%>
+                    <%end%>
+                  </span>
+                </p>
+              <%elsif payment.paymentable.present? and payment.paymentable_type=="LedgerBook"%>
+                <%=payment.paymentable&.comment%>
+                <br>
+                <p>
+                  <span>
+                    <%if payment.paymentable&.sys_user.present?%>
+                      <%=payment.paymentable&.sys_user&.name%>
+                    <%end%>
+                  </span>
+                </p>
               <%end%>
-              <hr>
-              <p>
-                <span class="h4 text-gray">Total:</span> <span class="h4 text-gray font-weight-bold"><%=payment.paymentable&.total_bill%></span>
-              </p>
-            <%elsif payment.paymentable.present? and payment.paymentable_type=="ExpenseEntry"%>
-              <%=payment.paymentable&.comment%>
-              <%=payment.paymentable&.expense&.comment if payment.paymentable&.expense.present?%>
-              <br>
-              <p>
-                <span>
-                  <%if payment.paymentable&.expense_type.present?%>
-                    <%=payment.paymentable&.expense_type.title%>
-                  <%end%>
-                </span>
-              </p>
-            <%elsif payment.paymentable.present? and payment.paymentable_type=="Salary"%>
-              <%=payment.paymentable&.comment%>
-              <br>
-              <p>
-                <span>
-                  <%if payment.paymentable&.staff.present?%>
-                    <%=payment.paymentable&.staff&.full_name%>
-                  <%end%>
-                </span>
-              </p>
-            <%elsif payment.paymentable.present? and payment.paymentable_type=="LedgerBook"%>
-              <%=payment.paymentable&.comment%>
-              <br>
-              <p>
-                <span>
-                  <%if payment.paymentable&.sys_user.present?%>
-                    <%=payment.paymentable&.sys_user&.name%>
-                  <%end%>
-                </span>
-              </p>
-            <%end%>
-          </td>
-          <td>
-            <%= number_with_delimiter(payment.amount) %>
-          </td>
+            </td>
+            <td>
+              <%= number_with_delimiter(payment.amount) %>
+            </td>
+          </tr>
+        <% end %>
+        <tr>
+          <td colspan='2'><h5>Total</h5></td>
+          <td><h5><%=number_with_delimiter(@t_dabit.first.sum_debit.to_f.round(2)) %></h5></td>
+          <td><h5><%=number_with_delimiter(@t_dabit.first.sum_credit.to_f.round(2)) %></h5></td>
+          <td colspan='2'></td>
         </tr>
-      <% end %>
-      <tr>
-        <td colspan='2'><h5>Total</h5></td>
-        <td><h5><%=number_with_delimiter(@t_dabit.first.sum_debit.to_f.round(2)) %></h5></td>
-        <td><h5><%=number_with_delimiter(@t_dabit.first.sum_credit.to_f.round(2)) %></h5></td>
-        <td colspan='2'></td>
-      </tr>
-    </tbody>
-  </table>
+      </tbody>
+    </table>
 
   <div class="row mt-2">
     <div class="col-lg-4 col-sm-4">
@@ -185,6 +192,14 @@
 <div class="show-data"></div>
 
 <script>
+  $(document).ready(function(){
+    $('.files-download-btn').on('click', function(){
+      var name_btn = $(this).attr('name')
+      $('.dynamic-submit-btn').attr('name', name_btn)
+      $('.dynamic-submit-btn').val($(this).val())
+      $('.dynamic-submit-btn').click()
+    })
+  })
   $(function() {
     FontAwesome.dom.i2svg();
     var start = moment();
