@@ -1,0 +1,65 @@
+<html>
+  <head>
+    <style>
+      .border-bottom{
+        border-bottom: double 4px;
+      }
+      .text-center{
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <% @date = Date.today  %>
+    <% @time = DateTime.now %>
+    <% @time = Time.zone.now %>
+    <div>
+      <p class="border-bottom"></p>
+      <h1 class="text-center">Agent Deals</h1>
+      <h1 class="text-center">
+        Date: <b><span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%></span>
+        Time: <span><%=@time.strftime("at %I:%M%p")%></span></b>
+      </h1>
+      <p class="border-bottom"></p>
+      <p class="text-center">Report by: <%=current_user.name%></p>
+    </div>
+    <div>
+      <table data-toggle="table mt-3" data-search="true" class="table" style='overflow: hidden;'>
+        <thead>
+          <tr class='text-center'>
+            <th>SR#</th>
+            <th>Date</th>
+            <th>Agent Name</th>
+            <th>Deal Details</th>
+            <th>Total Commission</th>
+            <th>Office Share</th>
+            <th>Agent Share</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @deals.each_with_index do |deal, index|%>
+            <tr class='text-center'>
+              <td><%= index+1 %></td>
+              <td><%= deal.created_at.strftime('%d-%m-%Y') %></td>
+              <td><%= deal.staff&.name %></td>
+              <td><%= deal.deal_detail %></td>
+              <td><%= number_with_delimiter(deal.comission) %></td>
+              <td><%= number_with_delimiter(deal.file_share) %></td>
+              <td><%= number_with_delimiter(deal.agent_earning) %></td>
+            </tr>
+          <% end %>
+          <tr class='text-center'>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td><h3>Total:</h3></td>
+              <td><h3><%= number_with_delimiter(@deals.sum(:comission)) %></h3></td>
+              <td><h3><%= number_with_delimiter(@deals.sum(:file_share)) %></h3></td>
+              <td><h3><%= number_with_delimiter(@deals.sum(:agent_earning)) %></h3></td>
+            </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

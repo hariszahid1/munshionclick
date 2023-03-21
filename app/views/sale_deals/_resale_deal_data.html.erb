@@ -25,7 +25,7 @@
         <% color_class = '' if sale_deal.payment_method.eql?(3) %>
 
         <tr class="<%= color_class %>">
-          <td><%= index.to_i + 1 %></td>
+          <td><%= @starting_number +index %></td>
           <td><%= sale_deal.created_at.strftime('%d/%m/%y')%></td>
           <td>
             <%= sale_deal.sys_user&.name %>

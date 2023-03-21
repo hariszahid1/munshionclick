@@ -300,17 +300,16 @@ class PaymentsController < ApplicationController
       @end_date = Time.now.end_of_day
     end
     @q = Payment.order(created_at: :desc).ransack(params[:q])
-
-    # Use a more concise syntax to filter records by date and account_id
     @monthly_data = Payment.where(created_at: Time.now.beginning_of_month..DateTime.now.end_of_day, account_id: @account_id)
     @previous_credit = Payment.order(created_at: :desc).where(account_id: @account_id).where.not(credit: nil).first&.credit&.round(2).to_f
-
-    # Use ActiveRecord's sum method to calculate totals
     @t_dabit = @q.result.select('SUM(debit) as sum_debit', 'SUM(credit) as sum_credit', '(SUM(credit) - SUM(debit)) as mean_sum')
-
-    # Use instance variables only when needed
     @account = Account.find_by(id: @account_id)
-    @payments = @q.result.page(params[:page])
+    @payments = @q.result.page(params[:page]).per(25)
+    @starting_number = 1 + 25 * ([params[:page].to_i, 1].max - 1)
+    return unless params[:pdf].present?
+
+    @payments = @q.result
+    print_pdf('expense-sheet', 'pdf.html', 'A4')
   end
 
   private
