@@ -23,7 +23,7 @@
     <%= link_to nakasi_salary_details_path, class: "btn btn-outline-success" do %>
        Nakasi Book
     <% end %>
-    <%= link_to vehicle_salary_details_path, class: "btn btn-outline-warning" do %>
+    <%= link_to vehicle_salary_details_path, class: "btn btn-outline-danger" do %>
       <%= @departments.fourth.title%> Book
     <% end %>   
     <%= link_to salary_details_path, class: "btn btn-outline-info " do %>
@@ -39,38 +39,39 @@
   	</ul>
   </div>
   <div class="clearfix"></div>
-  <%= search_form_for @q, url: pather_salary_details_path, class: "admin-controls", method: "get" do |f| %>
     <div class="tab-content">
       <div class="tab-pane active no-tab-border mt-2" id="search" role="tabpanel">
-        <div class="row card shadow  m-1 p-3">
-          <div class="row d-flex p-3">
-            <div style="width:200px;" class="mr-2">
-              <%= f.select :id_in, options_from_collection_for_select(@salary_searchs, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code}"},f.object.id_in),{:include_blank => "Select Staff"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Staff"}}%>
-            </div>
-            <div style="width:180px;" class="mr-2">
-              <%= f.search_field :salary_details_created_at_gteq, class: 'form-control input-sm datepicker',value: @created_at_gteq,placeholder: "YYYY-MM-DD" %>
-            </div>
-            <div style="width:180px;" class="mr-2">
-              <%= f.search_field :salary_details_created_at_lteq, class: 'form-control input-sm datepicker',value: @created_at_lteq,placeholder: "YYYY-MM-DD"%>
-            </div>
-            <div class="">
-             <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+        <%= search_form_for @q, url: pather_salary_details_path, class: "admin-controls", method: "get" do |f| %>
+          <div class="row card shadow  m-1 p-3">
+            <div class="row d-flex p-3">
+              <div style="width:200px;" class="mr-2">
+                <%= f.select :id_in, options_from_collection_for_select(@salary_searchs, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code}"},f.object.id_in),{:include_blank => "Select Staff"},{:multiple => true,:class=>"form-control chosen-select", :data => {:placeholder => "Select the Staff"}}%>
+              </div>
+              <div style="width:180px;" class="mr-2">
+                <%= f.search_field :salary_details_created_at_gteq, class: 'form-control input-sm datepicker',value: @created_at_gteq,placeholder: "YYYY-MM-DD" %>
+              </div>
+              <div style="width:180px;" class="mr-2">
+                <%= f.search_field :salary_details_created_at_lteq, class: 'form-control input-sm datepicker',value: @created_at_lteq,placeholder: "YYYY-MM-DD"%>
+              </div>
+              <div class="">
+               <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+               <button type='submit' class='dynamic-submit-btn d-none' formtarget='_blank'></button>
+              </div>
             </div>
           </div>
-        </div>
+        <% end %>
         <div class="card shadow mt-2 m-1 p-3">
           <div class="row d-flex ml-1 mt-2" style="position: absolute;">
             <div class="dropdown my-dropdown mr-2 ml-auto">
              <button type="button" class="form-control btn btn-danger file-btn-color">PDF List</button>
              <div style="width:80px;" class="dropdown-content my-dropdown-content p-1">
-               <button class="form-control btn-danger file-btn-color my-2" name="submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank">Full</button>
-               <button class="form-control btn-danger file-btn-color my-2" name="submit_pdf_staff_with" type="submit" value="With Price PDF A4" formtarget="_blank">With Price</button>
-               <button class="form-control btn-danger file-btn-color my-2" name="submit_pdf_staff_without" type="submit" value="Without Price PDF A8" formtarget="_blank">WithoutPrice </button>
-               <button class="form-control btn-danger file-btn-color my-2" name="submit_pdf_rate" type="submit" value="Daily PDF A4" formtarget="_blank">Daily</button>
-               <button class="form-control btn-danger file-btn-color my-2 " name="submit_pdf_work" type="submit" value="Daily PDF A4" formtarget="_blank">Full work</button>             
+               <button class="form-control btn-danger file-btn-color files-download-btn my-2" name="submit_pdf" type="submit" value="Full PDF A4" formtarget="_blank">Full</button>
+               <button class="form-control btn-danger file-btn-color files-download-btn my-2" name="submit_pdf_staff_with" type="submit" value="With Price PDF A4" formtarget="_blank">With Price</button>
+               <button class="form-control btn-danger file-btn-color files-download-btn my-2" name="submit_pdf_staff_without" type="submit" value="Without Price PDF A8" formtarget="_blank">WithoutPrice </button>
+               <button class="form-control btn-danger file-btn-color files-download-btn my-2" name="submit_pdf_rate" type="submit" value="Daily PDF A4" formtarget="_blank">Daily</button>
+               <button class="form-control btn-danger file-btn-color files-download-btn my-2 " name="submit_pdf_work" type="submit" value="Daily PDF A4" formtarget="_blank">Full work</button>             
              </div>
             </div>
-            <button  style="width:80px;" class="form-control btn btn-info file-btn-color" name="email" type="submit" value="Email">Mail</button>
           </div>
           <table data-toggle="table" data-search="true">
             <thead>
@@ -152,7 +153,6 @@
         </div>
       </div>
     </div>
-  <% end %>
   <div class="clearfix"></div>
   <div class="row">
     <div class="col-lg-4 col-sm-4">
@@ -163,3 +163,13 @@
     </div>
   </div>
 </div>
+<script>
+  $(document).ready(function() {
+    $('.files-download-btn').on('click', function(){
+      var name_btn = $(this).attr('name')
+      $('.dynamic-submit-btn').attr('name', name_btn)
+      $('.dynamic-submit-btn').val($(this).val())
+      $('.dynamic-submit-btn').click()
+    })
+  });
+</script>
