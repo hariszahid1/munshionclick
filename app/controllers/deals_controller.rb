@@ -21,8 +21,10 @@ class DealsController < ApplicationController
     @total_commission = @q.result.sum(:comission)
     @total_earning = @q.result.sum(:agent_earning)
     @office_commission = @q.result.sum(:file_share)
-    @deals = @q.result.page(params[:page])
+    @deals = @q.result.page(params[:page]).per(25)
+    @starting_number = 1 + 25 * ([params[:page].to_i, 1].max - 1)
     @staffs = Staff.all
+    pdf_func if params[:pdf].present?
   end
 
   # GET /deals/1
@@ -81,6 +83,11 @@ class DealsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_deal
     @deal = Deal.find(params[:id])
+  end
+
+  def pdf_func
+    @deals = @q.result
+    print_pdf('Agent-deals', 'pdf.html', 'A4')
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
