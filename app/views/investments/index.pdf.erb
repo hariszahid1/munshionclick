@@ -22,8 +22,8 @@
       <% @investments.each do |investment| %>
         <tr>
           <td><%= investment.id %></td>
-          <td><%= investment.credit.to_f.round(2) %></td>
-          <td><%= investment.debit.to_f.round(2) %></td>
+          <td><%= number_with_delimiter(investment.credit.to_f.round(2)) %></td>
+          <td><%= number_with_delimiter(investment.debit.to_f.round(2)) %></td>
           <td><%= investment.account_id.present? ? investment.account.title : ''%></td>
           <td><%= investment.comment %></td>
           <td>
@@ -37,8 +37,8 @@
       <% end %>
       <tr class="lite-gray">
         <td><h4>Total</h4></td>
-        <td><h4><%= @total_investment.first[1] %></h4></td>
-        <td><h4><%= @total_investment.first[0] %></h4></td>
+        <td><h4><%= number_with_delimiter(@total_investment.first[1].to_f.round(2)) %></h4></td>
+        <td><h4><%= number_with_delimiter(@total_investment.first[0].to_f.round(2)) %></h4></td>
         <td></td>
         <td></td>
       </tr>

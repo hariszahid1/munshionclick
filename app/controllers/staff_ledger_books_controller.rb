@@ -293,6 +293,144 @@ class StaffLedgerBooksController < ApplicationController
     end
   end
 
+  def salary_sheet
+    @pos_setting = PosSetting.last
+    @departments = Department.all
+    @created_at_gteq = Date.today.prev_occurring(:thursday)
+    @created_at_lteq = DateTime.now
+    if params[:q].present?
+      @staff_id = params[:q][:staff_id_eq]
+      @comment = params[:q][:comment]
+      @created_at_gteq = params[:q][:created_at_gteq]
+      @created_at_lteq = params[:q][:created_at_lteq]
+      if params[:q][:created_at_lteq].present?
+        params[:q][:created_at_lteq] =
+          params[:q][:created_at_lteq].to_date.end_of_day
+      end
+    end
+    if params[:q].present?
+      @q = StaffLedgerBook.joins(:staff).where('credit>0 or debit>0 or credit<0 or debit<0').ransack(params[:q])
+    else
+      @q = StaffLedgerBook.joins(:staff).where('credit>0 or debit>0 or credit<0 or debit<0').where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).ransack
+    end
+    @staff = Staff.all
+    @debit = @q.result.sum(:debit)
+    @credit = @q.result.sum(:credit)
+    if @pos_setting.sys_type =="HousingScheme"
+      staff_list = @q.result.order('staff_ledger_books.created_at desc')
+    else
+      staff_list = @q.result.order('staffs.name asc', 'staff_ledger_books.created_at desc')
+    end
+    @quantity = StaffLedgerBook.joins(:staff,
+                                      :salary_detail).ransack(params[:q]).result.sum(:quantity) + StaffLedgerBook.joins(:staff,
+                                                                                                                        :salary_detail).ransack(params[:q]).result.sum(:khakar_remaning)
+
+    @options_for_select = StaffLedgerBook.all
+    @custom_pagination = params[:limit].present? ? params[:limit] : 25
+    @custom_pagination = @pos_setting.custom_pagination['staff_ledger_books'] if @pos_setting&.custom_pagination.present? && @pos_setting&.custom_pagination['staff_ledger_books'].present?
+    @staff_ledger_books = staff_list.page(params[:page]).per(@custom_pagination)
+
+    if params.dig(:q, :staff_id_eq).present? && params.dig(:q, :created_at_gteq).present? && @staff_ledger_books.blank?
+      st_id = params[:q][:staff_id_eq]
+      st_date = params[:q][:created_at_gteq]
+      staff_led = StaffLedgerBook.joins(:staff).where('credit>0 or debit>0 or credit<0 or debit<0')
+      @total_b = staff_led.where('staff_ledger_books.created_at < ? AND staff_ledger_books.staff_id = ?', st_date, st_id).order('staff_ledger_books.created_at asc').last&.balance.to_f
+    end
+    if params[:staff_ledger_book_asc_op].present?
+      @staff_ledger_books = @q.result.reorder('created_at asc', 'id asc')
+      print_pdf("ASC-OP-StaffLedgerBook -" + @created_at_gteq.to_s + ' to ' + @created_at_lteq.to_s, 'pdf.html', 'A4')
+    elsif params[:staff_ledger_book_desc_op]
+      @staff_ledger_books = @q.result.reorder('created_at desc', 'id desc')
+      print_pdf("DESC-OP-StaffLedgerBook -" + @created_at_gteq.to_s + ' to ' + @created_at_lteq.to_s, 'pdf.html', 'A4')
+    end
+    pdfName = '[' + StaffLedgerBook.where(id: staff_list.ids).joins(:staff).pluck('name').uniq.join(' ') + ']'
+    if params[:bulk].present?
+      @staff_ledger_books_pdf_debit = @q.result.group(:name).sum(:debit)
+      @staff_ledger_books_pdf_credit = @q.result.group(:name).sum(:credit)
+      @staff_ledger_books_pdf_total_debit = @q.result.sum(:debit)
+      @staff_ledger_books_pdf_total_credit = @q.result.sum(:credit)
+      request.format = 'pdf'
+      respond_to do |format|
+        format.html
+        format.pdf do
+          render pdf: "#{pdfName}-StaffLedgerBook -" + @created_at_gteq.to_s + ' to ' + @created_at_lteq.to_s,
+                 layout: 'pdf.html',
+                 page_size: 'A4',
+                 margin_top: '0',
+                 margin_right: '0',
+                 margin_bottom: '0',
+                 margin_left: '0',
+                 footer: { # optional, use 'pdf_plain' for a pdf_plain.html.pdf.erb file, defaults to main layout
+                   right: '[page] of [topage]'
+                 },
+                 encoding: 'UTF-8',
+                 show_as_html: false
+        end
+      end
+    end
+    if params[:submit_pdf_staff_with_desc].present? or params[:desc_email].present?
+      @staff_ledger_books_pdf = @q.result.order('staffs.name asc', 'staff_ledger_books.created_at desc')
+      if params[:desc_email]
+        @pdf_index = render_to_string(pdf: 'desc - staff ledger book', template: 'staff_ledger_books/index.pdf.erb',
+                                      filename: 'desc - staff leger book')
+      else
+        request.format = 'pdf'
+        respond_to do |format|
+          format.html
+          format.pdf do
+            render pdf: "#{pdfName}-StaffLedgerBook -" + @created_at_gteq.to_s + ' to ' + @created_at_lteq.to_s,
+                   layout: 'pdf.html',
+                   page_size: 'A4',
+                   margin_top: '0',
+                   margin_right: '0',
+                   margin_bottom: '0',
+                   margin_left: '0',
+                   footer: {             # optional, use 'pdf_plain' for a pdf_plain.html.pdf.erb file, defaults to main layout
+                     right: '[page] of [topage]'
+                   },
+                   encoding: 'UTF-8',
+                   show_as_html: false
+          end
+        end
+      end
+    end
+    if params[:submit_pdf_staff_with_asc].present? or params[:asc_email].present?
+      @staff_ledger_books_pdf = @q.result.order('staffs.name asc', 'staff_ledger_books.created_at asc')
+      if params[:asc_email]
+        @pdf_index = render_to_string(pdf: 'Asc - staff ledger book', template: 'staff_ledger_books/index.pdf.erb',
+                                      filename: 'Asc - staff leger book')
+      else
+        request.format = 'pdf'
+        respond_to do |format|
+          format.html
+          format.pdf do
+            render pdf: "#{pdfName}-StaffLedgerBook -" + @created_at_gteq.to_s + ' to ' + @created_at_lteq.to_s,
+                   layout: 'pdf.html',
+                   page_size: 'A4',
+                   margin_top: '0',
+                   margin_right: '0',
+                   margin_bottom: '0',
+                   margin_left: '0',
+                   footer: {             # optional, use 'pdf_plain' for a pdf_plain.html.pdf.erb file, defaults to main layout
+                     right: '[page] of [topage]'
+                   },
+                   encoding: 'UTF-8',
+                   show_as_html: false
+          end
+        end
+      end
+    end
+
+    if params[:desc_email].present? or params[:asc_email].present? and @q.result.count > 0
+      @pos_setting = PosSetting.first
+      subject = "#{@pos_setting.display_name} - staff lager books"
+      email = current_user.superAdmin.email_to.present? ? current_user.superAdmin.email_to : 'info@munshionclick.com'
+      pdf = [[@pdf_index, 'staff_ledger_books']]
+      ReportMailer.new_report_email(pdf, subject, email, '').deliver
+      redirect_to staff_ledger_books_path
+    end
+  end
+
   private
 
   # Use callbacks to share common setup or constraints between actions.

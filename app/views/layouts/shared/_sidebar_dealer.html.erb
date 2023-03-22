@@ -114,7 +114,15 @@
                  </a>
                </li>
              <% end %>
-             <% if check_is_hidden_by_module('payments') %>    
+             <% if check_is_hidden_by_module('staff_ledger_books') %>
+               <!--li class="<%= 'active' if request.path.start_with?(staff_ledger_books_path) %>">
+                 <a href="<%= salary_sheet_staff_ledger_books_path %>" class="">
+                   <i class="fas fa-plus"></i>
+                   <span class="link-text">Salary Sheet</span>
+                 </a>
+               </li-->
+             <% end %>
+             <% if check_is_hidden_by_module('payments') %>
                <li class="<%= 'active' if request.path.start_with?(payments_path) %>">
                  <%= link_to payments_path do %>
                    <i class="fas fa-plus"></i>
@@ -130,7 +138,7 @@
                  <% end %>
                </li>
              <% end %>
-             <% if check_is_hidden_by_module('ledger_books') %>
+             <% if check_is_hidden_by_module('staff_ledger_books') %>
                <li class="<%= 'active' if request.path.start_with?(staff_ledger_books_path) %>">
                  <a href="<%=staff_ledger_books_path%>" class="">
                    <i class="fa fa-plus"></i>
