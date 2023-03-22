@@ -32,7 +32,7 @@
     <tbody>
       <% @staff_ledger_books_pdf.each do |staff_ledger_book| %>
         <tr style="font-size:14px;,font-family: Arial Black, Gadget, sans-serif">
-          <td><%= staff_ledger_book.staff.full_name %></td>
+          <td><%= staff_ledger_book.staff&.full_name %></td>
           <td><%= staff_ledger_book.debit%></td>
           <td><%= staff_ledger_book.credit%></td>
           <td><%= staff_ledger_book.balance%></td>
@@ -44,8 +44,8 @@
             <% end %>
             <%if staff_ledger_book.salary_detail.present? %>
               <p><%=staff_ledger_book.salary_detail&.comment%></p>
-              <%if staff_ledger_book.salary_detail.staff.department.present?%>
-                <%if staff_ledger_book.salary_detail.quantity.to_i>0%>
+              <%if staff_ledger_book.salary_detail&.staff&.department.present?%>
+                <%if staff_ledger_book&.salary_detail&.quantity.to_i>0%>
                   <p>
                     <span><%= staff_ledger_book.salary_detail.raw_product_title %></span>
                     Qty: <span><%= staff_ledger_book.salary_detail.quantity.to_f.round(0) %></span>
@@ -56,8 +56,8 @@
           </td>
           <% p_detail =  PurchaseSaleDetail.find_by(staff_id:staff_ledger_book.staff_id, loading:staff_ledger_book.credit.to_f, created_at: staff_ledger_book.created_at) %>
           <% if pos_setting_sys_type=="ColdStorage" && p_detail.present? %>
-            <td> <%= p_detail.purchase_sale_items.first.product.title %> </td>
-            <td> <%= p_qty = p_detail.purchase_sale_items.sum(:size_9) %> </td>
+            <td> <%= p_detail.purchase_sale_items&.first&.product&.title %> </td>
+            <td> <%= p_qty = p_detail.purchase_sale_items&.sum(:size_9) %> </td>
             <td> <%= (staff_ledger_book.credit.to_f/p_qty.to_f).to_f %> </td>
             <td> <%= p_detail.transaction_type %> </td>
           <% end %>
