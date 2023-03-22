@@ -32,8 +32,8 @@
         <td class='urdu-font'><%=staff_deal.product.present? ? staff_deal.product.title+" "+staff_deal.product.item_type.title : "" %></td>
         <td><%= staff_deal.product.product_category.title rescue 'nil'%></td>
         <td><%= staff_deal.product.product_sub_category.title rescue 'nil'%></td>
-        <td><%= staff_deal.product.sale.to_f.round(2) %></td>
-          <td><%= total = (staff_deal.product.sale.to_f.round(2)*(staff_deal.product.marla.to_f+(staff_deal.product.square_feet.to_f/225))).to_f.round(2)%><%@total =@total+ total %></td>
+        <td><%=number_with_delimiter(staff_deal.product.sale.to_f.round(2)) %></td>
+          <td><%=number_with_delimiter(total = (staff_deal.product.sale.to_f.round(2)*(staff_deal.product.marla.to_f+(staff_deal.product.square_feet.to_f/225))).to_f.round(2))%><%number_with_delimiter(@total =@total+ total) %></td>
         <td><%= staff_deal.product.marla.to_i %> Marla <%= staff_deal.product.square_feet.to_i%> Square Feet | <%= staff_deal.product.size_1.to_i %></td>
         <td>
           <% staff_deal_orders = staff_deal.product.orders%>
@@ -48,7 +48,7 @@
                 <%=booking.sys_user.name%>
                 <b>Contact: </b>
                 <%=booking.sys_user.contact.phone_with_comma%>
-                <%=booking.sys_user.ledger_books.pluck('SUM(debit)','SUM(credit)').map { |sys| "<br> <b>Total:</b> "+sys.first.to_s+" <b>Paid:</b> "+sys.second.to_s+" <b>In %</b> "+((sys.second/sys.first)*100).round(2).to_s+" <b>Remaning:</b> "+(sys.first.to_i-sys.second.to_i).to_s+" <b>Commission:</b> "+token&.carriage.to_s+"<b> In % </b>"+((token&.carriage.to_f/total.to_f)*100).round(2).to_s}.join(',').html_safe%>
+                <%=booking.sys_user.ledger_books.pluck('SUM(debit)','SUM(credit)').map { |sys| "<br> <b>Total:</b> "+ number_with_delimiter(sys.first.to_s)+" <b>Paid:</b> "+ number_with_delimiter(sys.second.to_s)+" <b>In %</b> "+((sys.second/sys.first)*100).round(2).to_s+" <b>Remaning:</b> "+ number_with_delimiter((sys.first.to_i-sys.second.to_i).to_s)+" <b>Commission:</b> "+ number_with_delimiter(token&.carriage.to_s)+"<b> In % </b>"+((token&.carriage.to_f/total.to_f)*100).round(2).to_s}.join(',').html_safe%>
                 <%= ("<br><b>Last Payment Date: </b>"+booking&.sys_user&.ledger_books&.last&.created_at&.strftime("%d%b%y at %I:%M%p")).html_safe if booking.present?%>
               <%else%>
                 <span>
@@ -58,7 +58,7 @@
                   <%=booking.sys_user.ledger_books.pluck('SUM(debit)','SUM(credit)').map { |sys| "<br> <b>Total:</b> "+sys.first.to_s+" <b>Paid:</b> "+sys.second.to_s+" <b>In %</b> "+((sys.second/sys.first)*100).round(2).to_s+" <b>Remaning:</b> "+(sys.first.to_i-sys.second.to_i).to_s+" <b>Commission:</b> "+token&.carriage.to_s+"<b> In % </b>"+((token&.carriage.to_f/total.to_f)*100).round(2).to_s}.join(',').html_safe%>
                   <b>Contact: </b>
                   <%=booking.sys_user.contact.phone_with_comma%>
-                  <%= ("<br><b>Last Payment Date: </b>"+booking&.sys_user&.ledger_books&.last&.created_at&.strftime("%d%b%y at %I:%M%p")).html_safe if booking.present?%>
+                  <%= ("<br><b>Last Payment Date: </b>"+booking&.sys_user&.ledger_books&.last&.created_at&.strftime("%d%b%y , %I:%M")).html_safe if booking.present?%>
                   <br>
                   <b>Booking-Canceled</b>
                   <br>
@@ -73,7 +73,7 @@
           <%advance_total+=advance%>
         </td>
         <td>
-          <%=short_inst=staff_deal_orders.joins(property_plans: :property_installments).where('property_installments.due_status':[nil, PropertyPlan.due_statuses["Unpaid"]],'property_installments.due_date': @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).sum(:installment_price)%>
+          <%= number_with_delimiter(short_inst=staff_deal_orders.joins(property_plans: :property_installments).where('property_installments.due_status':[nil, PropertyPlan.due_statuses["Unpaid"]],'property_installments.due_date': @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).sum(:installment_price))%>
           <%short_inst_total+=short_inst%>
         </td>
         <td><%= staff_deal.comment %></td>
@@ -85,11 +85,11 @@
         <td><h5></h5></td>
         <td><h5></h5></td>
         <td><h5></h5></td>
-        <td><h4><%=@total.to_f.round(2)%></h4></td>
+        <td><h4><%= number_with_delimiter(@total.to_f.round(2))%></h4></td>
         <td><h5></h5></td>
         <td><h5></h5></td>
-        <td><h5><%=advance_total.to_f.round(2)%></h5></td>
-        <td><h5><%=short_inst_total.to_f.round(2)%></h5></td>
+        <td><h5><%= number_with_delimiter(advance_total.to_f.round(2))%></h5></td>
+        <td><h5><%= number_with_delimiter(short_inst_total.to_f.round(2))%></h5></td>
         <td><h5></h5></td>
       </tr>
     </tbody>

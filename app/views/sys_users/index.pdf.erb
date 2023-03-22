@@ -85,7 +85,7 @@
             <td style="text-align: center;"><%= sys_user['status'] %></td>
             <td style="text-align: center;"><%= sys_user['occupation'] %></td>
             <td style="text-align: center;"><%= sys_user['opening_balance'] %></td>
-            <td style="text-align: center;"><%= sys_user['balance'] %></td>
+            <td style="text-align: center;"><%= number_with_delimiter(sys_user['balance'].to_f.round(2)) %></td>
             <td style="text-align: center;"><b><%= sys_user['jama_benam'] %></b></td>
             <td style="text-align: center;"><b><%= sys_user['address'] %></b></td>
           </tr>
@@ -98,7 +98,7 @@
           <td></td>
           <td></td>
           <td></td>
-          <td><h4><%= data.pluck('balance').sum %></h4></td>
+          <td><h4><%= number_with_delimiter(data.pluck('balance').sum) %></h4></td>
           <td></td>
           <td></td>
         </tr>

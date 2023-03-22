@@ -44,20 +44,20 @@
               <td class="text-center"><%= staff['department'] %></td>
               <td class="text-center"><%= staff['code'] %></td>
               <td class="text-center"><%= staff['name'] %></td>
-              <td class="text-center"><%= staff['monthly_wage'] %></td>
-              <td class="text-center"><%= staff['advance'] %></td>
-              <td class="text-center"><%= staff['short_pay'] %></td>
-              <td class="text-center"><b><%= staff['balance'] %></b></td>
+              <td class="text-center"><%= number_with_delimiter(staff['monthly_wage']) %></td>
+              <td class="text-center"><%= number_with_delimiter(staff['advance']) %></td>
+              <td class="text-center"><%= number_with_delimiter(staff['short_pay']) %></td>
+              <td class="text-center"><b><%= number_with_delimiter(staff['balance']) %></b></td>
             </tr>
           <% end %>
           <tr>
             <td class="text-center"><h4>Total<h4></td>
             <td></td>
             <td></td>
-            <td class='text-center'><h4><%= data.last.try(:[], 'monthly_wage_total') %><h4></td>
-            <td class='text-center'><h4><%= data.last.try(:[], 'advance_total') %><h4></td>
+            <td class='text-center'><h4><%= number_with_delimiter(data.last.try(:[], 'monthly_wage_total')) %><h4></td>
+            <td class='text-center'><h4><%=number_with_delimiter(data.last.try(:[], 'advance_total')) %><h4></td>
             <td class='text-center'><h4><%= data.last.try(:[], 'short_pay_total') %><h4></td>
-            <td class='text-center'><h4><%= data.last.try(:[], 'balance_total') %><h4></td>
+            <td class='text-center'><h4><%=number_with_delimiter(data.last.try(:[], 'balance_total')) %><h4></td>
           </tr>
         </tbody>
       </table>

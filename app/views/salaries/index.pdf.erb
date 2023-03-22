@@ -41,23 +41,23 @@
       <% @salaries.each do |salary| %>
         <tr>
           <td style="width:20vw;"><%= salary.staff.name %></td>
-          <td style="width:20vw;"><%= salary.paid_salary.present? ? salary.paid_salary : "" %><%= salary.advance.present? ? salary.advance : "" %> </td>
-          <td style="width:20vw;"><%= salary.staff.balance.to_f.round(2) %></td>
+          <td style="width:20vw;"><%= number_with_delimiter(salary.paid_salary.present? ? salary.paid_salary : "") %><%=number_with_delimiter(salary.advance.present? ? salary.advance : "") %> </td>
+          <td style="width:20vw;"><%= number_with_delimiter(salary.staff.balance.to_f.round(2)) %></td>
           <td style="width:20vw;"><%= salary.leaves_in_month %></td>
           <td style="width:20vw;"><%= salary.account_id.present? ? salary.account.title : '' %></td>
           <td style="width:20vw;"><%= salary.comment %> | <%= salary.payment_type %></td>
           <td style="width:20vw;">
             <%if salary.created_at.strftime("%d%b%y")!=salary.updated_at.strftime("%d%b%y")%>
-              <%= salary.created_at.present? ? salary.created_at.strftime("%A,  %d-%b-%y at %H:%M%p") : '' %> | <%= salary.updated_at.present? ? salary.updated_at.strftime("%d%b%y at %H:%M%p") : '' %>
+              <%= salary.created_at.present? ? salary.created_at.strftime("%d%b%y , %I:%M") : '' %> | <%= salary.updated_at.present? ? salary.updated_at.strftime("%d%b%y , %I:%M") : '' %>
             <%else%>
-              <%= salary.created_at.present? ? salary.created_at.strftime("%A,  %d-%b-%y at %H:%M%p") : '' %>
+              <%= salary.created_at.present? ? salary.created_at.strftime("%d%b%y , %I:%M") : '' %>
             <%end%>
           </td>
         </tr>
       <% end %>
       <tr>
         <td><h5>Total</h5></td>
-        <td><h5><%=@salaries.sum(:paid_salary)+@salaries.sum(:advance)%></h5></td>
+        <td><h5><%= number_with_delimiter(@salaries.sum(:paid_salary)+@salaries.sum(:advance))%></h5></td>
         <td></td>
       </tr>
     </tbody>
