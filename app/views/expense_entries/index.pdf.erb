@@ -2,7 +2,7 @@
 <% @time = DateTime.now %>
 <% @time = Time.zone.now %>
 <p style="border-bottom: double 4px;  margin: 0;"></p>
-<h1 style="text-align: center; margin: 0;">Total Expense => <%=@expense_total.to_f.round(2)%> </h1>
+<h1 style="text-align: center; margin: 0;">Total Expense => <%= number_with_delimiter(@expense_total.to_f.round(2))%> </h1>
 <p style="border-bottom: double 4px;  margin: 0;"></p>
 <p style="text-align: center;margin: 0;">Report by: <%=current_user.name%></p>
 <div >
@@ -37,7 +37,7 @@
           <%end%>
         </td>
         <td style="border-bottom: 1px solid #000;"> <%=item.expense_type.title %></td>
-        <td style="border-bottom: 1px solid #000; "><%=item.amount %></td>
+        <td style="border-bottom: 1px solid #000; "><%= number_with_delimiter(item.amount.to_f.round(2)) %></td>
         <td style="border-bottom: 1px solid #000; "><%=item.account.title %></td>
         <td style="border-bottom: 1px solid #000; "><%=item.comment %></td>
       </tr>
@@ -45,7 +45,7 @@
     <tr>
       <td></td>
       <td><h3>Total</h3></td>
-      <td><h3><%=@expense_total.to_f.round(2)%></h3></td>
+      <td><h3><%= number_with_delimiter(@expense_total.to_f.round(2))%></h3></td>
     </tr>
   </table>
 </div>

@@ -14,7 +14,7 @@
   </head>
   <body>
     <p style="border-bottom: double 4px;  margin: 0;"></p>
-    <h1 class="text-center">Total Expense => <%= data.pluck('expense').sum.to_f.round(2) %> </h1>
+    <h1 class="text-center">Total Expense => <%= number_with_delimiter(data.pluck('expense').sum.to_f.round(2)) %> </h1>
     <p style="border-bottom: double 4px;  margin: 0;"></p>
     <p class="text-center" style="margin-top: 30px;">Report by: <%=current_user.name%></p>
     <div style="margin-bottom: 30px">

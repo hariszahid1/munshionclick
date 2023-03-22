@@ -36,7 +36,7 @@
         <tbody>
           <% data.each_with_index do |loan, index| %>
             <tr>
-              <td class="text-center"><%= loan['credit'] %></td>
+              <td class="text-center"><%= number_with_delimiter(loan['credit']) %></td>
               <td class="text-center"><%= loan['debit'] %>
               <td class="text-center"><%= loan['paid_by'] %></td>
               <td class="text-center"><%= loan['comment'] %></td>
