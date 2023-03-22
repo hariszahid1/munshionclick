@@ -75,7 +75,7 @@
     </div>
   </div>
   <div class="float-right">
-    <%if (check_can_create(@module_permission))%>
+    <%if (check_can_create(@module_permission)) && !@pos_setting.sys_type.eql?('Dealer') %>
       <%= link_to transfer_payments_path, class: "btn btn-warning form-group mr-3" do %>
         <i class="fa fa-exchange-alt text-dark mr-2" aria-hidden="true"></i>Payment Transfer
       <% end %> 
