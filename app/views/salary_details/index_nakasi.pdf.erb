@@ -36,16 +36,16 @@
       <% @salary_details.each.with_index do |staff,index| %>
         <% staff.salary_details.each do |salary_detail| %>
           <tr <%= index.odd? ? "class=lite-red" : "class="%> >
-            <td><%= salary_detail.created_at.strftime("%A,  %d-%b-%y") if salary_detail.created_at%></td>
+            <td><%= salary_detail.created_at.strftime("%d%b%y , %I:%M") if salary_detail.created_at%></td>
             <td><%= salary_detail.staff.code %></td>
             <td><%= salary_detail.staff_full_name %></td>
-            <td><%= salary_detail.quantity.to_f.round(0) %></td>
-            <td><%= salary_detail.raw_wage_rate.to_f.round(3) %> </td>
-            <td><%= salary_detail.wage_debit.to_f.round(3) %> </td>
-            <td><%= salary_detail.wage_rate.to_f.round(3)*1000 %></td>
-            <td><%= salary_detail.amount.to_f.round(3) %></td>
-            <td><%= wage_debit+=salary_detail.wage_debit.to_f.round(0) %></td>
-            <td><%= wage_credit+=salary_detail.amount.to_f.round(0) %></td>
+            <td><%= number_with_delimiter(salary_detail.quantity.to_f.round(0)) %></td>
+            <td><%= number_with_delimiter(salary_detail.raw_wage_rate.to_f.round(3)) %> </td>
+            <td><%= number_with_delimiter(salary_detail.wage_debit.to_f.round(3)) %> </td>
+            <td><%= number_with_delimiter(salary_detail.wage_rate.to_f.round(3)*1000) %></td>
+            <td><%= number_with_delimiter(salary_detail.amount.to_f.round(3)) %></td>
+            <td><%= number_with_delimiter(wage_debit+=salary_detail.wage_debit.to_f.round(0)) %></td>
+            <td><%= number_with_delimiter(wage_credit+=salary_detail.amount.to_f.round(0)) %></td>
           </tr>
         <%end%>
       <% end %>
@@ -53,13 +53,13 @@
         <td class="td-bold">Total</td>
         <td></td>
         <td></td>
-        <td class="td-bold"><%= @quantity.to_f.round(0) %></td>
+        <td class="td-bold"><%= number_with_delimiter(@quantity.to_f.round(0)) %></td>
 
-        <td class="td-bold"><%= @debit_rate.to_f.round(0) %></td>
-        <td class="td-bold"><%= @wage_debit.to_f.round(0) %></td>
+        <td class="td-bold"><%= number_with_delimiter(@debit_rate.to_f.round(0)) %></td>
+        <td class="td-bold"><%= number_with_delimiter(@wage_debit.to_f.round(0)) %></td>
 
-        <td class="td-bold"><%= @credit_rate.to_f.round(0) %></td>
-        <td class="td-bold"><%= @amount.to_f.round(0) %></td>
+        <td class="td-bold"><%= number_with_delimiter(@credit_rate.to_f.round(0)) %></td>
+        <td class="td-bold"><%= number_with_delimiter(@amount.to_f.round(0)) %></td>
 
         <td class="td-bold"></td>
         <td class="td-bold"></td>

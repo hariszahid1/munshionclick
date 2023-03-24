@@ -269,7 +269,7 @@
           <td><b><%= number_with_delimiter(@credit.to_i) %></b></td>
           <td><b><%= number_with_delimiter(@credit.to_i-@debit.to_i) %></b></td>
           <td></td>
-          <td><b><%=@quantity%></b></td>
+          <td><b><%=number_with_delimiter(@quantity.to_f.round(2))%></b></td>
           <td></td>
           <td></td>
         </tr>
