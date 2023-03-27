@@ -19,14 +19,14 @@
                 <%total=0%>
                 <td><%=ex.first.last%></td>
                 <td><%=ex.first.first%></td>
-                <td><%=ex.last.first.to_f.round(2)%> <%@daily=@daily+ex.last.first%></td>
-                <td><%=ex.last.last.to_f.round(2)%> <%@total=@total+ex.last.last%></td>
+                <td><%= number_with_delimiter(ex.last.first.to_f.round(2))%> <%number_with_delimiter(@daily=@daily+ex.last.first)%></td>
+                <td><%= number_with_delimiter(ex.last.last.to_f.round(2))%> <%number_with_delimiter(@total=@total+ex.last.last)%></td>
               </tr>
             <%end%>
             <tr>
               <td><h5>Total</h5></td>
-              <td><h5><%=@daily.to_f.round(2)%></h5></td>
-              <td><h5><%=@total.to_f.round(2)%></h5></td>
+              <td><h5><%=number_with_delimiter(@daily.to_f.round(2))%></h5></td>
+              <td><h5><%=number_with_delimiter(@total.to_f.round(2))%></h5></td>
             </tr>
         </tbody>
       </table>

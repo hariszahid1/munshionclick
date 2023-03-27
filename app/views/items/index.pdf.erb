@@ -3,9 +3,9 @@
 <% @time = DateTime.now %>
 <% @time = Time.zone.now %>
 <p style="border-bottom: double 4px;  margin: 0;"></p>
-<h1 style="text-align: center; margin: 0;">Raw material details</h1>
+<h1 style="text-align: center; margin: 0;">Raw Material Details</h1>
 <p style="border-bottom: double 4px;  margin: 0;"></p>
-<p style="text-align: center;margin: 0;">Report by: <%=current_user.name%></p>
+<p style="text-align: center;margin: 0;">Report By: <%=current_user.name%></p>
 <div >
   <table>
     <thead>
@@ -31,11 +31,11 @@
         <td><%= item.item_type.title %></td>
         <td class="urdu-font"><%= item.title %></td>
         <td><%= item.code %></td>
-        <td><%= item.cost.to_f.round(2) %></td>
-        <td><%= item.sale.to_f.round(2) %></td>
-        <td><%= item.minimum %></td>
+        <td><%= number_with_delimiter(item.cost.to_f.round(2)) %></td>
+        <td><%= number_with_delimiter(item.sale.to_f.round(2)) %></td>
+        <td><%= number_with_delimiter(item.minimum.to_f.round(2)) %></td>
         <td><%= item.optimal %></td>
-        <td><%= item.maximun %></td>
+        <td><%= number_with_delimiter(item.maximun.to_f.round(2)) %></td>
         <td><%= item.comment %></td>
         <td><%= item.status %></td>
       </tr>

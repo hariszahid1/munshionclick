@@ -20,7 +20,7 @@
 
             <tr>
         <th class="short-column">Date</th>
-        <th class="short-column">quantity</th>
+        <th class="short-column">Quantity</th>
         <th class="short-column">Credit Amount</th>
         <th class="short-column">Credit Jama</th>
       </tr>
@@ -31,24 +31,26 @@
         <%wage_credit=0%>
         <% staff.salary_details.each do |salary_detail| %>
           <tr class="" style="font-size:15px;text-align: center;,font-family: Arial Black, Gadget, sans-serif">
-         <td><%= salary_detail.created_at.strftime("%A,  %d-%b-%y") if salary_detail.created_at%></td>
+         <td><%= salary_detail.created_at.strftime("%d%b%y, %I:%M") if salary_detail.created_at%></td>
             <td><%= salary_detail.quantity.to_f.round(0) %></td>
-            <td><%= salary_detail.amount.to_f.round(2) %></td>
-            <td><%= wage_credit+=salary_detail.amount.to_f.round(0) %></td>
+            <td><%= number_with_delimiter(salary_detail.amount.to_f.round(2)) %></td>
+            <td><%= number_with_delimiter(wage_credit+=salary_detail.amount.to_f.round(0)) %></td>
             </td>
           </tr>
         <%end%>
         <tr class="lite-gray" style= "text-align: center;">
           <td class="td-bold">Total</td>
           <td class="td-bold"><%= @quantity.to_f.round(0) %></td>
-          <td class="td-bold"> <%= @credit_rate.to_f.round(0) %></td>
-          <td class="td-bold"> <%= @amount.to_f.round(0) %></td>
+          <td class="td-bold"> <%= number_with_delimiter(@credit_rate.to_f.round(0)) %></td>
+          <td class="td-bold"> <%= number_with_delimiter(@amount.to_f.round(0)) %></td>
         </tr>
+        <tr></tr>
+        <tr></tr>
         <tr class="lite-gray" style = "text-align: center;">
           <td class="td-bold">Total Payable</td>
-          <td class="td-bold"><%= @amount.to_f.round(0) %></td>
+          <td class="td-bold"><%= number_with_delimiter(@amount.to_f.round(0)) %></td>
           <td class="td-bold">Credit</td>
-          <td class="td-bold"><%= wage_credit%></td>
+          <td class="td-bold"><%= number_with_delimiter(wage_credit)%></td>
         </tr>
       </tbody>
     </table>
