@@ -11,43 +11,63 @@
     </ol>
   </div>
       <%if (check_can_create(@module_permission))%>
-        <div class="row ml-1 d-flex mb-5" style="font-family: arial">
-          <div class="col-lg-3 col-sm-3 stats-cards border-radius-1 shadow-lg p-4 mr-4" style="background:linear-gradient(45deg, #0f1d59 73%, white 8%); color:white;">
-              <%= link_to new_investment_path(credit: true), remote: true, class: "card shadow p-3 ml-5 float-right hov-btn", style:"width: 80px; height: 80px; border-radius: 100%;" do %>
-                <i class="fa fa-plus text-dark mt-3 ml-3" aria-hidden="true"></i>
-              <% end %> 
-            <div>
+        <div class="row d-flex mb-5" style="font-family: arial">
+          <div class="col-lg-3 col-sm-6 mt-2">
+            <%= link_to new_investment_path(credit: true), class: "card shadow p-3 m-4 float-right hov-btn", style:"width: 80px; height: 80px; border-radius: 100%;" do %>
+              <i class="fa fa-plus text-dark mt-3 ml-3" aria-hidden="true"></i>
+            <% end %> 
+            <div class="shadow px-4 py-3" style="background:linear-gradient(45deg, #0f1d59 75%, white 8%); color:white;">
               <div class="p font-weight-bold mb-3 mt-1" style="color: #C0C0C0">Today's Credit</div>
-              <span class="mt-1 mb-2"><i>Rs.</i><i class="h4 mb-0 font-weight-bold text-light-800 mr-1"><%= number_with_delimiter(@today_credit_investment) %></i></span>
-              <br>
-              <% if @today_credit_investment > @yesterday_credit_investment %>
-                <span class="bg-success border-radius-1 px-1 text-light font-weight-bold">+ <%= @percentage_credit_investment %> %</span><i class="fas fa-user text-light ml-3 mr-2"></i><%= @investment_credit_count%>
-              <% else %>
-                <span class="bg-danger border-radius-1 px-2 text-light font-weight-bold"> <%= @percentage_credit_investment %> %</span><i class="fas fa-user text-light ml-3 mr-2"></i><%= @investment_credit_count%>
-              <% end %>
+              <span class="mt-1 mb-2"><i>Rs.</i><i class="h5 mb-0 font-weight-bold text-light-800 mr-1"><%= number_with_delimiter(@today_credit_investment) %></i></span>
+              <div class="mt-2"><i class="fa fa-user mr-2"></i><%= @investment_credit_count %></div>
             </div>
           </div>
-           <div class="col-lg-3 col-sm-3 stats-cards border-radius-1 shadow-lg p-4 mr-4" style="background:linear-gradient(45deg, darkred 73%, white 8%); color:white;">
-              <%= link_to new_investment_path(debit: true), remote: true, class: "card shadow p-3 ml-5 float-right hov-btn", style:"width: 80px; height: 80px; border-radius: 100%;" do %>
-                <i class="fa fa-plus text-dark mt-3 ml-3" aria-hidden="true"></i>
-              <% end %> 
-            <div>
+          <div class="col-lg-3 col-sm-6 mt-2">
+            <%= link_to new_investment_path(debit: true), class: "card shadow p-3 m-4 float-right hov-btn", style:"width: 80px; height: 80px; border-radius: 100%;" do %>
+              <i class="fa fa-plus text-dark mt-3 ml-3" aria-hidden="true"></i>
+            <% end %> 
+            <div class="shadow px-4 py-3" style="background:linear-gradient(45deg, darkred 75%, white 8%); color:white;">
               <div class="p font-weight-bold mb-3 mt-1" style="color: #C0C0C0">Today's Debit</div>
-              <span class="mt-1 mb-2"><i>Rs.</i><i class="h4 mb-0 font-weight-bold text-light-800 mr-1"><%= number_with_delimiter(@today_debit_investment) %></i></span>
-              <br>
-              <% if @today_debit_investment > @yesterday_debit_investment %>
-                <span class="bg-success border-radius-1 px-1 text-light font-weight-bold">+ <%= @percentage_debit_investment %> %</span><i class="fas fa-user text-light ml-3 mr-2"></i><%= @investment_debit_count%>
-              <% else %>
-                <span class="bg-danger border-radius-1 px-2 text-light font-weight-bold"> <%= @percentage_debit_investment %> %</span><i class="fas fa-user text-light ml-3 mr-2"></i><%= @investment_debit_count%>
-              <% end %>
+              <span class="mt-1 mb-2"><i>Rs.</i><i class="h5 mb-0 font-weight-bold text-light-800 mr-1"><%= number_with_delimiter(@today_debit_investment) %></i></span>
+              <div class="mt-2"><i class="fa fa-user mr-2"></i><%= @investment_debit_count %></div>
             </div>
           </div>
-          <div class="col-lg-5 col-sm-5 border-radius-1 shadow-lg ml-1" style="background:linear-gradient(-45deg, darkblue 40%, white 8%);">
-            <div class="p font-weight-bold text-muted mt-3 py-2" style="color: #C0C0C0">Monthly Report</div>
-              <div><i class="fa fa-circle text-primary mr-2"></i><i>Rs.</i><i class="h5 mb-0 font-weight-bold text-gray-800 mr-1"><%= number_with_delimiter(@monthly_credit_investment) %></i><i class="fas fa-signal text-primary ml-2"></i></div>
-              <div class="p text-muted mb-1">Total Credit/Jama</div>
-              <div><i class="fa fa-circle text-danger mr-2"></i><i>Rs.</i><i class="h5 mb-0 font-weight-bold text-gray-800 mr-1"><%= number_with_delimiter(@monthly_debit_investment) %></i><i class="fas fa-signal text-danger ml-2"></i></div>
-              <div class="p text-muted mb-3">Total Debit/Benam</div>
+          <div class="col-lg-6 col-sm-12">
+            <div class="row shadow mt-2 mr-1 ml-1">
+              <div class="col-lg-4 bg-white" style="border-right: 1px solid lightgray">
+                <div class="h6 font-weight-bold text-muted mt-2" style="color: #C0C0C0">Monthly Report </div>
+                <div><i>Rs.</i><i class="h6 mb-0 font-weight-bold text-gray-800 mr-1"><%= number_with_delimiter(@monthly_credit_investment) %></i></div>
+                <div class="p text-muted mb-2">Total Credit</div>
+                <div><i>Rs.</i><i class="h6 mb-0 font-weight-bold text-gray-800 mr-1"><%= number_with_delimiter(@monthly_debit_investment) %></i></div>
+                <div class="p text-muted mb-2">Total Debit</div>
+              </div>
+              <div class="col-lg-8 bg-white">
+                <div class="h6 font-weight-bold text-muted mt-2" style="color: #C0C0C0">Yearly Statistics (<%= Time.current.year%>)</div>
+                <div>
+                  <div class="float-left">  
+                    <div><i class="fa fa-user mr-2"></i><%= @yearly_credit_count_investment %></div>
+                    <div><i class="fa fa-circle text-primary mr-2"></i><i>Rs.</i><i class="h6 mb-0 font-weight-bold text-gray-800 mr-1"><%= number_with_delimiter(@yearly_credit_investment) %></i></div>
+                  </div> 
+                  <div class="float-right"> 
+                    <div><i class="fa fa-user mr-2"></i><%= @yearly_debit_count_investment %></div>
+                    <div><i class="fa fa-circle text-danger mr-2"></i><i>Rs.</i><i class="h6 mb-0 font-weight-bold text-gray-800 mr-1"><%= number_with_delimiter(@yearly_debit_investment) %></i></div>
+                  </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="progress mb-1">
+                  <div class="progress-bar bg-primary" role="progressbar" style="width: <%= (@yearly_credit_investment/@yearly_report_investment)*100%>%" aria-valuenow="<%= (@yearly_credit_investment/@yearly_report_investment)*100 %>" aria-valuemin="0" aria-valuemax="100"></div>
+                  <div class="progress-bar bg-danger" role="progressbar" style="width: <%= (@yearly_debit_investment/@yearly_report_investment)*100 %>%" aria-valuenow="<%= (@yearly_debit_investment/@yearly_report_investment)*100 %>" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <div>
+                  <div class="float-left">  
+                    <div class="p text-muted mb-1">Total Credit</div>
+                  </div> 
+                  <div class="float-right"> 
+                    <div class="p text-muted mb-1">Total Debit</div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       <% end %>
@@ -156,8 +176,8 @@
               <tr>
                 <td></td>
                 <td><h5>Total</h5></td>
-                <td><h5><%=number_with_delimiter(@total_investment&.first&.first) %></h5></td>
-                <td><h5><%= number_with_delimiter(@total_investment&.first&.last) %></h5></td>
+                <td><h5><%=number_with_delimiter(@total_investment&.first&.first.to_f.round(2)) %></h5></td>
+                <td><h5><%= number_with_delimiter(@total_investment&.first&.last.to_f.round(2)) %></h5></td>
               </tr>
             </tbody>
           </table>

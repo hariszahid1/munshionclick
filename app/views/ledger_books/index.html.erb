@@ -4,202 +4,220 @@
     <span aria-hidden="true">×</span>
   </button>
 </div>
-<div class="m-4">
-      <div class="d-flex">
-        <div class="main-content-header">
-          <h2 class="ml-2  logo-back"><i class="fa fa-book mr-2"></i>Ledger Book</h2>
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-              <a href="<%= root_path %>">Dashboard</a>
-            </li>
-            <li class="breadcrumb-item active">
-              <a href="<%= ledger_books_path %>">Ledger Book</a>
-            </li>
-          </ol>
-        </div>
-      </div>
-      <%if (check_can_create(@module_permission))%>
-        <div class="row ml-1 d-flex mb-5" style="font-family: arial">
-          <div class="col-lg-3 col-sm-3 stats-cards border-radius-1 shadow-lg p-4 mr-4" style="background:linear-gradient(45deg, #0f1d59 73%, white 8%); color:white;">
-              <%= link_to new_ledger_book_path(Sjama: true), class: "card shadow p-3 ml-5 float-right hov-btn", style:"width: 80px; height: 80px; border-radius: 100%;" do %>
-                <i class="fa fa-plus text-dark mt-3 ml-3" aria-hidden="true"></i>
-              <% end %> 
-            <div>
-              <div class="p font-weight-bold mb-3 mt-1" style="color: #C0C0C0">Today's Credit</div>
-              <span class="mt-1 mb-2"><i>Rs.</i><i class="h4 mb-0 font-weight-bold text-light-800 mr-1"><%= number_with_delimiter(@today_credit_total) %></i></span>
-              <br>
-              <% if @today_credit_total > @yesterday_credit_total%>
-                <span class="bg-success border-radius-1 px-1 text-light font-weight-bold">+ <%= @percentage_credit %> %</span><i class="fas fa-user text-light ml-3 mr-2"></i><%= @ledger_credit_count%>
-              <% else %>
-                <span class="bg-danger border-radius-1 px-2 text-light font-weight-bold"> <%= @percentage_credit %> %</span><i class="fas fa-user text-light ml-3 mr-2"></i><%= @ledger_credit_count%>
-              <% end %>
-            </div>
-          </div>
-           <div class="col-lg-3 col-sm-3 stats-cards border-radius-1 shadow-lg p-4 mr-4" style="background:linear-gradient(45deg, darkred 73%, white 8%); color:white;">
-              <%= link_to new_ledger_book_path(Sbenam: true), class: "card shadow p-3 ml-5 float-right hov-btn", style:"width: 80px; height: 80px; border-radius: 100%;" do %>
-                <i class="fa fa-plus text-dark mt-3 ml-3" aria-hidden="true"></i>
-              <% end %> 
-            <div>
-              <div class="p font-weight-bold mb-3 mt-1" style="color: #C0C0C0">Today's Debit</div>
-              <span class="mt-1 mb-2"><i>Rs.</i><i class="h4 mb-0 font-weight-bold text-light-800 mr-1"><%= number_with_delimiter(@today_debit_total) %></i></span>
-              <br>
-              <% if @today_debit_total > @yesterday_debit_total%>
-                <span class="bg-success border-radius-1 px-1 text-light font-weight-bold">+ <%= @percentage_debit %> %</span><i class="fas fa-user text-light ml-3 mr-2"></i><%= @ledger_debit_count%>
-              <% else %>
-                <span class="bg-danger border-radius-1 px-2 text-light font-weight-bold"> <%= @percentage_debit %> %</span><i class="fas fa-user text-light ml-3 mr-2"></i><%= @ledger_debit_count%>
-              <% end %>
-            </div>
-          </div>
-          <div class="col-lg-5 col-sm-5 border-radius-1 shadow-lg ml-1" style="background:linear-gradient(-45deg, darkblue 40%, white 8%);">
-            <div class="p font-weight-bold text-muted mt-3 py-2" style="color: #C0C0C0">Monthly Report</div>
-              <div><i class="fa fa-circle text-primary mr-2"></i><i>Rs.</i><i class="h5 mb-0 font-weight-bold text-gray-800 mr-1"><%= number_with_delimiter(@monthly_credit_ledger) %></i><i class="fas fa-signal text-primary ml-2"></i></div>
-              <div class="p text-muted mb-1">Total Credit/Jama</div>
-              <div><i class="fa fa-circle text-danger mr-2"></i><i>Rs.</i><i class="h5 mb-0 font-weight-bold text-gray-800 mr-1"><%= number_with_delimiter(@monthly_debit_ledger) %></i><i class="fas fa-signal text-danger ml-2"></i></div>
-              <div class="p text-muted mb-3">Total Debit/Benam</div>
-          </div>
-        </div>
+<div class="row-lg-12 m-4">
+  <div class="float-left">
+    <h3 class="ml-2 logo-back"><i class="fas fa-book mr-2"></i>Ledger Book</h3>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<%= root_path %>">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active">
+        <a href="<%= ledger_books_path %>">Ledger Book</a>
+      </li>
+    </ol>
+  </div>
+  <% if check_can_create(@module_permission) %>
+    <div class="float-right mt-3">
+      <%= link_to transfer_ledger_books_path, class: "btn btn-outline-danger mt-3" do %>
+          Payment Transfer
       <% end %>
-      <div class="clearfix"></div>
-      <div class="float-right">
-        <div class="dropdown ml-auto ">
-          <span class="btn btn-outline-info btn-sm mt-4" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
-          <div class="dropdown-content">
-            <% if @help.present? %>
-            <% @help&.help_links.each do |link| %>
-            <a type="button" class="" target="_blank" href="<%= link[1] %>" >Help in <%= link[0] %></a>
-            <% end %>
-            <% end %>
-          </div>
-        </div>
-      </div>
-      <div class="float-right">
-        <%if (check_can_create(@module_permission))%>
-           <%= link_to transfer_ledger_books_path, class: "btn btn-outline-danger form-group mr-2 mt-3" do %>
-            Payment Transfer
-          <% end %> 
+    </div>
+  <% end %>
+</div>
+<div class="clearfix"></div>
+<div class="m-4">
+  <%if (check_can_create(@module_permission))%>
+      <div class="row d-flex mb-5" style="font-family: arial">
+      <div class="col-lg-3 col-sm-6 mt-2">
+        <%= link_to new_ledger_book_path(Sjama: true), class: "card shadow p-3 m-4 float-right hov-btn", style:"width: 80px; height: 80px; border-radius: 100%;" do %>
+          <i class="fa fa-plus text-dark mt-3 ml-3" aria-hidden="true"></i>
         <% end %> 
+        <div class="shadow px-4 py-3" style="background:linear-gradient(45deg, #0f1d59 75%, white 8%); color:white;">
+          <div class="p font-weight-bold mb-3 mt-1" style="color: #C0C0C0">Today's Credit</div>
+          <span class="mt-1 mb-2"><i>Rs.</i><i class="h5 mb-0 font-weight-bold text-light-800 mr-1"><%= number_with_delimiter(@today_credit_total) %></i></span>
+          <div class="mt-2"><i class="fa fa-user mr-2"></i><%= @ledger_credit_count %></div>
+        </div>
       </div>
-      <div class="row">
-        <ul class="nav nav-tabs mb-2 mt-2" role="tablist">
-          <li class="nav-item">
-            <a class="nav-link tab-label ledger-search-exp-tab active" data-toggle="tab" href="#search" role="tab"><i class="fa fa-search mr-2"></i>Search</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link tab-label sys-user-search-exp-tab" data-toggle="tab" href="#analytics" data-remote="true" role="tab"><i class="fa fa-signal mr-2"></i>Analytics</a>
-          </li>
-          <li class="nav-item">
-          <a class="nav-link tab-label ledger-search-exp-tab" data-toggle="tab" href="#import-export" role="tab"><i class="fa fa-exchange-alt mr-2"></i>Import/Export</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link tab-label ledger-logs-tab" data-toggle="tab" href="#logs" role="tab"><i class="fa fa-history mr-2"></i>Logs</a>
-          </li> 
-        </ul>
+      <div class="col-lg-3 col-sm-6 mt-2">
+        <%= link_to new_ledger_book_path(Sbenam: true), class: "card shadow p-3 m-4 float-right hov-btn", style:"width: 80px; height: 80px; border-radius: 100%;" do %>
+          <i class="fa fa-plus text-dark mt-3 ml-3" aria-hidden="true"></i>
+        <% end %> 
+        <div class="shadow px-4 py-3" style="background:linear-gradient(45deg, darkred 75%, white 8%); color:white;">
+          <div class="p font-weight-bold mb-3 mt-1" style="color: #C0C0C0">Today's Debit</div>
+          <span class="mt-1 mb-2"><i>Rs.</i><i class="h5 mb-0 font-weight-bold text-light-800 mr-1"><%= number_with_delimiter(@today_debit_total) %></i></span>
+          <div class="mt-2"><i class="fa fa-user mr-2"></i><%= @ledger_debit_count %></div>
+        </div>
       </div>
-      <%= hidden_field_tag "userCount", @user_count, { :id => "userCount" } %>
-      <%= hidden_field_tag "balanceSum", @balance_sum, { :id => "balanceSum" } %>
-      <%= hidden_field_tag "jamaKeys", @jama_keys, { :id => "jamaKeys" } %>
-      <%= hidden_field_tag "jamaValues", @jama_total, { :id => "jamaValues" } %>
-      <%= hidden_field_tag "benamValues", @benam_total, { :id => "benamValues" } %>
-      <%= hidden_field_tag "nilValues", @nil_total, { :id => "nilValues" } %>
-      <%= hidden_field_tag "debitKeys", @debit_keys, { :id => "debitKeys" } %>
-      <%= hidden_field_tag "debitValues", @debit_values, { :id => "debitValues" } %>
-      <%= hidden_field_tag "creditValues", @credit_values, { :id => "creditValues" } %>
-
-      <div class="tab-content mb-2">
-        <div class="tab-pane active mb-4 card shadow mt-2 p-4 " style="border-left: 12px solid #1e3494" id="search" role="tabpanel">
-          <%= search_form_for @q, url: ledger_books_path, class: "admin-controls mt-3", method: "get" do |f| %>
-          <div class="row d-flex">
-            <div class="col-lg-9">
-              <div class="col-lg-2 form-group float-left">
-                <%= f.search_field :id_eq, placeholder: "Search by id", title: "Search by id" ,:class=>"form-control" %>
-              </div>
-              <div class="col-lg-3 form-group float-left">
-                <%= f.select :sys_user_id_eq, options_from_collection_for_select(@ledger_searchs, "id", ->(st){"#{st.name} \u{27F6} \u{27F6} #{st.code} "}, f.object.sys_user_id_eq), {:include_blank => "Select Name/Code"},{:class=>"form-control chosen-select", :data => {:placeholder => "Select Name/Code"} } %>
-              </div>
-              <div class="d-none">
-                <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker', value: @created_at_gteq, placeholder: "YYYY-MM-DD" %>
-                <%= f.search_field :created_at_lteq, class: 'form-control input-sm datepicker', value: @created_at_lteq, placeholder: "YYYY-MM-DD"%>
-              </div>
-              <div class="col-lg-4 form-group float-left d-flex">
-                <%= f.search_field :created_at, id: "reportrange", class: 'form-control' %>
-              </div>
-              <div class="col-lg-1 form-group float-left">
-                <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+      <div class="col-lg-6 col-sm-12">
+        <div class="row shadow mt-2 mr-1 ml-1">
+          <div class="col-lg-4 bg-white" style="border-right: 1px solid lightgray">
+            <div class="h6 font-weight-bold text-muted mt-2" style="color: #C0C0C0">Monthly Report </div>
+            <div><i>Rs.</i><i class="h6 mb-0 font-weight-bold text-gray-800 mr-1"><%= number_with_delimiter(@monthly_credit_ledger) %></i></div>
+            <div class="p text-muted mb-2">Total Credit</div>
+            <div><i>Rs.</i><i class="h6 mb-0 font-weight-bold text-gray-800 mr-1"><%= number_with_delimiter(@monthly_debit_ledger) %></i></div>
+            <div class="p text-muted mb-2">Total Debit</div>
+          </div>
+          <div class="col-lg-8 bg-white">
+            <div class="h6 font-weight-bold text-muted mt-2" style="color: #C0C0C0">Yearly Statistics (<%= Time.current.year%>)</div>
+            <div>
+              <div class="float-left">  
+                <div><i class="fa fa-user mr-2"></i><%= @yearly_credit_count_ledger %></div>
+                <div><i class="fa fa-circle text-primary mr-2"></i><i>Rs.</i><i class="h6 mb-0 font-weight-bold text-gray-800 mr-1"><%= number_with_delimiter(@yearly_credit_ledger) %></i></div>
+              </div> 
+              <div class="float-right"> 
+                <div><i class="fa fa-user mr-2"></i><%= @yearly_debit_count_ledger %></div>
+                <div><i class="fa fa-circle text-danger mr-2"></i><i>Rs.</i><i class="h6 mb-0 font-weight-bold text-gray-800 mr-1"><%= number_with_delimiter(@yearly_debit_ledger) %></i></div>
               </div>
             </div>
-            <div class="col-lg-3">
-              <%if (check_can_download_csv(@module_permission))%>
-                <div class="dropdown my-dropdown float-right mr-2">
-                  <button type="button" class="form-control bg-warning text-dark">CSV List</button>
-                  <div class="dropdown-content my-dropdown-content p-2">
-                    <button class="form-control d-flex justify-content-center ml-2 mt-2 btn btn-warning" style="width:100px" title="Download ledger book for single user in ascending order csv" name="submit_form_without_csv" type="submit" value="Ledger Book CSV" formtarget="_blank">1-Asc </button>
-                    <button class="form-control d-flex justify-content-center ml-2 mt-2 btn btn-warning" style="width:100px" title="Download ledger book for single user in descending order csv" name="submit_csv_without" type="submit" value="Ledger Book CSV A4" formtarget="_blank">1-Desc </button>
-                    <button class="form-control d-flex justify-content-center ml-2 mt-2 btn btn-warning" style="width:100px" title="Download ledger book for all user in ascending order csv" name="submit_form_csv" type="submit" value="Ledger Book CSV A4" formtarget="_blank">Asc </button>
-                    <button class="form-control d-flex justify-content-center ml-2 mt-2 btn btn-warning" style="width:100px" title="Download ledger book for all user in desending order csv" name="submit_csv" type="submit" value="Ledger Book CSV A4" formtarget="_blank">Desc</button>
-                    <button class="form-control d-flex justify-content-center ml-2 mt-2 btn btn-warning" style="width:100px" title="Download ledger book with short commenting csv" name="submit_csv_short" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Short </button>
-                    <button class="form-control d-flex justify-content-center ml-2 mt-2 btn btn-warning" style="width:100px" title="Download debit csv" name="submit_debit_csv" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Debit List </button>
-                    <button class="form-control d-flex justify-content-center ml-2 mt-2 btn btn-warning" style="width:100px" title="Download credit csv" name="submit_credit_csv" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Credit List </button>
-                  </div>
-                </div>
-              <% end %>
-              <%if (check_can_download_pdf(@module_permission))%>
-                <div class="dropdown my-dropdown float-right mr-2">
-                  <button type="button" class="form-control bg-danger text-light">PDF List</button>
-                  <div class="dropdown-content my-dropdown-content p-2" style="width: 100px;">
-                    <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download ledger book pdf for single user in ascending order pdf" name="submit_form_without" type="submit" value="Ledger Book PDF A4" formtarget="_blank">1-Asc</button>
-                    <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download ledger book pdf for single user in descending order pdf" name="submit_pdf_without" type="submit" value="Ledger Book PDF A4" formtarget="_blank">1-Desc </button>
-                    <% if params.dig(:q, :sys_user_id_eq).present? %>
-                      <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download ledger book pdf for single user in ascending with OP order pdf" name="ledger_book_asc_op" type="submit" value="Ledger Book PDF A4" formtarget="_blank">1-ASC OP </button>
-                      <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download ledger book pdf for single user in desending with OP order pdf" name="ledger_book_desc_op" type="submit" value="Ledger Book PDF A4" formtarget="_blank">1-Desc OP </button>
-                    <% end %>
-                    <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download ledger book for all user in ascending order pdf" name="submit_form" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Asc </button>
-                    <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download ledger book for all user in desending order pdf" name="submit_pdf" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Desc </button>
-                    <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download ledger book with short commenting pdf" name="submit_pdf_short" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Short </button>
-                    <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download debit pdf" name="submit_debit" type="submit" value="Ledger Book PDF A4" formtarget="_blank">DebitList </button>
-                    <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download credit pdf" name="submit_credit" type="submit" value="Ledger Book PDF A4" formtarget="_blank">CreditList </button>
-                  </div>
-                </div>
-              <% end %>
+            <div class="clearfix"></div>
+            <div class="progress mb-1">
+              <div class="progress-bar bg-primary" role="progressbar" style="width: <%= (@yearly_credit_ledger/@yearly_report_ledger)*100 rescue nil%>%" aria-valuenow="<%= (@yearly_credit_ledger/@yearly_report_ledger)*100 rescue nil %>" aria-valuemin="0" aria-valuemax="100"></div>
+              <div class="progress-bar bg-danger" role="progressbar" style="width: <%= (@yearly_debit_ledger/@yearly_report_ledger)*100 rescue nil %>%" aria-valuenow="<%= (@yearly_debit_ledger/@yearly_report_ledger)*100 rescue nil %>" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+            <div>
+              <div class="float-left">  
+                <div class="p text-muted mb-1">Total Credit</div>
+              </div> 
+              <div class="float-right"> 
+                <div class="p text-muted mb-1">Total Debit</div>
+              </div>
             </div>
           </div>
         </div>
-        <div class="tab-pane card shadow  p-5" id="analytics" role="tabpanel">
-          <div class="row d-flex">
-            <div class="col-lg-6">
-              <div class="my-chart-Container">
-                <div class="mychartBox card border-radius-1 shadow mt-2">
-                  <canvas id="myChart"></canvas>
-                </div> 
-              </div>
-            </div>
-            <div class="col-lg-6">
-              <div class="my-chart-Container">
-                <div class="mychartBox card border-radius-1 shadow mt-2">
-                  <canvas id="myChart1"></canvas>
-                </div> 
-              </div>
-            </div>
-          </div>
-          <div class="mychartBox2 card border-radius-1 shadow mt-2 p-3">
-            <canvas id="myChart3"></canvas>
-          </div>
-
-          <div class="mychartBox2 card border-radius-1 shadow mt-2 p-3">
-            <canvas id="myChart4"></canvas>
-          </div>
-        </div>
-
-        <div class="tab-pane mb-3 card shadow mt-2  p-3" id="import-export" role="tabpanel">
-          <p>
-            <div class="d-flex ml-2">
-              <button class="btn btn-danger ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
-              <button class="btn btn-info ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
-            </div>
-          </p>
-        </div>
+      </div>
+    </div>
+  <% end %>
+  <div class="clearfix"></div>
+  <div class="float-right">
+    <div class="dropdown ml-auto ">
+      <span class="btn btn-outline-info btn-sm mt-4" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
+      <div class="dropdown-content">
+        <% if @help.present? %>
+        <% @help&.help_links.each do |link| %>
+        <a type="button" class="" target="_blank" href="<%= link[1] %>" >Help in <%= link[0] %></a>
         <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <ul class="nav nav-tabs mb-2 mt-2" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link tab-label ledger-search-exp-tab active" data-toggle="tab" href="#search" role="tab"><i class="fa fa-search mr-2"></i>Search</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link tab-label sys-user-search-exp-tab" data-toggle="tab" href="#analytics" data-remote="true" role="tab"><i class="fa fa-signal mr-2"></i>Analytics</a>
+      </li>
+      <li class="nav-item">
+      <a class="nav-link tab-label ledger-search-exp-tab" data-toggle="tab" href="#import-export" role="tab"><i class="fa fa-exchange-alt mr-2"></i>Import/Export</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link tab-label ledger-logs-tab" data-toggle="tab" href="#logs" role="tab"><i class="fa fa-history mr-2"></i>Logs</a>
+      </li> 
+    </ul>
+  </div>
+  <%= hidden_field_tag "userCount", @user_count, { :id => "userCount" } %>
+  <%= hidden_field_tag "balanceSum", @balance_sum, { :id => "balanceSum" } %>
+  <%= hidden_field_tag "jamaKeys", @jama_keys, { :id => "jamaKeys" } %>
+  <%= hidden_field_tag "jamaValues", @jama_total, { :id => "jamaValues" } %>
+  <%= hidden_field_tag "benamValues", @benam_total, { :id => "benamValues" } %>
+  <%= hidden_field_tag "nilValues", @nil_total, { :id => "nilValues" } %>
+  <%= hidden_field_tag "debitKeys", @debit_keys, { :id => "debitKeys" } %>
+  <%= hidden_field_tag "debitValues", @debit_values, { :id => "debitValues" } %>
+  <%= hidden_field_tag "creditValues", @credit_values, { :id => "creditValues" } %>
 
+  <div class="tab-content mb-2">
+    <div class="tab-pane active mb-4 card shadow mt-2 p-4 " id="search" role="tabpanel">
+      <%= search_form_for @q, url: ledger_books_path, class: "admin-controls mt-3", method: "get" do |f| %>
+      <div class="row d-flex">
+        <div class="col-lg-9">
+          <div class="col-lg-3 form-group float-left">
+            <%= f.search_field :id_eq, placeholder: "Search by id", title: "Search by id" ,:class=>"form-control" %>
+          </div>
+          <div class="col-lg-3 form-group float-left">
+            <%= f.select :sys_user_id_eq, options_from_collection_for_select(@ledger_searchs, "id", ->(st){"#{st.name} \u{27F6} \u{27F6} #{st.code} "}, f.object.sys_user_id_eq), {:include_blank => "Select Name/Code"},{:class=>"form-control chosen-select", :data => {:placeholder => "Select Name/Code"} } %>
+          </div>
+          <div class="d-none">
+            <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker', value: @created_at_gteq, placeholder: "YYYY-MM-DD" %>
+            <%= f.search_field :created_at_lteq, class: 'form-control input-sm datepicker', value: @created_at_lteq, placeholder: "YYYY-MM-DD"%>
+          </div>
+          <div class="col-lg-4 form-group float-left d-flex">
+            <%= f.search_field :created_at, id: "reportrange", class: 'form-control' %>
+          </div>
+          <div class="col-lg-1 form-group float-left">
+            <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+          </div>
+        </div>
+        <div class="col-lg-3">
+          <%if (check_can_download_csv(@module_permission))%>
+            <div class="dropdown my-dropdown float-right mr-2">
+              <button type="button" class="form-control bg-warning text-dark" style="width: 80px;">CSV</button>
+              <div class="dropdown-content my-dropdown-content p-2">
+                <button class="form-control d-flex justify-content-center ml-2 mt-2 btn btn-warning" style="width:100px" title="Download ledger book for single user in ascending order csv" name="submit_form_without_csv" type="submit" value="Ledger Book CSV" formtarget="_blank">1-Asc </button>
+                <button class="form-control d-flex justify-content-center ml-2 mt-2 btn btn-warning" style="width:100px" title="Download ledger book for single user in descending order csv" name="submit_csv_without" type="submit" value="Ledger Book CSV A4" formtarget="_blank">1-Desc </button>
+                <button class="form-control d-flex justify-content-center ml-2 mt-2 btn btn-warning" style="width:100px" title="Download ledger book for all user in ascending order csv" name="submit_form_csv" type="submit" value="Ledger Book CSV A4" formtarget="_blank">Asc </button>
+                <button class="form-control d-flex justify-content-center ml-2 mt-2 btn btn-warning" style="width:100px" title="Download ledger book for all user in desending order csv" name="submit_csv" type="submit" value="Ledger Book CSV A4" formtarget="_blank">Desc</button>
+                <button class="form-control d-flex justify-content-center ml-2 mt-2 btn btn-warning" style="width:100px" title="Download ledger book with short commenting csv" name="submit_csv_short" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Short </button>
+                <button class="form-control d-flex justify-content-center ml-2 mt-2 btn btn-warning" style="width:100px" title="Download debit csv" name="submit_debit_csv" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Debit </button>
+                <button class="form-control d-flex justify-content-center ml-2 mt-2 btn btn-warning" style="width:100px" title="Download credit csv" name="submit_credit_csv" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Credit </button>
+              </div>
+            </div>
+          <% end %>
+          <%if (check_can_download_pdf(@module_permission))%>
+            <div class="dropdown my-dropdown float-right mr-2">
+              <button type="button" class="form-control bg-danger text-light" style="width: 80px;">PDF</button>
+              <div class="dropdown-content my-dropdown-content p-2" style="width: 100px;">
+                <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download ledger book pdf for single user in ascending order pdf" name="submit_form_without" type="submit" value="Ledger Book PDF A4" formtarget="_blank">1-Asc</button>
+                <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download ledger book pdf for single user in descending order pdf" name="submit_pdf_without" type="submit" value="Ledger Book PDF A4" formtarget="_blank">1-Desc </button>
+                <% if params.dig(:q, :sys_user_id_eq).present? %>
+                  <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download ledger book pdf for single user in ascending with OP order pdf" name="ledger_book_asc_op" type="submit" value="Ledger Book PDF A4" formtarget="_blank">1-ASC OP </button>
+                  <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download ledger book pdf for single user in desending with OP order pdf" name="ledger_book_desc_op" type="submit" value="Ledger Book PDF A4" formtarget="_blank">1-Desc OP </button>
+                <% end %>
+                <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download ledger book for all user in ascending order pdf" name="submit_form" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Asc </button>
+                <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download ledger book for all user in desending order pdf" name="submit_pdf" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Desc </button>
+                <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download ledger book with short commenting pdf" name="submit_pdf_short" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Short </button>
+                <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download debit pdf" name="submit_debit" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Debit</button>
+                <button class="form-control d-flex justify-content-center mx-2 mt-2 btn btn-danger" style="width:120px" title="Download credit pdf" name="submit_credit" type="submit" value="Ledger Book PDF A4" formtarget="_blank">Credit</button>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="tab-pane card shadow  p-5" id="analytics" role="tabpanel">
+      <div class="row d-flex">
+        <div class="col-lg-6">
+          <div class="my-chart-Container">
+            <div class="mychartBox card border-radius-1 shadow mt-2">
+              <canvas id="myChart"></canvas>
+            </div> 
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="my-chart-Container">
+            <div class="mychartBox card border-radius-1 shadow mt-2">
+              <canvas id="myChart1"></canvas>
+            </div> 
+          </div>
+        </div>
+      </div>
+      <div class="mychartBox2 card border-radius-1 shadow mt-2 p-3">
+        <canvas id="myChart3"></canvas>
+      </div>
 
+      <div class="mychartBox2 card border-radius-1 shadow mt-2 p-3">
+        <canvas id="myChart4"></canvas>
+      </div>
+    </div>
+    <div class="tab-pane mb-3 card shadow mt-2  p-3" id="import-export" role="tabpanel">
+      <p>
+        <div class="d-flex ml-2">
+          <button class="btn btn-danger ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
+          <button class="btn btn-info ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
+        </div>
+      </p>
+    </div>
+    <% end %>
     <div class="tab-pane mb-3 card shadow mt-2  p-3" id="logs" role="tabpanel">
       <div class='ml-2 mt-2 mb-2'>
         <%= link_to view_history_ledger_books_path, class: "btn btn-success d-none", id: "ledger-logs", remote:true do %>
@@ -210,13 +228,12 @@
       <div class="my-loader mx-auto"></div>
     </div>
   </div>
- 
-  <div class='card  shadow p-4 ledger-book-index-card' style="border-left: 12px solid #1e3494">
-  <div class="row d-flex" style="position: absolute;">
+  <div class='card  shadow p-4 ledger-book-index-card'>
+    <div class="row d-flex" style="position: absolute;">
       <div>
         <%if (check_can_delete(@module_permission))%>
-	        <button class="btn btn-outline-danger delete-selected mt-4 ml-3" type='button' value='LedgerBook'>
-	        	Delete Selected 
+	        <button class="btn btn-danger file-btn-color delete-selected mt-4 ml-3" type='button' value='LedgerBook'>
+	        	<i class="fa fa-trash"></i>
 	        </button>		
         <%end%>
       </div>  
@@ -227,227 +244,227 @@
       <% end %>
     </div>
     <div class="mt-3">  
-    <table data-toggle="table" data-search="true" class="content-table">
-      <thead>
-        <tr>
-         <th>
-            <input type="checkbox" id="master" class='select-all-checkbox'>
-          </th>
-          <th>ID/P<div class='float-right'><%= sort_link(@q, :sys_user_name, '', {}, class: 'sorting-button') %></div></th>
-          <th>Customer/Supplier<div class='float-right'><%= sort_link(@q, :sys_user_name, '', {}, class: 'sorting-button') %></div></th>
-          <th>Debit<div class='float-right'><%= sort_link(@q, :debit, '', {}, class: 'sorting-button') %></div></th>
-          <th>Credit<div class='float-right'><%= sort_link(@q, :credit, '', {}, class: 'sorting-button') %></div></th>
-          <th>Balance<div class='float-right'><%= sort_link(@q, :balance, '', {}, class: 'sorting-button') %></div></th>
-          <th>Jama/Benam</th>
-          <th>Voucher<div class='float-right'><%= sort_link(@q, :purchase_sale_detail_id, '', {}, class: 'sorting-button') %></div></th>
-          <th>Comment<div class='float-right'><%= sort_link(@q, :comment, '', {}, class: 'sorting-button') %></div></th>
-          <th>Date<div class='float-right'><%= sort_link(@q, :date, '', {}, class: 'sorting-button') %></div></th>
-          <th class="border_none">Action</th>
-        </tr>
-      </thead>
-  
-      <tbody>
-        <% @ledger_books.each do |ledger_book| %>
+      <table data-toggle="table" data-search="true" class="content-table">
+        <thead>
           <tr>
-          <td><%= check_box_tag 'object_ids[]', ledger_book.id %></td>
-            <td>
-            <% if check_can_delete(@module_permission) %>
-                <% if ledger_book&.purchase_sale_detail.present?%>
-                  <%= link_to payments_path('q[id_eq]': ledger_book.purchase_sale_detail.payment_ids.last), title: "print receipt detail" do %>
-                      <%=ledger_book.id%><%=ledger_book.purchase_sale_detail.payment_ids%>
-                  <% end %>
-                <% elsif ledger_book&.order.present?%>
-                  <%= link_to payments_path('q[id_eq]': ledger_book.order.payment_ids.last) do %>
-                      <%=ledger_book.id%><%=ledger_book.order.payment_ids%>
-                  <% end %>
-                <% else%>
-                  <%= link_to payments_path('q[id_eq]': ledger_book.payment_ids.last) do %>
-                      <%=ledger_book.id%><%=ledger_book.payment_ids%>
-                  <% end %>
-                <% end%>
-            <% end %>
-            </td>
-            <td class="urdu-font">
-              <%= link_to sys_users_path('q[id_eq]':ledger_book.sys_user) do %>
-                <%= ledger_book.sys_user.name %>
-              <%end %>
-            </td>
-            <td><%= number_with_delimiter(ledger_book.debit) %></td>
-            <td><%= number_with_delimiter(ledger_book.credit) %></td>
-            <td><%= number_with_delimiter(ledger_book.balance) %></td>
-            <td>
-              <%if (ledger_book.balance.to_f > 0 ) %>
-                <b style="font-size:20px;color:blue;">Jama / Payable</b>
-              <%elsif (ledger_book.balance.to_f < 0 ) %>
-                <b style="font-size:20px;color:red;">Benam / Receivable</b>
-              <%else%>
-                <b style="font-size:20px;color: #6cec53 ;">Nill</b>
-              <%end%>
-            </td>
-            <td>
-              <% if ledger_book.purchase_sale_detail_id.present? %>
-                <% if check_can_update(@module_permission) %>
-                  <%= 'Sale' if ledger_book.purchase_sale_detail.transaction_type=="Sale"%>
-                  <%= 'Purchase' if ledger_book.purchase_sale_detail.transaction_type=="Purchase"%>
-                  <%= 'SaleReturn' if ledger_book.purchase_sale_detail.transaction_type=="SaleReturn"%>
-                  <%= 'PurchaseReturn' if ledger_book.purchase_sale_detail.transaction_type=="PurchaseReturn"%>
-                <% end %>
-              <% elsif ledger_book.order.present? %>
-                <% if check_can_update(@module_permission) %>
-                  <%= 'Sale Order' if ledger_book.order.transaction_type=="Sale"%>
-                  <%= 'Purchase Order' if ledger_book.order.transaction_type=="Purchase"%>
-                <% end %>
-              <%else%>
-                Ledger Book
+          <th>
+              <input type="checkbox" id="master" class='select-all-checkbox'>
+            </th>
+            <th>ID/P<%= sort_link(@q, :sys_user_name, '', {}, class: 'sorting-button ml-2') %></th>
+            <th>Customer/Supplier<%= sort_link(@q, :sys_user_name, '', {}, class: 'sorting-button ml-2') %></th>
+            <th>Debit<%= sort_link(@q, :debit, '', {}, class: 'sorting-button ml-2') %></th>
+            <th>Credit<%= sort_link(@q, :credit, '', {}, class: 'sorting-button ml-2') %></th>
+            <th>Balance<%= sort_link(@q, :balance, '', {}, class: 'sorting-button ml-2') %></th>
+            <th>Jama/Benam</th>
+            <th>Voucher<%= sort_link(@q, :purchase_sale_detail_id, '', {}, class: 'sorting-button ml-2') %></th>
+            <th>Comment<%= sort_link(@q, :comment, '', {}, class: 'sorting-button ml-2') %></th>
+            <th>Created at<%= sort_link(@q, :date, '', {}, class: 'sorting-button ml-2') %></th>
+            <th class="border_none">Action</th>
+          </tr>
+        </thead>
+    
+        <tbody>
+          <% @ledger_books.each do |ledger_book| %>
+            <tr>
+            <td><%= check_box_tag 'object_ids[]', ledger_book.id %></td>
+              <td>
+              <% if check_can_delete(@module_permission) %>
+                  <% if ledger_book&.purchase_sale_detail.present?%>
+                    <%= link_to payments_path('q[id_eq]': ledger_book.purchase_sale_detail.payment_ids.last), title: "print receipt detail" do %>
+                        <%=ledger_book.id%><%=ledger_book.purchase_sale_detail.payment_ids%>
+                    <% end %>
+                  <% elsif ledger_book&.order.present?%>
+                    <%= link_to payments_path('q[id_eq]': ledger_book.order.payment_ids.last) do %>
+                        <%=ledger_book.id%><%=ledger_book.order.payment_ids%>
+                    <% end %>
+                  <% else%>
+                    <%= link_to payments_path('q[id_eq]': ledger_book.payment_ids.last) do %>
+                        <%=ledger_book.id%><%=ledger_book.payment_ids%>
+                    <% end %>
+                  <% end%>
               <% end %>
-            </td>
-            <td>
-              <%if ledger_book.order.present? || ledger_book.purchase_sale_detail.present? %>
-              <%= ledger_book.comment %>
-              <%else%>
-              <%= ledger_book.comment %>
-              <%# ledger_book.created_at.strftime("%d/%m/%Y at %I:%M%p") %>
-              <%end%>
-              <% if ledger_book.account.present?%>
-              <p>
-                <span><%=ledger_book.account.title%></span>
-              </p>
-              <%end%>
-              <% if ledger_book.order.present? %>
-                <%if ledger_book.order.order_items_names_and_quantity!=0%>
-                  <%ledger_book.order.order_items_names_and_quantity.each do |name_quantity|%>
-                  <p>
-                    <span><%=name_quantity[8].to_s+'-'+name_quantity.first%></span>
-                    Qty: <span><%=name_quantity.second%></span>
-                    Rate:<span><%=name_quantity.third%></span>
-                    Total:<span><%=name_quantity.fourth%></span>
-                  </p>
-                  <%end%>
-                  <p>
-                    Total: <span><%=ledger_book.order.total_bill%></span>
-                  </p>
+              </td>
+              <td class="urdu-font">
+                <%= link_to sys_users_path('q[id_eq]':ledger_book.sys_user) do %>
+                  <%= ledger_book.sys_user.name %>
+                <%end %>
+              </td>
+              <td><%= number_with_delimiter(ledger_book.debit.to_f.round(2)) %></td>
+              <td><%= number_with_delimiter(ledger_book.credit.to_f.round(2)) %></td>
+              <td><%= number_with_delimiter(ledger_book.balance.to_f.round(2)) %></td>
+              <td>
+                <%if (ledger_book.balance.to_f > 0 ) %>
+                  <b style="font-size:20px;color:blue;">Jama/Payable</b>
+                <%elsif (ledger_book.balance.to_f < 0 ) %>
+                  <b style="font-size:20px;color:red;">Benam/Receivable</b>
+                <%else%>
+                  <b style="font-size:20px;color: #6cec53 ;">Nill</b>
                 <%end%>
-              <%elsif ledger_book.purchase_sale_detail.present?%>
-                <p>Comment:   <%= ledger_book.purchase_sale_detail.comment %></p>
-                <p>Version: <span><%=ledger_book.purchase_sale_detail.versions.count%></span></p>
-                <%if ledger_book.purchase_sale_detail.purchase_sale_items_names_and_quantity!=0%>
-                  <% ledger_book.purchase_sale_detail.purchase_sale_items_names_and_quantity.each do |name_quantity|%>
+              </td>
+              <td>
+                <% if ledger_book.purchase_sale_detail_id.present? %>
+                  <% if check_can_update(@module_permission) %>
+                    <%= 'Sale' if ledger_book.purchase_sale_detail.transaction_type=="Sale"%>
+                    <%= 'Purchase' if ledger_book.purchase_sale_detail.transaction_type=="Purchase"%>
+                    <%= 'SaleReturn' if ledger_book.purchase_sale_detail.transaction_type=="SaleReturn"%>
+                    <%= 'PurchaseReturn' if ledger_book.purchase_sale_detail.transaction_type=="PurchaseReturn"%>
+                  <% end %>
+                <% elsif ledger_book.order.present? %>
+                  <% if check_can_update(@module_permission) %>
+                    <%= 'Sale Order' if ledger_book.order.transaction_type=="Sale"%>
+                    <%= 'Purchase Order' if ledger_book.order.transaction_type=="Purchase"%>
+                  <% end %>
+                <%else%>
+                  Ledger Book
+                <% end %>
+              </td>
+              <td>
+                <%if ledger_book.order.present? || ledger_book.purchase_sale_detail.present? %>
+                <%= ledger_book.comment %>
+                <%else%>
+                <%= ledger_book.comment %>
+                <%# ledger_book.created_at.strftime("%d/%m/%Y at %I:%M%p") %>
+                <%end%>
+                <% if ledger_book.account.present?%>
+                <p>
+                  <span><%=ledger_book.account.title%></span>
+                </p>
+                <%end%>
+                <% if ledger_book.order.present? %>
+                  <%if ledger_book.order.order_items_names_and_quantity!=0%>
+                    <%ledger_book.order.order_items_names_and_quantity.each do |name_quantity|%>
                     <p>
                       <span><%=name_quantity[8].to_s+'-'+name_quantity.first%></span>
-                      Qty:  <span><%=name_quantity.second%></span>
+                      Qty: <span><%=name_quantity.second%></span>
+                      Rate:<span><%=name_quantity.third%></span>
+                      Total:<span><%=name_quantity.fourth%></span>
                     </p>
-                  <%end%>
-                  <%if ledger_book.purchase_sale_detail.with_gst.present?%>
+                    <%end%>
                     <p>
-                      GST: <span><%= ledger_book.purchase_sale_detail.purchase_sale_items.sum(:gst_amount)%></span>
+                      Total: <span><%=ledger_book.order.total_bill%></span>
                     </p>
                   <%end%>
+                <%elsif ledger_book.purchase_sale_detail.present?%>
+                  <p>Comment:   <%= ledger_book.purchase_sale_detail.comment %></p>
+                  <p>Version: <span><%=ledger_book.purchase_sale_detail.versions.count%></span></p>
+                  <%if ledger_book.purchase_sale_detail.purchase_sale_items_names_and_quantity!=0%>
+                    <% ledger_book.purchase_sale_detail.purchase_sale_items_names_and_quantity.each do |name_quantity|%>
+                      <p>
+                        <span><%=name_quantity[8].to_s+'-'+name_quantity.first%></span>
+                        Qty:  <span><%=name_quantity.second%></span>
+                      </p>
+                    <%end%>
+                    <%if ledger_book.purchase_sale_detail.with_gst.present?%>
+                      <p>
+                        GST: <span><%= ledger_book.purchase_sale_detail.purchase_sale_items.sum(:gst_amount)%></span>
+                      </p>
+                    <%end%>
+                  <%end%>
+                  <p><span>PO#: </span> <%=ledger_book&.purchase_sale_detail&.bill_no%></p>
                 <%end%>
-                <p><span>PO#: </span> <%=ledger_book&.purchase_sale_detail&.bill_no%></p>
-              <%end%>
-            </td>
-            <td><%=ledger_book.created_at.strftime("%d%b%Y , %I:%M")%></td>
-            <td>
-              <div class="icon-container-1">
-                  <div class="my-icon-1 my-view-1">
-                    <div class="my-tooltip-1">
-                      <div class="icon-container">
-                        <div class="my-icon my-view">
-                          <div class="my-tooltip">
-                              Edit
-                            </div>
-                              <% if check_can_update(@module_permission) %>
-                                <% if ledger_book.purchase_sale_detail_id.present? %>
-                                  <%if ledger_book.purchase_sale_detail.purchase_sale_items.present?%>
-                                    <%if ledger_book.purchase_sale_detail.purchase_sale_items.first.product.present? %>
-                                      <% if check_can_update(@module_permission) %>
-                                          <%= link_to edit_purchase_sale_detail_path(ledger_book.purchase_sale_detail,product: true),title: "Edit detail" do %>
-                                              <i class="fa fa-edit mt-2" aria-hidden="true"></i>
-                                          <% end %>
-                                    <% end %>
-                                  <%else%>
-                                  <% if check_can_update(@module_permission) %>
-                                    <%= link_to edit_purchase_sale_detail_path(ledger_book.purchase_sale_detail),title: "Edit detail" do %>
-                                      <i class="fa fa-edit mt-2" aria-hidden="true"></i>
-                                    <% end %>
-                                    <% end %>
+              </td>
+              <td><%=ledger_book.created_at.strftime("%d/%b/%Y , %I:%M")%></td>
+              <td>
+                <div class="icon-container-1">
+                    <div class="my-icon-1 my-view-1">
+                      <div class="my-tooltip-1">
+                        <div class="icon-container">
+                          <div class="my-icon my-view">
+                            <div class="my-tooltip">
+                                Edit
+                              </div>
+                                <% if check_can_update(@module_permission) %>
+                                  <% if ledger_book.purchase_sale_detail_id.present? %>
+                                    <%if ledger_book.purchase_sale_detail.purchase_sale_items.present?%>
+                                      <%if ledger_book.purchase_sale_detail.purchase_sale_items.first.product.present? %>
+                                        <% if check_can_update(@module_permission) %>
+                                            <%= link_to edit_purchase_sale_detail_path(ledger_book.purchase_sale_detail,product: true),title: "Edit detail" do %>
+                                                <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+                                            <% end %>
+                                      <% end %>
+                                    <%else%>
+                                    <% if check_can_update(@module_permission) %>
+                                      <%= link_to edit_purchase_sale_detail_path(ledger_book.purchase_sale_detail),title: "Edit detail" do %>
+                                        <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+                                      <% end %>
+                                      <% end %>
+                                    <%end%>
                                   <%end%>
-                                <%end%>
-                              <% elsif ledger_book.order.present? %>
-                                  <%= link_to edit_order_path(ledger_book.order_id,product: true),title: "Edit detail" do %>
+                                <% elsif ledger_book.order.present? %>
+                                    <%= link_to edit_order_path(ledger_book.order_id,product: true),title: "Edit detail" do %>
+                                      <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+                                    <%end %>
+                                <%else%>
+                                  <%= link_to edit_ledger_book_path(ledger_book),title: "Edit detail" do %>
                                     <i class="fa fa-edit mt-2" aria-hidden="true"></i>
                                   <%end %>
-                              <%else%>
-                                <%= link_to edit_ledger_book_path(ledger_book),title: "Edit detail" do %>
-                                  <i class="fa fa-edit mt-2" aria-hidden="true"></i>
-                                <%end %>
+                                <% end %>
                               <% end %>
-                            <% end %>
-                          </div>
-                          <div class="my-icon my-view">
-                            <div class="my-tooltip">
-                              Delete
                             </div>
-                                <% if check_can_delete(@module_permission) %>
-                                  <% if ledger_book.purchase_sale_detail_id.present? %>
-                                      <%= link_to purchase_sale_detail_path(ledger_book.purchase_sale_detail_id), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, title: "Delete ledger book",:remote => true, :class => 'delete' do %>
-                                        <i class="fa fa-trash mt-2" aria-hidden="true"></i>
-                                      <% end %>
-                                  <%elsif ledger_book.order.present? %>
-                                      <%= link_to order_path(ledger_book.order_id), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, title: "Delete ledger book",:remote => true, :class => 'delete' do %>
-                                        <i class="fa fa-trash mt-2" aria-hidden="true"></i>
-                                      <% end %>
-                                  <%else%>
-                                    <%= link_to ledger_book, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, title: "Delete ledger book",:remote => true, :class => 'delete' do %>
+                            <div class="my-icon my-view">
+                              <div class="my-tooltip">
+                                Delete
+                              </div>
+                              <% if check_can_delete(@module_permission) %>
+                                <% if ledger_book.purchase_sale_detail_id.present? %>
+                                    <%= link_to purchase_sale_detail_path(ledger_book.purchase_sale_detail_id), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, title: "Delete ledger book",:remote => true, :class => 'delete' do %>
+                                      <i class="fa fa-trash mt-2" aria-hidden="true"></i>
+                                    <% end %>
+                                <%elsif ledger_book.order.present? %>
+                                    <%= link_to order_path(ledger_book.order_id), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, title: "Delete ledger book",:remote => true, :class => 'delete' do %>
+                                      <i class="fa fa-trash mt-2" aria-hidden="true"></i>
+                                    <% end %>
+                                <%else%>
+                                  <%= link_to ledger_book, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, title: "Delete ledger book",:remote => true, :class => 'delete' do %>
                                     <i class="fa fa-trash mt-2" aria-hidden="true"></i>
                                   <%end%>
-                                  <%end %>
-                                <% end %>
-                          </div>
-                          <div class="my-icon my-view">
-                            <div class="my-tooltip">
-                              Show
+                                <%end %>
+                              <% end %>
                             </div>
-                            <%if (check_can_read(@module_permission))%>
-                              <%= link_to ledger_book, title: "View Detail" do %>
-                                <i class="fa fa-eye mt-2" aria-hidden="true"></i>
-                              <%end %>
-                            <%end%>
-                          </div>
+                            <div class="my-icon my-view">
+                              <div class="my-tooltip">
+                                Show
+                              </div>
+                              <%if (check_can_read(@module_permission))%>
+                                <%= link_to ledger_book, title: "View Detail" do %>
+                                  <i class="fa fa-eye mt-2" aria-hidden="true"></i>
+                                <%end %>
+                              <%end%>
+                            </div>
+                        </div>
                       </div>
+                        <span class="icon-div-1">
+                          <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+                        </span>
                     </div>
-                      <span class="icon-div-1">
-                        <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
-                      </span>
                   </div>
-                </div>
-            </td>
+              </td>
+            </tr>
+          <% end %>
+          <tr>
+            <td></td>
+            <td><h5>Total</h5></td>
+            <td></td>
+            <td><h5><%=number_with_delimiter(@ledger_books_all&.first&.sum_debit.to_f.round(2))%></h5></td>
+            <td><h5><%=number_with_delimiter(@ledger_books_all&.first&.sum_credit.to_f.round(2))%></h5></td>
+            <td><h5><%= @total_b.present? ? number_with_delimiter(@total_b.to_f.round(2)) : number_with_delimiter(@ledger_books_all&.first&.mean_sum.to_f.round(2))%></h5></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
           </tr>
-        <% end %>
-        <tr>
-          <td></td>
-          <td><h5>Total</h5></td>
-          <td></td>
-          <td><h5><%=number_with_delimiter(@ledger_books_all&.first&.sum_debit)%></h5></td>
-          <td><h5><%=number_with_delimiter(@ledger_books_all&.first&.sum_credit)%></h5></td>
-          <td><h5><%= @total_b.present? ? number_with_delimiter(@total_b) : number_with_delimiter(@ledger_books_all&.first&.mean_sum)%></h5></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="col-lg-12 digg_pagination mt-3">
-    <div class="float-left page_info">
-      <%= page_entries_info @ledger_books %>
+        </tbody>
+      </table>
     </div>
-    <div class="float-right">
-    <%= paginate @ledger_books, :container => false %>
+    <div class="col-lg-12 digg_pagination mt-3">
+      <div class="float-left page_info">
+        <%= page_entries_info @ledger_books %>
+      </div>
+      <div class="float-right">
+      <%= paginate @ledger_books, :container => false %>
+      </div>
     </div>
-  </div>
   </div>
 </div>
 <%= form_for :bulk_import, url: bulk_import_data_path, method: :post, html: {class: "bulk-import-form"} do |f| %>
