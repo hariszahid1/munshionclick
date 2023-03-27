@@ -4,30 +4,32 @@
     <span aria-hidden="true">×</span>
   </button>
 </div>
-
-<div class="hidden m-4" id="city_list">
-  <div class="main-content-header">
-    <h1>Profit Reports</h1>
+<div class="row-lg-12 m-4">
+  <div class="float-left">
+    <h3 class="ml-2 logo-back"><i class="fas fa-chart-line mr-2"></i>Profit Reports</h3>
     <ol class="breadcrumb">
       <li class="breadcrumb-item">
         <a href="<%= root_path %>">Dashboard</a>
       </li>
       <li class="breadcrumb-item active">
-        <a href="<%= profit_reports_path %>">Profit Report</a>
+        <a href="<%= profit_reports_path %>">Profit Reports</a>
       </li>
     </ol>
   </div>
-    <div id="new_city">
-      <% if check_can_create(@module_permission) %>
-        <%= link_to new_profit_report_path,class: "btn btn-success mb-4" do %>
-          <i class="fa fa-plus" aria-hidden="false"></i>
+  <% if check_can_create(@module_permission) %>
+    <div class="float-right mt-3">
+      <%= link_to new_profit_report_path, style:"width: 150px;", class: "btn btn-success mt-3" do %>
+          <i class="fa fa-plus-circle"></i>
           Create
-        <% end %>
       <% end %>
     </div>
+  <% end %>  
+</div>
+<div class="clearfix"></div>
+<div class="hidden m-4" id="city_list">
   <div class="float-right">
-    <div class="dropdown ml-auto mr-4">
-     <span class="btn btn-info" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
+    <div class="dropdown ml-auto">
+     <span class="btn btn-outline-info btn-sm" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
       <div class="dropdown-content">
         <% if @help.present? %>
         <% @help&.help_links.each do |link| %>
@@ -37,15 +39,17 @@
       </div>
     </div>
   </div>
-  <ul class="nav nav-pills" role="tablist">
+  <div class="row">
+    <ul class="nav nav-tabs" role="tablist">
       <li class="nav-item">
-        <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab">Search</a>
+        <a class="nav-link tab-label active " data-toggle="tab" href="#search" role="tab"><i class="fa fa-search mr-2"></i>Search</a>
       </li>
-	</ul>
+    </ul>
+  </div>
 </div>
 
 <%= search_form_for @q, url: profit_reports_path, class: "admin-controls", method: "get" do |f| %>
-  <div class="row">
+  <div class="row card shadow px-3 pt-5 pb-3 ml-3 mr-3 ">
     <div class="col-lg-12 col-sm-12">
       <div class="col-lg-6 form-group float-left">
         <%= f.search_field :sale_from_gteq,class: 'form-control input-sm datepicker' ,placeholder: "Sale YYYY-MM-DD"%>
@@ -78,7 +82,7 @@
         <%= f.search_field :loan_to_lteq,class: 'form-control input-sm datepicker' ,placeholder: "Loan YYYY-MM-DD"%>
       </div>
       <div class="col-lg-2 form-group float-left">
-        <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search "></i>Search</button>
+        <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search "></i></button>
       </div>
       <%# <div class="col-lg-1 form-group float-right">
         <button class="form-control btn-danger" name="submit_pdf_a4" type="submit" value="Investment PDF A4" formtarget="_blank"><i class="fa fa-file-pdf mr-2"></i>PDF</button>
@@ -87,8 +91,8 @@
   </div>
 <% end %>
 
-<div class="mt-3">
-  <table>
+<div class="card shadow p-3 m-3 mt-3">
+  <table class="content-table">
     <thead>
       <tr>
         <th>Sale</th>
@@ -155,7 +159,7 @@
                       <div class="my-tooltip">
                         Delete
                       </div>
-                      <% if (check_can_update(@module_permission))%>
+                      <% if (check_can_delete(@module_permission))%>
                         <%= link_to profit_report_path(@profit_reports.try(:[], index)), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete icon-div' do %>
                           <i class="fa fa-trash mt-2" aria-hidden="true"></i>
                         <%end %>

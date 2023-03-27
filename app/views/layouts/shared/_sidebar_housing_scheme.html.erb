@@ -10,7 +10,7 @@
       </li>
       <span class="mt-4 mb-3 text-secondary ml-2" style="font-size: 1.2em;">Menu</span>
       <% if check_is_hidden_by_module('crms') %>
-        <li class="mb-2 <%= 'active' if request.path.start_with?(crms_path) %>">
+        <li class="mb-2 <%= 'active' if request.path.start_with?(crms_path, follow_ups_path) %>">
           <a href="<%=crms_path%>" class="">
             <i class="fas fa-user ml-3"></i>
             <span class="link-text ml-1">CRM</span>
@@ -339,7 +339,7 @@
         </ul>
       </li>
       <% if check_is_hidden_by_module('reports') %>    
-        <li class="mb-2">
+        <li class="mb-2 <%= 'active' if request.path.start_with?(profit_reports_path) %>">
           <a href="#ReportsSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
             <i class="fas fa fa-print ml-3"></i>
             <span class="link-text">Reports</span>

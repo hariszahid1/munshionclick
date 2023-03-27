@@ -67,18 +67,10 @@
   <% end %>
   <div class="clearfix">
   <hr>
-
-  <div class="col-lg-12 row ">
-    <div class="col-lg-6 form-group float-left">
-      <%= link_to profit_reports_path do %>
-        <i class="fa fa-arrow-left " aria-hidden="true"></i>
-      <% end %>
-    </div>
-
-    <div class="col-lg-6 form-group float-left">
-      <div class="col-lg-6 form-group float-left">
-        <%=f.object.id.nil? ? (f.submit class: "btn btn-success", style: "float: left")  :  (f.submit class: "btn btn-warning", style: "float: left")%>
-      </div>
-    </div>
+  <div class="float-right">
+    <%= link_to profit_reports_path, class:"btn btn-light btn-outline-secondary mr-2" do %>
+      Cancel
+    <% end %>    
+    <%=f.object.id.nil? ? (f.submit "Save",class: "btn btn-primary ", style: "float: right")  :  (f.submit "Update", class: "btn btn-warning mr-4", style: "float: right")%>
   </div>
 <% end %>
