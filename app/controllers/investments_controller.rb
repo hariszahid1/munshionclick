@@ -56,17 +56,7 @@
     @db_total = @db_by_date.values
     @cr_total = @cr_by_date.values
 
-    @today_debit_investment = @q.result.where(created_at: Time.current.all_day).sum(:debit).to_f
-    @today_credit_investment = @q.result.where(created_at: Time.current.all_day).sum(:credit).to_f
-    @yesterday_debit_investment = @q.result.where(created_at: 1.day.ago.all_day).sum(:debit).to_f
-    @yesterday_credit_investment = @q.result.where(created_at: 1.day.ago.all_day).sum(:credit).to_f
-    @percentage_debit_investment = ((@today_debit_investment - @yesterday_debit_investment) / (@yesterday_debit_investment.to_f.positive? ? @yesterday_debit_investment.to_f : 1 ) ).round(2)
-    @percentage_credit_investment = ((@today_credit_investment - @yesterday_credit_investment) / (@yesterday_credit_investment.to_f.positive? ? @yesterday_credit_investment.to_f : 1 ) ).round(2)
-    @investment_debit_count = @q.result.where(created_at: Time.current.all_day).count(:debit)
-    @investment_credit_count = @q.result.where(created_at: Time.current.all_day).count(:credit)
-    @monthly_debit_investment = @q.result.where(created_at: Time.current.all_month).sum(:debit).to_f
-    @monthly_credit_investment = @q.result.where(created_at: Time.current.all_month).sum(:credit).to_f
-
+    investments_credit_debit_report
 
   end
 
@@ -148,6 +138,20 @@
     respond_to do |format|
       format.js
     end
+  end
+
+  def investments_credit_debit_report
+    @today_debit_investment = @q.result.where(created_at: Time.current.all_day).sum(:debit).to_f.round(2)
+    @today_credit_investment = @q.result.where(created_at: Time.current.all_day).sum(:credit).to_f.round(2)
+    @investment_debit_count = @q.result.where(created_at: Time.current.all_day).count(:debit)
+    @investment_credit_count = @q.result.where(created_at: Time.current.all_day).count(:credit)
+    @monthly_debit_investment = @q.result.where(created_at: Time.current.all_month).sum(:debit).to_f.round(2)
+    @monthly_credit_investment = @q.result.where(created_at: Time.current.all_month).sum(:credit).to_f.round(2)
+    @yearly_debit_investment = @q.result.where(created_at: Time.current.all_year).sum(:debit).to_f.round(2)
+    @yearly_credit_investment = @q.result.where(created_at: Time.current.all_year).sum(:credit).to_f.round(2)
+    @yearly_debit_count_investment = @q.result.where(created_at: Time.current.all_year).count(:debit)
+    @yearly_credit_count_investment = @q.result.where(created_at: Time.current.all_year).count(:credit)
+    @yearly_report_investment = @yearly_debit_investment + @yearly_credit_investment
   end
 
   private

@@ -15,12 +15,12 @@
       <% @staff_ledger_books_pdf_credit.each do |staff_ledger_book| %>
         <tr style="font-size:14px;,font-family: Arial Black, Gadget, sans-serif">
           <td><%= staff_ledger_book.first %></td>
-          <td><%= staff_ledger_book.last%></td>
+          <td><%= number_with_delimiter(staff_ledger_book.last.to_f.round(2))%></td>
         </tr>
       <% end %>
       <tr style="font-size:20px;,font-family: Arial Black, Gadget, sans-serif">
         <td><b>Total<b></td>
-        <td><b><%=@staff_ledger_books_pdf_total_credit.to_i%></b></td>
+        <td><b><%= number_with_delimiter(@staff_ledger_books_pdf_total_credit.to_i)%></b></td>
       </tr>
     </tbody>
   </table>
@@ -44,13 +44,13 @@
         <%if staff_ledger_book.last>0%>
         <tr style="font-size:14px;,font-family: Arial Black, Gadget, sans-serif">
           <td><%= staff_ledger_book.first %></td>
-          <td><%= staff_ledger_book.last%></td>
+          <td><%= number_with_delimiter(staff_ledger_book.last.to_f.round(2))%></td>
         </tr>
         <% end %>
       <% end %>
       <tr style="font-size:20px;,font-family: Arial Black, Gadget, sans-serif">
         <td><b>Total<b></td>
-        <td><b><%=@staff_ledger_books_pdf_total_debit.to_i%></b></td>
+        <td><b><%= number_with_delimiter(@staff_ledger_books_pdf_total_debit.to_i)%></b></td>
       </tr>
     </tbody>
   </table>

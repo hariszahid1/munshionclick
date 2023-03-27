@@ -29,13 +29,13 @@
       <tr>
         <td style="border-bottom: 1px solid #000; " class = "urdu-font"><%=item.first %></td>
         <td style="border-bottom: 1px solid #000; "><%=item.last.to_f.round(2) %></td>
-        <td style="border-bottom: 1px solid #000; "><%=@products_sale[item.first].round(2) %></td>
+        <td style="border-bottom: 1px solid #000; "><%= number_with_delimiter(@products_sale[item.first].round(2)) %></td>
       </tr>
     <% end %>
     <tr>
       <td></td>
       <td></td>
-      <td><%=params[:sale].present? ? "Total Sale" : "Total Purchase"%> : <%=@products_sale_total%></td>
+      <td><%=params[:sale].present? ? "Total Sale" : "Total Purchase"%> : <%= number_with_delimiter(@products_sale_total.to_f.round(2))%></td>
     </tr>
   </table>
 </div>
