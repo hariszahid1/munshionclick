@@ -202,14 +202,18 @@ class OrdersController < ApplicationController
       @suppliers = SysUser.where(user_group: %w[Supplier Both Own])
       @customers = SysUser.where(user_group: %w[Customer Supplier Both Salesman])
     end
-    if params[:page_size].present? && params[:style].present?
-      print_pdf(@order&.sys_user&.name.to_s + ' Order-Detail', 'pdf.html', 'A3')
-    elsif params[:page_size].present?
-      print_pdf(@order&.sys_user&.name.to_s + ' Order-Detail', 'pdf.html', 'A3')
-    elsif @pos_setting.sys_type == 'FastFood'
-      render partial: '/orders/fast_food/create'
+    if @pos_setting&.extra_settings.present? && @pos_setting&.extra_settings.try(:[], 'booking_dynamic_receipt').present?
+      print_pdf(@order&.sys_user&.name.to_s + ' Order-Detail', nil, 'A4')
     else
-      print_pdf(@order&.sys_user&.name.to_s + ' Order-Detail', 'pdf.html', 'A4')
+      if params[:page_size].present? && params[:style].present?
+        print_pdf(@order&.sys_user&.name.to_s + ' Order-Detail', 'pdf.html', 'A3')
+      elsif params[:page_size].present?
+        print_pdf(@order&.sys_user&.name.to_s + ' Order-Detail', 'pdf.html', 'A3')
+      elsif @pos_setting.sys_type == 'FastFood'
+        render partial: '/orders/fast_food/create'
+      else
+        print_pdf(@order&.sys_user&.name.to_s + ' Order-Detail', 'pdf.html', 'A4')
+      end
     end
   end
 
