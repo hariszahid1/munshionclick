@@ -28,7 +28,7 @@
             <% if sale_deal.job_no.eql?('') || sale_deal.reference_no.eql?('') %>
               <span class='blinker-index'></span>
             <% end %>
-            <%= index.to_i + 1 %>
+            <%= @starting_number +index %>
           </td>
           <td><%= sale_deal.created_at.strftime('%d/%m/%y')%></td>
           <td>

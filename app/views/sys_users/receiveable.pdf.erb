@@ -39,7 +39,7 @@
            <td class="urdu-font"><b><%= sys_user.name %></b></td>
            <td><%= sys_user.user_type.title %></td>
            <td><%= sys_user.user_group %></td>
-           <td><b><%= sys_user.balance.abs %><%@sys_user_balance += sys_user.balance.abs %></b> </td>
+           <td><b><%= number_with_delimiter(sys_user.balance.abs) %><%@sys_user_balance += sys_user.balance.abs %></b> </td>
            <td><%= date.strftime("%d%b%y at %I:%M%p") %> </td>
           </tr>
           <tr>
@@ -52,7 +52,7 @@
         <td><h4><%=@count%></h4></td>
         <td></td>
         <td></td>
-        <td><h4><%=@sys_user_balance %></h4></td>
+        <td><h4><%=number_with_delimiter(@sys_user_balance) %></h4></td>
         <td></td>
       </tr>
     </tbody>
