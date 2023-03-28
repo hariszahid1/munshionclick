@@ -16,9 +16,9 @@
       <div class="col card border-radius-1 shadow p-4 m-2">
         <div class="row-lg-12 form-group float-left">
           <%if params.present? && params[:account_id]%>
-            <%= f.select :account_id , options_from_collection_for_select(@accounts, 'id', 'title', params[:account_id]), {prompt: "Select the Account"},class: "form-control", required: true,onchange:"set_account_balance(this.value,'sys_user_balance')",onkeyup:"set_account_balance(this.value,'sys_user_balance')"%>
+            <%= f.select :account_id , options_from_collection_for_select(@accounts, 'id', 'title', params[:account_id]), {prompt: "Select the Account"},class: "form-control  ", required: true,onchange:"set_account_balance(this.value,'sys_user_balance')",onkeyup:"set_account_balance(this.value,'sys_user_balance')"%>
           <%else%>
-            <%= f.select :account_id , options_from_collection_for_select(@accounts, 'id', 'title', (f.object.account_id.present? ? f.object.account_id : @account)), {prompt: "Select the Account"},class: "form-control", required: true,onchange:"set_account_balance(this.value,'sys_user_balance')",onkeyup:"set_account_balance(this.value,'sys_user_balance')"%>
+            <%= f.select :account_id , options_from_collection_for_select(@accounts, 'id', 'title', (f.object.account_id.present? ? f.object.account_id : @account)), {prompt: "Select the Account"},class: "form-control chosen-select", required: true,onchange:"set_account_balance(this.value,'sys_user_balance')",onkeyup:"set_account_balance(this.value,'sys_user_balance')"%>
           <%end%>
         </div>
         <% if params[:jama].present?%>

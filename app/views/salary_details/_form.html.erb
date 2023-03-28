@@ -42,7 +42,7 @@
           <%= f.select :staff_id, options_from_collection_for_select(@staffs_list, 'id', 'name',f.object.staff_id), {prompt: "Select the Staff",required: true}, {class: "chosen-select", onchange: 'get_staff_wage_rate_info(this.value); return false;', required: true } %>
         </td>
         <td>
-          <%= f.select :product_id, options_from_collection_for_select(@products, 'id', 'title',f.object.product_id), {prompt: "Select the Product",required: true}, {class: ""} %>
+          <%= f.select :product_id, options_from_collection_for_select(@products, 'id', 'title',f.object.product_id), {prompt: "Select the Product",required: true}, {class: "chosen-select"} %>
         </td>
         <td>
           <%= f.date_select :created_at %>
@@ -70,8 +70,8 @@
   </table>
 
   <div class="actions">
-    <%= link_to 'Salaries Details', salary_details_path, class: "btn btn-info" %>
-    <%= f.submit class: "btn btn-primary", style: "float: right" %>
+    <%= link_to 'Cancel', salary_details_path, class: "btn btn-outline-secondary" %>
+    <%= f.submit "Update" ,class: "btn btn-warning", style: "float: right" %>
   </div>
 
 <% end %>

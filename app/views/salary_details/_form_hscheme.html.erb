@@ -27,13 +27,11 @@
     <%= render 'payments_fields_new', f: payments %>
   <% end %>
   <div class="actions">
-    <%= link_to 'Salaries Details', salary_details_path, class: "btn btn-info" %>
-    <%= f.submit class: "btn btn-primary", style: "float: right" %>
+    <%= link_to 'Cancel', salary_details_path, class: "btn btn-outline-secondary" %>
+    <%= f.submit "Save", class: "btn btn-primary", style: "float: right" %>
   </div>
 
 <% end %>
-
-
 
 <script>
   $(document).ready(function() {
