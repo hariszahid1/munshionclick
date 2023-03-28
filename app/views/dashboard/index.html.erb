@@ -14,6 +14,8 @@
   <%= render 'dashboard/developer/index_developer', products: @products %>
 <%elsif pos_setting_sys_type=="Dealer"%>
   <%= render 'dashboard/dealer/index_dealer', products: @products %>
+<%elsif pos_setting_sys_type=="ColdStorage"%>
+  <%= render 'dashboard/cold_storage/index', products: @products %>
 <%else%>
   <%= render 'dashboard/pos/index', products: @products %>
 <%end%>

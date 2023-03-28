@@ -103,9 +103,15 @@
                               <div class="my-tooltip">
                                 Edit
                               </div>
-                              <%= link_to edit_loan_path(loan), class:"icon-div" do %>
+                              <% if loan.credit.to_i.positive? %>
+                              <%= link_to edit_loan_path(id: loan.id, jama: true), class:"icon-div" do %>
                                 <i class="fa fa-edit mt-2" aria-hidden="true"></i>
                               <%end %>
+                              <% else %>
+                                <%= link_to edit_loan_path(loan), class:"icon-div" do %>
+                                  <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+                                <%end %>
+                              <% end %>
                             </div>
                           <% end %>
                           <%if (check_can_delete(@module_permission))%>

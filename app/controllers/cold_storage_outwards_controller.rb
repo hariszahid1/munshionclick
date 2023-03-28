@@ -219,7 +219,7 @@ class ColdStorageOutwardsController < ApplicationController
   def download_outward_show_pdf_file
     sorted_outward_show_data
     if params["nakasi"].present?
-      generate_pdf(@sorted_data.as_json, 'Outward', 'pdf.html', 'A4', false, 'cold_storage_outwards/nakasi.pdf.erb')
+      generate_pdf(@sorted_data.as_json, 'Outward', nil, 'A4', false, 'cold_storage_outwards/nakasi.pdf.erb')
     else
       generate_pdf(@sorted_data.as_json, 'Outward', 'pdf.html', 'A4', false, 'cold_storage_outwards/show.pdf.erb')
     end

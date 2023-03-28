@@ -80,7 +80,7 @@ class LoansController < ApplicationController
     @loan.destroy
     respond_to do |format|
       AccountPaymentJob.perform_later(current_user.superAdmin.company_type, account.id)
-      format.html { redirect_to loan_url, notice: 'Loan was successfully destroyed.' }
+      format.html { redirect_to loans_path, notice: 'Loan was successfully destroyed.' }
       format.json { head :no_content }
       format.js   { render layout: false }
     end
