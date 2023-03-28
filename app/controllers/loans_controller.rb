@@ -18,6 +18,7 @@ class LoansController < ApplicationController
     
     @options_for_select = Loan.all
     @custom_pagination = params[:limit].present? ? params[:limit] : 25
+    @starting_number = 1 + 25 * ([params[:page].to_i, 1].max - 1)
     @custom_pagination = @pos_setting.custom_pagination['loans'] if @pos_setting&.custom_pagination.present? && @pos_setting&.custom_pagination['loans'].present?
     @loans = @q.result(distinct: true).page(params[:page]).per(@custom_pagination)
     download_loans_pdf_file if params[:pdf].present?
