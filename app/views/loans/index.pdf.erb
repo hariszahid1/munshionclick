@@ -1,51 +1,5 @@
-<html>
-  <head>
-    <style>
-      .border-bottom{
-        border-bottom: double 4px;
-      }
-      .text-center{
-        text-align: center;
-      }
-    </style>
-  </head>
-  <body>
-    <% @date = Date.today  %>
-    <% @time = DateTime.now %>
-    <% @time = Time.zone.now %>
-    <div>
-      <p class="border-bottom"></p>
-      <h1 class="text-center">Loan Details</h1>
-      <h1 class="text-center">
-        Date: <b><span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%></span>
-        Time: <span><%=@time.strftime("at %I:%M%p")%></span></b>
-      </h1>
-      <p class="border-bottom"></p>
-      <p class="text-center">Report by: <%=current_user.name%></p>
-    </div>
-    <div>
-      <table>
-        <thead class="lite-gray">
-          <th class="text-center">Credit</th>
-          <th class="text-center">Debit</th>
-          <th class="text-center">Account title</th>
-          <th class="text-center">Comment</th>
-          <th class="text-center">Time</th>
-
-        </thead>
-        <tbody>
-          <% data.each_with_index do |loan, index| %>
-            <tr>
-              <td class="text-center"><%= number_with_delimiter(loan['credit']) %></td>
-              <td class="text-center"><%= loan['debit'] %>
-              <td class="text-center"><%= loan['paid_by'] %></td>
-              <td class="text-center"><%= loan['comment'] %></td>
-  
-              <td class="text-center"><%= Date.parse(loan['date'])&.strftime('%d-%m-%Y') %></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
-  </body>
-</html>
+<% if @pos_setting.sys_type.eql?('Dealer')%>
+  <%= render 'loans/dealer/index'%>
+<%else%>
+  <%= render 'index'%>
+<%end%>

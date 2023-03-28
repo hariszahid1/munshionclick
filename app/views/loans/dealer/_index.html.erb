@@ -1,0 +1,288 @@
+<div class="row-lg-12 m-4">
+  <div class="float-left">
+    <h2 class="ml-2 logo-back"><i class="fa fa-signal mr-2"></i>
+      Loan Sheet
+    </h2>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<%= root_path %>">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active">
+        <a href="<%= loans_path %>">Loan Sheet</a>
+      </li>
+    </ol>
+  </div>
+  <div id="new_sale_deal">
+    <%= link_to new_loan_path(debit: true), class: "btn btn-outline-success mr-1 float-right", style:"width: 150px;" do %>
+      Loan Pay
+    <% end %>
+    <%= link_to new_loan_path(jama: true), class: "btn btn-outline-primary mr-1 float-right", style:"width: 150px;" do %>
+      Loan Recieve
+    <% end %>
+  </div>
+</div>
+
+<div class="clearfix"></div>
+<div class="float-right">
+  <div class="dropdown ml-auto">
+    <span class="btn btn-outline-info btn-sm mt-2" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
+    <div class="dropdown-content">
+      <% if @help.present? %>
+      <% @help&.help_links.each do |link| %>
+      <a type="button" class="" target="_blank" href="<%= link[1] %>" >Help in <%= link[0] %></a>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <ul class="nav nav-tabs ml-1" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link tab-label active investment-search-exp-tab" data-toggle="tab" href="#search" role="tab"><i class="fa fa-search mr-2"></i>Search</a>
+    </li>
+  </ul>
+</div>
+
+<div class="tab-content">
+  <div class="tab-pane active no-tab-border mb-3 mt-2" id="search" role="tabpanel">
+    <%= search_form_for @q, url: loans_path, class: "admin-controls", method: "get" do |f| %>
+      <div class="card shadow mb-3 p-3">
+        <div class="row d-flex mt-3">
+          <div class="col">
+            <div class="col-lg-3 form-group float-left d-flex">
+              <%= f.search_field :created_at, id: "reportrange", class: 'form-control' %>
+            </div>
+            <div class="d-none">
+              <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker',placeholder: "YYYY-MM-DD" %>
+              <%= f.search_field :created_at_lteq, class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
+            </div>
+            <div class="col-lg-3 form-group float-left">
+              <%= f.search_field :comment_cont, placeholder: "search by comment", title: "search by comment" ,:class=>"form-control" %>
+            </div>
+            <button class="form-control btn btn-primary" style="width: 100px;" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
+            <button type='submit' class='dynamic-submit-btn d-none' formtarget='_blank'></button>
+          </div>
+        </div>
+      </div>
+    <% end %>
+    <div class="investment-book-index-card card shadow mt-2 p-4">
+      <div class="row d-flex" style="position: absolute;">
+        <div class="mt-4 ml-3">
+          <%if (check_can_download_pdf(@module_permission))%>
+            <button class="btn btn-danger files-download-btn file-btn-color mr-1" title= "download cities pdf" name="pdf" type="submit" value="pdf" formtarget="_blank" style="width:80px">PDF </button>
+          <% end %>
+        </div>
+      </div>
+      <div class="mt-3">
+        <table data-toggle="table" data-search="true" id="investment_table" class="content-table">
+          <thead>
+            <tr>
+              <th>Sr#</th>
+              <th>Date</th>
+              <th>Loan Received</th>
+              <th>Loan Given</th>
+              <th class="urdu-font">Comment</th>
+              <th class="border_none">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @loans.each_with_index do |loan, index|%>
+              <tr>
+                <td><%= @starting_number + index %></td>
+                <td><%= loan.created_at.strftime('%d-%m-%Y') %></td>
+                <td><%= number_with_delimiter(loan.credit.to_f.round(2)) %></td>
+                <td><%= number_with_delimiter(loan.debit.to_f.round(2)) %></td>
+                <td><span title="<%= loan.comment %>" class='truncate-text'><%= loan.comment %></span></td>
+                <td class="p-3">
+                  <div class="icon-container-1">
+                    <div class="my-icon-1 my-view-1">
+                      <div class="my-tooltip-1">
+                        <div class="icon-container">
+                          <%if (check_can_update(@module_permission))%>
+                            <div class="my-icon my-view">
+                              <div class="my-tooltip">
+                                Edit
+                              </div>
+                              <%= link_to edit_loan_path(loan), class:"icon-div" do %>
+                                <i class="fa fa-edit mt-2" aria-hidden="true"></i>
+                              <%end %>
+                            </div>
+                          <% end %>
+                          <%if (check_can_delete(@module_permission))%>
+                            <div class="my-icon my-view">
+                              <div class="my-tooltip">
+                                Delete
+                              </div>
+                                <%= link_to loan, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :class => 'delete icon-div' do %>
+                                  <i class="fa fa-trash mt-2" aria-hidden="true"></i>
+                                <%end %>
+                            </div>
+                          <% end %>
+                          <%if (check_can_read(@module_permission))%>
+                            <div class="my-icon my-view">
+                              <div class="my-tooltip">
+                                Show
+                              </div>
+                                <%= link_to loan_path(loan), remote: true, class:"icon-div" do %>
+                                  <i class="fa fa-eye mt-2" aria-hidden="true"></i>
+                                <%end %>
+                            </div>
+                          <% end %>
+                        </div>
+                      </div>
+                      <span class="icon-div-1">
+                        <i class="fa fa-ellipsis-v mt-2" aria-hidden="true"></i>
+                      </span>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+            <tr>
+              <td><h5>Total</h5></td>
+              <td></td>
+              <td><h5><%= number_with_delimiter(@total_loan&.first&.last.to_f.round(2)) %></h5></td>
+              <td><h5><%=number_with_delimiter(@total_loan&.first&.first.to_f.round(2)) %></h5></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-lg-12 digg_pagination mt-3">
+        <div class="float-left page_info">
+          <%= page_entries_info @loans %>
+        </div>
+        <div class="float-right">
+        <%= paginate @loans, :container => false %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="tab-pane card shadow mt-2  p-3" id="import-export" role="tabpanel">
+    <p>
+      <%= search_form_for @q, url: investments_path, class: "admin-controls", method: "get" do |f| %>
+        <div class="d-flex">
+          <button class="btn btn-info ml-2" name="export_data" type="submit" value="export_data">Export Data</button>
+          <button class="btn btn-danger ml-2" type="button" data-toggle="modal" data-target="#importFile">Import Data</button>
+        </div>
+      <% end %>
+    </p>
+  </div>
+</div>
+
+  <%= form_for :bulk_import, url: bulk_import_data_path, method: :post, html: {class: "bulk-import-form"} do |f| %>
+    <div class="modal fade" id="importFile" tabindex="-1" role="dialog" aria-labelledby="importFileTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Import file</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <%= f.file_field :file, required: true, accept: '.csv' %>
+            <%= f.hidden_field :table_name, value: 'Investment' %>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <%= f.submit 'Import', class: 'btn btn-primary' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+  <div class="show-data"></div>
+<script>
+  $(document).ready(function() {
+    if ($(".bootstrap-table").length == 0){
+      $("table").bootstrapTable();
+    }
+    $("#investment_list").removeClass('hidden');
+    FontAwesome.dom.i2svg();
+
+    $('.investment-logs-tab').on('click', function(){
+      $('#investment-logs').click();
+      $('.investment-book-index-card').addClass('d-none')
+    })
+    $('.files-download-btn').on('click', function(){
+      var name_btn = $(this).attr('name')
+      $('.dynamic-submit-btn').attr('name', name_btn)
+      $('.dynamic-submit-btn').val($(this).val())
+      $('.dynamic-submit-btn').click()
+    })
+
+    $('.investment-search-exp-tab').on('click', function(){
+      $('.investment-book-index-card').removeClass('d-none')
+    })
+  });
+  $(document).ready(function() {
+    setTimeout(function(){
+      $(".chosen-select").chosen({
+  allow_single_deselect: true,
+  width: '100%'
+});
+    }, 50);
+  });
+
+  $(function() {
+    setTimeout(function() { $(".my-loader").fadeOut(1500); }, 5000)
+  })
+
+  $('#pagination-limit').on('change', function(){
+    $(this).closest('form').submit();
+  })
+
+  $(function() {
+
+    var start = moment();
+    var end = moment();
+
+    function cb(start, end) {
+        $('#reportrange span').html(start.format('YYYY/MM/DD') + ' - ' + end.format('YYYY/MM/DD'));
+    }
+
+    var gteq = $('#q_created_at_gteq').val()
+    var lteq = $('#q_created_at_lteq').val()
+    if (gteq !== ''){
+      start = moment(new Date(gteq))
+    }
+    if(lteq !== ''){
+      end = moment(new Date(lteq))
+    }
+
+    $('#reportrange').daterangepicker({
+        startDate: start,
+        endDate: end,
+      ranges: {
+          'Select Date Range':[],
+           'Today': [moment(), moment()],
+           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+           'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+           'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+           '1 Year': [moment().subtract(1, 'years')],
+           '5 Year': [moment().subtract(5, 'years')],
+           'This Month': [moment().startOf('month'), moment().endOf('month')],
+           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+           'This Month Last Year': [moment().subtract(1, 'years').startOf('month'), moment().subtract(1, 'years').endOf('month')],
+           'This Year': [moment().startOf('year'), moment().endOf('year')],
+           'Last Year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')]
+        },
+        locale: {
+          format: 'YYYY/MM/DD'
+        }
+    }, cb);
+
+    cb(start, end);
+
+    $('#reportrange').on('change', function(){
+      var value = $(this).val()
+      var greater_eq = value.split(' - ')[0]
+      var less_eq = value.split(' - ')[1]
+      $('#q_created_at_gteq').val(greater_eq)
+      $('#q_created_at_lteq').val(less_eq)
+    })
+
+  });
+</script>

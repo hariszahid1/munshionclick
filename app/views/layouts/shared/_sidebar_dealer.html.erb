@@ -24,6 +24,22 @@
                 </a>
             </li>
         <% end %>
+        <% if check_is_hidden_by_module('staff_ledger_books') %>
+            <li class="activ-link">
+                <a href="<%= salary_sheet_staff_ledger_books_path %>" class="activ-link">
+                  <i class="fas fa-money-check-alt ml-3"></i>
+                  <span class="link-text">Salary Sheet</span>
+                </a>
+            </li>
+        <% end %>
+        <% if check_is_hidden_by_module('loans') %>
+            <li class="activ-link">
+                <a href="<%= loans_path %>" class="activ-link">
+                  <i class="fa fa-signal ml-3"></i>
+                  <span class="link-text">Loan Sheet</span>
+                </a>
+            </li>
+        <% end %>
         <span class="mt-4 mb-3 text-secondary ml-2" style="font-size: 1.2em;">Menu</span>
         <% if check_is_hidden_by_module('crms') %>
             <li class="mt-4 mb-3 <%= 'active' if request.path.start_with?(crms_path) %>">
@@ -105,7 +121,7 @@
              <i class="fas fa fa-book ml-3"></i>
              <span class="link-text ml-1">Accounts</span>
            </a>
-           <ul class="collapse list-unstyled border-radius-1 <%= 'show' if request.path.start_with?(accounts_path, payments_path, ledger_books_path, staff_ledger_books_path, expense_vouchers_path, expenses_path, expense_types_path, investments_path, loans_path) %>" id="AccountSubmenu">
+           <ul class="collapse list-unstyled border-radius-1 <%= 'show' if request.path.start_with?(accounts_path, payments_path, ledger_books_path, staff_ledger_books_path, expense_vouchers_path, expenses_path, expense_types_path, investments_path) %>" id="AccountSubmenu">
              <% if check_is_hidden_by_module('accounts') %>
                <li class="<%= 'active' if request.path.start_with?(accounts_path) %>">
                  <a href="<%= accounts_path%>" class="">
@@ -113,14 +129,6 @@
                    <span class="link-text">Account Details</span>
                  </a>
                </li>
-             <% end %>
-             <% if check_is_hidden_by_module('staff_ledger_books') %>
-               <!--li class="<%= 'active' if request.path.start_with?(staff_ledger_books_path) %>">
-                 <a href="<%= salary_sheet_staff_ledger_books_path %>" class="">
-                   <i class="fas fa-plus"></i>
-                   <span class="link-text">Salary Sheet</span>
-                 </a>
-               </li-->
              <% end %>
              <% if check_is_hidden_by_module('payments') %>
                <li class="<%= 'active' if request.path.start_with?(payments_path) %>">
@@ -184,14 +192,6 @@
                    <i class="fas fa-plus"></i>
                    <span class="link-text">Investment</span>
                  <%end%>
-               </li>
-             <% end %>
-             <% if check_is_hidden_by_module('loans') %>  
-               <li class="<%= 'active' if request.path.start_with?(loans_path) %>">
-                 <%= link_to loans_path do %>
-                   <i class="fas fa-plus"></i>
-                   <span class="link-text">Loan</span>
-                 <% end %>
                </li>
              <% end %>
            </ul>
