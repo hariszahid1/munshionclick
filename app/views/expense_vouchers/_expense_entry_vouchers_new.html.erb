@@ -6,7 +6,7 @@
       <%= f.hidden_field :id %>
       <%=f.text_field :amount,step: :any,class:'expense', required: true, hide_label: true,placeholder: :Amount,onchange:"expenseVoucherUpdate()",onkeyup:"expenseVoucherUpdate()"%>
     </div>
-    <div class="col-lg-4 form-group float-left"><%= f.select :expense_type_id, options_from_collection_for_select(@expense_types, 'id', 'title', f.object.expense_type_id), {hide_label:true,prompt: "Select the Expense Type"}, required: true,class: "form-control" %></div>
+    <div class="col-lg-4 form-group float-left"><%= f.select :expense_type_id, options_from_collection_for_select(@expense_types, 'id', 'title', f.object.expense_type_id), {hide_label:true,prompt: "Select the Expense Type"}, required: true,class: "form-control chosen-select" %></div>
     <div class="col-lg-3 form-group float-left"><%= f.text_area :comment, placeholder:"Enter Comment for Expense Entry", hide_label: true%></div>
     <% if (f.object.id.nil? || check_can_delete(@module_permission))%>
       <div class="form-group float-right links">

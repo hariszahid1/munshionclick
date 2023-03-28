@@ -32,7 +32,7 @@
 <hr>
 
 <div class="col-lg-6 form-group float-left">
-    <%= f.select :item_type_id, options_from_collection_for_select(@item_types, 'id', 'title', f.object.item_type_id),{include_blank: "Please Select Type"},{class: "form-control", required: true} %>
+    <%= f.select :item_type_id, options_from_collection_for_select(@item_types, 'id', 'title', f.object.item_type_id),{include_blank: "Please Select Type"},{class: "form-control chosen-select", required: true} %>
   </div>
 
   <div class="col-lg-6 form-group float-left">
@@ -52,11 +52,11 @@
   </div>
 
   <div class="col-lg-6 form-group float-left">
-    <%= f.select :product_category_id, options_from_collection_for_select(@product_categories, 'id', 'title', f.object.product_category_id), {prompt: "Select the Category", label: "Unit Category"},{class: "form-control", required: true} %>
+    <%= f.select :product_category_id, options_from_collection_for_select(@product_categories, 'id', 'title', f.object.product_category_id), {prompt: "Select the Category", label: "Unit Category"},{class: "form-control chosen-select", required: true} %>
   </div>
 
   <div class="col-lg-6 form-group float-left">
-    <%= f.select :product_sub_category_id, options_from_collection_for_select(@product_sub_categories, 'id', 'title', f.object.product_sub_category_id), {prompt: "Select the Sub Category", label: "Unit Sub Category"},{class: "form-control"}%>
+    <%= f.select :product_sub_category_id, options_from_collection_for_select(@product_sub_categories, 'id', 'title', f.object.product_sub_category_id), {prompt: "Select the Sub Category", label: "Unit Sub Category"},{class: "form-control chosen-select"}%>
   </div>
 
   <div class="col-lg-6 form-group float-left hidden">

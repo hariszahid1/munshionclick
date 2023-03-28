@@ -30,7 +30,7 @@
       <%= f.number_field :account_id, value: "#{@account&.id}", class: 'd-none', hide_label: true%>
     <% else %>
       <div class="col">
-        <%= f.select :account_id , options_from_collection_for_select(@accounts, 'id', 'title', f.object.account_id), {prompt: "Select the Account"}, required: true%>
+        <%= f.select :account_id , options_from_collection_for_select(@accounts, 'id', 'title', f.object.account_id), {prompt: "Select the Account"}, class: 'chosen-select', required: true%>
       </div>
     <% end %>
     <div class="col">

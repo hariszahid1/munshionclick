@@ -18,7 +18,7 @@
         <%= f.text_field :cnic , placeholder:"Enter CNIC"%>
       </div>
       <div class="col-lg-6 form-group float-left">
-        <%= f.select :user_group, SysUser.user_groups.map { |key, value| [key.humanize, key] },{include_blank: "Please Select User Group"},{class: "form-control", required: true} %>
+        <%= f.select :user_group, SysUser.user_groups.map { |key, value| [key.humanize, key] },{include_blank: "Please Select User Group"},{class: "form-control chosen-select", required: true} %>
       </div>
       <div class="col-lg-5 form-group float-left">
         <label> First Name
@@ -28,7 +28,7 @@
       </div>
       <div class="col-lg-2 form-group float-left">
         <label> Relation </label>
-        <%= f.select :suffix, options_for_select(['S/O','D/O','W/O'], f.object.suffix), {hide_label: true , include_blank: "Please Select Relation"}, class:"form-control" %>
+        <%= f.select :suffix, options_for_select(['S/O','D/O','W/O'], f.object.suffix), {hide_label: true , include_blank: "Please Select Relation"}, class:"form-control chosen-select" %>
       </div>
       <div class="col-lg-5 form-group float-left">
         <label> Last Name
@@ -37,12 +37,12 @@
         <%= f.text_field :father, placeholder:"Enter Father Name", hide_label: true ,class: 'urdu-font' %>
       </div>
       <div class="col-lg-6 form-group float-left">
-        <%= f.select :user_type_id, options_from_collection_for_select(@user_types, 'id', 'title', f.object.user_type_id.present? ? f.object.user_type_id : @user_types.first.id ),{include_blank: "Please Select User Type"}, required: true, class: 'urdu-font form-control'%>
+        <%= f.select :user_type_id, options_from_collection_for_select(@user_types, 'id', 'title', f.object.user_type_id.present? ? f.object.user_type_id : @user_types.first.id ),{include_blank: "Please Select User Type"}, required: true, class: 'urdu-font form-control chosen-select'%>
       </div>
       <div class="col-lg-6" style="float:left">
       </div>
       <div class="col-lg-6 form-group float-left">
-        <%= f.select :status, SysUser.statuses.map { |key, value| [key.humanize, key] },{include_blank: "Please Select Status"},{class: "form-control"} %>
+        <%= f.select :status, SysUser.statuses.map { |key, value| [key.humanize, key] },{include_blank: "Please Select Status"},{class: "form-control chosen-select"} %>
       </div>
       <div class="clearfix"> </div> 
     </div>
