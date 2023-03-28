@@ -25,9 +25,14 @@
     <% end %>
   </div>
   <div class="row mb-4">
-    <div class="col">
-      <%= f.select :account_id , options_from_collection_for_select(@accounts, 'id', 'title', f.object.account_id), {prompt: "Select the Account"}, required: true%>
-    </div>
+    <% if @pos_setting.sys_type.eql?('Dealer') %>
+      <% @account = Account.find_by(title: 'SalaryLoan')%>
+      <%= f.number_field :account_id, value: "#{@account&.id}", class: 'd-none', hide_label: true%>
+    <% else %>
+      <div class="col">
+        <%= f.select :account_id , options_from_collection_for_select(@accounts, 'id', 'title', f.object.account_id), {prompt: "Select the Account"}, class: 'chosen-select', required: true%>
+      </div>
+    <% end %>
     <div class="col">
       <%= f.date_select :created_at %>
     </div>
