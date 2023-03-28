@@ -175,10 +175,11 @@
                     <%end %>
                   </b>
                 </td>
-                <td><b><%= purchase_sale_detail.purchase_sale_items.count rescue 0 %></b></td>
+                <% product = purchase_sale_detail.order&.order_items&.first&.product %>
+                <td><b><%= product&.title %></b></td>
                 <td><b><%= number_with_delimiter(purchase_sale_detail.total_bill.to_f.round(2)) rescue 0 %></b></td>
                 <td><b><%= number_with_delimiter(purchase_sale_detail.amount.to_f.round(2)) rescue 0%></b></td>
-                <td><b><%= number_with_delimiter(purchase_sale_detail.total_bill.to_f.round(2) - purchase_sale_detail.amount.to_f.round(2)) rescue 0%></b></td>
+                <td><b><%= number_with_delimiter(purchase_sale_detail.ledger_book&.balance.round(2)) %></b></td>
                 <td>
                   <b>
                     <% if (purchase_sale_detail.total_bill.to_i - (purchase_sale_detail.amount.to_f+purchase_sale_detail.discount_price.to_f)) > 0 %>
