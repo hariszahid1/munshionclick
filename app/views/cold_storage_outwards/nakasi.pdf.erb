@@ -1,5 +1,6 @@
 <html>
   <head>
+    <%= wicked_pdf_stylesheet_link_tag ("pdf") -%>
     <style>
       .border-bottom{
         border-bottom: double 4px;
@@ -26,19 +27,23 @@
         display: flex;
         display: -webkit-box;
       }
+      .div-width{
+       width: 50%;
+      }
     </style>
   </head>
-  <body>
+  <body class='bond_pos_pdf'>
+  <div class = "div-width" >
     <% @date = Date.today  %>
     <% @time = DateTime.now %>
     <% @time = Time.zone.now %>
     <div>
+      <h1 class= "text-center">Qasim Cold Storage</h1>
       <p class="border-bottom"></p>
       <h2 class="text-center text-large"> Nakasi Gate Pass OutWard</h2>
       <h3 class= "text-large text-center">Party Name: <%= data.first['name']%></h3>
       <div class='d-flex'>
-        <h3 class= "text-large" style='padding-left: 254px;'>Marka No: <%= data.first['items'].first['marka']%></h3>
-        <h3 class="text-large" style='padding-left: 80px;'>
+        <h3 class="text-large" style='padding-left: 190px;'>
           <b><span><%= data.first['date'] %></span></b>
         </h3>
       </div>
@@ -48,6 +53,7 @@
     <div>
       <table>
         <thead class="lite-gray">
+          <th class="text-center text-large">Marka No</th>
           <th class="text-center text-large">Challan No</th>
           <th class="text-center text-large">Out Qty</th>
           <th class="text-center text-large">Room No</th>
@@ -57,6 +63,7 @@
           <% data.each_with_index do |order, index| %>
             <% order['items'].each_with_index do |item, index| %>
               <tr>
+                <td class="text-center text-large"><%= item['marka'] %></td>
                 <td class="text-center text-large"><%= item['challan_no'] %></td>
                 <td class="text-center text-large"><%= item['quantity'] %></td>
                 <td class="text-center text-large"><%= item['room_num'] %></td>
@@ -68,10 +75,12 @@
             <th class="text-large">Sub Total: </th>
             <th></th>
             <th></th>
+            <th></th>
             <th class="text-large"><%= data.first['total_quantity'] %></th>
           </tr>
           <tr>
             <th class="text-large">Grand Total: </th>
+            <th></th>
             <th></th>
             <th></th>
             <th class="text-large"><%= data.first['total_quantity'] %></th>
@@ -80,4 +89,5 @@
       </table>
     </div>
    </body>
+  </div> 
 </html>   

@@ -22,7 +22,7 @@
     <% @time = Time.zone.now %>
     <div>
       <p class="border-bottom"></p>
-      <h1 class="text-center">Outward List</h1>
+      <h1 class="text-center">Phariya Report</h1>
       <h2 class="text-left">Outward Date</h1>
       <h3 class="text-left">
         <b><span>From: <%= @pdf_orders.first&.created_at&.strftime("%d-%b-%y at %I:%M %p") %></span>
@@ -36,6 +36,7 @@
       <p class="text-center">Report by: <%=current_user.name%></p>
     </div>
     <div>
+       <h3 class="text-center">With Panelty</h3>
       <table>
         <thead class="lite-gray">
           <th class="text-center">Gate Pass No</th>
@@ -54,6 +55,7 @@
         <tbody>
           <% data.each_with_index do |order, index| %>
             <% order['items'].each_with_index do |item, index| %>
+            <% if  item['total_pandri_bill'] > 0 %>
               <tr>
                 <td class="text-center"><%= order['id'] %></td>
                 <td class="text-center"><%= order['name'] %></td>
@@ -68,6 +70,46 @@
                 <td class="text-center"><%= item['panelty_pandri'] %></td>
                 <td class="text-center"><%= item['total_pandri_bill'] %></td>
               </tr>
+            <% end %>  
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+      <h3 class="text-center">Without Panelty</h3>
+      <table>
+        <thead class="lite-gray">
+          <th class="text-center">Gate Pass No</th>
+          <th class="text-center">Party Name</th>
+          <th class="text-center">Marka No</th>
+          <th class="text-center">Challan No</th>
+          <th class="text-center">Product Name</th>
+          <th class="text-center">Out Qty</th>
+          <th class="text-center">In Date</th>
+          <th class="text-center">Close Date</th>
+          <th class="text-center">Outward Date</th>
+          <th class="text-center">Rent Pandri</th>
+          <th class="text-center">Penalty Pandri</th>
+          <th class="text-center">total bill</th>
+        </thead>
+        <tbody>
+          <% data.each_with_index do |order, index| %>
+            <% order['items'].each_with_index do |item, index| %>
+            <% if  item['total_pandri_bill'] == 0 %>
+              <tr>
+                <td class="text-center"><%= order['id'] %></td>
+                <td class="text-center"><%= order['name'] %></td>
+                <td class="text-center"><%= item['marka'] %></td>
+                <td class="text-center"><%= item['challan_no'] %></td>
+                <td class="text-center"><%= item['product'] %></td>
+                <td class="text-center"><%= item['quantity'] %></td>
+                <td class="text-center"><%= item['in_date'] %></td>
+                <td class="text-center"><%= item['close_date'] %></td>
+                <td class="text-center"><%= order['date'] %></td>
+                <td class="text-center"><%= item['rent_pandri'] %></td>
+                <td class="text-center"><%= item['panelty_pandri'] %></td>
+                <td class="text-center"><%= item['total_pandri_bill'] %></td>
+              </tr>
+            <% end %>  
             <% end %>
           <% end %>
           <tr>
