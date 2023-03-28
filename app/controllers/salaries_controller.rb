@@ -71,6 +71,9 @@ class SalariesController < ApplicationController
   end
 
   def advance
+    if params[:salary_sheet].present?
+      session[:salary_sheet_redirect] = salary_sheet_staff_ledger_books_path
+    end
     @staffs_list = activated_list("Staff")
     @salary = Salary.new(payment_type: :Advance)
     @accounts=Account.all
@@ -107,6 +110,9 @@ class SalariesController < ApplicationController
 
   # GET /salaries/1/edit
   def edit_advance
+    if params[:salary_sheet].present?
+      session[:salary_sheet_redirect] = salary_sheet_staff_ledger_books_path
+    end
     @staffs_list = activated_list("Staff")
     @accounts=Account.all
   end
@@ -133,6 +139,7 @@ class SalariesController < ApplicationController
           else
             redirect_url_sal = salaries_path
           end
+          redirect_url_sal = session[:salary_sheet_redirect] if session[:salary_sheet_redirect].present?
           format.html { redirect_to redirect_url_sal, notice: @salary.payment_type+' was successfully created.' }
           format.js   { }
         elsif @salary.payment_type=="Loan"
@@ -171,7 +178,9 @@ class SalariesController < ApplicationController
           SalaryDetailJob.perform_later(current_user.superAdmin.company_type,@salary.staff_id)
           AccountPaymentJob.perform_later(current_user.superAdmin.company_type,@salary.account_id)
         end
-        format.html { redirect_to salaries_path, notice: @salary.payment_type+' was successfully updated.' }
+        redirect_url = salaries_path
+        redirect_url = session[:salary_sheet_redirect] if session[:salary_sheet_redirect].present?
+        format.html { redirect_to redirect_url, notice: @salary.payment_type+' was successfully updated.' }
         format.json { render :show, status: :ok, location: @salary }
       else
         @staffs_list = activated_list("Staff")

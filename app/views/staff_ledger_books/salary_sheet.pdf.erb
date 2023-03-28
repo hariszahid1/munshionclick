@@ -1,0 +1,83 @@
+<html>
+  <head>
+    <style>
+      .border-bottom{
+        border-bottom: double 4px;
+      }
+      .text-center{
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <% @date = Date.today  %>
+    <% @time = DateTime.now %>
+    <% @time = Time.zone.now %>
+    <div>
+      <p class="border-bottom"></p>
+      <h1 class="text-center">Salary Sheet</h1>
+      <h1 class="text-center">
+        Date: <b><span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%></span>
+        Time: <span><%=@time.strftime("at %I:%M%p")%></span></b>
+      </h1>
+      <p class="border-bottom"></p>
+      <p class="text-center">Report by: <%=current_user.name%></p>
+    </div>
+    <div>
+      <table data-toggle="table" data-search="true" id="ledger_book_table" class=" overflow-hidden border-radius-1">
+        <thead>
+          <tr>
+            <th>SR #</th>
+            <th>Date</th>
+            <th>Name</th>
+            <th>Salary</th>
+            <th>Advance</th>
+            <th>Balance</th>
+            <th>Comment</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @staff_ledger_books.each_with_index do |staff_ledger_book, index| %>
+            <tr style='text-align: center;'>
+              <td><%= index+1 %></td>
+              <td>
+                <%= staff_ledger_book.created_at.strftime("%d-%m-%Y") %>
+                <% if staff_ledger_book.salary.present? && staff_ledger_book.created_at.strftime("%d-%m-%Y")!=staff_ledger_book.salary.created_at.strftime("%d-%m-%Y") %>
+                  <br>
+                  <%= staff_ledger_book.salary.created_at.strftime("%d-%m-%Y") %>
+                <%end%>
+                <%if staff_ledger_book.salary_detail.present? && staff_ledger_book.created_at.strftime("%d-%m-%Y")!=staff_ledger_book.salary_detail.created_at.strftime("%d-%m-%Y") %>
+                  <br>
+                  <%= staff_ledger_book.salary_detail.created_at.strftime("%d-%m-%Y") %>
+                <%end%>
+              </td>
+              <td><%= staff_ledger_book.staff.full_name %></td>
+              <td><%=  number_with_delimiter(staff_ledger_book.credit) %></td>
+              <td><%=  number_with_delimiter(staff_ledger_book.debit )%></td>
+              <td><%=  number_with_delimiter(staff_ledger_book.balance) %></td>
+              <td>
+                <%= staff_ledger_book.comment %>
+                <%if staff_ledger_book.salary_detail.present?%>
+                  <%=staff_ledger_book.salary_detail.wage_rate%> X <%=staff_ledger_book.salary_detail.quantity%>
+                <%end%>
+
+                <% if staff_ledger_book.salary.present? %>
+                  <%= staff_ledger_book.salary.comment%>
+                <%end%>
+              </td>
+            </tr>
+          <% end %>
+          <tr>
+            <td style='text-align: center;'><b>Total<b></td>
+            <td></td>
+            <td></td>
+            <td style='text-align: center;'><b><%=number_with_delimiter(@credit.to_i)%></b></td>
+            <td style='text-align: center;'><b><%=number_with_delimiter(@debit.to_i)%></b></td>
+            <td style='text-align: center;'><b><%=number_with_delimiter(@credit.to_i-@debit.to_i)%></b></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

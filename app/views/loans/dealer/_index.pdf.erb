@@ -1,0 +1,58 @@
+<html>
+  <head>
+    <style>
+      .border-bottom{
+        border-bottom: double 4px;
+      }
+      .text-center{
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <% @date = Date.today  %>
+    <% @time = DateTime.now %>
+    <% @time = Time.zone.now %>
+    <div>
+      <p class="border-bottom"></p>
+      <h1 class="text-center">Loan Details</h1>
+      <h1 class="text-center">
+        Date: <b><span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%></span>
+        Time: <span><%=@time.strftime("at %I:%M%p")%></span></b>
+      </h1>
+      <p class="border-bottom"></p>
+      <p class="text-center">Report by: <%=current_user.name%></p>
+    </div>
+    <div>
+      <table data-toggle="table" data-search="true" id="investment_table" class="content-table">
+        <thead>
+          <tr>
+            <th>Sr#</th>
+            <th>Date</th>
+            <th>Loan Received</th>
+            <th>Loan Given</th>
+            <th class="urdu-font">Comment</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @loans.each_with_index do |loan, index|%>
+            <tr style='text-align: center;'>
+              <td><%= index+1 %></td>
+              <td><%= loan.created_at.strftime('%d-%m-%Y') %></td>
+              <td><%= number_with_delimiter(loan.credit.to_f.round(2)) %></td>
+              <td><%= number_with_delimiter(loan.debit.to_f.round(2)) %></td>
+              <td><span title="<%= loan.comment %>" class='truncate-text'><%= loan.comment %></span></td>
+            </tr>
+          <% end %>
+          <tr>
+            <td style='text-align: center'><h5>Total</h5></td>
+            <td style='text-align: center'></td>
+            <td style='text-align: center'><h5><%= number_with_delimiter(@total_loan&.first&.last.to_f.round(2)) %></h5></td>
+            <td style='text-align: center'><h5><%=number_with_delimiter(@total_loan&.first&.first.to_f.round(2)) %></h5></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

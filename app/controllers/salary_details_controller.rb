@@ -951,6 +951,9 @@ class SalaryDetailsController < ApplicationController
 
   end
   def advance_all
+    if params[:salary_sheet].present?
+      session[:salary_sheet_redirect] = salary_sheet_staff_ledger_books_path
+    end
     @departments = Department.all
     if params[:q].present? || pos_type_batha.blank?
     @q = Staff.ransack(params[:q])
@@ -982,6 +985,9 @@ class SalaryDetailsController < ApplicationController
 
   # GET /salary_details/1/edit
   def edit
+    if params[:salary_sheet].present?
+      session[:salary_sheet_redirect] = salary_sheet_staff_ledger_books_path
+    end
     @staffs_list = activated_list("Staff")
     @products=Product.all
     @salary_detail.payments.build if @salary_detail.payments.blank?
@@ -1068,7 +1074,11 @@ class SalaryDetailsController < ApplicationController
         @salary_detail.update_column(:remarks, balance.to_s)
       end
       if @salary_detail.update(salary_detail_params)
-        format.html { redirect_to salary_details_path, notice: 'Salary detail was successfully updated.' }
+        if session[:salary_sheet_redirect].present?
+          format.html { redirect_to session[:salary_sheet_redirect], notice: 'Salary detail was successfully updated.' }
+        else
+          format.html { redirect_to salary_details_path, notice: 'Salary detail was successfully updated.' }
+        end
         format.json { render :show, status: :ok, location: @salary_detail }
       else
         @staffs_list = activated_list("Staff")
