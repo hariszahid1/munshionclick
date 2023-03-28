@@ -93,6 +93,9 @@
                 <span class="col-lg-3 form-group float-left">
                   <%= f.search_field :cnic_eq, class: "form-control chosen-select", placeholder: "Search by Cnic" %>
                 </span>
+                <span class="col-lg-3 form-group float-left">
+                  <%= f.search_field :contact_mobile_eq, class: "form-control chosen-select", placeholder: "Search by Mobile no" %>
+                </span>
                 <span class="col-lg-2 form-group float-left">
                   <%= f.select :status_eq, SysUser.statuses.map { |key, value| [key.humanize, value] },{include_blank: "Select Status", hide_label:true, required: true },:class=>"form-control chosen-select" %>
                 </span>

@@ -81,21 +81,22 @@
             <%= search_form_for @q, url: staffs_path, class: "admin-controls mb-4", method: "get" do |f| %>
               <div class="card shadow mb-3 p-3">
                 <div class="row d-flex mt-3">
-                  <div class="col-lg-7">
-                    <div class="col-lg-4 form-group float-left">
-                      <%= f.select :id_eq, options_from_collection_for_select(@staff_names, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code}"},@name),{:include_blank => "Select Staff"},:class=>"form-control chosen-select" %>
-                    </div>
-                    <div class="col-lg-4 form-group float-left">
-                      <%= f.select :department_id_eq, options_from_collection_for_select(@departments, 'id', 'title', @department), {hide_label:true,title: "Select the Department" ,prompt: "Select the Department"},:class=>"form-control chosen-select"%>
-                    </div>
-                    <div class="col-lg-3 form-group float-left">
-                      <%= f.select :staff_type_eq, Staff.staff_types.map { |key, value| [key.humanize, value] }, {include_blank: "Select the Status", hide_label:true, required: true },:class=>"form-control  chosen-select"%>
-                    </div>
-                    <div class="col-lg-1 form-group float-left">
-                      <button class="form-control btn btn-primary" name="search_submit" style="width: 80px;" type="submit" value="Search"><i class="fa fa-search"></i></button>
-                      <button type='submit' class='dynamic-submit-btn d-none' formtarget='_blank'></button>
-                    </div>
-                  </div> 
+                  <div class="col-lg-3 form-group float-left">
+                    <%= f.select :id_eq, options_from_collection_for_select(@staff_names, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code}"},@name),{:include_blank => "Select Staff"},:class=>"form-control chosen-select" %>
+                  </div>
+                  <div class="col-lg-3 form-group float-left">
+                    <%= f.select :department_id_eq, options_from_collection_for_select(@departments, 'id', 'title', @department), {hide_label:true,title: "Select the Department" ,prompt: "Select the Department"},:class=>"form-control chosen-select"%>
+                  </div>
+                  <div class="col-lg-2 form-group float-left">
+                    <%= f.select :staff_type_eq, Staff.staff_types.map { |key, value| [key.humanize, value] }, {include_blank: "Select the Status", hide_label:true, required: true },:class=>"form-control  chosen-select"%>
+                  </div>
+                  <div class="col-lg-3 form-group float-left">
+                    <%= f.search_field :phone_eq, class: "form-control chosen-select", placeholder: "Search by Mobile no" %>
+                  </div>
+                  <div class="col-lg-1 form-group float-left">
+                    <button class="form-control btn btn-primary" name="search_submit" style="width: 80px;" type="submit" value="Search"><i class="fa fa-search"></i></button>
+                    <button type='submit' class='dynamic-submit-btn d-none' formtarget='_blank'></button>
+                  </div>
                 </div>
               </div> 
             <% end %> 
@@ -108,7 +109,7 @@
 	                  </button>		
                   <%end%>
                 </div> 
-                <div class="mt-4 ml-3">                 
+                <div class="mt-4 ml-3">
                   <% if check_can_download_csv(@module_permission)%>
                     <div class="dropdown my-dropdown mr-2 float-right">
                       <button type="button" class="form-control btn btn-warning file-btn-color" style="width:80px">CSV</button>
