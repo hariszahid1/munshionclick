@@ -45,6 +45,11 @@ class DashboardController < ApplicationController
     @due_advance = PropertyPlan.joins(:order).where(due_status:[nil, PropertyPlan.due_statuses["Unpaid"]]).where('due_date <= ?', Date.today).sum(:advance)
     @due_installment = PropertyInstallment.where(due_status:[nil, PropertyPlan.due_statuses["Unpaid"]]).where('due_date <= ?', Date.today).sum(:installment_price)
 
+    @in_ord_count = Order.where(transaction_type: "Inward").count
+    @out_ord_count = Order.where(transaction_type: "Outward").count
+    @in_cold_storage_count = PurchaseSaleDetail.where(transaction_type: "InWard").count
+    @out_cold_storage_count = PurchaseSaleDetail.where(transaction_type: "OutWard").count
+
     @total_booked=Product.booked_plot.uniq
     @total_reserved=Product.secure_plot.uniq
     @total_remaning=Product.open_plot.uniq
