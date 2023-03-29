@@ -65,8 +65,8 @@
      </ul>
 </div>
   </td>
-  <td><%= number_with_delimiter(staff_deal_orders.joins(:property_plans).where('property_plans.due_status':[nil, PropertyPlan.due_statuses["Unpaid"]],'property_plans.due_date': @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).sum(:advance))%></td>
-  <td><%= number_with_delimiter(staff_deal_orders.joins(property_plans: :property_installments).where('property_installments.due_status':[nil, PropertyPlan.due_statuses["Unpaid"]],'property_installments.due_date': @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).sum(:installment_price))%></td>
+  <td><%= number_with_delimiter((staff_deal_orders.joins(:property_plans).where('property_plans.due_status':[nil, PropertyPlan.due_statuses["Unpaid"]],'property_plans.due_date': @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).sum(:advance)).to_f.round(2))%></td>
+  <td><%= number_with_delimiter((staff_deal_orders.joins(property_plans: :property_installments).where('property_installments.due_status':[nil, PropertyPlan.due_statuses["Unpaid"]],'property_installments.due_date': @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).sum(:installment_price)).to_f.round(2))%></td>
   <td>
     <%= staff_deal.comment %>
   </td>

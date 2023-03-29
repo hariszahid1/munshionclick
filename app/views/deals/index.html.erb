@@ -40,7 +40,7 @@
                 </div>
               </div>
               <div class="media-body text-right">
-                <h3><%= number_with_delimiter(@total_commission) %></h3>
+                <h3><%= number_with_delimiter(@total_commission.to_f.round(2)) %></h3>
                 <span>Total Commission</span>
               </div>
             </div>
@@ -59,7 +59,7 @@
                 </div>
               </div>
               <div class="media-body text-right">
-                <h3><%= number_with_delimiter(@office_commission) %></h3>
+                <h3><%= number_with_delimiter(@office_commission.to_f.round(2)) %></h3>
                 <span>Office Commission</span>
               </div>
             </div>
@@ -108,7 +108,7 @@
             <button type='submit' class='dynamic-submit-btn d-none' formtarget='_blank'></button>
           </div>
           <% if params.dig(:q, :staff_id_eq).present? %>
-            <div class='d-flex mt-1'><h4>Agent Share => </h4><h5 class='mt-1 ml-2'><%= number_with_delimiter(@total_earning) %></h5></div>
+            <div class='d-flex mt-1'><h4>Agent Share => </h4><h5 class='mt-1 ml-2'><%= number_with_delimiter(@total_earning.to_f.round(2)) %></h5></div>
           <% end %>
         </div>
       <% end %>
@@ -144,10 +144,10 @@
             <td><%= @starting_number + index %></td>
             <td><%= deal.created_at.strftime('%d-%m-%Y') %></td>
             <td><%= deal.staff&.name %></td>
-            <td><%= number_with_delimiter(deal.comission) %></td>
-            <td><%= number_with_delimiter(deal.file_share) %></td>
+            <td><%= number_with_delimiter(deal.comission.to_f.round(2)) %></td>
+            <td><%= number_with_delimiter(deal.file_share.to_f.round(2)) %></td>
             <td><%= deal.deal_detail %></td>
-            <td><%= number_with_delimiter(deal.agent_earning) %></td>
+            <td><%= number_with_delimiter(deal.agent_earning.to_f.round(2)) %></td>
             <td>
               <div class="icon-container-1">
                 <div class="my-icon-1 my-view-1">

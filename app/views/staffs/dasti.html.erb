@@ -103,11 +103,11 @@
               <td></td>
               <td></td>
               <td></td>
-              <td><h4><%= number_with_delimiter @monthly_wage.round(2) %><h4></td>
-              <td><h4><%= number_with_delimiter @advance.round(2) %><h4></td>
+              <td><h4><%= number_with_delimiter @monthly_wage.to_f.round(2) %><h4></td>
+              <td><h4><%= number_with_delimiter @advance.to_f.round(2) %><h4></td>
               <td></td>
-              <td><h4><%= number_with_delimiter @short_pay.round(2) %><h4></td>
-              <td><h4><%= number_with_delimiter @balance.round(2) %><h4></td>
+              <td><h4><%= number_with_delimiter @short_pay.to_f.round(2) %><h4></td>
+              <td><h4><%= number_with_delimiter @balance.to_f.round(2) %><h4></td>
             </tr>
           </tbody>
         </table>

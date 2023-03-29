@@ -5,10 +5,10 @@
   <td><%= item.code %></td>
   <td><%= number_with_delimiter item.cost.to_f.round(2) %></td>
   <td><%= number_with_delimiter item.sale.to_f.round(2) %></td>
-  <td><%= number_with_delimiter item.stock %></td>
-  <td><%= number_with_delimiter item.minimum %></td>
-  <td><%= number_with_delimiter item.optimal %></td>
-  <td><%= number_with_delimiter item.maximun %></td>
+  <td><%= number_with_delimiter(item.stock.to_f.round(2)) %></td>
+  <td><%= number_with_delimiter(item.minimum.to_f.round(2)) %></td>
+  <td><%= number_with_delimiter(item.optimal.to_f.round(2)) %></td>
+  <td><%= number_with_delimiter(item.maximun.to_f.round(2)) %></td>
   <td><span title="<%= item.comment %>" class='truncate-text'><%= item.comment %></span></td>
   <td><%= item.status %></td>
   <td>

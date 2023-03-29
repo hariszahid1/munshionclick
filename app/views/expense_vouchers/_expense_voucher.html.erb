@@ -116,7 +116,7 @@
                     <br>
       <%end%>
       </td>
-      <td><%= number_with_delimiter(expense.expense)%></td>
+      <td><%= number_with_delimiter(expense.expense.to_f.round(2))%></td>
       <td>
         <% expense&.expense_entries&.each do |entry|  %>
           <span class='ml-2'><%= entry.account&.title %></span>

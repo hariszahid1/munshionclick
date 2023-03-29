@@ -1,7 +1,7 @@
 <tr>
   <td><%= expense_entry.expense_type.title %></td>
   <td><%= expense_entry.account.title %> ------ <%=number_with_delimiter(@expense_payment[expense_entry.id])%></td>
-  <td><%= number_with_delimiter(expense_entry.amount)%></td>
+  <td><%= number_with_delimiter(expense_entry.amount.to_f.round(2))%></td>
   <td><%= expense_entry.comment %></td>
   <td>
     <%if expense_entry.created_at.strftime("%d%b%y")!=expense_entry.updated_at.strftime("%d%b%y")%>

@@ -190,7 +190,7 @@
                 <td><h5>Total</h5></td>
                 <td></td>
                 <td></td>
-                <td><h5><%= number_with_delimiter(@salaries.sum(:paid_salary)+@salaries.sum(:advance))%></h5></td>
+                <td><h5><%= number_with_delimiter((@salaries.sum(:paid_salary) + @salaries.sum(:advance)).to_f.round(2))%></h5></td>
                 <td></td>
                 <td></td>
                 <td></td>

@@ -19,10 +19,10 @@
       <tr class='text-center'>
         <td><%= @deal.created_at.strftime('%d-%m-%Y') %></td>
         <td><%= @deal.staff&.name %></td>
-        <td><%= number_with_delimiter(@deal.comission) %></td>
-        <td><%= number_with_delimiter(@deal.file_share) %></td>
+        <td><%= number_with_delimiter(@deal.comission.to_f.round(2)) %></td>
+        <td><%= number_with_delimiter(@deal.file_share.to_f.round(2)) %></td>
         <td><%= @deal.deal_detail %></td>
-        <td><%= number_with_delimiter(@deal.agent_earning) %></td>
+        <td><%= number_with_delimiter(@deal.agent_earning.to_f.round(2)) %></td>
       </tr>
     </tbody>
   </table>

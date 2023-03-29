@@ -69,9 +69,9 @@
               <tr>
                 <td><%= check_box_tag 'object_ids[]', production.id %></td>
                 <td><%= production.product.title %> - <%= production.product&.product_category&.title %> </td>
-                <td><%= number_with_delimiter production.operation_cost %></td>
-                <td><%= number_with_delimiter production.cost_price %></td>
-                <td><%= number_with_delimiter production.sale_price %></td>
+                <td><%= number_with_delimiter(production.operation_cost.to_f.round(2)) %></td>
+                <td><%= number_with_delimiter(production.cost_price.to_f.round(2)) %></td>
+                <td><%= number_with_delimiter(production.sale_price.to_f.round(2)) %></td>
                 <td><%= production.comment %></td>
                 <td><%= production.status %></td>
                 <td>
