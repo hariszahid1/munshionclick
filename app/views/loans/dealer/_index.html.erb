@@ -132,7 +132,7 @@
                 <td><%= loan.created_at.strftime('%d-%m-%Y') %></td>
                 <td><%= number_with_delimiter(loan.credit.to_i) %></td>
                 <td><%= number_with_delimiter(loan.debit.to_i) %></td>
-                <td><span title="<%= loan.comment %>" class='truncate-text'><%= loan.comment %></span></td>
+                <td><%= loan.comment %></td>
                 <td class="p-3">
                   <div class="icon-container-1">
                     <div class="my-icon-1 my-view-1">

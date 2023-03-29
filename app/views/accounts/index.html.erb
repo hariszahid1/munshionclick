@@ -32,11 +32,13 @@
     </div>
   <% end %>
   <% if check_can_create(@module_permission) %>
-    <div class="float-right mt-3">
-      <%= link_to transfer_payments_path, class: "btn btn-outline-primary  mr-2 mt-3" do %>
-          Transfer Payments
-      <% end %>
-    </div>
+    <% if current_user.company_type != 'jr' %>
+      <div class="float-right mt-3">
+        <%= link_to transfer_payments_path, class: "btn btn-outline-primary  mr-2 mt-3" do %>
+            Transfer Payments
+        <% end %>
+      </div>
+    <% end %>
   <% end %>
 </div>
 <div class="clearfix"></div>
