@@ -305,7 +305,7 @@
             <td><h5><%=number_with_delimiter(order.amount.to_i+order.purchase_sale_details.sum(:amount).to_i)%></h5></td>
             <td><h5><%=number_with_delimiter(order.purchase_sale_details.sum(:discount_price).to_f.round(2))%></h5></td>
             <td><h5>Remaing</h5></td>
-            <td><h5><%=number_with_delimiter(order.sys_user.balance.to_f)%></h5></td>
+            <td><h5><%=number_with_delimiter(order.sys_user.balance.to_f.round(2))%></h5></td>
             <td>
                 <%if (order.sys_user.balance > 0 ) %>
                     <b style="font-size:20px;color:blue;">Jama</b>

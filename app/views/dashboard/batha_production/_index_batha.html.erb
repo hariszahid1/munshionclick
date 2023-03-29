@@ -173,7 +173,7 @@
         <h6 class="ml-5">Net Payable</h6>
         <div class="ml-5 d-flex">
           <i class="mr-1" aria-hidden="true">Rs.</i>
-          <i class="h4 mb-0 font-weight-bold text-gray-800"><%=number_with_delimiter(@payable)%></i>
+          <i class="h4 mb-0 font-weight-bold text-gray-800"><%=number_with_delimiter(@payable.to_f.round(2))%></i>
         </div>
       <% end %>
       </div>
@@ -182,7 +182,7 @@
         <h6 class="ml-5">Net Receivable</h6>
         <div class="ml-5 d-flex">
             <i class="mr-1" aria-hidden="true">Rs.</i>
-    				<i class="h4 mb-0 font-weight-bold text-gray-800"><%=number_with_delimiter(@receivable)%></i>
+    				<i class="h4 mb-0 font-weight-bold text-gray-800"><%=number_with_delimiter(@receivable.to_f.round(2))%></i>
         </div>
       <% end %>
       </div>
@@ -300,7 +300,7 @@
                     <div class="col ml-2">
                       <%= link_to products_path do %>
                         <div class="text-xs font-weight-bold text-uppercase mb-1 logo-back">Products</div>
-                        <div class="h6 mb-0 font-weight-bold text-muted"><%= number_with_delimiter(@product_count) %></div>
+                        <div class="h6 mb-0 font-weight-bold text-muted"><%= number_with_delimiter(@product_count.to_f.round(2)) %></div>
                       <% end %>
                     </div>
                     <div class="col-auto">
@@ -328,7 +328,7 @@
                     <div class="col ml-2">
                       <%= link_to sys_users_path do %>
                         <div class="text-xs font-weight-bold text-uppercase mb-1 logo-back">Users</div>
-                        <div class="h6 mb-0 font-weight-bold text-muted"><%=number_with_delimiter(@sys_user_count) %></div>
+                        <div class="h6 mb-0 font-weight-bold text-muted"><%=number_with_delimiter(@sys_user_count.to_f.round(2)) %></div>
                       <% end %>
                     </div>
                     <div class="col-auto">
@@ -384,7 +384,7 @@
                     <div class="col ml-2">
                       <%= link_to purchase_sale_details_path(sale: true) do %>
                         <div class="text-xs font-weight-bold text-uppercase mb-1 logo-back">Sale</div>
-                        <div class="h6 mb-0 font-weight-bold text-muted"><%=  number_with_delimiter(@total_sale_slips) %></div>
+                        <div class="h6 mb-0 font-weight-bold text-muted"><%=  number_with_delimiter(@total_sale_slips.to_f.round(2)) %></div>
                       <% end %>
                     </div>
                     <div class="col-auto">
@@ -440,7 +440,7 @@
                     <div class="col ml-2">
                       <%= link_to expenses_path do %>
                         <div class="text-xs font-weight-bold text-uppercase mb-1 logo-back">Expenses</div>
-                        <div class="h6 mb-0 font-weight-bold text-muted"><%= number_with_delimiter(@total_expense_slips) %></div>
+                        <div class="h6 mb-0 font-weight-bold text-muted"><%= number_with_delimiter(@total_expense_slips.to_f.round(2)) %></div>
                       <% end %>
                     </div>
                     <div class="col-auto">
@@ -496,7 +496,7 @@
                     <div class="col ml-2">
                       <%= link_to khakar_daily_books_path(department_id: @departments.second.title) do %>
                         <div class="text-xs font-weight-bold text-uppercase mb-1 logo-back">Kharkar Daily</div>
-                        <div class="h6 mb-0 font-weight-bold text-muted"><%= number_with_delimiter(@daily_book_salary_details_khakar_quantity) %></div>
+                        <div class="h6 mb-0 font-weight-bold text-muted"><%= number_with_delimiter(@daily_book_salary_details_khakar_quantity.to_f.round(2)) %></div>
                       <% end %>
                     </div>
                     <div class="col-auto">

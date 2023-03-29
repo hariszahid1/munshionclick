@@ -153,8 +153,8 @@
                 <% end %>
                 <tr>
                   <td><h5>Total</h5></td>
-                  <td><h5><%=number_with_delimiter(@total_sale)%></h5></td>
-                  <td><h5><%=number_with_delimiter(@total_cash)%></h5></td>
+                  <td><h5><%=number_with_delimiter(@total_sale.to_f.round(2))%></h5></td>
+                  <td><h5><%=number_with_delimiter(@total_cash.to_f.round(2))%></h5></td>
                   <td></td>
                   <td></td>
                   <td></td>

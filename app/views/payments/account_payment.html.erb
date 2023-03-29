@@ -16,7 +16,7 @@
       <div class="col-lg-3 col-sm-3 stats-cards border-radius-1 shadow-lg p-4 mr-4" style="background:linear-gradient(45deg, #0f1d59 73%, white 8%); color:white;">
         <div>
           <div class="p font-weight-bold mb-3 mt-1" style="color: #C0C0C0">Last Credit</div>
-          <span class="mt-1 mb-2"><i>Rs.</i><i class="h4 mb-0 font-weight-bold text-light-800 mr-1"><%= number_with_delimiter(@previous_credit) %></i></span>
+          <span class="mt-1 mb-2"><i>Rs.</i><i class="h4 mb-0 font-weight-bold text-light-800 mr-1"><%= number_with_delimiter(@previous_credit.to_f.round(2)) %></i></span>
           <br>
         </div>
       </div>
@@ -98,8 +98,8 @@
           <tr>
             <td><%= @starting_number + index %></td>
             <td><%= payment.created_at.strftime('%d/%b/%Y at %I:%M%p') %></td>
-            <td><%= number_with_delimiter(payment.debit) %></td>
-            <td><%= number_with_delimiter(payment.credit) %></td>
+            <td><%= number_with_delimiter(payment.debit.to_f.round(2)) %></td>
+            <td><%= number_with_delimiter(payment.credit.to_f.round(2)) %></td>
             <td>
               <%= payment.comment %>
               <% if payment.paymentable.present? and payment.paymentable_type=="Order" %>
@@ -166,7 +166,7 @@
               <%end%>
             </td>
             <td>
-              <%= number_with_delimiter(payment.amount) %>
+              <%= number_with_delimiter(payment.amount.to_f.round(2)) %>
             </td>
           </tr>
         <% end %>

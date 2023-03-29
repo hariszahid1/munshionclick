@@ -445,10 +445,10 @@
                       <th>Status</th>
                     </tr>
                     <tr>
-                      <td><%= number_with_delimiter(order.amount) %></td>
+                      <td><%= number_with_delimiter(order.amount.to_f.round(2)) %></td>
                       <td><%= number_with_delimiter(order.purchase_sale_details.sum(:total_bill)) %></td>
                       <td><%= number_with_delimiter(order.amount.to_i-order.purchase_sale_details.sum(:total_bill).to_i) %></td>
-                      <td><%= number_with_delimiter(order.sys_user.balance) rescue ''%></td>
+                      <td><%= number_with_delimiter(order.sys_user.balance.to_f.round(2)) rescue ''%></td>
                       <td>
                           <%if (order.sys_user.balance > 0 ) %>
                             <b style="font-size:20px;color:blue;">Jama</b>

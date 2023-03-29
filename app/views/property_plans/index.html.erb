@@ -121,11 +121,11 @@
                     <td><%= link_to property_plan.order&.sys_user&.name, orders_path('q[sys_user_id_eq]': property_plan.order&.sys_user.id.to_s,"sale":true) if property_plan.order&.sys_user&.id.present?%></td>
                     <td><%= property_plan.order&.sys_user&.contact&.phone %></td>
                     <td><%= property_plan.order&.order_items_names_and_quantity&.first&.first %></td>
-                    <td><%= number_with_delimiter property_plan.order&.sys_user&.ledger_books.where('credit>0')&.last&.credit %></td>
-                    <td><%= property_plan.order&.sys_user&.ledger_books.where('credit>0')&.last&.created_at&.strftime("%d%b%y , %I:%M")%></td>
-                    <td><%= number_with_delimiter property_plan.advance %></td>
+                    <td><%= number_with_delimiter((property_plan.order&.sys_user&.ledger_books.where('credit>0')&.last&.credit).to_f.round(2)) %></td>
+                    <td><%= property_plan.order&.sys_user&.ledger_books.where('credit>0')&.last&.created_at&.strftime("%d/%b/%y, %I:%M")%></td>
+                    <td><%= number_with_delimiter(property_plan.advance.to_f.round(2)) %></td>
                     <td><%= property_plan.order&.order_items_names_and_quantity&.first[8]%>-M <%= property_plan.order&.order_items_names_and_quantity&.first[9]%>-sqr</td>
-                    <td><%= property_plan.due_date.present? ? property_plan.due_date.strftime("%d%b%y , %I:%M") : '' %></td>
+                    <td><%= property_plan.due_date.present? ? property_plan.due_date.strftime("%d/%b/%y, %I:%M") : '' %></td>
                     <td><%= property_plan&.order&.order_plot_dealer&.first&.staff&.name%></td>
                     <td>
                       <div class="icon-container-1">
@@ -199,7 +199,7 @@
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td colspan="7"><h4><%= number_with_delimiter @total_advance%></h4></td>
+                  <td colspan="7"><h4><%= number_with_delimiter(@total_advance.to_f.round(2)) %></h4></td>
                 </tr>
               </tbody>
             </table>

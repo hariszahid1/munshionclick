@@ -382,14 +382,14 @@
                   <div class="col">Status</div>
                 </div>
                 <div class="row d-flex  p-3 pt-3 mt-3 m-1" style="font-size: 1.2em;">
-                  <div class="col"><%= number_with_delimiter(order.amount) %></div>
+                  <div class="col"><%= number_with_delimiter(order.amount.to_f.round(2)) %></div>
                   <div class="col"></div>
-                  <div class="col"><%= number_with_delimiter(order.purchase_sale_details.sum(:total_bill)) %></div>
+                  <div class="col"><%= number_with_delimiter(order.purchase_sale_details.sum(:total_bill).to_f.round(2)) %></div>
                   <div class="col"></div>
                   
                   <div class="col"><%= number_with_delimiter(order.amount.to_i-order.purchase_sale_details.sum(:total_bill).to_i) %></div>
                   <div class="col"></div>
-                  <div class="col"><%= number_with_delimiter(order.sys_user.balance) rescue ''%></div>
+                  <div class="col"><%= number_with_delimiter(order.sys_user.balance.to_f.round(2)) rescue ''%></div>
                   <div class="col"></div>
                   <div class="col">
                       <%if (order.sys_user.balance > 0 ) %>

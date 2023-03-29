@@ -106,10 +106,10 @@
                     <td><%= salary_detail.staff.name %> <%= salary_detail.staff.father %></td>
                     <td><%= number_with_delimiter(salary_detail.wage_rate.to_f.round(2)) %></td>
                     <td><%= salary_detail.quantity.to_f.round(2) %></td>
-                    <td><%= number_with_delimiter(salary_detail.amount.to_f.round(2) )%></td>
+                    <td><%= number_with_delimiter(salary_detail.amount.to_f.round(2))%></td>
                     <td><%= number_with_delimiter(salary_detail.remarks.to_f.round(2)) %></td>
                     <td><%= salary_detail.comment %></td>
-                    <td><%= salary_detail.created_at.strftime("%d%b%y , %I:%M") %></td>
+                    <td><%= salary_detail.created_at.strftime("%d/%b/%y, %I:%M") %></td>
                     <td>
                       <div class="icon-container-1">
                         <div class="my-icon-1 my-view-1">
@@ -161,7 +161,7 @@
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td><h5><%= number_with_delimiter(@salary_details&.pluck(:amount)&.compact&.sum)%></h5></td>
+                  <td><h5><%= number_with_delimiter((@salary_details&.pluck(:amount)&.compact&.sum).to_f.round(2)) %></h5></td>
                   <td></td>
                 </tr>
               </tbody>

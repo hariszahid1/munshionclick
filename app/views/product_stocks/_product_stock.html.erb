@@ -1,10 +1,10 @@
 <tr>
   <td><%= product_stock.product.title %></td>
-  <td><%= number_with_delimiter product_stock.in_stock %></td>
-  <td><%= number_with_delimiter product_stock.out_stock %></td>
-  <td><%= number_with_delimiter product_stock.stock %></td>
-  <td><%= number_with_delimiter product_stock.cost_price %></td>
-  <td><%= number_with_delimiter product_stock.sale_price %></td>
+  <td><%= number_with_delimiter(product_stock.in_stock.to_f.round(2)) %></td>
+  <td><%= number_with_delimiter(product_stock.out_stock.to_f.round(2)) %></td>
+  <td><%= number_with_delimiter(product_stock.stock.to_f.round(2)) %></td>
+  <td><%= number_with_delimiter(product_stock.cost_price.to_f.round(2)) %></td>
+  <td><%= number_with_delimiter(product_stock.sale_price.to_f.round(2)) %></td>
   <td><%= product_stock.created_at.strftime("%d%b%y , %I:%M") %></td>
   <td>
     <div class="icon-container-1">

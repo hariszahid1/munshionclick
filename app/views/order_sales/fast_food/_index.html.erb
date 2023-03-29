@@ -198,9 +198,9 @@
           <% end %>
           <tr class="btn-success">
             <td><h5>O-Total</h5></td>
-            <td><h5><%= number_with_delimiter(order.amount)%></h5></td>
+            <td><h5><%= number_with_delimiter(order.amount.to_f.round(2))%></h5></td>
             <td><h5>D-Total</h5></td>
-            <td><h5><%=number_with_delimiter(order.purchase_sale_details.sum(:total_bill))%></h5></td>
+            <td><h5><%=number_with_delimiter(order.purchase_sale_details.sum(:total_bill).to_f.round(2))%></h5></td>
             <td></td>
             <td></td>
             <td><h5>Order Remaing</h5></td>
