@@ -76,10 +76,10 @@
             <%end%>
             <tr>
               <td><h5>Total</h5></td>
-              <td><h5><%= number_with_delimiter(@purchase_stock) %></h5></td>
-              <td><h5><%=number_with_delimiter(@sale_stock) %></h5></td>
-              <td><h5><%= number_with_delimiter(@remaning_stock) %></h5></td>
-              <td><h5><%= number_with_delimiter(@final_stock)%></h5></td>
+              <td><h5><%= number_with_delimiter(@purchase_stock.to_f.round(2)) %></h5></td>
+              <td><h5><%=number_with_delimiter(@sale_stock.to_f.round(2)) %></h5></td>
+              <td><h5><%= number_with_delimiter(@remaning_stock.to_f.round(2)) %></h5></td>
+              <td><h5><%= number_with_delimiter(@final_stock.to_f.round(2))%></h5></td>
             </tr>
           </tbody>
         </table>
@@ -109,10 +109,10 @@
             <%end%>
             <tr>
               <td><h5>Total</h5></td>
-              <td><h5><%=number_with_delimiter(@purchase_stock_day)%></h5></td>
-              <td><h5><%= number_with_delimiter(@sale_stock_day) %></h5></td>
-              <td><h5><%= number_with_delimiter(@remaning_stock_day)%></h5></td>
-              <td><h5><%= number_with_delimiter(@final_stock_day)%></h5></td>
+              <td><h5><%=number_with_delimiter(@purchase_stock_day.to_f.round(2))%></h5></td>
+              <td><h5><%= number_with_delimiter(@sale_stock_day.to_f.round(2)) %></h5></td>
+              <td><h5><%= number_with_delimiter(@remaning_stock_day.to_f.round(2))%></h5></td>
+              <td><h5><%= number_with_delimiter(@final_stock_day.to_f.round(2))%></h5></td>
             </tr>
           </tbody>
         </table>

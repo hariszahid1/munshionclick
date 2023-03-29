@@ -176,7 +176,7 @@
         <h6 class="ml-5">Net Payable</h6>
         <div class="ml-5 d-flex">
           <i class="mr-1" aria-hidden="true">Rs.</i>
-          <i class="h5 mb-0 font-weight-bold text-gray-800"><%=number_with_delimiter(@payable)%></i>
+          <i class="h5 mb-0 font-weight-bold text-gray-800"><%=number_with_delimiter(@payable.to_f.round(2))%></i>
         </div>
       <% end %>
       </div>
@@ -185,7 +185,7 @@
         <h6 class="ml-5">Net Receivable</h6>
         <div class="ml-5 d-flex">
             <i class="mr-1" aria-hidden="true">Rs.</i>
-            <i class="h5 mb-0 font-weight-bold text-gray-800"><%=number_with_delimiter(@receivable)%></i>
+            <i class="h5 mb-0 font-weight-bold text-gray-800"><%=number_with_delimiter(@receivable.to_f.round(2))%></i>
         </div>
       <% end %>
       </div>

@@ -125,7 +125,7 @@
               <td><h5>Total</h5></td>
               <td></td>
               <td><h5><%=number_with_delimiter(@expense_total.to_f.round(2))%></h5></td>
-              <td><h5><%=number_with_delimiter(@expense_payment_total)%></h5></td>
+              <td><h5><%=number_with_delimiter(@expense_payment_total.to_f.round(2))%></h5></td>
             </tr>
           </tbody>
         </table>

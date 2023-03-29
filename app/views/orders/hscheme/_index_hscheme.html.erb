@@ -461,7 +461,7 @@
                                 <div class="col"><h5><%= number_with_delimiter(order.amount.to_i+order.purchase_sale_details.sum(:amount).to_i) %></h5></div>
                                 <div class="col"><h5><%= number_with_delimiter(order.purchase_sale_details.sum(:discount_price).to_f.round(2)) %></h5></div>
                                 <div class="col"><h5>Remaining</h5></div>
-                                <div class="col"><h5><%= number_with_delimiter(order.sys_user.balance.to_f) %></h5></div>
+                                <div class="col"><h5><%= number_with_delimiter(order.sys_user.balance.to_f.round(2)) %></h5></div>
                                 <div class="col">
                                     <%if (order.sys_user.balance > 0 ) %>
                                         <b style="font-size:20px;color:blue;">Jama</b>
@@ -484,10 +484,10 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td><%= number_with_delimiter(@order_total_bill_count) %></td>
-                    <td><%= number_with_delimiter(@order_total_received_count) %></td>
-                    <td><%= number_with_delimiter(@order_total_bill_count-@order_total_received_count) %></td>
-                    <td><%= number_with_delimiter(@order_discount_count) %></td>
+                    <td><%= number_with_delimiter(@order_total_bill_count.to_f.round(2)) %></td>
+                    <td><%= number_with_delimiter(@order_total_received_count.to_f.round(2)) %></td>
+                    <td><%= number_with_delimiter((@order_total_bill_count-@order_total_received_count).to_f.round(2)) %></td>
+                    <td><%= number_with_delimiter(@order_discount_count.to_f.round(2)) %></td>
                     <td></td>
                     </tr> 
                 </tbody>

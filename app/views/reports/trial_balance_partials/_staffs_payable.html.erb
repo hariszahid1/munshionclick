@@ -72,7 +72,7 @@
         <td></td>
         <td></td>
         <td></td>
-        <td><h4><%=number_with_delimiter(@staff_payable.sum(:balance))%><h4></td>
+        <td><h4><%=number_with_delimiter(@staff_payable.sum(:balance).to_f.round(2))%><h4></td>
       </tr>
     </tbody>
   </table>

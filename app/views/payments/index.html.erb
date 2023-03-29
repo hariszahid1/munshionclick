@@ -38,7 +38,7 @@
       <% end %> 
       <div class="shadow px-4 py-3" style="background:linear-gradient(45deg, #0f1d59 75%, white 8%); color:white;">
         <div class="p font-weight-bold mb-3 mt-1" style="color: #C0C0C0">Today's Credit</div>
-        <span class="mt-1 mb-2"><i>Rs.</i><i class="h5 mb-0 font-weight-bold text-light-800 mr-1"><%= number_with_delimiter(@today_credit_payment) %></i></span>
+        <span class="mt-1 mb-2"><i>Rs.</i><i class="h5 mb-0 font-weight-bold text-light-800 mr-1"><%= number_with_delimiter(@today_credit_payment.to_f.round(2)) %></i></span>
         <div class="mt-2"><i class="fa fa-user mr-2"></i><%= @payment_credit_count %></div>
       </div>
     </div>
@@ -48,7 +48,7 @@
       <% end %> 
       <div class="shadow px-4 py-3" style="background:linear-gradient(45deg, darkred 75%, white 8%); color:white;">
         <div class="p font-weight-bold mb-3 mt-1" style="color: #C0C0C0">Today's Debit</div>
-        <span class="mt-1 mb-2"><i>Rs.</i><i class="h5 mb-0 font-weight-bold text-light-800 mr-1"><%= number_with_delimiter(@today_debit_payment) %></i></span>
+        <span class="mt-1 mb-2"><i>Rs.</i><i class="h5 mb-0 font-weight-bold text-light-800 mr-1"><%= number_with_delimiter(@today_debit_payment.to_f.round(2)) %></i></span>
         <div class="mt-2"><i class="fa fa-user mr-2"></i><%= @payment_debit_count %></div>
       </div>
     </div>
@@ -56,9 +56,9 @@
       <div class="row shadow mt-2 mr-1 ml-1">
         <div class="col-lg-4 bg-white" style="border-right: 1px solid lightgray">
           <div class="h6 font-weight-bold text-muted mt-2" style="color: #C0C0C0">Monthly Report</div>
-          <div><i>Rs.</i><i class="h6 mb-0 font-weight-bold text-gray-800 mr-1"><%= number_with_delimiter(@monthly_credit_payment) %></i></div>
+          <div><i>Rs.</i><i class="h6 mb-0 font-weight-bold text-gray-800 mr-1"><%= number_with_delimiter(@monthly_credit_payment.to_f.round(2)) %></i></div>
           <div class="p text-muted mb-2">Total Credit</div>
-          <div><i>Rs.</i><i class="h6 mb-0 font-weight-bold text-gray-800 mr-1"><%= number_with_delimiter(@monthly_debit_payment) %></i></div>
+          <div><i>Rs.</i><i class="h6 mb-0 font-weight-bold text-gray-800 mr-1"><%= number_with_delimiter(@monthly_debit_payment.to_f.round(2)) %></i></div>
           <div class="p text-muted mb-2">Total Debit</div>
         </div>
         <div class="col-lg-8 bg-white">
@@ -66,11 +66,11 @@
           <div>
             <div class="float-left">  
               <div><i class="fa fa-user mr-2"></i><%= @yearly_credit_count %></div>
-              <div><i class="fa fa-circle text-primary mr-2"></i><i>Rs.</i><i class="h6 mb-0 font-weight-bold text-gray-800 mr-1"><%= number_with_delimiter(@yearly_credit_payment) %></i></div>
+              <div><i class="fa fa-circle text-primary mr-2"></i><i>Rs.</i><i class="h6 mb-0 font-weight-bold text-gray-800 mr-1"><%= number_with_delimiter(@yearly_credit_payment.to_f.round(2)) %></i></div>
             </div> 
             <div class="float-right"> 
               <div><i class="fa fa-user mr-2"></i><%= @yearly_debit_count %></div>
-              <div><i class="fa fa-circle text-danger mr-2"></i><i>Rs.</i><i class="h6 mb-0 font-weight-bold text-gray-800 mr-1"><%= number_with_delimiter(@yearly_debit_payment) %></i></div>
+              <div><i class="fa fa-circle text-danger mr-2"></i><i>Rs.</i><i class="h6 mb-0 font-weight-bold text-gray-800 mr-1"><%= number_with_delimiter(@yearly_debit_payment.to_f.round(2)) %></i></div>
             </div>
           </div>
           <div class="clearfix"></div>
@@ -261,8 +261,8 @@
                         <%= payment.account.title if payment.account.present?%>
                       <%end %>
                     </td>
-                    <td><%= number_with_delimiter(payment.debit) %></td>
-                    <td><%= number_with_delimiter(payment.credit) %></td>
+                    <td><%= number_with_delimiter(payment.debit.to_f.round(2)) %></td>
+                    <td><%= number_with_delimiter(payment.credit.to_f.round(2)) %></td>
                     <td>
                       <div class="float-left"><%= number_with_delimiter(payment.amount.to_f.round(2)) %></div>
                       <div class="icon-container float-right">

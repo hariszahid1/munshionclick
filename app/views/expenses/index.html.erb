@@ -135,7 +135,7 @@
                   <td><%= expense.id %></td>
                   <td>
                     <%expense.expense_entries.joins(:expense_type).group(:expense_type).sum(:amount).each do |expense| %>
-                      <%= expense.first.title %> : <%= number_with_delimiter(expense.last) %>
+                      <%= expense.first.title %> : <%= number_with_delimiter(expense.last.to_f.round(2)) %>
                       <br>
                     <%end%>
                   </td>
@@ -230,7 +230,7 @@
               <tr>
                 <td><h5>Total</h5></td>
                 <td></td>
-                <td><h5><%=number_with_delimiter(@expense_payment_total)%></h5></td>
+                <td><h5><%=number_with_delimiter(@expense_payment_total.to_f.round(2))%></h5></td>
                 <td><h5><%=number_with_delimiter(@expense_total.to_f.round(2))%></h5></td>
               </tr>
             </tbody>

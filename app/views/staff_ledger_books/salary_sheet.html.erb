@@ -87,9 +87,9 @@
                     <%end%>
                   </td>
                   <td><%= staff_ledger_book.staff.full_name %></td>
-                  <td><%=  number_with_delimiter(staff_ledger_book.credit) %></td>
-                  <td><%=  number_with_delimiter(staff_ledger_book.debit )%></td>
-                  <td><%=  number_with_delimiter(staff_ledger_book.balance) %></td>
+                  <td><%=  number_with_delimiter(staff_ledger_book.credit.to_f.round(2)) %></td>
+                  <td><%=  number_with_delimiter(staff_ledger_book.debit.to_f.round(2) )%></td>
+                  <td><%=  number_with_delimiter(staff_ledger_book.balance.to_f.round(2)) %></td>
                   <td>
                     <%= staff_ledger_book.comment %>
                     <%if staff_ledger_book.salary_detail.present?%>

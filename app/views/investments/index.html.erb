@@ -18,7 +18,7 @@
             <% end %> 
             <div class="shadow px-4 py-3" style="background:linear-gradient(45deg, #0f1d59 75%, white 8%); color:white;">
               <div class="p font-weight-bold mb-3 mt-1" style="color: #C0C0C0">Today's Credit</div>
-              <span class="mt-1 mb-2"><i>Rs.</i><i class="h5 mb-0 font-weight-bold text-light-800 mr-1"><%= number_with_delimiter(@today_credit_investment) %></i></span>
+              <span class="mt-1 mb-2"><i>Rs.</i><i class="h5 mb-0 font-weight-bold text-light-800 mr-1"><%= number_with_delimiter(@today_credit_investment.to_f.round(2)) %></i></span>
               <div class="mt-2"><i class="fa fa-user mr-2"></i><%= @investment_credit_count %></div>
             </div>
           </div>
@@ -28,7 +28,7 @@
             <% end %> 
             <div class="shadow px-4 py-3" style="background:linear-gradient(45deg, darkred 75%, white 8%); color:white;">
               <div class="p font-weight-bold mb-3 mt-1" style="color: #C0C0C0">Today's Debit</div>
-              <span class="mt-1 mb-2"><i>Rs.</i><i class="h5 mb-0 font-weight-bold text-light-800 mr-1"><%= number_with_delimiter(@today_debit_investment) %></i></span>
+              <span class="mt-1 mb-2"><i>Rs.</i><i class="h5 mb-0 font-weight-bold text-light-800 mr-1"><%= number_with_delimiter(@today_debit_investment.to_f.round(2)) %></i></span>
               <div class="mt-2"><i class="fa fa-user mr-2"></i><%= @investment_debit_count %></div>
             </div>
           </div>
@@ -46,11 +46,11 @@
                 <div>
                   <div class="float-left">  
                     <div><i class="fa fa-user mr-2"></i><%= @yearly_credit_count_investment %></div>
-                    <div><i class="fa fa-circle text-primary mr-2"></i><i>Rs.</i><i class="h6 mb-0 font-weight-bold text-gray-800 mr-1"><%= number_with_delimiter(@yearly_credit_investment) %></i></div>
+                    <div><i class="fa fa-circle text-primary mr-2"></i><i>Rs.</i><i class="h6 mb-0 font-weight-bold text-gray-800 mr-1"><%= number_with_delimiter(@yearly_credit_investment.to_f.round(2)) %></i></div>
                   </div> 
                   <div class="float-right"> 
                     <div><i class="fa fa-user mr-2"></i><%= @yearly_debit_count_investment %></div>
-                    <div><i class="fa fa-circle text-danger mr-2"></i><i>Rs.</i><i class="h6 mb-0 font-weight-bold text-gray-800 mr-1"><%= number_with_delimiter(@yearly_debit_investment) %></i></div>
+                    <div><i class="fa fa-circle text-danger mr-2"></i><i>Rs.</i><i class="h6 mb-0 font-weight-bold text-gray-800 mr-1"><%= number_with_delimiter(@yearly_debit_investment.to_f.round(2)) %></i></div>
                   </div>
                 </div>
                 <div class="clearfix"></div>
