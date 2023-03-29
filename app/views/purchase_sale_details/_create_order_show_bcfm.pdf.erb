@@ -119,14 +119,14 @@
         <td></td>
         <td class="td-size" style="font-weight: bold;">Pre Balance:</td>
         <td class="td-size" style="font-weight: bold;"><%#=@purchase_sale_detail.sys_user.balance %></td>
-      </tr-->
+      </tr>
       <tr>
         <td></td>
         <td></td>
         <td></td>
         <td class="td-size" style="font-weight: bold;">Balance:</td>
-        <td class="td-size" style="font-weight: bold;"><%=@purchase_sale_detail.sys_user.balance.to_i-@purchase_sale_detail.total_bill.to_f+@purchase_sale_detail.amount.to_f%></td>
-      </tr>
+        <td class="td-size" style="font-weight: bold;"><%#=@purchase_sale_detail.sys_user.balance.to_i-@purchase_sale_detail.total_bill.to_f+@purchase_sale_detail.amount.to_f%></td>
+      </tr-->
     <%end%>
 
   </table>
