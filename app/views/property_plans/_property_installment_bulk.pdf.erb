@@ -2,7 +2,7 @@
 <% @time = DateTime.now %>
 <% @time = Time.zone.now %>
 <p style="border-bottom: double 4px;  margin: 0;"></p>
-<h1 style="text-align: center; margin: 0;">Panding Installment Customer List</h1>
+<h1 style="text-align: center; margin: 0;">Pending Installment Customer List</h1>
 <h1 style="text-align: center; margin: 0;"> Date: <b><span><%= @time.strftime("%d")%>/<%=@time.strftime("%b")%>/<%= @time.strftime("%y")%></span>  Time: <span><%=@time.strftime("at %I:%M%p")%></span></b></h1>
 <p style="border-bottom: double 4px;  margin: 0;"></p>
 <p style="text-align: center;margin: 0;">Report by: <%=current_user.name%></p>
