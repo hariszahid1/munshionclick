@@ -29,8 +29,8 @@
           <tr>
             <th>Sr#</th>
             <th>Date</th>
-            <th>Loan Received</th>
-            <th>Loan Given</th>
+            <th>Received</th>
+            <th>Given</th>
             <th class="urdu-font">Comment</th>
           </tr>
         </thead>
@@ -39,16 +39,16 @@
             <tr style='text-align: center;'>
               <td><%= index+1 %></td>
               <td><%= loan.created_at.strftime('%d-%m-%Y') %></td>
-              <td><%= number_with_delimiter(loan.credit.to_f.round(2)) %></td>
-              <td><%= number_with_delimiter(loan.debit.to_f.round(2)) %></td>
+              <td><%= number_with_delimiter(loan.credit.to_i) %></td>
+              <td><%= number_with_delimiter(loan.debit.to_i) %></td>
               <td><span title="<%= loan.comment %>" class='truncate-text'><%= loan.comment %></span></td>
             </tr>
           <% end %>
           <tr>
             <td style='text-align: center'><h5>Total</h5></td>
             <td style='text-align: center'></td>
-            <td style='text-align: center'><h5><%= number_with_delimiter(@total_loan&.first&.last.to_f.round(2)) %></h5></td>
-            <td style='text-align: center'><h5><%=number_with_delimiter(@total_loan&.first&.first.to_f.round(2)) %></h5></td>
+            <td style='text-align: center'><h5><%= number_with_delimiter(@total_loan&.first&.last.to_i) %></h5></td>
+            <td style='text-align: center'><h5><%=number_with_delimiter(@total_loan&.first&.first.to_i) %></h5></td>
             <td></td>
           </tr>
         </tbody>

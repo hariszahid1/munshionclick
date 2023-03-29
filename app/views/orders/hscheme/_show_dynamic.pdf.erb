@@ -104,10 +104,7 @@
   </head>
 
   <body class='bond_pos_pdf'>
-    <%if @order.sys_user.profile_image.attached?%>
-      <img src="<%= @order.sys_user.profile_image.service_url%>" height='150px' width='120px' style='float: right;' >
-    <% end %>
-    <div style='padding-top: 180px;'>
+    <div style='padding-top: 290px;'>
       <h2 class='text-center' style='font-size: 30px;'>Office Copy</h2>
       <div class='d-flex'>
         <div style='width: 33%' class='d-flex'>
@@ -345,10 +342,7 @@
 
     <div class="page-break"></div>
 
-    <%if @order.sys_user.profile_image.attached?%>
-      <%= image_tag @order.sys_user.profile_image.service_url, class:"profile_image", style:"float: right;"%>
-    <% end %>
-    <div style='padding-top: 180px;'>
+    <div style='padding-top: 290px;'>
       <h2 class='text-center' style='font-size: 30px;'>Client Copy</h2>
       <div class='d-flex'>
         <div style='width: 33%' class='d-flex'>

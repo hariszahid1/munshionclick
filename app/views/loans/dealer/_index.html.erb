@@ -14,15 +14,55 @@
   </div>
   <div id="new_sale_deal">
     <%= link_to new_loan_path(debit: true), class: "btn btn-outline-success mr-1 float-right", style:"width: 150px;" do %>
-      Loan Pay
+      Payable
     <% end %>
     <%= link_to new_loan_path(jama: true), class: "btn btn-outline-primary mr-1 float-right", style:"width: 150px;" do %>
-      Loan Recieve
+      Receivable
     <% end %>
   </div>
 </div>
 
 <div class="clearfix"></div>
+<div class='row mb-4'>
+  <div class="col-xl-4 col-sm-4 col-12 mb-2">
+    <div class="card mt-2 shadow" >
+      <div class="card-content">
+        <div class="card-body">
+          <div class="media d-flex">
+            <div class="align-self-center">
+              <div class="circle-icon">
+                <i class="fa fa-percent fa-2x logo-back circle-margin" style="color: #0f1d59;"></i>
+              </div>
+            </div>
+            <div class="media-body text-right">
+              <h3><%= number_with_delimiter(@total_loan&.first&.last.to_i) %></h3>
+              <span>Total Received</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-4 col-sm-4 col-12 mb-2">
+    <div class="card mt-2 shadow" >
+      <div class="card-content">
+        <div class="card-body">
+          <div class="media d-flex">
+            <div class="align-self-center">
+              <div class="circle-icon">
+                <i class="fas fa-money-bill-alt fa-2x logo-back circle-margin" style="color: #0f1d59;"></i>
+              </div>
+            </div>
+            <div class="media-body text-right">
+              <h3><%= number_with_delimiter(@total_loan&.first&.first.to_i) %></h3>
+              <span>Total Given</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="float-right">
   <div class="dropdown ml-auto">
     <span class="btn btn-outline-info btn-sm mt-2" title= "About This page"><i class="fa fa-question-circle mr-1"></i>Help</span>
@@ -79,8 +119,8 @@
             <tr>
               <th>Sr#</th>
               <th>Date</th>
-              <th>Loan Received</th>
-              <th>Loan Given</th>
+              <th>Received</th>
+              <th>Given</th>
               <th class="urdu-font">Comment</th>
               <th class="border_none">Action</th>
             </tr>
@@ -90,8 +130,8 @@
               <tr>
                 <td><%= @starting_number + index %></td>
                 <td><%= loan.created_at.strftime('%d-%m-%Y') %></td>
-                <td><%= number_with_delimiter(loan.credit.to_f.round(2)) %></td>
-                <td><%= number_with_delimiter(loan.debit.to_f.round(2)) %></td>
+                <td><%= number_with_delimiter(loan.credit.to_i) %></td>
+                <td><%= number_with_delimiter(loan.debit.to_i) %></td>
                 <td><span title="<%= loan.comment %>" class='truncate-text'><%= loan.comment %></span></td>
                 <td class="p-3">
                   <div class="icon-container-1">
@@ -147,8 +187,8 @@
             <tr>
               <td><h5>Total</h5></td>
               <td></td>
-              <td><h5><%= number_with_delimiter(@total_loan&.first&.last.to_f.round(2)) %></h5></td>
-              <td><h5><%=number_with_delimiter(@total_loan&.first&.first.to_f.round(2)) %></h5></td>
+              <td><h5><%= number_with_delimiter(@total_loan&.first&.last.to_i) %></h5></td>
+              <td><h5><%=number_with_delimiter(@total_loan&.first&.first.to_i) %></h5></td>
               <td></td>
               <td></td>
             </tr>
