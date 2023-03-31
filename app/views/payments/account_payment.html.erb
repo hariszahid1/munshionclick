@@ -46,7 +46,7 @@
         <%= search_form_for @q, url: account_payment_payments_path, class: "admin-controls", method: "get" do |f| %>
           <div class="row d-flex ml-1 mr-1 mt-4">
             <div class="col-lg-3 form-group float-left">
-              <%= f.select :account_id_eq, options_from_collection_for_select(Account.all, "id", ->(st){"#{st.title} \u{27F6} #{st.bank_name}"},f.object.account_id_eq), {:include_blank => "Select the Account Title"},{class: "form-control chosen-select", :data => {:placeholder => "Select the Account Title"} } %>
+              <%= f.select :account_id_eq, options_from_collection_for_select(@accounts, "id", ->(st){"#{st.title} \u{27F6} #{st.bank_name}"},f.object.account_id_eq), {:include_blank => "Select the Account Title"},{class: "form-control chosen-select", :data => {:placeholder => "Select the Account Title"} } %>
             </div>
             <div class="col-lg-3 form-group float-left d-flex">
               <%= f.search_field :created_at, id: "reportrange", class: 'form-control' %>

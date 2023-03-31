@@ -1,1 +1,6 @@
-<%= render 'staff_advance_all' %>
+
+<% if current_user.company_type.eql?('jr') %>
+  <%= render 'staff_advance_all_for_jr' %>
+<% else %>
+  <%= render 'staff_advance_all' %>
+<% end %>

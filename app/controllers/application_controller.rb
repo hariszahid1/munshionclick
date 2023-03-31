@@ -357,8 +357,14 @@ class ApplicationController < ActionController::Base
     ApplicationRecord.set_connection
 
     @pos_setting = PosSetting.last
-    @account_balance = Account.group(:title).sum(:amount)
-    @account_amount_total = Account.sum(:amount)
+    if current_user&.extra_settings.try(:[], 'account_ids').present?
+      accounts = Account.where(id: current_user.extra_settings['account_ids'])
+      @account_balance = accounts.group(:title).sum(:amount)
+      @account_amount_total = accounts.sum(:amount)
+    else
+      @account_balance = Account.group(:title).sum(:amount)
+      @account_amount_total = Account.sum(:amount)
+    end
     @total_cash = @pos_setting&.cash_in_hand
   end
 

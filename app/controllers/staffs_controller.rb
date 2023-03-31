@@ -235,7 +235,7 @@ class StaffsController < ApplicationController
   def staff_params
     params.require(:staff).permit(:code, :name, :father, :education, :gender, :phone, :address, :cnic, :date_of_joining, :date_of_leaving, :yearly_increment,
                                   :monthly_salary, :school_branch_id, :wage_rate, :balance, :staff_department, :department_id, :staff_type, :wage_debit,
-                                    :raw_product_quantity, :profile_image, :staff_raw_products_attributes => [:id, :staff_id, :raw_product_id, :_destroy],
+                                    :raw_product_quantity, :profile_image, :is_agent, :staff_raw_products_attributes => [:id, :staff_id, :raw_product_id, :_destroy],
                                   contact_attributes: [:country_id, :city_id, :address, :home, :office, :Mobile, :fax,
                                     :email, :comment, :status, :permanent_address, :contactable_id, :contactable_type, :date_of_birth])
   end

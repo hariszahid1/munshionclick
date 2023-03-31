@@ -1,6 +1,7 @@
 class ExpensesController < ApplicationController
   before_action :check_access
   before_action :set_expense, only: %i[show edit update destroy]
+  before_action :set_accounts, only: %i[index edit new create]
   include PdfCsvGeneralMethod
   include ExpensesHelper
 
@@ -8,7 +9,6 @@ class ExpensesController < ApplicationController
   # GET /expenses.json
   def index
     @expense_types = ExpenseType.all
-    @accounts = Account.all
     @start_date = DateTime.current.beginning_of_month
     @end_date = DateTime.now
     @expense_type = @expense_types
@@ -73,14 +73,12 @@ class ExpensesController < ApplicationController
       @expense.expense_entries.build
     end
     @expense_types = ExpenseType.all
-    @accounts = Account.all
     @account = current_user.user_account
   end
 
   # GET /expenses/1/edit
   def edit
     @expense_types = ExpenseType.all
-    @accounts = Account.all
   end
 
   # POST /expenses
@@ -88,7 +86,6 @@ class ExpensesController < ApplicationController
   def create
     @expense = Expense.new(expense_params)
     @expense_types = ExpenseType.all
-    @accounts = Account.all
 
     respond_to do |format|
       if @expense.save
@@ -262,5 +259,12 @@ class ExpensesController < ApplicationController
     @total_debit = @payments.sum(:debit)
     @total_credit = @payments.sum(:credit)
     generate_pdf([@expense, @payments], 'Expense Voucher', 'pdf.html', 'A4', false, 'expenses/show.pdf.erb')
+  end
+
+  def set_accounts
+    @accounts = Account.all
+    return unless current_user&.extra_settings.try(:[], 'account_ids').present?
+
+    @accounts = Account.where(id: current_user.extra_settings['account_ids'])
   end
 end
