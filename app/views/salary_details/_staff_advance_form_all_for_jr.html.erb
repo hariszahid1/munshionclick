@@ -1,0 +1,30 @@
+<%= bootstrap_form_for(salary_detail, remote: true) do |f| %>
+  <div  id="create_<%=staff.id%>" class="col-lg-12 float-left" >
+    <div class="col-lg-3 form-group float-left" >
+      <% if salary_detail.persisted? %>
+        <%= text_field_tag "salary_paid_to", salary.paid_to, class: "form-control", readonly: true %>
+        <%= text_field_tag "salary_paid_to_name", salary.staff.name, class: "form-control", readonly: true %>
+      <% else %>
+        <%= f.select :staff_id, options_from_collection_for_select(@staffs_list, 'id', ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code} "},staff.id), {prompt: "Select the Staff",hide_label:true}, { required: true }%>
+      <% end %>
+    </div>
+    <div class="col-lg-2 form-group float-left" >
+      <%=staff.balance%>
+    </div>
+    <div class="col-lg-2 form-group float-left d-none">
+      <%= f.text_field :wage_rate,value:(staff.monthly_salary.present? ? staff.monthly_salary : staff.wage_rate), required: true,hide_label:true, class: "form-control  wage-rate", onchange:"wage_rate_generat(this)", onkeyup:"wage_rate_generat(this)", readonly:true %>
+    </div>
+    <div class="col-lg-2 form-group float-left d-none">
+      <%= f.number_field :quantity,value:1, required: true,hide_label:true, class: "form-control qty-hour", onchange:"wage_rate_generat(this)", onkeyup:"wage_rate_generat(this)" %>
+    </div>
+    <div class="col-lg-2 form-group float-left">
+      <%= f.number_field :amount,value:(staff.monthly_salary.present? ? staff.monthly_salary : staff.wage_rate), required: true,hide_label:true, class: "form-control salary-amount"%>
+    </div>
+    <div class='col-lg-3 form-group float-left'>
+      <%= f.text_area :comment, value:"Salary Paid", hide_label: true %>
+    </div>
+    <div class="col-lg-2 form-group float-left">
+      <%= f.submit "Save", name:staff.id, class: "btn btn-primary create float-left" %>
+    </div>
+  </div>
+<% end %>

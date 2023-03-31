@@ -278,6 +278,11 @@ class PaymentsController < ApplicationController
 
   def account_payment
     # Extract common expressions into variables
+    if current_user&.extra_settings.try(:[], 'account_ids').present?
+      @accounts = Account.where(id: current_user.extra_settings['account_ids'])
+    else
+      @accounts = Account.all
+    end
     @account_id = params.dig(:q, :account_id_eq)
 
     if params.dig(:q, :created_at_gteq).present?

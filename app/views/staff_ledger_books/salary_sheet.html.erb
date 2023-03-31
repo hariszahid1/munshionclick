@@ -92,13 +92,8 @@
                   <td><%=  number_with_delimiter(staff_ledger_book.balance.to_f.round(2)) %></td>
                   <td>
                     <%= staff_ledger_book.comment %>
-                    <%if staff_ledger_book.salary_detail.present?%>
-                      <%=staff_ledger_book.salary_detail.wage_rate%> X <%=staff_ledger_book.salary_detail.quantity%>
-                    <%end%>
-
-                    <% if staff_ledger_book.salary.present? %>
-                      <%= staff_ledger_book.salary.comment%>
-                    <%end%>
+                    <%= staff_ledger_book.salary_detail&.comment %>
+                    <%= staff_ledger_book.salary&.comment %>
                   </td>
                   <td>
                     <div class="icon-container-1">

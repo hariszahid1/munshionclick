@@ -963,8 +963,13 @@ class SalaryDetailsController < ApplicationController
     if @q.result.count > 0
       @q.sorts = 'name asc' if @q.sorts.empty?
     end
-    @staffs=Staff.all
-    @staffs_list = @q.result(distinct: true)
+    if current_user.company_type.eql?('jr')
+      @staffs=Staff.where(is_agent: false)
+      @staffs_list = @q.result(distinct: true).where(is_agent: false)
+    else
+      @staffs=Staff.all
+      @staffs_list = @q.result(distinct: true)
+    end
     @salary_detail = SalaryDetail.new(comment: 'Payment Credit',quantity:1)
   end
 

@@ -1,0 +1,56 @@
+
+ <div class="m-4">
+  <div class="float-left">
+    <h2 class="ml-2 logo-back"><i class="fas fa-money-check-alt mr-2"></i>Staff Payment</h2>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<%= root_path %>">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active">
+        <a href="<%=  %>">Staff Payment</a>
+      </li>
+    </ol>
+  </div>
+  <div class="clearfix"></div>
+  <div class="row mt-4">
+    <ul class="nav nav-tabs  ml-3" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link tab-label active" data-toggle="tab" href="#search" role="tab"><i class="fa fa-search mr-2"></i>Search</a>
+      </li>
+    </ul>
+  </div>
+  <div class="tab-content">
+    <div class="tab-pane active  mt-2 no-tab-border" id="search" role="tabpanel">
+      <%= search_form_for @q, url: advance_all_salary_details_path, class: "admin-controls", method: "get" do |f| %>
+          <div class="card mb-3 shadow p-4">
+            <div class="col-lg-12 col-sm-12">
+              <div class="col-lg-3 form-group float-left">
+                <%= f.select :id_eq, options_from_collection_for_select(@staffs, "id", ->(st){"#{st.name} \u{27F6} #{st.father} \u{27F6} #{st.code}"},f.object.id_eq),{:include_blank => "Select Staff"},:class=>"form-control chosen-select" %>
+              </div>
+              <div class="col-lg-2 form-group float-left">
+                <%= f.select :staff_type_eq, Staff.staff_types.map { |key, value| [key.humanize, value] }, {include_blank: "Select the Status", hide_label:true, required: true },:class=>"form-control  chosen-select"%>
+              </div>
+              <div class="col-lg-1 form-group float-left">
+                <input class="form-control btn btn-primary" name="search_submit" type="submit" value="Search"></input>
+              </div>
+            </div>
+          </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="card p-4">
+    <div class="col-lg-12" >
+      <div class="col-lg-3 form-group float-left"><b>Staff</b></div>
+      <div class="col-lg-2 form-group float-left"><b>Balance</b></div>
+      <div class="col-lg-2 form-group float-left"><b>Amount</b></div>
+      <div class="col-lg-3 form-group float-left"><b>Comment</b></div>
+      <div class="col-lg-2 form-group float-left"><b>Action</b></div>
+    </div>
+    <%@staffs_list.each do |staff|%>
+      <%= render 'staff_advance_form_all_for_jr', salary_detail: @salary_detail ,staff: staff%>
+    <%end%>
+  </div>
+  <div class="actions mt-4 float-right">
+    <%= link_to 'Salaries', salary_details_path, class: "btn btn-info" %>
+  </div>
+</div>
