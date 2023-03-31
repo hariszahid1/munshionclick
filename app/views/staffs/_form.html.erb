@@ -70,6 +70,10 @@
     <div class="col-lg-6 form-group float-left">
       <%= f.text_field :cnic , placeholder:"Enter CNIC Number"%>
     </div>
+
+    <div class="col-lg-6 form-group float-left">
+      <%= f.check_box :is_agent, class: "form-control", checked: f.object&.is_agent %>
+    </div>
  </div>
 <div class="clearfix"></div>
   <ul class="nav nav-tabs ml-4" role="tablist">
