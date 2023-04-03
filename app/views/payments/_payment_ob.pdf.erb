@@ -23,9 +23,12 @@
   <h1>Payments by Opening Balance</h1>
   <% if params[:payment_asc_op].present? %>
     <% current_balance = @payments&.last&.amount.to_i %>
+    <% opening_balance = @payments&.first&.amount.to_i - (@payments&.first&.credit.to_i - @payments&.first&.debit.to_i) %>
   <% else %>
     <% current_balance = @payments&.first&.amount.to_i %>
+    <% opening_balance = @payments&.last&.amount.to_i - (@payments&.last&.credit.to_i - @payments&.last&.debit.to_i) %>
   <% end %>
+  <h3 class='text-right'>Opening Balance: <%= number_with_delimiter(opening_balance) %></h3>
   <h3 class='text-right'>Current Balance: <%= number_with_delimiter(current_balance) %></h3>
   <div style='border: 1px solid black; margin: 20px 0px; padding: 10px;'>
     <h3>
