@@ -10,11 +10,12 @@
   <%if @pos_setting&.sys_type=="batha"%>
     <%= render partial: "order_show_batha", locals: {order: @order} %>
   <%elsif @pos_setting&.sys_type=="HousingScheme"%>
-    <% if @pos_setting&.extra_settings.present? && @pos_setting&.extra_settings.try(:[], 'booking_dynamic_receipt').present? %>
+    <% if params[:reciept].present? && @pos_setting&.extra_settings&.try(:[], 'booking_dynamic_receipt').present? %>
       <%= render partial: "/orders/hscheme/show_dynamic", locals: {order: @order} %>
     <% else %>
       <%= render partial: "/orders/hscheme/show", locals: {order: @order} %>
-    <% end%>
+    <% end %>
+
   <%elsif pos_setting_sys_type=="CustomClear" %>
     <%= render partial: "order_show_custom", locals: {order: @order} %>
   <%elsif params[:with_gst].present? %>

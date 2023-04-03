@@ -103,7 +103,7 @@ class GatesController < ApplicationController
       @nkasi_production_cycles = @n.result
       @expenses_with_type=ExpenseEntry.joins(:expense_type).where.not(expense_type_id:29).where(created_at: @expense_from.beginning_of_day..@expense_to.end_of_day).group('expense_types.title').sum(:amount)
       @expenses_total=ExpenseEntry.joins(:expense_type).where.not(expense_type_id:29).where(created_at: @expense_from.beginning_of_day..@expense_to.end_of_day).sum(:amount)
-      @salary_amount = SalaryDetail.joins(staff: :department).where.not('staffs.department_id':[1,2,3,4]).where(created_at: @salary_from.beginning_of_day..@salary_to.end_of_day).group('departments.title').sum(:amount)
+      @salary_amount = SalaryDetail.joins(staff: :department).where.not(wage_rate:nil).where.not('staffs.department_id':[1,2,3,4]).where(created_at: @salary_from.beginning_of_day..@salary_to.end_of_day).group('departments.title').sum(:amount)
       @purchase = PurchaseSaleItem.joins(:item).where.not('items.optimal':1).where(created_at: @purchase_from.beginning_of_day..@purchase_to.end_of_day).group(:title).sum(:total_cost_price)
       @purchase_quantity = PurchaseSaleItem.joins(:item).where.not('items.optimal':1).where(created_at: @purchase_from.beginning_of_day..@purchase_to.end_of_day).group(:title).sum(:quantity)
       @sale = PurchaseSaleItem.joins(:product).where(created_at: @sale_from.beginning_of_day..@sale_to.end_of_day).group(:title).sum(:total_sale_price)
