@@ -49,31 +49,33 @@
                 </a>
             </li>
         <% end %>
-        <li class='position-relative ml-3 <%= 'active' if request.path.start_with?(sale_deals_path,sale_deals_path) %>'>
-            <% if @requested_deals&.positive?%>
-                <span class = "notification-dot my_blinker" style='top: 15px;position: absolute;right: 35px;'></span>
-            <% end %>
-            <a href="#SaleSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                <i class="fas fa fa-percent"></i>
-                <span class="link-text">Sale Deals</span>
-            </a>
-            <ul class="collapse list-unstyled my-option border-radius-1 <%= 'active' if request.path.start_with?(sale_deals_path,sale_deals_path) %>" id="SaleSubmenu">
-                <li class="">
-                    <%= link_to sale_deals_path(q: {transaction_type_eq: 8}) do %>
-                        <i class="fas fa-plus"></i>
-                        <span class="link-text">Resale Deals</span>
-                    <% end %>
-                </li>
-            </ul>
-            <ul class="collapse list-unstyled my-option border-radius-1" id="SaleSubmenu">
-                <li class="">
-                    <%= link_to sale_deals_path(q: {transaction_type_eq: 9}) do %>
-                     <i class="fas fa-plus"></i>
-                     <span class="link-text">Fresh Sale Deals</span>
-                    <% end %>
-                </li>
-            </ul>
-        </li>
+        <% if check_is_hidden_by_module('sale_deals') %>
+          <li class='position-relative ml-3 <%= 'active' if request.path.start_with?(sale_deals_path,sale_deals_path) %>'>
+              <% if @requested_deals&.positive?%>
+                  <span class = "notification-dot my_blinker" style='top: 15px;position: absolute;right: 35px;'></span>
+              <% end %>
+              <a href="#SaleSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                  <i class="fas fa fa-percent"></i>
+                  <span class="link-text">Sale Deals</span>
+              </a>
+              <ul class="collapse list-unstyled my-option border-radius-1 <%= 'active' if request.path.start_with?(sale_deals_path,sale_deals_path) %>" id="SaleSubmenu">
+                  <li class="">
+                      <%= link_to sale_deals_path(q: {transaction_type_eq: 8}) do %>
+                          <i class="fas fa-plus"></i>
+                          <span class="link-text">Resale Deals</span>
+                      <% end %>
+                  </li>
+              </ul>
+              <ul class="collapse list-unstyled my-option border-radius-1" id="SaleSubmenu">
+                  <li class="">
+                      <%= link_to sale_deals_path(q: {transaction_type_eq: 9}) do %>
+                      <i class="fas fa-plus"></i>
+                      <span class="link-text">Fresh Sale Deals</span>
+                      <% end %>
+                  </li>
+              </ul>
+          </li>
+        <% end %>
         <li class="mb-2">
             <a href="#DealSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
               <i class="fas fa-handshake ml-3"></i>

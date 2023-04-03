@@ -23,7 +23,7 @@ class DealsController < ApplicationController
     @office_commission = @q.result.sum(:file_share)
     @deals = @q.result.page(params[:page]).per(25)
     @starting_number = 1 + 25 * ([params[:page].to_i, 1].max - 1)
-    @staffs = Staff.all
+    @staffs = Staff.where(staff_type: 'active')
     pdf_func if params[:pdf].present?
   end
 

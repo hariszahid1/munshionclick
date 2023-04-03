@@ -187,7 +187,7 @@ class CrmsController < ApplicationController
     @cities = City.all
     @countries = Country.all
     @user_groups = UserGroup.all
-    @staff = Staff.all
+    @staff = Staff.where(staff_type: 'active')
     @pos_setting = PosSetting.last
     @project_name = get_setting('project_name')
     @client_type = get_setting('client_type')

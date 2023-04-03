@@ -12,7 +12,7 @@
   <% end %>
   <div class="col-lg-12 row">
     <div class="col-lg-6 form-group">
-      <%= f.select :staff_id, options_from_collection_for_select(Staff.all, 'id', 'name', f.object&.staff_id), {label: "Select Agent Name",prompt: "Select Agent Name"}, class: 'chosen-select form-control'%>
+      <%= f.select :staff_id, options_from_collection_for_select(Staff.where(staff_type: 'active'), 'id', 'name', f.object&.staff_id), {label: "Select Agent Name",prompt: "Select Agent Name"}, class: 'chosen-select form-control'%>
     </div>
     <div class="col-lg-6 form-group">
       <%= f.number_field :comission, label: 'Commission' %>

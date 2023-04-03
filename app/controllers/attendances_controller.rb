@@ -99,6 +99,6 @@ class AttendancesController < ApplicationController
   end
 
   def set_staff
-    @staffs = Staff.where(is_agent: false)
+    @staffs = Staff.where(is_agent: false, staff_type: 'active')
   end
 end

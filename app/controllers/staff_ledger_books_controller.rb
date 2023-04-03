@@ -312,7 +312,7 @@ class StaffLedgerBooksController < ApplicationController
       @q = StaffLedgerBook.joins(:staff).where('credit>0 or debit>0 or credit<0 or debit<0')
                           .where(created_at: @created_at_gteq.to_date.beginning_of_day..@created_at_lteq.to_date.end_of_day).ransack
     end
-    @staff = Staff.all
+    @staff = Staff.where(staff_type: 'active')
     @debit = @q.result.sum(:debit)
     @credit = @q.result.sum(:credit)
     staff_list = @q.result.order('staffs.name asc', 'staff_ledger_books.created_at desc')

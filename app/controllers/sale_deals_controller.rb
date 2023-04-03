@@ -1,4 +1,5 @@
 class SaleDealsController < ApplicationController
+  before_action :check_access
   include PdfCsvGeneralMethod
   include SaleDealsHelper
 
@@ -157,7 +158,7 @@ class SaleDealsController < ApplicationController
     @deal = get_setting('deal')
     @source = get_setting('source')
     @category = get_setting('category')
-    @staffs = Staff.all
+    @staffs = Staff.where(staff_type: 'active')
     @sys_users = SysUser.all.where(for_crms: [false, nil])
     @accounts = Account.all
     @products = Product.all
