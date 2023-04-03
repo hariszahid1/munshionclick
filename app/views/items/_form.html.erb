@@ -10,7 +10,7 @@
     </div>
   <% end %>
   <div class="col-lg-6 form-group float-left">
-    <%= f.select :item_type_id, options_from_collection_for_select(@item_types, 'id', 'title', f.object.item_type_id), {prompt: "Select the Item Type"}, required: true %>
+<%= f.select :item_type_id, options_from_collection_for_select(@item_types, 'id', 'title', f.object.item_type_id), {prompt: "Select the Item Type"}, {required: true, class: "chosen-select"} %>
   </div>
   <div class="col-lg-6 form-group float-left">
     <%= f.label :title do %>
@@ -69,3 +69,10 @@
     </div>   
 <% end %>
 <%= javascript_include_tag 'hover', 'data-turbolinks-track': 'reload' %>
+<script>
+  $(document).ready(function() {
+    $('.chosen-select').chosen();
+    // Set the width of the chosen-select fields
+    $('.chosen-container').css('width', '100%');
+  });
+</script>
