@@ -12,6 +12,13 @@ class StaffsController < ApplicationController
   def index
     @departments=Department.all
     @q = Staff.where(deleted: false).ransack(params[:q])
+    if @pos_setting.sys_type.eql?('Dealer')
+      if params.dig(:q, :staff_type_eq).present?
+        @q = Staff.where(deleted: false).ransack(params[:q])
+      else
+        @q = Staff.where(deleted: false, staff_type: 'active').ransack(params[:q])
+      end
+    end
     if @q.result.count > 0
       @q.sorts = ['name asc', 'department_id asc'] if @q.sorts.empty?
     end

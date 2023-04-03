@@ -202,7 +202,7 @@ class OrdersController < ApplicationController
       @suppliers = SysUser.where(user_group: %w[Supplier Both Own])
       @customers = SysUser.where(user_group: %w[Customer Supplier Both Salesman])
     end
-    if @pos_setting&.extra_settings.present? && @pos_setting&.extra_settings.try(:[], 'booking_dynamic_receipt').present?
+    if params[:reciept].present? && @pos_setting&.extra_settings&.try(:[], 'booking_dynamic_receipt').present?
       print_pdf(@order&.sys_user&.name.to_s + ' Order-Detail', nil, 'A4')
     else
       if params[:page_size].present? && params[:style].present?
