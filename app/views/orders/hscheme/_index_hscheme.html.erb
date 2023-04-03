@@ -173,6 +173,18 @@
                                     <%end%>
                                   <% end %>
                                 </div-->
+                                <% if @pos_setting&.extra_settings&.try(:[], 'booking_dynamic_receipt').present? %>
+                                  <div class="my-icon my-view">
+                                    <div class="my-tooltip">
+                                      Booking Receipt
+                                    </div>
+                                    <%if (check_can_download_pdf(@module_permission))%>
+                                      <%= link_to order_path(id: order.id, reciept: true), target: "_blank", title: "Download Booking Receipt", class:"icon-div" do %>
+                                        <i class="fa fa-print mt-2" aria-hidden="true"></i>
+                                      <% end %>
+                                    <% end %>
+                                  </div>
+                                <% end %>
                                 <% if @pos_setting&.extra_settings.present? && @pos_setting&.extra_settings['ghouse5'].present? %>
                                   <div class="my-icon my-view">
                                     <div class="my-tooltip">
