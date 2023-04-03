@@ -23,9 +23,12 @@
   <h1>Ledger Book by Opening Balance</h1>
   <% if params[:ledger_book_asc_op].present? %>
     <% current_balance = @ledger_books&.last&.balance.to_i %>
+    <% opening_balance = @ledger_books&.first&.balance.to_i - (@ledger_books&.first&.credit.to_i - @ledger_books&.first&.debit.to_i) %>
   <% else %>
     <% current_balance = @ledger_books&.first&.balance.to_i %>
+    <% opening_balance = @ledger_books&.last&.balance.to_i - (@ledger_books&.last&.credit.to_i - @ledger_books&.last&.debit.to_i) %>
   <% end %>
+  <h3 class='text-right'>Opening Balance: <%= number_with_delimiter(opening_balance) %></h3>
   <h3 class='text-right'>Current Balance: <%= number_with_delimiter(current_balance) %></h3>
   <div style='border: 1px solid black; margin: 20px 0px; padding: 10px;'>
     <h3>
