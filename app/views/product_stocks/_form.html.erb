@@ -16,7 +16,7 @@
 <div class="col-lg-12 row">
 
     <div class="col-lg-6 form-group float-left">
-      <%= form.select :product_id , options_from_collection_for_select(@products, 'id', 'title', form.object.product_id), {prompt: "Select the Product"}, required: true%>
+      <%= form.select :product_id , options_from_collection_for_select(@products, 'id', 'title', form.object.product_id), {prompt: "Select the Product"},class: "chosen-select" ,required: true%>
     </div>
     <div class="col-lg-6 form-group float-left">
       <%= form.number_field :in_stock %>

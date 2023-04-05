@@ -40,7 +40,7 @@
       </div>
     <% end %>
     <div class="col-lg-12 field form-group">
-      <%= f.number_field :advance, label: "New Advance amount", required: true%>
+      <%= f.number_field :advance, label: "New Advance amount", class: 'advance-payment-field', required: true%>
     </div>
     <div class="col-lg-12 field form-group">
     <%= f.hidden_field :balance, label: "New Balance", required: true%>
@@ -81,3 +81,18 @@
 
   <% end %>
 <%= javascript_include_tag 'hover', 'data-turbolinks-track': 'reload' %>
+
+<% if params[:salary_sheet].present? %>
+  <script>
+    $(document).ready(function(){
+      var current_balance = 0;
+      $('.advance-payment-field').on('keyup', function(){
+        if (current_balance == 0){
+          current_balance = parseFloat($('#balance').text())
+        }
+        var fieldValue = $(this).val()
+        $('#balance').text(current_balance - fieldValue)
+      })
+    })
+  </script>
+<% end %>

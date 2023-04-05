@@ -11,28 +11,32 @@
     </div>
   <% end %>
   <div class="card border-radius-1 shadow p-3 mb-3">
-  <table>
-    <thead>
-      <th>Product</th>
-      <th>Opration Cost</th>
-      <th>Total Cost</th>
-      <th>Sale Price</th>
-      <th>Status</th>
-      <th>Comment</th>
-    </thead>
-    <tbody>
-      <tr>
-        <td><%= f.select :product_id, options_from_collection_for_select(@products, 'id', ->(st){"#{st.title} \u{27F6} #{st.category_title}"}, f.object.product_id), {hide_label:true,prompt: "Select the Product"}, required: true %></td>
-        <td><%= f.number_field :operation_cost,step: :any,hide_label:true,onchange:"remaingUpdate()",onkeyup:"remaingUpdate()"%></td>
-        <td><%= f.hidden_field :cost_price%><h1 class="production_cost_price"><%=f.object.cost_price.present? ? f.object.cost_price : 0.00%></h1></td>
-        <td><%= f.number_field :sale_price,step: :any,hide_label:true%></td>
-        <td>
-          <%= f.select :status, PurchaseSaleDetail.statuses.map { |key, value| [key.humanize, key] },{hide_label:true,class: "form-control", required: true} %>
-        </td>
-        <td><%= f.text_area :comment, placeholder:"Enter Comment",hide_label:true%></td>
-      </tr>
-    </tbody>
-  </table>
+  <div>
+   <table>
+     <thead>
+       <th>Product</th>
+       <th>Opration Cost</th>
+       <th>Total Cost</th>
+       <th>Sale Price</th>
+       <th>Status</th>
+       <th>Comment</th>
+     </thead>
+     <tbody>
+       <tr>
+         <td>
+           <%= f.select :product_id, options_from_collection_for_select(@products, 'id', ->(st){"#{st.title} \u{27F6} #{st.category_title}"}, f.object.product_id), { hide_label: true, prompt: "Select the Product" }, class: "form-control chosen-select", required: true %>
+         </td>
+         <td><%= f.number_field :operation_cost,step: :any,hide_label:true,onchange:"remaingUpdate()",onkeyup:"remaingUpdate()"%></td>
+         <td><%= f.hidden_field :cost_price%><h1 class="production_cost_price"><%=f.object.cost_price.present? ? f.object.cost_price : 0.00%></h1></td>
+         <td><%= f.number_field :sale_price,step: :any,hide_label:true%></td>
+         <td>
+           <%= f.select :status, PurchaseSaleDetail.statuses.map { |key, value| [key.humanize, key] },{hide_label:true,class: "form-control", required: true} %>
+         </td>
+         <td><%= f.text_area :comment, placeholder:"Enter Comment",hide_label:true%></td>
+       </tr>
+     </tbody>
+   </table>
+   </div>
   <%if @production.materials.present?%>
     <table>
       <thead>
@@ -74,6 +78,6 @@
   <div class="actions">
     <%= link_to productions_path, class:"btn btn-light btn-outline-secondary " do %>Cancel
     <% end %>    
-    <%= f.submit class: "btn btn-success", style: "float: right" %>
+    <%= f.submit "Save", class: "btn btn-success", style: "float: right" %>
   </div>
 <% end %>
