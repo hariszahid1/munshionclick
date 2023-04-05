@@ -120,10 +120,10 @@
                 <div class="col-lg-2 form-group float-left font-weight-bold"><%= f.select :sys_user_id, options_from_collection_for_select(@suppliers, 'id', 'name', f.object.sys_user_id), {label:'User',prompt: "Select the Supplier"}, required: true,:class=>"form-control chosen-select",onchange:"set_sys_user_balance(this.value,'sys_user_balance')",onkeyup:"set_sys_user_balance(this.value,'sys_user_balance')" %></div>
               <%end%>
               <div class="col-lg-2 form-group float-left font-weight-bold">
-                <%= f.select :order_id, options_from_collection_for_select(@orders, 'id', ->(st){"#{st.id} \u{27F6} #{st.total_bill} "}, f.object.order_id), {prompt: "Select the Order"},class: "form-control"%>
+                <%= f.select :order_id, options_from_collection_for_select(@orders, 'id', ->(st){"#{st.id} \u{27F6} #{st.total_bill} "}, f.object.order_id), {prompt: "Select the Order"},class: "form-control chosen-select"%>
               </div>
               <div class="col-lg-2 form-group float-left font-weight-bold">
-                <%= f.select :account_id , options_from_collection_for_select(@accounts, 'id', 'title', (f.object.account_id.present? ? f.object.account_id : @account)),{},class: "form-control"%>
+                <%= f.select :account_id , options_from_collection_for_select(@accounts, 'id', 'title', (f.object.account_id.present? ? f.object.account_id : @account)),{},class: "form-control chosen-select"%>
               </div>
               <div class="col-lg-2 form-group float-left font-weight-bold"> <%= f.hidden_field :total_bill%>
                 <%if f.object.order_id.present? && params[:action] == 'new' %>

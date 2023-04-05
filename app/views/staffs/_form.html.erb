@@ -92,7 +92,7 @@
               <%= f.number_field :monthly_salary %>
             </div>
             <div class="col-lg-6 form-group float-left">
-              <%= f.select :department_id, options_from_collection_for_select(@departments, 'id', 'title', f.object.department_id), {prompt: "Select the Department"},class:"form-control"%>
+              <%= f.select :department_id, options_from_collection_for_select(@departments, 'id', 'title', f.object.department_id), {prompt: "Select the Department"},class:"form-control chosen-select"%>
             </div>
             <div class="col-lg-6 form-group float-left">
              <%= f.text_field :staff_department , placeholder:"Enter Department" %>
@@ -141,7 +141,7 @@
     <div class="clearfix">
     <div class="modal-footer">
       <a href="<%= staffs_path %>" class="btn btn-light btn-outline-secondary cancel-btn-outline">Cancel</a>
-      <%=f.object.id.nil? ? (f.submit "Save" ,class: "btn btn-primary", style: "")  :  (f.submit class: "btn btn-warning", style: "float: right")%>
+      <%=f.object.id.nil? ? (f.submit "Save" ,class: "btn btn-primary", style: "")  :  (f.submit "Update", class: "btn btn-warning", style: "float: right")%>
     </div>
 </div>
 <% end %>
