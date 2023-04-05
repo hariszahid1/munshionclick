@@ -1,3 +1,12 @@
-<h1>Editing Advance (Balance: <span id='balance'>0.00</span>)</h1>
-
-<%= render 'advance_form', salary: @salary %>
+<div class="card border-radius-1 shadow-sm">
+<div class="card-header p-4">
+  <% if params[:salary_sheet].present? %>
+  <h1>Editing Advance</h1>
+  <% else %>
+    <h1>Editing Advance (Balance: <span id='balance'>0.00</span>)</h1>
+  <% end %>
+</div>
+</div>
+<div class="card border-radius-1 shadow-sm p-3 mt-3">
+  <%= render 'advance_form', salary: @salary %>
+</div>

@@ -57,7 +57,7 @@ class SaleDealsController < ApplicationController
 
     respond_to do |format|
       if @sale_deal.save
-        modify_salary_details if @sale_deal.staff_id.present?
+        # modify_salary_details if @sale_deal.staff_id.present?
         # @ledger_book = LedgerBook.new(sys_user_id: @sale_deal&.sys_user.id, debit: @sale_deal&.total_bill.to_f, credit: @sale_deal&.amount.to_f,
         #                               balance: (@sale_deal&.sys_user&.balance.to_f - @sale_deal&.remaining_balance.to_f),
         #                               comment: 'Voucher #' + @sale_deal&.id.to_s,
