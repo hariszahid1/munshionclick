@@ -616,13 +616,19 @@
                     <%= link_to products_path('q[size_6_in]':0), class: "btn btn-outline-primary rounded-pill btn-sm mr-1" do %>
                       Booked:
                       <i class="text-xs mb-0 font-weight-bold">
-                        <%=@total_booked.count.to_f.round(2) rescue 0%>
+                        <%=@total_booked.count.to_i %>
                       </i>
                     <% end %>
-                    <%= link_to products_path('q[size_6_in]':1), class: "btn btn-outline-danger rounded-pill btn-sm" do %>
+                    <%= link_to products_path('q[size_6_in]':1), class: "btn btn-outline-success rounded-pill btn-sm" do %>
                       Open:
                       <i class="text-xs mb-0 font-weight-bold">
-                        <%=@total_remaning.count.to_f.round(2) rescue 0%>
+                        <%=@total_remaning.count.to_i %>
+                      </i>
+                    <% end %>
+                    <%= link_to products_path('q[orders_status_eq]':5), class: "btn btn-outline-danger rounded-pill btn-sm mt-2" do %>
+                      Canceled:
+                      <i class="text-xs mb-0 font-weight-bold">
+                        <%=@total_canceled.count.to_i %>
                       </i>
                     <% end %>
                   </div>
