@@ -249,6 +249,7 @@ Rails.application.routes.draw do
       get :sys_user_balance, to: 'sys_users#sys_user_balance', as: :sys_user_balance
       get :view_history, to: 'sys_users#view_history'
     end
+    patch :update_balance, on: :member
   end
 
   resources :user_types
@@ -311,6 +312,8 @@ Rails.application.routes.draw do
       post :create_user
     end
   end
+
+  resources :markers
   get 'reports/index'
   get 'reports/chart'
   get 'reports/day_out_report'
@@ -395,6 +398,7 @@ Rails.application.routes.draw do
       get :salary_info
       get :salary_wage_rate_info
     end
+    patch :update_balance_staff, on: :member
   end
 
   resources :salaries do
