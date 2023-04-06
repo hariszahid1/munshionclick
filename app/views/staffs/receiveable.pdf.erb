@@ -6,9 +6,9 @@
 <% @time = DateTime.now %>
 <% @time = Time.zone.now %>
 <p style="border-bottom: double 4px;  margin: 0;"></p>
-<h1 style="text-align: center; margin: 0;">Reciveable staff details</h1>
+<h1 style="text-align: center; marginy: 2px;">Reciveable Staff Details</h1>
 <p style="border-bottom: double 4px;  margin: 0;"></p>
-<p style="text-align: center;margin: 0;">Report by: <%=current_user.name%></p>
+<p style="text-align: center;margintop: 2px;">Report by: <%=current_user.name%></p>
 <div >
   <table>
     <thead>
@@ -34,7 +34,7 @@
           <td><%= staff.code %></td>
           <td><%= staff.name %></td>
           <td><%= staff.father %></td>
-          <td><%= staff.date_of_joining.strftime("%A,  %d-%b-%y") if staff.date_of_joining%></td>
+          <td><%= staff.date_of_joining.strftime("%d-%b-%y") if staff.date_of_joining%></td>
           <td><%= number_with_delimiter(staff.staff_salary_or_wage.to_f.round(2))%><% number_with_delimiter(@monthly_wage += staff.staff_salary_or_wage.to_f.round(2)) %></td>
           <td><%= number_with_delimiter(staff.advance_amount.to_f.round(2)) %><% number_with_delimiter(@advance += staff.advance_amount.to_f.round(2)) %></td>
           <td><%= staff.department.present? ? staff.department.title : ""%>:<%= staff.staff_raw_products.present? ? staff.staff_raw_products_titles : ""%></td>

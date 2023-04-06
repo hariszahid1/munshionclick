@@ -41,8 +41,9 @@
   </div> 
   <hr>
   <div class="row-lg-12 p-3"> 
+  <a href ="<%=investments_path %>" class="btn  btn-outline-secondary "> Cancel</a>
     <div class="float-right">
-      <%=f.object.id.nil? ? (f.submit "Save" ,class: "btn btn-success", style: "float: right")  :  (f.submit class: "btn btn-warning", style: "float: right")%>
+      <%=f.object.id.nil? ? (f.submit "Save" ,class: "btn btn-success mb-4", style: "float: right")  :  (f.submit class: "btn btn-warning", style: "float: right")%>
     </div>
   </div>           
 <% end %>
