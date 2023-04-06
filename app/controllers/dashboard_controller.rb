@@ -50,6 +50,10 @@ class DashboardController < ApplicationController
     @in_cold_storage_count = PurchaseSaleDetail.where(transaction_type: "InWard").count
     @out_cold_storage_count = PurchaseSaleDetail.where(transaction_type: "OutWard").count
 
+    # product_ids = OrderItem.joins(:order).where(orders: { status: %w[Clear Order UnClear UnPrint Printed] })
+    #                        .select(:product_id).distinct.pluck(:product_id)
+    # @total_canceled = Product.joins(:orders).where.not(id: product_ids).where('product.orders.status': 'Cancel')
+    @total_canceled = Product.joins(order_items: :order).where(orders: { status: 'Cancel' })
     @total_booked=Product.booked_plot.uniq
     @total_reserved=Product.secure_plot.uniq
     @total_remaning=Product.open_plot.uniq

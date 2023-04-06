@@ -90,6 +90,7 @@
     <table data-toggle="table" data-search="true" id="country_table">
       <thead>
         <tr>
+          <th>ID/P</th>
           <th><%= sort_link(@q, :staff, 'Staff') %></th>
           <th><%= sort_link(@q, :debit, 'Debit/Benam') %></th>
           <th><%= sort_link(@q, :credit, 'Credit/Jama') %></th>
@@ -103,6 +104,13 @@
       <tbody>
         <% @staff_ledger_books.each do |staff_ledger_book| %>
           <tr style="font-size:20px;,font-family: Arial Black, Gadget, sans-serif">
+            <td>
+              <% payment_id = staff_ledger_book.salary&.payment&.first&.id if staff_ledger_book.salary.present? %>
+              <% payment_id = staff_ledger_book.salary_detail&.payments&.first&.id if staff_ledger_book.salary_detail.present? %>
+              <%= link_to payments_path('q[id_eq]': payment_id ) do %>
+                <%= staff_ledger_book.id%>[<%= payment_id %>]
+              <% end %>
+            </td>
             <td class="urdu-font"><%= link_to staff_ledger_book.staff.code+' '+staff_ledger_book.staff.full_name , staffs_path('q[id_eq]': staff_ledger_book.staff.id) %></td>
             <td><%= number_with_delimiter(staff_ledger_book.debit.to_f.round(2)) %></td>
             <td><%= number_with_delimiter(staff_ledger_book.credit.to_f.round(2)) %></td>
