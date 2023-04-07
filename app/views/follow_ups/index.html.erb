@@ -106,12 +106,12 @@
         <%= render partial: 'follow_up', collection: @follow_ups %>
       </tbody>
     </table>
-    <div class="row">
-      <div class="col-lg-4 col-sm-4">
+    <div class="col-lg-12 digg_pagination">
+      <div class="float-left page_info">
         <%= page_entries_info @follow_ups %>
       </div>
-      <div class="col-lg-8 col-sm-8 pagination-left">
-        <%= paginate @follow_ups %>
+      <div class="float-right">
+        <%= paginate @follow_ups, :container => false %>
       </div>
     </div>
   </div>
