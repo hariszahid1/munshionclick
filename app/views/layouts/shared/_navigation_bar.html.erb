@@ -23,16 +23,18 @@ background: none;
       <rect  y="310" width="500" height="35"/>
     </g>
   </svg>
-   
-  <div class="d-flex">
-    <div class="d-none d-lg-block mb-2">
-      <span>
-        <div class="dropdown my-nav-dropdown">
-          <span class="mt-2 px-3 py-2 mr-3" style="border: 1px solid #e5e4e2; background: #f5f5f5; border-radius: 18px; color: dark;">Account Balance: <span><%= number_with_delimiter(@total_cash) %></span>
-        </div>
-      </span>
+
+  <% if !current_user.company_type.eql?('jr') %>
+    <div class="d-flex">
+      <div class="d-none d-lg-block mb-2">
+        <span>
+          <div class="dropdown my-nav-dropdown">
+            <span class="mt-2 px-3 py-2 mr-3" style="border: 1px solid #e5e4e2; background: #f5f5f5; border-radius: 18px; color: dark;">Account Balance: <span><%= number_with_delimiter(@total_cash) %></span>
+          </div>
+        </span>
+      </div>
     </div>
-  </div> 
+  <% end %>
   <div class="d-flex">
     <div class="d-none d-lg-block mr-auto mb-2" style="cursor: pointer;">
       <span>
