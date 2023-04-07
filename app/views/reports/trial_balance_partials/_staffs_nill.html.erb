@@ -39,18 +39,30 @@
             <% @staff_nill.each do |staff| %>
               <tr>
                 <td><%= staff.staff_type %></td>
-                <td>
-                  <%= link_to staff_ledger_books_path('q[staff_id_eq]':staff.id) do%>
-                    <i class="fa fa-address-book"></i><%= staff.code %>
-                  <%end %>
+                <td style="display: flex; align-items: center; justify-content: space-between;">
+                  <div>
+                    <%= link_to staff_ledger_books_path('q[staff_id_eq]':staff.id) do%>
+                      <i class="fa fa-address-book"></i><%= staff.code %>
+                    <%end %>
+                  </div>
+                  <div class="icon-container">
+                    <div class="my-icon my-view">
+                      <div class="my-tooltip">
+                        Update Balance
+                      </div>
+                      <a class="icon-div" id="staff-nill-balance" data-staff-nill-id="<%= staff.id %>">
+                        <i class="fa fa-undo mt-2"></i>
+                      </a>
+                    </div>
+                  </div>
                 </td>
                 <td><%= staff.full_name %></td>
                 <td><%= number_with_delimiter(staff.staff_salary_or_wage.to_f.round(2))%></td>
                 <td><%= staff.department.present? ? staff.department.title : ""%>:<%= staff.staff_raw_products.present? ? staff.staff_raw_products_titles : ""%></td>
                 <td><%= number_with_delimiter(debit_sum  = @staff_nill_ledger_book_debit[staff.id].to_d) %></td>
                 <td><%= number_with_delimiter(credit_sum = @staff_nill_ledger_book_credit[staff.id].to_d) %></td>
-                <td><%= number_with_delimiter(balance = staff.balance.to_f.round(2))%><%credit_debit = credit_sum-debit_sum%></td>
-                <td>
+                <td id="updated-staff-nill-balance-<%= staff.id %>"><%= number_with_delimiter(balance = staff.balance.to_f.round(2))%><%credit_debit = credit_sum-debit_sum%></td>
+                <td id="new-updated-staff-nill-balance-<%= staff.id %>">
                   <% if balance == credit_debit%>
                     <i class="fa fa-check"></i>
                   <%else%>
@@ -73,3 +85,29 @@
     </div>
   </div>
 </div>
+
+<script>
+  $(document).ready(function() {
+    $(document).on('click', '#staff-nill-balance', function(e) {
+      e.preventDefault();
+      var userId = $(this).data('staff-nill-id');
+      var balanceCell1 = $('td#updated-staff-nill-balance-' + userId);
+      var balanceCell2 = $('td#new-updated-staff-nill-balance-' + userId);
+      $.ajax({
+        type: 'PATCH',
+        url: '/staffs/' + userId + '/update_balance',
+        dataType: 'json',
+        success: function(data) {
+          balanceCell1.text(data.updated_balance);
+          balanceCell2.html('<i class="fas fa-check"></i>');
+
+        },
+        error: function(xhr, status, error) {
+          console.log('Error:', error);
+        }
+      });
+    });
+  });
+
+  FontAwesome.dom.i2svg();
+</script>

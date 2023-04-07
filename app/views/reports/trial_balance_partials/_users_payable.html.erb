@@ -34,7 +34,19 @@
         <tbody>
           <% @sys_user_payable.each do |sys_user| %>
             <tr>
-              <td><%= sys_user.code %></td>
+              <td style="display: flex; align-items: center; justify-content: space-between;">
+                <div><%= sys_user.code %></div>
+                <div class="icon-container">
+                  <div class="my-icon my-view">
+                    <div class="my-tooltip">
+                      Update Balance
+                    </div>
+                    <a class="icon-div" id="user-payable-balance" data-sys-user-payable-id="<%= sys_user.id %>">
+                      <i class="fa fa-undo mt-2"></i>
+                    </a>
+                  </div>
+                </div>
+              </td>
               <td>
                 <%= link_to ledger_books_path('q[sys_user_id_eq]':sys_user.id) do%>
                   <i class="fa fa-address-book"></i><%= sys_user.name %>
@@ -44,13 +56,14 @@
               <td><%= sys_user.status %></td>
               <td><%= number_with_delimiter(debit_sum  = @sys_user_payable_ledger_book_debit[sys_user.id].to_d)%></td>
               <td><%= number_with_delimiter(credit_sum = @sys_user_payable_ledger_book_credit[sys_user.id].to_d)%></td>
-              <td><%= number_with_delimiter(balance = sys_user.balance) %> <%credit_debit = credit_sum-debit_sum%></td>
-              <td>
-                <% if balance == credit_debit%>
+              <td id="updated-payable-balance-<%= sys_user.id %>"><%= number_with_delimiter(sys_user.balance) %></td>
+              <td id="new-updated-payable-balance-<%= sys_user.id %>">
+                <% credit_debit = credit_sum - debit_sum %>
+                <% if sys_user.balance == credit_debit %>
                   <i class="fa fa-check"></i>
-                <%else%>
-                  <i class="fa fa-trash"></i><%=balance-credit_debit%>
-                <%end%>
+                <% else %>
+                  <i class="fa fa-trash"></i><%= number_with_delimiter(sys_user.balance - credit_debit) %>
+                <% end %>
               </td>
             </tr>
           <% end %>
@@ -68,3 +81,28 @@
     </div>
   </div>
 </div>
+<script>
+  $(document).ready(function() {
+    $(document).on('click', '#user-payable-balance', function(e) {
+      e.preventDefault();
+      var userId = $(this).data('sys-user-payable-id');
+      var balanceCell1 = $('td#updated-payable-balance-' + userId);
+      var balanceCell2 = $('td#new-updated-payable-balance-' + userId);
+      $.ajax({
+        type: 'PATCH',
+        url: '/sys_users/' + userId + '/update_balance',
+        dataType: 'json',
+        success: function(data) {
+          balanceCell1.text(data.updated_balance);
+          balanceCell2.html('<i class="fas fa-check"></i>');
+
+        },
+        error: function(xhr, status, error) {
+          console.log('Error:', error);
+        }
+      });
+    });
+  });
+
+  FontAwesome.dom.i2svg();
+</script>

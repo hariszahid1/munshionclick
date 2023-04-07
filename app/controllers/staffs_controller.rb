@@ -216,6 +216,15 @@ class StaffsController < ApplicationController
     end
   end
 
+  def update_balance
+    staff = Staff.find(params[:id])
+    @credit_sum = StaffLedgerBook.where(staff_id: staff).sum(:credit)
+    @debit_sum = StaffLedgerBook.where(staff_id: staff).sum(:debit)
+    @updated_balance = @credit_sum.to_f - @debit_sum.to_f
+    staff.update(balance: @updated_balance)
+    render json: { updated_balance: @updated_balance }
+  end
+
   def view_history
     @start_date = Date.today.beginning_of_month
     @end_date =  Date.today.end_of_month
