@@ -85,10 +85,9 @@
   $(document).ready(function() {
     $(document).on('click', '#user-nil-balance', function(e) {
       e.preventDefault();
-      var userId = $(this).data('data-sys-user-nil-id');
+      var userId = $(this).data('sys-user-nil-id');
       var balanceCell1 = $('td#updated-nil-balance-' + userId);
-      var balanceCell2 = $('td#new_updated-nil-balance-' + userId);
-      
+      var balanceCell2 = $('td#new-updated-nil-balance-' + userId);
       $.ajax({
         type: 'PATCH',
         url: '/sys_users/' + userId + '/update_balance',

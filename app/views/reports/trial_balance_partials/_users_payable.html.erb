@@ -85,10 +85,9 @@
   $(document).ready(function() {
     $(document).on('click', '#user-payable-balance', function(e) {
       e.preventDefault();
-      var userId = $(this).data('data-sys-user-payable-id');
+      var userId = $(this).data('sys-user-payable-id');
       var balanceCell1 = $('td#updated-payable-balance-' + userId);
-      var balanceCell2 = $('td#new_updated-payable-balance-' + userId);
-      
+      var balanceCell2 = $('td#new-updated-payable-balance-' + userId);
       $.ajax({
         type: 'PATCH',
         url: '/sys_users/' + userId + '/update_balance',

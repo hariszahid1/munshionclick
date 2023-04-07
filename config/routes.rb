@@ -398,7 +398,7 @@ Rails.application.routes.draw do
       get :salary_info
       get :salary_wage_rate_info
     end
-    patch :update_balance_staff, on: :member
+    patch :update_balance, on: :member
   end
 
   resources :salaries do

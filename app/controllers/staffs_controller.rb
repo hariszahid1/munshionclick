@@ -216,7 +216,7 @@ class StaffsController < ApplicationController
     end
   end
 
-  def update_balance_staff
+  def update_balance
     staff = Staff.find(params[:id])
     @credit_sum = StaffLedgerBook.where(staff_id: staff).sum(:credit)
     @debit_sum = StaffLedgerBook.where(staff_id: staff).sum(:debit)
