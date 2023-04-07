@@ -71,12 +71,12 @@
       </table>
     </div>
     <div class="clearfix"></div>
-    <div class="row expense-book-index-card">
-      <div class="col-lg-4 col-sm-4">
+    <div class="col-lg-12 digg_pagination">
+      <div class="float-left page_info">
         <%= page_entries_info @expense_entry_vouchers %>
       </div>
-      <div class="col-lg-8 col-sm-8 pagination-left expense-book-index-card">
-        <%= paginate @expense_entry_vouchers %>
+      <div class="float-right">
+      <%= paginate @expense_entry_vouchers, :container => false %>
       </div>
     </div>
   </div>

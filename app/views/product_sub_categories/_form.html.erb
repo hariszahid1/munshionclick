@@ -11,7 +11,7 @@
     </div>
   <% end %>
       <div class="col-lg-12 form-group float-left">
-        <%= f.select :product_category_id, options_from_collection_for_select(@product_categories, 'id', 'title', f.object.product_category_id), {prompt: "Select the Category"}, required: true %>
+        <%= f.select :product_category_id, options_from_collection_for_select(@product_categories, 'id', 'title', f.object.product_category_id), {prompt: "Select the Category"}, class:"chosen-select", required: true %>
       </div>
 
       <div class="col-lg-12 form-group float-left">
@@ -38,3 +38,10 @@
 
     <% end %>
 </div>
+<script>
+  $(document).ready(function() {
+    $('.chosen-select').chosen();
+    // Set the width of the chosen-select fields
+    $('.chosen-container').css('width', '100%');
+  });
+</script>

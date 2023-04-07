@@ -53,6 +53,15 @@ class SysUsersController < ApplicationController
     end
   end
 
+  def update_balance
+    sys_user = SysUser.find(params[:id])
+    @credit_sum = LedgerBook.where(sys_user_id: sys_user).sum(:credit)
+    @debit_sum = LedgerBook.where(sys_user_id: sys_user).sum(:debit)
+    @updated_balance = @credit_sum.to_f - @debit_sum.to_f
+    sys_user.update(balance: @updated_balance)
+    render json: { updated_balance: @updated_balance }
+  end
+
   def payable
     @q = SysUser.where('balance > 0 ').ransack(params[:q])
     @q.sorts = 'name asc' if @q.result.count > 0 && @q.sorts.empty?

@@ -487,18 +487,16 @@
                   <td colspan="5"></td>
                 </tr>
               </tbody>
-            
             </table>
-            <div class="row mt-2">
-              <div class="col-lg-4 col-sm-4">
+            <div class="col-lg-12 digg_pagination">
+              <div class="float-left page_info">
                 <%= page_entries_info @payments %>
               </div>
-              <div class="col-lg-8 col-sm-8 pagination-left">
-                <%= paginate @payments %>
+              <div class="float-right">
+              <%= paginate @payments, :container => false %>
               </div>
             </div>
           </div>
-
         </div>
       <% end %>
     </div>

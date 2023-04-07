@@ -163,12 +163,12 @@
              </tbody>
            </table>
          </div>  
-        <div class="row">
-          <div class="col-lg-4 col-sm-4">
+        <div class="col-lg-12 digg_pagination">
+          <div class="float-left page_info">
             <%= page_entries_info @daily_sales %>
           </div>
-          <div class="col-lg-8 col-sm-8 pagination-left">
-            <%= paginate @daily_sales %>
+          <div class="float-right">
+          <%= paginate @daily_sales, :container => false %>
           </div>
         </div>
       </div>  

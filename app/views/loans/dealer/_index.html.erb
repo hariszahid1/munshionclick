@@ -36,7 +36,7 @@
             </div>
             <div class="media-body text-right">
               <h3><%= number_with_delimiter(@total_loan&.first&.last.to_i) %></h3>
-              <span>Total Received</span>
+              <span>Total Receivable</span>
             </div>
           </div>
         </div>
@@ -55,7 +55,7 @@
             </div>
             <div class="media-body text-right">
               <h3><%= number_with_delimiter(@total_loan&.first&.first.to_i) %></h3>
-              <span>Total Given</span>
+              <span>Total Payable</span>
             </div>
           </div>
         </div>
@@ -119,8 +119,8 @@
             <tr>
               <th>Sr#</th>
               <th>Date</th>
-              <th>Received</th>
-              <th>Given</th>
+              <th>Receivable</th>
+              <th>Payable</th>
               <th class="urdu-font">Comment</th>
               <th class="border_none">Action</th>
             </tr>
