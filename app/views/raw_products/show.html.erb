@@ -8,63 +8,27 @@
       <!-- Card Content - Collapse -->
       <div class="collapse show" id="collapseCardExample" style="">
         <div class="card-body">
-
-  <div class="row">
-          <div class="col-lg-12 col-sm-12">
-            <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-              <h3>Id:<h5> <%= @raw_product.id %></h5></h3>
-            </div>
-            <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-              <h3>Title:<h5><%= @raw_product.title %></h5></h3>
-            </div>
-            <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-              <h3>Code:<h5><%= @raw_product.code %></h5> </h3>
-            </div>
-            <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-              <h3>Stock:<h5><%= @raw_product.stock %></h5></h3>
-            </div>
+          <div class="card">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item mb-2"><span class="float-left h5">Id:</span><span class="float-right"><%= @raw_product.id %></span></li>
+              <li class="list-group-item mb-2"><span class="float-left h5">Title:</span><span class="float-right"><%= @raw_product.title %></span></li>
+              <li class="list-group-item mb-2"><span class="float-left h5">Code:</span><span class="float-right"><%= @raw_product.code %></span></li>
+              <li class="list-group-item mb-2"><span class="float-left h5">Stock:</span><span class="float-right"><%= @raw_product.stock %></span></li>
+              <li class="list-group-item mb-2"><span class="float-left h5">Acquire Type:</span><span class="float-right"><%= @praw_product.acquire_type rescue nil %></span></li>
+              <li class="list-group-item mb-2"><span class="float-left h5">Cost:</span><span class="float-right"><%= @raw_product.cost %></span></li>
+              <li class="list-group-item mb-2"><span class="float-left h5">Sale:</span><span class="float-right"><%= @raw_product.sale %></span></li>
+              <li class="list-group-item mb-2"><span class="float-left h5">MIN:</span><span class="float-right"><%= @raw_product.minimum %></span></li>
+              <li class="list-group-item mb-2"><span class="float-left h5">Optimal:</span><span class="float-right"><%= @raw_product.optimal %></span></li>
+              <li class="list-group-item mb-2"><span class="float-left h5">MAX:</span><span class="float-right"><%= @raw_product.maximum %></span></li>
+            </ul>
           </div>
-  </div>
-
-  <div class="row">
-          <div class="col-lg-12 col-sm-12">
-            <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-              <h3>Acquire Type: <h5><%= @praw_product.acquire_type rescue nil %></h5></h3>
-            </div>
-            <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-              <h3>Cost:<h5><%= @raw_product.cost %></h5></h3>
-            </div>
-            <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-              <h3>Sale:<h5><%= @raw_product.sale %></h5> </h3>
-            </div>
-            <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-              <h3>MIN:<h5><%= @raw_product.minimum %></h5></h3>
-            </div>
+        </div>
+        <div class="row float-right">
+          <div class="col-lg-1">
+            <%= link_to products_path, class: "btn btn-outline-secondary m-2" do %>Cancel
+            <% end %>
           </div>
-  </div>
-
-  <div class="row">
-          <div class="col-lg-12 col-sm-12">
-            <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-              <h3>Optimal:<h5><%= @raw_product.optimal %></h5></h3>
-            </div>
-            <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-              <h3>MAX:<h5><%= @raw_product.maximum %></h5></h3>
-            </div>
-
-
-  </div>
-  </div>
-
-
-          <div class="row">
-            <div class="col-lg-1 float-left">
-              <%= link_to products_path do %>
-              <i class="fa fa-arrow-left " aria-hidden="true"></i>
-              <% end %>
-            </div>
-          </div>
-
+        </div>
         </div>
       </div>
     </div>

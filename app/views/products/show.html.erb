@@ -29,13 +29,13 @@
             <li class="list-group-item mb-2"><span class="float-left h5">Qst:</span><span class="float-right"><%= @product.qst %></span></li>
           </ul>
         </div>
-        <div class="row">
-          <div class="col-lg-1 float-right">
+        <div class="row float-right">
+          <div class="col-lg-1 ">
             <%= link_to products_path,class:"btn btn-outline-secondary my-2" do %>Cancel
             <% end %>
           </div>
         </div>
-        <img width="150px" height="115px" class="figure" style=""src=<%="data:image/svg+xml;base64,"+@str%> />
+        <img width="150px" height="115px" class="figure my-2"  style=""src=<%="data:image/svg+xml;base64,"+@str%> />
       </div>
     </div>
   </div>

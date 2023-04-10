@@ -11,12 +11,12 @@
   <% end %>
   <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
     <div class="field">
-      <%= form.select :product_id , options_from_collection_for_select(@products, 'id', 'title', form.object.product_id), {prompt: "Select the Product From"}, required: true%>
+      <%= form.select :product_id , options_from_collection_for_select(@products, 'id', 'title', form.object.product_id), {prompt: "Select the Product From"}, class: "chosen-select", required: true%>
     </div>
   </div>
   <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
     <div class="field">
-     <%= form.select :product_recipient_id , options_from_collection_for_select(@products, 'id', 'title', form.object.product_recipient_id), {prompt: "Select the Product To"}, required: true%>
+     <%= form.select :product_recipient_id , options_from_collection_for_select(@products, 'id', 'title', form.object.product_recipient_id), {prompt: "Select the Product To"}, class: "chosen-select", required: true%>
     </div>
   </div>
   <div class="col-lg-6 col-md-6 col-sm-6 form-group float-left">
@@ -28,13 +28,13 @@
     <hr>
     <div class="col-lg-12 row ">
       <div class="col-lg-6 form-group float-left">
-        <%= link_to product_stock_exchanges_path ,class:"btn-light btn-outline-secondary p-2" do %>
+        <%= link_to product_stock_exchanges_path ,class:"btn btn-outline-secondary p-2" do %>
         Cancel
         <% end %>
       </div>
       <div class="col-lg-6 form-group float-left">
         <div class="col-lg-6 form-group float-right">
-          <%=form.object.id.nil? ? (form.submit "Save" ,class: "btn btn-success", style: "float: right")  :  (form.submit "Update" ,class: "btn btn-warning", style: "float: right")%>
+          <%=form.object.id.nil? ? (form.submit "Save" ,class: "btn btn-primary", style: "float: right")  :  (form.submit "Update" ,class: "btn btn-warning", style: "float: right")%>
         </div>
       </div>
     <% end %>
