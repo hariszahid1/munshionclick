@@ -58,16 +58,7 @@
               </div>
               <div class="col-lg-1 form-group float-left">
                 <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
-              </div>
-            </div>
-          </div>  
-          <div class="col-lg- ml-4 mb-3">
-            <div class="dropdown my-dropdown float-right mr-3 ml-1">
-              <button type="button" class="form-control btn btn-danger file-btn-color">PDF List</button>
-              <div class="dropdown-content my-dropdown-content p-2">
-                <button class="form-control btn  btn-danger file-btn-color mt-2" name="submit_pdf_staff_with_asc" type="submit" value="Accounts PDF A4" formtarget="_blank">ASC</button>
-                <button class="form-control btn  btn-danger file-btn-color mt-2" name="submit_pdf_staff_with_desc" type="submit" value="Accounts PDF A4" formtarget="_blank">Desc</button>
-                <button class="form-control btn  btn-danger file-btn-color mt-2" name="bulk" type="submit" value="Accounts PDF A4" formtarget="_blank">Bulk Record</button>
+                <button type='submit' class='dynamic-submit-btn d-none' formtarget='_blank'></button>
               </div>
             </div>
           </div>
@@ -87,202 +78,222 @@
     </div>
   </div>
   <div class= " card p-3 ledger-book-index-card">
-    <table data-toggle="table" data-search="true" id="country_table">
-      <thead>
-        <tr>
-          <th>ID/P</th>
-          <th><%= sort_link(@q, :staff, 'Staff') %></th>
-          <th><%= sort_link(@q, :debit, 'Debit/Benam') %></th>
-          <th><%= sort_link(@q, :credit, 'Credit/Jama') %></th>
-          <th><%= sort_link(@q, :balance, 'Balance') %></th>
-          <th><%= sort_link(@q, :balance, 'Jama/Benam') %></th>
-          <th><%= sort_link(@q, :comment, 'Comment') %></th>
-          <th><%= sort_link(@q, :created_at, 'Date') %></th>
-          <th class="border_none">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @staff_ledger_books.each do |staff_ledger_book| %>
-          <tr style="font-size:20px;,font-family: Arial Black, Gadget, sans-serif">
-            <td>
-              <% payment_id = staff_ledger_book.salary&.payment&.first&.id if staff_ledger_book.salary.present? %>
-              <% payment_id = staff_ledger_book.salary_detail&.payments&.first&.id if staff_ledger_book.salary_detail.present? %>
-              <%= link_to payments_path('q[id_eq]': payment_id ) do %>
-                <%= staff_ledger_book.id%>[<%= payment_id %>]
-              <% end %>
-            </td>
-            <td class="urdu-font"><%= link_to staff_ledger_book.staff.code+' '+staff_ledger_book.staff.full_name , staffs_path('q[id_eq]': staff_ledger_book.staff.id) %></td>
-            <td><%= number_with_delimiter(staff_ledger_book.debit.to_f.round(2)) %></td>
-            <td><%= number_with_delimiter(staff_ledger_book.credit.to_f.round(2)) %></td>
-            <td><%= number_with_delimiter(staff_ledger_book.balance.to_f.round(2)) %></td>
-            <td>
-              <%if staff_ledger_book.balance.to_f > 0  %>
-                <b style="font-size:20px;color:blue;">Credit/Jama</b>
-                <%elsif  staff_ledger_book.balance.to_f < 0  %>
-                <b style="font-size:20px;color:red;">Debit/Benam</b>
-                <%else%>
-                <b style="font-size:20px;color: #6cec53 ;">Nill</b>
+    <div class="row d-flex" style="position: absolute;">
+      <div class="mt-4 ">
+        <%if (check_can_download_pdf(@module_permission))%>
+          <div class="dropdown my-dropdown float-left mr-2 ml-3">
+            <button type="button" class="form-control btn btn-danger file-btn-color ">PDF List</button>
+            <div class="dropdown-content my-dropdown-content p-2">
+              <button class="form-control file-btn-color ml-2 mt-2 btn btn-danger files-download-btn" style="width:80px" name="submit_pdf_staff_with_asc" type="submit" value="Accounts PDF A4" formtarget="_blank">ASC</button>
+              <button class="form-control file-btn-color ml-2 mt-2 btn btn-danger files-download-btn" style="width:80px" name="submit_pdf_staff_with_desc" type="submit" value="Accounts PDF A4" formtarget="_blank">Desc</button>
+              <button class="form-control file-btn-color ml-2 mt-2 btn btn-danger files-download-btn" style="width:120px" name="bulk" type="submit" value="Accounts PDF A4" formtarget="_blank">BulkRecord</button>
+            </div>
+          </div>
+        <% end %>
+        <%if (check_can_download_csv(@module_permission))%>
+          <button class="form-control d-flex justify-content-center ml- btn btn-warning file-btn-color float-left mr-2 files-download-btn" style="width:80px" title= "download staff ledger book csv" name="csv" type="submit" value="csv">CSV</button>
+        <% end %>
+      </div>
+    </div>
+    <div class='mt-3'>
+      <table data-toggle="table" data-search="true" id="country_table">
+        <thead>
+          <tr>
+            <th>ID/P</th>
+            <th><%= sort_link(@q, :staff, 'Staff') %></th>
+            <th><%= sort_link(@q, :debit, 'Debit/Benam') %></th>
+            <th><%= sort_link(@q, :credit, 'Credit/Jama') %></th>
+            <th><%= sort_link(@q, :balance, 'Balance') %></th>
+            <th><%= sort_link(@q, :balance, 'Jama/Benam') %></th>
+            <th><%= sort_link(@q, :comment, 'Comment') %></th>
+            <th><%= sort_link(@q, :created_at, 'Date') %></th>
+            <th class="border_none">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @staff_ledger_books.each do |staff_ledger_book| %>
+            <tr style="font-size:20px;,font-family: Arial Black, Gadget, sans-serif">
+              <td>
+                <% payment_id = staff_ledger_book.salary&.payment&.first&.id if staff_ledger_book.salary.present? %>
+                <% payment_id = staff_ledger_book.salary_detail&.payments&.first&.id if staff_ledger_book.salary_detail.present? %>
+                <%= link_to payments_path('q[id_eq]': payment_id ) do %>
+                  <%= staff_ledger_book.id%>[<%= payment_id %>]
+                <% end %>
+              </td>
+              <td class="urdu-font"><%= link_to staff_ledger_book.staff.code+' '+staff_ledger_book.staff.full_name , staffs_path('q[id_eq]': staff_ledger_book.staff.id) %></td>
+              <td><%= number_with_delimiter(staff_ledger_book.debit.to_f.round(2)) %></td>
+              <td><%= number_with_delimiter(staff_ledger_book.credit.to_f.round(2)) %></td>
+              <td><%= number_with_delimiter(staff_ledger_book.balance.to_f.round(2)) %></td>
+              <td>
+                <%if staff_ledger_book.balance.to_f > 0  %>
+                  <b style="font-size:20px;color:blue;">Credit/Jama</b>
+                  <%elsif  staff_ledger_book.balance.to_f < 0  %>
+                  <b style="font-size:20px;color:red;">Debit/Benam</b>
+                  <%else%>
+                  <b style="font-size:20px;color: #6cec53 ;">Nill</b>
+                  <%end%>
+              </td>
+              <td>
+                <%= staff_ledger_book.comment %>
+                <%if staff_ledger_book.salary_detail.present?%>
+                  <%= link_to 'Salary',edit_salary_detail_path(staff_ledger_book.salary_detail) if staff_ledger_book.salary_detail.present? %>
+                  <%=staff_ledger_book.salary_detail.wage_rate%> X <%=staff_ledger_book.salary_detail.quantity%>
                 <%end%>
-            </td>
-            <td>
-              <%= staff_ledger_book.comment %>
-              <%if staff_ledger_book.salary_detail.present?%>
-                <%= link_to 'Salary',edit_salary_detail_path(staff_ledger_book.salary_detail) if staff_ledger_book.salary_detail.present? %>
-                <%=staff_ledger_book.salary_detail.wage_rate%> X <%=staff_ledger_book.salary_detail.quantity%>
-              <%end%>
-              <% if staff_ledger_book.salary.present? %>
-              <%end%>
-              <% if staff_ledger_book.salary.present? %>
-                <%= staff_ledger_book.salary.comment%>
-                <%= link_to 'Salary',edit_salary_path(staff_ledger_book.salary) if staff_ledger_book.salary.present? and staff_ledger_book.salary.paid_salary.present?%>
-                <%= link_to 'Wage Salary',edit_advance_salary_path(staff_ledger_book.salary) if staff_ledger_book.salary.present? and staff_ledger_book.salary.advance.present?%>
-              <%end%>
-              <%if staff_ledger_book.salary_detail.present? %>
-                <%if staff_ledger_book.salary_detail.staff.department.present? and staff_ledger_book.salary_detail.staff.department&.id==@departments.first&.id%>
-                  <%if staff_ledger_book.salary_detail.quantity.to_i>0%>
-                    <%= link_to staff_ledger_book&.salary_detail&.staff&.department&.title.to_s+' Daily',edit_daily_book_path(staff_ledger_book.salary_detail.daily_book) if staff_ledger_book.salary_detail.daily_book.present? %>
-                    <p>
-                      <span><%= staff_ledger_book.salary_detail.raw_product_title %></span>
-                      Qty: <span><%= staff_ledger_book.salary_detail.quantity.to_f.round(0) %></span>
-                    </p>
-                  <%end%>
-                <%elsif staff_ledger_book.salary_detail.staff.department.present? and staff_ledger_book.salary_detail.staff.department&.id==@departments.second&.id%>
-                  <%if staff_ledger_book.salary_detail.khakar_remaning.to_i>0%>
-                    <%= link_to staff_ledger_book&.salary_detail&.staff&.department&.title.to_s+' Daily',edit_khakar_daily_book_path(staff_ledger_book.salary_detail.daily_book) if staff_ledger_book.salary_detail.daily_book.present? %>
-                    <p>
-                      <span><%= staff_ledger_book.salary_detail.raw_product_title %></span>
-                      Qty: <span><%= staff_ledger_book.salary_detail.khakar_remaning.to_f.round(0) %></span>
-                    </p>
-                  <%end%>
-                <%elsif staff_ledger_book.salary_detail.staff.department.present? and staff_ledger_book.salary_detail.staff.department&.id==@departments.third&.id%>
-                  <%if staff_ledger_book.salary_detail.quantity.to_i>0%>
-                    <%= link_to staff_ledger_book&.salary_detail&.staff&.department&.title.to_s+' Daily',edit_nakasi_daily_book_path(staff_ledger_book.salary_detail.daily_book) if staff_ledger_book.salary_detail.daily_book.present? %>
-                    <p>
-                      Qty: <span><%= staff_ledger_book.salary_detail.quantity.to_f.round(0) %></span>
-                    </p>
-                  <%end%>
-                <%elsif staff_ledger_book.salary_detail.staff.department.present? and staff_ledger_book.salary_detail.staff.department&.id==@departments.fourth&.id%>
-                  <%if staff_ledger_book.salary_detail.purchase_sale_detail.present?%>
-                    <%= link_to 'Sale',edit_purchase_sale_detail_path(staff_ledger_book.salary_detail.purchase_sale_detail,product:true) if staff_ledger_book.salary_detail.purchase_sale_detail.present? and staff_ledger_book.salary_detail.purchase_sale_detail.transaction_type=="Sale"%>
-                    <%= link_to 'Purchase',edit_purchase_sale_detail_path(staff_ledger_book.salary_detail.purchase_sale_detail) if staff_ledger_book.salary_detail.purchase_sale_detail.present? and staff_ledger_book.salary_detail.purchase_sale_detail.transaction_type=="Purchase"%>
-                    <% if staff_ledger_book.salary_detail.purchase_sale_detail.purchase_sale_items_names_and_quantity!=0%>
-                      <% staff_ledger_book.salary_detail.purchase_sale_detail.purchase_sale_items_names_and_quantity.each do |p|%>
-                        <p><span><%=p.first%></span> Qty: <span><%=p.second%></span></p>
+                <% if staff_ledger_book.salary.present? %>
+                <%end%>
+                <% if staff_ledger_book.salary.present? %>
+                  <%= staff_ledger_book.salary.comment%>
+                  <%= link_to 'Salary',edit_salary_path(staff_ledger_book.salary) if staff_ledger_book.salary.present? and staff_ledger_book.salary.paid_salary.present?%>
+                  <%= link_to 'Wage Salary',edit_advance_salary_path(staff_ledger_book.salary) if staff_ledger_book.salary.present? and staff_ledger_book.salary.advance.present?%>
+                <%end%>
+                <%if staff_ledger_book.salary_detail.present? %>
+                  <%if staff_ledger_book.salary_detail.staff.department.present? and staff_ledger_book.salary_detail.staff.department&.id==@departments.first&.id%>
+                    <%if staff_ledger_book.salary_detail.quantity.to_i>0%>
+                      <%= link_to staff_ledger_book&.salary_detail&.staff&.department&.title.to_s+' Daily',edit_daily_book_path(staff_ledger_book.salary_detail.daily_book) if staff_ledger_book.salary_detail.daily_book.present? %>
+                      <p>
+                        <span><%= staff_ledger_book.salary_detail.raw_product_title %></span>
+                        Qty: <span><%= staff_ledger_book.salary_detail.quantity.to_f.round(0) %></span>
+                      </p>
+                    <%end%>
+                  <%elsif staff_ledger_book.salary_detail.staff.department.present? and staff_ledger_book.salary_detail.staff.department&.id==@departments.second&.id%>
+                    <%if staff_ledger_book.salary_detail.khakar_remaning.to_i>0%>
+                      <%= link_to staff_ledger_book&.salary_detail&.staff&.department&.title.to_s+' Daily',edit_khakar_daily_book_path(staff_ledger_book.salary_detail.daily_book) if staff_ledger_book.salary_detail.daily_book.present? %>
+                      <p>
+                        <span><%= staff_ledger_book.salary_detail.raw_product_title %></span>
+                        Qty: <span><%= staff_ledger_book.salary_detail.khakar_remaning.to_f.round(0) %></span>
+                      </p>
+                    <%end%>
+                  <%elsif staff_ledger_book.salary_detail.staff.department.present? and staff_ledger_book.salary_detail.staff.department&.id==@departments.third&.id%>
+                    <%if staff_ledger_book.salary_detail.quantity.to_i>0%>
+                      <%= link_to staff_ledger_book&.salary_detail&.staff&.department&.title.to_s+' Daily',edit_nakasi_daily_book_path(staff_ledger_book.salary_detail.daily_book) if staff_ledger_book.salary_detail.daily_book.present? %>
+                      <p>
+                        Qty: <span><%= staff_ledger_book.salary_detail.quantity.to_f.round(0) %></span>
+                      </p>
+                    <%end%>
+                  <%elsif staff_ledger_book.salary_detail.staff.department.present? and staff_ledger_book.salary_detail.staff.department&.id==@departments.fourth&.id%>
+                    <%if staff_ledger_book.salary_detail.purchase_sale_detail.present?%>
+                      <%= link_to 'Sale',edit_purchase_sale_detail_path(staff_ledger_book.salary_detail.purchase_sale_detail,product:true) if staff_ledger_book.salary_detail.purchase_sale_detail.present? and staff_ledger_book.salary_detail.purchase_sale_detail.transaction_type=="Sale"%>
+                      <%= link_to 'Purchase',edit_purchase_sale_detail_path(staff_ledger_book.salary_detail.purchase_sale_detail) if staff_ledger_book.salary_detail.purchase_sale_detail.present? and staff_ledger_book.salary_detail.purchase_sale_detail.transaction_type=="Purchase"%>
+                      <% if staff_ledger_book.salary_detail.purchase_sale_detail.purchase_sale_items_names_and_quantity!=0%>
+                        <% staff_ledger_book.salary_detail.purchase_sale_detail.purchase_sale_items_names_and_quantity.each do |p|%>
+                          <p><span><%=p.first%></span> Qty: <span><%=p.second%></span></p>
+                        <%end%>
                       <%end%>
                     <%end%>
+                  <%else%>
+                    <%= link_to 'Salary Detail',edit_purchase_sale_detail_path(staff_ledger_book.salary_detail.purchase_sale_detail) if staff_ledger_book.salary_detail.purchase_sale_detail.present?%>
+                    <%= staff_ledger_book.salary_detail.comment
+                    %>
                   <%end%>
-                <%else%>
-                  <%= link_to 'Salary Detail',edit_purchase_sale_detail_path(staff_ledger_book.salary_detail.purchase_sale_detail) if staff_ledger_book.salary_detail.purchase_sale_detail.present?%>
-                  <%= staff_ledger_book.salary_detail.comment %>
                 <%end%>
-              <%end%>
-            </td>
-            <td>
-              <%= staff_ledger_book.created_at.strftime("%d%b%y , %I:%M") %>
-              <% if staff_ledger_book.salary.present? && staff_ledger_book.created_at.strftime("%d%b%y")!=staff_ledger_book.salary.created_at.strftime("%d%b%y") %>
-                <br>
-                <%= staff_ledger_book.salary.created_at.strftime("%d%b%y at %I:%M:%S %p") %>
-              <%end%>
-              <%if staff_ledger_book.salary_detail.present? && staff_ledger_book.created_at.strftime("%d%b%y")!=staff_ledger_book.salary_detail.created_at.strftime("%d%b%y") %>
-                <br>
-                <%= staff_ledger_book.salary_detail.created_at.strftime("%d%b%y at %I:%M:%S %p") %>
-              <%end%>
-            </td>
-            <td>
-              <% if can?(:update, :all) %>
-                <%if staff_ledger_book.salary_detail.present? %>
-                  <%if staff_ledger_book.salary_detail.purchase_sale_detail.present?%>
-                    <% if staff_ledger_book.salary_detail.purchase_sale_detail.present? and staff_ledger_book.salary_detail.purchase_sale_detail.transaction_type=="Sale"%>
-                      <%= link_to edit_purchase_sale_detail_path(staff_ledger_book.salary_detail.purchase_sale_detail,product:true) do %>
-                        <i class="fa fa-edit" aria-hidden="true"></i> |
+              </td>
+              <td>
+                <%= staff_ledger_book.created_at.strftime("%d%b%y , %I:%M") %>
+                <% if staff_ledger_book.salary.present? && staff_ledger_book.created_at.strftime("%d%b%y")!=staff_ledger_book.salary.created_at.strftime("%d%b%y") %>
+                  <br>
+                  <%= staff_ledger_book.salary.created_at.strftime("%d%b%y at %I:%M:%S %p") %>
+                <%end%>
+                <%if staff_ledger_book.salary_detail.present? && staff_ledger_book.created_at.strftime("%d%b%y")!=staff_ledger_book.salary_detail.created_at.strftime("%d%b%y") %>
+                  <br>
+                  <%= staff_ledger_book.salary_detail.created_at.strftime("%d%b%y at %I:%M:%S %p") %>
+                <%end%>
+              </td>
+              <td>
+                <% if can?(:update, :all) %>
+                  <%if staff_ledger_book.salary_detail.present? %>
+                    <%if staff_ledger_book.salary_detail.purchase_sale_detail.present?%>
+                      <% if staff_ledger_book.salary_detail.purchase_sale_detail.present? and staff_ledger_book.salary_detail.purchase_sale_detail.transaction_type=="Sale"%>
+                        <%= link_to edit_purchase_sale_detail_path(staff_ledger_book.salary_detail.purchase_sale_detail,product:true) do %>
+                          <i class="fa fa-edit" aria-hidden="true"></i> |
+                        <%end%>
+                      <%else%>
+                        <%= link_to edit_purchase_sale_detail_path(staff_ledger_book.salary_detail.purchase_sale_detail,product:true) do %>
+                          <i class="fa fa-edit" aria-hidden="true"></i> |
+                        <%end%>
+                      <%end%>
+                    <%elsif staff_ledger_book.salary_detail.staff.department.present? and staff_ledger_book.salary_detail.staff.department&.id==@departments.first&.id && staff_ledger_book.salary_detail.daily_book.present? %>
+                      <%if staff_ledger_book.salary_detail.quantity.to_i>0%>
+                        <%= link_to edit_daily_book_path(staff_ledger_book.salary_detail.daily_book) do %>
+                          <i class="fa fa-edit" aria-hidden="true"></i> |
+                        <%end%>
+                      <%end%>
+                    <%elsif staff_ledger_book.salary_detail.staff.department.present? and staff_ledger_book.salary_detail.staff.department&.id==@departments.second&.id  && staff_ledger_book.salary_detail.daily_book.present?%>
+                      <%if staff_ledger_book.salary_detail.khakar_remaning.to_i>0%>
+                        <%= link_to edit_khakar_daily_book_path(staff_ledger_book.salary_detail.daily_book) do %>
+                          <i class="fa fa-edit" aria-hidden="true"></i> |
+                        <%end%>
+                      <%end%>
+                    <%elsif staff_ledger_book.salary_detail.staff.department.present? and staff_ledger_book.salary_detail.staff.department&.id==@departments.third&.id  && staff_ledger_book.salary_detail.daily_book.present?%>
+                      <%if staff_ledger_book.salary_detail.quantity.to_i>0%>
+                        <%= link_to edit_nakasi_daily_book_path(staff_ledger_book.salary_detail.daily_book) do %>
+                          <i class="fa fa-edit" aria-hidden="true"></i> |
+                        <%end%>
                       <%end%>
                     <%else%>
-                      <%= link_to edit_purchase_sale_detail_path(staff_ledger_book.salary_detail.purchase_sale_detail,product:true) do %>
-                        <i class="fa fa-edit" aria-hidden="true"></i> |
-                      <%end%>
-                    <%end%>
-                  <%elsif staff_ledger_book.salary_detail.staff.department.present? and staff_ledger_book.salary_detail.staff.department&.id==@departments.first&.id && staff_ledger_book.salary_detail.daily_book.present? %>
-                    <%if staff_ledger_book.salary_detail.quantity.to_i>0%>
-                      <%= link_to edit_daily_book_path(staff_ledger_book.salary_detail.daily_book) do %>
-                        <i class="fa fa-edit" aria-hidden="true"></i> |
-                      <%end%>
-                    <%end%>
-                  <%elsif staff_ledger_book.salary_detail.staff.department.present? and staff_ledger_book.salary_detail.staff.department&.id==@departments.second&.id  && staff_ledger_book.salary_detail.daily_book.present?%>
-                    <%if staff_ledger_book.salary_detail.khakar_remaning.to_i>0%>
-                      <%= link_to edit_khakar_daily_book_path(staff_ledger_book.salary_detail.daily_book) do %>
-                        <i class="fa fa-edit" aria-hidden="true"></i> |
-                      <%end%>
-                    <%end%>
-                  <%elsif staff_ledger_book.salary_detail.staff.department.present? and staff_ledger_book.salary_detail.staff.department&.id==@departments.third&.id  && staff_ledger_book.salary_detail.daily_book.present?%>
-                    <%if staff_ledger_book.salary_detail.quantity.to_i>0%>
-                      <%= link_to edit_nakasi_daily_book_path(staff_ledger_book.salary_detail.daily_book) do %>
+                      <%= link_to (edit_salary_detail_path(staff_ledger_book.salary_detail) if staff_ledger_book.salary_detail.present?) do%>
                         <i class="fa fa-edit" aria-hidden="true"></i> |
                       <%end%>
                     <%end%>
                   <%else%>
-                    <%= link_to (edit_salary_detail_path(staff_ledger_book.salary_detail) if staff_ledger_book.salary_detail.present?) do%>
-                      <i class="fa fa-edit" aria-hidden="true"></i> |
+                  <% if staff_ledger_book.salary.present? %>
+                    <%if staff_ledger_book.salary.present? and staff_ledger_book.salary.paid_salary.present?%>
+                      <%= link_to edit_salary_path(staff_ledger_book.salary) do %>
+                        <i class="fa fa-edit" aria-hidden="true"></i> |
+                      <% end %>
+                    <%else%>
+                      <%= link_to (edit_advance_salary_path(staff_ledger_book.salary) if staff_ledger_book.salary.present? and staff_ledger_book.salary.advance.present?) do %>
+                        <i class="fa fa-edit" aria-hidden="true"></i> |
+                      <% end %>
                     <%end%>
-                  <%end%>
-                <%else%>
-                <% if staff_ledger_book.salary.present? %>
-                  <%if staff_ledger_book.salary.present? and staff_ledger_book.salary.paid_salary.present?%>
-                    <%= link_to edit_salary_path(staff_ledger_book.salary) do %>
-                      <i class="fa fa-edit" aria-hidden="true"></i> |
-                    <% end %>
                   <%else%>
-                    <%= link_to (edit_advance_salary_path(staff_ledger_book.salary) if staff_ledger_book.salary.present? and staff_ledger_book.salary.advance.present?) do %>
+                    <%= link_to edit_staff_ledger_book_path(staff_ledger_book) do %>
                       <i class="fa fa-edit" aria-hidden="true"></i> |
                     <% end %>
                   <%end%>
-                <%else%>
-                  <%= link_to edit_staff_ledger_book_path(staff_ledger_book) do %>
-                    <i class="fa fa-edit" aria-hidden="true"></i> |
-                  <% end %>
-                <%end%>
-                <%end%>
-              <% end %>
-              <% if can?(:delete, :all) %>
-                <%if staff_ledger_book.salary_detail.present? %>
-                  <%if staff_ledger_book.salary_detail.purchase_sale_detail.present?%>
-                    <%= link_to purchase_sale_detail_path(staff_ledger_book.salary_detail.purchase_sale_detail), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+                  <%end%>
+                <% end %>
+                <% if can?(:delete, :all) %>
+                  <%if staff_ledger_book.salary_detail.present? %>
+                    <%if staff_ledger_book.salary_detail.purchase_sale_detail.present?%>
+                      <%= link_to purchase_sale_detail_path(staff_ledger_book.salary_detail.purchase_sale_detail), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+                        <i class="fa fa-trash" aria-hidden="true"></i> |
+                      <%end%>
+                    <%else%>
+                      <%= link_to salary_detail_path(staff_ledger_book.salary_detail), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+                        <i class="fa fa-trash" aria-hidden="true"></i> |
+                      <%end%>
+                    <%end%>
+                  <%elsif staff_ledger_book.salary%>
+                    <%= link_to salary_path(staff_ledger_book.salary), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
                       <i class="fa fa-trash" aria-hidden="true"></i> |
                     <%end%>
                   <%else%>
-                    <%= link_to salary_detail_path(staff_ledger_book.salary_detail), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
+                    <%= link_to staff_ledger_book, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
                       <i class="fa fa-trash" aria-hidden="true"></i> |
-                    <%end%>
+                    <% end %>
                   <%end%>
-                <%elsif staff_ledger_book.salary%>
-                  <%= link_to salary_path(staff_ledger_book.salary), method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
-                    <i class="fa fa-trash" aria-hidden="true"></i> |
-                  <%end%>
-                <%else%>
-                  <%= link_to staff_ledger_book, method: :delete, data: {title: 'Confirmation' ,confirm: 'Are you sure?', commit: 'Sure!'}, :remote => true, :class => 'delete' do %>
-                    <i class="fa fa-trash" aria-hidden="true"></i> |
-                  <% end %>
+                <% end %>
+                <% if can?(:view, :all) %>
+                  <%= link_to staff_ledger_book do %>
+                    <i class="fa fa-eye " aria-hidden="true"></i>
+                  <%end %>
                 <%end%>
-              <% end %>
-              <% if can?(:view, :all) %>
-                <%= link_to staff_ledger_book do %>
-                  <i class="fa fa-eye " aria-hidden="true"></i>
-                <%end %>
-              <%end%>
-            </td>
+              </td>
+            </tr>
+          <% end %>
+          <tr>
+            <td><b>Total<b></td>
+            <td><b><%= number_with_delimiter(@debit.to_i.round(2)) %></b></td>
+            <td><b><%= number_with_delimiter(@credit.to_i.round(2)) %></b></td>
+            <td><b><%= number_with_delimiter(@credit.to_i.round(2)-@debit.to_i.round(2)) %></b></td>
+            <td></td>
+            <td><b><%=number_with_delimiter(@quantity.to_f.round(2))%></b></td>
+            <td></td>
+            <td></td>
           </tr>
-        <% end %>
-        <tr>
-          <td><b>Total<b></td>
-          <td><b><%= number_with_delimiter(@debit.to_i.round(2)) %></b></td>
-          <td><b><%= number_with_delimiter(@credit.to_i.round(2)) %></b></td>
-          <td><b><%= number_with_delimiter(@credit.to_i.round(2)-@debit.to_i.round(2)) %></b></td>
-          <td></td>
-          <td><b><%=number_with_delimiter(@quantity.to_f.round(2))%></b></td>
-          <td></td>
-          <td></td>
-        </tr>
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 
@@ -312,6 +323,14 @@
     $('.ledger-search-exp-tab').on('click', function(){
       $('.ledger-book-index-card').removeClass('d-none')
     })
+
+    $('.files-download-btn').on('click', function(){
+      var name_btn = $(this).attr('name')
+      $('.dynamic-submit-btn').attr('name', name_btn)
+      $('.dynamic-submit-btn').val($(this).val())
+      $('.dynamic-submit-btn').click()
+    })
+
   });
 
     $(function() {

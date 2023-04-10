@@ -201,8 +201,7 @@
                   <th><%= sort_link(@q, :amount, 'Balance') %></th>
                   <th><%= sort_link(@q, :paymentable, 'Paymentable') %></th>
                   <th class ="urdu-font"><%= sort_link(@q, :comment, 'Summary') %></th>
-                  <th><%= sort_link(@q, :created_at, 'Created at') %></th>
-                  <th><%= sort_link(@q, :created_at, 'Updated at') %></th>
+                  <th><%= sort_link(@q, :created_at, 'Date') %></th>
                   <th class="border_none">Action</th>
                 </tr>
               </thead>
@@ -333,10 +332,10 @@
                       <%end%>
                     </td>
                     <td>
-                      <%= payment.created_at.strftime("%d%b%y, %I:%M") %>
-                    </td>
-                    <td>
-                      <%= payment.updated_at.strftime("%d%b%y, %I:%M") %>
+                      <%= payment.created_at.strftime("%d%b%y, %I:%M") %><br>
+                      <% if payment.created_at.strftime("%d%b%y, %I:%M") != payment.updated_at.strftime("%d%b%y, %I:%M") %>
+                        <b class='mr-2'>Updated_at:</b><%= payment.updated_at.strftime("%d%b%y, %I:%M") %>
+                      <% end %>
                     </td>
                     <td class="p-3">
                     <div class="icon-container-1">
