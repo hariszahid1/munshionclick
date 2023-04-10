@@ -141,6 +141,10 @@ class StaffLedgerBooksController < ApplicationController
       ReportMailer.new_report_email(pdf, subject, email, '').deliver
       redirect_to staff_ledger_books_path
     end
+
+    return unless params[:csv].present?
+
+    csv_file_of_ledger
   end
 
   # GET /staff_ledger_books/1
@@ -356,6 +360,36 @@ class StaffLedgerBooksController < ApplicationController
         end
       end
     end
+  end
+
+  def csv_file_of_ledger
+    headers = ['ID/P', 'Staff', 'Debit/Benam', 'Credit/Jama', 'Balance', 'Jama/Benam', 'Comment', 'Date']
+
+    rows = @q.result.map do |staff_ledger_book|
+      jama_benam = if staff_ledger_book.balance.to_f.positive?
+                     'Credit/Jama'
+                   elsif staff_ledger_book.balance.to_f.negative?
+                     'Debit/Benam'
+                   else
+                     'Nill'
+                   end
+      id = "#{staff_ledger_book.id}[#{staff_ledger_book.salary_detail&.payments&.first&.id || staff_ledger_book.salary&.payment&.first&.id}]"
+      staff = "#{staff_ledger_book.staff&.code} #{staff_ledger_book.staff&.full_name}"
+      debit = staff_ledger_book.debit.to_f.round(2)
+      credit = staff_ledger_book.credit.to_f.round(2)
+      balance = staff_ledger_book.balance.to_f.round(2)
+      comment = "#{staff_ledger_book.comment} #{staff_ledger_book.salary_detail&.comment} #{staff_ledger_book.salary&.comment}"
+      created_at = staff_ledger_book.created_at.strftime('%d%b%y , %I:%M')
+      [id, staff, debit, credit, balance, jama_benam, comment, created_at]
+    end
+
+    csv_data = CSV.generate(headers: true) do |csv|
+      csv << headers
+      rows.each { |row| csv << row }
+    end
+
+    filename = "Staff-ledger-book-#{Date.today}.csv"
+    send_data csv_data, filename: filename, disposition: :attachment
   end
 
   private
