@@ -58,17 +58,17 @@
       <%= render partial: 'raw_product', collection: @raw_products %>
       </tbody>
     </table>
+    <div class="col-lg-12 digg_pagination">
+      <div class="float-left page_info">
+        <%= page_entries_info @raw_products %>
+      </div>
+      <div class="flaot-right">
+        <%= paginate @raw_products,:container => false %>
+      </div>
+    </div>
   </div>
 </div>
 <div class="clearfix"></div>
-<div class="row">
-  <div class="col-lg-4 col-sm-4">
-    <%= page_entries_info @raw_products %>
-  </div>
-  <div class="col-lg-8 col-sm-8 pagination-left">
-    <%= paginate @raw_products %>
-  </div>
-</div>
 <script>
   $(document).ready(function() {
     if ($(".bootstrap-table").length == 0){

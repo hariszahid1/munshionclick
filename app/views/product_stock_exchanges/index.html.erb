@@ -28,11 +28,12 @@
       <%= search_form_for @q, url: product_stock_exchanges_path, class: "admin-controls", method: "get" do |f| %>
         <div class="card shadow mb-3 p-3">
           <div class="col-lg-12 col-sm-12">
-            <div class="col-lg-3 form-group float-left">
-              <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker',placeholder: "YYYY-MM-DD" %>
+            <div class="col-lg-4 form-group float-left d-flex">
+              <%= f.search_field :created_at, id: "reportrange", class: 'form-control' %>
             </div>
-            <div class="col-lg-3 form-group float-left">
-              <%= f.search_field :created_at_lteq,class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
+            <div class="d-none">
+              <%= f.search_field :created_at_gteq, class: 'form-control input-sm datepicker',placeholder: "YYYY-MM-DD" %>
+              <%= f.search_field :created_at_lteq, class: 'form-control input-sm datepicker' ,placeholder: "YYYY-MM-DD"%>
             </div>
             <div class="col-lg-2 form-group float-left">
               <button class="form-control btn btn-primary" name="search_submit" type="submit" value="Search" style="width:100px"><i class="fa fa-search"></i></button>
@@ -111,4 +112,56 @@
       $('.dynamic-submit-btn').val($(this).val())
       $('.dynamic-submit-btn').click()
   })
+
+  $(function() {
+
+    var start = moment();
+    var end = moment();
+
+    function cb(start, end) {
+        $('#reportrange span').html(start.format('YYYY/MM/DD') + ' - ' + end.format('YYYY/MM/DD'));
+    }
+
+    var gteq = $('#q_created_at_gteq').val()
+    var lteq = $('#q_created_at_lteq').val()
+    if (gteq !== ''){
+      start = moment(new Date(gteq))
+    }
+    if(lteq !== ''){
+      end = moment(new Date(lteq))
+    }
+
+    $('#reportrange').daterangepicker({
+        startDate: start,
+        endDate: end,
+      ranges: {
+          'Select Date Range':[],
+           'Today': [moment(), moment()],
+           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+           'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+           'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+           '1 Year': [moment().subtract(1, 'years')],
+           '5 Year': [moment().subtract(5, 'years')],
+           'This Month': [moment().startOf('month'), moment().endOf('month')],
+           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+           'This Month Last Year': [moment().subtract(1, 'years').startOf('month'), moment().subtract(1, 'years').endOf('month')],
+           'This Year': [moment().startOf('year'), moment().endOf('year')],
+           'Last Year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')]
+        },
+        locale: {
+          format: 'YYYY/MM/DD'
+        }
+    }, cb);
+
+    cb(start, end);
+
+    $('#reportrange').on('change', function(){
+      var value = $(this).val()
+      var greater_eq = value.split(' - ')[0]
+      var less_eq = value.split(' - ')[1]
+      $('#q_created_at_gteq').val(greater_eq)
+      $('#q_created_at_lteq').val(less_eq)
+    })
+
+  });
 </script>

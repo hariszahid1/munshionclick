@@ -53,9 +53,11 @@
           <th class="text-center">total bill</th>
         </thead>
         <tbody>
+          <% with_panelty = 0 %>
           <% data.each_with_index do |order, index| %>
             <% order['items'].each_with_index do |item, index| %>
             <% if  item['total_pandri_bill'] > 0 %>
+              <% with_panelty = with_panelty + item['quantity'].to_i %>
               <tr>
                 <td class="text-center"><%= order['id'] %></td>
                 <td class="text-center"><%= order['name'] %></td>
@@ -73,6 +75,20 @@
             <% end %>  
             <% end %>
           <% end %>
+          <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th>Total: </th>
+            <th><%=  with_panelty  %></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+          </tr>
         </tbody>
       </table>
       <h3 class="text-center">Without Panelty</h3>
@@ -92,9 +108,11 @@
           <th class="text-center">total bill</th>
         </thead>
         <tbody>
+          <% without_panelty = 0 %>
           <% data.each_with_index do |order, index| %>
             <% order['items'].each_with_index do |item, index| %>
             <% if  item['total_pandri_bill'] == 0 %>
+              <% without_panelty = without_panelty + item['quantity'].to_i %>
               <tr>
                 <td class="text-center"><%= order['id'] %></td>
                 <td class="text-center"><%= order['name'] %></td>
@@ -109,9 +127,26 @@
                 <td class="text-center"><%= item['panelty_pandri'] %></td>
                 <td class="text-center"><%= item['total_pandri_bill'] %></td>
               </tr>
-            <% end %>  
+            <% end %>
             <% end %>
           <% end %>
+          <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th>Total: </th>
+            <th><%=  without_panelty  %></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+          </tr>
+          <tr>
+            <th style='color: white'>ok</th>
+          </tr>
           <tr>
             <th></th>
             <th></th>
