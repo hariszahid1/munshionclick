@@ -68,13 +68,13 @@
     <br>
     <br>
   <hr>
-  <div class="row ">
-    <div class="col-lg-6 form-group float-left">
-      <%= link_to raw_products_path ,class:"btn-light btn-outline-secondary p-2"  do %>
+  <div class="row float-right ">
+    <div class="col-lg-6 form-group ">
+      <%= link_to raw_products_path ,class:"btn btn-outline-secondary p-2"  do %>
       Cancel
       <% end %>
     </div>
-        <div class="col-lg-6 form-group float-left">
+        <div class="col-lg-6 form-group float-right">
           <%=f.object.id.nil? ? (f.submit "Save" ,class: "btn btn-success", style: "float: right")  :  (f.submit "Update" ,class: "btn btn-warning", style: "float: right")%>
         </div>
     <% end %>

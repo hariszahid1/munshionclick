@@ -6,25 +6,16 @@
     <!-- Card Content - Collapse -->
     <div class="collapse show" id="collapseCardExample" style="">
       <div class="card-body">
-
-<div class="row">
-        <div class="col-lg-12 col-sm-12">
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Product sender:<h5> <%= @product_stock_exchange.product_id %></h5></h3>
-          </div>
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Product recipient:<h5><%= @product_stock_exchange.product_recipient_id %></h5> </h3>
-          </div>
-          <div class="col-lg-3 form-group float-left card mb-4 py-3 border-left-primary shadow h-100 py-2">
-            <h3>Quantity:<h5><%= @product_stock_exchange.quantity %></h5></h3>
-          </div>
+        <div class="card">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item mb-2"><span class="float-left h5">Product sender:</span><span class="float-right"><%= @product_stock_exchange.product_id %></span></li>
+            <li class="list-group-item mb-2"><span class="float-left h5">Product recipient:</span><span class="float-right"><%= @product_stock_exchange.product_recipient_id %></span></li>
+            <li class="list-group-item mb-2"><span class="float-left h5">Quantity:</span><span class="float-right"><%= @product_stock_exchange.quantity %></span></li>
+          </ul>
         </div>
-</div>
-
-        <div class="row">
-          <div class="col-lg-1 float-left">
-            <%= link_to product_stock_exchanges_path do %>
-            <i class="fa fa-arrow-left " aria-hidden="true"></i>
+        <div class="row float-right">
+          <div class="col-lg-1 ">
+            <%= link_to product_stock_exchanges_path, class: "btn btn-outline-secondary m-2" do %> Cancel
             <% end %>
           </div>
         </div>

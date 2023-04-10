@@ -27,10 +27,9 @@
                 <li class="list-group-item "><span class="float-left h5">Measurement Quantity:</span><span class="float-right"><%= @item.measurement_quantity %></span></li>
              </ul>
           </div>
-            <div class="row">
-              <div class="col-lg-1 float-left">
-                <%= link_to products_path do %>
-                <i class="fa fa-arrow-left " aria-hidden="true"></i>
+            <div class="row float-right">
+              <div class="col-lg-1">
+                <%= link_to products_path, class: "btn btn-outline-secondary my-2" do %> Cancel
                 <% end %>
               </div>
             </div>
